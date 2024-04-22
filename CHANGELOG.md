@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.0.4] - 2024-04-22
 ### Added:
 - BIP39 passphrase login
 - Handle external BIP21 payment on macOS and Windows
-- Support signing message with digital wallet
+- Support signing message with software wallet
 
 ### Changed:
 - Updates Qt to 6.7.0
@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - QR Code for Authenticator app in Two-Factor authentication settings
 - Only show fee amount for redeposits
 - Sign Liquid transaction with Ledger Nano S
+- Show insufficient funds for fee error
 
 ## [2.0.3] - 2024-03-28
 ### Added:
