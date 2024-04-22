@@ -10,6 +10,7 @@ import "util.js" as UtilJS
 
 ItemDelegate {
     required property Output output
+    required property string unit
     id: self
     hoverEnabled: false
     leftPadding: 20
@@ -72,7 +73,7 @@ ItemDelegate {
                     account: self.output.account
                     asset: self.output.asset
                     input: ({ satoshi: self.output.data.satoshi })
-                    unit: self.output.account.session.unit
+                    unit: self.unit
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
@@ -100,7 +101,8 @@ ItemDelegate {
                 Layout.preferredWidth: 0
                 font.pixelSize: 12
                 font.weight: 400
-                text: self.output.data.txhash + ':' + self.output.data.pt_idx
+                text: (self.output.data.txhash ?? '') + ':' + self.output.data.pt_idx
+                visible: self.output.data.txhash ?? false
                 wrapMode: Label.Wrap
             }
             Label {

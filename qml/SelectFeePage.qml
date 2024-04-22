@@ -100,7 +100,7 @@ StackViewPage {
                             id: convert
                             account: self.account
                             input: ({ satoshi: String(Math.round(slider.value * self.size / 1000)) })
-                            unit: self.account.session.unit
+                            unit: self.unit
                         }
                         Label {
                             Layout.alignment: Qt.AlignRight
@@ -187,7 +187,7 @@ StackViewPage {
                     id: convert
                     account: self.account
                     input: ({ satoshi: String(Math.round(button.rate * self.size / 1000)) })
-                    unit: self.account.session.unit
+                    unit: self.unit
                 }
                 Label {
                     Layout.alignment: Qt.AlignRight

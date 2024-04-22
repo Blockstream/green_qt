@@ -12,6 +12,7 @@ StackViewPage {
     required property Account account
     required property Asset asset
     required property var coins
+    required property string unit
 
     property var selection: {
         const selection = new Set()
@@ -87,6 +88,7 @@ StackViewPage {
                 id: delegate
                 checked: self.selection.has(delegate.output)
                 width: ListView.view.width
+                unit: self.unit
                 onClicked: {
                     const output = delegate.output
                     const selection = new Set(self.selection)
@@ -168,7 +170,7 @@ StackViewPage {
                 }
                 return { satoshi }
             }
-            unit: self.account.session.unit
+            unit: self.unit
         }
     }
 

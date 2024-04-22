@@ -19,6 +19,7 @@ StackViewPage {
             account: controller.account,
             asset: controller.asset,
             coins: controller.coins,
+            unit: amount_field.unit,
         })
     }
     function pushSelectFeePage() {
