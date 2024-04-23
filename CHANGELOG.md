@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added:
 - New watch-only section in wallet settings dialog
 - Expose extended public keys and output descriptors of singlesig accounts
+- Handle external BIP21 payment on Linux
 - Option to scramble login keypad
 
 ## [2.0.4] - 2024-04-22

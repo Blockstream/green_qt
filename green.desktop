@@ -4,6 +4,6 @@ Terminal=false
 Type=Application
 Icon=green
 Name=Blockstream Green
-Exec=green
+Exec=green %U
 Categories=Office;Finance;
 MimeType=x-scheme-handler/bitcoin;x-scheme-handler/liquidnetwork;
