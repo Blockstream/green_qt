@@ -2,8 +2,15 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 RegularButton {
     required property PinField target
+    property var keys: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    function scramble() {
+        self.keys = UtilJS.shuffle(self.keys)
+    }
+
     id: self
     focusPolicy: Qt.NoFocus
     icon.source: 'qrc:/svg2/hand.svg'
@@ -51,28 +58,29 @@ RegularButton {
                 rowSpacing: 10
                 y: 5
                 Repeater {
-                    model: 9
+                    model: self.keys.slice(0, 9)
                     RegularButton {
                         Layout.preferredWidth: 56
-                        text: index + 1
-                        onClicked: self.target.append(index + 1)
+                        text: modelData
+                        onClicked: self.target.append(modelData)
                     }
                 }
                 PadButton {
                     Layout.fillHeight: true
                     Layout.preferredWidth: 56
-                    icon.source: 'qrc:/svg2/x-square.svg'
-                    onClicked: self.target.clear()
+                    icon.source: 'qrc:/svg2/arrows-counter-clockwise.svg'
+                    onClicked: self.scramble()
                 }
                 RegularButton {
                     Layout.preferredWidth: 56
-                    text: '0'
-                    onClicked: self.target.append(0)
+                    text: self.keys[9]
+                    onClicked: self.target.append(self.keys[9])
                 }
                 PadButton {
                     Layout.fillHeight: true
                     Layout.preferredWidth: 56
                     icon.source: 'qrc:/svg2/backspace.svg'
+                    enabled: self.target.pin.length > 0
                     onClicked: self.target.remove()
                 }
             }

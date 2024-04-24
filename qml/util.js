@@ -165,3 +165,13 @@ function twoFactorMethodLabel(method)
     }
     return qsTrId(labels[method])
 }
+
+function shuffle(a) {
+    const b = a.slice()
+    const c = []
+    while (b.length) {
+        const [d] = b.splice(Math.floor(Math.random() * b.length), 1)
+        c.push(d)
+    }
+    return c
+}
