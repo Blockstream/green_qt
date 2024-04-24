@@ -10,7 +10,6 @@ Pane {
     required property Context context
     readonly property Wallet wallet: self.context.wallet
     readonly property Session session: self.context.primarySession
-    readonly property Network network: self.session.network
 
     readonly property var per_currency: {
         const result = {}
@@ -52,7 +51,7 @@ Pane {
                 title: qsTrId('id_bitcoin_denomination')
                 enabled: !wallet.locked
                 contentItem: RowLayout {
-                    spacing: constants.s1
+                    spacing: 10
                     Label {
                         Layout.fillWidth: true
                         Layout.minimumWidth: contentWidth
@@ -91,7 +90,7 @@ Pane {
                         text: qsTrId('id_reference_exchange_rate')
                     }
                     RowLayout {
-                        spacing: constants.s1
+                        spacing: 10
                         GComboBox {
                             id: currency_combo
                             Layout.fillWidth: true
@@ -136,65 +135,9 @@ Pane {
             }
 
             SettingsBox {
-                title: qsTrId('id_watchonly_login')
-                visible: !self.context.watchonly
-                contentItem: ColumnLayout {
-                    Repeater {
-                        model: self.context.sessions.filter(session => !self.context.watchonly && !session.network.electrum)
-                        delegate: AbstractButton {
-                            required property var modelData
-                            readonly property Session session: modelData
-                            Layout.fillWidth: true
-                            id: button
-                            // TODO enabled: !wallet.locked
-                            leftPadding: 20
-                            rightPadding: 20
-                            topPadding: 15
-                            bottomPadding: 15
-                            background: Rectangle {
-                                radius: 5
-                                color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
-                            }
-                            contentItem: RowLayout {
-                                spacing: 20
-                                ColumnLayout {
-                                    Label {
-                                        font.pixelSize: 14
-                                        font.weight: 600
-                                        text: button.session.network.displayName
-                                    }
-                                    Label {
-                                        Layout.fillWidth: true
-                                        font.pixelSize: 11
-                                        font.weight: 400
-                                        opacity: 0.6
-                                        text: {
-                                            if (button.session.username === '') return qsTrId('id_watchonly_disabled')
-                                            return button.session.username
-                                        }
-                                    }
-                                }
-                                Image {
-                                    Layout.alignment: Qt.AlignCenter
-                                    source: 'qrc:/svg2/edit.svg'
-                                }
-                            }
-                            onClicked: {
-                                const dialog = watchonly_dialog.createObject(self, {
-                                    context: self.context,
-                                    session: button.session,
-                                })
-                                dialog.open()
-                            }
-                        }
-                    }
-                }
-            }
-
-            SettingsBox {
                 title: qsTrId('id_notifications')
                 contentItem: ColumnLayout {
-                    spacing: 10
+                    spacing: 8
                     Label {
                         Layout.fillWidth: true
                         text: qsTrId('id_receive_email_notifications_for')
@@ -303,193 +246,5 @@ Pane {
                 }
             }
         }
-    }
-
-    Component {
-        id: watchonly_dialog
-        WalletDialog {
-            required property Session session
-            id: self
-            clip: true
-            header: null
-            enabled: controller.monitor.idle
-            width: 450
-            height: 550
-            Overlay.modal: Rectangle {
-                anchors.fill: parent
-                color: 'black'
-                opacity: 0.6
-            }
-            WatchOnlyController {
-                id: controller
-                session: self.session
-                onFailed: error => error_badge.error = error
-                onFinished: ok_badge.error = 'Watch-only credentials updated successfully'
-            }
-            contentItem: StackViewPage {
-                title: qsTrId('id_set_up_watchonly')
-                rightItem: CloseButton {
-                    onClicked: self.close()
-                }
-                contentItem: ColumnLayout {
-                    spacing: 10
-                    FieldTitle {
-                        text: qsTrId('id_network')
-                    }
-                    Pane {
-                        Layout.bottomMargin: 15
-                        Layout.fillWidth: true
-                        padding: 15
-                        bottomPadding: 15
-                        leftPadding: 20
-                        rightPadding: 20
-                        background: Rectangle {
-                            color: '#222226'
-                            radius: 5
-                        }
-                        contentItem: RowLayout {
-                            spacing: 10
-                            Image {
-                                Layout.alignment: Qt.AlignCenter
-                                Layout.preferredHeight: 24
-                                Layout.preferredWidth: 24
-                                source: UtilJS.iconFor(self.session.network)
-                            }
-                            Label {
-                                Layout.fillWidth: true
-                                color: '#FFF'
-                                font.pixelSize: 14
-                                font.weight: 600
-                                text: self.session.network.displayName
-                            }
-                        }
-                    }
-                    FieldTitle {
-                        text: qsTrId('id_username')
-                    }
-                    TTextField {
-                        Layout.bottomMargin: 15
-                        Layout.fillWidth: true
-                        id: username_field
-                        text: self.session.username
-                        validator: FieldValidator {
-                        }
-                        onTextEdited: {
-                            error_badge.clear()
-                            ok_badge.clear()
-                        }
-                    }
-                    FieldTitle {
-                        text: qsTrId('id_password')
-                    }
-                    TTextField {
-                        Layout.bottomMargin: 15
-                        Layout.fillWidth: true
-                        id: password_field
-                        echoMode: TextField.Password
-                        validator: FieldValidator {
-                        }
-                        onTextEdited: {
-                            error_badge.clear()
-                            ok_badge.clear()
-                        }
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
-                        font.pixelSize: 12
-                        color: '#FFF'
-                        opacity: 0.6
-                        text: qsTrId('Username and password should have 8 characters or more')
-                    }
-                    VSpacer {
-                    }
-                    FixedErrorBadge {
-                        Layout.alignment: Qt.AlignCenter
-                        id: error_badge
-                        pointer: false
-                    }
-                    FixedErrorBadge {
-                        Layout.alignment: Qt.AlignCenter
-                        id: ok_badge
-                        pointer: false
-                        backgroundColor: '#00B45A'
-                    }
-                    VSpacer {
-                    }
-                }
-                footer: Pane {
-                    background: null
-                    padding: 20
-                    contentItem: RowLayout {
-                        spacing: 10
-                        RegularButton {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            enabled: self.session.username.length > 0
-                            implicitWidth: 0
-                            text: qsTrId('id_delete')
-                            onClicked: {
-                                error_badge.clear()
-                                ok_badge.clear()
-                                username_field.clear()
-                                password_field.clear()
-                                controller.clear()
-                            }
-                        }
-                        PrimaryButton {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            implicitWidth: 0
-                            text: qsTrId('id_update')
-                            enabled: username_field.acceptableInput && password_field.acceptableInput
-                            onClicked: {
-                                ok_badge.clear()
-                                error_badge.clear()
-                                controller.update(username_field.text, password_field.text)
-                            }
-                            busy: !controller.monitor.idle
-                        }
-                    }
-                }
-            }
-        }
-    }
-    /*
-                    Connections {
-                        target: controller
-                        function onWatchOnlyUpdateSuccess() {
-                            const dialog = message_dialog.createObject(window, {
-                              title: qsTrId('id_success'),
-                              message: qsTrId('Watch-only credentials updated successfully.'),
-                            })
-                            dialog.open()
-                        }
-                        function onWatchOnlyUpdateFailure() {
-                            const dialog = message_dialog.createObject(window, {
-                                title: qsTrId('id_warning'),
-                                message: qsTrId('Failed to set new watch-only credentials.'),
-                                wallet: self.context.wallet,
-                            })
-                            dialog.open()
-                        }
-                    }
-
-                    Component {
-                        id: message_dialog
-                        MessageDialog {
-                            id: dialog
-                            width: 350
-                            actions: [
-                                Action {
-                                    text: qsTrId('id_ok')
-                                    onTriggered: dialog.reject()
-                                }
-                            ]
-                        }
-                    }
-                }
-                */
-    component FieldValidator: RegularExpressionValidator {
-        regularExpression: /^.{8,}$/
     }
 }

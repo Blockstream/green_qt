@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added:
+- New watch-only section in wallet settings dialog
+- Expose extended public keys and output descriptors of singlesig accounts
 - Option to scramble login keypad
 
 ## [2.0.4] - 2024-04-22

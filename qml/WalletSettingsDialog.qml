@@ -73,52 +73,46 @@ WalletDialog {
                 radius: 4
             }
         }
-        contentItem: RowLayout {
-            spacing: 16
-            Image {
-                source: b.icon.source
-                sourceSize.width: b.icon.width
-                sourceSize.height: b.icon.height
-            }
-            Label {
-                text: b.text
-                Layout.fillWidth: true
-                rightPadding: 12
-                font.styleName: 'Regular'
-            }
+        contentItem: Label {
+            text: b.text
+            Layout.fillWidth: true
+            rightPadding: 12
+            font.styleName: 'Regular'
         }
     }
     contentItem: RowLayout {
         id: layout
-        spacing: constants.p3
+        spacing: 20
         ColumnLayout {
             id: side_bar
             Layout.fillWidth: false
-            spacing: constants.p1
+            spacing: 10
             B {
                 name: 'WalletSettingsGeneral'
                 index: 0
                 text: qsTrId('id_general')
-                icon.source: 'qrc:/svg/preferences.svg'
+            }
+            B {
+                name: 'WalletSettingsWatchOnly'
+                index: 1
+                text: qsTrId('id_watchonly')
+                visible: !self.context.watchonly
             }
             B {
                 name: 'WalletSettingsSecurity'
-                index: 1
+                index: 2
                 text: qsTrId('id_security')
-                icon.source: 'qrc:/svg/security.svg'
                 enabled: !self.context.device
             }
             B {
                 name: 'WalletSettings2FA'
-                index: 2
+                index: 3
                 text: qsTrId('id_twofactor_authentication')
-                icon.source: 'qrc:/svg/2fa_general.svg'
             }
             B {
                 name: 'WalletSettingsRecovery'
-                index: 3
+                index: 4
                 text: qsTrId('id_recovery')
-                icon.source: 'qrc:/svg/recovery.svg'
                 enabled: !self.context.device
             }
             VSpacer { }
@@ -129,6 +123,9 @@ WalletDialog {
             Layout.fillHeight: true
             clip: true
             WalletGeneralSettingsView {
+                context: self.context
+            }
+            WalletWatchOnlySettingsView {
                 context: self.context
             }
             WalletSecuritySettingsView {

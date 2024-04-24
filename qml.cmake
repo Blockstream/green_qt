@@ -243,6 +243,7 @@ SET(QML_FILES
     qml/JadeHttpRequestDialog.qml
     qml/LinkLabel.qml
     qml/PassphraseDialog.qml
+    qml/WalletWatchOnlySettingsView.qml
 )
 
 if (GREEN_NO_RESOURCES)
