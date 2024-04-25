@@ -16,8 +16,9 @@ void Application::raise()
         // instead, Windows flashes the taskbar button of the window to notify the user
 
         // mac: if the primary window is minimized, it is restored. It is background, it is brough to foreground
-
-        window->showNormal();
+        if (window->visibility() == QWindow::Hidden || window->visibility() == QWindow::Minimized) {
+            window->setVisibility(QWindow::AutomaticVisibility);
+        }
         window->requestActivate();
         window->raise();
     }
