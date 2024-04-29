@@ -255,7 +255,6 @@ StackViewPage {
     Component {
         id: select_recovery_key_page
         SelectRecoveryKeyPage {
-            required property Network network
             required property string type
             id: page
             onRecoveryKey: (mnemonic) => {

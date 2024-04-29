@@ -81,6 +81,8 @@ class WatchonlyData : public LoginData
     Q_OBJECT
     Q_PROPERTY(Network* network READ network NOTIFY networkChanged)
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
+    Q_PROPERTY(QStringList coreDescriptors READ coreDescriptors NOTIFY coreDescriptorsChanged)
+    Q_PROPERTY(QStringList extendedPubkeys READ extendedPubkeys NOTIFY extendedPubkeysChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -89,14 +91,22 @@ public:
     void setNetwork(Network* network);
     QString username() const { return m_username; }
     void setUsername(const QString& username);
+    QStringList coreDescriptors() const { return m_core_descriptors; }
+    void setCoreDescriptors(const QStringList& core_descriptors);
+    QStringList extendedPubkeys() const { return m_extended_pubkeys; }
+    void setExtendedPubkeys(const QStringList& extended_pubkeys);
     bool write(QJsonObject& data) override;
     bool read(const QJsonObject& data) override;
 signals:
     void networkChanged();
     void usernameChanged();
+    void coreDescriptorsChanged();
+    void extendedPubkeysChanged();
 private:
     Network* m_network{nullptr};
     QString m_username;
+    QStringList m_core_descriptors;
+    QStringList m_extended_pubkeys;
 };
 
 class Wallet : public QObject

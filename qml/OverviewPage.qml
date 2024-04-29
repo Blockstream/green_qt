@@ -120,7 +120,7 @@ StackViewPage {
         const account = account_list_model.first()
         if (account) {
             self.currentAccount = account
-        } else {
+        } else if (!self.context.watchonly) {
             Qt.callLater(() => {
                 fresh_wallet_dialog.createObject(self, { context: self.context }).open()
             })

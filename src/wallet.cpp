@@ -218,7 +218,7 @@ QString Wallet::getDisplayUnit(const QString& unit)
 void Wallet::setXPubHashId(const QString &xpub_hash_id)
 {
     if (m_xpub_hash_id == xpub_hash_id) return;
-    Q_ASSERT(m_xpub_hash_id.isEmpty());
+    // Q_ASSERT(m_xpub_hash_id.isEmpty());
     m_xpub_hash_id = xpub_hash_id;
     emit xpubHashIdChanged();
     save();
@@ -325,14 +325,54 @@ void WatchonlyData::setUsername(const QString& username)
     emit usernameChanged();
 }
 
+void WatchonlyData::setCoreDescriptors(const QStringList& core_descriptors)
+{
+    if (m_core_descriptors == core_descriptors) return;
+    m_core_descriptors = core_descriptors;
+    emit coreDescriptorsChanged();
+}
+
+void WatchonlyData::setExtendedPubkeys(const QStringList& extended_pubkeys)
+{
+    if (m_extended_pubkeys == extended_pubkeys) return;
+    m_extended_pubkeys = extended_pubkeys;
+    emit extendedPubkeysChanged();
+}
 
 bool WatchonlyData::write(QJsonObject& data)
 {
-    data.insert("watchonly", QJsonObject{
-        { "network", m_network->id() },
-        { "username", m_username },
-    });
-    return true;
+    if (m_network->isElectrum() && !m_core_descriptors.isEmpty()) {
+        data.insert("watchonly", QJsonObject{
+            { "network", m_network->id() },
+            { "core_descriptors", QJsonArray::fromStringList(m_core_descriptors) },
+        });
+        return true;
+    }
+    if (m_network->isElectrum() && !m_extended_pubkeys.isEmpty()) {
+        data.insert("watchonly", QJsonObject{
+            { "network", m_network->id() },
+            { "extended_pubkeys", QJsonArray::fromStringList(m_extended_pubkeys) },
+        });
+        return true;
+    }
+    if (!m_network->isElectrum()) {
+        data.insert("watchonly", QJsonObject{
+            { "network", m_network->id() },
+            { "username", m_username },
+        });
+        return true;
+    }
+    return false;
+}
+
+static QStringList ToStringList(const QJsonValue& input)
+{
+    QStringList list;
+    if (!input.isArray()) return list;
+    for (const auto value : input.toArray()) {
+        list.append(value.toString());
+    }
+    return list;
 }
 
 bool WatchonlyData::read(const QJsonObject& data)
@@ -340,5 +380,7 @@ bool WatchonlyData::read(const QJsonObject& data)
     auto watchonly = data.value("watchonly").toObject();
     m_network = NetworkManager::instance()->network(watchonly.value("network").toString());
     m_username = watchonly.value("username").toString();
+    m_core_descriptors = ToStringList(watchonly.value("core_descriptors"));
+    m_extended_pubkeys = ToStringList(watchonly.value("extended_pubkeys"));
     return true;
 }

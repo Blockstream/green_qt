@@ -4,6 +4,7 @@
 
 #include "context.h"
 #include "network.h"
+#include "session.h"
 #include "task.h"
 #include "wallet.h"
 #include "walletmanager.h"
@@ -82,6 +83,31 @@ void WatchOnlyLoginController::update()
 
 void WatchOnlyLoginController::login()
 {
+    auto watchonly_data = m_wallet ? qobject_cast<WatchonlyData*>(m_wallet->login()) : nullptr;
+
+    const auto network = watchonly_data ? watchonly_data->network() : m_network;
+
+    setContext(new Context(network->deployment(), false, this));
+    m_context->setWatchonly(true);
+
+    auto session = m_context->getOrCreateSession(network);
+
+    if (!network->isElectrum()) {
+        const auto username = watchonly_data ? watchonly_data->username() : m_username;
+        login(new LoginTask(username, m_password, session));
+    } else if (!watchonly_data->extendedPubkeys().isEmpty()) {
+        setValid(true);
+        const auto slip132_extended_pubkeys = QJsonArray::fromStringList(watchonly_data->extendedPubkeys());
+        login(new LoginTask(QJsonObject{{ "slip132_extended_pubkeys", slip132_extended_pubkeys }}, QJsonObject{}, session));
+    } else if (!watchonly_data->coreDescriptors().isEmpty()) {
+        setValid(true);
+        const auto core_descriptors = QJsonArray::fromStringList(watchonly_data->coreDescriptors());
+        login(new LoginTask(QJsonObject{{ "core_descriptors", core_descriptors }}, QJsonObject{}, session));
+    }
+}
+
+void WatchOnlyLoginController::login(LoginTask* login_task)
+{
     Q_ASSERT(m_valid);
     m_error.clear();
 
@@ -89,18 +115,10 @@ void WatchOnlyLoginController::login()
     m_monitor = new TaskGroupMonitor(this);
     emit monitorChanged();
 
-    auto watchonly_data = m_wallet ? qobject_cast<WatchonlyData*>(m_wallet->login()) : nullptr;
-
-    const auto network = watchonly_data ? watchonly_data->network() : m_network;
-    const auto username = watchonly_data ? watchonly_data->username() : m_username;
-
-    setContext(new Context(network->deployment(), false, this));
-    m_context->setWatchonly(true);
-
-    auto session = m_context->getOrCreateSession(network);
+    auto session = login_task->session();
+    auto network = session->network();
 
     auto connect_session = new ConnectTask(session);
-    auto session_login = new LoginTask(username, m_password, session);
     auto create_wallet = new WatchOnlyCreateWalletTask(this);
 
     connect(connect_session, &Task::failed, this, [=](const QString& error) {
@@ -111,20 +129,20 @@ void WatchOnlyLoginController::login()
             m_error = error;
         }
     });
-    connect(session_login, &Task::failed, this, [=](const QString& error) {
+    connect(login_task, &Task::failed, this, [=](const QString& error) {
         if (!m_error.isEmpty()) return;
         m_error = error;
     });
 
     m_context->setWallet(m_wallet);
 
-    connect_session->then(session_login);
-    session_login->then(create_wallet);
+    connect_session->then(login_task);
+    login_task->then(create_wallet);
 
     auto group = new TaskGroup(this);
 
     group->add(connect_session);
-    group->add(session_login);
+    group->add(login_task);
     group->add(create_wallet);
 
     dispatcher()->add(group);
@@ -134,6 +152,36 @@ void WatchOnlyLoginController::login()
     connect(group, &TaskGroup::failed, this, [=] {
         emit loginFailed(m_error);
     });
+}
+
+void WatchOnlyLoginController::loginExtendedPublicKeys(const QString& input)
+{
+    qDebug() << m_network->id();
+
+    setContext(new Context(m_network->deployment(), false, this));
+    m_context->setWatchonly(true);
+
+    auto session = m_context->getOrCreateSession(m_network);
+
+    m_extended_pubkeys = input.split('\n');
+
+    setValid(true);
+    login(new LoginTask(QJsonObject{{ "slip132_extended_pubkeys", QJsonArray::fromStringList(m_extended_pubkeys) }}, QJsonObject{}, session));
+}
+
+void WatchOnlyLoginController::loginDescriptors(const QString& input)
+{
+    setContext(new Context(m_network->deployment(), false, this));
+    m_context->setWatchonly(true);
+
+    auto session = m_context->getOrCreateSession(m_network);
+
+    m_core_descriptors = input.split('\n');;
+
+    QJsonObject details{{ "core_descriptors", QJsonArray::fromStringList(m_core_descriptors) }};
+
+    setValid(true);
+    login(new LoginTask(details, QJsonObject{}, session));
 }
 
 void WatchOnlyLoginController::setValid(bool valid)
@@ -174,6 +222,8 @@ void WatchOnlyCreateWalletTask::update()
             auto watchonly_data = new WatchonlyData(wallet);
             watchonly_data->setNetwork(m_controller->network());
             watchonly_data->setUsername(m_controller->username());
+            watchonly_data->setExtendedPubkeys(m_controller->extendedPubkeys());
+            watchonly_data->setCoreDescriptors(m_controller->coreDescriptors());
 
             wallet->setName(QString("%1 watch-only wallet").arg(m_controller->username()));
             wallet->setLogin(watchonly_data);

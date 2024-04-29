@@ -86,10 +86,33 @@ private:
 class XPubValidator : public QValidator
 {
     Q_OBJECT
+    Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     QML_ELEMENT
 public:
     XPubValidator(QObject* parent = nullptr);
+    Network* network() const { return m_network; }
+    void setNetwork(Network* network);
     QValidator::State validate(QString& input, int& pos) const override;
+signals:
+    void networkChanged();
+private:
+    Network* m_network{nullptr};
+};
+
+class DescriptorValidator : public QValidator
+{
+    Q_OBJECT
+    Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
+    QML_ELEMENT
+public:
+    DescriptorValidator(QObject* parent = nullptr);
+    Network* network() const { return m_network; }
+    void setNetwork(Network* network);
+    QValidator::State validate(QString& input, int& pos) const override;
+signals:
+    void networkChanged();
+private:
+    Network* m_network{nullptr};
 };
 
 #endif // GREEN_CREATEACCOUNTCONTROLLER_H

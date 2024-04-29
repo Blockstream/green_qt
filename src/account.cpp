@@ -187,6 +187,9 @@ void Account::timerEvent(QTimerEvent* event)
         killTimer(m_load_balance_timer_id);
         m_load_balance_timer_id = -1;
         m_context->dispatcher()->add(new LoadBalanceTask(this));
+        if (m_context->isWatchonly() && m_network->isElectrum()) {
+            m_context->dispatcher()->add(new LoadAccountTask(m_pointer, m_session));
+        }
     }
 }
 

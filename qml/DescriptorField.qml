@@ -5,7 +5,6 @@ import QtQuick.Layouts
 
 TextField {
     required property Network network
-    Layout.fillWidth: true
     id: self
     topPadding: 14
     bottomPadding: 13
@@ -38,7 +37,7 @@ TextField {
             }
         }
     }
-    validator: XPubValidator {
+    validator: DescriptorValidator {
         network: self.network
     }
     Row {

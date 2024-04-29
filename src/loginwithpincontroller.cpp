@@ -314,13 +314,19 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
     group->add(new GetWatchOnlyDetailsTask(session));
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
-    auto load_accounts = new LoadAccountsTask(false, session);
-    connect(load_accounts, &Task::finished, this, [=] {
-        for (auto account : load_accounts->accounts()) {
-            group->add(new LoadBalanceTask(account));
-        }
-    });
-    group->add(load_accounts);
+    if (!m_context->isWatchonly() || !network->isElectrum()) {
+        auto load_accounts = new LoadAccountsTask(false, session);
+        connect(load_accounts, &Task::finished, this, [=] {
+            for (auto account : load_accounts->accounts()) {
+                group->add(new LoadBalanceTask(account));
+            }
+        });
+        connect(load_accounts, &Task::failed, this, [=](auto error) {
+            // TODO: deal with these errors
+            qDebug() << Q_FUNC_INFO << error;
+        });
+        group->add(load_accounts);
+    }
 }
 
 void LoadController::loginNetwork(Network* network)

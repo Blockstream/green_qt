@@ -11,7 +11,6 @@
 class WatchOnlyLoginController : public Controller
 {
     Q_OBJECT
-    Q_PROPERTY(TaskGroupMonitor* monitor READ monitor NOTIFY monitorChanged)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
@@ -22,8 +21,6 @@ class WatchOnlyLoginController : public Controller
 public:
     WatchOnlyLoginController(QObject* parent = nullptr);
 
-    TaskGroupMonitor* monitor() const { return m_monitor; }
-
     Network* network() const { return m_network; }
     void setNetwork(Network* network);
 
@@ -33,6 +30,9 @@ public:
     QString password() const { return m_password; }
     void setPassword(const QString& password);
 
+    QStringList extendedPubkeys() { return m_extended_pubkeys; }
+    QStringList coreDescriptors() { return m_core_descriptors; }
+
     bool saveWallet() const { return m_save_wallet; }
     void setSaveWallet(bool save_wallet);
 
@@ -41,11 +41,13 @@ public:
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
 
+    void login(LoginTask* login_task);
+
 public slots:
     void login();
-
+    void loginExtendedPublicKeys(const QString& input);
+    void loginDescriptors(const QString& input);
 signals:
-    void monitorChanged();
     void networkChanged();
     void usernameChanged();
     void passwordChanged();
@@ -60,10 +62,11 @@ private:
     void setValid(bool valid);
 
 private:
-    TaskGroupMonitor* m_monitor{nullptr};
     Network* m_network{nullptr};
     QString m_username;
     QString m_password;
+    QStringList m_extended_pubkeys;
+    QStringList m_core_descriptors;
     bool m_save_wallet{false};
     bool m_valid{false};
     Wallet* m_wallet{nullptr};

@@ -41,7 +41,6 @@ StackViewPage {
             }
             Option {
                 Layout.fillWidth: true
-                enabled: false
                 icon.source: 'qrc:/svg2/singlesig.svg'
                 type: qsTrId('id_singlesig') + '/' + qsTrId('id_legacy_segwit')
                 text: qsTrId('id_standard')
@@ -68,7 +67,7 @@ StackViewPage {
         id: self
         padding: 20
         background: Rectangle {
-            color: '#222226'
+            color: Qt.lighter('#222226', self.hovered ? 1.2 : 1)
             radius: 5
             Rectangle {
                 border.width: 2

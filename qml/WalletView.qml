@@ -98,9 +98,7 @@ MainPage {
         SecureFundsPage {
             onAddWallet: stack_view.push(add_wallet_page)
             onUseDevice: stack_view.push(use_device_page)
-            // TODO present singlesig or multisig options once singlesig watchonly login is implemented
-            // onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
-            onWatchOnlyWallet: stack_view.push(multisig_watch_only_network_page)
+            onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
         }
     }
 
@@ -210,13 +208,33 @@ MainPage {
     Component {
         id: watch_only_wallet_page
         WatchOnlyWalletPage {
+            onSinglesigWallet: stack_view.push(singlesig_watch_only_network_page)
             onMultisigWallet: stack_view.push(multisig_watch_only_network_page)
         }
     }
 
     Component {
+        id: singlesig_watch_only_network_page
+        WatchOnlyNetworkPage {
+            electrum: true
+            onNetworkSelected: (network) => stack_view.push(singlesig_watch_only_add_page, { network })
+        }
+    }
+
+    Component {
+        id: singlesig_watch_only_add_page
+        SinglesigWatchOnlyAddPage {
+            onLoginFinished: (context) => {
+                self.wallet = context.wallet
+                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+            }
+        }
+    }
+
+    Component {
         id: multisig_watch_only_network_page
-        MultisigWatchOnlyNetworkPage {
+        WatchOnlyNetworkPage {
+            electrum: false
             onNetworkSelected: (network) => stack_view.push(multisig_watch_only_add_page, { network })
         }
     }

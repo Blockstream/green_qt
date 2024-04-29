@@ -13,7 +13,6 @@ SET(QML_FILES
     qml/WalletSecuritySettingsView.qml
     qml/GCard.qml
     qml/TwoFactorEnableDialog.qml
-    qml/LedgerDevicesView.qml
     qml/DebugRectangle.qml
     qml/WalletGeneralSettingsView.qml
     qml/WalletsView.qml
@@ -179,7 +178,7 @@ SET(QML_FILES
     qml/WatchOnlyLoginPage.qml
     qml/UsernameField.qml
     qml/PasswordField.qml
-    qml/MultisigWatchOnlyNetworkPage.qml
+    qml/WatchOnlyNetworkPage.qml
     qml/FreshWalletDialog.qml
     qml/AbstractDrawer.qml
     qml/WalletsDrawer.qml
@@ -243,7 +242,9 @@ SET(QML_FILES
     qml/JadeHttpRequestDialog.qml
     qml/LinkLabel.qml
     qml/PassphraseDialog.qml
+    qml/SinglesigWatchOnlyAddPage.qml
     qml/WalletWatchOnlySettingsView.qml
+    qml/DescriptorField.qml
 )
 
 if (GREEN_NO_RESOURCES)

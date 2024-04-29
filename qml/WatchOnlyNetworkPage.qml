@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal networkSelected(Network network)
+    required property bool electrum
     id: self
     padding: 60
     contentItem: ColumnLayout {
@@ -42,12 +43,12 @@ StackViewPage {
             }
             Option {
                 Layout.fillWidth: true
-                network: NetworkManager.network('mainnet')
+                network: NetworkManager.network(self.electrum ? 'electrum-mainnet' : 'mainnet')
                 description: qsTrId('id_bitcoin_is_the_worlds_leading')
             }
             Option {
                 Layout.fillWidth: true
-                network: NetworkManager.network('liquid')
+                network: NetworkManager.network(self.electrum ? 'electrum-liquid' : 'liquid')
                 description: qsTrId('id_the_liquid_network_is_a_bitcoin')
             }
         }
@@ -64,7 +65,7 @@ StackViewPage {
         icon.source: UtilJS.iconFor(option.network)
         text: option.network.displayName
         background: Rectangle {
-            color: '#222226'
+            color: Qt.lighter('#222226', option.hovered ? 1.2 : 1)
             radius: 5
             Rectangle {
                 border.width: 2
@@ -129,7 +130,13 @@ StackViewPage {
             id: dialog
             onDeploymentSelected: (deployment) => {
                 if (deployment === 'testnet') {
-                    const network = NetworkManager.network(dialog.network.liquid ? 'testnet-liquid' : 'testnet')
+                    const testnet = {
+                        'mainnet': 'testnet',
+                        'electrum-mainnet': 'electrum-testnet',
+                        'liquid': 'testnet-liquid',
+                        'electrum-liquid': 'electrum-testnet-liquid',
+                    }
+                    const network = NetworkManager.network(testnet[dialog.network.id])
                     self.networkSelected(network)
                 } else {
                     self.networkSelected(dialog.network)

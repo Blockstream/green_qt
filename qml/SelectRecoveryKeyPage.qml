@@ -6,6 +6,7 @@ import QtQuick.Layouts
 StackViewPage {
     signal recoveryKey(var recovery_key)
     signal xpub(string xpub)
+    required property Network network
 
     id: self
     title: qsTrId('id_select_your_recovery_key')
@@ -132,6 +133,7 @@ StackViewPage {
                 XPubField {
                     Layout.fillWidth: true
                     id: xpub_field
+                    network: self.network
                 }
                 VSpacer {
                 }

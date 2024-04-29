@@ -37,7 +37,7 @@ StackViewPage {
     }
     Action {
         id: login_action
-        enabled: controller.valid
+        // enabled: controller.valid
         onTriggered: {
             error_badge.clear()
             self.contentItem.enabled = false
@@ -85,27 +85,30 @@ StackViewPage {
                 text: qsTrId('id_log_in_via_watchonly_to_receive')
                 wrapMode: Label.Wrap
             }
-            FieldTitle {
-                Layout.topMargin: 20
-                text: qsTrId('id_username')
-            }
-            UsernameField {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: true
-                text: self.wallet.login.username
-                readOnly: true
-            }
-            FieldTitle {
-                Layout.topMargin: 10
-                text: qsTrId('id_password')
-            }
-            PasswordField {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignCenter
-                id: password_field
-                focus: true
-                onAccepted: login_action.trigger()
-                onTextEdited: error_badge.clear()
+            ColumnLayout {
+                visible: !self.wallet.login.network.electrum
+                FieldTitle {
+                    Layout.topMargin: 20
+                    text: qsTrId('id_username')
+                }
+                UsernameField {
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: true
+                    text: self.wallet.login.username
+                    readOnly: true
+                }
+                FieldTitle {
+                    Layout.topMargin: 10
+                    text: qsTrId('id_password')
+                }
+                PasswordField {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignCenter
+                    id: password_field
+                    focus: true
+                    onAccepted: login_action.trigger()
+                    onTextEdited: error_badge.clear()
+                }
             }
             FixedErrorBadge {
                 Layout.alignment: Qt.AlignHCenter

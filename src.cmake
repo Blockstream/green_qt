@@ -58,7 +58,7 @@ SET(TARGET_SOURCES
 	src/walletmanager.cpp
 	src/wally.cpp
 	src/watchonlylogincontroller.cpp
-	src/ledger/ledgerdevice.cpp
+        src/ledger/ledgerdevice.cpp
 	src/ledger/ledgergetblindingkeyactivity.cpp
 	src/ledger/ledgergetblindingnonceactivity.cpp
 	src/ledger/ledgergetwalletpublickeyactivity.cpp
@@ -66,7 +66,6 @@ SET(TARGET_SOURCES
 	src/ledger/ledgersignmessageactivity.cpp
 	src/ledger/ledgersigntransactionactivity.cpp
 	src/controllers/receiveaddresscontroller.cpp
-	src/controllers/ledgerdevicecontroller.cpp
 	src/controllers/exporttransactionscontroller.cpp
 	src/controllers/exportaddressescontroller.cpp
 	src/jade/jadeconnection.cpp

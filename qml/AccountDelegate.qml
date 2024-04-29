@@ -184,7 +184,7 @@ ItemDelegate {
                         ProgressIndicator {
                             Layout.alignment: Qt.AlignBottom
                             Layout.bottomMargin: 2
-                            indeterminate: !delegate.account.synced
+                            indeterminate: !delegate.account.type || !delegate.account.synced
                             width: 20
                             height: 20
                         }

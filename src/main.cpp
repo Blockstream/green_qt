@@ -162,8 +162,29 @@ QString GetPlatformName()
     return "linux";
 }
 
+#include <wally_wrapper.h>
+
 int main(int argc, char *argv[])
 {
+#if 0
+    // decoded = wally.base58check_to_bytes(b58key)
+    //           assert decoded[:4] == version
+    //             bip32_version = wally.BIP32_VER_MAIN_PRIVATE if is_private else wally.BIP32_VER_MAIN_PUBLIC
+    //       return wally.bip32_key_unserialize((bip32_version).to_bytes(4, 'big') + decoded[4:])
+
+    unsigned char bytes[BIP32_SERIALIZED_LEN + BASE58_CHECKSUM_LEN];
+    size_t written;
+
+    auto rc = wally_base58_to_bytes("vpub5XzEwP9YWe4cJzi7Xjm7AbBxPskJwJb5RBzAWcXhHSC7eYXT3V4F9B1TfULr9eE7BTjgn63bu3mB8xWCSafD9zZo4uQdL8eyPB3DREJmoJM",
+                          BASE58_FLAG_CHECKSUM,
+                          bytes,
+                          sizeof(bytes), &written);
+
+
+    qDebug() << QByteArray((const char*) bytes, written).toHex();
+
+    return 0;
+#endif
     QCoreApplication::setApplicationName("Green");
     QCoreApplication::setOrganizationName("Blockstream");
     QCoreApplication::setOrganizationDomain("blockstream.com");
