@@ -136,7 +136,7 @@ WalletDialog {
                 sessions: self.sessions
             }
             Loader {
-                active: stack_layout.currentIndex === 3
+                active: stack_layout.currentIndex === 4
                 sourceComponent: GFlickable {
                     id: recovery_settings_flickable
                     contentHeight: recovery_view.height
