@@ -47,6 +47,7 @@ public slots:
     void login();
     void loginExtendedPublicKeys(const QString& input);
     void loginDescriptors(const QString& input);
+    QStringList parseFile(const QUrl& url);
 signals:
     void networkChanged();
     void usernameChanged();

@@ -9,6 +9,8 @@
 #include "wallet.h"
 #include "walletmanager.h"
 
+#include <QJsonDocument>
+
 WatchOnlyLoginController::WatchOnlyLoginController(QObject* parent)
     : Controller(parent)
 {
@@ -182,6 +184,39 @@ void WatchOnlyLoginController::loginDescriptors(const QString& input)
 
     setValid(true);
     login(new LoginTask(details, QJsonObject{}, session));
+}
+
+QStringList WatchOnlyLoginController::parseFile(const QUrl& url)
+{
+    if (!url.isLocalFile()) return {};
+    const auto path = url.toLocalFile();
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return {};
+    }
+    const auto doc = QJsonDocument::fromJson(file.readAll());
+    const auto content = doc.object();
+    QStringList xpubs;
+    if (content.value("chain").toString() == "BTC") {
+        for (const auto i : content) {
+            if (!i.isObject()) continue;
+            const auto bip = i.toObject();
+            const auto name = bip.value("name").toString();
+            if (name != "p2pkh" && name != "p2sh-p2wpkh" && name != "p2wpkh" && name != "p2tr") continue;
+            const auto pub = bip.value("_pub").toString();
+            const auto xpub = bip.value("xpub").toString();
+            if (!pub.isEmpty()) {
+                xpubs.append(pub);
+            } else if (!xpub.isEmpty()) {
+                xpubs.append(xpub);
+            }
+        }
+    } else if (content.value("wallet_type").toString() == "standard") {
+        const auto keystore = content.value("keystore").toObject();
+        const auto xpub = keystore.value("xpub").toString();
+        xpubs.append(xpub);
+    }
+    return xpubs;
 }
 
 void WatchOnlyLoginController::setValid(bool valid)

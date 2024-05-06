@@ -244,7 +244,6 @@ SET(QML_FILES
     qml/PassphraseDialog.qml
     qml/SinglesigWatchOnlyAddPage.qml
     qml/WalletWatchOnlySettingsView.qml
-    qml/DescriptorField.qml
 )
 
 if (GREEN_NO_RESOURCES)

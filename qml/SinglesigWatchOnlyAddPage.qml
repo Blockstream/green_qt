@@ -1,7 +1,9 @@
 import Blockstream.Green
 import Blockstream.Green.Core
+import QtCore
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
@@ -39,6 +41,7 @@ StackViewPage {
             Layout.maximumWidth: 500
             background: null
             contentItem: ColumnLayout {
+                spacing: 10
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
@@ -55,87 +58,42 @@ StackViewPage {
                     id: selector
                     index: self.network.liquid ? 1 : 0
                 }
-                Pane {
+                Label {
+                    Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
+                    Layout.maximumWidth: 400
+                    Layout.preferredWidth: 0
                     Layout.topMargin: 30
-                    visible: selector.index === 0
-                    background: null
-                    contentItem: ColumnLayout {
-                        Label {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            Layout.preferredWidth: 0
-                            font.pixelSize: 14
-                            font.weight: 400
-                            horizontalAlignment: Label.AlignHCenter
-                            opacity: 0.4
-                            text: qsTrId('id_scan_or_paste_your_extended')
-                            wrapMode: Label.Wrap
-                        }
-                        XPubField {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            id: xpub_field
-                            focus: true
-                            network: self.network
-                            validator: null
-                            onAccepted: xpub_login_action.trigger()
-                            onTextEdited: error_badge.clear()
-                        }
-                        PrimaryButton {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            Layout.topMargin: 40
-                            text: qsTrId('id_import')
-                            action: Action {
-                                id: xpub_login_action
-                                enabled: xpub_field.acceptableInput
-                                onTriggered: {
-                                    onTextEdited: error_badge.clear()
-                                    controller.loginExtendedPublicKeys(xpub_field.text)
-                                }
-                            }
-                        }
+                    font.pixelSize: 14
+                    font.weight: 400
+                    horizontalAlignment: Label.AlignHCenter
+                    opacity: 0.4
+                    text: selector.index === 0 ? qsTrId('id_scan_or_paste_your_extended') : qsTrId('id_scan_or_paste_your_public')
+                    wrapMode: Label.Wrap
+                }
+                KeysField {
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: true
+                    id: keys_field
+                    focus: true
+                    onTextChanged: {
+                        error_badge.clear()
+                        selector.index = keys_field.text.indexOf('(') < 0 ? 0 : 1
                     }
                 }
-                Pane {
+                PrimaryButton {
+                    Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
-                    Layout.topMargin: 30
-                    visible: selector.index === 1
-                    background: null
-                    contentItem: ColumnLayout {
-                        Label {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            Layout.preferredWidth: 0
-                            font.pixelSize: 14
-                            font.weight: 400
-                            horizontalAlignment: Label.AlignHCenter
-                            opacity: 0.4
-                            text: qsTrId('id_scan_or_paste_your_public')
-                            wrapMode: Label.Wrap
-                        }
-                        DescriptorField {
-                            Layout.fillWidth: true
-                            id: descriptor_field
-                            focus: true
-                            network: self.network
-                            validator: null
-                            onAccepted: descriptor_login_action.trigger()
+                    Layout.topMargin: 40
+                    text: qsTrId('id_import')
+                    action: Action {
+                        id: login_action
+                        onTriggered: {
                             onTextEdited: error_badge.clear()
-                        }
-                        PrimaryButton {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            Layout.topMargin: 40
-                            text: qsTrId('id_import')
-                            action: Action {
-                                id: descriptor_login_action
-                                enabled: descriptor_field.acceptableInput
-                                onTriggered: {
-                                    onTextEdited: error_badge.clear()
-                                    controller.loginDescriptors(descriptor_field.text)
-                                }
+                            if (selector.index === 0) {
+                                controller.loginExtendedPublicKeys(keys_field.text)
+                            } else {
+                                controller.loginDescriptors(keys_field.text)
                             }
                         }
                     }
@@ -150,6 +108,7 @@ StackViewPage {
                     Layout.alignment: Qt.AlignCenter
                     Layout.topMargin: 10
                     id: remember_checkbox
+                    checked: true
                     text: qsTrId('id_remember_me')
                     leftPadding: 12
                     rightPadding: 12
@@ -193,7 +152,7 @@ StackViewPage {
             spacing: 0
             Option {
                 text: qsTrId('id_xpub')
-                enabled: !self.network.liquid
+                enabled: !self.network.liquid && keys_field.text.indexOf('(') < 0
                 checked: selector.index === 0
                 onClicked: selector.index = 0
             }
@@ -235,6 +194,87 @@ StackViewPage {
             verticalAlignment: Label.AlignVCenter
             opacity: option.checked ? 1 : 0.3
             text: option.text
+        }
+    }
+
+
+    component KeysField: TextArea {
+        Layout.minimumHeight: options_layout.height + text_area.topPadding + text_area.bottomPadding
+        id: text_area
+        topPadding: 14
+        bottomPadding: 14
+        leftPadding: 15
+        rightPadding: 15 + options_layout.width + 10
+        font.pixelSize: 14
+        font.weight: 500
+        wrapMode: TextEdit.Wrap
+        background: Rectangle {
+            color: Qt.lighter('#222226', text_area.hovered ? 1.2 : 1)
+            radius: 5
+            Rectangle {
+                border.width: 2
+                border.color: '#00B45A'
+                color: 'transparent'
+                radius: 9
+                anchors.fill: parent
+                anchors.margins: -4
+                z: -1
+                opacity: {
+                    if (self.activeFocus) {
+                        switch (self.focusReason) {
+                        case Qt.TabFocusReason:
+                        case Qt.BacktabFocusReason:
+                        case Qt.ShortcutFocusReason:
+                            return 1
+                        }
+                    }
+                    return 0
+                }
+            }
+        }
+        Column {
+            id: options_layout
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 15
+            spacing: 16
+            CircleButton {
+                enabled: text_area.text.length > 0
+                icon.source: 'qrc:/svg2/x-circle.svg'
+                onClicked: text_area.clear()
+            }
+            CircleButton {
+                icon.source: 'qrc:/svg2/paste.svg'
+                onClicked: {
+                    text_area.clear();
+                    text_area.paste();
+                }
+            }
+            CircleButton {
+                enabled: !scanner_popup.visible
+                icon.source: 'qrc:/svg2/qrcode.svg'
+                onClicked: scanner_popup.open()
+                ScannerPopup {
+                    id: scanner_popup
+                    onCodeScanned: (code) => {
+                        text_area.text = code
+                    }
+                }
+            }
+            CircleButton {
+                icon.source: 'qrc:/svg2/import.svg'
+                onClicked: file_dialog.open()
+            }
+        }
+        FileDialog {
+            id: file_dialog
+            currentFolder: StandardPaths.standardLocations(StandardPaths.DesktopLocation)[0]
+            onAccepted: {
+                const xpubs = controller.parseFile(file_dialog.selectedFile)
+                if (xpubs.length) {
+                    text_area.text = xpubs.join('\n')
+                }
+            }
         }
     }
 }

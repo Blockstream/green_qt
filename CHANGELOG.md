@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added:
+- Add or import singlesig watch-only wallet
 - New watch-only section in wallet settings dialog
 - Expose extended public keys and output descriptors of singlesig accounts
 - Handle external BIP21 payment on Linux
