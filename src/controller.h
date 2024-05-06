@@ -56,7 +56,6 @@ public slots:
     void changeSessionSettings(Session* session, const QJsonObject& data);
     void sendRecoveryTransactions();
     void setRecoveryEmail(const QString& email);
-    void setCsvTime(int value);
     void deleteWallet();
     void disableAllPins();
     void setUnspentOutputsStatus(Account* account, const QVariantList &outputs, const QString &status);
@@ -121,6 +120,7 @@ public slots:
     void enable(const QString& data);
     void disable();
     void changeLimits(const QString& satoshi);
+    void setCsvTime(int value);
 signals:
     void methodChanged();
 private:

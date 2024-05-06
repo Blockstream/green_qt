@@ -204,15 +204,6 @@ void Controller::setRecoveryEmail(const QString& email)
     dispatcher()->add(group);
 }
 
-void Controller::setCsvTime(int value)
-{
-    if (!m_context) return;
-    auto session = m_context->primarySession();
-    auto set_csv_time = new SetCsvTimeTask(value, session);
-
-    dispatcher()->add(set_csv_time);
-}
-
 void Controller::deleteWallet()
 {
     auto session = m_context->primarySession();
@@ -417,6 +408,28 @@ void TwoFactorController::changeLimits(const QString& satoshi)
     m_monitor->add(group);
 
     connect(change_twofactor_limits, &Task::failed, this, [=](const QString& error) {
+        emit failed(error);
+    });
+    connect(group, &TaskGroup::finished, this, [=] {
+        emit finished();
+    });
+}
+
+void TwoFactorController::setCsvTime(int value)
+{
+    if (!m_context) return;
+    if (!m_session) return;
+
+    auto set_csv_time = new SetCsvTimeTask(value, m_session);
+
+    auto group = new TaskGroup(this);
+
+    group->add(set_csv_time);
+
+    dispatcher()->add(group);
+    m_monitor->add(group);
+
+    connect(set_csv_time, &Task::failed, this, [=](const QString& error) {
         emit failed(error);
     });
     connect(group, &TaskGroup::finished, this, [=] {

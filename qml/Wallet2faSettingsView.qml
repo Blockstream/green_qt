@@ -201,18 +201,45 @@ Page {
 
             SettingsBox {
                 title: qsTrId('id_twofactor_authentication_expiry')
-                visible: false // !view.session.network.liquid
-                contentItem: RowLayout {
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTrId('id_customize_2fa_expiration_of')
-                        wrapMode: Text.WordWrap
+                visible: !view.session.network.liquid
+                contentItem: AbstractButton {
+                    id: button3
+                    leftPadding: 20
+                    rightPadding: 20
+                    topPadding: 15
+                    bottomPadding: 15
+                    background: Rectangle {
+                        radius: 5
+                        color: Qt.lighter('#222226', button3.hovered ? 1.2 : 1)
                     }
-                    GButton {
-                        Layout.alignment: Qt.AlignRight
-                        large: false
-                        text: qsTrId('id_change')
-                        onClicked: two_factor_auth_expiry_dialog.createObject(stack_view).open()
+                    contentItem: RowLayout {
+                        ColumnLayout {
+                            spacing: 10
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.minimumWidth: 0
+                                font.pixelSize: 14
+                                font.weight: 600
+                                text: qsTrId('id_customize_2fa_expiration_of')
+                                wrapMode: Text.WordWrap
+                            }
+                            Label {
+                                text: UtilJS.csvLabel(view.session.settings.csvtime)
+                                font.pixelSize: 14
+                                font.weight: 500
+                            }
+                        }
+                        Image {
+                            Layout.alignment: Qt.AlignCenter
+                            source: 'qrc:/svg2/edit.svg'
+                        }
+                    }
+                    onClicked: {
+                        const dialog = two_factor_auth_expiry_dialog.createObject(view, {
+                            context: self.context,
+                            session: view.session,
+                        })
+                        dialog.open()
                     }
                 }
             }
@@ -318,8 +345,6 @@ Page {
     Component {
         id: two_factor_auth_expiry_dialog
         TwoFactorAuthExpiryDialog {
-//            wallet: self.wallet
-//            session: self.session
         }
     }
 

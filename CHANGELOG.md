@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle external BIP21 payment on Linux
 - Option to scramble login keypad
 
+### Fixed:
+- Reinstate 2FA expire settings
+
 ## [2.0.4] - 2024-04-22
 ### Added:
 - BIP39 passphrase login

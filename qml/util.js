@@ -175,3 +175,19 @@ function shuffle(a) {
     }
     return c
 }
+
+function csvTimeLabel(blocks) {
+    const hours = Math.round(blocks / 6)
+    if (hours <= 1) return '~1 ' + qsTrId('id_hour')
+    if (hours < 24) return hours + ' ' + qsTrId('id_hours')
+    const days = Math.round(blocks / 6 / 24)
+    if (days <= 1) return '1 ' + qsTrId('id_day')
+    if (days < 30) return days + qsTrId('id_days')
+    const months = Math.round(blocks / 6 / 24 / 30)
+    if (months <= 1) return '1 ' + qsTrId('id_month')
+    return months + ' ' + qsTrId('id_months')
+}
+
+function csvLabel(blocks) {
+    return csvTimeLabel(blocks) + ' (' + blocks + ' ' + qsTrId('id_blocks') + ')'
+}
