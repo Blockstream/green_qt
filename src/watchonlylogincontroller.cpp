@@ -260,7 +260,11 @@ void WatchOnlyCreateWalletTask::update()
             watchonly_data->setExtendedPubkeys(m_controller->extendedPubkeys());
             watchonly_data->setCoreDescriptors(m_controller->coreDescriptors());
 
-            wallet->setName(QString("%1 watch-only wallet").arg(m_controller->username()));
+            QString name = qtTrId("id_watchonly_wallet");
+            if (!m_controller->username().isEmpty()) {
+                name = m_controller->username() + " " + name;
+            }
+            wallet->setName(WalletManager::instance()->uniqueWalletName(name));
             wallet->setLogin(watchonly_data);
             wallet->m_deployment = m_controller->network()->deployment();
             wallet->m_is_persisted = m_controller->saveWallet();
