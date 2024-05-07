@@ -102,6 +102,10 @@ StackViewPage {
         id: account_list_model
         context: self.context
         filter: '!hidden'
+        onCountChanged: {
+            if (self.currentAccount) return;
+            self.currentAccount = account_list_model.first()
+        }
     }
 
     AccountListModel {
