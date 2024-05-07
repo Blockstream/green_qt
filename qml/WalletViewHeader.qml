@@ -136,8 +136,8 @@ MainPageHeader {
                             font.weight: 700
                         }
                         Label {
+                            Layout.leftMargin: 8
                             verticalAlignment: Qt.AlignVCenter
-                            leftPadding: 8
                             color: '#FFF'
                             text: '/'
                             opacity: 0.2
@@ -171,6 +171,7 @@ MainPageHeader {
                         }
                         Loader {
                             Layout.minimumHeight: 42
+                            Layout.leftMargin: 8
                             active: !self.wallet.persisted
                             visible: active
                             sourceComponent: Label {
