@@ -125,9 +125,13 @@ AbstractDrawer {
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: {
-                    if (button.wallet.watchOnly) return 'qrc:/svg2/eye.svg'
-                    if (button.wallet.deployment !== 'mainnet') return 'qrc:/svg2/flask.svg'
-                    return 'qrc:/svg2/wallet.svg'
+                    if (button.wallet.login instanceof WatchonlyData) {
+                        return 'qrc:/svg2/eye.svg'
+                    } else if (button.wallet.deployment !== 'mainnet') {
+                        return 'qrc:/svg2/flask.svg'
+                    } else {
+                        return 'qrc:/svg2/wallet.svg'
+                    }
                 }
             }
             Label {
@@ -149,16 +153,6 @@ AbstractDrawer {
                 radius: 5
                 visible: !!button.wallet.context
             }
-//            Rectangle {
-//                Layout.alignment: Qt.AlignCenter
-//                Layout.leftMargin: 20
-//                Layout.rightMargin: 20
-//                implicitHeight: 10
-//                implicitWidth: 10
-//                visible: button.wallet.context?.device ?? false
-//                color: button.wallet.context?.device?.connected ? '#42FF00' : 'red'
-//                radius: 5
-//            }
             Image {
                 Layout.alignment: Qt.AlignCenter
                 visible: button.wallet.login?.device ?? false
