@@ -108,12 +108,13 @@ WalletDialog {
                 name: 'WalletSettings2FA'
                 index: 3
                 text: qsTrId('id_twofactor_authentication')
+                enabled: !self.context.watchonly
             }
             B {
                 name: 'WalletSettingsRecovery'
                 index: 4
                 text: qsTrId('id_recovery')
-                enabled: !self.context.device
+                enabled: self.context.wallet.login instanceof PinData
             }
             VSpacer { }
         }
