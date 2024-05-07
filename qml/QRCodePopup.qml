@@ -52,7 +52,7 @@ Popup {
                     anchors.bottomMargin: 16
                     sourceSize.width: Math.max(1, width)
                     sourceSize.height: Math.max(1, height)
-                    source: `image://QZXing/encode/${encodeURI(self.text || '')}?format=qrcode&border=true&transparent=false`
+                    source: `image://zxing/${encodeURI(self.text || '')}`
                 }
                 layer.enabled: true
                 layer.effect: OpacityMask {

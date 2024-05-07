@@ -24,6 +24,8 @@ find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
 
 find_package(gdk REQUIRED COMPONENT greenaddress-full)
 
+find_package(ZXing REQUIRED)
+
 include(CMakePrintHelpers)
 cmake_print_properties(TARGETS gdk::greenaddress-full PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES
@@ -54,12 +56,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-DNO_ICONV)
 add_definitions(-DGDK_STATIC_DEFINE)
 
-SET(QZXING_MULTIMEDIA ON)
-SET(QZXING_USE_DECODER_1D_BARCODES ON)
-SET(QZXING_USE_DECODER_QR_CODE ON)
-SET(QZXING_USE_ENCODER ON)
 
-add_subdirectory(ext/qzxing/src)
 
 include(src.cmake)
 
@@ -87,7 +84,7 @@ set_target_properties(green PROPERTIES
 
 target_link_libraries(green
     PRIVATE
-    qzxing
+    ZXing::Core
     gdk::greenaddress-full
     ${COUNTLY_LIB}
     Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia

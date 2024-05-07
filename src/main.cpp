@@ -29,7 +29,6 @@
 #include "walletmanager.h"
 
 #include <KDSingleApplication>
-#include <QZXing.h>
 
 #if defined(QT_QPA_PLATFORM_WAYLAND)
 Q_IMPORT_PLUGIN(QWaylandIntegrationPlugin)
@@ -413,8 +412,7 @@ int main(int argc, char *argv[])
         }
     });
 
-    QZXing::registerQMLTypes();
-    QZXing::registerQMLImageProvider(engine);
+    engine.addImageProvider("zxing", new ZXingImageProvider);
 
     qInfo() << "Load GUI";
     engine.load(QUrl(QStringLiteral("main.qml")));

@@ -22,6 +22,10 @@ FROM base AS gdk
 COPY tools/buildgdk.sh tools/
 RUN . /root/.cargo/env && tools/buildgdk.sh
 
+FROM base AS zxing
+COPY tools/buildzxing.sh tools/
+RUN tools/buildzxing.sh
+
 FROM base AS qt
 COPY tools/buildqt.sh tools/
 RUN tools/buildqt.sh
@@ -33,5 +37,6 @@ RUN tools/buildkdsingleapplication.sh
 FROM base
 COPY --from=hidapi /depends /depends
 COPY --from=countly /depends /depends
+COPY --from=zxing /depends /depends
 COPY --from=gdk /depends /depends
 COPY --from=kdsa /depends /depends

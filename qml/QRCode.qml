@@ -28,7 +28,7 @@ Item {
             cache: false
             sourceSize.width: Math.max(1, img.width)
             sourceSize.height: Math.max(1, img.height)
-            source: `image://QZXing/encode/${encodeURI(self.text || '')}?format=qrcode&border=false&transparent=false&correctionLevel=H`
+            source: `image://zxing/${encodeURI(self.text || '')}`
         }
     }
 }

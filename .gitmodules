@@ -1,3 +1,0 @@
-[submodule "ext/qzxing"]
-	path = ext/qzxing
-	url = https://github.com/Blockstream/qzxing.git

@@ -1,9 +1,10 @@
+import Blockstream.Green
 import QtMultimedia
-import QtQuick
 import QtQml
+import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
-import QZXing
+import QtQuick.Shapes
 
 Item {
     signal codeScanned(string code)
@@ -20,53 +21,59 @@ Item {
             id: camera
             Component.onCompleted: camera.start()
         }
-        videoOutput: videoOutput
+        videoOutput: video_output
     }
 
     VideoOutput {
-        id: videoOutput
+        id: video_output
         anchors.fill: parent
         fillMode: VideoOutput.PreserveAspectCrop
     }
 
-    QZXingFilter
-    {
-        id: zxingFilter
-        videoSink: videoOutput.videoSink
-        orientation: videoOutput.orientation
-        captureRect: {
-            videoOutput.sourceRect;
-            return Qt.rect(videoOutput.sourceRect.width * videoOutput.captureRectStartFactorX,
-                           videoOutput.sourceRect.height * videoOutput.captureRectStartFactorY,
-                           videoOutput.sourceRect.width * videoOutput.captureRectFactorWidth,
-                           videoOutput.sourceRect.height * videoOutput.captureRectFactorHeight)
-        }
+    Item {
+        anchors.centerIn: self
+        scale: Math.max(self.width / video_output.sourceRect.width, self.height / video_output.sourceRect.height)
+        width: video_output.sourceRect.width
+        height: video_output.sourceRect.height
 
-        decoder {
-            enabledDecoders: QZXing.DecoderFormat_QR_CODE
-            onTagFound: (tag) => self.codeScanned(tag)
-            tryHarder: false
+        Repeater {
+            model: detector.results
+            delegate: Shape {
+                ShapePath {
+                    fillColor: Qt.alpha('#00B45A', 0.25)
+                    startX: modelData.points[0].x
+                    startY: modelData.points[0].y
+                    strokeColor: Qt.alpha('#00B45A', 0.75)
+                    strokeWidth: 10
+                    joinStyle: ShapePath.RoundJoin
+                    PathLine {
+                        x: modelData.points[1].x
+                        y: modelData.points[1].y
+                    }
+                    PathLine {
+                        x: modelData.points[2].x
+                        y: modelData.points[2].y
+                    }
+                    PathLine {
+                        x: modelData.points[3].x
+                        y: modelData.points[3].y
+                    }
+                    PathLine {
+                        x: modelData.points[0].x
+                        y: modelData.points[0].y
+                    }
+                }
+            }
         }
     }
 
-    Rectangle {
-        border.width: 1
-        border.color: Material.accent
-        color: 'transparent'
-        width: Math.min(parent.width, parent.height) - Math.round(self.width / 10)
-        height: width
-        anchors.centerIn: parent
-        opacity: 0
-        SequentialAnimation on opacity {
-            PauseAnimation { duration: 2000 }
-            SmoothedAnimation { to: 0.5; velocity: 2 }
-        }
-
-        Rectangle {
-            color: Material.accent
-            anchors.fill: parent
-            anchors.margins: 8
-            opacity: 0.1
+    ZXingDetector {
+        id: detector
+        videoSink: video_output.videoSink
+        onResultsChanged: {
+            for (const result of detector.results) {
+                self.codeScanned(result.text)
+            }
         }
     }
 }

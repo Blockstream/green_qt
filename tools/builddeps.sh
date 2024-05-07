@@ -12,5 +12,6 @@ fi
 ./tools/buildhidapi.sh
 ./tools/buildcountly.sh
 ./tools/buildkdsingleapplication.sh
+./tools/buildzxing.sh
 
 rm -rf build
