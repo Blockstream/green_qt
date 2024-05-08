@@ -247,13 +247,6 @@ void CreateAccountController::setRecoveryXpub(const QString& recovery_xpub)
     }
     m_recovery_xpub = recovery_xpub;
     emit recoveryXpubChanged();
-    if (m_recovery_xpub.isEmpty()) {
-        setError("recoveryXpub", QString{"empty"});
-    } else if (!IsValidXpub(m_recovery_xpub)) {
-        setError("recoveryXpub", QString{"invalid"});
-    } else {
-        clearError("recoveryXpub");
-    }
 }
 
 MnemonicGenerator::MnemonicGenerator(QObject *parent)

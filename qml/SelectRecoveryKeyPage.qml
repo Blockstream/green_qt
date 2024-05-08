@@ -135,6 +135,15 @@ StackViewPage {
                     id: xpub_field
                     network: self.network
                 }
+                SendPage.ErrorPane {
+                    Layout.topMargin: -15
+                    Layout.bottomMargin: 15
+                    error: {
+                        if (xpub_field.text.length === 0) return
+                        if (xpub_field.acceptableInput) return
+                        return qsTrId('id_invalid_xpub')
+                    }
+                }
                 VSpacer {
                 }
             }
