@@ -1,5 +1,6 @@
 import Blockstream.Green
 import QtMultimedia
+import QtCore
 import QtQml
 import QtQuick
 import QtQuick.Controls
@@ -8,8 +9,22 @@ import QtQuick.Shapes
 
 Item {
     signal codeScanned(string code)
+    function start() {
+        if (permission.status === Qt.Granted) {
+            camera.start()
+        } else if (permission.status === Qt.Undetermined) {
+            permission.request()
+        }
+    }
 
     id: self
+
+    Component.onCompleted: self.start()
+
+    CameraPermission {
+        id: permission
+        onStatusChanged: self.start()
+    }
 
     BusyIndicator {
         anchors.centerIn: parent
@@ -19,7 +34,6 @@ Item {
     CaptureSession {
         camera: Camera {
             id: camera
-            Component.onCompleted: camera.start()
         }
         videoOutput: video_output
     }

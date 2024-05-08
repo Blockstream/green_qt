@@ -144,8 +144,7 @@ StackViewPage {
                 CircleButton {
                     Layout.alignment: Qt.AlignCenter
                     id: scanner_button
-                    visible: scanner_popup.available
-                    enabled: !scanner_popup.visible
+                    enabled: scanner_popup.available && !scanner_popup.visible
                     icon.source: 'qrc:/svg2/qrcode.svg'
                     onClicked: {
                         scanner_button.forceActiveFocus()

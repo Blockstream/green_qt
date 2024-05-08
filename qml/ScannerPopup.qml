@@ -1,5 +1,6 @@
 import Blockstream.Green
 import Blockstream.Green.Core
+import QtCore
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
@@ -8,8 +9,11 @@ import QtQuick.Shapes
 Popup {
     signal codeScanned(string code)
     property bool scanned: false
-    readonly property bool available: window.hasVideoInput
-
+    readonly property bool available: window.hasVideoInput && permission.status !== Qt.Denied
+    CameraPermission {
+        id: permission
+        onStatusChanged: self.start()
+    }
     onOpened: self.scanned = false
     id: self
     background: null
