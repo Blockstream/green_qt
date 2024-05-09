@@ -1605,3 +1605,24 @@ bool AckSystemMessageTask::call(GA_session* session, GA_auth_handler** auth_hand
     const auto rc = GA_ack_system_message(session, m_message.toUtf8().constData(), auth_handler);
     return rc == GA_OK;
 }
+
+DecodeBCURTask::DecodeBCURTask(const QString& part, Session* session)
+    : AuthHandlerTask(session)
+    , m_part(part)
+{
+}
+
+QJsonObject DecodeBCURTask::decodedResult() const
+{
+    return m_result.value("result").toObject();
+}
+
+bool DecodeBCURTask::call(GA_session *session, GA_auth_handler **auth_handler)
+{
+    const QJsonObject details{
+        { "part", m_part },
+        { "return_raw_data", false }
+    };
+    const auto rc = GA_bcur_decode(session, Json::fromObject(details).get(), auth_handler);
+    return rc == GA_OK;
+}

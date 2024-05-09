@@ -801,4 +801,17 @@ private:
     const QString m_message;
 };
 
+class DecodeBCURTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    DecodeBCURTask(const QString& part, Session* session);
+    QJsonObject decodedResult() const;
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QString m_part;
+};
 #endif // GREEN_TASK_H
