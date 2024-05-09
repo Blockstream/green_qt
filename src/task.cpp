@@ -1626,3 +1626,15 @@ bool DecodeBCURTask::call(GA_session *session, GA_auth_handler **auth_handler)
     const auto rc = GA_bcur_decode(session, Json::fromObject(details).get(), auth_handler);
     return rc == GA_OK;
 }
+
+EncodeBCURTask::EncodeBCURTask(const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
+    , m_details(details)
+{
+}
+
+bool EncodeBCURTask::call(GA_session* session, GA_auth_handler** auth_handler)
+{
+    const auto rc = GA_bcur_encode(session, Json::fromObject(m_details).get(), auth_handler);
+    return rc == GA_OK;
+}

@@ -814,4 +814,18 @@ private:
 private:
     const QString m_part;
 };
+
+class EncodeBCURTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    EncodeBCURTask(const QJsonObject& details, Session* session);
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QJsonObject m_details;
+};
+
 #endif // GREEN_TASK_H
