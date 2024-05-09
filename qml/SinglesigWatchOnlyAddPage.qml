@@ -259,6 +259,11 @@ StackViewPage {
                     onCodeScanned: (code) => {
                         text_area.text = code
                     }
+                    onBcurScanned: (result) => {
+                        if (result.ur_type === 'crypto-account') {
+                            text_area.text = result.descriptors.join('\n')
+                        }
+                    }
                 }
             }
             CircleButton {

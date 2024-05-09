@@ -8,6 +8,7 @@ import QtQuick.Shapes
 
 Popup {
     signal codeScanned(string code)
+    signal bcurScanned(var result)
     property bool scanned: false
     readonly property bool available: window.hasVideoInput && permission.status !== Qt.Denied
     CameraPermission {
@@ -60,6 +61,13 @@ Popup {
                     if (!self.scanned) {
                         self.scanned = true
                         self.codeScanned(code)
+                        self.close()
+                    }
+                }
+                onBcurScanned: (result) => {
+                    if (!self.scanned) {
+                        self.scanned = true
+                        self.bcurScanned(result)
                         self.close()
                     }
                 }

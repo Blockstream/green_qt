@@ -9,6 +9,7 @@ import QtQuick.Shapes
 
 Item {
     signal codeScanned(string code)
+    signal bcurScanned(var result)
     function start() {
         if (permission.status === Qt.Granted) {
             camera.start()
@@ -80,14 +81,20 @@ Item {
             }
         }
     }
-
     ZXingDetector {
         id: detector
         videoSink: video_output.videoSink
         onResultsChanged: {
             for (const result of detector.results) {
-                self.codeScanned(result.text)
+                controller.process(result.text)
+                // ignore remaining results
+                break
             }
         }
+    }
+    BCURController {
+        id: controller
+        onResultDecoded: (result) => self.bcurScanned(result)
+        onDataDiscarded: (data) => self.codeScanned(data)
     }
 }
