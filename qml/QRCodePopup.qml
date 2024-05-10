@@ -20,7 +20,7 @@ Popup {
         active: self.visible
         sourceComponent: Item {
             implicitWidth: 200
-            implicitHeight: 216
+            implicitHeight: 208
             scale: self.background.containsMouse ? 1.05 : (self.visible ? 1 : 0)
             transformOrigin: Item.Bottom
             Behavior on scale {
@@ -47,11 +47,13 @@ Popup {
                     smooth: false
                     mipmap: false
                     cache: false
-                    anchors.fill: parent
-                    anchors.margins: 8
-                    anchors.bottomMargin: 16
-                    sourceSize.width: Math.max(1, width)
-                    sourceSize.height: Math.max(1, height)
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: 8
+                    sourceSize: {
+                        const dim = Math.max(1, qrcode.width - 16)
+                        return Qt.size(dim, dim)
+                    }
                     source: `image://zxing/${encodeURI(self.text || '')}`
                 }
                 layer.enabled: true
