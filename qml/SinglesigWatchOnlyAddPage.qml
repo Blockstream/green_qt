@@ -199,7 +199,7 @@ StackViewPage {
 
 
     component KeysField: TextArea {
-        Layout.minimumHeight: options_layout.height + text_area.topPadding + text_area.bottomPadding
+        Layout.minimumHeight: Math.max(150, options_layout.height) + text_area.topPadding + text_area.bottomPadding
         id: text_area
         topPadding: 14
         bottomPadding: 14
@@ -239,20 +239,19 @@ StackViewPage {
             anchors.rightMargin: 15
             spacing: 16
             CircleButton {
-                enabled: text_area.text.length > 0
                 icon.source: 'qrc:/svg2/x-circle.svg'
+                visible: text_area.text.length > 0
                 onClicked: text_area.clear()
             }
             CircleButton {
+                visible: text_area.text.length === 0
                 icon.source: 'qrc:/svg2/paste.svg'
-                onClicked: {
-                    text_area.clear();
-                    text_area.paste();
-                }
+                onClicked: text_area.paste();
             }
             CircleButton {
                 enabled: scanner_popup.available && !scanner_popup.visible
                 icon.source: 'qrc:/svg2/qrcode.svg'
+                visible: text_area.text.length === 0
                 onClicked: scanner_popup.open()
                 ScannerPopup {
                     id: scanner_popup
@@ -268,6 +267,7 @@ StackViewPage {
             }
             CircleButton {
                 icon.source: 'qrc:/svg2/import.svg'
+                visible: text_area.text.length === 0
                 onClicked: file_dialog.open()
             }
         }
