@@ -560,7 +560,7 @@ void BCURController::process(const QString& data)
     if (m_seen.contains(data)) return;
     m_seen.insert(data);
 
-    if (!data.startsWith("ur:")) {
+    if (!data.startsWith("ur:", Qt::CaseInsensitive)) {
         emit dataDiscarded(data);
         if (m_task) {
             m_task->deleteLater();
