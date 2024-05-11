@@ -90,8 +90,8 @@ void Analytics::start()
     auto& countly = cly::Countly::getInstance();
     countly.setLogger([](cly::LogLevel level, const std::string& message) {
         switch (level) {
-        case cly::LogLevel::INFO:    qInfo() << QString::fromStdString(message); break;
-        case cly::LogLevel::WARNING: qWarning() << QString::fromStdString(message); break;
+        case cly::LogLevel::INFO:    qInfo() << qPrintable(QString::fromStdString(message)); break;
+        case cly::LogLevel::WARNING: qWarning() << qPrintable(QString::fromStdString(message)); break;
         case cly::LogLevel::ERROR:   qFatal("%s\n", message.c_str()); break;
         case cly::LogLevel::FATAL:   qFatal("%s\n", message.c_str()); break;
         case cly::LogLevel::DEBUG:   break;
