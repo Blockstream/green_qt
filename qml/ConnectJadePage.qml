@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -7,6 +8,7 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal deviceSelected(JadeDevice device)
+    signal qrmodeSelected()
     id: self
     padding: 60
     rightItem: LinkButton {
@@ -16,6 +18,13 @@ StackViewPage {
         onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/19629901272345-Set-up-Jade')
     }
     footerItem: ColumnLayout {
+        RegularButton {
+            Layout.alignment: Qt.AlignCenter
+            icon.source: 'qrc:/svg2/qrcode.svg'
+            text: 'QR PIN Unlock'
+            visible: Settings.enableExperimental
+            onClicked: self.qrmodeSelected()
+        }
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20

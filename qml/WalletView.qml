@@ -76,6 +76,12 @@ MainPage {
     }
 
     Component {
+        id: qrmode_page
+        JadeQRModePage {
+        }
+    }
+
+    Component {
         id: ledger_page
         LedgerPage {
             onLoginFinished: (context) => {
@@ -122,6 +128,7 @@ MainPage {
         id: connect_jade_page
         ConnectJadePage {
             onDeviceSelected: (device) => stack_view.push(jade_page, { device, login: true })
+            onQrmodeSelected: stack_view.push(qrmode_page)
         }
     }
 
@@ -320,6 +327,83 @@ MainPage {
                 VSpacer {
                 }
             }
+        }
+    }
+
+    component JadeQRModePage: StackViewPage {
+        JadeQRController {
+            id: controller
+            onHttpRequest: (request) => {
+                const dialog = http_request_dialog.createObject(page, { request, context: self.context })
+                dialog.open()
+            }
+            onResultEncoded: (result) => page.StackView.view.replace(parts_page, result, StackView.PushTransition)
+        }
+        id: page
+        padding: 60
+        title: qsTrId('id_scan_qr_code')
+        contentItem: ColumnLayout {
+            spacing: 20
+            VSpacer {
+            }
+            ScannerView {
+                Layout.alignment: Qt.AlignCenter
+                Layout.minimumWidth: 350
+                Layout.minimumHeight: 350
+                onBcurScanned: (result) => controller.process(result)
+            }
+            VSpacer {
+            }
+        }
+    }
+    Component {
+        id: parts_page
+        StackViewPage {
+            required property var parts
+            padding: 60
+            id: page
+            title: qsTrId('id_scan_qr_code')
+            contentItem: ColumnLayout {
+                Slider {
+                    id: slider
+                    from: 0
+                    stepSize: 1
+                    to: page.parts.length - 1
+                    visible: false
+                }
+                Timer {
+                    interval: 250
+                    running: true
+                    repeat: true
+                    onTriggered: slider.value = (slider.value + 1) % (slider.to + 1)
+                }
+                VSpacer {
+                }
+                QRCode {
+                    Layout.alignment: Qt.AlignCenter
+                    implicitWidth: 360
+                    implicitHeight: 360
+                    text: page.parts[Math.round(slider.value)].toUpperCase()
+                }
+                VSpacer {
+                }
+            }
+            footerItem: RowLayout {
+                HSpacer {
+                }
+                PrimaryButton {
+                    Layout.minimumWidth: 350
+                    text: qsTrId('id_done')
+                    onClicked: page.StackView.view.pop()
+                }
+                HSpacer {
+                }
+            }
+        }
+    }
+    Component {
+        id: http_request_dialog
+        JadeHttpRequestDialog {
         }
     }
 }
