@@ -1606,6 +1606,41 @@ bool AckSystemMessageTask::call(GA_session* session, GA_auth_handler** auth_hand
     return rc == GA_OK;
 }
 
+HttpRequestTask::HttpRequestTask(const QJsonObject& params, Session* session)
+    : SessionTask(session)
+    , m_params(params)
+{
+}
+
+void HttpRequestTask::update()
+{
+    if (status() != Status::Ready) return;
+
+    if (!m_session->isConnected()) return;
+
+    setStatus(Status::Active);
+
+    QtConcurrent::run([=] {
+        GA_json* output;
+        const auto params = Json::fromObject(m_params);
+        const auto rc = GA_http_request(m_session->m_session, params.get(), &output);
+        if (rc == GA_OK) {
+            auto res = Json::toObject(output);
+            GA_destroy_json(output);
+            return qMakePair(true, res);
+        } else {
+            return qMakePair(false, QJsonObject{});
+        }
+    }).then(this, [=](QPair<bool, QJsonObject> result) {
+        if (result.first) {
+            m_response = result.second;
+            setStatus(Status::Finished);
+        } else {
+            setStatus(Status::Failed);
+        }
+    });
+}
+
 DecodeBCURTask::DecodeBCURTask(const QString& part, Session* session)
     : AuthHandlerTask(session)
     , m_part(part)

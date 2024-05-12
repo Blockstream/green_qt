@@ -801,6 +801,21 @@ private:
     const QString m_message;
 };
 
+class HttpRequestTask : public SessionTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    HttpRequestTask(const QJsonObject& params, Session* session);
+    QJsonObject response() const { return m_response; }
+private:
+    void update() override;
+private:
+    const QJsonObject m_params;
+    QJsonObject m_response;
+};
+
 class DecodeBCURTask : public AuthHandlerTask
 {
     Q_OBJECT
