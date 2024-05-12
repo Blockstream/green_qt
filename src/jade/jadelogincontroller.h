@@ -63,6 +63,20 @@ protected:
     Network* m_network{nullptr};
 };
 
+class JadeQRController : public JadeController
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    JadeQRController(QObject* parent = nullptr);
+public slots:
+    void process(const QJsonObject& result);
+signals:
+    void resultEncoded(const QJsonObject& result);
+private:
+    void processJadePin(const QJsonObject& result);
+};
+
 class JadeSetupController : public JadeController
 {
     Q_OBJECT

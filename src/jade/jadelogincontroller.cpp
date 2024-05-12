@@ -442,3 +442,57 @@ void JadeHttpRequest::reject()
     emit rejected();
     emit finished({});
 }
+
+JadeQRController::JadeQRController(QObject *parent)
+    : JadeController(parent)
+{
+}
+
+void JadeQRController::process(const QJsonObject& result)
+{
+    const auto ur_type = result.value("ur_type").toString();
+
+    if (ur_type == "jade-pin") {
+        processJadePin(result.value("result").toObject());
+    } else {
+        Q_UNREACHABLE();
+    }
+}
+
+void JadeQRController::processJadePin(const QJsonObject& result)
+{
+    const auto id = result.value("id").toString();
+    Q_ASSERT(id == "qrauth");
+
+    const auto req = result.value("result").toObject().value("http_request").toObject();
+    const auto on_reply = req.value("on-reply").toString();
+    const auto params = req.value("params").toObject();
+    Q_ASSERT(on_reply == "pin");
+
+    if (!m_context) {
+        setContext(new Context("mainnet", false, this));
+    }
+
+    m_network = m_context->primaryNetwork();
+    auto request = handleHttpRequest(params);
+    QObject::connect(request, &JadeHttpRequest::finished, this, [=](const QJsonObject& res) {
+        const auto params = res.value("body").toObject();
+        QJsonObject data{
+            { "id", "0" },
+            { "method", "pin" },
+            { "params", params },
+        };
+
+        QJsonObject details{
+            { "ur_type", "jade-pin" },
+            { "data", QString::fromLatin1(QCborMap::fromJsonObject(data).toCborValue().toCbor().toHex()) },
+            { "max_fragment_len", 40 },
+        };
+
+        auto task = new EncodeBCURTask(details, m_context->primarySession());
+        connect(task, &Task::finished, this, [=] {
+            emit resultEncoded(task->result().value("result").toObject());
+        });
+        dispatcher()->add(task);
+    });
+}
