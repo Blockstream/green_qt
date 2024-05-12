@@ -98,9 +98,7 @@ JadeHttpRequest *JadeController::handleHttpRequest(const QJsonObject& params)
     auto session = m_context->getOrCreateSession(m_network);
     auto request = new JadeHttpRequest(params, session);
     if (IsHostAllowed(request->hosts())) {
-        QMetaObject::invokeMethod(request, [=] {
-            request->accept(false);
-        }, Qt::QueuedConnection);
+        request->accept(false);
     } else {
         emit httpRequest(request);
         connect(request, &JadeHttpRequest::accepted, [=](bool remember) {
@@ -418,20 +416,15 @@ void JadeHttpRequest::accept(bool remember)
     m_busy = true;
     emit busyChanged();
 
-    using Watcher = QFutureWatcher<QJsonObject>;
-    const auto watcher = new Watcher(this);
-    watcher->setFuture(QtConcurrent::run([=] {
-        GA_json* output;
-        const auto params = Json::fromObject(m_params);
-        GA_http_request(m_session->m_session, params.get(), &output);
-        auto res = Json::toObject(output);
-        GA_destroy_json(output);
-        return res;
-    }));
+    auto context = m_session->context();
+    context->dispatcher()->add(new ConnectTask(m_session));
 
-    connect(watcher, &Watcher::finished, this, [=] {
-        const auto response = watcher->result();
-        emit finished(response);
+    auto req = new HttpRequestTask(m_params, m_session);
+    context->dispatcher()->add(req);
+
+    connect(req, &HttpRequestTask::finished, this, [=] {
+        req->deleteLater();
+        emit finished(req->response());
     });
 
     emit accepted(remember);
