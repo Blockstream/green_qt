@@ -31,8 +31,8 @@ StackViewPage {
 
     function checkDeviceMatches() {
         if (self.context.wallet.login instanceof DeviceData) {
-            if (!self.context.device) return false
-            if (!self.context.device.session) return false
+            if (!self.context.device) return true
+            if (!self.context.device.session) return true
             if (self.context.device.session.xpubHashId !== self.context.xpubHashId) return false
         }
         return true
