@@ -452,6 +452,12 @@ void AuthHandlerTask::handleRequestCode(const QJsonObject& result)
     }
 }
 
+void AuthHandlerTask::promptDevice(const QJsonObject& result)
+{
+    m_prompt = new DevicePrompt(result, this);
+    emit promptChanged();
+}
+
 void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 {
     if (result.contains("method")) {
@@ -472,10 +478,12 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
     if (result.contains("required_data")) {
         Resolver* resolver{nullptr};
         const auto device = m_session->context()->device();
-        if (!device || !device->isConnected() || (device->session() && !m_session->context()->xpubHashId().isEmpty() && device->session()->xpubHashId() != m_session->context()->xpubHashId())) {
-            m_prompt = new DevicePrompt(result, this);
-            emit promptChanged();
-            return;
+        const auto xpub_hash_id = m_session->context()->xpubHashId();
+        if (!device) return promptDevice(result);
+        if (device->session() && !xpub_hash_id.isEmpty()) {
+            if (device->session()->xpubHashId() != xpub_hash_id) {
+                return promptDevice(result);
+            }
         }
         auto network = m_session->network();
         const auto required_data = result.value("required_data").toObject();

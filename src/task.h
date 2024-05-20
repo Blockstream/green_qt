@@ -256,6 +256,7 @@ public:
     virtual void handleCall(const QJsonObject& result);
 private:
     virtual bool call(GA_session* session, GA_auth_handler** auth_handler) = 0;
+    void promptDevice(const QJsonObject& result);
     void next();
 protected:
     GA_auth_handler* m_auth_handler{nullptr};
