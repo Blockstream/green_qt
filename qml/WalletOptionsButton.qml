@@ -20,7 +20,7 @@ CircleButton {
         pointerX: 0.85
         pointerY: 0
         GMenu.Item {
-            enabled: self.wallet.login instanceof PinData
+            enabled: self.wallet?.login instanceof PinData
             text: qsTrId('id_login_with_bip39_passphrase')
             icon.source: 'qrc:/svg2/passphrase.svg'
             onClicked: {
