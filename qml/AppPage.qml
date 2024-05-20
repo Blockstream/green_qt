@@ -18,7 +18,6 @@ MainPage {
         side_bar.currentView = SideBar.View.Wallets
     }
     function openDevice(device, options) {
-        console.trace()
         if (stack_layout.currentItem?.device) {
             console.log('current view has device assigned')
             return
