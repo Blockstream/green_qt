@@ -4,12 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.0.6] - 2024-05-22
 ### Changed:
+- Experimental support to unlock Jade in QR mode
 - Better QR Code scanning
 
 ### Fixed:
+- Do not disable send and receive buttons
 - Request camera permission when required
+- Application startup in macOS Sonoma
 
 ## [2.0.5] - 2024-05-08
 ### Added:
