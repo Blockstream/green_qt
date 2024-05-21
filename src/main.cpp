@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     WalletManager wallet_manager;
 
     Application app(argc, argv);
-    KDSingleApplication kdsa;
+    KDSingleApplication kdsa("green_qt");
 
     g_args.addHelpOption();
     g_args.addVersionOption();
