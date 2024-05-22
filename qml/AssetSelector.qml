@@ -33,9 +33,9 @@ StackViewPage {
             Layout.fillHeight: true
             footer: ColumnLayout {
                 width: list_view.width
-                spacing: 10
+                spacing: 5
                 OptionButton {
-                    Layout.topMargin: 10
+                    Layout.topMargin: 5
                     icon.source: 'qrc:/svg2/liquid_icon.svg'
                     text: 'Receive any Liquid Asset'
                     onClicked: self.anyLiquidClicked()
@@ -58,7 +58,7 @@ StackViewPage {
                 return -1
             }
             focus: true
-            spacing: 10
+            spacing: 5
             model: AssetsModel {
                 context: self.context
                 filter: search_field.text.trim()
