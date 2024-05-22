@@ -93,7 +93,7 @@ Pane {
                     spacing: 8
                     Repeater {
                         id: singlesig_xpubs_repeater
-                        model: self.context.accounts.filter(account => account.json.slip132_extended_pubkey)
+                        model: self.context.accounts.filter(account => !account.hidden && account.json.slip132_extended_pubkey)
                         delegate: SinglesigAccountPane {
                             required property var modelData
                             account: modelData
@@ -109,7 +109,7 @@ Pane {
                     spacing: 8
                     Repeater {
                         id: singlesig_descriptors_repeater
-                        model: self.context.accounts.filter(account => account.json.core_descriptors)
+                        model: self.context.accounts.filter(account => !account.hidden && account.json.core_descriptors)
                         delegate: SinglesigAccountPane {
                             required property var modelData
                             account: modelData
