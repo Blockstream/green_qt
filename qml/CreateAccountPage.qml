@@ -38,11 +38,9 @@ StackViewPage {
 
     component SinglesigButton: SecurityPolicyButton2 {
         serverType: 'electrum'
-        visible: self.asset || self.anyLiquid
     }
     component MultisigButton: SecurityPolicyButton2 {
         serverType: 'green'
-        visible: self.asset || self.anyLiquid
     }
 
     component LightningButton: SecurityPolicyButton {
@@ -98,6 +96,7 @@ StackViewPage {
                 tag: qsTrId('id_native_segwit')
                 title: qsTrId('id_standard')
                 description: qsTrId('id_cheaper_singlesig_option')
+                visible: self.asset && !self.asset.amp || self.anyLiquid
             }
             LightningButton {
             }
@@ -106,13 +105,14 @@ StackViewPage {
                 tag: qsTrId('id_legacy_segwit')
                 title: qsTrId('id_legacy_segwit')
                 description: qsTrId('id_simple_portable_standard')
-                visible: !self.anyAMP && self.advanced
+                visible: !self.anyAMP && !self.asset?.amp && self.advanced
             }
             MultisigButton {
                 type: '2of2'
                 tag: qsTrId('id_2of2')
                 title: qsTrId('id_2fa_protected')
                 description: qsTrId('id_quick_setup_2fa_account_ideal')
+                visible: self.asset && !self.asset.amp || self.anyLiquid
             }
             MultisigButton {
                 id: multisig_2of3_button
@@ -120,7 +120,7 @@ StackViewPage {
                 tag: qsTrId('id_2of3')
                 title: qsTrId('id_2of3_with_2fa')
                 description: qsTrId('id_permanent_2fa_account_ideal_for')
-                visible: !self.anyAMP && (self.anyLiquid || self.advanced && self.asset?.networkKey !== 'liquid' && self.asset?.networkKey !== 'testnet-liquid')
+                visible: !self.anyAMP && (self.anyLiquid || self.advanced && self.asset?.networkKey !== 'liquid' && self.asset?.networkKey !== 'testnet-liquid') && !self.asset?.amp
                 action: Action {
                     onTriggered: {
                         self.StackView.view.push(select_recovery_key_page, {
@@ -135,7 +135,7 @@ StackViewPage {
                 tag: qsTrId('id_amp')
                 title: qsTrId('id_amp')
                 description: qsTrId('id_account_for_special_assets')
-                visible: self.anyLiquid || self.anyAMP || self.advanced && self.asset?.networkKey === 'liquid'
+                visible: self.anyLiquid || self.anyAMP || self.asset?.amp || self.advanced && self.asset?.networkKey === 'liquid'
             }
         }
     }
@@ -150,7 +150,7 @@ StackViewPage {
             LinkButton {
                 text: self.advanced ? qsTrId('id_hide_advanced_options') : qsTrId('id_show_advanced_options')
                 onClicked: self.advanced = !self.advanced
-                visible: !self.anyAMP
+                visible: !self.anyAMP && !self.asset?.amp
             }
             HSpacer {
             }

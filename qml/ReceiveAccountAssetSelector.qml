@@ -183,9 +183,9 @@ StackViewPage {
                                 const account = self.context.accounts[i]
                                 if (account.hidden) continue
                                 if (delegate.asset) {
-                                    if (delegate.asset.networkKey === account.network.key) {
-                                        accounts.push(account)
-                                    }
+                                    if (delegate.asset.networkKey !== account.network.key) continue
+                                    if (delegate.asset.amp && account.type !== '2of2_no_recovery') continue
+                                    accounts.push(account)
                                 } else if (self.anyLiquid) {
                                     if (account.network.liquid) {
                                         accounts.push(account)
