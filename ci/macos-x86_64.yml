@@ -7,7 +7,7 @@
     PKG_CONFIG_PATH: "$PREFIX/lib/pkgconfig"
     CMAKE_INSTALL_PREFIX: "$PREFIX"
   cache:
-    key: macos_x86_64_2
+    key: macos_x86_64_3
     paths: [depends/]
   tags:
     - macos-x86_64

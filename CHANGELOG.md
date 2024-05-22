@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Changed:
+- Updates Qt to 6.7.1
 - Updates GDK to 0.71.1
 
 ## [2.0.6] - 2024-05-22
