@@ -1,16 +1,20 @@
 #!/bin/bash
 set -eo pipefail
 
+GDK_BRANCH=release_0.71.1
+GDK_COMMIT=46750e33fb9811fe5a0ad0a773dc77284c57cf41
+
 mkdir -p build
 
 cd build
 
 if [ ! -d gdk ]; then
-    git clone --quiet --depth 1 --branch release_0.71.1 --single-branch https://github.com/Blockstream/gdk.git gdk
+    git clone --quiet --depth 1 --branch $GDK_BRANCH --single-branch https://github.com/Blockstream/gdk.git gdk
 fi
 
 cd gdk
 git rev-parse HEAD
+git checkout $GDK_COMMIT
 
 # unset to disable building gdk java support
 unset JAVA_HOME
