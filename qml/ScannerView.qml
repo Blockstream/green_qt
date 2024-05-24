@@ -97,4 +97,16 @@ Item {
         onResultDecoded: (result) => self.bcurScanned(result)
         onDataDiscarded: (data) => self.codeScanned(data)
     }
+
+    TProgressBar {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 20
+        from: 0
+        opacity: 0.6
+        to: 100
+        visible: controller.progress > 0
+        value: controller.progress
+    }
 }
