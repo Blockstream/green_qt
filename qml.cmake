@@ -87,7 +87,6 @@ SET(QML_FILES
     qml/TwoFactorDisableDialog.qml
     qml/TransactionDelegate.qml
     qml/AnalyticsConsentDialog.qml
-    qml/BalanceItem.qml
     qml/JadeSignTransactionView.qml
     qml/SideBar.qml
     qml/AlertView.qml

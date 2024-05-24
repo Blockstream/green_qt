@@ -49,7 +49,6 @@ void AccountListModel::update()
         connect(account, &Account::nameChanged, this, &AccountListModel::invalidateFilterAndCount);
         connect(account, &Account::hiddenChanged, this, &AccountListModel::invalidateFilterAndCount);
         connect(account, &Account::balanceChanged, this, &AccountListModel::invalidateFilterAndCount);
-        connect(account, &Account::balancesChanged, this, &AccountListModel::invalidateFilterAndCount);
     }
     if (changed) emit countChanged();
 }

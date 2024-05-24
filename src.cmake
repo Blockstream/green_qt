@@ -9,7 +9,6 @@ SET(TARGET_SOURCES
 	src/analytics.cpp
 	src/appupdatecontroller.cpp
 	src/asset.cpp
-	src/balance.cpp
 	src/blogcontroller.cpp
 	src/clipboard.cpp
 	src/command.cpp

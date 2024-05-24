@@ -6,7 +6,6 @@
 
 #include "address.h"
 #include "asset.h"
-#include "balance.h"
 #include "context.h"
 #include "network.h"
 #include "output.h"
@@ -51,40 +50,6 @@ void Account::update(QJsonObject json)
 
 void Account::updateBalance()
 {
-    if (m_network->isLiquid()) {
-        auto satoshi = m_json.value("satoshi").toObject();
-        auto balance_by_id = m_balance_by_id;
-        m_balance_by_id.clear();
-        m_balances.clear();
-        for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
-            Balance* balance = balance_by_id.take(i.key());
-            if (!balance) balance = new Balance(this);
-            m_balance_by_id.insert(i.key(), balance);
-            balance->setAsset(context()->getOrCreateAsset(i.key()));
-            balance->setAmount(i.value().toDouble());
-            m_balances.append(balance);
-        }
-        std::sort(m_balances.begin(), m_balances.end(), [=](const Balance* b1, const Balance* b2) {
-            Asset* a1 = b1->asset();
-            Asset* a2 = b2->asset();
-
-            if (a1->id() == m_network->policyAsset()) return true;
-            if (a2->id() ==  m_network->policyAsset()) return false;
-
-            if (a1->hasIcon() && !a2->hasIcon()) return true;
-            if (a2->hasIcon() && !a1->hasIcon()) return false;
-            if (a1->hasIcon() && a2->hasIcon()) return a1->name() < a2->name();
-
-            if (a1->hasData() && !a2->hasData()) return true;
-            if (a2->hasData() && !a1->hasData()) return false;
-            if (a1->hasData() && a2->hasData()) return a1->name() < a2->name();
-
-            return a1->name() < a2->name();
-        });
-        emit balancesChanged();
-        qDeleteAll(balance_by_id.values());
-    }
-
     emit balanceChanged();
 }
 
@@ -100,11 +65,6 @@ qint64 Account::balance() const
 {
     const QString key = m_network->isLiquid() ? m_network->policyAsset() : "btc";
     return m_json.value("satoshi").toObject().value(key).toDouble();
-}
-
-QQmlListProperty<Balance> Account::balances()
-{
-    return { this, &m_balances };
 }
 
 bool Account::isEmpty() const
@@ -169,11 +129,6 @@ Address* Account::getOrCreateAddress(const QJsonObject& data)
     }
     address->updateFromData(data);
     return address;
-}
-
-Balance *Account::getBalanceByAssetId(const QString &id) const
-{
-    return m_balance_by_id.value(id);
 }
 
 Transaction *Account::getTransactionByTxHash(const QString &id) const

@@ -7,7 +7,6 @@
 #include <QObject>
 #include <QQmlEngine>
 
-Q_MOC_INCLUDE("balance.h")
 Q_MOC_INCLUDE("context.h")
 Q_MOC_INCLUDE("network.h")
 Q_MOC_INCLUDE("session.h")
@@ -28,7 +27,6 @@ class Account : public QObject
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(bool hidden READ isHidden NOTIFY hiddenChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
-    Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -63,15 +61,12 @@ public:
 
     qint64 balance() const;
 
-    QQmlListProperty<Balance> balances();
-
     bool isEmpty() const;
     void setBalanceData(const QJsonObject& data);
     void updateBalance();
     Transaction *getOrCreateTransaction(const QJsonObject &data);
     Output *getOrCreateOutput(const QJsonObject &data);
     Address *getOrCreateAddress(const QJsonObject &data);
-    Q_INVOKABLE Balance* getBalanceByAssetId(const QString &id) const;
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
 protected:
     void timerEvent(QTimerEvent* event) override;
@@ -84,7 +79,6 @@ signals:
     void nameChanged();
     void hiddenChanged();
     void balanceChanged();
-    void balancesChanged();
     void addressGenerated();
 private:
     Session* const m_session;
@@ -99,8 +93,6 @@ private:
     QMap<QString, Transaction*> m_transactions_by_hash;
     QMap<QPair<QString, int>, Output*> m_outputs_by_hash;
     QMap<QString, Address*> m_address_by_hash;
-    QList<Balance*> m_balances;
-    QMap<QString, Balance*> m_balance_by_id;
     int m_load_balance_timer_id{-1};
     friend class Wallet;
 };
