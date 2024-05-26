@@ -7,6 +7,7 @@
 #include "network.h"
 #include "networkmanager.h"
 #include "session.h"
+#include "settings.h"
 #include "task.h"
 #include "wallet.h"
 #include "walletmanager.h"
@@ -122,7 +123,7 @@ static QString device_deployment(Device* device)
     Q_UNREACHABLE();
 }
 
-void LoginController::loginWithDevice(Device* device, bool remember)
+void LoginController::loginWithDevice(Device* device)
 {
     m_error.clear();
 
@@ -134,8 +135,9 @@ void LoginController::loginWithDevice(Device* device, bool remember)
         }
         setContext(new Context(deployment, false, this));
         m_context->setDevice(device);
-        m_context->setRemember(remember);
     }
+
+    m_context->setRemember(Settings::instance()->rememberDevices());
 
     const auto hw_device = device_details_from_device(device);
     auto session = m_context->primarySession();

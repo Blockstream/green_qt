@@ -9,14 +9,13 @@ StackViewPage {
     signal loginFinished(Context context)
     signal loginFailed()
     required property LedgerDevice device
-    required property bool remember
     function pushView() {
         if (stack_view.depth > 0) return
         if (!self.device.compatible) return
         self.pushStateView()
     }
     function pushStateView() {
-        stack_view.push(login_view, { context: null, remember: self.remember, device: self.device })
+        stack_view.push(login_view, { context: null, device: self.device })
     }
     Component.onCompleted: pushView()
     id: self

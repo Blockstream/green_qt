@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Changed:
+- Setting to remember devices
 - Updates Qt to 6.7.1
 - Updates GDK to 0.71.1
 

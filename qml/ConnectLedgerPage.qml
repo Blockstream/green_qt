@@ -6,7 +6,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal deviceSelected(LedgerDevice device, bool remember)
+    signal deviceSelected(LedgerDevice device)
     id: self
     padding: 60
     footerItem: ColumnLayout {
@@ -47,19 +47,11 @@ StackViewPage {
                 vendor: Device.Ledger
             }
             delegate: LedgerDeviceDelegate {
-                onSelected: (device) => self.deviceSelected(device, remember_checkbox.checked)
+                onSelected: (device) => self.deviceSelected(device)
             }
         }
         InstructionsView {
             visible: device_repeater.count === 0
-        }
-        CheckBox {
-            Layout.alignment: Qt.AlignCenter
-            Layout.topMargin: 10
-            id: remember_checkbox
-            checked: true
-            visible: device_repeater.count > 0
-            text: qsTrId('id_remember_device_connection')
         }
         VSpacer {
         }

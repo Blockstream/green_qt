@@ -164,6 +164,19 @@ void Settings::toggleIncognito()
     setIncognito(!m_incognito);
 }
 
+void Settings::setRememberDevices(bool remember_devices)
+{
+    if (m_remember_devices == remember_devices) return;
+    m_remember_devices = remember_devices;
+    emit rememberDevicesChanged();
+    saveLater();
+}
+
+void Settings::toggleRememberDevices()
+{
+    setRememberDevices(!m_remember_devices);
+}
+
 void Settings::setUsePersonalNode(bool use_personal_node)
 {
     if (m_use_personal_node == use_personal_node) return;
@@ -290,6 +303,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_analytics)
     LOAD(m_accepted_tos_version)
     LOAD(m_incognito)
+    LOAD(m_remember_devices)
 #undef LOAD
 }
 
@@ -327,6 +341,7 @@ void Settings::saveNow()
     SAVE(m_analytics)
     SAVE(m_accepted_tos_version)
     SAVE(m_incognito)
+    SAVE(m_remember_devices)
 #undef SAVE
 }
 

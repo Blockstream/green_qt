@@ -32,6 +32,7 @@ class Settings : public QObject
     Q_PROPERTY(QString analytics READ analytics WRITE setAnalytics NOTIFY analyticsChanged)
     Q_PROPERTY(bool acceptedTermsOfService READ acceptedTermsOfService NOTIFY acceptedTermsOfServiceChanged)
     Q_PROPERTY(bool incognito READ incognito NOTIFY incognitoChanged)
+    Q_PROPERTY(bool rememberDevices READ rememberDevices NOTIFY rememberDevicesChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -82,10 +83,13 @@ public:
     bool acceptedTermsOfService() const;
     bool incognito() const { return m_incognito; }
     void setIncognito(bool incognito);
+    bool rememberDevices() const { return m_remember_devices; }
+    void setRememberDevices(bool remember_devices);
 public slots:
     void updateRecentWallet(const QString& id);
     void acceptTermsOfService();
     void toggleIncognito();
+    void toggleRememberDevices();
 signals:
     void windowXChanged();
     void windowYChanged();
@@ -110,6 +114,7 @@ signals:
     void analyticsChanged();
     void acceptedTermsOfServiceChanged();
     void incognitoChanged();
+    void rememberDevicesChanged();
 private:
     void load();
     void load(const QSettings& settings);
@@ -142,6 +147,7 @@ private:
     QString m_analytics;
     int m_accepted_tos_version{0};
     bool m_incognito{false};
+    bool m_remember_devices{true};
 };
 
 #endif // GREEN_SETTINGS_H

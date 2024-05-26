@@ -55,7 +55,7 @@ MainPage {
                     stack_view.push(jade_page, { device, login: true })
                 }
                 if (device instanceof LedgerDevice) {
-                    stack_view.push(ledger_page, { device, remember: true })
+                    stack_view.push(ledger_page, { device })
                 }
             }
             onRemoveClicked: self.removeWallet(self.wallet)
@@ -135,7 +135,7 @@ MainPage {
     Component {
         id: connect_ledger_page
         ConnectLedgerPage {
-            onDeviceSelected: (device, remember) => stack_view.push(ledger_page, { device, remember })
+            onDeviceSelected: (device) => stack_view.push(ledger_page, { device })
         }
     }
 

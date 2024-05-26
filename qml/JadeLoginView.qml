@@ -9,8 +9,7 @@ ColumnLayout {
     signal loginFailed()
     required property Context context
     required property Device device
-    property bool remember: false
-    StackView.onActivated: controller.loginWithDevice(self.device, self.remember)
+    StackView.onActivated: controller.loginWithDevice(self.device)
     id: self
     spacing: 20
     LoginController {

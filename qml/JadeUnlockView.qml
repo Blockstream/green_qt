@@ -17,7 +17,6 @@ ColumnLayout {
         id: controller
         context: self.context
         device: self.device
-        remember: remember_checkbox.checked
         onHttpRequest: (request) => {
             const dialog = http_request_dialog.createObject(self, { request, context: self.context })
             dialog.open()
@@ -43,14 +42,6 @@ ColumnLayout {
         horizontalAlignment: Label.AlignHCenter
         text: qsTrId('id_unlock_your_device_to_continue')
         wrapMode: Label.WordWrap
-    }
-    CheckBox {
-        Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 10
-        id: remember_checkbox
-        checked: true
-        visible: self.showRemember
-        text: qsTrId('id_remember_device_connection')
     }
     VSpacer {
     }

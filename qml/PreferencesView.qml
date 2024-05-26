@@ -211,6 +211,11 @@ AbstractDialog {
                     checked: Settings.enableExperimental
                     onClicked: Settings.enableExperimental = !Settings.enableExperimental
                 }
+                SwitchButton {
+                    text: qsTrId('id_remember_device_connection')
+                    checked: Settings.rememberDevices
+                    onClicked: Settings.toggleRememberDevices()
+                }
                 VSpacer {
                 }
             }
