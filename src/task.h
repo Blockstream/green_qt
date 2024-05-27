@@ -461,9 +461,11 @@ class LoadAssetsTask : public SessionTask
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    LoadAssetsTask(Session* session);
+    LoadAssetsTask(bool refresh, Session* session);
 private:
     void update() override;
+private:
+    const bool m_refresh;
 };
 
 class CreateAccountTask : public AuthHandlerTask

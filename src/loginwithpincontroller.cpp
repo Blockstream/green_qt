@@ -270,6 +270,12 @@ LoadController::LoadController(QObject* parent)
             }
             wallet->save();
             emit loadFinished();
+
+            for (auto session : m_context->getSessions()) {
+                if (session->network()->isLiquid()) {
+                    dispatcher()->add(new LoadAssetsTask(true, session));
+                }
+            }
         });
     });
 }
@@ -311,7 +317,7 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
     auto session = m_context->getOrCreateSession(network);
     if (!session->m_ready) return;
     if (m_context->isWatchonly() && session->network()->isLiquid()) {
-        group->add(new LoadAssetsTask(session));
+        group->add(new LoadAssetsTask(false, session));
     }
     group->add(new GetWatchOnlyDetailsTask(session));
     group->add(new LoadTwoFactorConfigTask(session));
@@ -347,7 +353,7 @@ void LoadController::loginNetwork(Network* network)
 
     if (network->isLiquid() && !m_assets_loaded) {
         m_assets_loaded = true;
-        auto load_assets = new LoadAssetsTask(session);
+        auto load_assets = new LoadAssetsTask(false, session);
         connect_session->then(load_assets);
         load_assets->then(login);
         group->add(load_assets);

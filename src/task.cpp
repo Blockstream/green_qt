@@ -866,8 +866,9 @@ void GetWatchOnlyDetailsTask::update()
     });
 }
 
-LoadAssetsTask::LoadAssetsTask(Session* session)
+LoadAssetsTask::LoadAssetsTask(bool refresh, Session* session)
     : SessionTask(session)
+    , m_refresh(refresh)
 {
 }
 
@@ -883,37 +884,40 @@ void LoadAssetsTask::update()
     setStatus(Status::Active);
 
     QtConcurrent::run([=] {
-        auto params = Json::fromObject({
-            { "assets", true },
-            { "icons", true },
-        });
-        const auto rc = GA_refresh_assets(m_session->m_session, params.get());
-        return rc == GA_OK;
-    }).then(this, [=](bool ok) {
-        if (ok) {
-            // TODO: move to bg thread?
+        if (m_refresh) {
+            const nlohmann::json params = {{ "assets", true }, { "icons", true }};
+            const auto rc = GA_refresh_assets(m_session->m_session, (const GA_json*) &params);
+            if (rc != GA_OK) return false;
+        }
+
+        nlohmann::json* output;
+
+        {
             const nlohmann::json params = {{ "category", "all" }};
-            nlohmann::json* output;
-
             const auto err = GA_get_assets(m_session->m_session, (const GA_json*) &params, (GA_json**) &output);
-            Q_ASSERT(err == GA_OK);
+            if (err != GA_OK) return false;
+        }
 
-            auto context = m_session->context();
-
-            for (const auto& item : output->at("assets").items()) {
-                const auto id = item.key();
-                const auto data = item.value();
-                auto asset = context->getOrCreateAsset(QString::fromStdString(id));
+        auto context = m_session->context();
+        for (const auto& item : output->at("assets").items()) {
+            const auto id = item.key();
+            const auto data = item.value();
+            QString asset_id = QString::fromStdString(id);
+            QString icon_data;
+            if (output->at("icons").contains(id)) {
+                const auto icon = output->at("icons").at(id).get<std::string>();
+                icon_data = QString("data:image/png;base64,") + QString::fromStdString(icon);
+            }
+            QMetaObject::invokeMethod(context, [=] {
+                auto asset = context->getOrCreateAsset(asset_id);
                 asset->setNetworkKey(m_session->network()->key());
                 asset->setData(Json::toObject((GA_json*) &data));
-                if (output->at("icons").contains(id)) {
-                    const auto icon = output->at("icons").at(id).get<std::string>();
-                    asset->setIcon(QString("data:image/png;base64,") + QString::fromStdString(icon));
-                }
-            }
-            GA_destroy_json((GA_json*) output);
+                if (!icon_data.isEmpty()) asset->setIcon(icon_data);
+            }, Qt::QueuedConnection);
         }
-        setStatus(Status::Finished);
+        GA_destroy_json((GA_json*) output);
+    }).then(this, [=](bool ok) {
+        setStatus(ok ? Status::Finished : Status::Failed);
     });
 }
 
