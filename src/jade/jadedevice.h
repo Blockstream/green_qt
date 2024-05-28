@@ -88,4 +88,26 @@ private:
     JadeDevice::State m_state{StateLocked};
 };
 
+class JadeGetMasterBlindingKeyActivity : public GetMasterBlindingKeyActivity
+{
+    Q_OBJECT
+    Q_PROPERTY(bool ask READ ask NOTIFY askChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    JadeGetMasterBlindingKeyActivity(JadeDevice* device);
+    QByteArray masterBlindingKey() const override { return m_master_blinding_key; }
+    void exec() override;
+    bool ask() const { return m_ask; }
+public slots:
+    void confirm();
+signals:
+    void askChanged();
+private:
+    JadeDevice* const m_device;
+    QByteArray m_master_blinding_key;
+    bool m_only_if_silent{true};
+    bool m_ask{false};
+};
+
 #endif // GREEN_JADEDEVICE_H

@@ -253,8 +253,9 @@ void LoginController::login(TaskGroup* group, LoginTask* login_task)
 
 LoadController::LoadController(QObject* parent)
     : Controller(parent)
-    , m_monitor(new TaskGroupMonitor(this))
 {
+    setMonitor(new TaskGroupMonitor(this));
+
     connect(m_monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=] {
         auto group = m_context->cleanAccounts();
         dispatcher()->add(group);

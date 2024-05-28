@@ -393,37 +393,38 @@ public:
     }
 };
 
-class JadeGetMasterBlindingKeyActivity : public GetMasterBlindingKeyActivity
+JadeGetMasterBlindingKeyActivity::JadeGetMasterBlindingKeyActivity(JadeDevice* device)
+    : GetMasterBlindingKeyActivity(device)
+    , m_device(device)
 {
-    JadeDevice* const m_device;
-    QByteArray m_master_blinding_key;
-public:
-    JadeGetMasterBlindingKeyActivity(JadeDevice* device)
-        : GetMasterBlindingKeyActivity(device)
-        , m_device(device)
-    {
-    }
-    QByteArray masterBlindingKey() const override
-    {
-        return m_master_blinding_key;
-    }
-    void exec() override
-    {
-        m_device->api()->getMasterBlindingKey(/* only_if_silent = */ false, [this](const QVariantMap& msg) {
-            if (msg.contains("result")) {
-                m_master_blinding_key = msg["result"].toByteArray();
+}
+void JadeGetMasterBlindingKeyActivity::exec()
+{
+    m_device->api()->getMasterBlindingKey(m_only_if_silent, [=](const QVariantMap& msg) {
+        if (msg.contains("result")) {
+            m_master_blinding_key = msg["result"].toByteArray();
+            finish();
+            return;
+        }
+        auto error = msg["error"].toMap();
+        if (error["code"] == -32000) { // CBOR_RPC_USER_CANCELLED
+            if (m_only_if_silent) {
+                m_ask = true;
+                emit askChanged();
+            } else {
                 finish();
-                return;
             }
-            auto error = msg["error"].toMap();
-            if (error["code"] == -32000) { // CBOR_RPC_USER_CANCELLED
-                finish();
-                return;
-            }
-            fail();
-        });
-    }
-};
+            return;
+        }
+        fail();
+    });
+}
+
+void JadeGetMasterBlindingKeyActivity::confirm()
+{
+    m_only_if_silent = false;
+    exec();
+}
 
 class JadeGetBlindingFactorsActivity : public GetBlindingFactorsActivity
 {

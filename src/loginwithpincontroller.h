@@ -54,7 +54,6 @@ private:
     void loadNetwork(TaskGroup* group, Network* network);
     void loginNetwork(Network* network);
 private:
-    TaskGroupMonitor* const m_monitor;
     bool m_assets_loaded{false};
 };
 

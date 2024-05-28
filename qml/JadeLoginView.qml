@@ -18,6 +18,11 @@ ColumnLayout {
         onLoginFinished: (context) => self.loginFinished(context)
         onLoginFailed: self.loginFailed()
     }
+    TaskPageFactory {
+        title: self.title
+        monitor: controller.monitor
+        target: self.StackView.view
+    }
     VSpacer {
     }
     BusyIndicator {

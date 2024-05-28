@@ -35,7 +35,7 @@ signals:
     void failed();
     void resolved(const QJsonObject& data);
     void progress(int current, int total);
-    void activityChanged(Activity* activity);
+    void activityChanged();
 protected:
     void pushActivity(Activity* activity);
     QJsonObject const m_result;

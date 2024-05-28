@@ -26,7 +26,32 @@ QtObject {
     }
     readonly property Resolver resolver: self.task?.resolver ?? null
     readonly property Prompt prompt: self.task?.prompt ?? null
+    readonly property JadeGetMasterBlindingKeyActivity activity: {
+        if (!self.monitor) return null
+        const groups = self.monitor.groups
+        for (let i = 0; i < groups.length; i++) {
+            const group = groups[i]
+            const tasks = group.tasks
+            for (let j = 0; j < tasks.length; j++) {
+                const task = tasks[j]
+                if (task.status !== Task.Active) continue
+                const activity = task.resolver?.activity
+                if (activity instanceof JadeGetMasterBlindingKeyActivity) {
+                    if (activity.ask) {
+                        return activity
+                    }
+                }
+            }
+        }
+        return null
+    }
     property string title: ''
+
+    onActivityChanged: {
+        if (self.activity) {
+            self.target.push(jade_get_master_blinding_key_dialog, { activity: self.activity })
+        }
+    }
 
     function push(page, props) {
         // TODO: pushed pages should have an attribute to better check
@@ -309,6 +334,8 @@ QtObject {
     }
     property Component jade_sign_liquid_transaction_view: JadeSignLiquidTransactionView {
         onClosed: self.closed()
+    }
+    property Component jade_get_master_blinding_key_dialog: JadeGetMasterBlindingKeyView {
     }
 
     property Component jade_connect_view: ConnectJadePage {

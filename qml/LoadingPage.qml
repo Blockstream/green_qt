@@ -16,6 +16,11 @@ StackViewPage {
         context: self.context
         onLoadFinished: self.loadFinished(self.context)
     }
+    TaskPageFactory {
+        title: self.title
+        monitor: controller.monitor
+        target: self.StackView.view
+    }
     contentItem: ColumnLayout {
         VSpacer {
         }

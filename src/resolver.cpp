@@ -20,9 +20,9 @@ void Resolver::pushActivity(Activity* activity)
     m_activity = activity;
     connect(m_activity, &Activity::destroyed, this, [this] {
         m_activity = nullptr;
-        emit activityChanged(m_activity);
+        emit activityChanged();
     });
-    emit activityChanged(m_activity);
+    emit activityChanged();
 }
 
 TwoFactorResolver::TwoFactorResolver(const QJsonObject& result, AuthHandlerTask* task)
