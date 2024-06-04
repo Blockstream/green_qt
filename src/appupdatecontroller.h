@@ -4,26 +4,37 @@
 #include <QObject>
 #include <QtQml>
 
+#include "notification.h"
+
+class UpdateNotification : public Notification
+{
+    Q_OBJECT
+    Q_PROPERTY(QString version READ version CONSTANT)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    UpdateNotification(const QString& version, QObject* parent);
+    QString version() const { return m_version; }
+private:
+    QString m_version;
+};
+
 class AppUpdateController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString latestVersion READ latestVersion NOTIFY latestVersionChanged)
-    Q_PROPERTY(bool updateAvailable READ updateAvailable NOTIFY updateAvailableChanged)
+    Q_PROPERTY(UpdateNotification* notification READ notification NOTIFY notificationChanged)
     QML_ELEMENT
 public:
     AppUpdateController(QObject* parent = nullptr);
-    QString latestVersion() const { return m_latest_version; }
-    bool updateAvailable() const { return m_update_available; }
+    UpdateNotification* notification() const { return m_notification; }
 private slots:
     void checkForUpdates();
     void checkNow();
 signals:
-    void latestVersionChanged();
-    void updateAvailableChanged();
+    void notificationChanged();
 private:
     QTimer* const m_timer;
-    QString m_latest_version;
-    bool m_update_available{false};
+    UpdateNotification* m_notification{nullptr};
 };
 
 #endif // GREEN_APPUPDATECONTROLLER_H

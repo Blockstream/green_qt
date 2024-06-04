@@ -49,12 +49,16 @@ void AppUpdateController::checkNow()
         const auto version = activity->body().toJsonObject().value("version");
         if (version.isString()) {
             const auto app_version = QVersionNumber::fromString(qApp->applicationVersion());
-            m_latest_version = version.toString();
-            m_update_available = app_version < QVersionNumber::fromString(m_latest_version);
-            if (m_update_available) m_timer->stop();
-            emit latestVersionChanged();
-            emit updateAvailableChanged();
-            qInfo() << "new version" << m_latest_version;
+            const bool update_available = app_version < QVersionNumber::fromString(version.toString());
+            if (update_available) {
+                if (m_notification) {
+                    if (m_notification->version() == version.toString()) return;
+                    m_notification->deleteLater();
+                }
+                qInfo() << "new version" << version.toString();
+                m_notification = new UpdateNotification(version.toString(), this);
+                emit notificationChanged();
+            }
         } else {
             qInfo() << "failed to check new version";
         }
@@ -64,4 +68,10 @@ void AppUpdateController::checkNow()
         qInfo() << "failed to fetch new version";
     });
     HttpManager::instance()->exec(activity);
+}
+
+UpdateNotification::UpdateNotification(const QString& version, QObject* parent)
+    : Notification(parent)
+    , m_version(version)
+{
 }
