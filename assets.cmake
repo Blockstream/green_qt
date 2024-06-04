@@ -160,6 +160,7 @@ qt_add_resources(green "images"
         assets/svg2/check.svg
         assets/svg2/check-green.svg
         assets/svg2/close.svg
+        assets/svg2/close_black.svg
         assets/svg2/coin_selection.svg
         assets/svg2/copy.svg
         assets/svg2/copy-green.svg
@@ -168,6 +169,7 @@ qt_add_resources(green "images"
         assets/svg2/edit.svg
         assets/svg2/eject-simple-thin.svg
         assets/svg2/expand.svg
+        assets/svg2/expired_2fa.svg
         assets/svg2/eye.svg
         assets/svg2/eye_closed.svg
         assets/svg2/flask.svg
@@ -207,6 +209,7 @@ qt_add_resources(green "images"
         assets/svg2/shield_check.svg
         assets/svg2/shield_warning.svg
         assets/svg2/star.svg
+        assets/svg2/star_white.svg
         assets/svg2/seal-check.svg
         assets/svg2/sun.svg
         assets/svg2/sun-dim.svg
