@@ -1290,6 +1290,11 @@ QJsonObject GetUnspentOutputsTask::unspentOutputs() const
     return result().value("result").toObject().value("unspent_outputs").toObject();
 }
 
+bool GetUnspentOutputsTask::active() const
+{
+    return AuthHandlerTask::active() && m_session->m_ready;
+}
+
 bool GetUnspentOutputsTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
     auto details = Json::fromObject({

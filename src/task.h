@@ -698,6 +698,7 @@ public:
     GetUnspentOutputsTask(int num_confs, bool all_coins, Account* account);
     QJsonObject unspentOutputs() const;
 private:
+    bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
     qint64 m_subaccount;
