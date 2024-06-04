@@ -9,7 +9,6 @@ qt_add_resources(green "qtquickcontrols2"
 SET(QML_FILES
     qml/analytics.js
     qml/util.js
-    qml/SelectServerTypeView.qml
     qml/WalletSecuritySettingsView.qml
     qml/GCard.qml
     qml/TwoFactorEnableDialog.qml
@@ -39,11 +38,9 @@ SET(QML_FILES
     qml/GTextField.qml
     qml/NLockTimeDialog.qml
     qml/MessageDialog.qml
-    qml/SelectNetworkViewCard.qml
     qml/GSwitch.qml
     qml/SetUnspentOutputsStatusDialog.qml
     qml/VSpacer.qml
-    qml/SelectServerTypeViewCard.qml
     qml/AbstractDialog.qml
     qml/ControllerDialog.qml
     qml/WizardPage.qml
@@ -117,7 +114,6 @@ SET(QML_FILES
     qml/MainPageHeader.qml
     qml/LedgerSignTransactionView.qml
     qml/AssetIcon.qml
-    qml/SelectNetworkView.qml
     qml/AuthHandlerTaskView.qml
     qml/GetCredentialsView.qml
     qml/TaskDispatcherInspector.qml
