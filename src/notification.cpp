@@ -3,9 +3,8 @@
 #include "session.h"
 #include "task.h"
 
-Notification::Notification(Context* context)
-    : QObject{context}
-    , m_context{context}
+Notification::Notification(QObject* parent)
+    : QObject{parent}
 {
 }
 
@@ -39,8 +38,9 @@ void Notification::setDismissable(bool dismissable)
 
 void Notification::dismiss()
 {
-    if (m_dismissable) {
-        m_context->removeNotification(this);
+    if (m_dismissable && !m_dismissed) {
+        m_dismissed = true;
+        emit dismissedChanged();
     }
 }
 
@@ -117,7 +117,7 @@ void NotificationsModel::setSource(QStandardItemModel* source)
 }
 
 NetworkNotification::NetworkNotification(Network* network, Context* context)
-    : Notification{context}
+    : ContextNotification{context}
     , m_network{network}
 {
 }
@@ -193,4 +193,10 @@ TwoFactorResetNotification::TwoFactorResetNotification(Network* network, Context
         bool is_active = event.value("is_active").toBool();
         remove(is_active);
     });
+}
+
+ContextNotification::ContextNotification(Context* context)
+    : Notification{context}
+    , m_context{context}
+{
 }

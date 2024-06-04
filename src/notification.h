@@ -12,11 +12,11 @@
 class Notification : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Context* context READ context CONSTANT)
     Q_PROPERTY(Level level READ level NOTIFY levelChanged)
     Q_PROPERTY(bool seen READ seen NOTIFY seenChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     Q_PROPERTY(bool dismissable READ dismissable NOTIFY dismissableChanged)
+    Q_PROPERTY(bool dismissed READ dismissed NOTIFY dismissedChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -24,10 +24,9 @@ public:
         Info,
         Notice,
         Alert,
-    }
+    };
     Q_ENUMS(Level);
-    explicit Notification(Context* context);
-    Context* context() const { return m_context; }
+    explicit Notification(QObject* parent);
     Level level() const { return m_level; }
     void setLevel(Level level);
     bool seen() const { return m_seen; }
@@ -36,6 +35,7 @@ public:
     void setBusy(bool busy);
     bool dismissable() const { return m_dismissable; }
     void setDismissable(bool dismissable);
+    bool dismissed() const { return m_dismissed; }
 public slots:
     void dismiss();
 signals:
@@ -43,12 +43,26 @@ signals:
     void seenChanged();
     void busyChanged();
     void dismissableChanged();
+    void dismissedChanged();
 protected:
-    Context* const m_context;
     Level m_level{Info};
     bool m_seen{false};
     bool m_busy{false};
     bool m_dismissable{false};
+    bool m_dismissed{false};
+};
+
+class ContextNotification : public Notification
+{
+    Q_OBJECT
+    Q_PROPERTY(Context* context READ context CONSTANT)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    explicit ContextNotification(Context* context);
+    Context* context() const { return m_context; }
+protected:
+    Context* const m_context;
 };
 
 class NotificationsController : public Controller
@@ -82,7 +96,7 @@ private:
     QStandardItemModel* m_source{nullptr};
 };
 
-class NetworkNotification : public Notification
+class NetworkNotification : public ContextNotification
 {
     Q_OBJECT
     Q_PROPERTY(Network* network READ network CONSTANT)
