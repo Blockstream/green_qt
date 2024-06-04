@@ -916,6 +916,8 @@ void LoadAssetsTask::update()
             }, Qt::QueuedConnection);
         }
         GA_destroy_json((GA_json*) output);
+
+        return true;
     }).then(this, [=](bool ok) {
         setStatus(ok ? Status::Finished : Status::Failed);
     });
