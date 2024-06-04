@@ -23,6 +23,7 @@ MainPageHeader {
     readonly property bool archived: self.currentAccount ? self.currentAccount.hidden : false
     required property real accountListWidth
     property Item toolbarItem: toolbar
+    property string view: 'transactions'
     id: self
 
     readonly property bool busy: {
@@ -94,7 +95,7 @@ MainPageHeader {
         GMenu.Item {
             text: qsTrId('id_view_archived_accounts_d').arg(archive_list_model.count)
             icon.source: 'qrc:/svg/archived.svg'
-            enabled: archive_list_model.count > 0 && !(navigation.param.archive ?? false)
+            enabled: archive_list_model.count > 0
             onClicked: {
                 menu.close()
                 self.archivedAccountsClicked()
@@ -325,7 +326,7 @@ MainPageHeader {
         leftPadding: 0
         rightPadding: 0
         background: null
-        checked: navigation.param.view === tab_button.view
+        checked: self.view === tab_button.view
         visible: enabled
         action: Action {
             text: qsTrId('id_' + tab_button.view)
@@ -339,7 +340,7 @@ MainPageHeader {
                 }
                 return null
             }
-            onTriggered: navigation.set({ view: tab_button.view })
+            onTriggered: self.view = tab_button.view
         }
         contentItem: Label {
             text: tab_button.text

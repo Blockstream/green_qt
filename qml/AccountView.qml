@@ -14,6 +14,7 @@ Page {
     signal assetClicked(Account account, Asset asset)
     required property Context context
     required property Account account
+    required property string view
 
     id: self
     spacing: constants.s1
@@ -59,7 +60,7 @@ Page {
         currentIndex: UtilJS.findChildIndex(stack_layout, child => child.load)
 
         PersistentLoader {
-            load: navigation.param.view === 'transactions'
+            load: self.view === 'transactions'
             sourceComponent: TransactionListView {
                 account: self.account
                 leftPadding: 0
@@ -68,7 +69,7 @@ Page {
         }
 
         PersistentLoader {
-            load: navigation.param.view === 'addresses'
+            load: self.view === 'addresses'
             sourceComponent: AddressesListView {
                 account: self.account
                 leftPadding: 0
@@ -77,7 +78,7 @@ Page {
         }
 
         PersistentLoader {
-            load: !(self.account?.context?.watchonly ?? false) && navigation.param.view === 'coins'
+            load: !(self.account?.context?.watchonly ?? false) && self.view === 'coins'
             sourceComponent: OutputsListView {
                 account: self.account
             }
@@ -85,7 +86,7 @@ Page {
     }
 
     PersistentLoader {
-        load: navigation.param.view === 'assets'
+        load: self.view === 'assets'
         sourceComponent: AssetListView {
             context: self.context
             account: self.account

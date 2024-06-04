@@ -24,11 +24,6 @@ StackViewPage {
         }
     }
 
-    Navigation {
-        id: navigation
-        Component.onCompleted: set({ view: 'transactions' })
-    }
-
     function checkDeviceMatches() {
         if (self.context.wallet.login instanceof DeviceData) {
             if (!self.context.device) return true
@@ -236,6 +231,7 @@ StackViewPage {
     Component {
         id: account_view_component
         AccountView {
+            view: wallet_header.view
             onTransactionClicked: (transaction) => transaction_details_drawer.createObject(self, { context: self.context, transaction }).open()
             onAddressClicked: (address) => address_details_drawer.createObject(self, { context: self.context, address }).open()
             onAssetClicked: (account, asset) => asset_drawer.createObject(self, { context: self.context, account, asset }).open()

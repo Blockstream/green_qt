@@ -36,7 +36,6 @@ SET(TARGET_SOURCES
 	src/loader2.cpp
 	src/loginwithpincontroller.cpp
 	src/main.cpp
-	src/navigation.cpp
 	src/network.cpp
 	src/networkmanager.cpp
 	src/output.cpp

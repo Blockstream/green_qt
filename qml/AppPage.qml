@@ -132,7 +132,6 @@ MainPage {
         Analytics.recordEvent('wallet_delete')
     }
 
-    property Navigation navigation: Navigation {}
     property Constants constants: Constants {}
 
     Action {

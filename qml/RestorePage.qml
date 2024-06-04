@@ -25,11 +25,7 @@ StackViewPage {
         onValidChanged: {
             if (controller.valid) restore_button.forceActiveFocus()
         }
-        // onFailedRecoveryPhraseCheck: {
-        //     Analytics.recordEvent('failed_recovery_phrase_check', {
-        //         network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network
-        //     })
-        // }
+        // TODO: track failed_recovery_phrase_check event
     }
     rightItem: WalletOptionsButton {
         wallet: self.wallet
