@@ -2,5 +2,6 @@ import QtQuick
 import QtQuick.Controls
 
 CircleButton {
-    icon.source: 'qrc:/svg2/close.svg'
+    id: self
+    icon.source: self.black ? 'qrc:/svg2/close_black.svg' : 'qrc:/svg2/close.svg'
 }
