@@ -56,6 +56,7 @@ windows-x86_64:installer:
     name: amake/innosetup
     entrypoint: [""]
   stage: installer
+  when: manual
   tags:
     - ga
   artifacts:
@@ -72,6 +73,7 @@ windows-x86_64:installer:
 windows-x86_64:sign-installer:
   extends: .windows:sign
   stage: installer
+  when: manual
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
