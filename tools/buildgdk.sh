@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
-GDK_BRANCH=release_0.71.1
-GDK_COMMIT=46750e33fb9811fe5a0ad0a773dc77284c57cf41
+GDK_BRANCH=release_0.71.3
+GDK_COMMIT=18fcde05c2ea9f428ab7b2200f6167b4daad9ec6
 
 mkdir -p build
 
