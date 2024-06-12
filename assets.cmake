@@ -178,6 +178,7 @@ qt_add_resources(green "images"
         assets/svg2/funds_sww.svg
         assets/svg2/gauge-green.svg
         assets/svg2/gear.svg
+        assets/svg2/globe.svg
         assets/svg2/hand.svg
         assets/svg2/house.svg
         assets/svg2/import.svg

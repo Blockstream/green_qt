@@ -152,6 +152,7 @@ StackViewPage {
         onSettingsClicked: settings_dialog.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
         onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
+        onStatusClicked: status_drawer.open()
         onNotificationsClicked: notifications_drawer.open()
         id: wallet_header
         context: self.context
@@ -167,6 +168,10 @@ StackViewPage {
         enabled: UtilJS.effectiveVisible(self)
         shortcut: 'Ctrl+L'
         onTriggered: self.logout()
+    }
+    StatusDrawer {
+        id: status_drawer
+        context: self.context
     }
     NotificationsDrawer {
         id: notifications_drawer

@@ -14,6 +14,7 @@ MainPageHeader {
     signal assetsClicked()
     signal settingsClicked()
     signal archivedAccountsClicked()
+    signal statusClicked()
     signal notificationsClicked()
     signal logoutClicked()
 
@@ -203,13 +204,7 @@ MainPageHeader {
                     Layout.leftMargin: 20
                     Layout.rightMargin: 20
                     spacing: constants.s1
-                    visible: opacity > 0
-                    opacity: self.context?.dispatcher.busy ?? false ? 0.8 : 0
-                    Behavior on opacity {
-                        SmoothedAnimation {
-                            velocity: 2
-                        }
-                    }
+                    visible: self.context?.dispatcher.busy ?? false
                     Label {
                         text: {
                             let name = ''
@@ -229,7 +224,7 @@ MainPageHeader {
                                 // }
                             }
                             // return name
-                            return '--'
+                            return ''
                         }
                     }
                     ProgressIndicator {
@@ -240,7 +235,13 @@ MainPageHeader {
                         max: 1
                     }
                 }
+                CircleButton {
+                    Layout.margins: 10
+                    icon.source: 'qrc:/svg2/globe.svg'
+                    onClicked: self.statusClicked()
+                }
                 NotificationsButton {
+                    Layout.margins: 10
                 }
             }
         }

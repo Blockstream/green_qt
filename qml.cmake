@@ -240,6 +240,7 @@ SET(QML_FILES
     qml/SinglesigWatchOnlyAddPage.qml
     qml/WalletWatchOnlySettingsView.qml
     qml/JadeGetMasterBlindingKeyView.qml
+    qml/StatusDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)
