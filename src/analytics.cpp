@@ -583,6 +583,20 @@ bool AnalyticsAlert::isDismissable() const
     return m_data.value("dismissable").toBool();
 }
 
+void AnalyticsAlert::setNotification(AnalyticsAlertNotification* notification)
+{
+    if (m_notification == notification) return;
+    if (m_notification) {
+        m_notification->deleteLater();
+        m_notification = nullptr;
+        emit notificationChanged();
+    }
+    if (notification) {
+        m_notification = notification;
+        emit notificationChanged();
+    }
+}
+
 void AnalyticsAlert::update()
 {
     const auto banners = Analytics::instance()->getRemoteConfigValue("banners");
@@ -619,6 +633,12 @@ void AnalyticsAlert::update()
         if (m_data != alert) {
             m_data = alert;
             emit dataChanged();
+
+            if (m_data.isEmpty()) {
+                setNotification(nullptr);
+            } else {
+                setNotification(new AnalyticsAlertNotification(this));
+            }
         }
 
         return;
@@ -650,4 +670,11 @@ void AnalyticsRemoteConfig::update()
 {
     const auto value = Analytics::instance()->getRemoteConfigValue(m_key);
     setValue(value);
+}
+
+AnalyticsAlertNotification::AnalyticsAlertNotification(AnalyticsAlert* alert)
+    : Notification(alert)
+    , m_alert(alert)
+{
+    setDismissable(alert->isDismissable());
 }

@@ -7,6 +7,8 @@
 
 #include <chrono>
 
+#include "notification.h"
+
 class AnalyticsPrivate;
 class Analytics : public QObject
 {
@@ -104,6 +106,8 @@ private:
     QScopedPointer<AnalyticsEventPrivate> d;
 };
 
+class AnalyticsAlertNotification;
+
 class AnalyticsAlert : public QObject
 {
     Q_OBJECT
@@ -115,6 +119,7 @@ class AnalyticsAlert : public QObject
     Q_PROPERTY(QString message READ message NOTIFY dataChanged)
     Q_PROPERTY(QString link READ link NOTIFY dataChanged)
     Q_PROPERTY(bool dismissable READ isDismissable NOTIFY dataChanged)
+    Q_PROPERTY(AnalyticsAlertNotification* notification READ notification NOTIFY notificationChanged)
     QML_ELEMENT
 public:
     AnalyticsAlert(QObject* parent = nullptr);
@@ -128,17 +133,34 @@ public:
     QString message() const;
     QString link() const;
     bool isDismissable() const;
+    AnalyticsAlertNotification* notification() const { return m_notification; }
+    void setNotification(AnalyticsAlertNotification* notification);
 signals:
     void activeChanged();
     void screenChanged();
     void networkChanged();
     void dataChanged();
+    void notificationChanged();
 private slots:
     void update();
 private:
     QString m_screen;
     QString m_network;
     QJsonObject m_data;
+    AnalyticsAlertNotification* m_notification{nullptr};
+};
+
+class AnalyticsAlertNotification : public Notification
+{
+    Q_OBJECT
+    Q_PROPERTY(AnalyticsAlert* alert READ alert CONSTANT)
+    QML_UNCREATABLE("")
+    QML_ELEMENT
+public:
+    AnalyticsAlertNotification(AnalyticsAlert* alert);
+    AnalyticsAlert* alert() const { return m_alert; }
+private:
+    AnalyticsAlert* const m_alert;
 };
 
 class AnalyticsRemoteConfig : public QObject
