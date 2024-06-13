@@ -137,6 +137,7 @@ qt_add_resources(green "images"
 
         assets/png/2fa.png
         assets/png/2fa_email.png
+        assets/png/2fa_expired.png
         assets/png/2fa_gauth.png
         assets/png/2fa_phone.png
         assets/png/2fa_sms.png
@@ -185,6 +186,7 @@ qt_add_resources(green "images"
         assets/svg2/incoming.svg
         assets/svg2/info.svg
         assets/svg2/info_red.svg
+        assets/svg2/info_white.svg
         assets/svg2/jade-logo.svg
         assets/svg2/lightning.svg
         assets/svg2/list_bullets.svg
@@ -222,6 +224,7 @@ qt_add_resources(green "images"
         assets/svg2/tx-redeposit.svg
         assets/svg2/wallet.svg
         assets/svg2/warning.svg
+        assets/svg2/warning_white.svg
         assets/svg2/watermark_bitcoin.svg
         assets/svg2/watermark_liquid.svg
         assets/svg2/x-square.svg
