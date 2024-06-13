@@ -4,10 +4,11 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 Collapsible {
-    AppUpdateController {
-        id: controller
-    }
+    required property var notifications
+
     id: self
     collapsed: {
         for (let i = 0; i < self.notifications.length; i++) {
@@ -20,44 +21,46 @@ Collapsible {
     contentHeight: stack_layout.height - 20
     animationVelocity: 200
 
-    readonly property var notifications: {
-        const notifications = []
-        if (controller.notification) {
-            notifications.push(controller.notification)
-        }
-        return notifications
-    }
 
     SwipeView {
         id: stack_layout
         clip: true
+        spacing: 8
         orientation: Qt.Vertical
-        interactive: false
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
-        currentIndex: {
-            for (let i = self.notifications.length - 1; i >= 0; i--) {
-                if (!self.notifications[i].dismissed) {
-                    return i
-                }
-            }
-            return 0
-        }
-
         x: 20
         width: self.width - 40
         implicitHeight: 108
         Repeater {
             model: self.notifications
             delegate: Loader {
-                readonly property Notification notification: loader.modelData
+                readonly property Notification _notification: loader.modelData
                 required property var modelData
                 id: loader
                 sourceComponent: {
-                    if (loader.notification instanceof UpdateNotification) {
+                    const notification = loader._notification
+                    if (notification instanceof UpdateNotification) {
                         return update_banner
                     }
                 }
+            }
+        }
+    }
+
+    ColumnLayout {
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 4
+        visible: self.notifications.length > 1
+        x: self.width - 14
+        Repeater {
+            model: self.notifications
+            delegate: Rectangle {
+                color: '#fff'
+                opacity: index === stack_layout.currentIndex ? 1 : 0.6
+                radius: 2
+                implicitHeight: 4
+                implicitWidth: 4
             }
         }
     }
@@ -69,11 +72,17 @@ Collapsible {
     }
 
     component Banner: Pane {
-        property bool dismissed
+        property Notification notification: _notification
+        property color backgroundColor
+        id: banner
         leftPadding: 20
         rightPadding: 20
         topPadding: 40
         bottomPadding: 20
+        background: Rectangle {
+            color: banner.backgroundColor
+            radius: 8
+        }
     }
 
     Component {

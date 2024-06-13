@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 MainPage {
     function openWallet(wallet) {
         for (let i = 0; i < stack_layout.children.length; ++i) {
@@ -154,6 +156,10 @@ MainPage {
     }
     StackView.onActivated: side_bar.x = 0
 
+    AppUpdateController {
+        id: update_controller
+    }
+
     id: self
     leftPadding: side_bar.width
     rightPadding: 0
@@ -161,6 +167,7 @@ MainPage {
     contentItem: Page {
         background: null
         header: AppBanner {
+            notifications: UtilJS.flatten(stack_layout.currentItem?.notifications, update_controller.notification).filter(notification => !notification.dismissed)
         }
         contentItem: GStackLayout {
             id: stack_layout
