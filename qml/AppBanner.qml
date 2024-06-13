@@ -89,10 +89,7 @@ Collapsible {
         id: update_banner
         Banner {
             id: banner
-            background: Rectangle {
-                color: '#00B45A'
-                radius: 8
-            }
+            backgroundColor: '#00B45A'
             contentItem: RowLayout {
                 spacing: 20
                 Image {
@@ -118,11 +115,6 @@ Collapsible {
                     text: qsTrId('Download %1').arg(notification.version)
                     textColor: '#1C1C1C'
                     onClicked: Qt.openUrlExternally('https://blockstream.com/green/')
-                }
-                CloseButton {
-                    Layout.alignment: Qt.AlignCenter
-                    visible: notification.dismissable
-                    onClicked: notification.dismiss()
                 }
             }
         }
