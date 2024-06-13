@@ -1,3 +1,18 @@
+function flatten(...args) {
+    const result = []
+    for (const arg of args) {
+        if (!arg) continue
+        if (arg.length >= 0) {
+            for (let i = 0; i < arg.length; i++) {
+                result.push(arg[i])
+            }
+        } else {
+            result.push(arg)
+        }
+    }
+    return result
+}
+
 function link(url, text) {
     return `<style>a:link { color: "#00B45A"; text-decoration: none; }</style><a href="${url}">${text || url}</a>`
 }
