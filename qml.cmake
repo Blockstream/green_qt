@@ -217,7 +217,7 @@ SET(QML_FILES
     qml/WalletOptionsButton.qml
     qml/SelectFeePage.qml
     qml/AssetDetailsPage.qml
-    qml/AppUpdateBanner.qml
+    qml/AppBanner.qml
     qml/ConnectLedgerPage.qml
     qml/LedgerPage.qml
     qml/LedgerDeviceDelegate.qml

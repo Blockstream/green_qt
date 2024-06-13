@@ -160,7 +160,7 @@ MainPage {
     title: stack_layout.currentItem?.title ?? ''
     contentItem: Page {
         background: null
-        header: AppUpdateBanner {
+        header: AppBanner {
         }
         contentItem: GStackLayout {
             id: stack_layout
