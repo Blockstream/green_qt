@@ -11,7 +11,10 @@ AbstractDrawer {
     readonly property int count: self.context.notifications.length
 
     onCountChanged: if (self.count === 0) self.close()
-    onClosed: controller.updateSeen()
+    onClosed: {
+        controller.updateSeen()
+        stack_view.pop(initial_page)
+    }
 
     NotificationsController {
         id: controller
@@ -30,6 +33,7 @@ AbstractDrawer {
     contentItem: GStackView {
         id: stack_view
         initialItem: StackViewPage {
+            id: initial_page
             title: qsTrId('id_notifications')
             rightItem: CloseButton {
                 onClicked: self.close()
