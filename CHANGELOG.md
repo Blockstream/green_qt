@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Added:
 - Expose status of wallet connections
+- Show banner for login alert
 
 ## [2.0.7] - 2024-06-11
 ### Changed:

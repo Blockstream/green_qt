@@ -42,6 +42,8 @@ Collapsible {
                     const notification = loader._notification
                     if (notification instanceof UpdateNotification) {
                         return update_banner
+                    } else if (notification instanceof AnalyticsAlertNotification) {
+                        return analytics_alert_banner
                     }
                 }
             }
@@ -82,6 +84,55 @@ Collapsible {
         background: Rectangle {
             color: banner.backgroundColor
             radius: 8
+        }
+    }
+    Component {
+        id: analytics_alert_banner
+        Banner {
+            id: banner
+            backgroundColor: '#00B45A'
+            contentItem: RowLayout {
+                spacing: 20
+                Image {
+                    Layout.alignment: Qt.AlignCenter
+                    source: 'qrc:/svg2/warning_white.svg'
+                }
+                ColumnLayout {
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        color: '#FFFFFF'
+                        font.pixelSize: 13
+                        font.weight: 700
+                        text: notification.alert.title
+                        wrapMode: Label.WordWrap
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        color: '#FFFFFF'
+                        font.pixelSize: 13
+                        font.weight: 400
+                        opacity: 0.75
+                        text: notification.alert.message
+                        wrapMode: Label.WordWrap
+                    }
+                }
+                LinkButton {
+                    font.bold: true
+                    font.pixelSize: 14
+                    text: qsTrId('id_learn_more')
+                    textColor: '#FFFFFF'
+                    onClicked: Qt.openUrlExternally(notification.alert.link)
+                }
+                CloseButton {
+                    Layout.alignment: Qt.AlignCenter
+                    visible: notification.dismissable
+                    onClicked: notification.dismiss()
+                }
+            }
         }
     }
 
