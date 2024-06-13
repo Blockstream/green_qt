@@ -18,7 +18,7 @@ AbstractButton {
     text: self.network.electrum ? 'singlesig' : 'multisig'
     padding: 20
     background: Rectangle {
-        color: '#222226'
+        color: Qt.lighter('#222226', self.enabled && self.hovered ? 1.1 : 1)
         radius: 5
         Image {
             anchors.top: parent.top
