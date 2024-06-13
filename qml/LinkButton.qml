@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 
 AbstractButton {
+    property color textColor: '#00B45A'
     HoverHandler {
         cursorShape: Qt.PointingHandCursor
     }
@@ -12,7 +13,7 @@ AbstractButton {
     background: Item {
         Rectangle {
             border.width: 2
-            border.color: '#00B45A'
+            border.color: self.textColor
             color: 'transparent'
             anchors.fill: parent
             anchors.margins: -4
@@ -21,7 +22,7 @@ AbstractButton {
         }
     }
     contentItem: Label {
-        color: Qt.lighter('#00B45A', self.enabled && self.hovered ? 1.2 : 1)
+        color: Qt.lighter(self.textColor, self.enabled && self.hovered ? 1.2 : 1)
         font: self.font
         text: self.text
         opacity: self.enabled ? 1 : 0.6
