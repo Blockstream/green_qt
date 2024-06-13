@@ -42,6 +42,8 @@ Collapsible {
                     const notification = loader._notification
                     if (notification instanceof UpdateNotification) {
                         return update_banner
+                    } else if (notification instanceof SystemNotification) {
+                        return system_message_banner
                     } else if (notification instanceof AnalyticsAlertNotification) {
                         return analytics_alert_banner
                     }
@@ -84,6 +86,44 @@ Collapsible {
         background: Rectangle {
             color: banner.backgroundColor
             radius: 8
+        }
+    }
+    Component {
+        id: system_message_banner
+        Banner {
+            id: banner
+            backgroundColor: '#00B45A'
+            contentItem: RowLayout {
+                spacing: 20
+                Image {
+                    Layout.alignment: Qt.AlignCenter
+                    source: 'qrc:/svg2/info_white.svg'
+                }
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    color: '#FFFFFF'
+                    font.pixelSize: 13
+                    font.weight: 700
+                    text: banner.notification.message
+                    wrapMode: Label.WordWrap
+                }
+                PrimaryButton {
+                    Layout.alignment: Qt.AlignCenter
+                    borderColor: '#FFFFFF'
+                    fillColor: '#FFFFFF'
+                    font.pixelSize: 12
+                    font.weight: 500
+                    text: qsTrId('id_accept')
+                    textColor: '#1C1C1C'
+                    onClicked: banner.notification.trigger()
+                }
+                CloseButton {
+                    Layout.alignment: Qt.AlignCenter
+                    onClicked: banner.notification.dismiss()
+                }
+            }
         }
     }
     Component {
