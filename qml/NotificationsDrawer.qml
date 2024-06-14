@@ -56,60 +56,127 @@ AbstractDrawer {
         id: delegate
         enabled: !delegate.notification.busy
         width: delegate.ListView.view.width
-        text: delegate.notification.message
-        background: Rectangle {
-            id: r1
-            anchors.fill: parent
-            color: '#222226'
-            radius: 5
-        }
-        topPadding: 18
-        leftPadding: 18
-        rightPadding: 18
-        bottomPadding: 18
-        contentItem: RowLayout {
-            spacing: 5
-            Loader {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignCenter
-                property Notification notification: delegate.notification
-                sourceComponent: {
-                    if (delegate.notification instanceof SystemNotification) {
-                        return system_notification
-                    } else if (delegate.notification instanceof TwoFactorResetNotification) {
-                        return two_factor_reset_notification
-                    }
-                    return null
+        background: null
+        topPadding: 0
+        leftPadding: 0
+        rightPadding: 0
+        bottomPadding: 0
+        contentItem: Loader {
+            property Notification _notification: delegate.notification
+            sourceComponent: {
+                if (delegate.notification instanceof SystemNotification) {
+                    return system_notification
+                } else if (delegate.notification instanceof TwoFactorResetNotification) {
+                    return two_factor_reset_notification
+                } else if (delegate.notification instanceof TwoFactorExpiredNotification) {
+                    return two_factor_expired_notification
                 }
-            }
-            ColumnLayout {
-                Layout.fillWidth: false
-                VSpacer {
-                }
-                CloseButton {
-                    visible: delegate.notification.dismissable
-                    opacity: 0.6
-                    onClicked: delegate.notification.dismiss()
-                }
-                ProgressIndicator {
-                   Layout.minimumWidth: 24
-                   Layout.minimumHeight: 24
-                   indeterminate: delegate.notification.busy
-                   visible: delegate.notification.busy
-                }
-                VSpacer {
-                }
+                return null
             }
         }
     }
 
+    component NotificationItem: Pane {
+        property Notification notification: _notification
+        property color backgroundColor: '#222226'
+        id: item
+        topPadding: 18
+        leftPadding: 18
+        rightPadding: 18
+        bottomPadding: 18
+        background: Rectangle {
+            id: r1
+            color: item.backgroundColor
+            radius: 5
+        }
+    }
     Component {
         id: system_notification
-        ColumnLayout {
+        NotificationItem {
             AnalyticsView {
                 active: true
                 name: 'SystemMessage'
             }
+            id: item
+            backgroundColor: '#00B45A'
+            contentItem: RowLayout {
+                spacing: 16
+                    Image {
+                    Layout.alignment: Qt.AlignCenter
+                    source: 'qrc:/svg2/info_white.svg'
+                }
+                ColumnLayout {
+                    spacing: 0
+                    Label {
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        clip: true
+                        color: '#FFF'
+                        font.pixelSize: 13
+                        font.weight: 700
+                        text: item.notification.network.displayName
+                        wrapMode: Label.Wrap
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        clip: true
+                        color: '#FFF'
+                        font.pixelSize: 13
+                        font.weight: 400
+                        text: item.notification.message
+                        textFormat: Label.MarkdownText
+                        wrapMode: Label.Wrap
+                        onLinkActivated: Qt.openUrlExternally(link)
+                    }
+                    RowLayout {
+                        Layout.topMargin: 16
+                        spacing: 0
+                        visible: !item.notification.accepted
+                        CheckBox {
+                            Layout.alignment: Qt.AlignCenter
+                            id: confirm_checkbox
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                            color: '#FFF'
+                            text: qsTrId('id_i_confirm_i_have_read_and')
+                            wrapMode: Label.Wrap
+                        }
+                        PrimaryButton {
+                            Layout.alignment: Qt.AlignRight
+                            Layout.leftMargin: 15
+                            borderColor: '#FFFFFF'
+                            fillColor: '#FFFFFF'
+                            font.pixelSize: 12
+                            font.weight: 500
+                            enabled: confirm_checkbox.checked
+                            font.capitalization: Font.Capitalize
+                            text: qsTrId('id_accept').toLowerCase()
+                            textColor: '#1C1C1C'
+                            onClicked: item.notification.accept(controller.monitor)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    Component {
+        id: two_factor_reset_notification
+        TwoFactorResetNotificationView {
+        }
+    }
+    Component {
+        id: two_factor_expired_notification
+        TwoFactorExpiredNotificationView {
+        }
+    }
+
+    component TwoFactorResetNotificationView: NotificationItem {
+        readonly property Session session: notification.context.getOrCreateSession(notification.network)
+        id: view
+        contentItem: ColumnLayout {
             spacing: 0
             RowLayout {
                 Layout.bottomMargin: 10
@@ -126,94 +193,83 @@ AbstractDrawer {
                 }
             }
             Label {
+                Layout.bottomMargin: 10
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 color: '#FFF'
-                font.pixelSize: 18
+                font.pixelSize: 14
                 font.weight: 500
-                text: notification.message
-                textFormat: Label.MarkdownText
-                wrapMode: Label.Wrap
-                onLinkActivated: Qt.openUrlExternally(link)
+                text: qsTrId('id_twofactor_reset_in_progress')
+                wrapMode: Label.WordWrap
             }
-            Collapsible {
+            Label {
                 Layout.fillWidth: true
-                animationVelocity: 300
-                collapsed: notification.accepted
-                ColumnLayout {
-                    width: parent.width
-                    y: 10
-                    RowLayout {
-                        CheckBox {
-                            Layout.alignment: Qt.AlignCenter
-                            id: confirm_checkbox
-                        }
-                        Label {
-                            Layout.fillWidth: true
-                            Layout.preferredWidth: 0
-                            color: '#FFF'
-                            text: qsTrId('id_i_confirm_i_have_read_and')
-                            wrapMode: Label.Wrap
-                        }
-                    }
-                    RegularButton {
-                        Layout.alignment: Qt.AlignRight
-                        enabled: confirm_checkbox.checked
-                        font.capitalization: Font.Capitalize
-                        text: qsTrId('id_accept').toLowerCase()
-                        onClicked: notification.accept(controller.monitor)
+                Layout.preferredWidth: 0
+                color: '#FFF'
+                opacity: 0.8
+                text: {
+                    if (view.session.config.twofactor_reset?.is_active ?? false) {
+                        return qsTrId('id_your_wallet_is_locked_for_a').arg(view.session.config.twofactor_reset.days_remaining)
+                    } else {
+                        return ''
                     }
                 }
+                wrapMode: Label.WordWrap
             }
-        }
-    }
-    Component {
-        id: two_factor_reset_notification
-        TwoFactorResetNotificationView {
         }
     }
 
-    component TwoFactorResetNotificationView: ColumnLayout {
-        readonly property Session session: notification.context.getOrCreateSession(notification.network)
+    component TwoFactorExpiredNotificationView: NotificationItem {
         id: view
-        spacing: 0
-        RowLayout {
-            Layout.bottomMargin: 10
+        backgroundColor: '#F7D000'
+        contentItem: RowLayout {
+            spacing: 16
             Image {
-                Layout.preferredHeight: 24
-                Layout.preferredWidth: 24
-                source: UtilJS.iconFor(notification.network)
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/expired_2fa.svg'
             }
-            Label {
-                color: '#FFF'
-                font.pixelSize: 16
-                opacity: 0.6
-                text: notification.network.displayName
-            }
-        }
-        Label {
-            Layout.bottomMargin: 10
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            color: '#FFF'
-            font.pixelSize: 14
-            font.weight: 500
-            text: qsTrId('id_twofactor_reset_in_progress')
-            wrapMode: Label.WordWrap
-        }
-        Label {
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            color: '#FFF'
-            opacity: 0.8
-            text: {
-                if (view.session.config.twofactor_reset?.is_active ?? false) {
-                    return qsTrId('id_your_wallet_is_locked_for_a').arg(view.session.config.twofactor_reset.days_remaining)
-                } else {
-                    return ''
+            ColumnLayout {
+                spacing: 0
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    color: '#13151C'
+                    font.pixelSize: 13
+                    font.weight: 700
+                    text: 'Update 2FA protection on some of your accounts'
+                    wrapMode: Label.Wrap
+                }
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    color: '#13151C'
+                    font.pixelSize: 13
+                    font.weight: 400
+                    horizontalAlignment: Label.AlignJustify
+                    text: 'Consider enabling 2FA on additional accounts where sensitive information is stored to enhance your overall security posture.'
+                    wrapMode: Label.Wrap
+                }
+                RowLayout {
+                    Layout.topMargin: 16
+                    spacing: 40
+                    HSpacer {
+                    }
+                    LinkButton {
+                        text: qsTrId('id_learn_more')
+                        textColor: '#13151C'
+                        onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900001391763-How-does-Blockstream-Green-s-2FA-multisig-protection-work#h_01HRYKB9YRHWX02REXYY34VPV9')
+                    }
+                    PrimaryButton {
+                        Layout.alignment: Qt.AlignCenter
+                        borderColor: '#1C1C1C'
+                        fillColor: '#1C1C1C'
+                        font.pixelSize: 12
+                        font.weight: 500
+                        text: 'Re-enable 2FA'
+                        textColor: '#FFFFFF'
+                    }
                 }
             }
-            wrapMode: Label.WordWrap
         }
     }
 }
