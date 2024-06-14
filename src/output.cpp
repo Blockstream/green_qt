@@ -3,12 +3,25 @@
 #include "context.h"
 #include "json.h"
 #include "network.h"
+#include "notification.h"
 #include "output.h"
 #include "session.h"
 #include "util.h"
 #include "wallet.h"
 
 #include <gdk.h>
+
+namespace {
+    TwoFactorExpiredNotification* GetExpiredNotification(Context* context)
+    {
+        TwoFactorExpiredNotification* notification{nullptr};
+        for (auto _notitifaction : context->getNotifications()) {
+            notification = qobject_cast<TwoFactorExpiredNotification*>(_notitifaction);
+            if (notification) return notification;
+        }
+        return nullptr;
+    }
+}
 
 Output::Output(const QJsonObject& data, Account* account)
     : QObject(account)
@@ -67,6 +80,26 @@ void Output::setExpired(bool expired)
     if (m_expired == expired) return;
     m_expired = expired;
     emit expiredChanged();
+
+    // skip liquid notification for until gdk has better redeposit for liquid
+    if (m_account->network()->isLiquid()) return;
+
+    auto notification = GetExpiredNotification(m_account->context());
+    if (m_expired) {
+        if (!notification) {
+            notification = new TwoFactorExpiredNotification(m_account->context());
+            m_account->context()->addNotification(notification);
+        }
+        notification->add(this);
+    } else {
+        if (notification) {
+            notification->remove(this);
+            if (notification->isEmpty()) {
+                m_account->context()->removeNotification(notification);
+                notification->deleteLater();
+            }
+        }
+    }
 }
 
 void Output::setDust(bool dust)
