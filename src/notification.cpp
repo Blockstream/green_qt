@@ -133,7 +133,7 @@ SystemNotification::SystemNotification(const QString& message, Network* network,
     : NetworkNotification{network, context}
     , m_message{message}
 {
-    setDismissable(false);
+    setDismissable(true);
 }
 
 void SystemNotification::setAccepted(bool accepted)
