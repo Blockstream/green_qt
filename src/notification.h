@@ -8,6 +8,9 @@
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QQmlEngine>
+#include <QQmlListProperty>
+
+Q_MOC_INCLUDE("account.h")
 
 class Notification : public QObject
 {
@@ -139,6 +142,25 @@ class TwoFactorResetNotification : public NetworkNotification
     QML_UNCREATABLE("")
 public:
     TwoFactorResetNotification(Network* network, Context* context);
+};
+
+class TwoFactorExpiredNotification : public ContextNotification
+{
+    Q_OBJECT
+    Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    TwoFactorExpiredNotification(Context* context);
+    QQmlListProperty<Account> accounts();
+    void add(Output* output);
+    void remove(Output* output);
+    bool isEmpty() const { return m_outputs.isEmpty(); }
+signals:
+    void accountsChanged();
+private:
+    QList<Account*> m_accounts;
+    QSet<Output*> m_outputs;
 };
 
 #endif // GREEN_NOTIFICATION_H

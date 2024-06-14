@@ -1,5 +1,7 @@
+#include "account.h"
 #include "context.h"
 #include "notification.h"
+#include "output.h"
 #include "session.h"
 #include "task.h"
 
@@ -198,6 +200,37 @@ TwoFactorResetNotification::TwoFactorResetNotification(Network* network, Context
         bool is_active = event.value("is_active").toBool();
         remove(is_active);
     });
+}
+
+TwoFactorExpiredNotification::TwoFactorExpiredNotification(Context* context)
+    : ContextNotification(context)
+{
+    setDismissable(true);
+}
+
+QQmlListProperty<Account> TwoFactorExpiredNotification::accounts()
+{
+    return { this, &m_accounts };
+}
+
+void TwoFactorExpiredNotification::add(Output* output)
+{
+    if (m_outputs.contains(output)) return;
+    m_outputs.insert(output);
+    if (!m_accounts.contains(output->account())) {
+        m_accounts.append(output->account());
+        emit accountsChanged();
+    }
+}
+
+void TwoFactorExpiredNotification::remove(Output* output)
+{
+    m_outputs.remove(output);
+    for (auto o : m_outputs) {
+        if (o->account() == output->account()) return;
+    }
+    m_accounts.removeOne(output->account());
+    emit accountsChanged();
 }
 
 ContextNotification::ContextNotification(Context* context)
