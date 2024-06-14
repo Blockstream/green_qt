@@ -1,5 +1,6 @@
 #include "loginwithpincontroller.h"
 
+#include "account.h"
 #include "context.h"
 #include "jadedevice.h"
 #include "ledgerdevice.h"
@@ -328,6 +329,18 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
         connect(load_accounts, &Task::finished, this, [=] {
             for (auto account : load_accounts->accounts()) {
                 group->add(new LoadBalanceTask(account));
+
+                auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, account);
+
+                connect(get_unspent_outputs, &Task::finished, this, [=] {
+                    for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {
+                        for (const QJsonValue& asset_value : assets_values.toArray()) {
+                            auto output = account->getOrCreateOutput(asset_value.toObject());
+                        }
+                    }
+                });
+
+                group->add(get_unspent_outputs);
             }
         });
         connect(load_accounts, &Task::failed, this, [=](auto error) {
