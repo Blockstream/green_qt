@@ -241,6 +241,7 @@ SET(QML_FILES
     qml/WalletWatchOnlySettingsView.qml
     qml/JadeGetMasterBlindingKeyView.qml
     qml/StatusDrawer.qml
+    qml/TwoFactorExpiredSelectAccountPage.qml
 )
 
 if (GREEN_NO_RESOURCES)

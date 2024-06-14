@@ -22,6 +22,9 @@ StackViewPage {
         function onAutoLogout() {
             self.logout()
         }
+        function onNotificationTriggered(notification) {
+            notification_drawer.createObject(self, { notification }).open()
+        }
     }
 
     function checkDeviceMatches() {
@@ -83,6 +86,42 @@ StackViewPage {
                 console.warn(`missing localized label for ${label}`)
                 console.trace()
                 return label
+        }
+    }
+
+
+    Component {
+        id: notification_drawer
+        NotificationDrawer {
+        }
+    }
+
+    component NotificationDrawer: AbstractDrawer {
+        required property Notification notification
+        onClosed: drawer.destroy()
+
+        id: drawer
+        edge: Qt.RightEdge
+        minimumContentWidth: 450
+        contentItem: GStackView {
+            id: stack_view
+            initialItem: {
+                if (drawer.notification instanceof TwoFactorExpiredNotification) {
+                    return two_factor_expired_page
+                } else {
+                    console.log('unhandled notification trigger', notification)
+                }
+            }
+        }
+        Component {
+            id: two_factor_expired_page
+            TwoFactorExpiredSelectAccountPage {
+                context: self.context
+                notification: drawer.notification
+                rightItem: CloseButton {
+                    onClicked: drawer.close()
+                }
+            }
         }
     }
 

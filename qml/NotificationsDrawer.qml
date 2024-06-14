@@ -267,9 +267,21 @@ AbstractDrawer {
                         font.weight: 500
                         text: 'Re-enable 2FA'
                         textColor: '#FFFFFF'
+                        onClicked: {
+                            stack_view.push(two_factor_expired_page, {
+                                context: self.context,
+                                notification: view.notification,
+                            })
+                        }
                     }
                 }
             }
+        }
+    }
+
+    Component {
+        id: two_factor_expired_page
+        TwoFactorExpiredSelectAccountPage {
         }
     }
 }
