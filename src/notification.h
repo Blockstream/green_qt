@@ -37,8 +37,10 @@ public:
     void setDismissable(bool dismissable);
     bool dismissed() const { return m_dismissed; }
 public slots:
+    void trigger();
     void dismiss();
 signals:
+    void triggered();
     void levelChanged();
     void seenChanged();
     void busyChanged();

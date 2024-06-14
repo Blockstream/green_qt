@@ -36,6 +36,11 @@ void Notification::setDismissable(bool dismissable)
     emit dismissableChanged();
 }
 
+void Notification::trigger()
+{
+    emit triggered();
+}
+
 void Notification::dismiss()
 {
     if (m_dismissable && !m_dismissed) {
