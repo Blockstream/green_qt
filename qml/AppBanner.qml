@@ -42,6 +42,8 @@ Collapsible {
                     const notification = loader._notification
                     if (notification instanceof UpdateNotification) {
                         return update_banner
+                    } else if (notification instanceof TwoFactorExpiredNotification) {
+                        return two_factor_expired_banner
                     } else if (notification instanceof SystemNotification) {
                         return system_message_banner
                     } else if (notification instanceof AnalyticsAlertNotification) {
@@ -70,6 +72,11 @@ Collapsible {
     }
 
     Component {
+        id: two_factor_expired_banner
+        TwoFactorExpiredBanner {
+        }
+    }
+    Component {
         id: banner
         Banner {
         }
@@ -86,6 +93,42 @@ Collapsible {
         background: Rectangle {
             color: banner.backgroundColor
             radius: 8
+        }
+    }
+    component TwoFactorExpiredBanner: Banner {
+        id: banner
+        backgroundColor: '#F7D000'
+        contentItem: RowLayout {
+            spacing: 20
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/expired_2fa.svg'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                color: '#070B0E'
+                font.pixelSize: 13
+                font.weight: 700
+                text: 'Some coins are no longer 2FA protected (%1 accounts)'.arg(banner.notification.accounts.length)
+                wrapMode: Label.WordWrap
+            }
+            PrimaryButton {
+                Layout.alignment: Qt.AlignCenter
+                borderColor: '#1C1C1C'
+                fillColor: '#1C1C1C'
+                font.pixelSize: 12
+                font.weight: 500
+                text: 'Re-enable 2FA'
+                textColor: '#FFFFFF'
+                onClicked: banner.notification.trigger()
+            }
+            CloseButton {
+                Layout.alignment: Qt.AlignCenter
+                black: true
+                onClicked: banner.notification.dismiss()
+            }
         }
     }
     Component {

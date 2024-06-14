@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expose status of wallet connections
 - Show banner for login alert
 - Show banner for system messages
+- Show banner for two factor expired outputs
 
 ## [2.0.7] - 2024-06-11
 ### Changed:
