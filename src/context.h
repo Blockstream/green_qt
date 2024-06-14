@@ -103,6 +103,7 @@ signals:
     void notificationAdded(Notification* notification);
     void notificationRemoved(Notification* notification);
     void notificationsChanged();
+    void notificationTriggered(Notification* notification);
     void xpubHashIdChanged();
 
 private:

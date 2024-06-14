@@ -278,15 +278,16 @@ QQmlListProperty<Notification> Context::notifications()
 
 void Context::addNotification(Notification* notification)
 {
-    qDebug() << Q_FUNC_INFO << notification;
     m_notifications.append(notification);
     emit notificationsChanged();
     emit notificationAdded(notification);
+    connect(notification, &Notification::triggered, this, [=] {
+        emit notificationTriggered(notification);
+    });
 }
 
 void Context::removeNotification(Notification* notification)
 {
-    qDebug() << Q_FUNC_INFO << notification;
     emit notificationRemoved(notification);
     m_notifications.removeOne(notification);
     emit notificationsChanged();
