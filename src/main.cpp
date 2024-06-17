@@ -180,6 +180,7 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("printtoconsole"));
     g_args.addOption(QCommandLineOption("debug"));
     g_args.addOption(QCommandLineOption("tor", "", "tor", ""));
+    g_args.addOption(QCommandLineOption("proxy", "", "proxy", ""));
     g_args.addOption(QCommandLineOption("testnet"));
     g_args.addOption(QCommandLineOption("analytics", "", "analytics", ""));
     g_args.addOption(QCommandLineOption("debugfocus"));
@@ -350,6 +351,14 @@ int main(int argc, char *argv[])
     }
     if (g_args.isSet("tor")) {
         Settings::instance()->setUseTor(g_args.value("tor") == "enabled");
+    }
+    if (g_args.isSet("proxy")) {
+        const auto proxy = g_args.value("proxy").split(':');
+        if (proxy.length() == 2) {
+            Settings::instance()->setUseProxy(true);
+            Settings::instance()->setProxyHost(proxy[0]);
+            Settings::instance()->setProxyPort(proxy[1].toInt());
+        }
     }
 
     qInfo() << "Load wallets";
