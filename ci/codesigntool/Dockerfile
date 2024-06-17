@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl openjdk-11
 
 RUN curl -o archive.zip https://www.ssl.com/download/codesigntool-for-linux-and-macos/
 
-RUN echo 359782cee5c709b172610e2abd8cb49445bfadd26f44073ca18600c585b91b8d  archive.zip | sha256sum -c
+RUN echo 83d72ca2f0cf9a61ec7f2b0470e91abfdb5999392170097f0f4d81cbea4a5458  archive.zip | sha256sum -c
 
 RUN unzip archive.zip -d $CODE_SIGN_TOOL_PATH
 
