@@ -152,16 +152,23 @@ AbstractDrawer {
                     opacity: 0.6
                     font.pixelSize: 10
                     text: {
+                        if (button.session.usePersonalNode) {
+                            return button.session.electrumUrl
+                        }
                         const network = button.session.network
                         let url
-                        if (button.session.usePersonalNode) {
-                            url = button.session.electrumUrl
-                        } else if (button.session.useTor) {
-                            url = network.electrum ? 'http://' + network.data.electrum_onion_url : network.data.wamp_onion_url
+                        if (button.session.useTor) {
+                            url = network.electrum ? network.data.electrum_onion_url : network.data.wamp_onion_url
                         } else {
-                            url = network.electrum ? 'http://' + network.data.electrum_url : network.data.wamp_url
+                            url = network.electrum ? network.data.electrum_url : network.data.wamp_url
                         }
-                        return new URL(url).hostname
+                        try {
+                            let hostname = new URL(url).hostname
+                            if (!hostname) hostname = new URL('http://' + url).hostname
+                            return hostname
+                        } catch (e) {
+                            return url
+                        }
                     }
                     wrapMode: Label.WrapAnywhere
                 }
