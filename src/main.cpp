@@ -179,6 +179,7 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("tempdatadir"));
     g_args.addOption(QCommandLineOption("printtoconsole"));
     g_args.addOption(QCommandLineOption("debug"));
+    g_args.addOption(QCommandLineOption("tor", "", "tor", ""));
     g_args.addOption(QCommandLineOption("testnet"));
     g_args.addOption(QCommandLineOption("analytics", "", "analytics", ""));
     g_args.addOption(QCommandLineOption("debugfocus"));
@@ -346,6 +347,9 @@ int main(int argc, char *argv[])
     }
     if (g_args.isSet("analytics")) {
         Settings::instance()->setAnalytics(g_args.value("analytics"));
+    }
+    if (g_args.isSet("tor")) {
+        Settings::instance()->setUseTor(g_args.value("tor") == "enabled");
     }
 
     qInfo() << "Load wallets";
