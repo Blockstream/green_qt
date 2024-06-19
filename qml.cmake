@@ -23,7 +23,6 @@ SET(QML_FILES
     qml/GHeader.qml
     qml/Wallet2faSettingsView.qml
     qml/BlockstreamView.qml
-    qml/SessionBadge.qml
     qml/GComboBox.qml
     qml/TwoFactorAuthExpiryDialog.qml
     qml/Tag.qml
