@@ -192,6 +192,7 @@ qt_add_resources(green "images"
         assets/svg2/list_bullets.svg
         assets/svg2/ledger-logo.svg
         assets/svg2/lock-simple-thin.svg
+        assets/svg2/notifications.svg
         assets/svg2/tx-mixed.svg
         assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg

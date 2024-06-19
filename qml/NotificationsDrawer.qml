@@ -38,14 +38,54 @@ AbstractDrawer {
             rightItem: CloseButton {
                 onClicked: self.close()
             }
-            contentItem: TListView {
-                id: list_view
-                clip: true
-                spacing: 10
-                model: NotificationsModel {
-                    source: controller.model
+            contentItem: StackLayout {
+                currentIndex: self.context.notifications.length === 0 ? 0 : 1
+                ColumnLayout {
+                    spacing: 10
+                    VSpacer {
+                        Layout.fillWidth: true
+                    }
+                    MultiImage {
+                        Layout.alignment: Qt.AlignCenter
+                        foreground: 'qrc:/svg2/notifications.svg'
+                        fill: false
+                        center: true
+                        width: 300
+                        height: 182
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 200
+                        font.pixelSize: 18
+                        font.weight: 700
+                        horizontalAlignment: Label.AlignHCenter
+                        text: `You don't have any notification`
+                        wrapMode: Label.Wrap
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 300
+                        font.pixelSize: 12
+                        font.weight: 400
+                        horizontalAlignment: Label.AlignHCenter
+                        opacity: 0.6
+                        text: `You don't have any notifications right now; we'll let you know as soon as there's something new.`
+                        wrapMode: Label.Wrap
+                    }
+                    VSpacer {
+                    }
                 }
-                delegate: NotificationDelegate {
+                TListView {
+                    id: list_view
+                    clip: true
+                    spacing: 10
+                    model: NotificationsModel {
+                        source: controller.model
+                    }
+                    delegate: NotificationDelegate {
+                    }
                 }
             }
         }
