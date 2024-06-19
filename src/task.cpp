@@ -365,8 +365,6 @@ void AuthHandlerTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    if (!m_session->isConnected()) return;
-
     if (!active()) return;
 
     setStatus(Status::Active);
@@ -383,7 +381,8 @@ void AuthHandlerTask::update()
         if (watcher->result().first) {
             next();
         } else {
-            setError(watcher->result().second.value("details").toString());
+            const auto error = watcher->result().second.value("details").toString();
+            setError(error);
             setStatus(Status::Failed);
         }
     });
