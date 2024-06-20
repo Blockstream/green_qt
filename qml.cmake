@@ -241,6 +241,7 @@ SET(QML_FILES
     qml/JadeGetMasterBlindingKeyView.qml
     qml/StatusDrawer.qml
     qml/TwoFactorExpiredSelectAccountPage.qml
+    qml/Bip21Footer.qml
 )
 
 if (GREEN_NO_RESOURCES)
