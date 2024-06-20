@@ -30,7 +30,6 @@ class Session : public Entity
     Q_PROPERTY(QString electrumUrl READ electrumUrl CONSTANT)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
-    Q_PROPERTY(bool connecting READ isConnecting NOTIFY connectingChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QJsonObject block READ block NOTIFY blockChanged)
@@ -57,8 +56,6 @@ public:
     void setActive(bool active);
     bool isConnected() const { return m_connected; }
     void setConnected(bool connected);
-    bool isConnecting() const { return m_connecting; }
-    void setConnecting(bool connecting);
 
     QJsonObject config() const { return m_config; }
     void setConfig(const QJsonObject& config);
@@ -69,7 +66,7 @@ public:
     uint32_t blockHeight() const;
     void setBlock(const QJsonObject& block);
     QJsonObject settings() const { return m_settings; }
-    void setSettings(const QJsonObject& settings);    
+    void setSettings(const QJsonObject& settings);
     QJsonObject currencies() const { return m_currencies; }
     void setCurrencies(const QJsonObject& currencies);
     QString unit() const { return m_unit; }
@@ -88,7 +85,6 @@ signals:
     void eventHandled(Session* session, const QString& event, const QJsonObject& data);
     void activeChanged();
     void connectedChanged();
-    void connectingChanged();
     void configChanged();
     void networkEvent(const QJsonObject& event);
     void twoFactorResetEvent(const QJsonObject& event);
@@ -131,7 +127,6 @@ public:
     // TODO: make m_session private
     GA_session* m_session{nullptr};
     bool m_connected{false};
-    bool m_connecting{false};
     bool m_ready{false};
     QJsonObject m_config;
     QJsonObject m_events;

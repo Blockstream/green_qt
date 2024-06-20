@@ -179,7 +179,7 @@ AbstractDrawer {
                 implicitHeight: 8
                 implicitWidth: 8
                 radius: 4
-                color: button.session.connected ? '#00FF00' : button.session.connecting ? '#FFFF00' : '#FF0000'
+                color: button.session.connected ? '#00FF00' : '#FF0000'
             }
         }
     }

@@ -1459,8 +1459,6 @@ void ConnectTask::update()
             return;
         }
 
-        m_session->setConnecting(true);
-
         using Watcher = QFutureWatcher<QString>;
         const auto watcher = new Watcher(this);
         watcher->setFuture(QtConcurrent::run([=] {
@@ -1474,13 +1472,11 @@ void ConnectTask::update()
         connect(watcher, &Watcher::finished, this, [=] {
             const auto error = watcher->result();
             if (error.contains("session already connected")) {
-                m_session->setConnecting(false);
                 m_session->setConnected(true);
                 setStatus(Status::Finished);
                 return;
             }
             setError(error);
-            m_session->setConnecting(false);
             if (error.isEmpty()) {
                 m_session->setConnected(true);
                 setStatus(Status::Finished);

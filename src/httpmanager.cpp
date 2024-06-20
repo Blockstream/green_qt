@@ -69,7 +69,7 @@ void HttpManager::dispatch()
 {
     m_idle_timer->stop();
 
-    if (m_session && !m_running && !m_session->isConnecting()) {
+    if (m_session && !m_running) {
         auto settings = Settings::instance();
         if (m_session->useTor() != settings->useTor() ||
             m_session->proxy() != settings->proxy()) {
@@ -94,7 +94,6 @@ void HttpManager::dispatch()
         m_session = new Session(network, this);
         m_session->setActive(true);
         connect(m_session, &Session::connectedChanged, this, &HttpManager::dispatch);
-        connect(m_session, &Session::connectingChanged, this, &HttpManager::dispatch);
         emit sessionChanged();
 
         m_dispatcher->add(new ConnectTask(m_session));
