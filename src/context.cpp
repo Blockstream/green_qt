@@ -312,6 +312,11 @@ Network *Context::primaryNetwork()
     return nullptr;
 }
 
+QString Context::getDisplayUnit(const QString& unit)
+{
+    return ComputeDisplayUnit(primarySession()->network(), unit);
+}
+
 void Context::refreshAccounts()
 {
     auto group = new TaskGroup(this);

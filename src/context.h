@@ -87,6 +87,7 @@ public:
     void triggerAutoLogout();
 
     Q_INVOKABLE Network* primaryNetwork();
+    Q_INVOKABLE QString getDisplayUnit(const QString& unit);
 public slots:
     void refreshAccounts();
 

@@ -210,11 +210,6 @@ void Wallet::updateDeviceDetails(const QJsonObject& device_details)
 }
 */
 
-QString Wallet::getDisplayUnit(const QString& unit)
-{
-    return ComputeDisplayUnit(m_context->primarySession()->network(), unit);
-}
-
 void Wallet::setXPubHashId(const QString &xpub_hash_id)
 {
     if (m_xpub_hash_id == xpub_hash_id) return;

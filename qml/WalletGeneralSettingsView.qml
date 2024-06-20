@@ -60,7 +60,7 @@ Pane {
                     GComboBox {
                         property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
                         model: units.map(unit => ({
-                            text: wallet.getDisplayUnit(unit),
+                            text: self.context.getDisplayUnit(unit),
                             value: unit
                         }))
                         textRole: 'text'

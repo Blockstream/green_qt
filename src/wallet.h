@@ -144,10 +144,6 @@ public:
 
     void updateHashId(const QString& hash_id);
 
-    Q_INVOKABLE QString getDisplayUnit(const QString& unit);
-
-    void updateDisplayUnit();
-
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
