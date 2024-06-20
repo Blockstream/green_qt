@@ -186,6 +186,9 @@ MainPage {
         }
         footer: ColumnLayout {
             spacing: 10
+            TorFooter {
+                Layout.fillWidth: true
+            }
             Bip21Footer{
                 Layout.fillWidth: true
             }
