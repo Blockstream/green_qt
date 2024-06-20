@@ -4,6 +4,7 @@
 #include "httprequestactivity.h"
 #include "networkmanager.h"
 #include "session.h"
+#include "sessionmanager.h"
 #include "settings.h"
 #include "task.h"
 
@@ -91,7 +92,7 @@ void HttpManager::dispatch()
     if (!m_session) {
         qDebug() << "http: create session";
         auto network = NetworkManager::instance()->network("electrum-mainnet");
-        m_session = new Session(network, this);
+        m_session = SessionManager::instance()->create(network);
         m_session->setActive(true);
         connect(m_session, &Session::connectedChanged, this, &HttpManager::dispatch);
         emit sessionChanged();

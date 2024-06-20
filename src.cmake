@@ -44,6 +44,7 @@ SET(TARGET_SOURCES
 	src/resolver.cpp
 	src/restorecontroller.h src/restorecontroller.cpp
 	src/session.h src/session.cpp
+	src/sessionmanager.h src/sessionmanager.cpp
 	src/settings.h src/settings.cpp
 	src/signmessageresolver.cpp
 	src/signupcontroller.cpp

@@ -31,19 +31,6 @@ QString ElectrumUrlForNetwork(Network* network)
 
 Session::Session(Network* network, QObject* parent)
     : Entity(parent)
-    , m_context(nullptr)
-    , m_network(network)
-    , m_use_tor(Settings::instance()->useTor())
-    , m_use_proxy(Settings::instance()->useProxy())
-    , m_proxy(Settings::instance()->proxy())
-    , m_enable_spv(!network->isLiquid() ? Settings::instance()->enableSPV() : false)
-    , m_electrum_url(ElectrumUrlForNetwork(network))
-{
-}
-
-Session::Session(Network* network, Context* context)
-    : Entity(context)
-    , m_context(context)
     , m_network(network)
     , m_use_tor(Settings::instance()->useTor())
     , m_use_proxy(Settings::instance()->useProxy())
@@ -64,6 +51,14 @@ Session::Session(Network* network, Context* context)
 Session::~Session()
 {
     setActive(false);
+}
+
+void Session::setContext(Context* context)
+{
+    if (m_context == context) return;
+    Q_ASSERT(!m_context);
+    m_context = context;
+    emit contextChanged();
 }
 
 void Session::handleNotification(const QJsonObject& notification)

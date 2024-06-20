@@ -42,9 +42,10 @@ class Session : public Entity
     QML_UNCREATABLE("")
 public:
     Session(Network* network, QObject* parent);
-    Session(Network* network, Context* context);
+    Session(Network* network);
     virtual ~Session();
     Context* context() const { return m_context; }
+    void setContext(Context* context);
     Network* network() const { return m_network; }
     bool useTor() const { return m_use_tor; }
     bool useProxy() const { return m_use_proxy; }
@@ -81,6 +82,7 @@ public:
     AuthHandlerTask* login();
 
 signals:
+    void contextChanged();
     void notificationHandled(const QJsonObject& notification);
     void eventHandled(Session* session, const QString& event, const QJsonObject& data);
     void activeChanged();
@@ -109,8 +111,8 @@ private:
     void update();
     void handleNotification(const QJsonObject& notification);
 private:
-    Context* const m_context;
     Network* const m_network;
+    Context* m_context{nullptr};
     bool const m_use_tor;
     bool const m_use_proxy;
     QString const m_proxy;

@@ -7,6 +7,7 @@
 #include "networkmanager.h"
 #include "notification.h"
 #include "session.h"
+#include "sessionmanager.h"
 #include "task.h"
 #include "wallet.h"
 
@@ -99,7 +100,8 @@ Session* Context::getOrCreateSession(Network* network)
 
     auto session = m_sessions.value(network);
     if (!session) {
-        session = new Session(network, this);
+        session = SessionManager::instance()->create(network);
+        session->setContext(this);
         session->setActive(true);
         connect(session, &Session::blockEvent, this, [=](const QJsonObject& event) {
             for (auto account : m_accounts) {

@@ -24,6 +24,7 @@
 #include "json.h"
 #include "networkmanager.h"
 #include "session.h"
+#include "sessionmanager.h"
 #include "settings.h"
 #include "util.h"
 #include "walletmanager.h"
@@ -121,7 +122,7 @@ void Analytics::start()
         {
             if (!d->session) {
                 const auto network = NetworkManager::instance()->network("mainnet");
-                d->session = new Session(network, this);
+                d->session = SessionManager::instance()->create(network);
                 qDebug() << "analytics: create session";
                 d->session->setActive(true);
             }

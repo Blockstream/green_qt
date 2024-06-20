@@ -24,6 +24,7 @@
 #include "ga.h"
 #include "httpmanager.h"
 #include "networkmanager.h"
+#include "sessionmanager.h"
 #include "settings.h"
 #include "util.h"
 #include "walletmanager.h"
@@ -168,6 +169,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
 
+    SessionManager session_manager;
     WalletManager wallet_manager;
 
     Application app(argc, argv);
@@ -338,6 +340,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<HttpManager>("Blockstream.Green.Core", 0, 1, "HttpManager", HttpManager::instance());
     qmlRegisterSingletonInstance<NetworkManager>("Blockstream.Green.Core", 0, 1, "NetworkManager", NetworkManager::instance());
     qmlRegisterSingletonInstance<Settings>("Blockstream.Green.Core", 0, 1, "Settings", Settings::instance());
+    qmlRegisterSingletonInstance<SessionManager>("Blockstream.Green.Core", 0, 1, "SessionManager", SessionManager::instance());
     qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
     qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
     qmlRegisterSingletonInstance<AssetManager>("Blockstream.Green.Core", 0, 1, "AssetManager", AssetManager::instance());
