@@ -22,6 +22,8 @@
 
 #include "config.h"
 #include "json.h"
+#include "networkmanager.h"
+#include "session.h"
 #include "settings.h"
 #include "util.h"
 #include "walletmanager.h"
@@ -32,7 +34,7 @@ class AnalyticsPrivate : public QObject
 public:
     AnalyticsPrivate(Analytics* const q) : q(q) {}
 
-    GA_session* session{nullptr};
+    Session* session{nullptr};
     std::atomic_bool active{false};
     std::chrono::seconds timestamp_offset{0};
     struct View {
@@ -118,17 +120,10 @@ void Analytics::start()
 
         {
             if (!d->session) {
+                const auto network = NetworkManager::instance()->network("mainnet");
+                d->session = new Session(network, this);
                 qDebug() << "analytics: create session";
-                GA_create_session(&d->session);
-                QJsonObject params{
-                    { "name", "electrum-mainnet" },
-                    { "use_tor", Settings::instance()->useTor() },
-                    { "user_agent", QString("green_qt_%1").arg(QT_STRINGIFY(VERSION)) },
-                };
-                if (Settings::instance()->useProxy() && !Settings::instance()->proxy().isEmpty()) {
-                    params.insert("proxy", Settings::instance()->proxy());
-                }
-                GA_connect(d->session, Json::fromObject(params).get());
+                d->session->setActive(true);
             }
         }
 
@@ -171,7 +166,7 @@ void Analytics::start()
         }
 
         GA_json* out = nullptr;
-        const auto rc = GA_http_request(d->session, Json::fromObject(req).get(), &out);
+        const auto rc = GA_http_request(d->session->m_session, Json::fromObject(req).get(), &out);
         if (rc == GA_OK && out) {
             auto reply = Json::toObject(out);
 
@@ -295,7 +290,7 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
     QMetaObject::invokeMethod(this, [=] {
         auto& countly = cly::Countly::getInstance();
         countly.stop();
-        GA_destroy_session(session);
+        delete session;
         session = nullptr;
         QMetaObject::invokeMethod(q, [=] {
             q->decrBusy();
