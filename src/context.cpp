@@ -46,6 +46,14 @@ Context::Context(const QString& deployment, bool bip39, QObject* parent)
     Q_ASSERT(deployment == "mainnet" || deployment == "testnet" || deployment == "development");
 }
 
+Context::~Context()
+{
+    // TODO: remove context from session
+    for (auto session : m_sessions_list) {
+        session->setContext(nullptr);
+    }
+}
+
 TaskGroup* Context::cleanAccounts()
 {
     auto group = new TaskGroup(this);

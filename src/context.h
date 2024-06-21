@@ -34,6 +34,7 @@ class Context : public QObject
     QML_UNCREATABLE("")
 public:
     Context(const QString& deployment, bool bip39, QObject* parent);
+    ~Context();
 
     QString deployment() const { return m_deployment; }
     bool bip39() const { return m_bip39; }

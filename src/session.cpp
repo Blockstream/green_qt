@@ -56,7 +56,6 @@ Session::~Session()
 void Session::setContext(Context* context)
 {
     if (m_context == context) return;
-    Q_ASSERT(!m_context);
     m_context = context;
     emit contextChanged();
 }
