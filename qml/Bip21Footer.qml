@@ -23,8 +23,8 @@ Collapsible {
         id: pane
         leftPadding: 20
         rightPadding: 20
-        topPadding: 20
-        bottomPadding: 40
+        topPadding: 10
+        bottomPadding: 30
         x: 25
         width: self.width - 50
         background: Rectangle {
