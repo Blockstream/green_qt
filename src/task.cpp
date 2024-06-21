@@ -898,7 +898,6 @@ void LoadAssetsTask::update()
             if (err != GA_OK) return false;
         }
 
-        auto context = m_session->context();
         for (const auto& item : output->at("assets").items()) {
             const auto id = item.key();
             const auto data = item.value();
@@ -908,7 +907,9 @@ void LoadAssetsTask::update()
                 const auto icon = output->at("icons").at(id).get<std::string>();
                 icon_data = QString("data:image/png;base64,") + QString::fromStdString(icon);
             }
-            QMetaObject::invokeMethod(context, [=] {
+            QMetaObject::invokeMethod(m_session, [=] {
+                auto context = m_session->context();
+                if (!context) return;
                 auto asset = context->getOrCreateAsset(asset_id);
                 asset->setNetworkKey(m_session->network()->key());
                 asset->setData(Json::toObject((GA_json*) &data));
