@@ -9,7 +9,7 @@ Collapsible {
     animationVelocity: 200
     contentWidth: pane.width
     contentHeight: pane.height
-    collapsed: !(SessionManager.tor?.progress >= 0)
+    collapsed: !(Settings.useTor && !Settings.useProxy && SessionManager.tor?.progress >= 0)
     Pane {
         id: pane
         leftPadding: 20
@@ -46,7 +46,7 @@ Collapsible {
                 text: SessionManager.tor?.summary ?? ''
                 visible: tor_summary_text.text !== '' && tor_progress_bar.value < 100
             }
-            ProgressBar {
+            TProgressBar {
                 Layout.alignment: Qt.AlignCenter
                 Layout.minimumWidth: 200
                 id: tor_progress_bar
