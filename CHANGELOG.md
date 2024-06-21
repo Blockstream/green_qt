@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show banner for system messages
 - Show banner for two factor expired outputs
 
+### Changed:
+- Updates Qt to 6.7.2
+
 ## [2.0.7] - 2024-06-11
 ### Changed:
 - Setting to remember devices
