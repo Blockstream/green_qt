@@ -84,8 +84,6 @@ public:
     void addNotification(Notification* notification);
     void removeNotification(Notification* notification);
 
-    void triggerAutoLogout();
-
     Q_INVOKABLE Network* primaryNetwork();
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
 public slots:

@@ -102,6 +102,7 @@ signals:
     void currenciesChanged();
     void unitChanged();
     void usernameChanged();
+    void autoLogoutTriggered();
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;

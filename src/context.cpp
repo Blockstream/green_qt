@@ -103,6 +103,11 @@ Session* Context::getOrCreateSession(Network* network)
         session = SessionManager::instance()->create(network);
         session->setContext(this);
         session->setActive(true);
+        connect(session, &Session::autoLogoutTriggered, this, [=] {
+            if (m_wallet && !qobject_cast<DeviceData*>(m_wallet->login())) {
+                emit autoLogout();
+            }
+        });
         connect(session, &Session::blockEvent, this, [=](const QJsonObject& event) {
             for (auto account : m_accounts) {
                 if (account->session() == session) {
@@ -293,13 +298,6 @@ void Context::removeNotification(Notification* notification)
     emit notificationRemoved(notification);
     m_notifications.removeOne(notification);
     emit notificationsChanged();
-}
-
-void Context::triggerAutoLogout()
-{
-    if (m_wallet && !qobject_cast<DeviceData*>(m_wallet->login())) {
-        emit autoLogout();
-    }
 }
 
 Network *Context::primaryNetwork()
