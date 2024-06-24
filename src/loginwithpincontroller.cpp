@@ -306,6 +306,7 @@ void LoadController::load()
 
     if (!m_context->isWatchonly()) {
         for (auto network : NetworkManager::instance()->networks()) {
+            if (networks.contains(network)) continue;
             if (!compatibleToNetworks(network, networks)) continue;
             if (m_context->device() && !m_context->device()->supportsNetwork(network)) continue;
             qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << network->id() << network->name();
