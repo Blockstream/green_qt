@@ -15,15 +15,15 @@ ProgressBar {
     id: self
     background: Rectangle {
         color: "#235B35"
-        implicitHeight: 10
-        radius: 5
+        implicitHeight: 8
+        radius: 4
     }
     contentItem: Item {
-        implicitHeight: 10
+        implicitHeight: 8
         Rectangle {
             color: '#46B068'
-            height: 10
-            radius: 5
+            height: 8
+            radius: 4
             x: (self.indeterminate ? (0.5 - 0.5 * self._indeterminate_position) : 0) * self.contentItem.width
             width: (self.indeterminate ? self._indeterminate_position : self.visualPosition) * self.contentItem.width
         }
