@@ -56,7 +56,7 @@ void LoginController::loginWithPin(const QString& pin)
         if (error == "id_invalid_pin") {
             pin_data->decrementAttempts();
             emit invalidPin();
-        } else {
+        } else if (m_error.isEmpty()) {
             m_error = error;
         }
     });
