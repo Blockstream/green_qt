@@ -75,14 +75,6 @@ AbstractDrawer {
                         onClicked: self.walletClicked(wallet_button.wallet)
                     }
                 }
-//                Repeater {
-//                    model: DeviceListModel {
-//                    }
-//                    DeviceButton {
-//                        id: device_button
-//                        onClicked: self.deviceClicked(device_button.device)
-//                    }
-//                }
             }
         }
         footer: RowLayout {
@@ -101,18 +93,20 @@ AbstractDrawer {
         implicitHeight: 60
         leftPadding: 16
         rightPadding: 24
-        background: Rectangle {
-            color: Qt.lighter('#222226', button.enabled && button.hovered ? 1.2 : 1)
-            radius: 5
+        background: Item {
             Rectangle {
                 border.width: 2
                 border.color: '#00B45A'
                 color: 'transparent'
-                radius: 12
+                radius: 5
                 anchors.fill: parent
-                anchors.margins: -4
-                z: -1
                 opacity: button.visualFocus ? 1 : 0
+            }
+            Rectangle {
+                color: Qt.lighter('#222226', button.enabled && button.hovered ? 1.2 : 1)
+                radius: button.visualFocus ? 1 : 5
+                anchors.fill: parent
+                anchors.margins: button.visualFocus ? 4 : 0
             }
         }
     }
