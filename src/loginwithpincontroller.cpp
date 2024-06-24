@@ -212,12 +212,15 @@ void LoginController::login(LoginTask* login_task, const QString& passphrase)
 
     connect(group, &TaskGroup::failed, this, [=] {
         emit loginFailed(m_error);
+        if (m_error == "id_connection_failed") {
+            m_context->deleteLater();
+            setContext(nullptr);
+        }
     });
     connect(group, &TaskGroup::finished, this, [=] {
         if (passphrase.isEmpty()) {
             m_context->setWallet(m_wallet);
             emit loginFinished(m_context);
-            setContext(nullptr);
         } else {
             auto mnemonic = m_context->credentials().value("mnemonic").toString();
             auto network = m_context->primaryNetwork();
