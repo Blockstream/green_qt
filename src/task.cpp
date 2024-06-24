@@ -1480,13 +1480,11 @@ void ConnectTask::update()
         connect(watcher, &Watcher::finished, this, [=] {
             const auto error = watcher->result();
             if (error.contains("session already connected")) {
-                m_session->setConnected(true);
                 setStatus(Status::Finished);
                 return;
             }
             setError(error);
             if (error.isEmpty()) {
-                m_session->setConnected(true);
                 setStatus(Status::Finished);
             } else {
                 setStatus(Status::Failed);
