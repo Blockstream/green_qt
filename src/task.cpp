@@ -382,8 +382,12 @@ void AuthHandlerTask::update()
             next();
         } else {
             const auto error = watcher->result().second.value("details").toString();
-            setError(error);
-            setStatus(Status::Failed);
+            if (error == "id_you_are_not_connected") {
+                setStatus(Status::Ready);
+            } else {
+                setError(error);
+                setStatus(Status::Failed);
+            }
         }
     });
 }
