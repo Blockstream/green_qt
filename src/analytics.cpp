@@ -51,7 +51,6 @@ public:
     void stop(Qt::ConnectionType type = Qt::AutoConnection);
     void restart();
     void updateCustomUserDetails();
-    void updateRemoteConfig();
 };
 
 static Analytics* g_analytics_instance{nullptr};
@@ -113,6 +112,12 @@ void Analytics::start()
             if (success) {
                 emit remoteConfigChanged();
             }
+            const bool is_production = QStringLiteral("Production") == GREEN_ENV;
+            // update remote config after 60s
+            // unless last updated failed or it is not a production build
+            QTimer::singleShot(is_production && success ? 60000 : 1000, this, [=] {
+                cly::Countly::getInstance().updateRemoteConfig();
+            });
         });
     });
 
