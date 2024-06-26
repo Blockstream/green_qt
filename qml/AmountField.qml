@@ -94,10 +94,10 @@ TTextField {
     }
     AbstractButton {
         id: unit_label
-        leftPadding: 4
-        rightPadding: 4
-        bottomPadding: 2
-        topPadding: 2
+        leftPadding: 6
+        rightPadding: 6
+        bottomPadding: 4
+        topPadding: 4
         anchors.right: parent.right
         anchors.rightMargin: 15
         anchors.verticalCenter: parent.verticalCenter
@@ -118,7 +118,12 @@ TTextField {
             }
         }
         onClicked: unit_menu.open()
-        background: null
+        background: Rectangle {
+            border.width: 2
+            border.color: '#00B45A'
+            color: 'transparent'
+            visible: unit_label.visualFocus
+        }
         GMenu {
             id: unit_menu
             x: unit_label.width * 0.5 - unit_menu.width * 0.8
