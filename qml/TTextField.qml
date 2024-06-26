@@ -2,32 +2,39 @@ import QtQuick
 import QtQuick.Controls
 
 TextField {
+    property var error
+    readonly property bool visualFocus: {
+        if (!self.readOnly && self.activeFocus) {
+            switch (self.focusReason) {
+            case Qt.TabFocusReason:
+            case Qt.BacktabFocusReason:
+            case Qt.ShortcutFocusReason:
+                return true
+            }
+        }
+        return false
+    }
     id: self
     topPadding: 14
     bottomPadding: 13
     leftPadding: 15
-    background: Rectangle {
-        color: Qt.lighter('#222226', !self.readonly && self.hovered ? 1.2 : 1)
-        radius: 5
+    background: Item {
+        anchors.fill: parent
         Rectangle {
+            anchors.fill: parent
             border.width: 2
             border.color: '#00B45A'
             color: 'transparent'
-            radius: 9
+            radius: 5
+            visible: self.visualFocus
+        }
+        Rectangle {
             anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            opacity: {
-                if (self.activeFocus) {
-                    switch (self.focusReason) {
-                    case Qt.TabFocusReason:
-                    case Qt.BacktabFocusReason:
-                    case Qt.ShortcutFocusReason:
-                        return 1
-                    }
-                }
-                return 0
-            }
+            anchors.margins: self.visualFocus ? 4 : 0
+            border.width: !!self.error ? 2 : 0
+            border.color: '#C91D36'
+            color: Qt.lighter('#222226', !self.readonly && self.hovered ? 1.2 : 1)
+            radius: self.visualFocus ? 1 : 5
         }
     }
     font.pixelSize: 14
