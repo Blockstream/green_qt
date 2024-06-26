@@ -54,43 +54,44 @@ AbstractButton {
     topPadding: 0
     bottomPadding: 0
     rightPadding: 0
+    background: null
+    contentItem: RowLayout {
+        spacing: 10
+        Digit { index: 0 }
+        Digit { index: 1 }
+        Digit { index: 2 }
+        Digit { index: 3 }
+        Digit { index: 4 }
+        Digit { index: 5 }
+    }
 
-    background: Item {
+    component Digit: Item {
+        required property int index
+        readonly property bool visualFocus: self.visualFocus && digit.index === self.pin.length
+        id: digit
+        implicitWidth: 43
+        implicitHeight: 69
+        opacity: self.enabled ? 1 : 0.5
         Rectangle {
+            anchors.fill: parent
             border.width: 2
             border.color: '#00B45A'
             color: 'transparent'
-            radius: 14
-            anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            visible: self.visualFocus
+            radius: 10
+            visible: digit.visualFocus
         }
-    }
-    contentItem: RowLayout {
-        spacing: 10
-        Digit { fill: self.pin.length > 0 }
-        Digit { fill: self.pin.length > 1 }
-        Digit { fill: self.pin.length > 2 }
-        Digit { fill: self.pin.length > 3 }
-        Digit { fill: self.pin.length > 4 }
-        Digit { fill: self.pin.length > 5 }
-    }
-
-    component Digit: Rectangle {
-        required property bool fill
-        id: digit
-        radius: 10
-        implicitWidth: 43
-        implicitHeight: 69
-        color: '#FFF'
-        opacity: self.enabled ? 1 : 0.5
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: digit.visualFocus ? 4 : 0
+            color: '#FFF'
+            radius: digit.visualFocus ? 6 : 10
+        }
         Rectangle {
             anchors.centerIn: parent
             radius: 7
             width: 14
             height: 14
-            color: digit.fill ? '#212121' : '#D3D3D3'
+            color: digit.index < self.pin.length ? '#212121' : '#D3D3D3'
         }
     }
 }
