@@ -20,19 +20,21 @@ AbstractButton {
     topPadding: 12
     bottomPadding: 12
     opacity: self.enabled ? 1 : 0.4
-    background: Rectangle {
-        color: Qt.lighter(self.fillColor, self.enabled && self.hovered ? 1.1 : 1)
-        border.color: Qt.lighter(self.borderColor, self.enabled && self.hovered ? 1.1 : 1)
-        radius: 8
+    background: Item {
         Rectangle {
+            anchors.fill: parent
             border.width: 2
             border.color: self.borderColor
             color: 'transparent'
-            radius: 12
+            radius: 8
+            visible: self.visualFocus
+        }
+        Rectangle {
             anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            opacity: self.visualFocus ? 1 : 0
+            anchors.margins: self.visualFocus ? 4 : 0
+            color: Qt.lighter(self.fillColor, self.enabled && self.hovered ? 1.1 : 1)
+            border.color: Qt.lighter(self.borderColor, self.enabled && self.hovered ? 1.1 : 1)
+            radius: self.visualFocus ? 4 : 8
         }
     }
     contentItem: RowLayout {
