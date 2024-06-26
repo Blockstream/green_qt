@@ -597,48 +597,55 @@ void AnalyticsAlert::setNotification(AnalyticsAlertNotification* notification)
 void AnalyticsAlert::update()
 {
     const auto banners = Analytics::instance()->getRemoteConfigValue("banners");
-    if (!banners.isArray()) return;
 
-    const auto alerts = banners.toArray();
+    if (banners.isArray()) {
+        const auto alerts = banners.toArray();
 
-    for (const QJsonValue &a : alerts) {
-        QJsonObject alert = a.toObject();
+        for (const QJsonValue &a : alerts) {
+            QJsonObject alert = a.toObject();
 
-        bool matches_screen = false;
+            bool matches_screen = false;
 
-        for (const QJsonValue &s : alert["screens"].toArray()) {
-            if (s.toString() == m_screen) {
-                matches_screen = true;
-                break;
+            for (const QJsonValue &s : alert["screens"].toArray()) {
+                if (s.toString() == m_screen) {
+                    matches_screen = true;
+                    break;
+                }
             }
-        }
 
-        if (!matches_screen) continue;
+            if (!matches_screen) continue;
 
-        const auto networks = alert["networks"].toArray();
-        bool matches_network = networks.size() == 0;
+            const auto networks = alert["networks"].toArray();
+            bool matches_network = networks.size() == 0;
 
-        for (const QJsonValue &s : alert["networks"].toArray()) {
-            if (s.toString() == m_network) {
-                matches_network = true;
-                break;
+            for (const QJsonValue &s : alert["networks"].toArray()) {
+                if (s.toString() == m_network) {
+                    matches_network = true;
+                    break;
+                }
             }
-        }
 
-        if (!matches_network) continue;
+            if (!matches_network) continue;
 
-        if (m_data != alert) {
-            m_data = alert;
-            emit dataChanged();
+            if (m_data != alert) {
+                m_data = alert;
+                emit dataChanged();
 
-            if (m_data.isEmpty()) {
-                setNotification(nullptr);
-            } else {
-                setNotification(new AnalyticsAlertNotification(this));
+                if (m_data.isEmpty()) {
+                    setNotification(nullptr);
+                } else {
+                    setNotification(new AnalyticsAlertNotification(this));
+                }
             }
-        }
 
-        return;
+            return;
+        }
+    }
+
+    if (!m_data.isEmpty()) {
+        m_data = {};
+        emit dataChanged();
+        setNotification(nullptr);
     }
 }
 
