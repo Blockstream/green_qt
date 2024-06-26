@@ -11,13 +11,17 @@ Switch {
     }
     id: self
     opacity: self.enabled ? 1 : 0.5
-    indicator: Rectangle {
+    indicator: Item {
         implicitWidth: 48
         implicitHeight: 28
         x: self.width - self.indicator.width
         y: parent.height / 2 - height / 2
-        radius: 14
-        color: Qt.lighter(self.baseColor, self.enabled && self.hovered ? 1.2 : 1)
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: self.visualFocus ? 4 : 0
+            color: Qt.lighter(self.baseColor, self.enabled && self.hovered ? 1.2 : 1)
+            radius: height / 2
+        }
         Rectangle {
             id: circle
             x: self.checked ? parent.width - width - 3 : 3
@@ -40,7 +44,7 @@ Switch {
             color: 'white'
         }
     }
-    leftPadding: 8
+    leftPadding: self.text.length > 0 ? 8 : 0
     rightPadding: 0
     topPadding: 0
     bottomPadding: 0
@@ -49,11 +53,9 @@ Switch {
             border.width: 2
             border.color: '#00B45A'
             color: 'transparent'
-            radius: 16
+            radius: height / 2
             anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            opacity: self.visualFocus ? 1 : 0
+            visible: self.visualFocus
         }
     }
     contentItem: Label {
