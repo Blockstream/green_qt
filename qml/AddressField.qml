@@ -2,45 +2,16 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-TextField {
+TTextField {
     signal cleared
     signal codeScanned(string code)
     property string address_input
-    property var error
     Layout.fillWidth: true
     id: self
     topPadding: 18
     bottomPadding: 18
     leftPadding: !self.readOnly && self.text.length > 0 ? 60 : 18
     rightPadding: (options_layout.visible ? options_layout.width + 10 : 0) + 18
-    background: Rectangle {
-        color: Qt.lighter('#222226', !self.readOnly && self.hovered ? 1.2 : 1)
-        radius: 5
-        border.width: !!self.error ? 2 : 0
-        border.color: '#C91D36'
-        Rectangle {
-            border.width: 2
-            border.color: '#00B45A'
-            color: 'transparent'
-            radius: 9
-            anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            opacity: {
-                if (self.activeFocus) {
-                    switch (self.focusReason) {
-                    case Qt.TabFocusReason:
-                    case Qt.BacktabFocusReason:
-                    case Qt.ShortcutFocusReason:
-                        return 1
-                    }
-                }
-                return 0
-            }
-        }
-    }
-    font.pixelSize: 14
-    font.weight: 500
     CircleButton {
         focusPolicy: Qt.NoFocus
         anchors.verticalCenter: parent.verticalCenter
