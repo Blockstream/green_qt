@@ -12,6 +12,9 @@ Item {
     function toggle() {
         self.collapsed = !self.collapsed
     }
+    function open() {
+        self.collapsed = false
+    }
     id: self
     clip: self.animating || self.collapsed
     implicitWidth: (self.horizontalCollapse ? self.position : 1) * self.contentWidth
