@@ -7,18 +7,20 @@ AbstractButton {
     property string content: self.text
     id: self
     padding: 10
-    background: Rectangle {
-        color: Qt.alpha(Qt.darker('#13161D'), 0.6)
-        radius: 4
+    background: Item {
         Rectangle {
+            anchors.fill: parent
             border.width: 2
             border.color: '#00B45A'
             color: 'transparent'
             radius: 8
+            visible: self.visualFocus
+        }
+        Rectangle {
             anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            opacity: self.visualFocus ? 1 : 0
+            anchors.margins: self.visualFocus ? 4 : 0
+            color: Qt.alpha(Qt.darker('#13161D'), 0.6)
+            radius: self.visualFocus ? 4 : 8
         }
     }
     contentItem: RowLayout {
