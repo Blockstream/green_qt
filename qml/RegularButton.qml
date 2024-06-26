@@ -15,20 +15,22 @@ AbstractButton {
     topPadding: 12
     bottomPadding: 12
     opacity: self.enabled ? 1 : 0.4
-    background: Rectangle {
-        color: Qt.alpha('#FFF', self.enabled && self.hovered ? 0.2 : 0)
-        border.width: 1
-        border.color: '#FFF'
-        radius: 8
+    background: Item {
         Rectangle {
+            anchors.fill: parent
             border.width: 2
             border.color: '#00B45A'
             color: 'transparent'
-            radius: 12
+            radius: 8
+            visible: self.visualFocus
+        }
+        Rectangle {
             anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            opacity: self.visualFocus ? 1 : 0
+            anchors.margins: self.visualFocus ? 4 : 0
+            color: Qt.alpha('#FFF', self.enabled && self.hovered ? 0.2 : 0)
+            border.width: 1
+            border.color: '#FFF'
+            radius: self.visualFocus ? 4 : 8
         }
     }
     contentItem: RowLayout {
