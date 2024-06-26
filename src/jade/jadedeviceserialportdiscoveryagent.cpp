@@ -113,7 +113,6 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
         if (data.contains("error")) {
             auto error = data.value("error").toMap();
             if (error.value("message").toString() == "timeout") {
-                qDebug() << "RETRY";
                 QTimer::singleShot(100, backend, [=] {
                     probe(backend);
                 });
