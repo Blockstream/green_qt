@@ -1,5 +1,5 @@
 windows-x86_64:build:
-  image: borgbyte/green_qt:windows-x86_64@sha256:b114c83937938bc64eb38deede40df5d0f94c1a40f137403e411ea487ffb5cdc
+  image: borgbyte/green_qt:windows-x86_64@sha256:188a55411f51ed5fa9c69dc47b074f9e777623b7eac798d5444d9fee9d5e7993
   extends:
     - .build
   tags:

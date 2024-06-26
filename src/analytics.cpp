@@ -108,10 +108,11 @@ void Analytics::start()
         return hash.result().toStdString();
     });
 
-    countly.setRemoteConfigCallback([=] {
+    countly.setRemoteConfigCallback([=](bool success) {
         QMetaObject::invokeMethod(this, [=] {
-            auto& countly = cly::Countly::getInstance();
-            emit remoteConfigChanged();
+            if (success) {
+                emit remoteConfigChanged();
+            }
         });
     });
 

@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
-COUNTLY_BRANCH=bump
-COUNTLY_COMMIT=a9f703a891f15683308e8c9b947a75597dd3b2fc
+COUNTLY_BRANCH=bump2
+COUNTLY_COMMIT=13ff517e12966be52e02677aadd654ff241a5bfc
 
 mkdir -p build
 
