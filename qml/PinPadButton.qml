@@ -12,7 +12,11 @@ RegularButton {
     }
 
     id: self
-    focusPolicy: Qt.NoFocus
+    onFocusChanged: {
+        if (self.focus) {
+            collapsible.open()
+        }
+    }
     icon.source: 'qrc:/svg2/hand.svg'
     text: 'Pin Pad'
     leftPadding: 13
