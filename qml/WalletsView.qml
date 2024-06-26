@@ -6,12 +6,18 @@ import QtQuick.Layouts
 import QtQuick.Window
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 MainPage {
     signal openWallet(Wallet wallet)
     signal openDevice(Device device)
     signal createWallet
     readonly property int count: sww_repeater.count + hww_repeater.count
+    readonly property var notifications: UtilJS.flatten(home_alert.notification)
+    AnalyticsAlert {
+        id: home_alert
+        screen: 'Home'
+    }
     id: self
     padding: 60
     title: qsTrId('id_wallets')
