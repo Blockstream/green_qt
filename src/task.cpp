@@ -11,6 +11,7 @@
 #include "output.h"
 #include "resolver.h"
 #include "session.h"
+#include "sessionmanager.h"
 #include "task.h"
 #include "util.h"
 #include "wallet.h"
@@ -1452,6 +1453,14 @@ ConnectTask::ConnectTask(Session* session)
 void ConnectTask::update()
 {
     if (m_status == Status::Ready) {
+        if (m_session->useTor() && !m_session->useProxy()) {
+            auto tor_session = SessionManager::instance()->torSession();
+            if (tor_session != m_session && !tor_session->isConnected()) {
+                qDebug() << Q_FUNC_INFO << "wait for tor session";
+                return;
+            }
+        }
+
         setStatus(Status::Active);
 
         if (m_session->isConnected()) {

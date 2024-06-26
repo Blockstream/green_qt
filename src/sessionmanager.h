@@ -6,7 +6,6 @@
 #include <QtQml>
 
 #include "green.h"
-#include "notification.h"
 
 class SessionManager : public QObject
 {
@@ -19,9 +18,12 @@ public:
     QJsonObject tor() const { return m_tor; }
     void setTor(const QJsonObject& tor);
     Session* create(Network* network);
+    Session* torSession() const { return m_tor_session; }
 signals:
     void torChanged();
 private:
+    TaskDispatcher* const m_dispatcher;
+    Session* m_tor_session{nullptr};
     QJsonObject m_tor;
 };
 

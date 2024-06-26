@@ -42,7 +42,6 @@ class Session : public Entity
     QML_UNCREATABLE("")
 public:
     Session(Network* network, QObject* parent);
-    Session(Network* network);
     virtual ~Session();
     Context* context() const { return m_context; }
     void setContext(Context* context);
