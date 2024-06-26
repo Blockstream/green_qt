@@ -48,7 +48,6 @@ AbstractDialog {
                 }
                 SwitchButton {
                     text: qsTrId('id_help_green_improve')
-                    enabled: !Analytics.busy
                     checked: Settings.analytics === 'enabled'
                     onClicked: Settings.analytics = Settings.analytics === 'enabled' ? 'disabled' : 'enabled'
                 }

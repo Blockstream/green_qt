@@ -18,12 +18,14 @@ public:
     QJsonObject tor() const { return m_tor; }
     void setTor(const QJsonObject& tor);
     Session* create(Network* network);
+    void release(Session* session);
     Session* torSession() const { return m_tor_session; }
 signals:
     void torChanged();
 private:
     TaskDispatcher* const m_dispatcher;
     Session* m_tor_session{nullptr};
+    QList<Session*> m_sessions;
     QJsonObject m_tor;
 };
 

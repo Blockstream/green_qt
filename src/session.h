@@ -40,9 +40,11 @@ class Session : public Entity
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
-public:
+private:
+    friend class SessionManager;
     Session(Network* network, QObject* parent);
     virtual ~Session();
+public:
     Context* context() const { return m_context; }
     void setContext(Context* context);
     Network* network() const { return m_network; }

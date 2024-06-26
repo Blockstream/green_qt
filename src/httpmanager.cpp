@@ -39,7 +39,7 @@ HttpManager::HttpManager(QObject* parent)
             qDebug() << "http: idle timeout, session already destroyed";
         } else {
             qDebug() << "http: idle timeout, destroy session";
-            delete m_session;
+            SessionManager::instance()->release(m_session);
             m_session = nullptr;
             emit sessionChanged();
         }
@@ -75,7 +75,7 @@ void HttpManager::dispatch()
         if (m_session->useTor() != settings->useTor() ||
             m_session->proxy() != settings->proxy()) {
             qDebug() << "http: networking settings changed, destroy session";
-            delete m_session;
+            SessionManager::instance()->release(m_session);
             m_session = nullptr;
             emit sessionChanged();
         }

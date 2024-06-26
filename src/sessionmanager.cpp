@@ -34,7 +34,18 @@ Session* SessionManager::create(Network* network)
         m_dispatcher->add(new ConnectTask(m_tor_session));
         connect(m_tor_session, &Session::torEvent, this, &SessionManager::setTor);
     }
-    return new Session(network, this);
+    auto session = new Session(network, this);
+    m_sessions.append(session);
+    qDebug() << Q_FUNC_INFO << "total sessions:" << m_sessions.count();
+    return session;
+}
+
+void SessionManager::release(Session* session)
+{
+    Q_ASSERT(session);
+    m_sessions.removeOne(session);
+    qDebug() << Q_FUNC_INFO << "total sessions:" << m_sessions.count();
+    session->deleteLater();
 }
 
 void SessionManager::setTor(const QJsonObject& tor)

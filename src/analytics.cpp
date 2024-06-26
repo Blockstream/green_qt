@@ -26,6 +26,7 @@
 #include "session.h"
 #include "sessionmanager.h"
 #include "settings.h"
+#include "task.h"
 #include "util.h"
 #include "walletmanager.h"
 
@@ -34,7 +35,7 @@ class AnalyticsPrivate : public QObject
     Analytics* const q;
 public:
     AnalyticsPrivate(Analytics* const q) : q(q) {}
-
+    TaskDispatcher* dispatcher{nullptr};
     Session* session{nullptr};
     std::atomic_bool active{false};
     std::chrono::seconds timestamp_offset{0};
@@ -45,8 +46,6 @@ public:
     };
     std::map<std::string, View> views;
     QThread thread;
-    std::atomic_int busy{0};
-
     void start();
     void stop(Qt::ConnectionType type = Qt::AutoConnection);
     void restart();
@@ -77,6 +76,7 @@ Analytics::Analytics()
 {
     Q_ASSERT(!g_analytics_instance);
     g_analytics_instance = this;
+    d->dispatcher = new TaskDispatcher(this);
 }
 
 void Analytics::start()
@@ -122,16 +122,17 @@ void Analytics::start()
     });
 
     countly.setHTTPClient([=](bool use_post, const std::string& path, const std::string& data) {
-        incrBusy();
         cly::HTTPResponse res{false, {}};
 
-        {
-            if (!d->session) {
-                const auto network = NetworkManager::instance()->network("mainnet");
-                d->session = SessionManager::instance()->create(network);
+        if (!d->session) {
+            QMetaObject::invokeMethod(this, [=] {
                 qDebug() << "analytics: create session";
+                const auto network = NetworkManager::instance()->network("electrum-mainnet");
+                d->session = SessionManager::instance()->create(network);
                 d->session->setActive(true);
-            }
+                d->dispatcher->add(new ConnectTask(d->session));
+            });
+            return res;
         }
 
         QJsonObject req;
@@ -186,8 +187,6 @@ void Analytics::start()
             GA_destroy_json(out);
         }
 
-        decrBusy();
-
         return res;
     });
 
@@ -229,23 +228,6 @@ void AnalyticsPrivate::updateCustomUserDetails()
     cly::Countly::getInstance().setCustomUserDetails(user_details);
 }
 
-bool Analytics::isBusy() const
-{
-    return d->busy > 0;
-}
-
-void Analytics::incrBusy()
-{
-    d->busy ++;
-    QMetaObject::invokeMethod(this, &Analytics::busyChanged, Qt::QueuedConnection);
-}
-
-void Analytics::decrBusy()
-{
-    d->busy --;
-    QMetaObject::invokeMethod(this, &Analytics::busyChanged, Qt::QueuedConnection);
-}
-
 void AnalyticsPrivate::start()
 {
     QString device_id;
@@ -266,7 +248,6 @@ void AnalyticsPrivate::start()
         timestamp_offset = std::chrono::seconds(to);
     }
 
-    q->incrBusy();
     QMetaObject::invokeMethod(this, [=] {
         const bool is_production = QStringLiteral("Production") == GREEN_ENV;
         auto& countly = cly::Countly::getInstance();
@@ -281,7 +262,6 @@ void AnalyticsPrivate::start()
         QMetaObject::invokeMethod(q, [=] {
             active = true;
             updateCustomUserDetails();
-            q->decrBusy();
         });
     });
 }
@@ -293,15 +273,13 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
     if (!Settings::instance()->isAnalyticsEnabled()) {
         QFile::remove(GetDataFile("app", "analytics.ini"));
     }
-    q->incrBusy();
     QMetaObject::invokeMethod(this, [=] {
         auto& countly = cly::Countly::getInstance();
         countly.stop();
-        delete session;
-        session = nullptr;
-        QMetaObject::invokeMethod(q, [=] {
-            q->decrBusy();
-        });
+        if (session) {
+            SessionManager::instance()->release(session);
+            session = nullptr;
+        }
     }, type);
 }
 
@@ -325,8 +303,6 @@ Analytics* Analytics::instance()
     Q_ASSERT(g_analytics_instance);
     return g_analytics_instance;
 }
-
-bool Analytics::isActive() const { return d->active; }
 
 void Analytics::recordEvent(const QString& name)
 {
