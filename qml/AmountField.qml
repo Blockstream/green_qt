@@ -5,8 +5,7 @@ import QtQuick.Layouts
 
 import "util.js" as UtilJS
 
-TextField {
-    property var error
+TTextField {
     property bool fiat: false
     property bool dynamic: true
     required property string unit
@@ -82,35 +81,8 @@ TextField {
     rightPadding: 15 + 7 + unit_label.width
     validator: AmountValidator {
     }
-    background: Rectangle {
-        color: Qt.lighter('#222226', !self.readOnly && self.hovered ? 1.2 : 1)
-        radius: 5
-        border.width: !!self.error ? 2 : 0
-        border.color: '#C91D36'
-        Rectangle {
-            border.width: 2
-            border.color: '#00B45A'
-            color: 'transparent'
-            radius: 9
-            anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            visible: {
-                if (self.readOnly && self.activeFocus) {
-                    switch (self.focusReason) {
-                    case Qt.TabFocusReason:
-                    case Qt.BacktabFocusReason:
-                    case Qt.ShortcutFocusReason:
-                        return true
-                    }
-                }
-                return false
-            }
-        }
-    }
     horizontalAlignment: TextInput.AlignRight
     font.pixelSize: 24
-    font.weight: 500
     CircleButton {
         focusPolicy: Qt.NoFocus
         anchors.verticalCenter: parent.verticalCenter
