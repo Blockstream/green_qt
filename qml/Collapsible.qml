@@ -17,6 +17,7 @@ Item {
     }
     id: self
     clip: self.animating || self.collapsed
+    opacity: self.animating || !self.collapsed ? 1 : 0
     implicitWidth: (self.horizontalCollapse ? self.position : 1) * self.contentWidth
     implicitHeight: (self.verticalCollapse ? self.position : 1) * self.contentHeight
     Behavior on position {
