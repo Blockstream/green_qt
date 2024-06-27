@@ -47,7 +47,8 @@ void LoginController::loginWithPin(const QString& pin)
     Q_ASSERT(pin_data);
 
     auto network = pin_data->network();
-    if (!m_context) setContext(new Context(m_wallet->deployment(), false, this));
+    if (m_context) m_context->deleteLater();
+    setContext(new Context(m_wallet->deployment(), false, this));
 
     auto session = m_context->getOrCreateSession(network);
     auto login_task = new LoginTask(pin, pin_data->data(), session);
