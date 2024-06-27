@@ -5,11 +5,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Collapsible {
+    readonly property bool show: Settings.useTor && !Settings.useProxy && SessionManager.tor?.progress >= 0
+    property bool dismissed: false
+    onShowChanged: self.dismissed = false
     id: self
     animationVelocity: 200
     contentWidth: pane.width
     contentHeight: pane.height
-    collapsed: !(Settings.useTor && !Settings.useProxy && SessionManager.tor?.progress >= 0)
+    collapsed: !self.show || self.dismissed
     Pane {
         id: pane
         leftPadding: 20
@@ -59,6 +62,9 @@ Collapsible {
                         velocity: 40
                     }
                 }
+            }
+            CloseButton {
+                onClicked: self.dismissed = true
             }
         }
     }
