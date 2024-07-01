@@ -209,7 +209,10 @@ class ConnectTask : public SessionTask
     QML_UNCREATABLE("")
 public:
     ConnectTask(Session* session);
+    ConnectTask(int timeout, Session* session);
     void update() override;
+private:
+    int m_timeout{0};
 };
 
 class Prompt : public QObject

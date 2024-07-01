@@ -1453,6 +1453,12 @@ ConnectTask::ConnectTask(Session* session)
 {
 }
 
+ConnectTask::ConnectTask(int timeout, Session *session)
+    : SessionTask(session)
+    , m_timeout(timeout)
+{
+}
+
 void ConnectTask::update()
 {
     if (m_status == Status::Ready) {
@@ -1471,6 +1477,15 @@ void ConnectTask::update()
             return;
         }
 
+        if (m_timeout > 0) {
+            QTimer::singleShot(m_timeout, this, [=] {
+                if (m_status == Status::Active && !m_session->isConnected()) {
+                    setError("timeout error");
+                    setStatus(Status::Failed);
+                }
+            });
+        }
+
         using Watcher = QFutureWatcher<QString>;
         const auto watcher = new Watcher(this);
         watcher->setFuture(QtConcurrent::run([=] {
@@ -1482,6 +1497,7 @@ void ConnectTask::update()
         }));
 
         connect(watcher, &Watcher::finished, this, [=] {
+            if (m_status != Status::Active) return;
             const auto error = watcher->result();
             if (error.contains("session already connected")) {
                 setStatus(Status::Finished);
