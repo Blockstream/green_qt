@@ -53,8 +53,6 @@ signals:
 private:
     void loadNetwork(TaskGroup* group, Network* network);
     void loginNetwork(Network* network);
-private:
-    bool m_assets_loaded{false};
 };
 
 class PinDataController : public Controller

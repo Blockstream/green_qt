@@ -88,6 +88,8 @@ public:
     Q_INVOKABLE Network* primaryNetwork();
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
 
+    bool m_assets_loaded{false};
+
     void loadNetwork(TaskGroup* group, Network* network);
 
 public slots:

@@ -338,8 +338,8 @@ void LoadController::loginNetwork(Network* network)
         login = new LoginTask(m_context->credentials(), {}, session);
     }
 
-    if (network->isLiquid() && !m_assets_loaded) {
-        m_assets_loaded = true;
+    if (network->isLiquid() && !m_context->m_assets_loaded) {
+        m_context->m_assets_loaded = true;
         auto load_assets = new LoadAssetsTask(false, session);
         connect_session->then(load_assets);
         load_assets->then(login);
