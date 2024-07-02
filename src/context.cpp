@@ -362,6 +362,48 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
     }
 }
 
+QJsonObject device_details_from_device(Device* device);
+
+void Context::loginNetwork(TaskGroup *group, Network *network)
+{
+    auto session = getOrCreateSession(network);
+    auto connect_session = new ConnectTask(session);
+    LoginTask* login{nullptr};
+
+    if (m_device) {
+        login = new LoginTask(device_details_from_device(m_device), session);
+    } else if (m_credentials.contains("mnemonic")) {
+        login = new LoginTask(m_credentials, {}, session);
+    }
+
+    if (network->isLiquid() && !m_assets_loaded) {
+        m_assets_loaded = true;
+        auto load_assets = new LoadAssetsTask(false, session);
+        connect_session->then(load_assets);
+        load_assets->then(login);
+        group->add(load_assets);
+    }
+
+    connect(connect_session, &Task::failed, this, [=](const QString& error) {
+        if (error == "timeout error") {
+            // TODO
+            // setError("session", "id_connection_failed");
+        }
+    });
+
+    connect(login, &Task::finished, this, [=] {
+        loadNetwork(group, network);
+    });
+
+    connect(login, &Task::failed, this, [=](const QString& error) {
+        qDebug() << "ignoring login failed for network" << network->id() << "errr:" << error;
+        releaseSession(session);
+    });
+
+    group->add(connect_session);
+    group->add(login);
+}
+
 void Context::refreshAccounts()
 {
     auto group = new TaskGroup(this);

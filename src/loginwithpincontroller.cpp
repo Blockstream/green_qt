@@ -69,7 +69,7 @@ void LoginController::loginWithPin(const QString& pin)
     login(login_task, m_passphrase);
 }
 
-static QJsonObject device_details_from_device(Device* device)
+QJsonObject device_details_from_device(Device* device)
 {
     auto jade_device = qobject_cast<JadeDevice*>(device);
     if (jade_device) {
@@ -328,42 +328,7 @@ void LoadController::loginNetwork(Network* network)
 {
     auto group = new TaskGroup(this);
     group->setName(QString("load network %1").arg(network->id()));
-    auto session = m_context->getOrCreateSession(network);
-    auto connect_session = new ConnectTask(session);
-    LoginTask* login{nullptr};
-
-    if (m_context->device()) {
-        login = new LoginTask(device_details_from_device(m_context->device()), session);
-    } else if (m_context->credentials().contains("mnemonic")) {
-        login = new LoginTask(m_context->credentials(), {}, session);
-    }
-
-    if (network->isLiquid() && !m_context->m_assets_loaded) {
-        m_context->m_assets_loaded = true;
-        auto load_assets = new LoadAssetsTask(false, session);
-        connect_session->then(load_assets);
-        load_assets->then(login);
-        group->add(load_assets);
-    }
-
-    connect(connect_session, &Task::failed, this, [=](const QString& error) {
-        if (error == "timeout error") {
-            setError("session", "id_connection_failed");
-        }
-    });
-
-    connect(login, &Task::finished, this, [=] {
-        loadNetwork(group, network);
-    });
-
-    connect(login, &Task::failed, this, [=](const QString& error) {
-        qDebug() << "ignoring login failed for network" << network->id() << "errr:" << error;
-        m_context->releaseSession(session);
-    });
-
-    group->add(connect_session);
-    group->add(login);
-
+    m_context->loginNetwork(group, network);
     m_monitor->add(group);
     dispatcher()->add(group);
 }

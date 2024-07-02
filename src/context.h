@@ -88,9 +88,8 @@ public:
     Q_INVOKABLE Network* primaryNetwork();
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
 
-    bool m_assets_loaded{false};
-
     void loadNetwork(TaskGroup* group, Network* network);
+    void loginNetwork(TaskGroup* group, Network* network);
 
 public slots:
     void refreshAccounts();
@@ -125,6 +124,7 @@ private:
     bool m_watchonly{false};
 
     QList<Notification*> m_notifications;
+    bool m_assets_loaded{false};
 
 public:
     QMap<QString, Asset*> m_assets;
