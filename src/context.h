@@ -87,6 +87,9 @@ public:
 
     Q_INVOKABLE Network* primaryNetwork();
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
+
+    void loadNetwork(TaskGroup* group, Network* network);
+
 public slots:
     void refreshAccounts();
 

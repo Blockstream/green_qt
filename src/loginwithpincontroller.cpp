@@ -321,39 +321,7 @@ void LoadController::load()
 
 void LoadController::loadNetwork(TaskGroup* group, Network* network)
 {
-    auto session = m_context->getOrCreateSession(network);
-    if (!session->m_ready) return;
-    if (m_context->isWatchonly() && session->network()->isLiquid()) {
-        group->add(new LoadAssetsTask(false, session));
-    }
-    group->add(new GetWatchOnlyDetailsTask(session));
-    group->add(new LoadTwoFactorConfigTask(session));
-    group->add(new LoadCurrenciesTask(session));
-    if (!m_context->isWatchonly() || !network->isElectrum()) {
-        auto load_accounts = new LoadAccountsTask(false, session);
-        connect(load_accounts, &Task::finished, this, [=] {
-            for (auto account : load_accounts->accounts()) {
-                group->add(new LoadBalanceTask(account));
-
-                auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, account);
-
-                connect(get_unspent_outputs, &Task::finished, this, [=] {
-                    for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {
-                        for (const QJsonValue& asset_value : assets_values.toArray()) {
-                            auto output = account->getOrCreateOutput(asset_value.toObject());
-                        }
-                    }
-                });
-
-                group->add(get_unspent_outputs);
-            }
-        });
-        connect(load_accounts, &Task::failed, this, [=](auto error) {
-            // TODO: deal with these errors
-            qDebug() << Q_FUNC_INFO << error;
-        });
-        group->add(load_accounts);
-    }
+    m_context->loadNetwork(group, network);
 }
 
 void LoadController::loginNetwork(Network* network)
