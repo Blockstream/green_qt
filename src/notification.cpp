@@ -238,3 +238,20 @@ ContextNotification::ContextNotification(Context* context)
     , m_context{context}
 {
 }
+
+OutageNotification::OutageNotification(Context* context)
+    : ContextNotification(context)
+{
+}
+
+void OutageNotification::add(Network* network)
+{
+    if (!m_networks.contains(network)) {
+        m_networks.append(network);
+    }
+}
+
+void OutageNotification::remove(Network* network)
+{
+    m_networks.removeOne(network);
+}

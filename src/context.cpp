@@ -179,17 +179,14 @@ void Context::releaseSession(Session* session)
 {
     qDebug() << Q_FUNC_INFO << session->network()->id();
 
-    // TODO: the session is not needed but some tasks can be ongoing
-    // TODO: keep the session for now
-    return;
-
     for (auto account : m_accounts) {
         Q_ASSERT(account->session() != session);
     }
     m_sessions.take(session->network());
     m_sessions_list.removeOne(session);
     emit sessionsChanged();
-    session->deleteLater();
+
+    SessionManager::instance()->release(session);
 }
 
 void Context::setDevice(Device* device)
@@ -239,6 +236,17 @@ void Context::setWatchonly(bool watchonly)
     if (m_watchonly == watchonly) return;
     m_watchonly = watchonly;
     emit watchonlyChanged();
+}
+
+QList<Network*> Context::getActiveNetworks() const
+{
+    QList<Network*> networks;
+    for (auto session : m_sessions_list) {
+        if (session->isConnected() && session->m_ready) {
+            networks.append(session->network());
+        }
+    }
+    return networks;
 }
 
 Asset* Context::getOrCreateAsset(const QString& id)
@@ -367,7 +375,7 @@ QJsonObject device_details_from_device(Device* device);
 void Context::loginNetwork(TaskGroup *group, Network *network)
 {
     auto session = getOrCreateSession(network);
-    auto connect_session = new ConnectTask(session);
+    auto connect_session = new ConnectTask(5000, session);
     LoginTask* login{nullptr};
 
     if (m_device) {
@@ -388,10 +396,24 @@ void Context::loginNetwork(TaskGroup *group, Network *network)
         if (error == "timeout error") {
             // TODO
             // setError("session", "id_connection_failed");
+            releaseSession(session);
+            if (!m_outage_notification) {
+                m_outage_notification = new OutageNotification(this);
+                addNotification(m_outage_notification);
+            }
+            m_outage_notification->add(network);
         }
     });
 
     connect(login, &Task::finished, this, [=] {
+        if (m_outage_notification) {
+            m_outage_notification->remove(network);
+            if (m_outage_notification->isEmpty()) {
+                removeNotification(m_outage_notification);
+                // TODO m_outage_notification->deleteLater();
+                m_outage_notification = nullptr;
+            }
+        }
         loadNetwork(group, network);
     });
 

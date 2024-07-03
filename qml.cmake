@@ -243,6 +243,7 @@ SET(QML_FILES
     qml/TwoFactorExpiredSelectAccountPage.qml
     qml/Bip21Footer.qml
     qml/TorFooter.qml
+    qml/OutagePage.qml
 )
 
 if (GREEN_NO_RESOURCES)

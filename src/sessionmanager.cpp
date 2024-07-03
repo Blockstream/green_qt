@@ -45,7 +45,8 @@ void SessionManager::release(Session* session)
     Q_ASSERT(session);
     m_sessions.removeOne(session);
     qDebug() << Q_FUNC_INFO << "total sessions:" << m_sessions.count();
-    session->deleteLater();
+    session->setActive(false);
+    // TODO: session->deleteLater();
 }
 
 void SessionManager::setTor(const QJsonObject& tor)

@@ -9,7 +9,6 @@ class Context;
 class Controller;
 class Device;
 class Network;
-class Notification;
 class Output;
 class Resolver;
 class Session;
@@ -20,5 +19,8 @@ class TaskGroupMonitor;
 class TaskDispatcher;
 class Transaction;
 class Wallet;
+
+class Notification;
+class OutageNotification;
 
 #endif // GREEN_H

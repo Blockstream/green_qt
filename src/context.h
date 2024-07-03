@@ -63,7 +63,7 @@ public:
     bool isWatchonly() const { return m_watchonly; }
     void setWatchonly(bool watchonly);
 
-    QList<Network*> getActiveNetworks() const { return m_sessions.keys(); }
+    QList<Network*> getActiveNetworks() const;
     QList<Session*> getSessions() const { return m_sessions.values(); }
     QList<Account*> getAccounts() const { return m_accounts; }
 
@@ -124,6 +124,7 @@ private:
     bool m_watchonly{false};
 
     QList<Notification*> m_notifications;
+    OutageNotification* m_outage_notification{nullptr};
     bool m_assets_loaded{false};
 
 public:

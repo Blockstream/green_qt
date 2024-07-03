@@ -101,6 +101,20 @@ private:
     QStandardItemModel* m_source{nullptr};
 };
 
+class OutageNotification : public ContextNotification
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    explicit OutageNotification(Context* context);
+    void add(Network* network);
+    void remove(Network* network);
+    bool isEmpty() const { return m_networks.isEmpty(); }
+private:
+    QList<Network*> m_networks;
+};
+
 class NetworkNotification : public ContextNotification
 {
     Q_OBJECT

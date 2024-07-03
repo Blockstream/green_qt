@@ -106,6 +106,8 @@ AbstractDrawer {
             sourceComponent: {
                 if (delegate.notification instanceof SystemNotification) {
                     return system_notification
+                } else if (delegate.notification instanceof OutageNotification) {
+                    return outage_notification
                 } else if (delegate.notification instanceof TwoFactorResetNotification) {
                     return two_factor_reset_notification
                 } else if (delegate.notification instanceof TwoFactorExpiredNotification) {
@@ -203,6 +205,12 @@ AbstractDrawer {
         }
     }
     Component {
+        id: outage_notification
+        OutageNotificationView {
+        }
+    }
+
+    Component {
         id: two_factor_reset_notification
         TwoFactorResetNotificationView {
         }
@@ -210,6 +218,43 @@ AbstractDrawer {
     Component {
         id: two_factor_expired_notification
         TwoFactorExpiredNotificationView {
+        }
+    }
+
+    component OutageNotificationView: NotificationItem {
+        id: view
+        backgroundColor: '#9A0000'
+        contentItem: RowLayout {
+            spacing: 20
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/plugs_white'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                color: '#FFFFFF'
+                font.pixelSize: 13
+                font.weight: 700
+                text: 'Partial service outage'
+                wrapMode: Label.WordWrap
+            }
+            PrimaryButton {
+                Layout.alignment: Qt.AlignCenter
+                borderColor: '#FFFFFF'
+                fillColor: '#FFFFFF'
+                font.pixelSize: 12
+                font.weight: 500
+                text: 'Try again'
+                textColor: '#1C1C1C'
+                onClicked: {
+                    stack_view.push(outage_page, {
+                        context: self.context,
+                        notification: view.notification,
+                    })
+                }
+            }
         }
     }
 
@@ -319,6 +364,13 @@ AbstractDrawer {
         }
     }
 
+    Component {
+        id: outage_page
+        OutagePage {
+            id: page
+            onLoadFinished: page.StackView.view.pop()
+        }
+    }
     Component {
         id: two_factor_expired_page
         TwoFactorExpiredSelectAccountPage {

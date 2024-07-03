@@ -300,6 +300,7 @@ void LoadController::load()
     const auto networks = m_context->getActiveNetworks();
 
     auto group = new TaskGroup(this);
+    group->setName("load");
 
     for (auto network : networks) {
         loadNetwork(group, network);

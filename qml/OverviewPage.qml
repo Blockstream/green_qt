@@ -106,11 +106,20 @@ StackViewPage {
         contentItem: GStackView {
             id: stack_view
             initialItem: {
-                if (drawer.notification instanceof TwoFactorExpiredNotification) {
+                if (drawer.notification instanceof OutageNotification) {
+                    return outage_page
+                } else if (drawer.notification instanceof TwoFactorExpiredNotification) {
                     return two_factor_expired_page
                 } else {
                     console.log('unhandled notification trigger', notification)
                 }
+            }
+        }
+        Component {
+            id: outage_page
+            OutagePage {
+                context: self.context
+                onLoadFinished: drawer.close()
             }
         }
         Component {

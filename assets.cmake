@@ -200,6 +200,7 @@ qt_add_resources(green "images"
         assets/svg2/passphrase.svg
         assets/svg2/paste.svg
         assets/svg2/pencil-simple-line-green.svg
+        assets/svg2/plugs_white.svg
         assets/svg2/printer.svg
         assets/svg2/qrcode.svg
         assets/svg2/refresh.svg
