@@ -8,6 +8,8 @@ Popup {
     property real pointerY: 0
     default property alias contentItemData: content_item.data
     id: menu
+    font.pixelSize: 14
+    font.weight: 400
     padding: 0
     background: Item {
         MultiEffect {
@@ -92,8 +94,7 @@ Popup {
             Label {
                 Layout.fillWidth: true
                 text: self.details?.text ?? ''
-                font.pixelSize: 14
-                font.weight: 400
+                font: self.font
             }
             Label {
                 Layout.leftMargin: 12
