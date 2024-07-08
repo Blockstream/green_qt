@@ -1301,13 +1301,16 @@ bool GetUnspentOutputsTask::active() const
 
 bool GetUnspentOutputsTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    auto details = Json::fromObject({
+    auto details = QJsonObject{
         { "subaccount", m_subaccount },
         { "num_confs", m_num_confs },
         { "all_coins", m_all_coins }
-    });
+    };
+    if (m_expired_at > 0) {
+        details["expired_at"] = qint64(m_expired_at);
+    }
 
-    const auto rc = GA_get_unspent_outputs(session, details.get(), auth_handler);
+    const auto rc = GA_get_unspent_outputs(session, Json::fromObject(details).get(), auth_handler);
     return rc == GA_OK;
 }
 

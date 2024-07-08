@@ -699,6 +699,7 @@ class GetUnspentOutputsTask: public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     GetUnspentOutputsTask(int num_confs, bool all_coins, Account* account);
+    void setExpiredAt(uint32_t expired_at) { m_expired_at = expired_at; }
     QJsonObject unspentOutputs() const;
 private:
     bool active() const override;
@@ -707,6 +708,7 @@ public:
     qint64 m_subaccount;
     int m_num_confs;
     bool m_all_coins;
+    uint32_t m_expired_at{0};
 };
 
 class SetUnspentOutputsStatusTask : public AuthHandlerTask
