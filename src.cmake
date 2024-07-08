@@ -82,6 +82,7 @@ SET(TARGET_SOURCES
 	src/signtransactioncontroller.h src/signtransactioncontroller.cpp
         src/notification.h src/notification.cpp
         src/application.h src/application.cpp
+        src/redepositcontroller.h src/redepositcontroller.cpp
 )
 
 if (WIN32)
