@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal closed()
     required property Context context
     required property TwoFactorExpiredNotification notification
     id: self
@@ -79,6 +80,11 @@ StackViewPage {
                     Layout.fillWidth: true
                     id: delegate
                     account: delegate.modelData
+                    onClicked: {
+                        self.StackView.view.push(redeposit_page, {
+                            account: delegate.account,
+                        })
+                    }
                 }
             }
         }
@@ -147,6 +153,14 @@ StackViewPage {
                 visible: self.enabled
                 source: 'qrc:/svg2/next_arrow.svg'
             }
+        }
+    }
+
+    Component {
+        id: redeposit_page
+        RedepositPage {
+            context: self.context
+            onClosed: self.closed()
         }
     }
 }

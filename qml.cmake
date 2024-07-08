@@ -244,6 +244,7 @@ SET(QML_FILES
     qml/Bip21Footer.qml
     qml/TorFooter.qml
     qml/OutagePage.qml
+    qml/RedepositPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
