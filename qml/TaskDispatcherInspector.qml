@@ -15,7 +15,18 @@ Page {
         radius: 4
     }
     contentItem: ListView {
-        model: self.dispatcher?.groups ?? []
+        model: {
+            const groups = []
+            if (self.dispatcher) {
+                for (let i = 0; i < self.dispatcher.groups.length; i++) {
+                    const group = self.dispatcher.groups[i]
+                    if (group.status !== TaskGroup.Finished) {
+                        groups.push(group)
+                    }
+                }
+            }
+            return groups
+        }
         spacing: 4
         ScrollIndicator.vertical: ScrollIndicator {
         }
