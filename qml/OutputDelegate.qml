@@ -21,11 +21,7 @@ ItemDelegate {
     rightPadding: 20
     topPadding: 20
     bottomPadding: 20
-    background: Rectangle {
-        color: 'transparent'
-        radius: 4
-        border.width: self.highlighted ? 1 : 0
-        border.color: constants.g500
+    background: Item {
         Rectangle {
             anchors.fill: parent
             visible: self.hovered
@@ -43,8 +39,18 @@ ItemDelegate {
             height: 1
             y: parent.height - 1
         }
+        Rectangle {
+            anchors.fill: parent
+            anchors.bottomMargin: 1
+            color: 'transparent'
+            radius: 1
+            border.width: 2
+            border.color: '#00B45A'
+            visible: self.highlighted
+        }
+
     }
-    // onClicked: self.toggleSelection()
+    onClicked: self.toggleSelection()
     contentItem: RowLayout {
         spacing: 20
         AssetIcon {

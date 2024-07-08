@@ -31,28 +31,6 @@ Page {
         account: self.account
     }
 
-    OutputListModel {
-        id: output_model
-        account: self.account
-        onModelAboutToBeReset: selection_model.clear()
-    }
-
-    // TODO rename
-    ButtonGroup {
-        id: button_group
-    }
-
-    OutputListModelFilter {
-        id: output_model_filter
-        filter: button_group.checkedButton?.buttonTag ?? ''
-        model: output_model
-    }
-
-    ItemSelectionModel {
-        id: selection_model
-        model: output_model
-    }
-
     contentItem: StackLayout {
         id: stack_layout
 
