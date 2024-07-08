@@ -9,6 +9,7 @@
 #include "network.h"
 #include "receiveaddresscontroller.h"
 #include "resolver.h"
+#include "task.h"
 #include "util.h"
 #include "wallet.h"
 
@@ -206,20 +207,4 @@ void ReceiveAddressController::verifySinglesig()
             setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
         });
     }
-}
-
-bool GetReceiveAddressTask::call(GA_session *session, GA_auth_handler **auth_handler)
-{
-    const auto address_details = Json::fromObject({
-        { "subaccount", static_cast<qint64>(m_account->pointer()) },
-    });
-
-    const auto rc = GA_get_receive_address(session, address_details.get(), auth_handler);
-    return rc == GA_OK;
-}
-
-GetReceiveAddressTask::GetReceiveAddressTask(Account *account)
-    : AuthHandlerTask(account->session())
-    , m_account(account)
-{
 }

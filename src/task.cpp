@@ -1336,6 +1336,22 @@ QJsonArray GetTransactionsTask::transactions() const
     return result().value("result").toObject().value("transactions").toArray();
 }
 
+GetReceiveAddressTask::GetReceiveAddressTask(Account *account)
+    : AuthHandlerTask(account->session())
+    , m_account(account)
+{
+}
+
+bool GetReceiveAddressTask::call(GA_session *session, GA_auth_handler **auth_handler)
+{
+    const auto address_details = Json::fromObject({
+        { "subaccount", static_cast<qint64>(m_account->pointer()) },
+    });
+
+    const auto rc = GA_get_receive_address(session, address_details.get(), auth_handler);
+    return rc == GA_OK;
+}
+
 GetAddressesTask::GetAddressesTask(int last_pointer, Account* account)
     : AuthHandlerTask(account->session())
     , m_subaccount(account->pointer())
