@@ -23,7 +23,11 @@ StackViewPage {
             self.logout()
         }
         function onNotificationTriggered(notification) {
-            notification_drawer.createObject(self, { notification }).open()
+            if (notification instanceof SystemNotification) {
+                notifications_drawer.open()
+            } else {
+                notification_drawer.createObject(self, { notification }).open()
+            }
         }
     }
 
