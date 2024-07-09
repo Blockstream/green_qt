@@ -130,6 +130,7 @@ StackViewPage {
                 rightItem: CloseButton {
                     onClicked: drawer.close()
                 }
+                onClosed: drawer.close()
             }
         }
     }
