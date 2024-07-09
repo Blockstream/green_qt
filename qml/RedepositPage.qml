@@ -79,33 +79,6 @@ StackViewPage {
                 asset: controller.asset
                 readonly: true
             }
-            /*
-            FieldTitle {
-                text: qsTrId('id_address')
-            }
-            AddressField {
-                Layout.bottomMargin: 15
-                Layout.fillWidth: true
-                id: address_field
-                text: controller.recipient.address
-                onTextEdited: controller.recipient.address = address_field.text
-                onCleared: controller.recipient.address = ''
-                onCodeScanned: (code) => controller.recipient.address = code
-                focus: true
-                error: {
-                    if (controller.recipient.address === '') return
-                    const error = controller.transaction?.error
-                    if (error === 'id_invalid_address') return error
-                    if (error === 'id_nonconfidential_addresses_not') return error
-                    if (error === 'id_assets_cannot_be_used_on_bitcoin') return error
-                }
-            }
-            ErrorPane {
-                Layout.topMargin: -30
-                Layout.bottomMargin: 15
-                error: address_field.error
-            }
-            */
             FieldTitle {
                 text: qsTrId('id_amount')
             }
