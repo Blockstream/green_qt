@@ -1,7 +1,9 @@
 #include <QApplication>
+#include <QCameraDevice>
 #include <QCommandLineParser>
 #include <QFontDatabase>
 #include <QIcon>
+#include <QMediaDevices>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQuickWindow>
@@ -270,6 +272,8 @@ int main(int argc, char *argv[])
     QApplication::setWindowIcon(QIcon(":/icons/green.png"));
 #endif
 
+    auto video_inputs = QMediaDevices::videoInputs();
+
     qInfo() << qPrintable(QCoreApplication::organizationName()) << qPrintable(QCoreApplication::applicationName()) << qPrintable(QCoreApplication::applicationVersion());
     qInfo() << "Environment:" << GREEN_ENV;
     qInfo() << "System Information:";
@@ -282,6 +286,10 @@ int main(int argc, char *argv[])
     qInfo() << "  Product:" << qPrintable(QSysInfo::prettyProductName());
     qInfo() << "  Product Type:" << qPrintable(QSysInfo::productType());
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
+    qInfo() << "  Video inputs:" << video_inputs.size();
+    for (const auto video_input : video_inputs) {
+        qInfo() << "    " << video_input.description() << (video_input.isDefault() ? "(default)" : "");
+    }
     qInfo() << "Data directory:" << qPrintable(g_data_location);
     qInfo() << "Log file:" << qPrintable(g_log_file.fileName());
     qInfo() << "Initialize GDK";
