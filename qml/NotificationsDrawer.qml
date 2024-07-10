@@ -237,7 +237,7 @@ AbstractDrawer {
                 color: '#FFFFFF'
                 font.pixelSize: 13
                 font.weight: 700
-                text: 'Partial service outage'
+                text: 'Some accounts can not be logged in due to network issues. Please try again later.'
                 wrapMode: Label.WordWrap
             }
             PrimaryButton {
