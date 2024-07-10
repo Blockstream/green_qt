@@ -181,13 +181,12 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("tempdatadir"));
     g_args.addOption(QCommandLineOption("printtoconsole"));
     g_args.addOption(QCommandLineOption("debug"));
-    g_args.addOption(QCommandLineOption("tor", "", "tor", ""));
-    g_args.addOption(QCommandLineOption("proxy", "", "proxy", ""));
-    g_args.addOption(QCommandLineOption("testnet"));
-    g_args.addOption(QCommandLineOption("analytics", "", "analytics", ""));
-    g_args.addOption(QCommandLineOption("debugfocus"));
-    g_args.addOption(QCommandLineOption("debugjade"));
+    g_args.addOption(QCommandLineOption("tor", "Configure Tor.", "enabled|disabled", ""));
+    g_args.addOption(QCommandLineOption("proxy", "Configure Proxy.", "host:port", ""));
+    g_args.addOption(QCommandLineOption("analytics", "Configure analytics.", "enabled|disabled", ""));
     g_args.addOption(QCommandLineOption("channel", "", "name", "latest"));
+    g_args.addOption(QCommandLineOption("testnet"));
+    g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addPositionalArgument("uri", "BIP21 payment");
     g_args.process(app);
 
