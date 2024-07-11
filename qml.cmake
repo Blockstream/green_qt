@@ -38,7 +38,6 @@ SET(QML_FILES
     qml/NLockTimeDialog.qml
     qml/MessageDialog.qml
     qml/GSwitch.qml
-    qml/SetUnspentOutputsStatusDialog.qml
     qml/VSpacer.qml
     qml/AbstractDialog.qml
     qml/ControllerDialog.qml
