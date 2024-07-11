@@ -248,6 +248,7 @@ SET(QML_FILES
     qml/RedepositPage.qml
     qml/Countries.qml
     qml/PhoneField.qml
+    qml/UpdateUnspentsDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)
