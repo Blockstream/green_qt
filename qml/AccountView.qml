@@ -12,6 +12,7 @@ Page {
     signal transactionClicked(Transaction transaction)
     signal addressClicked(Address address)
     signal assetClicked(Account account, Asset asset)
+    signal updateUnspentsClicked(Account account, var unspents, string status)
     required property Context context
     required property Account account
     required property string view
@@ -59,6 +60,7 @@ Page {
             load: !(self.account?.context?.watchonly ?? false) && self.view === 'coins'
             sourceComponent: OutputsListView {
                 account: self.account
+                onUpdateUnspentsClicked: (unspents, status) => self.updateUnspentsClicked(self.account, unspents, status)
             }
         }
     }

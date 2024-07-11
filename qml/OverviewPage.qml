@@ -281,6 +281,12 @@ StackViewPage {
     }
 
     Component {
+        id: update_unspents_drawer
+        UpdateUnspentsDrawer {
+        }
+    }
+
+    Component {
         id: archived_accounts_dialog
         ArchivedAccountsDialog {
         }
@@ -293,6 +299,7 @@ StackViewPage {
             onTransactionClicked: (transaction) => transaction_details_drawer.createObject(self, { context: self.context, transaction }).open()
             onAddressClicked: (address) => address_details_drawer.createObject(self, { context: self.context, address }).open()
             onAssetClicked: (account, asset) => asset_drawer.createObject(self, { context: self.context, account, asset }).open()
+            onUpdateUnspentsClicked: (account, unspents, status) => update_unspents_drawer.createObject(self, { context: self.context, account, unspents, status }).open()
         }
     }
 

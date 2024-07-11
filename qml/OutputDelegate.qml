@@ -11,10 +11,6 @@ import "util.js" as UtilJS
 ItemDelegate {
     required property Output output
 
-    function toggleSelection() {
-        if (!output.account.network.liquid) selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
-    }
-
     id: self
     hoverEnabled: true
     leftPadding: 20
@@ -38,7 +34,6 @@ ItemDelegate {
             y: parent.height - 1
         }
     }
-    onClicked: self.toggleSelection()
     contentItem: RowLayout {
         spacing: 20
         AssetIcon {

@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import QtQml.Models
 
 Page {
+    signal updateUnspentsClicked(var unspents, string status)
     required property Account account
 
     readonly property var selectedOutputs: {
@@ -17,15 +18,17 @@ Page {
         return outputs;
     }
     readonly property var filters: {
+        const account = self.account
+        const network = account.network
         const filters = ['', 'csv', 'p2wsh']
-        if (account.network.liquid) {
+        if (network.liquid) {
             filters.push('not_confidential')
         } else {
             filters.push('p2sh')
             filters.push('dust')
-            filters.push('locked')
+            if (!network.electrum) filters.push('locked')
         }
-        if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
+        if (!network.electrum && account.type !== '2of3' && account.type !== '2of2_no_recovery') {
             filters.push('expired')
         }
         return filters
@@ -76,8 +79,14 @@ Page {
         spacing: -1
         model: output_model_filter
         delegate: OutputDelegate {
+            id: delegate
             highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
             width: ListView.view.width
+            onClicked: {
+                if (self.account.network.electrum) return
+                if (self.account.network.liquid) return
+                selection_model.select(output_model.index(output_model.indexOf(delegate.output), 0), ItemSelectionModel.Toggle)
+            }
         }
     }
     header: Collapsible {
@@ -104,7 +113,9 @@ Page {
                         }
                         return true;
                     }
-                    onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "frozen" }).open();
+                    onClicked: {
+                        self.updateUnspentsClicked(selectedOutputs, 'frozen')
+                    }
                 }
                 LinkButton {
                     text: qsTrId('id_unlock')
@@ -114,7 +125,9 @@ Page {
                         }
                         return true;
                     }
-                    onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "default" }).open();
+                    onClicked: {
+                        self.updateUnspentsClicked(selectedOutputs, 'default')
+                    }
                 }
                 LinkButton {
                     text: qsTrId('id_clear')
@@ -133,7 +146,6 @@ Page {
             rightPadding: 6
             bottomPadding: 4
             topPadding: 4
-            font.capitalization: Font.AllUppercase
             contentItem: RowLayout {
                 spacing: 4
                 Label {
@@ -173,14 +185,6 @@ Page {
                     }
                 }
             }
-        }
-    }
-
-    Component {
-        id: set_unspent_outputs_status_dialog
-        SetUnspentOutputsStatusDialog {
-            model: output_model
-            account: self.account
         }
     }
 
