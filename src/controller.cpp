@@ -231,24 +231,6 @@ void Controller::disableAllPins()
     });
 }
 
-void Controller::setUnspentOutputsStatus(Account* account, const QVariantList& outputs, const QString& status)
-{
-    auto network = account->network();
-    auto session = m_context->getOrCreateSession(network);
-
-    auto set_status = new SetUnspentOutputsStatusTask(outputs, status, session);
-    auto load_balance = new LoadBalanceTask(account);
-
-    set_status->then(load_balance);
-
-    auto group = new TaskGroup(this);
-    group->add(set_status);
-    group->add(load_balance);
-    dispatcher()->add(group);
-
-    connect(group, &TaskGroup::finished, this, &Controller::finished);
-}
-
 void Controller::changePin(const QString& pin)
 {
     if (!m_context) return;
@@ -326,6 +308,22 @@ void SessionController::setSession(Session* session)
     m_session = session;
     emit sessionChanged();
     if (m_session) setContext(m_session->context());
+}
+
+void SessionController::setUnspentOutputsStatus(Account* account, const QVariantList& outputs, const QString& status)
+{
+    auto set_status = new SetUnspentOutputsStatusTask(outputs, status, m_session);
+    auto load_balance = new LoadBalanceTask(account);
+
+    set_status->then(load_balance);
+
+    auto group = new TaskGroup(this);
+    group->add(set_status);
+    group->add(load_balance);
+    dispatcher()->add(group);
+    m_monitor->add(group);
+
+    connect(group, &TaskGroup::finished, this, &Controller::finished);
 }
 
 TwoFactorController::TwoFactorController(QObject* parent)

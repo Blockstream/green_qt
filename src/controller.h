@@ -58,7 +58,6 @@ public slots:
     void setRecoveryEmail(const QString& email);
     void deleteWallet();
     void disableAllPins();
-    void setUnspentOutputsStatus(Account* account, const QVariantList &outputs, const QString &status);
     void changePin(const QString& pin);
 
     bool setAccountName(Account* account, QString name, bool active_focus);
@@ -88,6 +87,7 @@ public:
 public slots:
     void requestTwoFactorReset(const QString& email);
     void cancelTwoFactorReset();
+    void setUnspentOutputsStatus(Account* account, const QVariantList &outputs, const QString &status);
 signals:
     void sessionChanged();
     void failed(const QString& error);
