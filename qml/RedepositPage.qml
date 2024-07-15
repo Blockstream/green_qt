@@ -131,16 +131,16 @@ StackViewPage {
                     font.pixelSize: 14
                     font.weight: 400
                     text: {
-                        if (controller.feeRate <= estimates.fees[24]) {
+                        if (controller.feeRate < estimates.fees[24]) {
+                            return qsTrId('id_custom')
+                        }
+                        if (controller.feeRate < estimates.fees[12]) {
                             return qsTrId('id_4_hours')
                         }
-                        if (controller.feeRate <= estimates.fees[12]) {
+                        if (controller.feeRate < estimates.fees[3]) {
                             return qsTrId('id_2_hours')
                         }
-                        if (controller.feeRate <= estimates.fees[3]) {
-                            return qsTrId('id_1030_minutes')
-                        }
-                        return qsTrId('id_custom')
+                        return qsTrId('id_1030_minutes')
                     }
                     visible: !controller.account.network.liquid
                 }
