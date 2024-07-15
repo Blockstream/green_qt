@@ -231,6 +231,7 @@ SET(QML_FILES
     qml/ErrorPage.qml
     qml/MultiImage.qml
     qml/TwoFactorEnableGenericView.qml
+    qml/TwoFactorEnablePhoneView.qml
     qml/TwoFactorEnableGAuthPage.qml
     qml/SecureFundsPage.qml
     qml/JadeHttpRequestDialog.qml

@@ -46,7 +46,17 @@ WalletDialog {
 
     contentItem: GStackView {
         id: stack_view
-        initialItem: self.method === 'gauth' ? gauth_page : generic_page
+        initialItem: {
+            switch (self.method) {
+            case 'gauth':
+                return gauth_page
+            case 'sms':
+            case 'phone':
+                return phone_page
+            default:
+                return generic_page
+            }
+        }
         implicitWidth: {
             let w = 400
             for (let i = 0; i < stack_view.depth; i++) {
@@ -68,6 +78,18 @@ WalletDialog {
     Component {
         id: generic_page
         TwoFactorEnableGenericView {
+            StackView.onActivated: controller.monitor.clear()
+            title: self.title
+            session: self.session
+            method: self.method
+            onNext: data => controller.enable(data)
+            onClosed: self.close()
+        }
+    }
+
+    Component {
+        id: phone_page
+        TwoFactorEnablePhoneView {
             StackView.onActivated: controller.monitor.clear()
             title: self.title
             session: self.session

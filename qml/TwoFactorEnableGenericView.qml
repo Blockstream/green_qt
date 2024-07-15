@@ -34,10 +34,8 @@ StackViewPage {
             font.weight: 600
             horizontalAlignment: Label.AlignHCenter
             text: switch (self.method) {
-                case 'sms': return qsTrId('id_enter_phone_number')
                 case 'gauth': return qsTrId('id_scan_the_qr_code_in_google')
                 case 'email': return qsTrId('id_enter_your_email_address')
-                case 'phone': return qsTrId('id_enter_phone_number')
                 case 'telegram': return qsTrId('id_enter_telegram_username_or_number')
             }
             wrapMode: Text.WordWrap
@@ -48,23 +46,12 @@ StackViewPage {
             focus: true
             horizontalAlignment: TextInput.AlignHCenter
             selectByMouse: true
+            text: self.method === 'telegram' ? '@' : ''
             onAccepted: change_action.trigger()
             onTextEdited: controller.clearErrors()
             Layout.fillWidth: true
             Layout.minimumWidth: 200
             Layout.alignment: Qt.AlignHCenter
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            opacity: 0.6
-            text: switch (self.method) {
-                case 'sms': case 'phone': return '+...'
-                case 'email': return '...@...'
-                case 'telegram': return '@...'
-                default: return ''
-            }
-            visible: false
-            // TODO: show as placeholder
         }
         FixedErrorBadge {
             Layout.alignment: Qt.AlignHCenter
