@@ -132,11 +132,15 @@ QImage ZXingImageProvider::requestImage(const QString& id, QSize* size, const QS
         image.fill(0xFFFFFFFF);
         return image;
     } else {
-        *size = requested_size;
+        if (requested_size.isValid()) {
+            *size = requested_size;
+        } else {
+            *size = QSize(512, 512);
+        }
         ZXing::MultiFormatWriter writer(ZXing::BarcodeFormat::QRCode);
         writer.setEccLevel(7);
         writer.setEncoding(ZXing::CharacterSet::UTF8);
-        writer.setMargin(1);
+        writer.setMargin(0);
         const auto bitmatrix = writer.encode(contents.toStdString(), size->width(), size->height());
 
         QImage image(*size, QImage::Format_RGB32);

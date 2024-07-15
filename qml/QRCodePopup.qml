@@ -47,13 +47,8 @@ Popup {
                     smooth: false
                     mipmap: false
                     cache: false
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: 8
-                    sourceSize: {
-                        const dim = Math.max(1, qrcode.width - 16)
-                        return Qt.size(dim, dim)
-                    }
+                    anchors.fill: parent
+                    anchors.bottomMargin: 8
                     source: `image://zxing/${encodeURI(self.text || '')}`
                 }
                 layer.enabled: true
