@@ -30,13 +30,11 @@ StackViewPage {
             text: qsTrId('id_insert_your_phone_number_to')
             wrapMode: Label.Wrap
         }
-        TTextField {
+        PhoneField {
             Layout.maximumWidth: 300
             id: data_field
             focus: true
-            horizontalAlignment: TextInput.AlignHCenter
             selectByMouse: true
-            text: '+'
             onAccepted: change_action.trigger()
             onTextEdited: controller.clearErrors()
             Layout.fillWidth: true
@@ -58,7 +56,7 @@ StackViewPage {
             action: Action {
                 id: change_action
                 enabled: data_field.text !== ''
-                onTriggered: self.next(data_field.text)
+                onTriggered: self.next(data_field.phone)
             }
             text: qsTrId('id_next')
         }
