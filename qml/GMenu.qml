@@ -44,16 +44,23 @@ Popup {
             height: 7.5
         }
     }
-    contentItem: ColumnLayout {
-        id: content_item
-        spacing: 0
+    contentItem: Flickable {
+        clip: true
+        contentHeight: content_item.height
+        contentWidth: content_item.implicitWidth
+        implicitHeight: Math.min(content_item.implicitHeight, 300)
+        implicitWidth: content_item.implicitWidth
+        ColumnLayout {
+            id: content_item
+            spacing: 0
+        }
     }
 
     component Item: AbstractButton {
         id: self
 
         property bool hideIcon: false
-        readonly property var details: {
+        property var details: {
             const re = /^([^\(\)]+)(?: \((\d+)\))?$/
             const result = re.exec(self.text || '') || []
             const [_, text, count] = result
@@ -96,7 +103,7 @@ Popup {
                     opacity: 0.25
                 }
                 text: self.details?.count ?? ''
-                visible: (self.details?.count ?? 0) > 0
+                visible: (self.details?.count ?? 0)
                 topPadding: 4
                 bottomPadding: 4
                 leftPadding: 12
