@@ -109,9 +109,11 @@ Page {
                     text: qsTrId('id_lock')
                     enabled: {
                         for (const output of selectedOutputs) {
-                            if (!output.canBeLocked || output.locked || output.unconfirmed) return false;
+                            if (output.locked) return false
+                            if (!output.canBeLocked) return false
+                            if (output.unconfirmed) return false
                         }
-                        return true;
+                        return true
                     }
                     onClicked: {
                         self.updateUnspentsClicked(selectedOutputs, 'frozen')
