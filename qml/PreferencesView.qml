@@ -381,6 +381,12 @@ AbstractDialog {
                             text: Settings.liquidTestnetElectrumUrl
                             onTextChanged: Settings.liquidTestnetElectrumUrl = text
                         }
+                        SwitchButton {
+                            Layout.topMargin: 10
+                            text: qsTrId('Enable TLS/SSL')
+                            checked: Settings.enableElectrumTls
+                            onClicked: Settings.enableElectrumTls = !Settings.enableElectrumTls
+                        }
                     }
                 }
                 SectionLabel {

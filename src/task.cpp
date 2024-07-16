@@ -322,6 +322,7 @@ namespace {
             if (!url.isEmpty()) {
                 params.insert("electrum_url", url);
                 params.insert("electrum_onion_url", url);
+                params.insert("electrum_tls", session->enableElectrumTls());
             }
         }
         return params;

@@ -185,6 +185,14 @@ void Settings::setUsePersonalNode(bool use_personal_node)
     saveLater();
 }
 
+void Settings::setEnableElectrumTls(bool enable_electrum_tls)
+{
+    if (m_enable_electrum_tls == enable_electrum_tls) return;
+    m_enable_electrum_tls = enable_electrum_tls;
+    emit enableElectrumTlsChanged();
+    saveLater();
+}
+
 void Settings::setBitcoinElectrumUrl(const QString& bitcoin_electrum_url)
 {
     if (m_bitcoin_electrum_url == bitcoin_electrum_url) return;
@@ -295,6 +303,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_show_news)
     LOAD(m_enable_experimental)
     LOAD(m_use_personal_node)
+    LOAD(m_enable_electrum_tls)
     LOAD(m_bitcoin_electrum_url)
     LOAD(m_testnet_electrum_url)
     LOAD(m_liquid_electrum_url)
@@ -333,6 +342,7 @@ void Settings::saveNow()
     SAVE(m_show_news)
     SAVE(m_enable_experimental)
     SAVE(m_use_personal_node)
+    SAVE(m_enable_electrum_tls)
     SAVE(m_bitcoin_electrum_url)
     SAVE(m_testnet_electrum_url)
     SAVE(m_liquid_electrum_url)

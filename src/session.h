@@ -27,6 +27,7 @@ class Session : public Entity
     Q_PROPERTY(QString proxy READ proxy CONSTANT)
     Q_PROPERTY(bool enableSPV READ enableSPV CONSTANT)
     Q_PROPERTY(bool usePersonalNode READ usePersonalNode CONSTANT)
+    Q_PROPERTY(bool enableElectrumTls READ enableElectrumTls CONSTANT)
     Q_PROPERTY(QString electrumUrl READ electrumUrl CONSTANT)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
@@ -53,6 +54,7 @@ public:
     QString proxy() const { return m_proxy; }
     bool enableSPV() const { return m_enable_spv; }
     bool usePersonalNode() const { return !m_electrum_url.isEmpty(); }
+    bool enableElectrumTls() const { return m_enable_electrum_tls; }
     QString electrumUrl() const { return m_electrum_url; }
     bool isActive() const { return m_active; }
     void setActive(bool active);
@@ -119,6 +121,7 @@ private:
     bool const m_use_proxy;
     QString const m_proxy;
     bool const m_enable_spv;
+    bool const m_enable_electrum_tls;
     QString const m_electrum_url;
     bool m_active{false};
     QJsonObject m_settings;
