@@ -314,14 +314,26 @@ void SessionController::setUnspentOutputsStatus(Account* account, const QVariant
 {
     auto set_status = new SetUnspentOutputsStatusTask(outputs, status, m_session);
     auto load_balance = new LoadBalanceTask(account);
+    auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, account);
 
     set_status->then(load_balance);
+    load_balance->then(get_unspent_outputs);
 
     auto group = new TaskGroup(this);
     group->add(set_status);
     group->add(load_balance);
+    group->add(get_unspent_outputs);
+
     dispatcher()->add(group);
     m_monitor->add(group);
+
+    connect(get_unspent_outputs, &Task::finished, this, [=] {
+        for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {
+            for (const QJsonValue& asset_value : assets_values.toArray()) {
+                auto output = account->getOrCreateOutput(asset_value.toObject());
+            }
+        }
+    });
 
     connect(group, &TaskGroup::finished, this, &Controller::finished);
 }
