@@ -246,6 +246,8 @@ SET(QML_FILES
     qml/TorFooter.qml
     qml/OutagePage.qml
     qml/RedepositPage.qml
+    qml/Countries.qml
+    qml/PhoneField.qml
 )
 
 if (GREEN_NO_RESOURCES)
