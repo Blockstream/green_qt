@@ -24,9 +24,7 @@ ItemDelegate {
     background: Item {
         Rectangle {
             anchors.fill: parent
-            visible: self.hovered
-            color: '#00B45A'
-            opacity: 0.08
+            color: Qt.alpha('#00B45A', (self.highlighted ? 0.2 : 0) + (self.hovered ? 0.1 : 0))
         }
         Rectangle {
             color: '#1F222A'
@@ -39,16 +37,6 @@ ItemDelegate {
             height: 1
             y: parent.height - 1
         }
-        Rectangle {
-            anchors.fill: parent
-            anchors.bottomMargin: 1
-            color: 'transparent'
-            radius: 1
-            border.width: 2
-            border.color: '#00B45A'
-            visible: self.highlighted
-        }
-
     }
     onClicked: self.toggleSelection()
     contentItem: RowLayout {
@@ -58,7 +46,8 @@ ItemDelegate {
             asset: output.asset
         }
         ColumnLayout {
-            RowLayout {
+            Flow {
+                Layout.fillWidth: true
                 spacing: 10
                 Repeater {
                     model: self.tags
