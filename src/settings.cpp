@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QGuiApplication>
+#include <QLocale>
 #include <QScreen>
 #include <QSettings>
 #include <QtGlobal>
@@ -108,6 +109,13 @@ void Settings::setLanguage(const QString& language)
     m_language = language;
     emit languageChanged();
     saveLater();
+}
+
+QString Settings::country() const
+{
+    const auto territory = QLocale(m_language).territory();
+    const auto code = QLocale::territoryToCode(territory).toLower();
+    return code;
 }
 
 void Settings::setShowNews(bool show_news)

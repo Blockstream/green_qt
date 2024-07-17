@@ -21,6 +21,7 @@ class Settings : public QObject
     Q_PROPERTY(bool useTor READ useTor WRITE setUseTor NOTIFY useTorChanged)
     Q_PROPERTY(QStringList recentWallets READ recentWallets NOTIFY recentWalletsChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
+    Q_PROPERTY(QString country READ country NOTIFY languageChanged)
     Q_PROPERTY(bool showNews READ showNews WRITE setShowNews NOTIFY showNewsChanged)
     Q_PROPERTY(bool enableExperimental READ enableExperimental WRITE setEnableExperimental NOTIFY enableExperimentalChanged)
     Q_PROPERTY(bool usePersonalNode READ usePersonalNode WRITE setUsePersonalNode NOTIFY usePersonalNodeChanged)
@@ -62,6 +63,7 @@ public:
     QStringList recentWallets();
     QString language() const { return m_language; }
     void setLanguage(const QString& language);
+    QString country() const;
     bool showNews() const { return m_show_news; }
     void setShowNews(bool show_news);
     bool enableExperimental() const { return m_enable_experimental; }
