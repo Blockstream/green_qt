@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added:
 - Phone field with country selector
 
+### Fixed:
+- Reinstate lock and unlock of dust outputs in bitcoin multisig
+
 ## [2.0.8] - 2024-07-09
 ### Added:
 - Flow to redeposit 2FA expired coins

@@ -83,8 +83,6 @@ Page {
             highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
             width: ListView.view.width
             onClicked: {
-                if (self.account.network.electrum) return
-                if (self.account.network.liquid) return
                 selection_model.select(output_model.index(output_model.indexOf(delegate.output), 0), ItemSelectionModel.Toggle)
             }
         }
@@ -108,6 +106,8 @@ Page {
                 LinkButton {
                     text: qsTrId('id_lock')
                     enabled: {
+                        if (self.account.network.electrum) return false
+                        if (self.account.network.liquid) return false
                         for (const output of selectedOutputs) {
                             if (output.locked) return false
                             if (!output.canBeLocked) return false
