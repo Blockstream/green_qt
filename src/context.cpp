@@ -180,7 +180,9 @@ void Context::releaseSession(Session* session)
     qDebug() << Q_FUNC_INFO << session->network()->id();
 
     for (auto account : m_accounts) {
-        Q_ASSERT(account->session() != session);
+        if (account->session() == session) {
+            qWarning() << Q_FUNC_INFO << "should remove account" << account->network()->id() << account->pointer();
+        }
     }
     m_sessions.take(session->network());
     m_sessions_list.removeOne(session);
