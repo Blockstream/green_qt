@@ -191,7 +191,7 @@ void ReceiveAddressController::verifyMultisig() {
 void ReceiveAddressController::verifySinglesig()
 {
     Q_ASSERT(!m_generating);
-    Q_ASSERT(m_address_verification != VerificationPending);
+    if (m_address_verification == VerificationPending) return;
     setAddressVerification(VerificationPending);
     const auto context = m_account->context();
     const auto network = m_account->network();
