@@ -11,7 +11,7 @@ Q_MOC_INCLUDE("address.h")
 Q_MOC_INCLUDE("convert.h")
 
 class Convert;
-class ReceiveAddressController : public Controller
+class ReceiveAddressController : public SessionController
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)

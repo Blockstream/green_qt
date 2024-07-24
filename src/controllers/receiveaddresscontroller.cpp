@@ -17,7 +17,7 @@
 #include <wally_wrapper.h>
 
 ReceiveAddressController::ReceiveAddressController(QObject *parent)
-    : Controller(parent)
+    : SessionController(parent)
     , m_convert(new Convert(this))
 {
     connect(m_convert, &Convert::outputChanged, this, &ReceiveAddressController::changed);
@@ -122,7 +122,10 @@ void ReceiveAddressController::generate()
         emit m_account->addressGenerated();
     });
 
-    dispatcher()->add(get_receive_address);
+    auto group = new TaskGroup(this);
+    group->add(get_receive_address);
+    dispatcher()->add(group);
+    monitor()->add(group);
 }
 
 void ReceiveAddressController::verify()

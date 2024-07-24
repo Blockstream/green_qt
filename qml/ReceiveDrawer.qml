@@ -16,9 +16,16 @@ WalletDrawer {
     ReceiveAddressController {
         id: controller
         context: self.context
+        session: self.account.session
         account: self.account
         asset: self.asset
         convert.unit: self.account.session.unit
+    }
+
+    TaskPageFactory {
+        title: receive_view.title
+        monitor: controller.monitor
+        target: stack_view
     }
 
     id: self
