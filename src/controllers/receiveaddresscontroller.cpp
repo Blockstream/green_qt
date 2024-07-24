@@ -204,6 +204,7 @@ void ReceiveAddressController::verifySinglesig()
     if (type == "p2pkh") variant = "pkh(k)";
     if (type == "p2wpkh") variant = "wpkh(k)";
     if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
+    Q_ASSERT(!variant.isEmpty());
 
     if (device->api()) {
         device->api()->getReceiveAddress(network->canonicalId(), variant, path, [this](const QVariantMap& msg) {
