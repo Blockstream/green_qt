@@ -22,12 +22,12 @@ find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWid
 find_package(hidapi REQUIRED)
 find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
 
-find_package(gdk REQUIRED COMPONENT greenaddress-full)
+find_package(gdk REQUIRED COMPONENT green_gdk_full)
 
 find_package(ZXing REQUIRED)
 
 include(CMakePrintHelpers)
-cmake_print_properties(TARGETS gdk::greenaddress-full PROPERTIES
+cmake_print_properties(TARGETS gdk::green_gdk_full PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES
     INTERFACE_LINK_LIBRARIES
     IMPORTED_LOCATION_RELEASE
@@ -85,7 +85,7 @@ set_target_properties(green PROPERTIES
 target_link_libraries(green
     PRIVATE
     ZXing::Core
-    gdk::greenaddress-full
+    gdk::green_gdk_full
     ${COUNTLY_LIB}
     Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
     ${SECURITY}
@@ -110,7 +110,7 @@ install(TARGETS green
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-get_target_property(GDK_INCLUDE gdk::greenaddress-full INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(GDK_INCLUDE gdk::green_gdk_full INTERFACE_INCLUDE_DIRECTORIES)
 
 target_include_directories(green PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers

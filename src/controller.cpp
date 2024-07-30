@@ -519,7 +519,6 @@ void SignMessageController::sign()
 WatchOnlyController::WatchOnlyController(QObject* parent)
     : SessionController(parent)
 {
-    setMonitor(new TaskGroupMonitor(this));
 }
 
 void WatchOnlyController::update(const QString& username, const QString& password)
@@ -529,7 +528,7 @@ void WatchOnlyController::update(const QString& username, const QString& passwor
     auto watchonly_data = qobject_cast<WatchonlyData*>(m_context->wallet()->login());
     if (watchonly_data) return;
 
-    auto task = new SetWatchOnlyTask(username, password, m_session);
+    auto task = new RegisterUserTask({{ "username", username }, { "password", password }}, {}, m_session);
 
     connect(task, &Task::finished, this, [=] {
         m_session->setUsername(username);

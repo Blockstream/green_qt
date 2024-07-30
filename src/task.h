@@ -514,20 +514,6 @@ private:
     const QJsonObject m_details;
 };
 
-class SetWatchOnlyTask : public SessionTask
-{
-    Q_OBJECT
-    QML_ELEMENT
-    QML_UNCREATABLE("")
-public:
-    SetWatchOnlyTask(const QString& username, const QString& password, Session* session);
-private:
-    void update() override;
-private:
-    const QString m_username;
-    const QString m_password;
-};
-
 class ChangeTwoFactorTask : public AuthHandlerTask
 {
     Q_OBJECT

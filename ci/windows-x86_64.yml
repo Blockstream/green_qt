@@ -1,9 +1,11 @@
 windows-x86_64:build:
-  image: borgbyte/green_qt:windows-x86_64@sha256:188a55411f51ed5fa9c69dc47b074f9e777623b7eac798d5444d9fee9d5e7993
+  image: borgbyte/green_qt:windows-x86_64@sha256:9421526da66ff28c06c12cb17fa39a6132ed67ad1e136d932ff354e29e29011d
   extends:
     - .build
   tags:
     - cloud
+  variables:
+    gdk_ROOT: "$PREFIX/lib/lib/gdk"
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week

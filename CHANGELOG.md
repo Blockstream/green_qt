@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added:
 - Phone field with country selector
 
+### Changed:
+- Updates GDK to 0.72.2
+
 ### Fixed:
 - Prevent Watch-Only login when password is empty
 - Fee rate label when custom fee is selected

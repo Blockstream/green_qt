@@ -1433,41 +1433,6 @@ bool SetUnspentOutputsStatusTask::call(GA_session *session, GA_auth_handler **au
     return rc == GA_OK;
 }
 
-SetWatchOnlyTask::SetWatchOnlyTask(const QString& username, const QString& password, Session* session)
-    : SessionTask(session)
-    , m_username(username)
-    , m_password(password)
-{
-}
-
-void SetWatchOnlyTask::update()
-{
-    if (m_status != Status::Ready) return;
-
-    setStatus(Status::Active);
-
-    if (!m_session->isConnected()) return;
-
-    using Watcher = QFutureWatcher<QString>;
-    const auto watcher = new Watcher(this);
-    watcher->setFuture(QtConcurrent::run([=] {
-        const auto rc = GA_set_watch_only(m_session->m_session, m_username.toUtf8().constData(), m_password.toUtf8().constData());
-        if (rc == GA_OK) return QString();
-        const auto error = gdk::get_thread_error_details();
-        return error.value("details").toString();
-    }));
-
-    connect(watcher, &Watcher::finished, this, [=] {
-        const auto error = watcher->result();
-        setError(error);
-        if (error.isEmpty()) {
-            setStatus(Status::Finished);
-        } else {
-            setStatus(Status::Failed);
-        }
-    });
-}
-
 ConnectTask::ConnectTask(Session* session)
     : SessionTask(session)
 {

@@ -1,15 +1,16 @@
 #!/bin/bash
 set -eo pipefail
 
-GDK_BRANCH=release_0.71.3
-GDK_COMMIT=18fcde05c2ea9f428ab7b2200f6167b4daad9ec6
+GDK_REPO=https://github.com/Blockstream/gdk.git
+GDK_BRANCH=release_0.72.2
+GDK_COMMIT=048dba04aabb42b638fbb24f93393fdd59474728
 
 mkdir -p build
 
 cd build
 
 if [ ! -d gdk ]; then
-    git clone --quiet --depth 1 --branch $GDK_BRANCH --single-branch https://github.com/Blockstream/gdk.git gdk
+    git clone --quiet --depth 1 --branch $GDK_BRANCH --single-branch $GDK_REPO gdk
 fi
 
 cd gdk
@@ -27,11 +28,11 @@ pip install -r tools/requirements.txt
 pip install setuptools
 
 if [ "$HOST" = "linux" ]; then
-    tools/build.sh --gcc --buildtype release --install $PREFIX --parallel 8
+    tools/build.sh --gcc --buildtype release --static --install $PREFIX --parallel 8
 elif [ "$HOST" = "windows" ]; then
-    tools/build.sh --mingw-w64 --buildtype release --install $PREFIX --parallel 8
+    tools/build.sh --mingw-w64 --buildtype release --static --install $PREFIX --parallel 8
 elif [ "$HOST" = "macos" ]; then
-    tools/build.sh --clang --buildtype release --install $PREFIX --parallel 8
+    tools/build.sh --clang --buildtype release --static --install $PREFIX --parallel 8
 else
     exit 1
 fi
