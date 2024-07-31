@@ -4,8 +4,20 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ColumnLayout {
-    spacing: constants.s1
+    signal signed
+    signal failed
     required property SignMessageResolver resolver
+    id: self
+    spacing: constants.s1
+    Connections {
+        target: self.resolver
+        function onResolved() {
+            self.signed()
+        }
+        function onFailed() {
+            self.failed()
+        }
+    }
     VSpacer {
     }
     MultiImage {

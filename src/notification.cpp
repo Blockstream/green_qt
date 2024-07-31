@@ -141,6 +141,7 @@ void SystemNotification::setAccepted(bool accepted)
     if (m_accepted == accepted) return;
     m_accepted = accepted;
     emit acceptedChanged();
+    if (m_accepted) dismiss();
 }
 
 void SystemNotification::accept(TaskGroupMonitor* monitor)

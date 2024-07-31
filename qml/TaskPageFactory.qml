@@ -328,7 +328,10 @@ QtObject {
         }
     }
 
-    property Component jade_sign_message_view: JadeSignMessageView {}
+    property Component jade_sign_message_view: JadeSignMessageView {
+        onFailed: self.target.pop()
+        onSigned: self.target.pop()
+    }
     property Component jade_sign_transaction_view: JadeSignTransactionView {
         onClosed: self.closed()
     }
@@ -340,7 +343,7 @@ QtObject {
 
     property Component jade_connect_view: ConnectJadePage {
         required property DeviceResolver resolver
-        onDeviceSelected: (device) => stack_view.push(jade_page, { device })
+        onDeviceSelected: (device) => self.target.push(jade_page, { device })
         padding: 0
         rightItem: Item {}
         footer: Item {}
