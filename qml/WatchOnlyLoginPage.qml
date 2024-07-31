@@ -37,7 +37,7 @@ StackViewPage {
     }
     Action {
         id: login_action
-        // enabled: controller.valid
+        enabled: controller.valid
         onTriggered: {
             error_badge.clear()
             self.contentItem.enabled = false

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phone field with country selector
 
 ### Fixed:
+- Prevent Watch-Only login when password is empty
 - Fee rate label when custom fee is selected
 - Reinstate lock and unlock of dust outputs in bitcoin multisig
 
