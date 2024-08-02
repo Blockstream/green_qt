@@ -72,6 +72,7 @@ protected:
     void timerEvent(QTimerEvent* event) override;
 private:
     int m_update_timer{-1};
+    quint64 m_seq{0};
     Account* m_account{nullptr};
     Asset* m_asset{nullptr};
     Transaction* m_previous_transaction{nullptr};

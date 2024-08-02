@@ -153,14 +153,19 @@ void CreateTransactionController::update()
             }
             if (m_fee_rate > 0) details["fee_rate"] = m_fee_rate;
             auto task = new CreateTransactionTask(details, session);
+            const auto seq = ++m_seq;
             connect(task, &CreateTransactionTask::finished, this, [=] {
-                setTransaction(task->transaction());
-                task->deleteLater();
+                if (m_seq == seq) {
+                    setTransaction(task->transaction());
+                    task->deleteLater();
+                }
             });
             connect(task, &CreateTransactionTask::failed, this, [=](const QString& error) {
-                qDebug() << error;
-                task->deleteLater();
-                setTransaction({});
+                if (m_seq == seq) {
+                    qDebug() << error;
+                    task->deleteLater();
+                    setTransaction({});
+                }
             });
             dispatcher->add(task);
         }
