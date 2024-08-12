@@ -150,6 +150,7 @@ void ReceiveAddressController::verifyMultisig() {
     const auto network = m_account->network();
     auto device = qobject_cast<JadeDevice*>(context->device());
     Q_ASSERT(device);
+    const auto account_recovery_xpub = m_account->json().value("recovery_xpub").toString().toUtf8();
     const quint32 subaccount = m_result.value("subaccount").toDouble();
     const quint32 branch = m_result.value("branch").toDouble();
     const quint32 pointer = m_result.value("pointer").toInteger();
@@ -157,26 +158,12 @@ void ReceiveAddressController::verifyMultisig() {
     QByteArray recovery_xpub;
 
     // Jade expects any 'recoveryxpub' to be at the subact/branch level, consistent with tx outputs - but gdk
-    // subaccount data has the base subaccount chain code and pubkey - so we apply the branch derivation here.
-    const auto recovery_chain_code = ParseByteArray(m_account->json().value("recovery_chain_code"));
-    if (recovery_chain_code.length() > 0) {
-        const auto recovery_pub_key = ParseByteArray(m_account->json().value("recovery_pub_key"));
-        const auto version = network->isMainnet() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
-
+    // subaccount data has the base subaccount recovery xpub - so we apply the branch derivation here.
+    if (!account_recovery_xpub.isEmpty()) {
         ext_key subactkey, branchkey;
         char* base58;
-
-        bip32_key_init(
-            version, 0, 0,
-            (const unsigned char *) recovery_chain_code.constData(), recovery_chain_code.size(),
-            (const unsigned char *) recovery_pub_key.constData(), recovery_pub_key.size(),
-            nullptr, 0,
-            nullptr, 0,
-            nullptr, 0,
-            &subactkey);
-
+        bip32_key_from_base58(account_recovery_xpub.constData(), &subactkey);
         bip32_key_from_parent(&subactkey, branch, BIP32_FLAG_KEY_PUBLIC | BIP32_FLAG_SKIP_HASH, &branchkey);
-
         bip32_key_to_base58(&branchkey, BIP32_FLAG_KEY_PUBLIC, &base58);
         recovery_xpub = QByteArray(base58);
         wally_free_string(base58);
