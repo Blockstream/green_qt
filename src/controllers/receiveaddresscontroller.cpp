@@ -170,9 +170,10 @@ void ReceiveAddressController::verifyMultisig() {
     }
 
     if (device->api()) {
-        device->api()->getReceiveAddress(network->canonicalId(), subaccount, branch, pointer, recovery_xpub, subtype, [this](const QVariantMap& msg) {
+        QPointer<ReceiveAddressController> self{this};
+        device->api()->getReceiveAddress(network->canonicalId(), subaccount, branch, pointer, recovery_xpub, subtype, [=](const QVariantMap& msg) {
             qDebug() << "jade: verify result" << msg;
-            setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
+            if (self) self->setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
         });
     }
 }
@@ -196,8 +197,9 @@ void ReceiveAddressController::verifySinglesig()
     Q_ASSERT(!variant.isEmpty());
 
     if (device->api()) {
-        device->api()->getReceiveAddress(network->canonicalId(), variant, path, [this](const QVariantMap& msg) {
-            setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
+        QPointer<ReceiveAddressController> self{this};
+        device->api()->getReceiveAddress(network->canonicalId(), variant, path, [=](const QVariantMap& msg) {
+            if (self) self->setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
         });
     }
 }
