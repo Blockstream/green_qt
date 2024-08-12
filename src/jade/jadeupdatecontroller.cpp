@@ -197,12 +197,12 @@ void JadeFirmwareCheckController::check()
                         auto firmware = value.toObject();
                         const auto firmware_version = QVersionNumber::fromString(firmware.value("version").toString());
                         if (firmware_version > latest_version) {
-                            qDebug() << latest_version << " -> " << firmware_version;
                             latest_version = firmware_version;
                         }
                     }
                 }
             }
+            qDebug() << Q_FUNC_INFO << "latest stable version:" << latest_version;
 
             for (const auto& channel : channels) {
                 auto index = m_index.value(type).toObject().value(channel).toObject();
