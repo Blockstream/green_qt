@@ -13,6 +13,14 @@ LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QByteArray& t
     , m_transaction_outputs(transaction_outputs)
     , m_signing_transactions(signing_transactions)
 {
+    wally_tx* tx;
+    auto rc = wally_tx_from_bytes((const unsigned char*) transaction.constData(), transaction.size(), WALLY_TX_FLAG_USE_WITNESS, &tx);
+    Q_ASSERT(rc == WALLY_OK);
+    rc = wally_tx_get_version(tx, &m_version);
+    Q_ASSERT(rc == WALLY_OK);
+    rc = wally_tx_get_locktime(tx, &m_locktime);
+    Q_ASSERT(rc == WALLY_OK);
+    wally_tx_free(tx);
 }
 
 QList<QByteArray> LedgerSignTransactionActivity::signatures() const
@@ -131,10 +139,8 @@ Command* LedgerSignTransactionActivity::signSW()
     connect(cmd, &Command::finished, [this, batch] {
         // Prepare the pseudo transaction
         // Provide the first script instead of a null script to initialize the P2SH confirmation logic
-        const uint32_t version = 0; // m_transaction.value("transaction_version").toDouble();
-        const uint32_t locktime = 0; // m_transaction.value("transaction_locktime").toDouble();
         const auto script0 = ParseByteArray(m_signing_inputs[0].toObject().value("prevout_script"));
-        batch->add(startUntrustedTransaction(version, true, 0, m_hw_inputs, script0, true));
+        batch->add(startUntrustedTransaction(m_version, true, 0, m_hw_inputs, script0, true));
         batch->add(finalizeInputFull(outputBytes()));
 
         for (int i = 0; i < m_hw_inputs.size(); i++) {
@@ -144,8 +150,8 @@ Command* LedgerSignTransactionActivity::signSW()
             const auto script = ParseByteArray(input.value("prevout_script"));
             const auto user_path = ParsePath(input.value("user_path"));
 
-            batch->add(startUntrustedTransaction(version, false, 0, m_hw_inputs.mid(i, 1), script, true));
-            batch->add(untrustedHashSign(i, user_path, "0", locktime));
+            batch->add(startUntrustedTransaction(m_version, false, 0, m_hw_inputs.mid(i, 1), script, true));
+            batch->add(untrustedHashSign(i, user_path, "0", m_locktime));
         }
 
         m_hw_inputs.clear();
@@ -159,8 +165,6 @@ Command* LedgerSignTransactionActivity::signNonSW()
     auto batch = new CommandBatch;
     auto cmd = getHwInputs(false);
     connect(cmd, &Command::finished, [this, batch] {
-        const uint32_t version = 0; // m_transaction.value("transaction_version").toDouble();
-        const uint32_t locktime = 0; // m_transaction.value("transaction_locktime").toDouble();
         const auto data = outputBytes();
 
         for (int i = 0; i < m_hw_inputs.size(); i++) {
@@ -169,9 +173,9 @@ Command* LedgerSignTransactionActivity::signNonSW()
             const auto script = ParseByteArray(input.value("prevout_script"));
             const auto user_path = ParsePath(input.value("user_path"));
 
-            batch->add(startUntrustedTransaction(version, i == 0, i, m_hw_inputs, script, false));
+            batch->add(startUntrustedTransaction(m_version, i == 0, i, m_hw_inputs, script, false));
             batch->add(finalizeInputFull(data));
-            if (address_type == "p2sh") batch->add(untrustedHashSign(i, user_path, "0", locktime));
+            if (address_type == "p2sh") batch->add(untrustedHashSign(i, user_path, "0", m_locktime));
         }
     });
     batch->add(cmd);

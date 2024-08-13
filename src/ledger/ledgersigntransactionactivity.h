@@ -39,6 +39,9 @@ private:
     const QJsonArray m_transaction_outputs;
     const QJsonObject m_signing_transactions;
 
+    size_t m_version;
+    size_t m_locktime;
+
     QList<Input> m_hw_inputs;
     QVector<QByteArray> m_signatures;
 };
