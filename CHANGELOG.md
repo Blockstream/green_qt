@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.0.9] - 2024-08-13
 ### Added:
 - Phone field with country selector
 
@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updates GDK to 0.72.2
 
 ### Fixed:
+- Send BTC with Ledger devices
+- Verify address with Jade
 - Prevent Watch-Only login when password is empty
 - Fee rate label when custom fee is selected
 - Reinstate lock and unlock of dust outputs in bitcoin multisig
