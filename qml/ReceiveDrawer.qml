@@ -79,6 +79,32 @@ WalletDrawer {
                     FieldTitle {
                         text: 'Asset & Account'
                     }
+                    AbstractButton {
+                        Layout.fillWidth: true
+                        padding: 20
+                        visible: controller.account.network.liquid && controller.context.wallet.login.device?.type === 'nanos'
+                        background: Rectangle {
+                            color: '#e5e7e9'
+                            radius: 5
+                        }
+                        contentItem: RowLayout {
+                            spacing: 10
+                            Image {
+                                Layout.alignment: Qt.AlignCenter
+                                source: 'qrc:/svg/warning_black.svg'
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.preferredWidth: 0
+                                color: 'black'
+                                font.pixelSize: 14
+                                font.weight: 400
+                                text: qsTrId('id_ledger_supports_a_limited_set')
+                                wrapMode: Label.Wrap
+                            }
+                        }
+                        onClicked: Qt.openUrlExternally('https://docs.blockstream.com/green/hww/hww-index.html#ledger-supported-assets')
+                    }
                     AccountAssetField {
                         Layout.fillWidth: true
                         account: controller.account
