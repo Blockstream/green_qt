@@ -55,6 +55,7 @@ public:
     QVariantMap firmware() const { return m_firmware; }
     void exec() override;
 signals:
+    void cancelled();
     void locked();
 private:
     JadeDevice* const m_device;
@@ -139,6 +140,7 @@ signals:
     void updatingChanged();
     void progressChanged();
     void updateStarted();
+    void updateCancelled();
     void updateFinished();
     void updateFailed();
     void unlockRequired();

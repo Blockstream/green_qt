@@ -103,17 +103,25 @@ void JadeUpdateActivity::exec()
             const auto code = error.value("code").toLongLong();
             const auto message = error.value("message").toString();
 
+#define CBOR_RPC_USER_CANCELLED -32000
 #define CBOR_RPC_PROTOCOL_ERROR -32001
 #define CBOR_RPC_HW_LOCKED -32002
+
+            if (code == CBOR_RPC_USER_CANCELLED) {
+                emit cancelled();
+                return;
+            }
+
             // message `OTA is only allowed on new or logged-in device.` code is as follow:
             // in 0.1.21 code is CBOR_RPC_PROTOCOL_ERROR
             // in 0.1.23 and later is CBOR_RPC_HW_LOCKED
             if (code == CBOR_RPC_HW_LOCKED || message == "OTA is only allowed on new or logged-in device.") {
                 emit locked();
-            } else {
-                qDebug() << Q_FUNC_INFO << this << "Unexpected error" << code << message;
-                fail();
+                return;
             }
+
+            qDebug() << Q_FUNC_INFO << this << "Unexpected error" << code << message;
+            fail();
         }
     };
 
@@ -392,6 +400,12 @@ void JadeFirmwareUpdateController::install(const QByteArray& data)
             m_started = true;
             emit updateStarted();
         }
+    });
+    connect(activity, &JadeUpdateActivity::cancelled, this, [=] {
+        activity->deleteLater();
+        m_updating = false;
+        emit updatingChanged();
+        emit updateCancelled();
     });
     connect(activity, &JadeUpdateActivity::locked, this, [=] {
         activity->deleteLater();

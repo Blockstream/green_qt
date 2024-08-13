@@ -25,6 +25,10 @@ Page {
             stack_view.replace(null, updating_view, StackView.PushTransition)
             Analytics.recordEvent('ota_start', AnalyticsJS.segmentationFirmwareUpdate(Settings, self.device, controller.firmware))
         }
+        onUpdateCancelled: {
+            Analytics.recordEvent('ota_refuse', AnalyticsJS.segmentationFirmwareUpdate(Settings, self.device, controller.firmware))
+            self.updateFailed()
+        }
         onUpdateFinished: {
             self.updateFinished()
             Analytics.recordEvent('ota_complete', AnalyticsJS.segmentationFirmwareUpdate(Settings, self.device, controller.firmware))
