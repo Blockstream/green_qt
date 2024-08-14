@@ -81,7 +81,10 @@ void Output::setExpired(bool expired)
     m_expired = expired;
     emit expiredChanged();
 
-    // skip liquid notification for until gdk has better redeposit for liquid
+    // skip notification for watchonly context
+    if (m_account->context()->isWatchonly()) return;
+
+    // skip notification for liquid until gdk has better redeposit
     if (m_account->network()->isLiquid()) return;
 
     auto notification = GetExpiredNotification(m_account->context());
