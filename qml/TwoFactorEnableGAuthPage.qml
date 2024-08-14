@@ -46,10 +46,6 @@ StackViewPage {
             Layout.alignment: Qt.AlignHCenter
             text: self.session.config.gauth.data.split('=')[1] || ''
         }
-        Label {
-            opacity: 0.6
-            text: self.session?.config.gauth?.data ?? 'N/A'
-        }
         PrimaryButton {
             Layout.alignment: Qt.AlignHCenter
             Layout.minimumWidth: 150
