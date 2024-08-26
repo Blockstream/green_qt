@@ -30,6 +30,7 @@ StackViewPage {
         device: self.device
     }
     id: self
+    footer: null
     padding: 60
     title: self.device.name
     rightItem: RowLayout {
@@ -204,15 +205,13 @@ StackViewPage {
 
     Component {
         id: waiting_page
-        ColumnLayout {
+        VFlickable {
             readonly property bool ready: !stack_view.busy && self.device.connected
             id: view
             onReadyChanged: {
                 if (view.ready) {
                     self.pushView(true)
                 }
-            }
-            VSpacer {
             }
             BusyIndicator {
                 Layout.alignment: Qt.AlignCenter
@@ -226,8 +225,6 @@ StackViewPage {
                 horizontalAlignment: Label.AlignHCenter
                 text: qsTrId('id_connecting_to_your_device')
                 wrapMode: Label.WordWrap
-            }
-            VSpacer {
             }
         }
     }

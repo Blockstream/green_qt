@@ -32,108 +32,103 @@ StackViewPage {
         }
     }
     id: self
+    footer: null
     padding: 60
-    contentItem: ColumnLayout {
-        VSpacer {
-        }
-        Pane {
-            Layout.alignment: Qt.AlignCenter
-            Layout.maximumWidth: 500
-            background: null
-            contentItem: ColumnLayout {
-                spacing: 10
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    font.pixelSize: 26
-                    font.weight: 600
-                    horizontalAlignment: Label.AlignHCenter
-                    text: qsTrId('id_watchonly_details')
-                    wrapMode: Label.WordWrap
+    Pane {
+        Layout.alignment: Qt.AlignCenter
+        Layout.maximumWidth: 500
+        background: null
+        contentItem: ColumnLayout {
+            spacing: 10
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                font.pixelSize: 26
+                font.weight: 600
+                horizontalAlignment: Label.AlignHCenter
+                text: qsTrId('id_watchonly_details')
+                wrapMode: Label.WordWrap
+            }
+            Selector {
+                Layout.alignment: Qt.AlignCenter
+                Layout.topMargin: 20
+                id: selector
+                index: self.network.liquid ? 1 : 0
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.maximumWidth: 400
+                Layout.preferredWidth: 0
+                Layout.topMargin: 30
+                font.pixelSize: 14
+                font.weight: 400
+                horizontalAlignment: Label.AlignHCenter
+                opacity: 0.4
+                text: selector.index === 0 ? qsTrId('id_scan_or_paste_your_extended') : qsTrId('id_scan_or_paste_your_public')
+                wrapMode: Label.Wrap
+            }
+            KeysField {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                id: keys_field
+                focus: true
+                onTextChanged: {
+                    error_badge.clear()
+                    selector.index = keys_field.text.indexOf('(') < 0 ? 0 : 1
                 }
-                Selector {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.topMargin: 20
-                    id: selector
-                    index: self.network.liquid ? 1 : 0
-                }
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: true
-                    Layout.maximumWidth: 400
-                    Layout.preferredWidth: 0
-                    Layout.topMargin: 30
-                    font.pixelSize: 14
-                    font.weight: 400
-                    horizontalAlignment: Label.AlignHCenter
-                    opacity: 0.4
-                    text: selector.index === 0 ? qsTrId('id_scan_or_paste_your_extended') : qsTrId('id_scan_or_paste_your_public')
-                    wrapMode: Label.Wrap
-                }
-                KeysField {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: true
-                    id: keys_field
-                    focus: true
-                    onTextChanged: {
-                        error_badge.clear()
-                        selector.index = keys_field.text.indexOf('(') < 0 ? 0 : 1
-                    }
-                }
-                PrimaryButton {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: true
-                    Layout.topMargin: 40
-                    text: qsTrId('id_import')
-                    action: Action {
-                        id: login_action
-                        onTriggered: {
-                            onTextEdited: error_badge.clear()
-                            if (selector.index === 0) {
-                                controller.loginExtendedPublicKeys(keys_field.text)
-                            } else {
-                                controller.loginDescriptors(keys_field.text)
-                            }
+            }
+            PrimaryButton {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.topMargin: 40
+                text: qsTrId('id_import')
+                action: Action {
+                    id: login_action
+                    onTriggered: {
+                        onTextEdited: error_badge.clear()
+                        if (selector.index === 0) {
+                            controller.loginExtendedPublicKeys(keys_field.text)
+                        } else {
+                            controller.loginDescriptors(keys_field.text)
                         }
                     }
                 }
-                FixedErrorBadge {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 20
-                    id: error_badge
-                    pointer: false
-                }
-                CheckBox {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.topMargin: 10
-                    id: remember_checkbox
-                    checked: true
-                    text: qsTrId('id_remember_me')
-                    leftPadding: 12
-                    rightPadding: 12
-                    topPadding: 8
-                    bottomPadding: 8
-                    background: Rectangle {
-                        color: '#282D38'
-                        border.width: 1
-                        border.color: '#FFF'
-                        radius: 5
-                    }
-                }
-                Label {
-                    Layout.topMargin: 30
-                    Layout.fillWidth: true
-                    font.pixelSize: 14
-                    font.weight: 400
-                    horizontalAlignment: Label.AlignHCenter
-                    opacity: 0.4
-                    text: 'Watch-only wallets let you receive funds and check your balance.'
-                    wrapMode: Label.WordWrap
+            }
+            FixedErrorBadge {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: 20
+                id: error_badge
+                pointer: false
+            }
+            CheckBox {
+                Layout.alignment: Qt.AlignCenter
+                Layout.topMargin: 10
+                id: remember_checkbox
+                checked: true
+                text: qsTrId('id_remember_me')
+                leftPadding: 12
+                rightPadding: 12
+                topPadding: 8
+                bottomPadding: 8
+                background: Rectangle {
+                    color: '#282D38'
+                    border.width: 1
+                    border.color: '#FFF'
+                    radius: 5
                 }
             }
-        }
-        VSpacer {
+            Label {
+                Layout.topMargin: 30
+                Layout.fillWidth: true
+                font.pixelSize: 14
+                font.weight: 400
+                horizontalAlignment: Label.AlignHCenter
+                opacity: 0.4
+                text: 'Watch-only wallets let you receive funds and check your balance.'
+                wrapMode: Label.WordWrap
+            }
         }
     }
 

@@ -248,6 +248,7 @@ SET(QML_FILES
     qml/Countries.qml
     qml/PhoneField.qml
     qml/UpdateUnspentsDrawer.qml
+    qml/VFlickable.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -10,49 +10,44 @@ StackViewPage {
     signal networkSelected(Network network)
     required property bool electrum
     id: self
+    footer: null
     padding: 60
-    contentItem: ColumnLayout {
-        VSpacer {
-        }
-        ColumnLayout {
+    ColumnLayout {
+        Layout.alignment: Qt.AlignCenter
+        Layout.fillHeight: false
+        Layout.fillWidth: false
+        Layout.maximumWidth: 400
+        Label {
             Layout.alignment: Qt.AlignCenter
-            Layout.fillHeight: false
-            Layout.fillWidth: false
-            Layout.maximumWidth: 400
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 26
-                font.weight: 600
-                horizontalAlignment: Label.AlignHCenter
-                text: qsTrId('id_choose_your_network')
-                wrapMode: Label.WordWrap
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.bottomMargin: 20
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 14
-                font.weight: 400
-                horizontalAlignment: Label.AlignHCenter
-                opacity: 0.4
-                text: qsTrId('id_blockstream_green_supports_both')
-                wrapMode: Label.Wrap
-            }
-            Option {
-                Layout.fillWidth: true
-                network: NetworkManager.network(self.electrum ? 'electrum-mainnet' : 'mainnet')
-                description: qsTrId('id_bitcoin_is_the_worlds_leading')
-            }
-            Option {
-                Layout.fillWidth: true
-                network: NetworkManager.network(self.electrum ? 'electrum-liquid' : 'liquid')
-                description: qsTrId('id_the_liquid_network_is_a_bitcoin')
-            }
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            font.pixelSize: 26
+            font.weight: 600
+            horizontalAlignment: Label.AlignHCenter
+            text: qsTrId('id_choose_your_network')
+            wrapMode: Label.WordWrap
         }
-        VSpacer {
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            Layout.bottomMargin: 20
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            font.pixelSize: 14
+            font.weight: 400
+            horizontalAlignment: Label.AlignHCenter
+            opacity: 0.4
+            text: qsTrId('id_blockstream_green_supports_both')
+            wrapMode: Label.Wrap
+        }
+        Option {
+            Layout.fillWidth: true
+            network: NetworkManager.network(self.electrum ? 'electrum-mainnet' : 'mainnet')
+            description: qsTrId('id_bitcoin_is_the_worlds_leading')
+        }
+        Option {
+            Layout.fillWidth: true
+            network: NetworkManager.network(self.electrum ? 'electrum-liquid' : 'liquid')
+            description: qsTrId('id_the_liquid_network_is_a_bitcoin')
         }
     }
 

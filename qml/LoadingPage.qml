@@ -21,23 +21,17 @@ StackViewPage {
         monitor: controller.monitor
         target: self.StackView.view
     }
-    contentItem: ColumnLayout {
-        VSpacer {
-        }
-        BusyIndicator {
-            Layout.alignment: Qt.AlignCenter
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            font.pixelSize: 22
-            font.weight: 600
-            horizontalAlignment: Label.AlignHCenter
-            text: qsTrId('id_loading_wallet')
-            wrapMode: Label.WordWrap
-        }
-        VSpacer {
-        }
+    BusyIndicator {
+        Layout.alignment: Qt.AlignCenter
+    }
+    Label {
+        Layout.alignment: Qt.AlignCenter
+        Layout.fillWidth: true
+        Layout.preferredWidth: 0
+        font.pixelSize: 22
+        font.weight: 600
+        horizontalAlignment: Label.AlignHCenter
+        text: qsTrId('id_loading_wallet')
+        wrapMode: Label.WordWrap
     }
 }

@@ -34,25 +34,19 @@ StackViewPage {
     leftItem: Item {
     }
     padding: 60
-    contentItem: ColumnLayout {
-        VSpacer {
-        }
-        BusyIndicator {
-            Layout.alignment: Qt.AlignCenter
-            running: true
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            font.pixelSize: 26
-            font.weight: 600
-            horizontalAlignment: Label.AlignHCenter
-            text: qsTrId('id_restoring_your_wallet')
-            wrapMode: Label.WordWrap
-        }
-        VSpacer {
-        }
+    BusyIndicator {
+        Layout.alignment: Qt.AlignCenter
+        running: true
+    }
+    Label {
+        Layout.alignment: Qt.AlignCenter
+        Layout.fillWidth: true
+        Layout.preferredWidth: 0
+        font.pixelSize: 26
+        font.weight: 600
+        horizontalAlignment: Label.AlignHCenter
+        text: qsTrId('id_restoring_your_wallet')
+        wrapMode: Label.WordWrap
     }
 
     Component {

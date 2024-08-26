@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Fixed:
 - Login with singlesig watch-only
+- Ensure the application is usable with a smaller window size
 
 ## [2.0.9] - 2024-08-13
 ### Added:

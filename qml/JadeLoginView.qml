@@ -4,7 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-ColumnLayout {
+VFlickable {
     signal loginFinished(Context context)
     signal loginFailed()
     required property Context context
@@ -23,8 +23,6 @@ ColumnLayout {
         monitor: controller.monitor
         target: self.StackView.view
     }
-    VSpacer {
-    }
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
     }
@@ -37,7 +35,5 @@ ColumnLayout {
         horizontalAlignment: Label.AlignHCenter
         text: qsTrId('id_logging_in')
         wrapMode: Label.WordWrap
-    }
-    VSpacer {
     }
 }

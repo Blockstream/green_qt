@@ -4,7 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-ColumnLayout {
+VFlickable {
     signal updateClicked()
     signal setupFinished(Context context)
     required property JadeDevice device
@@ -27,8 +27,6 @@ ColumnLayout {
             dialog.open()
         }
         onSetupFinished: (context) => self.setupFinished(context)
-    }
-    VSpacer {
     }
     SwipeView {
         Layout.alignment: Qt.AlignCenter
@@ -80,8 +78,6 @@ ColumnLayout {
         enabled: (self.debug || self.latestFirmware) && self.device.status === JadeDevice.StatusIdle
         text: qsTrId('id_firmware_update')
         onClicked: self.updateClicked()
-    }
-    VSpacer {
     }
 
     Component {

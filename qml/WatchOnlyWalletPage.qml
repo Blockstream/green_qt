@@ -8,55 +8,50 @@ StackViewPage {
     signal singlesigWallet
     signal multisigWallet
     id: self
+    footer: null
     padding: 60
-    contentItem: ColumnLayout {
-        VSpacer {
-        }
-        ColumnLayout {
+    ColumnLayout {
+        Layout.alignment: Qt.AlignCenter
+        Layout.fillHeight: false
+        Layout.fillWidth: false
+        Layout.maximumWidth: 400
+        Label {
             Layout.alignment: Qt.AlignCenter
-            Layout.fillHeight: false
-            Layout.fillWidth: false
-            Layout.maximumWidth: 400
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 26
-                font.weight: 600
-                horizontalAlignment: Label.AlignHCenter
-                text: qsTrId('id_select_watchonly_type')
-                wrapMode: Label.WordWrap
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.bottomMargin: 20
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 14
-                font.weight: 400
-                horizontalAlignment: Label.AlignHCenter
-                opacity: 0.4
-                text: qsTrId('id_choose_the_security_policy_that')
-                wrapMode: Label.Wrap
-            }
-            Option {
-                Layout.fillWidth: true
-                icon.source: 'qrc:/svg2/singlesig.svg'
-                type: qsTrId('id_singlesig') + '/' + qsTrId('id_legacy_segwit')
-                text: qsTrId('id_standard')
-                description: 'Enter the xPub or descriptor of the singlesig account you want watch-only access for.'
-                onClicked: self.singlesigWallet()
-            }
-            Option {
-                Layout.fillWidth: true
-                icon.source: 'qrc:/svg2/multisig.svg'
-                type: qsTrId('id_multisig') + ' / ' + qsTrId('id_2of2')
-                text: qsTrId('id_2fa_protected')
-                description: 'Log in to your 2FA Protected accounts with a username and password.'
-                onClicked: self.multisigWallet()
-            }
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            font.pixelSize: 26
+            font.weight: 600
+            horizontalAlignment: Label.AlignHCenter
+            text: qsTrId('id_select_watchonly_type')
+            wrapMode: Label.WordWrap
         }
-        VSpacer {
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            Layout.bottomMargin: 20
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            font.pixelSize: 14
+            font.weight: 400
+            horizontalAlignment: Label.AlignHCenter
+            opacity: 0.4
+            text: qsTrId('id_choose_the_security_policy_that')
+            wrapMode: Label.Wrap
+        }
+        Option {
+            Layout.fillWidth: true
+            icon.source: 'qrc:/svg2/singlesig.svg'
+            type: qsTrId('id_singlesig') + '/' + qsTrId('id_legacy_segwit')
+            text: qsTrId('id_standard')
+            description: 'Enter the xPub or descriptor of the singlesig account you want watch-only access for.'
+            onClicked: self.singlesigWallet()
+        }
+        Option {
+            Layout.fillWidth: true
+            icon.source: 'qrc:/svg2/multisig.svg'
+            type: qsTrId('id_multisig') + ' / ' + qsTrId('id_2of2')
+            text: qsTrId('id_2fa_protected')
+            description: 'Log in to your 2FA Protected accounts with a username and password.'
+            onClicked: self.multisigWallet()
         }
     }
 

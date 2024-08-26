@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 Page {
+    default property alias contentItemData: flickable.contentItemData
     property alias leftItem: left_pane.contentItem
     property alias centerItem: center_pane.contentItem
     property alias rightItem: right_pane.contentItem
@@ -71,5 +72,8 @@ Page {
                 padding: 0
             }
         }
+    }
+    contentItem: VFlickable {
+        id: flickable
     }
 }

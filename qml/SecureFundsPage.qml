@@ -11,50 +11,44 @@ StackViewPage {
     signal watchOnlyWallet()
 
     id: self
+    footer: null
     padding: 60
-    contentItem: ColumnLayout {
-        spacing: 0
-        VSpacer {
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            Layout.maximumWidth: 300
-            color: '#FFF'
-            font.pixelSize: 30
-            font.weight: 656
-            horizontalAlignment: Label.AlignHCenter
-            text: 'How do you want to secure your funds?'
-            wrapMode: Label.WordWrap
-        }
-        OptionButton {
-            Layout.topMargin: 40
-            title: 'On This Device'
-            description: 'Your computer will store the keys to your bitcoin, PIN protected.'
-            tag: 'For Ease of Use'
-            image: 'qrc:/svg2/funds_sww.svg'
-            offsetX: -65
-            offsetY: -30
-            onClicked: self.addWallet()
-        }
-        OptionButton {
-            Layout.topMargin: 20
-            title: 'On Hardware Wallet'
-            description: 'Your keys will be secured on a dedicated cold storage device, PIN protected.'
-            tag: 'For Higher Security'
-            image: 'qrc:/svg2/funds_hww.svg'
-            offsetX: -20
-            offsetY: -55
-            onClicked: self.useDevice()
-        }
-        RegularButton {
-            Layout.alignment: Qt.AlignCenter
-            Layout.minimumWidth: 400
-            Layout.topMargin: 40
-            text: qsTrId('id_watchonly')
-            onClicked: self.watchOnlyWallet()
-        }
-        VSpacer {
-        }
+    Label {
+        Layout.alignment: Qt.AlignCenter
+        Layout.maximumWidth: 300
+        color: '#FFF'
+        font.pixelSize: 30
+        font.weight: 656
+        horizontalAlignment: Label.AlignHCenter
+        text: qsTrId('id_how_do_you_want_to_secure_your')
+        wrapMode: Label.WordWrap
+    }
+    OptionButton {
+        Layout.topMargin: 40
+        title: qsTrId('id_on_this_device')
+        description: 'Your computer will store the keys to your bitcoin, PIN protected.'
+        tag: qsTrId('id_for_ease_of_use')
+        image: 'qrc:/svg2/funds_sww.svg'
+        offsetX: -65
+        offsetY: -30
+        onClicked: self.addWallet()
+    }
+    OptionButton {
+        Layout.topMargin: 20
+        title: 'On Hardware Wallet'
+        description: qsTrId('id_your_keys_will_be_secured_on_a')
+        tag: 'For Higher Security'
+        image: 'qrc:/svg2/funds_hww.svg'
+        offsetX: -20
+        offsetY: -55
+        onClicked: self.useDevice()
+    }
+    RegularButton {
+        Layout.alignment: Qt.AlignCenter
+        Layout.minimumWidth: 400
+        Layout.topMargin: 40
+        text: qsTrId('id_watchonly')
+        onClicked: self.watchOnlyWallet()
     }
 
     component OptionButton: AbstractButton {

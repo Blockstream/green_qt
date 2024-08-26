@@ -43,9 +43,7 @@ StackViewPage {
     }
     contentItem: GStackView {
         id: stack_view
-        initialItem: ColumnLayout {
-            VSpacer {
-            }
+        initialItem: VFlickable {
             Loader {
                 Layout.alignment: Qt.AlignCenter
                 sourceComponent: {
@@ -55,10 +53,9 @@ StackViewPage {
                     }
                 }
             }
-            VSpacer {
-            }
             BusyIndicator {
                 Layout.alignment: Qt.AlignCenter
+                Layout.topMargin: 20
             }
             Label {
                 Layout.alignment: Qt.AlignCenter

@@ -18,88 +18,84 @@ StackViewPage {
     }
     StackView.onActivated: pin_field.forceActiveFocus()
     id: self
+    footer: null
     padding: 60
     title: self.context?.wallet?.name ?? ''
     leftItem: Item {
     }
-    contentItem: ColumnLayout {
-        VSpacer {
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            font.pixelSize: 26
-            font.weight: 600
-            horizontalAlignment: Label.AlignHCenter
-            text: self.pin && pin_field.enabled ? qsTrId('id_confirm_your_new_pin') : qsTrId('id_set_a_new_pin')
-            wrapMode: Label.WordWrap
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            font.pixelSize: 14
-            font.weight: 400
-            horizontalAlignment: Label.AlignHCenter
-            opacity: 0.4
-            text: qsTrId('id_youll_need_your_pin_to_log_in')
-            wrapMode: Label.Wrap
-        }
-        PinField {
-            Layout.alignment: Qt.AlignCenter
-            Layout.topMargin: 36
-            id: pin_field
-            focus: true
-            onPinEntered: (pin) => {
-                if (self.pin) {
-                    if (self.pin === pin) {
-                        pin_field.enabled = false
-                        controller.update(pin)
-                    } else {
-                        pin_field.enabled = false
-                        self.pin = null
-                        timer.start()
-                        error_badge.error = qsTrId('id_pins_do_not_match_please_try')
-                    }
+    Label {
+        Layout.alignment: Qt.AlignCenter
+        Layout.fillWidth: true
+        Layout.preferredWidth: 0
+        font.pixelSize: 26
+        font.weight: 600
+        horizontalAlignment: Label.AlignHCenter
+        text: self.pin && pin_field.enabled ? qsTrId('id_confirm_your_new_pin') : qsTrId('id_set_a_new_pin')
+        wrapMode: Label.WordWrap
+    }
+    Label {
+        Layout.alignment: Qt.AlignCenter
+        Layout.fillWidth: true
+        Layout.preferredWidth: 0
+        font.pixelSize: 14
+        font.weight: 400
+        horizontalAlignment: Label.AlignHCenter
+        opacity: 0.4
+        text: qsTrId('id_youll_need_your_pin_to_log_in')
+        wrapMode: Label.Wrap
+    }
+    PinField {
+        Layout.alignment: Qt.AlignCenter
+        Layout.topMargin: 36
+        id: pin_field
+        focus: true
+        onPinEntered: (pin) => {
+            if (self.pin) {
+                if (self.pin === pin) {
+                    pin_field.enabled = false
+                    controller.update(pin)
                 } else {
                     pin_field.enabled = false
-                    self.pin = pin
+                    self.pin = null
                     timer.start()
+                    error_badge.error = qsTrId('id_pins_do_not_match_please_try')
                 }
-            }
-            onPinChanged: {
-                if (pin_field.pin.length > 0) {
-                    error_badge.clear()
-                }
-            }
-        }
-        Timer {
-            id: timer
-            interval: 300
-            repeat: false
-            onTriggered: {
-                pin_field.clear()
-                pin_field.enabled = true
+            } else {
+                pin_field.enabled = false
+                self.pin = pin
+                timer.start()
             }
         }
-        FixedErrorBadge {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.topMargin: 20
-            id: error_badge
-            pointer: false
-            visible: true
-        }
-        PinPadButton {
-            Layout.alignment: Qt.AlignCenter
-            Layout.topMargin: 20
-            enabled: pin_field.enabled
-            target: pin_field
-        }
-        VSpacer {
+        onPinChanged: {
+            if (pin_field.pin.length > 0) {
+                error_badge.clear()
+            }
         }
     }
-    footerItem: RowLayout {
+    Timer {
+        id: timer
+        interval: 300
+        repeat: false
+        onTriggered: {
+            pin_field.clear()
+            pin_field.enabled = true
+        }
+    }
+    FixedErrorBadge {
+        Layout.alignment: Qt.AlignHCenter
+        Layout.topMargin: 20
+        id: error_badge
+        pointer: false
+        visible: true
+    }
+    PinPadButton {
+        Layout.alignment: Qt.AlignCenter
+        Layout.topMargin: 20
+        enabled: pin_field.enabled
+        target: pin_field
+    }
+    RowLayout {
+        Layout.topMargin: 20
         spacing: 0
         Item {
             Layout.alignment: Qt.AlignCenter

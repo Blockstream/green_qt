@@ -10,7 +10,7 @@ import QtQml
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
-StackViewPage {
+Page {
     signal logout()
 
     required property Context context
@@ -168,6 +168,7 @@ StackViewPage {
     }
 
     StackView.onActivated: {
+        self.forceActiveFocus()
         Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(Settings, self.context))
         const account = account_list_model.first()
         if (account) {
@@ -187,6 +188,11 @@ StackViewPage {
     }
 
     id: self
+    background: null
+    leftPadding: 0
+    rightPadding: 0
+    topPadding: 0
+    bottomPadding: 0
     title: self.wallet.name
     spacing: 0
     property alias toolbarItem: wallet_header.toolbarItem

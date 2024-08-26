@@ -23,7 +23,7 @@ StackViewPage {
         pin_field.forceActiveFocus()
     }
     id: self
-    padding: 60
+    padding: flickable.clipping ? 10 : 60
     title: self.wallet.name
     StackView.onActivated: {
         if (self.wallet.login.passphrase) {
@@ -66,15 +66,44 @@ StackViewPage {
     }
     contentItem: GStackView {
         id: stack_view
-        initialItem: ColumnLayout {
+        initialItem: VFlickable {
+            id: flickable
             Timer {
                 interval: 2000
                 running: self.wallet.login.attempts === 0
                 onTriggered: stack_view.push(no_attempts_view)
             }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                font.pixelSize: 26
+                font.weight: 600
+                horizontalAlignment: Label.AlignHCenter
+                text: qsTrId('id_enter_your_6digit_pin_to_access')
+                wrapMode: Label.WordWrap
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.bottomMargin: 26
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                Layout.maximumWidth: 450
+                font.pixelSize: 14
+                font.weight: 400
+                horizontalAlignment: Label.AlignHCenter
+                opacity: 0.4
+                text: qsTrId('id_youll_need_your_pin_to_log_in')
+                wrapMode: Label.Wrap
+            }
             Pane {
                 Layout.alignment: Qt.AlignCenter
-                padding: 20
+                Layout.bottomMargin: 10
+                Layout.topMargin: 10
+                bottomPadding: 10
+                leftPadding: 10
+                rightPadding: 10
+                topPadding: 10
                 visible: controller.passphrase !== ''
                 background: Rectangle {
                     color: '#222226'
@@ -96,33 +125,9 @@ StackViewPage {
                     }
                 }
             }
-            VSpacer {
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 26
-                font.weight: 600
-                horizontalAlignment: Label.AlignHCenter
-                text: qsTrId('id_enter_your_6digit_pin_to_access')
-                wrapMode: Label.WordWrap
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                Layout.maximumWidth: 450
-                font.pixelSize: 14
-                font.weight: 400
-                horizontalAlignment: Label.AlignHCenter
-                opacity: 0.4
-                text: qsTrId('id_youll_need_your_pin_to_log_in')
-                wrapMode: Label.Wrap
-            }
             PinField {
                 Layout.alignment: Qt.AlignCenter
-                Layout.topMargin: 36
+                Layout.topMargin: 10
                 id: pin_field
                 focus: true
                 onPinEntered: (pin) => {
@@ -158,48 +163,87 @@ StackViewPage {
                 enabled: pin_field.enabled
                 target: pin_field
             }
-            VSpacer {
+            RowLayout {
+                HSpacer {
+                    Layout.minimumHeight: 100
+                }
+                ColumnLayout {
+                    Layout.fillWidth: false
+                    Layout.alignment: Qt.AlignBottom
+                    visible: !self.connecting
+                    Image {
+                        Layout.alignment: Qt.AlignCenter
+                        source: 'qrc:/svg2/house.svg'
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        font.pixelSize: 12
+                        font.weight: 600
+                        text: qsTrId('id_make_sure_to_be_in_a_private')
+                    }
+                }
+                ColumnLayout {
+                    Layout.alignment: Qt.AlignBottom
+                    Layout.fillWidth: false
+                    visible: self.connecting
+                    TProgressBar {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.minimumWidth: 100
+                        indeterminate: self.connecting
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        font.pixelSize: 12
+                        font.weight: 600
+                        text: qsTrId('id_connecting')
+                    }
+                }
+                HSpacer {
+                }
             }
+            // VSpacer {
+            // }
         }
     }
-    footerItem: RowLayout {
-        HSpacer {
-            Layout.minimumHeight: 100
-        }
-        ColumnLayout {
-            Layout.fillWidth: false
-            Layout.alignment: Qt.AlignBottom
-            visible: !self.connecting
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/house.svg'
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 12
-                font.weight: 600
-                text: qsTrId('id_make_sure_to_be_in_a_private')
-            }
-        }
-        ColumnLayout {
-            Layout.alignment: Qt.AlignBottom
-            Layout.fillWidth: false
-            visible: self.connecting
-            TProgressBar {
-                Layout.alignment: Qt.AlignCenter
-                Layout.minimumWidth: 100
-                indeterminate: self.connecting
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 12
-                font.weight: 600
-                text: qsTrId('id_connecting')
-            }
-        }
-        HSpacer {
-        }
-    }
+    footer: null
+    // footerItem: RowLayout {
+    //     HSpacer {
+    //         Layout.minimumHeight: 100
+    //     }
+    //     ColumnLayout {
+    //         Layout.fillWidth: false
+    //         Layout.alignment: Qt.AlignBottom
+    //         visible: !self.connecting
+    //         Image {
+    //             Layout.alignment: Qt.AlignCenter
+    //             source: 'qrc:/svg2/house.svg'
+    //         }
+    //         Label {
+    //             Layout.alignment: Qt.AlignCenter
+    //             font.pixelSize: 12
+    //             font.weight: 600
+    //             text: qsTrId('id_make_sure_to_be_in_a_private')
+    //         }
+    //     }
+    //     ColumnLayout {
+    //         Layout.alignment: Qt.AlignBottom
+    //         Layout.fillWidth: false
+    //         visible: self.connecting
+    //         TProgressBar {
+    //             Layout.alignment: Qt.AlignCenter
+    //             Layout.minimumWidth: 100
+    //             indeterminate: self.connecting
+    //         }
+    //         Label {
+    //             Layout.alignment: Qt.AlignCenter
+    //             font.pixelSize: 12
+    //             font.weight: 600
+    //             text: qsTrId('id_connecting')
+    //         }
+    //     }
+    //     HSpacer {
+    //     }
+    // }
     Component {
         id: no_attempts_view
         ColumnLayout {

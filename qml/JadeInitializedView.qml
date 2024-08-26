@@ -4,7 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-ColumnLayout {
+VFlickable {
     signal loginClicked()
     signal updateClicked()
     required property JadeDevice device
@@ -13,8 +13,6 @@ ColumnLayout {
     id: self
     enabled: (self.device?.connected ?? false) && self.device.status === JadeDevice.StatusIdle
     spacing: 10
-    VSpacer {
-    }
     Item {
         Layout.alignment: Qt.AlignCenter
         Layout.preferredWidth: 352
@@ -43,7 +41,5 @@ ColumnLayout {
         enabled: (self.debug || self.latestFirmware) && self.device.status === JadeDevice.StatusIdle
         text: qsTrId('id_firmware_update')
         onClicked: self.updateClicked()
-    }
-    VSpacer {
     }
 }
