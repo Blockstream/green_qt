@@ -77,7 +77,13 @@ void WatchOnlyLoginController::update()
 {
     if (m_wallet) {
         auto watchonly_data = qobject_cast<WatchonlyData*>(m_wallet->login());
-        setValid(watchonly_data && watchonly_data->network() && !m_password.isEmpty());
+        if (!watchonly_data || !watchonly_data->network()) {
+            setValid(false);
+        } else if (!watchonly_data->network()->isElectrum()) {
+            setValid(!m_password.isEmpty());
+        } else {
+            setValid(true);
+        }
     } else {
         setValid(m_network && !m_username.isEmpty() && !m_password.isEmpty());
     }
