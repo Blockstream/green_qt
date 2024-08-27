@@ -1458,9 +1458,12 @@ void ConnectTask::update()
     if (m_status == Status::Ready) {
         if (m_session->useTor() && !m_session->useProxy()) {
             auto tor_session = SessionManager::instance()->torSession();
-            if (tor_session != m_session && !tor_session->isConnected()) {
-                qDebug() << Q_FUNC_INFO << "wait for tor session";
-                return;
+            if (tor_session != m_session) {
+                const auto tag = tor_session->events().value("tor").toObject().value("tag").toString();
+                if (tag != "done") {
+                    qDebug() << Q_FUNC_INFO << "wait for tor session";
+                    return;
+                }
             }
         }
 
