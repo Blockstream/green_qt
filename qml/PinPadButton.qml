@@ -13,7 +13,7 @@ RegularButton {
 
     id: self
     onFocusChanged: {
-        if (self.focus) {
+        if (self.focus && self.focusReason === Qt.TabFocusReason) {
             collapsible.open()
         }
     }
