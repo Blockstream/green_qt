@@ -663,6 +663,15 @@ LoginTask::LoginTask(const QJsonObject& details, const QJsonObject& hw_device, S
 {
 }
 
+void LoginTask::update()
+{
+    if (m_session->m_ready) {
+        setStatus(Status::Finished);
+    } else {
+        AuthHandlerTask::update();
+    }
+}
+
 bool LoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     auto hw_device = Json::fromObject(m_hw_device);

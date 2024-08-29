@@ -339,6 +339,7 @@ public:
     LoginTask(const QString& username, const QString& password, Session* session);
     LoginTask(const QJsonObject& details, const QJsonObject& hw_device, Session* session);
 private:
+    void update() override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
 private:
