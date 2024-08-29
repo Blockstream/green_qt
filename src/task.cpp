@@ -610,12 +610,12 @@ void RegisterUserTask::handleDone(const QJsonObject& result)
     const auto xpub_hash_id = result.value("result").toObject().value("xpub_hash_id").toString();
     const auto wallet_hash_id = result.value("result").toObject().value("wallet_hash_id").toString();
 
-    m_session->m_ready = true;
     m_session->m_wallet_hash_id = wallet_hash_id;
 
     auto context = m_session->context();
     context->setXPubHashId(xpub_hash_id);
-    setStatus(Status::Finished);
+
+    AuthHandlerTask::handleDone(result);
 }
 
 LoginTask::LoginTask(Session* session)

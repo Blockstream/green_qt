@@ -45,6 +45,7 @@ void SignupController::signup(const QString& deployment)
     group->add(persist_wallet);
     group->add(get_credentials);
 
+    connect_session->then(register_user);
     register_user->then(mnemonic_login);
     mnemonic_login->then(create_wallet);
     create_wallet->then(get_credentials);
