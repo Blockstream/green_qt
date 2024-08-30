@@ -20,9 +20,16 @@ Image {
     Rectangle {
         anchors.fill: parent
         anchors.margins: 1 - self.border
+        color: '#FFF'
+        z: -1
         radius: width / 2
+    }
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: 1 - self.border
         border.width: self.border
         border.color: '#FFF'
         color: 'transparent'
+        radius: width / 2
     }
 }
