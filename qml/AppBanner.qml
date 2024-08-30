@@ -9,11 +9,34 @@ import "util.js" as UtilJS
 Collapsible {
     required property var notifications
 
-    id: self
-    collapsed: {
+    readonly property var items: {
+        const items = []
         for (let i = 0; i < self.notifications.length; i++) {
             const notification = self.notifications[i]
-            if (!self.notifications[i].dismissed) return false
+            let delegate
+            if (notification instanceof UpdateNotification) {
+                delegate = update_banner
+            } else if (notification instanceof OutageNotification) {
+                delegate = outage_banner
+            } else if (notification instanceof TwoFactorExpiredNotification) {
+                delegate = two_factor_expired_banner
+            } else if (notification instanceof SystemNotification) {
+                delegate = system_message_banner
+            } else if (notification instanceof AnalyticsAlertNotification) {
+                delegate = analytics_alert_banner
+            }
+            if (delegate) {
+                items.push({ delegate, notification })
+            }
+        }
+        return items
+    }
+
+    id: self
+    collapsed: {
+        for (let i = 0; i < self.items.length; i++) {
+            const notification = self.items[i].notification
+            if (!notification.dismissed) return false
         }
         return true
     }
@@ -33,25 +56,12 @@ Collapsible {
         width: self.width - 40
         implicitHeight: 108
         Repeater {
-            model: self.notifications
+            model: self.items
             delegate: Loader {
-                readonly property Notification _notification: loader.modelData
+                readonly property Notification _notification: loader.modelData.notification
                 required property var modelData
                 id: loader
-                sourceComponent: {
-                    const notification = loader._notification
-                    if (notification instanceof UpdateNotification) {
-                        return update_banner
-                    } else if (notification instanceof OutageNotification) {
-                        return outage_banner
-                    } else if (notification instanceof TwoFactorExpiredNotification) {
-                        return two_factor_expired_banner
-                    } else if (notification instanceof SystemNotification) {
-                        return system_message_banner
-                    } else if (notification instanceof AnalyticsAlertNotification) {
-                        return analytics_alert_banner
-                    }
-                }
+                sourceComponent: loader.modelData.delegate
             }
         }
     }
@@ -59,10 +69,10 @@ Collapsible {
     ColumnLayout {
         anchors.verticalCenter: parent.verticalCenter
         spacing: 4
-        visible: self.notifications.length > 1
+        visible: self.items.length > 1
         x: self.width - 14
         Repeater {
-            model: self.notifications
+            model: self.items
             delegate: Rectangle {
                 color: '#fff'
                 opacity: index === stack_layout.currentIndex ? 1 : 0.6
