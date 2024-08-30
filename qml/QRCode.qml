@@ -26,7 +26,6 @@ Item {
             smooth: false
             mipmap: false
             cache: false
-            sourceSize: Qt.size(Math.max(1, img.width), Math.max(1, img.height))
             source: `image://zxing/${encodeURI(self.text || '')}`
         }
     }
