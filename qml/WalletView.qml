@@ -14,7 +14,7 @@ MainPage {
     property Wallet wallet
     property Device device
     readonly property Account currentAccount: stack_view.currentItem?.currentAccount ?? null
-    readonly property var notifications: UtilJS.flatten(self.wallet?.context?.notifications, stack_view.currentItem?.notifications, login_alert.notification)
+    readonly property var notifications: UtilJS.flatten(stack_view.currentItem?.notifications, login_alert.notification)
 
     function send(url) {
         if (stack_view.currentItem instanceof OverviewPage) {

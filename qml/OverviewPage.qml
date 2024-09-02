@@ -16,6 +16,7 @@ Page {
     required property Context context
     readonly property Wallet wallet: self.context.wallet
     property Account currentAccount: null
+    readonly property var notifications: self.context?.notifications
 
     Connections {
         target: self.context
