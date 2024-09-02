@@ -22,6 +22,8 @@ NetworkManager::NetworkManager() : QObject(nullptr)
     auto networks = get_networks();
     for (auto key : networks.value("all_networks").toArray()) {
         auto data = networks.value(key.toString()).toObject();
+        // discard signet network for now
+        if (data.value("network").toString().contains("signet")) continue;
         m_networks.append(new Network(data, this));
     }
 }
