@@ -377,7 +377,7 @@ QJsonObject device_details_from_device(Device* device);
 void Context::loginNetwork(TaskGroup *group, Network *network)
 {
     auto session = getOrCreateSession(network);
-    auto connect_session = new ConnectTask(5000, session);
+    auto connect_session = new ConnectTask(10000, session);
     LoginTask* login{nullptr};
 
     if (m_device) {

@@ -1444,6 +1444,7 @@ bool SetUnspentOutputsStatusTask::call(GA_session *session, GA_auth_handler **au
 
 ConnectTask::ConnectTask(Session* session)
     : SessionTask(session)
+    , m_timeout(60000)
 {
 }
 
@@ -1461,7 +1462,7 @@ void ConnectTask::update()
             if (tor_session != m_session) {
                 const auto tag = tor_session->events().value("tor").toObject().value("tag").toString();
                 if (tag != "done") {
-                    qDebug() << Q_FUNC_INFO << "wait for tor session";
+                    qDebug() << Q_FUNC_INFO << m_session->network()->id() << "wait for tor session";
                     return;
                 }
             }
@@ -1477,6 +1478,7 @@ void ConnectTask::update()
         if (m_timeout > 0) {
             QTimer::singleShot(m_timeout, this, [=] {
                 if (m_status == Status::Active && !m_session->isConnected()) {
+                    qDebug() << Q_FUNC_INFO << m_session->network()->id() << "timeout after" << m_timeout;
                     setError("timeout error");
                     setStatus(Status::Failed);
                 }
