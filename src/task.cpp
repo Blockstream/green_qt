@@ -1501,9 +1501,7 @@ void ConnectTask::update()
                 return;
             }
             setError(error);
-            if (error.isEmpty()) {
-                setStatus(Status::Finished);
-            } else {
+            if (!error.isEmpty()) {
                 setStatus(Status::Failed);
             }
         });
