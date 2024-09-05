@@ -109,6 +109,7 @@ QJsonObject Transaction::destination() const
     for (int i = 0; i < outputs.size(); i++) {
         const auto output = outputs.at(i).toObject();
         if (!output.contains("satoshi")) continue;
+        if (type() == Type::Redeposit) return output;
         if (m_account->network()->isLiquid()) {
             if (output.value("script").toString().isEmpty()) continue;
             if (output.value("is_internal").toBool()) continue;
