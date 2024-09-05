@@ -23,40 +23,14 @@ WalletDialog {
             id: view
             device: self.device
             onUpdateFailed: stack_view.pop()
-            onUpdateFinished: stack_view.replace(completed_view)
+            onUpdateFinished: stack_view.replace(firmware_updated_page)
         }
     }
     Component {
-        id: completed_view
-        ColumnLayout {
-            VSpacer {
-            }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/png/completed.png'
-            }
-            VSpacer {
-            }
-            Item {
-                Layout.alignment: Qt.AlignCenter
-                Layout.bottomMargin: 60
-                Layout.minimumWidth: 400
-                Layout.minimumHeight: 4
-                Rectangle {
-                    anchors.centerIn: parent
-                    implicitHeight: 2
-                    radius: 1
-                    color: '#00B45A'
-                    NumberAnimation on implicitWidth {
-                        easing.type: Easing.OutCubic
-                        from: 300
-                        to: 0
-                        duration: 2000
-                        onFinished: stack_view.pop()
-                    }
-                    opacity: Math.min(1, implicitWidth / 20)
-                }
-            }
+        id: firmware_updated_page
+        JadeFirmwareUpdatedPage {
+            header: null
+            onDone: self.close()
         }
     }
 }
