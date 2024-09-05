@@ -249,6 +249,7 @@ SET(QML_FILES
     qml/PhoneField.qml
     qml/UpdateUnspentsDrawer.qml
     qml/VFlickable.qml
+    qml/JadeFirmwareUpdatedPage.qml
 )
 
 if (GREEN_NO_RESOURCES)

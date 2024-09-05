@@ -36,7 +36,7 @@ int JadeConnection::send(const QCborMap &msg)
     // qDebug() << "JadeConnection::send() called for cbor object of" << msg.size() << "fields";
 
     if (!isConnected()) {
-        qWarning() << "JadeConnection::send() cannot send to disconnected device";
+        // qWarning() << "JadeConnection::send() cannot send to disconnected device";
         return 0;
     }
 
