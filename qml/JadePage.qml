@@ -128,6 +128,7 @@ StackViewPage {
             anchors.fill: parent
             anchors.leftMargin: self.padding
             anchors.rightMargin: self.padding
+            anchors.bottomMargin: self.padding
             id: stack_view
         }
     }
@@ -159,7 +160,7 @@ StackViewPage {
             device: self.device
             onUpdateFailed: stack_view.pop()
             onUpdateFinished: {
-                stack_view.replace(null, waiting_page, StackView.PushTransition)
+                stack_view.replace(null, rebooting_page, StackView.PushTransition)
                 self.firmwareUpdated()
             }
         }
@@ -226,6 +227,41 @@ StackViewPage {
                 text: qsTrId('id_connecting_to_your_device')
                 wrapMode: Label.WordWrap
             }
+        }
+    }
+
+    Component {
+        id: rebooting_page
+        JadeRebootingView {
+            onRebooted: self.pushView(true)
+        }
+    }
+
+    component JadeRebootingView: ColumnLayout {
+        signal rebooted
+        id: view
+        Timer {
+            running: view.StackView.status === StackView.Active
+            interval: 5000
+            repeat: false
+            onTriggered: view.rebooted()
+        }
+        VSpacer {
+        }
+        BusyIndicator {
+            Layout.alignment: Qt.AlignCenter
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            font.pixelSize: 22
+            font.weight: 600
+            horizontalAlignment: Label.AlignHCenter
+            text: qsTrId('Jade is rebooting')
+            wrapMode: Label.WordWrap
+        }
+        VSpacer {
         }
     }
 }
