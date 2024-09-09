@@ -102,7 +102,7 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
         }
 
         // scan more often when app is active
-        int interval = qGuiApp->applicationState() == Qt::ApplicationActive ? 100 : 10000;
+        int interval = qGuiApp->applicationState() == Qt::ApplicationActive ? 1000 : 10000;
         QTimer::singleShot(interval, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
     });
 }
