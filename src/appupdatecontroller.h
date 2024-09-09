@@ -28,7 +28,6 @@ public:
     AppUpdateController(QObject* parent = nullptr);
     UpdateNotification* notification() const { return m_notification; }
 private slots:
-    void checkForUpdates();
     void checkNow();
 signals:
     void notificationChanged();

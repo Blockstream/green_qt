@@ -190,6 +190,7 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("testnet"));
     g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("jade", "Configure Jade.", "enabled|disabled", "enabled"));
+    g_args.addOption(QCommandLineOption("updatecheckperiod", "Update check Period.", "seconds", "3600"));
     g_args.addPositionalArgument("uri", "BIP21 payment");
     g_args.process(app);
 

@@ -30,15 +30,13 @@ AppUpdateController::AppUpdateController(QObject *parent)
     : QObject(parent)
     , m_timer(new QTimer(this))
 {
-    m_timer->setInterval(12 * 60 * 60 * 1000);
     connect(m_timer, &QTimer::timeout, this, &AppUpdateController::checkNow);
-    checkForUpdates();
-}
 
-void AppUpdateController::checkForUpdates()
-{
-    m_timer->start();
-    checkNow();
+    const auto period = g_args.value("updatecheckperiod").toInt();
+    if (period > 0) {
+        m_timer->setInterval(period * 1000);
+        m_timer->start();
+    }
 }
 
 void AppUpdateController::checkNow()
