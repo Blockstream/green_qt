@@ -9,6 +9,8 @@
 #include "jadeapi.h"
 #include "jadedevice.h"
 
+extern QCommandLineParser g_args;
+
 namespace {
 
 bool FilterSerialPort(const QSerialPortInfo& info)
@@ -37,7 +39,9 @@ bool FilterSerialPort(const QSerialPortInfo& info)
 JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* parent)
     : QObject(parent)
 {
-    scan();
+    if (g_args.value("jade") != "disabled") {
+        scan();
+    }
 }
 
 void JadeDeviceSerialPortDiscoveryAgent::scan()
