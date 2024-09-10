@@ -4,8 +4,9 @@ import QtCore
 import QtQml
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Window
+import QtQuick.Layouts
 import QtQuick.Shapes
+import QtQuick.Window
 
 Item {
     signal codeScanned(string code)
@@ -35,6 +36,7 @@ Item {
     CaptureSession {
         camera: Camera {
             id: camera
+            cameraDevice: camera_selector.cameraDevice
         }
         videoOutput: video_output
     }
@@ -108,5 +110,62 @@ Item {
         to: 100
         visible: controller.progress > 0
         value: controller.progress
+    }
+
+    CameraSelector {
+        id: camera_selector
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.margins: 16
+    }
+
+    component CameraSelector: AbstractButton {
+        property var cameraDevice: media_devices.defaultVideoInput
+        id: self
+        padding: 4
+        enabled: media_devices.videoInputs.length > 1
+        background: Rectangle {
+            color: '#000000'
+            radius: height / 2
+            opacity: 0.5
+        }
+        contentItem: RowLayout {
+            spacing: 4
+            Label {
+                text: self.cameraDevice.description
+                font.pixelSize: 12
+                color: '#FFFFFF'
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/caret-down-white.svg'
+                visible: self.enabled
+            }
+        }
+        MediaDevices {
+            id: media_devices
+            onVideoInputsChanged: self.cameraDevice = media_devices.defaultVideoInput
+        }
+        GMenu {
+            id: devices_menu
+            x: self.width * 0.5 - devices_menu.width * 0.8
+            y: -devices_menu.height - 8
+            pointerX: 0.8
+            pointerY: 1
+            Repeater {
+                model: media_devices.videoInputs
+                delegate: GMenu.Item {
+                    required property var modelData
+                    id: item
+                    hideIcon: true
+                    text: modelData.description
+                    onClicked: {
+                        devices_menu.close()
+                        self.cameraDevice = item.modelData
+                    }
+                }
+            }
+        }
+        onClicked: devices_menu.open()
     }
 }
