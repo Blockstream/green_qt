@@ -171,11 +171,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
 
-    SessionManager session_manager;
-    WalletManager wallet_manager;
-
     Application app(argc, argv);
     KDSingleApplication kdsa("green_qt");
+
+    SessionManager session_manager;
+    WalletManager wallet_manager;
 
     g_args.addHelpOption();
     g_args.addVersionOption();
