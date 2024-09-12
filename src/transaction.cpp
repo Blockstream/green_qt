@@ -125,7 +125,7 @@ void Transaction::updateFromData(const QJsonObject& data)
 {
     if (m_data == data) return;
     m_data = data;
-    emit dataChanged(m_data);
+    emit dataChanged();
 
     setType(ParseType(m_data.value("type").toString()));
     setMemo(m_data.value("memo").toString());
@@ -212,19 +212,19 @@ void Transaction::setType(Transaction::Type type)
 {
     if (m_type == type) return;
     m_type = type;
-    emit typeChanged(m_type);
+    emit typeChanged();
 }
 
 void Transaction::setMemo(const QString& memo)
 {
     if (m_memo == memo) return;
     m_memo = memo;
-    emit memoChanged(m_memo);
+    emit memoChanged();
 }
 
 void Transaction::setSpvStatus(Transaction::SPVStatus spv_status)
 {
     if (m_spv_status == spv_status) return;
     m_spv_status = spv_status;
-    emit spvStatusChanged(m_spv_status);
+    emit spvStatusChanged();
 }

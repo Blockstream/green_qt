@@ -100,11 +100,11 @@ public slots:
     void updateMemo(const QString& memo);
 
 signals:
-    void typeChanged(Transaction::Type type);
+    void typeChanged();
     void amountsChanged();
-    void dataChanged(const QJsonObject& data);
-    void memoChanged(const QString& memo);
-    void spvStatusChanged(Transaction::SPVStatus spv_status);
+    void dataChanged();
+    void memoChanged();
+    void spvStatusChanged();
 
 private:
     void setType(Type type);
