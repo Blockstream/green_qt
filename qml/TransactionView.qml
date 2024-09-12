@@ -16,23 +16,6 @@ StackViewPage {
     readonly property Network network: self.transaction.account.network
     readonly property int confirmations: transactionConfirmations(self.transaction)
     readonly property bool completed: self.confirmations >= (self.network.liquid ? 2 : 6)
-    readonly property var spv: {
-        const value = self.transaction.spv
-        if (value === Transaction.Disabled) return null
-        if (!completed) return null
-        switch (value) {
-        case Transaction.Unconfirmed:
-            return null
-        case Transaction.Verified:
-            return { value, color: constants.g500, icon: 'qrc:/svg/tx-spv-verified.svg', text: qsTrId('id_verified') }
-        case Transaction.NotVerified:
-            return { value, color: constants.r500, icon: 'qrc:/svg/tx-spv-not-verified.svg', text: qsTrId('id_invalid_merkle_proof') }
-        case Transaction.NotLongest:
-            return { value, color: constants.r500, icon: 'qrc:/svg/tx-spv-not-longest.svg', text: qsTrId('id_not_on_longest_chain') }
-        case Transaction.InProgress:
-            return { value, color: constants.g500, icon: 'qrc:/svg/tx-spv-in-progress.svg', text: qsTrId('id_verifying_transactions') }
-        }
-    }
     readonly property var amounts: {
         const amounts = []
         if (self.transaction.type !== Transaction.Redeposit) {
@@ -51,12 +34,6 @@ StackViewPage {
         if (self.confirmations === 0) return '#BB7B00'
         if (self.confirmations > self.network.liquid ? 2 : 6) return '#0A9252'
         return '#929292'
-        // switch (self.transaction.type) {
-        //     case Transaction.Incoming: return '#0A9252'
-        //     case Transaction.Outgoing: return '#FFF'
-        //     case Transaction.Redeposit: return '#929292'
-        //     case Transaction.Mixed: return '#0A9252'
-        // }
     }
 
     AnalyticsView {
@@ -69,9 +46,6 @@ StackViewPage {
     title: qsTrId('id_transaction_details')
     rightItem: RowLayout {
         spacing: 20
-        // CircleButton {
-        //     icon.source: 'qrc:/svg2/qrcode.svg'
-        // }
         ShareButton {
             onClicked: self.transaction.openInExplorer()
         }

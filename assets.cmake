@@ -105,10 +105,6 @@ qt_add_resources(green "images"
         assets/svg/trezor.svg
         assets/svg/twofactor.svg
         assets/svg/tx-check.svg
-        assets/svg/tx-spv-in-progress.svg
-        assets/svg/tx-spv-not-longest.svg
-        assets/svg/tx-spv-not-verified.svg
-        assets/svg/tx-spv-verified.svg
         assets/svg/usbAlt.svg
         assets/svg/warning.svg
         assets/svg/warning_black.svg
