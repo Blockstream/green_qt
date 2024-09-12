@@ -16,23 +16,6 @@ ItemDelegate {
 
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
-    readonly property var spv: {
-        const liquid = transaction.account.network.liquid
-        const unconfirmed = (liquid && confirmations < 2) || (!liquid && confirmations < 6)
-        if (unconfirmed) return null
-        switch (transaction.spv) {
-        case Transaction.Disabled:
-        case Transaction.Unconfirmed:
-        case Transaction.Verified:
-            return null
-        case Transaction.NotVerified:
-            return { icon: 'qrc:/svg/tx-spv-not-verified.svg', text: qsTrId('id_invalid_merkle_proof') }
-        case Transaction.NotLongest:
-            return { icon: 'qrc:/svg/tx-spv-not-longest.svg', text: qsTrId('id_not_on_longest_chain') }
-        case Transaction.InProgress:
-            return { icon: 'qrc:/svg/tx-spv-in-progress.svg', text: qsTrId('id_verifying_transactions') }
-        }
-    }
 
     onClicked: self.transactionClicked(transaction)
 
@@ -128,22 +111,10 @@ ItemDelegate {
         TransactionStatusBadge {
             transaction: self.transaction
             confirmations: self.confirmations
-            visible: confirmations < (transaction.account.network.liquid ? 1 : 6)
-        }
-        Loader {
-            active: spv
-            visible: active
-            sourceComponent: Image {
-                smooth: true
-                mipmap: true
-                fillMode: Image.PreserveAspectFit
-                horizontalAlignment: Image.AlignHCenter
-                source: spv.icon
-                sourceSize.height: 24
-            }
         }
         ColumnLayout {
             Layout.fillWidth: false
+            Layout.minimumWidth: self.width / 5
             spacing: 1
             Repeater {
                 model: {

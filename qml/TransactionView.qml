@@ -126,6 +126,11 @@ StackViewPage {
                     }
                 }
             }
+            TransactionStatusBadge {
+                Layout.alignment: Qt.AlignCenter
+                confirmations: self.confirmations
+                transaction: self.transaction
+            }
             Label {
                 Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 24
@@ -137,16 +142,9 @@ StackViewPage {
                     } else {
                         parts.push('Transaction')
                     }
-                    if (self.completed) {
-                        parts.push('Completed')
-                    } else {
-                        parts.push('Confirming')
-                        parts.push(`(${self.confirmations}/${self.network.liquid ? 2 : 6})`)
-                    }
                     return parts.join(' ')
                 }
             }
-
             TLabel {
                 Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 12
