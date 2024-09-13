@@ -326,7 +326,7 @@ StackViewPage {
                 pointerX: 0.5
                 pointerY: 1
                 GMenu.Item {
-                    enabled: controller.asset.id === controller.account.network.policyAsset
+                    enabled: controller.asset?.id === controller.account.network.policyAsset
                     text: qsTrId('id_manual_coin_selection')
                     icon.source: 'qrc:/svg2/coin_selection.svg'
                     onClicked: {

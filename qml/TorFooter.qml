@@ -10,7 +10,7 @@ Collapsible {
     onShowChanged: self.dismissed = false
     id: self
     animationVelocity: 200
-    contentWidth: pane.width
+    contentWidth: self.width
     contentHeight: pane.height
     collapsed: !self.show || self.dismissed
     Pane {
