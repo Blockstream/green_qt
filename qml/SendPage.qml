@@ -47,7 +47,6 @@ StackViewPage {
         asset: self.asset
         previousTransaction: self.transaction
         recipient.convert.unit: self.account.session.unit
-        feeRate: estimates.fees[24] ?? 0
     }
     AnalyticsView {
         name: 'Send'

@@ -139,6 +139,7 @@ void CreateTransactionController::update()
 
             if (m_previous_transaction) {
                 details["previous_transaction"] = m_previous_transaction->data();
+                details["subaccount"] = int(m_account->pointer());
             } else {
                 QJsonObject addressee;
                 addressee.insert("address", m_recipient->address().trimmed());
@@ -151,7 +152,21 @@ void CreateTransactionController::update()
                 addressees.append(addressee);
                 details["addressees"] = addressees;
             }
-            if (m_fee_rate > 0) details["fee_rate"] = m_fee_rate;
+            if (m_fee_rate > 0) {
+                details["fee_rate"] = m_fee_rate;
+            } else if (m_previous_transaction) {
+                const auto estimates = gdk::get_fee_estimates(session->m_session);
+                const auto previous_fee_rate = m_previous_transaction->data().value("fee_rate");
+                if (estimates.size() > 0) {
+                    const auto fee_rate = previous_fee_rate.toInt() + estimates.at(0).toInt();
+                    details["fee_rate"] = fee_rate;
+                }
+            } else {
+                const auto estimates = gdk::get_fee_estimates(session->m_session);
+                if (estimates.size() > 24) {
+                    details["fee_rate"] = estimates.at(24);
+                }
+            }
             auto task = new CreateTransactionTask(details, session);
             const auto seq = ++m_seq;
             connect(task, &CreateTransactionTask::finished, this, [=] {

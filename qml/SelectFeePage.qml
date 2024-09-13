@@ -13,6 +13,7 @@ StackViewPage {
     required property int size
     required property Transaction previousTransaction
     property bool custom: false
+    readonly property real minimumFeeRate: estimates.fees[0] + (self.previousTransaction?.data?.fee_rate ?? 0)
     id: self
     title: qsTrId('id_network_fee')
     FeeEstimates {
@@ -40,14 +41,14 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20
             text: qsTrId('id_custom')
-            visible: !self.custom
+            visible: !self.custom && !self.previousTransaction
             onClicked: self.custom = true
         }
         Pane {
             Layout.fillWidth: true
             Layout.topMargin: 20
             padding: 20
-            visible: self.custom
+            visible: self.custom || self.previousTransaction
             background: Rectangle {
                 color: '#2F2F35'
                 radius: 5
@@ -63,7 +64,7 @@ StackViewPage {
                 Slider {
                     Layout.fillWidth: true
                     id: slider
-                    from: estimates.fees[0]
+                    from: self.minimumFeeRate
                     to: Math.max(estimates.fees[1], self.previousTransaction?.data?.fee_rate ?? 0) * 2
                     stepSize: 100
                 }
@@ -132,6 +133,7 @@ StackViewPage {
         Layout.fillWidth: true
         id: button
         padding: 20
+        visible: button.rate >= self.minimumFeeRate
         onClicked: self.feeRateSelected(button.rate)
         background: Rectangle {
             color: Qt.lighter('#2F2F35', button.hovered ? 1.1 : 1)
