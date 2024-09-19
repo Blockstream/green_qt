@@ -607,7 +607,20 @@ private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:
     const QJsonObject m_details;
-    QJsonObject m_transaction;
+};
+
+class CreateRedepositTransactionTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    CreateRedepositTransactionTask(const QJsonObject& details, Session* session);
+    QJsonObject transaction() const;
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QJsonObject m_details;
 };
 
 class SignTransactionTask : public AuthHandlerTask

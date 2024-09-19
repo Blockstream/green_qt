@@ -1159,6 +1159,23 @@ QJsonObject CreateTransactionTask::transaction() const
     return m_result.value("result").toObject();
 }
 
+CreateRedepositTransactionTask::CreateRedepositTransactionTask(const QJsonObject &details, Session* session)
+    : AuthHandlerTask(session)
+    , m_details(details)
+{
+}
+
+bool CreateRedepositTransactionTask::call(GA_session *session, GA_auth_handler **auth_handler)
+{
+    const auto rc = GA_create_redeposit_transaction(session, Json::fromObject(m_details).get(), auth_handler);
+    return rc == GA_OK;
+}
+
+QJsonObject CreateRedepositTransactionTask::transaction() const
+{
+    return m_result.value("result").toObject();
+}
+
 SendNLocktimesTask::SendNLocktimesTask(Session* session)
     : SessionTask(session)
 {
