@@ -39,7 +39,6 @@ StackViewPage {
         account: self.account
         asset: self.asset
         recipient.convert.unit: self.account.session.unit
-        feeRate: estimates.fees[24] ?? 0
     }
     AnalyticsView {
         name: 'Send'

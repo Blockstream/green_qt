@@ -110,17 +110,22 @@ void RedepositController::update()
             qDebug() << utxos;
             details["utxos"] = QJsonObject{{ m_asset->id(), utxos }};
         }
-
-        // if (m_fee_rate > 0) details["fee_rate"] = m_fee_rate;
+        if (m_fee_rate > 0) {
+            details["fee_rate"] = m_fee_rate;
+        } else {
+            const auto estimates = gdk::get_fee_estimates(session->m_session);
+            if (estimates.size() > 24) {
+                details["fee_rate"] = estimates.at(24);
+            }
+        }
         auto task = new CreateRedepositTransactionTask(details, session);
         connect(task, &CreateRedepositTransactionTask::finished, this, [=] {
             setTransaction(task->transaction());
             task->deleteLater();
         });
         connect(task, &CreateRedepositTransactionTask::failed, this, [=](const QString& error) {
-            qDebug() << error;
+            setTransaction({{ "error", task->error() }});
             task->deleteLater();
-            setTransaction({});
         });
         dispatcher->add(task);
     }
