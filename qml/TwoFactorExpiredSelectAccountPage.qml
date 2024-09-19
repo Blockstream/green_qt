@@ -81,9 +81,9 @@ StackViewPage {
                     id: delegate
                     account: delegate.modelData
                     onClicked: {
-                        self.StackView.view.push(redeposit_page, {
-                            account: delegate.account,
-                        })
+                        const account = delegate.account
+                        const page = account.network.liquid ? redeposit_liquid_page : redeposit_page
+                        self.StackView.view.push(page, { account })
                     }
                 }
             }
@@ -159,6 +159,14 @@ StackViewPage {
     Component {
         id: redeposit_page
         RedepositPage {
+            context: self.context
+            onClosed: self.closed()
+        }
+    }
+
+    Component {
+        id: redeposit_liquid_page
+        RedepositLiquidPage {
             context: self.context
             onClosed: self.closed()
         }

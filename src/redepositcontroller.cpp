@@ -56,8 +56,6 @@ void RedepositController::update()
 
         if (m_utxos.isNull()) {
             auto task = new GetUnspentOutputsTask(0, false, m_account);
-            const auto block_height = m_account->session()->blockHeight();
-            task->setExpiredAt(block_height);
             connect(task, &Task::finished, this, [=] {
                 m_utxos = task->unspentOutputs();
                 emit utxosChanged();
