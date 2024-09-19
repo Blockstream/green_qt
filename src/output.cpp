@@ -98,9 +98,6 @@ void Output::updateNotifications()
     // skip notification for singlesig accounts
     if (m_account->network()->isElectrum()) return;
 
-    // skip notification for liquid until gdk has better redeposit
-    if (m_account->network()->isLiquid()) return;
-
     auto notification = GetExpiredNotification(m_account->context());
     if (m_expired && !m_spending_transaction) {
         if (!notification) {
