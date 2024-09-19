@@ -111,24 +111,13 @@ void RedepositController::update()
             details["utxos"] = QJsonObject{{ m_asset->id(), utxos }};
         }
 
-        QJsonObject addressee;
-        addressee.insert("address", m_recipient->address().trimmed());
-        addressee.insert("satoshi", m_recipient->convert()->satoshi().toLongLong());
-        addressee.insert("is_greedy", !m_recipient->address().contains("amount") && m_recipient->isGreedy());
-        if (session->network()->isLiquid() && m_recipient->convert()->asset()) {
-            addressee.insert("asset_id", m_recipient->convert()->asset()->id());
-        }
-        QJsonArray addressees;
-        addressees.append(addressee);
-        details["addressees"] = addressees;
-
-        if (m_fee_rate > 0) details["fee_rate"] = m_fee_rate;
-        auto task = new CreateTransactionTask(details, session);
-        connect(task, &CreateTransactionTask::finished, this, [=] {
+        // if (m_fee_rate > 0) details["fee_rate"] = m_fee_rate;
+        auto task = new CreateRedepositTransactionTask(details, session);
+        connect(task, &CreateRedepositTransactionTask::finished, this, [=] {
             setTransaction(task->transaction());
             task->deleteLater();
         });
-        connect(task, &CreateTransactionTask::failed, this, [=](const QString& error) {
+        connect(task, &CreateRedepositTransactionTask::failed, this, [=](const QString& error) {
             qDebug() << error;
             task->deleteLater();
             setTransaction({});
