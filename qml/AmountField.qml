@@ -17,12 +17,20 @@ TTextField {
         self.unit = unit
         self.convert.unit = unit
         const text = self.fiat ? self.convert.fiat.amount : self.convert.format(self.unit).amount
-        self.text = self.readOnly ? text : text.replace(/\s+/g, '')
+        if (self.text.length > 0) {
+            self.text = self.readOnly ? text : text.replace(/\s+/g, '')
+        } else {
+            self.text = ''
+        }
     }
     function setFiat() {
         self.fiat = true
-        const text = self.convert.fiat.amount
-        self.text = self.readOnly ? text : text.replace(/\s+/g, '')
+        if (self.text.length > 0) {
+            const text = self.convert.fiat.amount
+            self.text = self.readOnly ? text : text.replace(/\s+/g, '')
+        } else {
+            self.text = ''
+        }
     }
     function toggleFiat() {
         if (self.fiat) {
@@ -32,7 +40,7 @@ TTextField {
         }
     }
     function setText(value) {
-        self.convert.input = self.fiat ? { fiat: value } : { text: value }
+        self.convert.input = value.length === 0 ? {} : self.fiat ? { fiat: value } : { text: value }
     }
     function clearText() {
         self.clear()
@@ -61,12 +69,18 @@ TTextField {
         }
         function onOutputChanged() {
             if ((self.readOnly || !self.activeFocus) && (!self.fiat || !self.convert.fiat.available) && Object.keys(self.convert.input).length > 0) {
-                self.text = self.convert.output.amount
+                const amount = self.convert.output.amount
+                if (self.text !== '' || amount !== '0') {
+                    self.text = amount
+                }
             }
         }
         function onFiatChanged() {
             if ((self.readOnly || !self.activeFocus) && self.fiat && self.convert.fiat.available) {
-                self.text = self.convert.fiat.amount
+                const amount = self.convert.fiat.amount
+                if (self.text !== '' || amount !== '0') {
+                    self.text = amount
+                }
             }
         }
     }
@@ -109,7 +123,7 @@ TTextField {
                 color: unit_label.enabled && unit_label.hovered ? '#00DD6E' : '#00B45A'
                 font.pixelSize: 16
                 font.weight: 500
-                text: self.fiat ? self.convert.fiat.currency : self.convert.output.unit
+                text: (self.fiat ? self.convert.fiat.currency : self.convert.output.unit) ?? ''
             }
             Image {
                 Layout.alignment: Qt.AlignCenter
