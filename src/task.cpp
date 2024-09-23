@@ -57,6 +57,7 @@ QString Task::type() const
 void Task::setError(const QString& error)
 {
     if (m_error == error) return;
+    qDebug() << Q_FUNC_INFO << type() << error;
     m_error = error;
     emit errorChanged();
 }
@@ -89,6 +90,7 @@ void Task::setStatus(Status status)
     if (m_status == Status::Finished) {
         emit finished();
     } else if (m_status == Status::Failed) {
+        qDebug() << Q_FUNC_INFO << type() << m_error;
         emit failed(m_error);
         for (auto task : m_outputs) {
             task->setStatus(Status::Failed);
