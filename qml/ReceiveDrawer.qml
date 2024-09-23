@@ -56,11 +56,11 @@ WalletDrawer {
                 }
                 PrimaryButton {
                     Layout.fillWidth: true
-                    enabled: !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
+                    enabled: !controller.generating
                     text: qsTrId('id_verify_on_device')
                     visible: controller.context.wallet.login.device?.type === 'jade'
                     onClicked: {
-                        stack_view.push(jade_verify_page, { device: controller.context.device, controller })
+                        stack_view.push(jade_verify_page, { context: self.context, address: controller.address })
                         Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, controller.account))
                     }
                 }

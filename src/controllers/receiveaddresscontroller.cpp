@@ -3,18 +3,11 @@
 #include "asset.h"
 #include "context.h"
 #include "convert.h"
-#include "jadeapi.h"
-#include "jadedevice.h"
 #include "json.h"
 #include "network.h"
 #include "receiveaddresscontroller.h"
 #include "resolver.h"
 #include "task.h"
-#include "util.h"
-#include "wallet.h"
-
-#include <gdk.h>
-#include <wally_wrapper.h>
 
 ReceiveAddressController::ReceiveAddressController(QObject *parent)
     : SessionController(parent)
@@ -51,11 +44,6 @@ void ReceiveAddressController::setAsset(Asset* asset)
     m_convert->setAsset(m_asset);
 }
 
-Address* ReceiveAddressController::address() const
-{
-    return m_account->getOrCreateAddress({{ "address", m_address }});
-}
-
 QString ReceiveAddressController::uri() const
 {
     if (!m_account || m_generating) return {};
@@ -68,17 +56,17 @@ QString ReceiveAddressController::uri() const
         if (network->isLiquid()) {
             const auto asset_id = m_asset ? m_asset->id() : network->policyAsset();
             return QString("%1:%2?assetid=%3&amount=%4")
-                .arg(bip21_prefix, m_address, asset_id, amount);
+                .arg(bip21_prefix, m_address->address(), asset_id, amount);
         } else {
             return QString("%1:%2?amount=%3")
-                .arg(bip21_prefix, m_address, amount);
+                .arg(bip21_prefix, m_address->address(), amount);
         }
     } else if (network->isLiquid() && m_asset && m_asset->id() != network->policyAsset()) {
         const auto asset_id = m_asset->id();
         return QString("%1:%2?assetid=%3")
-            .arg(bip21_prefix, m_address, asset_id);
+            .arg(bip21_prefix, m_address->address(), asset_id);
     } else {
-        return m_address;
+        return m_address->address();
     }
 }
 
@@ -94,17 +82,6 @@ void ReceiveAddressController::setGenerating(bool generating)
     emit generatingChanged(m_generating);
 }
 
-void ReceiveAddressController::setAddressVerification(ReceiveAddressController::AddressVerification address_verification)
-{
-    if (m_address_verification == address_verification) return;
-    m_address_verification = address_verification;
-    emit addressVerificationChanged(m_address_verification);
-
-    if (m_address_verification == ReceiveAddressController::VerificationAccepted) {
-        address()->setVerified(true);
-    }
-}
-
 void ReceiveAddressController::generate()
 {
     if (!m_account) return; // || m_account->context()->isLocked()) return;
@@ -114,10 +91,10 @@ void ReceiveAddressController::generate()
     setGenerating(true);
     const auto get_receive_address = new GetReceiveAddressTask(m_account);
     connect(get_receive_address, &Task::finished, this, [=] {
-        m_result = get_receive_address->result().value("result").toObject();
-        m_address = m_result.value("address").toString();
+        const auto data = get_receive_address->result().value("result").toObject();
+        m_address = m_account->getOrCreateAddress(data);
+
         setGenerating(false);
-        setAddressVerification(VerificationNone);
         emit changed();
         emit m_account->addressGenerated();
     });
@@ -126,80 +103,4 @@ void ReceiveAddressController::generate()
     group->add(get_receive_address);
     dispatcher()->add(group);
     monitor()->add(group);
-}
-
-void ReceiveAddressController::verify()
-{
-    // TODO move device to context, device details stay on wallet
-    const auto context = m_account->context();
-    auto device = qobject_cast<JadeDevice*>(context->device());
-    Q_ASSERT(device);
-    const auto network = m_account->network();
-    if (network->isElectrum()) {
-        verifySinglesig();
-    } else {
-        verifyMultisig();
-    }
-}
-
-void ReceiveAddressController::verifyMultisig() {
-    Q_ASSERT(!m_generating);
-    Q_ASSERT(m_address_verification != VerificationPending);
-    setAddressVerification(VerificationPending);
-    const auto context = m_account->context();
-    const auto network = m_account->network();
-    auto device = qobject_cast<JadeDevice*>(context->device());
-    Q_ASSERT(device);
-    const auto account_recovery_xpub = m_account->json().value("recovery_xpub").toString().toUtf8();
-    const quint32 subaccount = m_result.value("subaccount").toDouble();
-    const quint32 branch = m_result.value("branch").toDouble();
-    const quint32 pointer = m_result.value("pointer").toInteger();
-    const quint32 subtype = m_result.value("subtype").toDouble();
-    QByteArray recovery_xpub;
-
-    // Jade expects any 'recoveryxpub' to be at the subact/branch level, consistent with tx outputs - but gdk
-    // subaccount data has the base subaccount recovery xpub - so we apply the branch derivation here.
-    if (!account_recovery_xpub.isEmpty()) {
-        ext_key subactkey, branchkey;
-        char* base58;
-        bip32_key_from_base58(account_recovery_xpub.constData(), &subactkey);
-        bip32_key_from_parent(&subactkey, branch, BIP32_FLAG_KEY_PUBLIC | BIP32_FLAG_SKIP_HASH, &branchkey);
-        bip32_key_to_base58(&branchkey, BIP32_FLAG_KEY_PUBLIC, &base58);
-        recovery_xpub = QByteArray(base58);
-        wally_free_string(base58);
-    }
-
-    if (device->api()) {
-        QPointer<ReceiveAddressController> self{this};
-        device->api()->getReceiveAddress(network->canonicalId(), subaccount, branch, pointer, recovery_xpub, subtype, [=](const QVariantMap& msg) {
-            qDebug() << "jade: verify result" << msg;
-            if (self) self->setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
-        });
-    }
-}
-
-void ReceiveAddressController::verifySinglesig()
-{
-    Q_ASSERT(!m_generating);
-    if (m_address_verification == VerificationPending) return;
-    setAddressVerification(VerificationPending);
-    const auto context = m_account->context();
-    const auto network = m_account->network();
-    auto device = qobject_cast<JadeDevice*>(context->device());
-    Q_ASSERT(device);
-    const auto type = m_account->type();
-    const auto path = ParsePath(m_result.value("user_path"));
-
-    QString variant;
-    if (type == "p2pkh") variant = "pkh(k)";
-    if (type == "p2wpkh") variant = "wpkh(k)";
-    if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
-    Q_ASSERT(!variant.isEmpty());
-
-    if (device->api()) {
-        QPointer<ReceiveAddressController> self{this};
-        device->api()->getReceiveAddress(network->canonicalId(), variant, path, [=](const QVariantMap& msg) {
-            if (self) self->setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
-        });
-    }
 }

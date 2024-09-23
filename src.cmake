@@ -83,6 +83,7 @@ SET(TARGET_SOURCES
         src/notification.h src/notification.cpp
         src/application.h src/application.cpp
         src/redepositcontroller.h src/redepositcontroller.cpp
+        src/jadeverifyaddresscontroller.h src/jadeverifyaddresscontroller.cpp
 )
 
 if (WIN32)

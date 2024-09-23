@@ -5,36 +5,40 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    required property JadeDevice device
-    required property ReceiveAddressController controller
+    required property Context context
+    required property Address address
     function update() {
-        switch (self.device.state) {
+        switch (self.context.device.state) {
         case JadeDevice.StateReady:
             controller.verify()
             break
         case JadeDevice.StateTemporary:
         case JadeDevice.StateLocked:
-            self.StackView.view.push(unlock_view, { context: controller.context, device: self.device })
+            self.StackView.view.push(unlock_view, { context: self.context, device: self.context.device })
             break
         }
     }
-
+    JadeVerifyAddressController {
+        id: controller
+        context: self.context
+        address: self.address
+    }
+    Timer {
+        running: controller.addressVerification === JadeVerifyAddressController.VerificationAccepted
+        interval: 1000
+        onTriggered: self.StackView.view.pop()
+    }
+    Timer {
+        running: controller.addressVerification === JadeVerifyAddressController.VerificationRejected
+        interval: 1000
+        onTriggered: self.StackView.view.pop()
+    }
     StackView.onActivated: self.update()
     id: self
-    Timer {
-        running: controller.addressVerification === ReceiveAddressController.VerificationAccepted
-        interval: 1000
-        onTriggered: self.StackView.view.pop()
-    }
-    Timer {
-        running: controller.addressVerification === ReceiveAddressController.VerificationRejected
-        interval: 1000
-        onTriggered: self.StackView.view.pop()
-    }
     title: qsTrId('id_verify_on_device')
     footer: BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        running: controller.addressVerification !== ReceiveAddressController.VerificationPending
+        running: controller.addressVerification !== JadeVerifyAddressController.VerificationPending
     }
     contentItem: ColumnLayout {
         VSpacer {
