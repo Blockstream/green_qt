@@ -114,8 +114,6 @@ void initLog()
     const QString log_file(GREEN_LOG_FILE);
     const QString version(GREEN_VERSION);
 
-    QDir(GetDataDir("logs")).removeRecursively();
-
     g_log_file.setFileName(GetDataFile("logs", QString("%1.txt").arg(log_file.isEmpty() ? version : log_file)));
 
     if (QString{"Development"} != GREEN_ENV) {
