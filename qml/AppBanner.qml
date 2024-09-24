@@ -198,6 +198,7 @@ Collapsible {
                     font.pixelSize: 13
                     font.weight: 700
                     text: banner.notification.message
+                    textFormat: Label.RichText
                     wrapMode: Label.WordWrap
                 }
                 PrimaryButton {
@@ -248,6 +249,7 @@ Collapsible {
                         font.weight: 400
                         opacity: 0.75
                         text: notification.alert.message
+                        textFormat: Label.RichText
                         wrapMode: Label.WordWrap
                     }
                 }
