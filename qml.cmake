@@ -172,7 +172,7 @@ SET(QML_FILES
     qml/UsernameField.qml
     qml/PasswordField.qml
     qml/WatchOnlyNetworkPage.qml
-    qml/FreshWalletDialog.qml
+    qml/FreshWalletView.qml
     qml/AbstractDrawer.qml
     qml/WalletsDrawer.qml
     qml/AlreadyRestoredPage.qml

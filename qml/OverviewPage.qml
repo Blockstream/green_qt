@@ -327,7 +327,7 @@ Page {
 
     contentItem: StackLayout {
         currentIndex: self.currentAccount || self.context.watchonly ? 1 : 0
-        FreshWalletDialog {
+        FreshWalletView {
             onCreateAccountClicked: openCreateAccountDrawer()
         }
         SplitView {
