@@ -174,17 +174,6 @@ Page {
         const account = account_list_model.first()
         if (account) {
             self.currentAccount = account
-        } else if (!self.context.watchonly) {
-            Qt.callLater(() => {
-                fresh_wallet_dialog.createObject(self, { context: self.context }).open()
-            })
-        }
-    }
-
-    Component {
-        id: fresh_wallet_dialog
-        FreshWalletDialog {
-            onAccepted: openCreateAccountDrawer({ dismissable: false })
         }
     }
 
@@ -337,6 +326,10 @@ Page {
     }
 
     contentItem: StackLayout {
+        currentIndex: self.currentAccount || self.context.watchonly ? 1 : 0
+        FreshWalletDialog {
+            onCreateAccountClicked: openCreateAccountDrawer()
+        }
         SplitView {
             id: split_view
             focusPolicy: Qt.ClickFocus
@@ -380,64 +373,66 @@ Page {
                     }
                 }
             }
-
-            StackView {
+            Item {
                 SplitView.fillWidth: true
                 SplitView.minimumWidth: self.width / 2
-                id: stack_view
-                initialItem: Item {}
-            }
-        }
-    }
-    MultiEffect {
-        anchors.fill: btns
-        shadowBlur: 1.0
-        shadowColor: 'black'
-        shadowEnabled: true
-        shadowVerticalOffset: 10
-        source: btns
-        blurMax: 64
-    }
-    MultiEffect {
-        anchors.fill: btns
-        shadowBlur: 1.0
-        shadowColor: 'black'
-        shadowEnabled: true
-        shadowVerticalOffset: -5
-        source: btns
-        blurMax: 64
-    }
-    RowLayout {
-        id: btns
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.rightMargin: constants.p3
-        anchors.bottomMargin: constants.p3 * 2
-        spacing: 5
-        PrimaryButton {
-            Layout.minimumWidth: 150
-            icon.source: 'qrc:/svg/send.svg'
-            text: qsTrId('id_send')
-            action: Action {
-                enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
-                shortcut: 'Ctrl+S'
-                onTriggered: openSendDrawer()
-            }
-        }
-        PrimaryButton {
-            Layout.minimumWidth: 150
-            icon.source: 'qrc:/svg/receive.svg'
-            text: qsTrId('id_receive')
-            action: Action {
-                enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
-                shortcut: 'Ctrl+R'
-                onTriggered: {
-                    const context = self.context
-                    const account = self.currentAccount
-                    const network = account.network
-                    const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
-                    const drawer = receive_drawer.createObject(self, { context, account, asset })
-                    drawer.open()
+                StackView {
+                    id: stack_view
+                    anchors.fill: parent
+                    initialItem: Item {}
+                }
+                MultiEffect {
+                    anchors.fill: btns
+                    shadowBlur: 1.0
+                    shadowColor: 'black'
+                    shadowEnabled: true
+                    shadowVerticalOffset: 10
+                    source: btns
+                    blurMax: 64
+                }
+                MultiEffect {
+                    anchors.fill: btns
+                    shadowBlur: 1.0
+                    shadowColor: 'black'
+                    shadowEnabled: true
+                    shadowVerticalOffset: -5
+                    source: btns
+                    blurMax: 64
+                }
+                RowLayout {
+                    id: btns
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    anchors.rightMargin: constants.p3
+                    anchors.bottomMargin: constants.p3 * 2
+                    spacing: 5
+                    PrimaryButton {
+                        Layout.minimumWidth: 150
+                        icon.source: 'qrc:/svg/send.svg'
+                        text: qsTrId('id_send')
+                        action: Action {
+                            enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
+                            shortcut: 'Ctrl+S'
+                            onTriggered: openSendDrawer()
+                        }
+                    }
+                    PrimaryButton {
+                        Layout.minimumWidth: 150
+                        icon.source: 'qrc:/svg/receive.svg'
+                        text: qsTrId('id_receive')
+                        action: Action {
+                            enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
+                            shortcut: 'Ctrl+R'
+                            onTriggered: {
+                                const context = self.context
+                                const account = self.currentAccount
+                                const network = account.network
+                                const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
+                                const drawer = receive_drawer.createObject(self, { context, account, asset })
+                                drawer.open()
+                            }
+                        }
+                    }
                 }
             }
         }

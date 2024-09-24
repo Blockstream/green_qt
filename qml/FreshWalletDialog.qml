@@ -2,12 +2,13 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-WalletDialog {
+Pane {
+    signal createAccountClicked
     id: self
     background: null
-    header: null
-    closePolicy: Popup.NoAutoClose
     contentItem: ColumnLayout {
+        VSpacer {
+        }
         Image {
             Layout.alignment: Qt.AlignCenter
             source: 'qrc:/svg2/fresh_wallet.svg'
@@ -39,7 +40,9 @@ WalletDialog {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 200
             text: qsTrId('id_create_account')
-            onClicked: self.accept()
+            onClicked: self.createAccountClicked()
+        }
+        VSpacer {
         }
     }
 }

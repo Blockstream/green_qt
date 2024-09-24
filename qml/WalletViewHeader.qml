@@ -63,6 +63,7 @@ MainPageHeader {
         }
         GMenu.Item {
             text: qsTrId('id_settings')
+            enabled: self.currentAccount
             icon.source: 'qrc:/svg/wallet-settings.svg'
             onClicked: {
                 menu.close()
@@ -85,7 +86,7 @@ MainPageHeader {
         GMenu.Item {
             text: qsTrId('id_refresh')
             icon.source: 'qrc:/svg2/refresh.svg'
-            enabled: !(self.context?.dispatcher.busy ?? false)
+            enabled: self.currentAccount && !(self.context?.dispatcher.busy ?? false)
             onClicked: {
                 menu.close()
                 self.context.refreshAccounts()
@@ -283,6 +284,7 @@ MainPageHeader {
             }
         }
         HPane {
+            visible: self.currentAccount
             contentItem: RowLayout {
                 id: toolbar
                 Layout.fillWidth: true
