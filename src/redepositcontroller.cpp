@@ -152,25 +152,35 @@ void RedepositController::setTransaction(const QJsonObject& transaction)
     const auto addressees = m_transaction.value("addressees").toArray();
     if (addressees.size() > 0) {
         const auto addressee = addressees.at(0).toObject();
-        const auto bip21_params = addressee.value("bip21-params").toObject();
+        if (m_account && !m_account->network()->isLiquid()) {
+            setAddress(m_account->getOrCreateAddress(addressee));
+        }
         if (addressee.contains("bip21-params")) {
-        if (bip21_params.contains("assetid")) {
-            const auto asset_id = bip21_params.value("assetid").toString();
-            const auto asset = m_context->getOrCreateAsset(asset_id);
-            setAsset(asset);
-        }
-        const auto address = addressee.value("address").toString();
-        if (!address.isEmpty()) {
-            m_recipient->setAddress(address);
-        }
-        if (bip21_params.contains("amount")) {
-            m_recipient->setGreedy(false);
-            const auto satoshi = addressee.value("satoshi").toInteger();
-            m_recipient->convert()->setInput({{ "satoshi", satoshi }});
-        }
+            const auto bip21_params = addressee.value("bip21-params").toObject();
+            if (bip21_params.contains("assetid")) {
+                const auto asset_id = bip21_params.value("assetid").toString();
+                const auto asset = m_context->getOrCreateAsset(asset_id);
+                setAsset(asset);
+            }
+            const auto address = addressee.value("address").toString();
+            if (!address.isEmpty()) {
+                m_recipient->setAddress(address);
+            }
+            if (bip21_params.contains("amount")) {
+                m_recipient->setGreedy(false);
+                const auto satoshi = addressee.value("satoshi").toInteger();
+                m_recipient->convert()->setInput({{ "satoshi", satoshi }});
+            }
         } else if (addressee.value("is_greedy").toBool()) {
             const auto satoshi = addressee.value("satoshi").toInteger();
             m_recipient->convert()->setInput({{ "satoshi", satoshi }});
         }
     }
+}
+
+void RedepositController::setAddress(Address* address)
+{
+    if (m_address == address) return;
+    m_address = address;
+    emit addressChanged();
 }

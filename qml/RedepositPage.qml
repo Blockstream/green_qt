@@ -79,6 +79,16 @@ StackViewPage {
                 readonly: true
             }
             FieldTitle {
+                text: qsTrId('id_address')
+            }
+            AddressField {
+                readOnly: true
+                text: controller.address?.address ?? ''
+            }
+            AddressVerifiedBadge {
+                address: controller.address
+            }
+            FieldTitle {
                 text: qsTrId('id_amount')
             }
             AmountField {
@@ -168,6 +178,17 @@ StackViewPage {
     }
     footerItem: RowLayout {
         spacing: 20
+        RegularButton {
+            Layout.fillWidth: true
+            enabled: controller.address && !controller.address.verified
+            implicitWidth: 0
+            text: qsTrId('id_verify_on_device')
+            visible: controller.context.wallet.login.device?.type === 'jade'
+            onClicked: {
+                stack_view.push(jade_verify_page, { context: self.context, address: controller.address })
+                Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, controller.account))
+            }
+        }
         PrimaryButton {
             Layout.fillWidth: true
             enabled: (controller.transaction?.transaction?.length ?? 0) > 0
@@ -196,6 +217,12 @@ StackViewPage {
                 controller.asset = asset
                 controller.coins = []
             }
+        }
+    }
+
+    Component {
+        id: jade_verify_page
+        JadeVerifyAddressPage {
         }
     }
 

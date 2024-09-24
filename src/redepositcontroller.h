@@ -4,6 +4,8 @@
 #include "green.h"
 #include "createtransactioncontroller.h"
 
+Q_MOC_INCLUDE("address.h")
+
 class RedepositController : public Controller
 {
     Q_OBJECT
@@ -14,6 +16,7 @@ class RedepositController : public Controller
     Q_PROPERTY(QVariantList coins READ coins WRITE setCoins NOTIFY coinsChanged)
     Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY feeRateChanged)
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
+    Q_PROPERTY(Address* address READ address NOTIFY addressChanged)
     QML_ELEMENT
 public:
     RedepositController(QObject* parent = nullptr);
@@ -29,6 +32,8 @@ public:
     void setFeeRate(int fee_rate);
     QJsonObject transaction() const { return m_transaction; }
     void setTransaction(const QJsonObject& transaction);
+    Address* address() const { return m_address; }
+    void setAddress(Address* address);
 public slots:
     void invalidate();
 signals:
@@ -38,6 +43,7 @@ signals:
     void coinsChanged();
     void feeRateChanged();
     void transactionChanged();
+    void addressChanged();
 protected:
     void update();
     void timerEvent(QTimerEvent* event) override;
@@ -50,6 +56,7 @@ private:
     int m_fee_rate{0};
     QJsonValue m_utxos;
     QJsonObject m_transaction;
+    Address* m_address{nullptr};
 };
 
 #endif // GREEN_REDEPOSITCONTROLLER_H
