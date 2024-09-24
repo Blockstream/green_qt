@@ -336,55 +336,57 @@ Page {
         }
     }
 
-    contentItem: SplitView {
-        id: split_view
-        focusPolicy: Qt.ClickFocus
-        handle: Item {
-            implicitWidth: constants.p3
-            implicitHeight: parent.height
-        }
+    contentItem: StackLayout {
+        SplitView {
+            id: split_view
+            focusPolicy: Qt.ClickFocus
+            handle: Item {
+                implicitWidth: constants.p3
+                implicitHeight: parent.height
+            }
 
-        Page {
-            SplitView.preferredWidth: 380
-            SplitView.minimumWidth: 200
-            SplitView.maximumWidth: self.width / 3
-            id: side_view
-            padding: 0
-            background: null
-            contentItem: TListView {
-                id: accounts_list
-                model: account_list_model
-                currentIndex: 0
-                spacing: 5
-                delegate: AccountDelegate {
-                    onAccountClicked: account => self.currentAccount = account
-                    onAccountArchived: account => {
-                        let i = Math.max(0, account_list_model.indexOf(account) - 1)
-                        if (account_list_model.accountAt(i) === account) i++
-                        self.currentAccount = account_list_model.accountAt(i)
+            Page {
+                SplitView.preferredWidth: 380
+                SplitView.minimumWidth: 200
+                SplitView.maximumWidth: self.width / 3
+                id: side_view
+                padding: 0
+                background: null
+                contentItem: TListView {
+                    id: accounts_list
+                    model: account_list_model
+                    currentIndex: 0
+                    spacing: 5
+                    delegate: AccountDelegate {
+                        onAccountClicked: account => self.currentAccount = account
+                        onAccountArchived: account => {
+                            let i = Math.max(0, account_list_model.indexOf(account) - 1)
+                            if (account_list_model.accountAt(i) === account) i++
+                            self.currentAccount = account_list_model.accountAt(i)
+                        }
+                    }
+                }
+                footer: ColumnLayout {
+                    spacing: 0
+                    Hint1Pane {
+                        Layout.fillWidth: true
+                        id: hint1_page
+                        visible: (side_view.height - accounts_list.contentHeight) > hint1_page.height
+                    }
+                    Hint2Pane {
+                        Layout.fillWidth: true
+                        id: hint2_page
+                        visible: (side_view.height - accounts_list.contentHeight) > (hint1_page.height + 10 + hint2_page.height)
                     }
                 }
             }
-            footer: ColumnLayout {
-                spacing: 0
-                Hint1Pane {
-                    Layout.fillWidth: true
-                    id: hint1_page
-                    visible: (side_view.height - accounts_list.contentHeight) > hint1_page.height
-                }
-                Hint2Pane {
-                    Layout.fillWidth: true
-                    id: hint2_page
-                    visible: (side_view.height - accounts_list.contentHeight) > (hint1_page.height + 10 + hint2_page.height)
-                }
-            }
-        }
 
-        StackView {
-            SplitView.fillWidth: true
-            SplitView.minimumWidth: self.width / 2
-            id: stack_view
-            initialItem: Item {}
+            StackView {
+                SplitView.fillWidth: true
+                SplitView.minimumWidth: self.width / 2
+                id: stack_view
+                initialItem: Item {}
+            }
         }
     }
     MultiEffect {
