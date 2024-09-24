@@ -4,9 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.0.11] - 2024-09-24
 ### Added:
+- Option to verify address on Jade in the redeposit 2FA expired coins flow
 - Camera selector when scanning QR codes
+- SPV status in the transaction details view
+
+### Changed:
+- Updates GDK to 0.73.0
+- Relaxation of serial port scanning for Jade devices
+
+### Fixed:
+- Default fee rate in the bump transaction flow
+- Keep the amount field empty after changing the unit in the send flow
+- Do not block the GUI before while no account is created on fresh wallet
 
 ## [2.0.10] - 2024-09-02
 ### Fixed:
