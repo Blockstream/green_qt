@@ -80,21 +80,6 @@ void RedepositController::update()
             return;
         }
 
-        if (m_recipient->address().trimmed().isEmpty()) {
-            auto task = new GetReceiveAddressTask(m_account);
-            connect(task, &Task::finished, this, [=] {
-                const auto result = task->result().value("result").toObject();
-                const auto address = result.value("address").toString();
-                m_recipient->setAddress(address);
-                m_recipient->setGreedy(true);
-                task->deleteLater();
-                update();
-            });
-            dispatcher->add(task);
-            setTransaction({});
-            return;
-        }
-
         auto session = m_account->session();
 
         QJsonObject details;
