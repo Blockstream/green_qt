@@ -74,7 +74,7 @@ void RedepositController::update()
                 m_utxos = task->unspentOutputs();
                 emit utxosChanged();
                 task->deleteLater();
-                update();
+                invalidate();
             });
             dispatcher->add(task);
             return;
