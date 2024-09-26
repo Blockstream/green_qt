@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QQmlEngine>
 
+Q_MOC_INCLUDE("address.h")
 Q_MOC_INCLUDE("context.h")
 Q_MOC_INCLUDE("network.h")
 Q_MOC_INCLUDE("session.h")
@@ -66,7 +67,7 @@ public:
     void updateBalance();
     Transaction *getOrCreateTransaction(const QJsonObject &data);
     Output *getOrCreateOutput(const QJsonObject &data);
-    Address *getOrCreateAddress(const QJsonObject &data);
+    Q_INVOKABLE Address *getOrCreateAddress(const QJsonObject &data);
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
 protected:
     void timerEvent(QTimerEvent* event) override;

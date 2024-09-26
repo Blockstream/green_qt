@@ -9,6 +9,8 @@ AbstractButton {
     }
     id: self
     focusPolicy: Qt.StrongFocus
+    font.pixelSize: 16
+    font.weight: 700
     padding: 16
     leftPadding: 16
     rightPadding: 16
@@ -43,8 +45,7 @@ AbstractButton {
             visible: image.status === Image.Ready
         }
         Label {
-            font.pixelSize: 16
-            font.weight: 700
+            font: self.font
             horizontalAlignment: Text.AlignHCenter
             text: self.text
             verticalAlignment: Text.AlignVCenter

@@ -11,7 +11,6 @@ StackViewPage {
     signal closed()
     required property Context context
     required property Account account
-    property Asset asset: self.context.getOrCreateAsset('btc')
 
     function pushSelectCoinsPage() {
         self.StackView.view.push(select_coins_page, {
@@ -24,7 +23,7 @@ StackViewPage {
     function pushSelectFeePage() {
         self.StackView.view.push(select_fee_page, {
             account: controller.account,
-            unit: amount_field.unit,
+            unit: controller.account.session.unit,
             size: controller.transaction?.transaction_vsize ?? 0,
             previousTransaction: null
         })
@@ -37,8 +36,6 @@ StackViewPage {
         id: controller
         context: self.context
         account: self.account
-        asset: self.asset
-        recipient.convert.unit: self.account.session.unit
     }
     AnalyticsView {
         name: 'Send'
@@ -46,7 +43,7 @@ StackViewPage {
         segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
     }
     id: self
-    title: qsTrId('Redeposit')
+    title: qsTrId('id_redeposit')
     rightItem: CloseButton {
         onClicked: self.closed()
     }
@@ -68,142 +65,95 @@ StackViewPage {
                 }
             }
             FieldTitle {
-                text: 'Asset & Account'
+                text: qsTrId('id_account__asset')
             }
             AccountAssetField {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 id: account_asset_field
                 account: controller.account
-                asset: controller.asset
+                asset: self.context.getOrCreateAsset('btc')
                 readonly: true
-            }
-            FieldTitle {
-                text: qsTrId('id_address')
-            }
-            AddressField {
-                readOnly: true
-                text: controller.address?.address ?? ''
-            }
-            AddressVerifiedBadge {
-                address: controller.address
-            }
-            FieldTitle {
-                text: qsTrId('id_amount')
-            }
-            AmountField {
-                Layout.bottomMargin: 15
-                Layout.fillWidth: true
-                id: amount_field
-                readOnly: true
-                convert: controller.recipient.convert
-                unit: self.account.session.unit
-                error: {
-                    const error = controller.transaction?.error
-                    if (error === 'id_insufficient_funds') return error
-                    if (error === 'id_invalid_amount') {
-                        if (controller.recipient.convert.result?.sats !== '0') {
-                            return error
-                        }
-                    }
-                }
-            }
-            ErrorPane {
-                Layout.topMargin: -30
-                Layout.bottomMargin: 15
-                error: amount_field.error
-            }
-            Convert {
-                id: fee_convert
-                account: controller.account
-                input: ({ satoshi: String(controller.transaction.fee ?? 0) })
-                unit: controller.account.session.unit
-            }
-            RowLayout {
-                Label {
-                    font.pixelSize: 14
-                    font.weight: 500
-                    text: qsTrId('id_network_fee')
-                }
-                HSpacer {
-                }
-                Label {
-                    font.pixelSize: 14
-                    font.weight: 500
-                    text: fee_convert.output.label
-                }
-            }
-            RowLayout {
-                Layout.bottomMargin: 20
-                Label {
-                    color: '#6F6F6F'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: {
-                        if (controller.feeRate < estimates.fees[24]) {
-                            return qsTrId('id_custom')
-                        }
-                        if (controller.feeRate < estimates.fees[12]) {
-                            return qsTrId('id_4_hours')
-                        }
-                        if (controller.feeRate < estimates.fees[3]) {
-                            return qsTrId('id_2_hours')
-                        }
-                        return qsTrId('id_1030_minutes')
-                    }
-                    visible: !controller.account.network.liquid
-                }
-                LinkButton {
-                    text: qsTrId('id_change_speed')
-                    visible: !controller.account.network.liquid
-                    onClicked: self.pushSelectFeePage()
-                }
-                HSpacer {
-                }
-                Label {
-                    color: '#6F6F6F'
-                    font.pixelSize: 12
-                    font.weight: 400
-                    text: '~ ' + fee_convert.fiat.label
-                }
-            }
-            ErrorPane {
-                error: {
-                    const error = controller.transaction?.error
-                    if (error === 'id_invalid_replacement_fee_rate') return error
-                    if (error === 'Insufficient funds for fees') return error
-                }
             }
         }
     }
-    footerItem: RowLayout {
-        spacing: 20
-        RegularButton {
-            Layout.fillWidth: true
-            enabled: controller.address && !controller.address.verified
-            implicitWidth: 0
-            text: qsTrId('id_verify_on_device')
-            visible: controller.context.wallet.login.device?.type === 'jade'
-            onClicked: {
-                stack_view.push(jade_verify_page, { context: self.context, address: controller.address })
-                Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, controller.account))
+    footerItem: ColumnLayout {
+        Convert {
+            id: fee_convert
+            account: controller.account
+            input: ({ satoshi: String(controller.transaction.fee ?? 0) })
+            unit: controller.account.session.unit
+        }
+        RowLayout {
+            Label {
+                font.pixelSize: 14
+                font.weight: 500
+                text: qsTrId('id_network_fee')
+            }
+            HSpacer {
+            }
+            Label {
+                font.pixelSize: 14
+                font.weight: 500
+                text: fee_convert.output.label
             }
         }
-        PrimaryButton {
-            Layout.fillWidth: true
-            enabled: (controller.transaction?.transaction?.length ?? 0) > 0
-            implicitWidth: 0
-            text: qsTrId('id_next')
-            onClicked: {
-                self.StackView.view.push(send_confirm_page, {
-                    context: self.context,
-                    account: controller.account,
-                    asset: controller.asset,
-                    recipient: controller.recipient,
-                    transaction: controller.transaction,
-                    fiat: amount_field.fiat,
-                    unit: amount_field.unit,
-                })
+        RowLayout {
+            Layout.bottomMargin: 20
+            Label {
+                color: '#6F6F6F'
+                font.pixelSize: 14
+                font.weight: 400
+                text: {
+                    if (controller.feeRate < estimates.fees[24]) {
+                        return qsTrId('id_custom')
+                    }
+                    if (controller.feeRate < estimates.fees[12]) {
+                        return qsTrId('id_4_hours')
+                    }
+                    if (controller.feeRate < estimates.fees[3]) {
+                        return qsTrId('id_2_hours')
+                    }
+                    return qsTrId('id_1030_minutes')
+                }
+                visible: !controller.account.network.liquid
+            }
+            LinkButton {
+                text: qsTrId('id_change_speed')
+                visible: !controller.account.network.liquid
+                onClicked: self.pushSelectFeePage()
+            }
+            HSpacer {
+            }
+            Label {
+                color: '#6F6F6F'
+                font.pixelSize: 12
+                font.weight: 400
+                text: '~ ' + fee_convert.fiat.label
+            }
+        }
+        ErrorPane {
+            error: {
+                const error = controller.transaction?.error
+                if (error === 'id_invalid_replacement_fee_rate') return error
+                if (error === 'Insufficient funds for fees') return error
+                if (error === 'id_insufficient_funds') return error
+            }
+        }
+        RowLayout {
+            spacing: 20
+            PrimaryButton {
+                Layout.fillWidth: true
+                enabled: (controller.transaction?.transaction?.length ?? 0) > 0
+                implicitWidth: 0
+                text: qsTrId('id_next')
+                onClicked: {
+                    self.StackView.view.push(redeposit_confirm_page, {
+                        context: self.context,
+                        account: controller.account,
+                        transaction: controller.transaction,
+                    })
+                }
             }
         }
     }
@@ -221,14 +171,8 @@ StackViewPage {
     }
 
     Component {
-        id: jade_verify_page
-        JadeVerifyAddressPage {
-        }
-    }
-
-    Component {
-        id: send_confirm_page
-        SendConfirmPage {
+        id: redeposit_confirm_page
+        RedepositConfirmPage {
             onClosed: self.closed()
         }
     }

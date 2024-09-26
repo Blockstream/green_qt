@@ -245,6 +245,7 @@ SET(QML_FILES
     qml/TorFooter.qml
     qml/OutagePage.qml
     qml/RedepositPage.qml
+    qml/RedepositConfirmPage.qml
     qml/Countries.qml
     qml/PhoneField.qml
     qml/UpdateUnspentsDrawer.qml
