@@ -84,6 +84,9 @@ void Output::setExpired(bool expired)
     // skip notification for watchonly context
     if (m_account->context()->isWatchonly()) return;
 
+    // skip notification for singlesig accounts
+    if (m_account->network()->isElectrum()) return;
+
     // skip notification for liquid until gdk has better redeposit
     if (m_account->network()->isLiquid()) return;
 
