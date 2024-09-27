@@ -189,6 +189,10 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("jade", "Configure Jade.", "enabled|disabled", "enabled"));
     g_args.addOption(QCommandLineOption("updatecheckperiod", "Update check Period.", "seconds", "3600"));
+    const bool is_production = QStringLiteral("Production") == GREEN_ENV;
+    if (!is_production) {
+        g_args.addOption(QCommandLineOption("mock-send", "Sending a transaction appears to succeed in the GUI but the transaction is not broadcasted to the network"));
+    }
     g_args.addPositionalArgument("uri", "BIP21 payment");
     g_args.process(app);
 

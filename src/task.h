@@ -661,6 +661,7 @@ class SendTransactionTask : public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     SendTransactionTask(Session* session);
+    void update() override;
     void setDetails(const QJsonObject& details);
     QJsonObject transaction() const;
 private:

@@ -1283,6 +1283,17 @@ SendTransactionTask::SendTransactionTask(Session* session)
 {
 }
 
+void SendTransactionTask::update()
+{
+    const bool mock_send = qApp->arguments().contains("--mock-send");
+    if (mock_send) {
+        setStatus(Status::Active);
+        setStatus(Status::Finished);
+    } else {
+        AuthHandlerTask::update();
+    }
+}
+
 void SendTransactionTask::setDetails(const QJsonObject &details)
 {
     m_details = details;
@@ -1290,10 +1301,18 @@ void SendTransactionTask::setDetails(const QJsonObject &details)
 
 QJsonObject SendTransactionTask::transaction() const
 {
-    Q_ASSERT(m_result.value("status") == "done");
-    auto txhash = m_result.value("result").toObject().value("txhash").toString();
     QJsonObject transaction;
-    transaction.insert("txhash", txhash);
+
+    const bool mock_send = qApp->arguments().contains("--mock-send");
+    if (mock_send) {
+        const auto txhash = m_details.value("txhash").toString();
+        transaction.insert("txhash", txhash);
+    } else {
+        Q_ASSERT(m_result.value("status") == "done");
+        const auto txhash = m_result.value("result").toObject().value("txhash").toString();
+        transaction.insert("txhash", txhash);
+    }
+
     return transaction;
 }
 
