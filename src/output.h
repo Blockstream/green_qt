@@ -60,6 +60,7 @@ signals:
     void expiredChanged();
 private slots:
     void updateExpired();
+    void updateNotifications();
 private:
     void setDust(bool dust);
     void setLocked(bool locked);

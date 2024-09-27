@@ -80,13 +80,18 @@ void Output::setExpired(bool expired)
     if (m_expired == expired) return;
     m_expired = expired;
     emit expiredChanged();
+    updateNotifications();
+}
 
 void Output::setSpendingTransaction(Transaction* transaction)
 {
     if (m_spending_transaction == transaction) return;
     m_spending_transaction = transaction;
+    updateNotifications();
 }
 
+void Output::updateNotifications()
+{
     // skip notification for watchonly context
     if (m_account->context()->isWatchonly()) return;
 
@@ -97,7 +102,7 @@ void Output::setSpendingTransaction(Transaction* transaction)
     if (m_account->network()->isLiquid()) return;
 
     auto notification = GetExpiredNotification(m_account->context());
-    if (m_expired) {
+    if (m_expired && !m_spending_transaction) {
         if (!notification) {
             notification = new TwoFactorExpiredNotification(m_account->context());
             m_account->context()->addNotification(notification);
