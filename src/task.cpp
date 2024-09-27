@@ -1305,13 +1305,12 @@ QJsonObject SendTransactionTask::transaction() const
 
     const bool mock_send = qApp->arguments().contains("--mock-send");
     if (mock_send) {
-        const auto txhash = m_details.value("txhash").toString();
-        transaction.insert("txhash", txhash);
+        transaction = m_details;
     } else {
         Q_ASSERT(m_result.value("status") == "done");
-        const auto txhash = m_result.value("result").toObject().value("txhash").toString();
-        transaction.insert("txhash", txhash);
+        transaction = m_result.value("result").toObject();
     }
+    transaction.insert("inputs", m_details.value("transaction_inputs"));
 
     return transaction;
 }
