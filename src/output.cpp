@@ -81,6 +81,12 @@ void Output::setExpired(bool expired)
     m_expired = expired;
     emit expiredChanged();
 
+void Output::setSpendingTransaction(Transaction* transaction)
+{
+    if (m_spending_transaction == transaction) return;
+    m_spending_transaction = transaction;
+}
+
     // skip notification for watchonly context
     if (m_account->context()->isWatchonly()) return;
 

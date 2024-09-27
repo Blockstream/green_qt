@@ -7,8 +7,9 @@
 
 class Account;
 class Asset;
-class Session;
 class Context;
+class Session;
+class Transaction;
 
 class Output : public QObject
 {
@@ -44,6 +45,7 @@ public:
     QString addressType() const { return m_address_type; }
     bool expired() const { return m_expired; }
     void setExpired(bool expired);
+    void setSpendingTransaction(Transaction* transaction);
 signals:
     void dataChanged();
     void assetChanged();
@@ -77,6 +79,7 @@ public:
     bool m_can_be_locked{false};
     QString m_address_type;
     bool m_expired{false};
+    Transaction* m_spending_transaction{nullptr};
 };
 
 #endif // GREEN_OUTPUT_H

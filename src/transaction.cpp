@@ -2,6 +2,7 @@
 #include "asset.h"
 #include "context.h"
 #include "network.h"
+#include "output.h"
 #include "session.h"
 #include "transaction.h"
 #include "util.h"
@@ -155,6 +156,12 @@ void Transaction::updateFromData(const QJsonObject& data)
 
     emit amountsChanged();
     qDeleteAll(amounts);
+
+    const auto inputs = m_data.value("inputs").toArray();
+    for (const auto input : inputs) {
+        auto output = m_account->getOrCreateOutput(input.toObject());
+        output->setSpendingTransaction(this);
+    }
 }
 
 void Transaction::openInExplorer() const
