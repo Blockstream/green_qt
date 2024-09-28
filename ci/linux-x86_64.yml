@@ -1,5 +1,5 @@
 linux-x86_64:build-appimage:
-  image: borgbyte/green_qt:linux-x86_64@sha256:5261a86e540ba9a00b4cbf0de4a54d8ceaaad5297ba0ac2f4f51773c48e7ea05
+  image: borgbyte/green_qt:linux-x86_64@sha256:0f1f5761440b5e3c0f2be1cfa385f636553766a43331307a4f238c155c191f5e
   extends:
     - .build
   tags:
@@ -13,7 +13,7 @@ linux-x86_64:build-appimage:
       - BlockstreamGreen-x86_64.AppImage
 
 linux-x86_64:build-binary:
-  image: borgbyte/green_qt:linux-x86_64@sha256:5261a86e540ba9a00b4cbf0de4a54d8ceaaad5297ba0ac2f4f51773c48e7ea05
+  image: borgbyte/green_qt:linux-x86_64@sha256:0f1f5761440b5e3c0f2be1cfa385f636553766a43331307a4f238c155c191f5e
   variables:
     GREEN_WAYLAND: "ON"
   extends:
