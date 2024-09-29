@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+### Changed:
+- Improve address verification with Jade on redeposit
+- Updates GDK to 0.73.0
+
+### Fixed:
+- Generate redeposit address once
+
 ## [2.0.11] - 2024-09-24
 ### Added:
 - Option to verify address on Jade in the redeposit 2FA expired coins flow
