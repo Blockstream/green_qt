@@ -1287,6 +1287,25 @@ void SendTransactionTask::update()
 {
     const bool mock_send = qApp->arguments().contains("--mock-send");
     if (mock_send) {
+        qDebug() << Q_FUNC_INFO << "inputs";
+        const auto inputs = m_details.value("transaction_inputs").toArray();
+        for (const auto value : inputs) {
+            const auto input = value.toObject();
+            qDebug()
+                << input.value("txhash").toString()
+                << input.value("pt_idx").toInt()
+                << input.value("asset_id").toString()
+                << input.value("satoshi").toInteger();
+        }
+        qDebug() << Q_FUNC_INFO << "outputs";
+        const auto outputs = m_details.value("transaction_outputs").toArray();
+        for (const auto value : outputs) {
+            const auto output = value.toObject();
+            qDebug()
+                << output.value("address").toString()
+                << output.value("asset_id").toString()
+                << output.value("satoshi").toInteger();
+        }
         setStatus(Status::Active);
         setStatus(Status::Finished);
     } else {
