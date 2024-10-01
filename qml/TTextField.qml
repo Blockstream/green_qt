@@ -39,4 +39,5 @@ TextField {
     }
     font.pixelSize: 14
     font.weight: 500
+    font.features: { 'calt': 0, 'zero': 1 }
 }

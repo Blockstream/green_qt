@@ -46,6 +46,7 @@ StackViewPage {
         Label {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
+            font.features: { 'calt': 0, 'zero': 1 }
             font.pixelSize: 14
             font.weight: 500
             horizontalAlignment: Label.AlignHCenter

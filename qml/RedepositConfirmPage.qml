@@ -99,6 +99,7 @@ StackViewPage {
                             Layout.alignment: Qt.AlignVCenter
                             Layout.fillWidth: true
                             Layout.preferredWidth: 0
+                            font.features: { 'calt': 0, 'zero': 1 }
                             horizontalAlignment: Qt.AlignHCenter
                             text: delegate.address.address
                             wrapMode: Label.WrapAnywhere

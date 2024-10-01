@@ -66,6 +66,7 @@ ItemDelegate {
             color: '#929292'
             elide: Text.ElideRight
             text: self.address.address
+            font.features: { 'calt': 0, 'zero': 1 }
             font.pixelSize: 12
             font.weight: 400
         }
