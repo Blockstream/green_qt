@@ -152,6 +152,20 @@ StackViewPage {
 
                         }
                         RowLayout {
+                            Layout.alignment: Qt.AlignCenter
+                            Layout.fillWidth: false
+                            visible: delegate.address.verified
+                            Image {
+                                Layout.alignment: Qt.AlignCenter
+                                source: 'qrc:/svg2/seal-check.svg'
+                            }
+                            Label {
+                                font.pixelSize: 14
+                                font.weight: 400
+                                text: qsTrId('id_verified')
+                            }
+                        }
+                        RowLayout {
                             Convert {
                                 id: convert
                                 account: self.account
@@ -180,6 +194,21 @@ StackViewPage {
                                     text: convert.fiat.label
                                     visible: convert.fiat.available
                                 }
+                            }
+                        }
+                        RegularButton {
+                            Layout.alignment: Qt.AlignCenter
+                            leftPadding: 8
+                            rightPadding: 8
+                            topPadding: 0
+                            bottomPadding: 0
+                            font.pixelSize: 12
+                            font.weight: 400
+                            visible: controller.context?.wallet?.login?.device?.type === 'jade' && !delegate.address.verified
+                            text: qsTrId('id_verify_on_device')
+                            onClicked: {
+                                self.StackView.view.push(jade_verify_page, { context: self.context, address: delegate.address })
+                                Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, self.account))
                             }
                         }
                     }
@@ -313,6 +342,12 @@ StackViewPage {
                 font.weight: 400
                 text: qsTrId('id_fees_are_collected_by_bitcoin')
             }
+        }
+    }
+
+    Component {
+        id: jade_verify_page
+        JadeVerifyAddressPage {
         }
     }
 
