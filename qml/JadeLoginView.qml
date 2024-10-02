@@ -19,7 +19,7 @@ VFlickable {
         onLoginFailed: self.loginFailed()
     }
     TaskPageFactory {
-        title: self.title
+        title: self.title ?? ''
         monitor: controller.monitor
         target: self.StackView.view
     }
