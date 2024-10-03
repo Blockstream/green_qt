@@ -448,6 +448,16 @@ Page {
             border.color: '#1F222A'
             color: Qt.lighter('#161921', hint.hovered ? 1.2 : 1)
             radius: 4
+            Image {
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.margins: 10
+                source: 'qrc:/svg2/share.svg'
+                visible: hint.hovered
+            }
+        }
+        HoverHandler {
+            cursorShape: Qt.PointingHandCursor
         }
     }
 
