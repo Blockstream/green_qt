@@ -314,25 +314,11 @@ StackViewPage {
         spacing: 20
         RegularButton {
             Layout.fillWidth: true
-            id: options_button
+            enabled: controller.asset?.id === controller.account.network.policyAsset
             implicitWidth: 0
-            text: qsTrId('id_advanced_options')
-            onClicked: options_menu.open()
-            GMenu {
-                id: options_menu
-                x: (options_button.width - options_menu.width) * 0.5
-                y: -options_menu.height - 8
-                pointerX: 0.5
-                pointerY: 1
-                GMenu.Item {
-                    enabled: controller.asset?.id === controller.account.network.policyAsset
-                    text: qsTrId('id_manual_coin_selection')
-                    icon.source: 'qrc:/svg2/coin_selection.svg'
-                    onClicked: {
-                        options_menu.close()
-                        self.pushSelectCoinsPage()
-                    }
-                }
+            text: qsTrId('id_manual_coin_selection')
+            onClicked: {
+                self.pushSelectCoinsPage()
             }
         }
         PrimaryButton {
