@@ -85,6 +85,7 @@ TTextField {
         }
     }
 
+    onTextChanged: self.text = self.text.replace(/\s+/g, '')
     onTextEdited: self.setText(self.text)
 
     Layout.fillWidth: true
