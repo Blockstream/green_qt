@@ -57,8 +57,8 @@ StackViewPage {
                 spacing: 10
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    font.pixelSize: 14
-                    font.weight: 400
+                    font.pixelSize: 16
+                    font.weight: 600
                     text: qsTrId('id_set_custom_fee_rate')
                 }
                 Slider {
