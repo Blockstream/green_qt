@@ -126,17 +126,16 @@ ZXingImageProvider::ZXingImageProvider()
 QImage ZXingImageProvider::requestImage(const QString& id, QSize* size, const QSize& requested_size)
 {
     const auto contents = QUrl::fromPercentEncoding(id.toUtf8());
-    if (contents.isEmpty()) {
+    if (requested_size.isValid()) {
         *size = requested_size;
+    } else {
+        *size = QSize(512, 512);
+    }
+    if (contents.isEmpty()) {
         QImage image(*size, QImage::Format_RGB32);
-        image.fill(0xFFFFFFFF);
+        image.fill(0x0);
         return image;
     } else {
-        if (requested_size.isValid()) {
-            *size = requested_size;
-        } else {
-            *size = QSize(512, 512);
-        }
         ZXing::MultiFormatWriter writer(ZXing::BarcodeFormat::QRCode);
         writer.setEccLevel(7);
         writer.setEncoding(ZXing::CharacterSet::UTF8);
