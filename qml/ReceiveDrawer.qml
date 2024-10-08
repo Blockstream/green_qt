@@ -163,14 +163,10 @@ WalletDrawer {
                             AddressVerifiedBadge {
                                 address: controller.address
                             }
-                            Label {
+                            AddressLabel {
                                 Layout.fillWidth: true
                                 Layout.preferredWidth: 0
-                                font.pixelSize: 12
-                                font.weight: 500
-                                horizontalAlignment: Label.AlignHCenter
-                                text: controller.uri
-                                wrapMode: Label.WrapAnywhere
+                                address: controller.address
                             }
                             CopyAddressButton {
                                 Layout.alignment: Qt.AlignCenter
