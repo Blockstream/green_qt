@@ -253,6 +253,7 @@ SET(QML_FILES
     qml/UpdateUnspentsDrawer.qml
     qml/VFlickable.qml
     qml/JadeFirmwareUpdatedPage.qml
+    qml/AddressLabel.qml
 )
 
 if (GREEN_NO_RESOURCES)

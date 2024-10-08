@@ -135,22 +135,11 @@ StackViewPage {
                     }
                     contentItem: ColumnLayout {
                         spacing: 10
-                        Label {
+                        AddressLabel {
                             Layout.alignment: Qt.AlignVCenter
                             Layout.fillWidth: true
                             Layout.preferredWidth: 0
-                            font.features: { 'calt': 0, 'zero': 1 }
-                            horizontalAlignment: Text.AlignJustify
-                            font.family: 'Roboto Mono'
-                            text: {
-                                const parts = delegate.address.address.match(/.{1,4}/g) ?? []
-                                return parts
-                                    .map((part, index) => `<span style="color:${index < 2 || index > parts.length - 3 ? '#00B45A' : '#FFFFFF'}">${part}</span>`)
-                                    .join(' ')
-                            }
-                            textFormat: Label.RichText
-                            wrapMode: Label.WordWrap
-
+                            address: delegate.address
                         }
                         RowLayout {
                             Layout.alignment: Qt.AlignCenter
