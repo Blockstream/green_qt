@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed:
 - Updates Qt to 6.7.3
+- Updates GDK to 0.73.2
 
 ## [2.0.12] - 2024-09-30
 ### Changed:
 - Improve address verification with Jade on redeposit
-- Updates GDK to 0.73.0
+- Updates GDK to 0.73.1
 
 ### Fixed:
 - Generate redeposit address once
