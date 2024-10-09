@@ -123,7 +123,7 @@ WalletDrawer {
                             color: '#222226'
                         }
                         contentItem: ColumnLayout {
-                            spacing: 10
+                            spacing: 20
                             RowLayout {
                                 Item {
                                     Layout.minimumWidth: rhs.width
@@ -131,15 +131,17 @@ WalletDrawer {
                                 QRCode {
                                     Layout.alignment: Qt.AlignHCenter
                                     Layout.fillWidth: true
+                                    Layout.margins: 20
                                     id: qrcode
                                     text: controller.uri
-                                    implicitHeight: 150
-                                    implicitWidth: 150
+                                    implicitHeight: 196
+                                    implicitWidth: 196
                                     radius: 8
+                                    corners: true
                                     AssetIcon {
                                         anchors.centerIn: parent
                                         asset: controller.asset
-                                        size: 32
+                                        size: 64
                                         border: 4
                                         visible: !!controller.asset
                                     }
@@ -153,11 +155,6 @@ WalletDrawer {
                                         icon.source: 'qrc:/svg2/refresh.svg'
                                         onClicked: controller.generate()
                                     }
-                                    CircleButton {
-                                        Layout.alignment: Qt.AlignTop
-                                        icon.source: 'qrc:/svg2/zoom.svg'
-                                        onClicked: stack_view.push(qrcode_page)
-                                    }
                                 }
                             }
                             AddressVerifiedBadge {
@@ -168,10 +165,21 @@ WalletDrawer {
                                 Layout.preferredWidth: 0
                                 address: controller.address
                             }
-                            CopyAddressButton {
-                                Layout.alignment: Qt.AlignCenter
-                                content: controller.uri
-                                text: qsTrId('id_copy_address')
+                            RowLayout {
+                                spacing: 10
+                                ToolButton {
+                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: 0
+                                    icon.source: 'qrc:/svg2/zoom.svg'
+                                    text: qsTrId('id_increase_qr_size')
+                                    onClicked: stack_view.push(qrcode_page)
+                                }
+                                CopyAddressButton {
+                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: 0
+                                    content: controller.uri
+                                    text: qsTrId('id_copy_address')
+                                }
                             }
                         }
                     }
@@ -337,6 +345,42 @@ WalletDrawer {
             }
         }
         onClicked: stack_view.push(address_details_page, { context: self.context, address: delegate.address })
+    }
+    component ToolButton: AbstractButton {
+        id: self
+        padding: 10
+        background: Item {
+            Rectangle {
+                anchors.fill: parent
+                border.width: 2
+                border.color: '#00B45A'
+                color: 'transparent'
+                radius: 8
+                visible: self.visualFocus
+            }
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: self.visualFocus ? 4 : 0
+                color: Qt.alpha(Qt.darker('#13161D'), 0.6)
+                radius: self.visualFocus ? 4 : 8
+            }
+        }
+        contentItem: RowLayout {
+            spacing: 10
+            Item {
+                Layout.minimumHeight: 22
+                Layout.minimumWidth: 22
+                Image {
+                    anchors.centerIn: parent
+                    source: self.icon.source
+                }
+            }
+            Label {
+                font.pixelSize: 12
+                font.weight: 600
+                text: self.text
+            }
+        }
     }
 
     Component {

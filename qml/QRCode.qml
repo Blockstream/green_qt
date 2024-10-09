@@ -5,6 +5,7 @@ Item {
     property string text
     property real radius: 16
     property real border: 8
+    property bool corners: false
     readonly property int size: Math.min(self.width, self.height)
 
     id: self
@@ -28,5 +29,54 @@ Item {
             cache: false
             source: `image://zxing/${encodeURI(self.text || '')}`
         }
+        Clip {
+            anchors.left: parent.left
+            anchors.top: parent.top
+            Border {
+                anchors.left: parent.left
+                anchors.top: parent.top
+            }
+        }
+        Clip {
+            anchors.right: parent.right
+            anchors.top: parent.top
+            Border {
+                anchors.right: parent.right
+                anchors.top: parent.top
+            }
+        }
+        Clip {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            Border {
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+            }
+        }
+        Clip {
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            Border {
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+            }
+        }
+    }
+
+    component Clip: Item {
+        anchors.margins: -12
+        clip: true
+        height: 60
+        visible: self.corners
+        width: 60
+    }
+
+    component Border: Rectangle {
+        width: 120
+        height: 120
+        border.width: 6
+        border.color: '#00B45A'
+        color: 'transparent'
+        radius: self.radius + 12
     }
 }
