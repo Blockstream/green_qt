@@ -1,6 +1,6 @@
-FROM ubuntu:lunar AS base
-COPY ci/windows-x86_64/lunar.sh .
-RUN ./lunar.sh
+FROM ubuntu:24.10 AS base
+COPY ci/windows-x86_64/24.10.sh .
+RUN ./24.10.sh
 ENV PREFIX=/depends/windows-x86_64
 ENV HOST=windows
 ENV ARCH=x86_64

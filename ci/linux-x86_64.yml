@@ -1,5 +1,5 @@
 .linux-x86_64:
-  image: borgbyte/green_qt:linux-x86_64@sha256:879ef3243093aa06b8039bec2a19aa3e23eead4cd165796cf04d8b377dd5b9ea
+  image: borgbyte/green_qt:linux-x86_64@sha256:6e55f87e3dc6c7cc02eeb7eca98703dd25cf373767b12b98bf1f0d980f81aac6
   extends:
     - .build
   tags:
