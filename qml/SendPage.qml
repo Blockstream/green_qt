@@ -224,24 +224,14 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 spacing: 10
                 visible: !controller.previousTransaction
-                ColumnLayout {
-                    Label {
-                        Layout.fillWidth: true
-                        font.features: { 'calt': 0, 'zero': 1 }
-                        font.pixelSize: 14
-                        font.weight: 500
-                        opacity: 0.4
-                        text: qsTrId('id_available') + ' ' + available_convert.output.label
-                    }
-                    Label {
-                        color: '#6F6F6F'
-                        font.features: { 'calt': 0, 'zero': 1 }
-                        font.pixelSize: 14
-                        font.weight: 500
-                        opacity: 0.4
-                        text: '~ ' + available_convert.fiat.label
-                        visible: available_convert.fiat.available
-                    }
+                Label {
+                    Layout.fillWidth: true
+                    font.features: { 'calt': 0, 'zero': 1 }
+                    font.pixelSize: 14
+                    font.weight: 500
+                    opacity: 0.4
+                    text: qsTrId('id_available') + ' ' + (amount_field.fiat ? '~ ' + available_convert.fiat.label : available_convert.output.label)
+                    visible: !amount_field.fiat || available_convert.fiat.available
                 }
                 LinkButton {
                     Layout.alignment: Qt.AlignTop
