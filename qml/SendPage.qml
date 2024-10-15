@@ -193,7 +193,7 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 id: amount_field
-                readOnly: !!controller.previousTransaction || controller.recipient.greedy
+                readOnly: !!controller.previousTransaction
                 convert: controller.recipient.convert
                 unit: self.account.session.unit
                 error: {
@@ -205,6 +205,8 @@ StackViewPage {
                         }
                     }
                 }
+                onCleared: controller.recipient.greedy = false
+                onTextEdited: controller.recipient.greedy = false
             }
             ErrorPane {
                 Layout.topMargin: -30
@@ -221,7 +223,7 @@ StackViewPage {
             RowLayout {
                 Layout.bottomMargin: 15
                 spacing: 10
-                visible: !self.transaction
+                visible: !controller.previousTransaction
                 ColumnLayout {
                     Label {
                         Layout.fillWidth: true
@@ -237,14 +239,13 @@ StackViewPage {
                         visible: available_convert.fiat.available
                     }
                 }
-                Label {
-                    text: qsTrId('id_send_all')
+                LinkButton {
+                    Layout.alignment: Qt.AlignTop
+                    enabled: !controller.recipient.greedy
                     font.pixelSize: 14
                     font.weight: 500
-                }
-                GSwitch {
-                    checked: controller.recipient.greedy
-                    onClicked: controller.recipient.greedy = !controller.recipient.greedy
+                    text: qsTrId('id_send_all')
+                    onClicked: controller.recipient.greedy = true
                 }
             }
             Convert {

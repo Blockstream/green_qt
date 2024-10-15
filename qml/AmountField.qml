@@ -6,6 +6,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 TTextField {
+    signal cleared
     property bool fiat: false
     property bool dynamic: true
     required property string unit
@@ -45,6 +46,7 @@ TTextField {
     function clearText() {
         self.clear()
         self.setText('')
+        self.cleared()
     }
 
     Component.onCompleted: {
