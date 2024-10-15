@@ -98,7 +98,7 @@ TTextField {
     rightPadding: 15 + 7 + unit_label.width
     validator: AmountValidator {
     }
-    horizontalAlignment: TextInput.AlignRight
+    horizontalAlignment: TextInput.AlignHCenter
     font.pixelSize: 24
     CircleButton {
         focusPolicy: Qt.NoFocus
@@ -171,10 +171,11 @@ TTextField {
     }
     Label {
         id: second_label
-        anchors.right: parent.right
-        anchors.rightMargin: self.rightPadding
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenterOffset: (self.leftPadding - self.rightPadding) / 2
         anchors.top: parent.baseline
         anchors.topMargin: 8
+        horizontalAlignment: Label.AlignHCenter
         text: self.fiat ? self.convert.output.label : self.convert.fiat.label
         color: '#FFF'
         opacity: 0.4

@@ -228,12 +228,12 @@ StackViewPage {
                     Label {
                         Layout.fillWidth: true
                         text: qsTrId('id_available') + ' ' + available_convert.output.label
-                        font.pixelSize: 14
+                        font.pixelSize: 11
                         font.weight: 500
                     }
                     Label {
                         color: '#6F6F6F'
-                        font.pixelSize: 14
+                        font.pixelSize: 12
                         font.weight: 500
                         text: '~ ' + available_convert.fiat.label
                         visible: available_convert.fiat.available
