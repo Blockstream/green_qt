@@ -99,7 +99,8 @@ TTextField {
     validator: AmountValidator {
     }
     horizontalAlignment: TextInput.AlignHCenter
-    font.pixelSize: 24
+    font.pixelSize: 30
+    font.weight: 500
     CircleButton {
         focusPolicy: Qt.NoFocus
         anchors.verticalCenter: parent.verticalCenter
@@ -124,7 +125,7 @@ TTextField {
             spacing: 4
             Label {
                 color: unit_label.enabled && unit_label.hovered ? '#00DD6E' : '#00B45A'
-                font.pixelSize: 16
+                font.pixelSize: 18
                 font.weight: 500
                 text: (self.fiat ? self.convert.fiat.currency : self.convert.output.unit) ?? ''
             }
@@ -179,9 +180,10 @@ TTextField {
         text: self.fiat ? self.convert.output.label : self.convert.fiat.label
         color: '#FFF'
         opacity: 0.4
+        font.features: { 'calt': 0, 'zero': 1 }
         font.pixelSize: 12
         font.weight: 500
-        visible: self.convert.fiat.available
+        visible: self.text !== '' && self.convert.fiat.available
         TapHandler {
             enabled: self.dynamic
             cursorShape: Qt.ArrowCursor

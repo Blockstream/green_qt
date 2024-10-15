@@ -227,14 +227,18 @@ StackViewPage {
                 ColumnLayout {
                     Label {
                         Layout.fillWidth: true
-                        text: qsTrId('id_available') + ' ' + available_convert.output.label
-                        font.pixelSize: 11
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 14
                         font.weight: 500
+                        opacity: 0.4
+                        text: qsTrId('id_available') + ' ' + available_convert.output.label
                     }
                     Label {
                         color: '#6F6F6F'
-                        font.pixelSize: 12
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 14
                         font.weight: 500
+                        opacity: 0.4
                         text: '~ ' + available_convert.fiat.label
                         visible: available_convert.fiat.available
                     }
@@ -243,7 +247,7 @@ StackViewPage {
                     Layout.alignment: Qt.AlignTop
                     enabled: !controller.recipient.greedy
                     font.pixelSize: 14
-                    font.weight: 500
+                    font.weight: 600
                     text: qsTrId('id_send_all')
                     onClicked: controller.recipient.greedy = true
                 }
@@ -273,6 +277,7 @@ StackViewPage {
             HSpacer {
             }
             Label {
+                font.features: { 'calt': 0, 'zero': 1 }
                 font.pixelSize: 14
                 font.weight: 500
                 text: fee_convert.output.label
@@ -282,6 +287,7 @@ StackViewPage {
             Layout.bottomMargin: 20
             Label {
                 color: '#6F6F6F'
+                font.features: { 'calt': 0, 'zero': 1 }
                 font.pixelSize: 14
                 font.weight: 400
                 text: {
@@ -306,6 +312,7 @@ StackViewPage {
             HSpacer {
             }
             Label {
+                font.features: { 'calt': 0, 'zero': 1 }
                 color: '#6F6F6F'
                 font.pixelSize: 12
                 font.weight: 400
