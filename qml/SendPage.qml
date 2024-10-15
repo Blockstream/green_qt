@@ -248,96 +248,98 @@ StackViewPage {
                     onClicked: controller.recipient.greedy = true
                 }
             }
-            Convert {
-                id: fee_convert
-                account: controller.account
-                input: ({ satoshi: String(controller.transaction.fee ?? 0) })
-                unit: controller.account.session.unit
-            }
-            RowLayout {
-                Label {
-                    font.pixelSize: 14
-                    font.weight: 500
-                    text: qsTrId('id_network_fee')
-                }
-                HSpacer {
-                }
-                Label {
-                    font.pixelSize: 14
-                    font.weight: 500
-                    text: fee_convert.output.label
-                }
-            }
-            RowLayout {
-                Layout.bottomMargin: 20
-                Label {
-                    color: '#6F6F6F'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: {
-                        if (controller.feeRate < estimates.fees[24]) {
-                            return qsTrId('id_custom')
-                        }
-                        if (controller.feeRate < estimates.fees[12]) {
-                            return qsTrId('id_4_hours')
-                        }
-                        if (controller.feeRate < estimates.fees[3]) {
-                            return qsTrId('id_2_hours')
-                        }
-                        return qsTrId('id_1030_minutes')
-                    }
-                    visible: !controller.account.network.liquid
-                }
-                LinkButton {
-                    text: qsTrId('id_change_speed')
-                    visible: !controller.account.network.liquid
-                    onClicked: self.pushSelectFeePage()
-                }
-                HSpacer {
-                }
-                Label {
-                    color: '#6F6F6F'
-                    font.pixelSize: 12
-                    font.weight: 400
-                    text: '~ ' + fee_convert.fiat.label
-                }
-            }
-            ErrorPane {
-                error: {
-                    const error = controller.transaction?.error
-                    if (error === 'id_invalid_replacement_fee_rate') return error
-                    if (error === 'Insufficient funds for fees') return error
-                }
-            }
         }
     }
-    footerItem: RowLayout {
-        spacing: 20
-        RegularButton {
-            Layout.fillWidth: true
-            enabled: controller.asset?.id === controller.account.network.policyAsset
-            implicitWidth: 0
-            text: qsTrId('id_manual_coin_selection')
-            onClicked: {
-                self.pushSelectCoinsPage()
+    footerItem: ColumnLayout {
+        Convert {
+            id: fee_convert
+            account: controller.account
+            input: ({ satoshi: String(controller.transaction.fee ?? 0) })
+            unit: controller.account.session.unit
+        }
+        ErrorPane {
+            error: {
+                const error = controller.transaction?.error
+                if (error === 'id_invalid_replacement_fee_rate') return error
+                if (error === 'Insufficient funds for fees') return error
             }
         }
-        PrimaryButton {
-            Layout.fillWidth: true
-            enabled: (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
-            implicitWidth: 0
-            text: qsTrId('id_next')
-            onClicked: {
-                self.StackView.view.push(send_confirm_page, {
-                    context: self.context,
-                    account: controller.account,
-                    asset: controller.asset,
-                    recipient: controller.recipient,
-                    transaction: controller.transaction,
-                    fiat: amount_field.fiat,
-                    unit: amount_field.unit,
-                    address_input: address_field.address_input,
-                })
+        RowLayout {
+            Label {
+                font.pixelSize: 14
+                font.weight: 500
+                text: qsTrId('id_network_fee')
+            }
+            HSpacer {
+            }
+            Label {
+                font.pixelSize: 14
+                font.weight: 500
+                text: fee_convert.output.label
+            }
+        }
+        RowLayout {
+            Layout.bottomMargin: 20
+            Label {
+                color: '#6F6F6F'
+                font.pixelSize: 14
+                font.weight: 400
+                text: {
+                    if (controller.feeRate < estimates.fees[24]) {
+                        return qsTrId('id_custom')
+                    }
+                    if (controller.feeRate < estimates.fees[12]) {
+                        return qsTrId('id_4_hours')
+                    }
+                    if (controller.feeRate < estimates.fees[3]) {
+                        return qsTrId('id_2_hours')
+                    }
+                    return qsTrId('id_1030_minutes')
+                }
+                visible: !controller.account.network.liquid
+            }
+            LinkButton {
+                text: qsTrId('id_change_speed')
+                visible: !controller.account.network.liquid
+                onClicked: self.pushSelectFeePage()
+            }
+            HSpacer {
+            }
+            Label {
+                color: '#6F6F6F'
+                font.pixelSize: 12
+                font.weight: 400
+                text: '~ ' + fee_convert.fiat.label
+            }
+        }
+        RowLayout {
+            spacing: 20
+            RegularButton {
+                Layout.fillWidth: true
+                enabled: controller.asset?.id === controller.account.network.policyAsset
+                implicitWidth: 0
+                text: qsTrId('id_manual_coin_selection')
+                onClicked: {
+                    self.pushSelectCoinsPage()
+                }
+            }
+            PrimaryButton {
+                Layout.fillWidth: true
+                enabled: (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
+                implicitWidth: 0
+                text: qsTrId('id_next')
+                onClicked: {
+                    self.StackView.view.push(send_confirm_page, {
+                        context: self.context,
+                        account: controller.account,
+                        asset: controller.asset,
+                        recipient: controller.recipient,
+                        transaction: controller.transaction,
+                        fiat: amount_field.fiat,
+                        unit: amount_field.unit,
+                        address_input: address_field.address_input,
+                    })
+                }
             }
         }
     }
