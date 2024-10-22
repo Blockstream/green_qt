@@ -19,6 +19,25 @@ protected:
     bool event(QEvent *event) override;
 };
 
+class ApplicationController : public QObject
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    ApplicationController(QObject* parent = nullptr);
+    virtual ~ApplicationController();
+public slots:
+    void triggerQuit();
+    void quit();
+signals:
+    void quitRequested();
+    void quitTriggered();
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+private:
+    bool m_quit_triggered{false};
+};
+
 class ZXingDetector : public QObject
 {
     Q_OBJECT

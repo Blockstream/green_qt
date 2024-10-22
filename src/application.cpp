@@ -151,3 +151,39 @@ QImage ZXingImageProvider::requestImage(const QString& id, QSize* size, const QS
         return image;
     }
 }
+
+ApplicationController::ApplicationController(QObject* parent)
+    : QObject(parent)
+{
+    qApp->installEventFilter(this);
+}
+
+ApplicationController::~ApplicationController()
+{
+    qApp->removeEventFilter(this);
+}
+
+void ApplicationController::triggerQuit()
+{
+    qDebug() << Q_FUNC_INFO << m_quit_triggered;
+    m_quit_triggered = true;
+    emit quitTriggered();
+}
+
+void ApplicationController::quit()
+{
+    qDebug() << Q_FUNC_INFO << m_quit_triggered;
+    qApp->removeEventFilter(this);
+    qApp->quit();
+}
+
+bool ApplicationController::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::Quit) {
+        if (!m_quit_triggered) {
+            emit quitRequested();
+            return true;
+        }
+    }
+    return QObject::eventFilter(obj, event);
+}

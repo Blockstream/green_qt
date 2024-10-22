@@ -440,6 +440,7 @@ int main(int argc, char *argv[])
     if (ret != 0) return ret;
     qInfo() << "Enter event loop";
     ret = app.exec();
+    qDebug() << "Event loop quit";
     hid_exit();
     return ret;
 }

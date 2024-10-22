@@ -35,6 +35,16 @@ ApplicationWindow {
         if (env !== 'Production') parts.push(`[${env}]`)
         return parts.join(' - ');
     }
+    onClosing: (event) => {
+        event.accepted = false
+        controller.triggerQuit()
+    }
+    ApplicationController {
+        id: controller
+        onQuitRequested: controller.triggerQuit()
+        onQuitTriggered: stack_view.replace(null, quit_page, StackView.PushTransition)
+    }
+
     MediaDevices {
         id: media_devices
     }
@@ -74,6 +84,16 @@ ApplicationWindow {
     }
 
     Component {
+        id: quit_page
+        Item {
+            StackView.onActivated: {
+                window.hide()
+                controller.quit()
+            }
+        }
+    }
+
+    Component {
         id: splash_page
         SplashPage {
             onTimeout: app_page.active = true
@@ -87,6 +107,7 @@ ApplicationWindow {
         asynchronous: true
         onLoaded: stack_view.replace(null, app_page.item, StackView.PushTransition)
         sourceComponent: AppPage {
+            StackView.onDeactivated: app_page.active = false
         }
     }
 
