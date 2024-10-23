@@ -34,9 +34,14 @@ FROM qt AS kdsa
 COPY tools/buildkdsingleapplication.sh tools/
 RUN tools/buildkdsingleapplication.sh
 
+FROM base AS libserialport
+COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
+RUN tools/buildlibserialport.sh
+
 FROM base
 COPY --from=hidapi /depends /depends
 COPY --from=countly /depends /depends
 COPY --from=zxing /depends /depends
 COPY --from=gdk /depends /depends
 COPY --from=kdsa /depends /depends
+COPY --from=libserialport /depends /depends

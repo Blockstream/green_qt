@@ -13,5 +13,6 @@ fi
 ./tools/buildcountly.sh
 ./tools/buildkdsingleapplication.sh
 ./tools/buildzxing.sh
+./tools/buildlibserialport.sh
 
 rm -rf build

@@ -34,6 +34,7 @@ cmake_print_properties(TARGETS gdk::green_gdk_full PROPERTIES
 )
 
 find_library(COUNTLY_LIB NAMES libcountly.a REQUIRED)
+find_library(LIBSERIALPORT_LIB NAMES libserialport.a REQUIRED)
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
@@ -55,8 +56,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-DNO_ICONV)
 add_definitions(-DGDK_STATIC_DEFINE)
-
-
 
 include(src.cmake)
 
@@ -87,6 +86,7 @@ target_link_libraries(green
     ZXing::Core
     gdk::green_gdk_full
     ${COUNTLY_LIB}
+    ${LIBSERIALPORT_LIB}
     Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
     ${SECURITY}
     hidapi::hidapi
