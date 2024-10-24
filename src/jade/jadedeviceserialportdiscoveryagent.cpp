@@ -9,6 +9,8 @@
 #include "jadeapi.h"
 #include "jadedevice.h"
 
+#include <libserialport.h>
+
 extern QCommandLineParser g_args;
 
 namespace {
@@ -32,6 +34,33 @@ bool FilterSerialPort(const QSerialPortInfo& info)
     if (info.systemLocation().contains("tty")) return false;
 
     return true;
+}
+
+QList<QSerialPortInfo> AvailablePorts()
+{
+    QList<QSerialPortInfo> ports;
+
+    sp_port** port_list;
+    const auto result = sp_list_ports(&port_list);
+    if (result != SP_OK) {
+        qDebug() << Q_FUNC_INFO << "sp_list_ports() failed;";
+        return ports;
+    }
+
+    for (int i = 0; port_list[i]; ++i) {
+        const auto transport = sp_get_port_transport(port_list[i]);
+        if (transport != SP_TRANSPORT_USB) continue;
+
+        const auto path = QString::fromUtf8(sp_get_port_name(port_list[i]));
+        const auto name = QFileInfo(path).fileName();
+
+        QSerialPortInfo port(name);
+        if (FilterSerialPort(port)) continue;
+        ports.append(port);
+    }
+
+    sp_free_port_list(port_list);
+    return ports;
 }
 
 } // namespace
@@ -58,7 +87,7 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
     const auto watcher = new Watcher(this);
 
     watcher->setFuture(QtConcurrent::run([=] {
-        return QSerialPortInfo::availablePorts();
+        return AvailablePorts();
     }));
 
     connect(watcher, &Watcher::finished, this, [=] {
@@ -67,8 +96,6 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
 
         for (const auto &info : watcher->result()) {
             const auto system_location = info.systemLocation();
-
-            if (FilterSerialPort(info)) continue;
 
             auto backend = backends.take(system_location);
             if (!backend) {
