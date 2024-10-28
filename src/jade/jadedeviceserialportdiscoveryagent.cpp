@@ -23,6 +23,11 @@ bool FilterSerialPort(const QSerialPortInfo& info)
     // WCH CH9102F (0x1a86, 0x55d4)
     if (info.vendorIdentifier() == 0x1a86 && info.productIdentifier() == 0x55d4) return false;
 
+    if (info.vendorIdentifier() == 0x0403 && info.productIdentifier() == 0x6001) return false;
+    if (info.vendorIdentifier() == 0x1a86 && info.productIdentifier() == 0x7523) return false;
+    if (info.vendorIdentifier() == 0x303a && info.productIdentifier() == 0x4001) return false;
+    if (info.vendorIdentifier() == 0x303a && info.productIdentifier() == 0x1001) return false;
+
 #ifdef Q_OS_LINUX
     // VMware Inc., happens in Debian VM
     if (info.vendorIdentifier() == 0x15ad) return false;
