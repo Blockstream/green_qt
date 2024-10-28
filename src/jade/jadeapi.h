@@ -25,15 +25,15 @@ public:
     static QVariantMap NULL_COMMITMENT_ENTRY;
 
     // Create JadeAPI on a serial connection
-    explicit JadeAPI(const QSerialPortInfo& deviceInfo, bool relax_write,
-                     QObject *parent = nullptr);
+    explicit JadeAPI(const QSerialPortInfo& deviceInfo, QObject *parent = nullptr);
 
     // Create JadeAPI on a ble connection
     explicit JadeAPI(const QBluetoothDeviceInfo& deviceInfo,
                      QObject *parent = nullptr);
     ~JadeAPI();
 
-    bool relaxWrite() const { return m_relax_write; }
+    bool relaxWrite() const;
+    void setRelaxWrite(bool relax_write);
 
     // Manage underlying connection
     bool isConnected();
@@ -139,7 +139,7 @@ private slots:
 
 private:
     // Private ctor
-    JadeAPI(JadeConnection* connection, bool relax_write, QObject *parent);
+    JadeAPI(JadeConnection* connection, QObject *parent);
 
     // Helper to get a new random id
     int getNewId();
@@ -178,7 +178,6 @@ private:
     QMap<int, int>              m_msg_timeout;
     // Underlying connection - lifetime managed by QObject hierarchy
     JadeConnection              *m_jade;
-    const bool m_relax_write;
     QQueue<QCborMap> m_msg_queue;
     QSet<int> m_msg_inflight;
 

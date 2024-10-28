@@ -37,26 +37,25 @@ static inline QCborMap getRequest(const int id, const QString& method, const QCb
 }
 
 // Create with serial connection
-JadeAPI::JadeAPI(const QSerialPortInfo& deviceInfo, bool relax_write, QObject *parent)
-    : JadeAPI(new JadeSerialImpl(deviceInfo, relax_write, parent), relax_write, parent) // temporary impl owership
+JadeAPI::JadeAPI(const QSerialPortInfo& deviceInfo, QObject *parent)
+    : JadeAPI(new JadeSerialImpl(deviceInfo, parent), parent) // temporary impl owership
 {
     // qDebug() << "JadeAPI::JadeAPI(serial)";
 }
 
 // Create with BLE connection
 JadeAPI::JadeAPI(const QBluetoothDeviceInfo& deviceInfo, QObject *parent)
-    : JadeAPI(new JadeBleImpl(deviceInfo, parent), false, parent) // temporary impl owership
+    : JadeAPI(new JadeBleImpl(deviceInfo, parent), parent) // temporary impl owership
 {
     // qDebug() << "JadeAPI::JadeAPI(ble)";
 }
 
 // Private ctor
-JadeAPI::JadeAPI(JadeConnection *connection, bool relax_write, QObject *parent)
+JadeAPI::JadeAPI(JadeConnection *connection, QObject *parent)
     : QObject(parent),
       m_idgen(QRandomGenerator::securelySeeded()),
       m_responseHandlers(),
-      m_jade(connection),
-      m_relax_write(relax_write)
+      m_jade(connection)
 {
     m_jade->setParent(this);  // take impl ownership here
 
@@ -77,6 +76,16 @@ JadeAPI::~JadeAPI()
 {
     // Disconnect the underlying connection's signals
     disconnect(m_jade, nullptr, this, nullptr);
+}
+
+bool JadeAPI::relaxWrite() const
+{
+    return m_jade->m_relax_write;
+}
+
+void JadeAPI::setRelaxWrite(bool relax_write)
+{
+    m_jade->m_relax_write = relax_write;
 }
 
 // Manage the underlying connection

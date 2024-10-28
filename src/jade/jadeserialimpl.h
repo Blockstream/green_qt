@@ -10,10 +10,8 @@ class JadeSerialImpl : public JadeConnection
 {
     Q_OBJECT
 public:
-    explicit JadeSerialImpl(const QSerialPortInfo& deviceInfo, bool relax_write,
-                            QObject *parent = nullptr);
+    explicit JadeSerialImpl(const QSerialPortInfo& deviceInfo, QObject *parent = nullptr);
     ~JadeSerialImpl();
-
 private slots:
     // Invoked when new serial data arrived
     void onSerialDataReady();
@@ -29,7 +27,6 @@ private:
 
     // Underlying connection - lifetime managed by QObject hierarchy
     QSerialPort *m_serial;
-    const bool m_relax_write;
 };
 
 #endif // JADESERIALIMPL_H

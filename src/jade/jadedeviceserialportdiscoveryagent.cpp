@@ -104,12 +104,7 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
 
             auto backend = backends.take(system_location);
             if (!backend) {
-#ifdef Q_OS_MACOS
-                const bool relax_write = system_location.contains("cu.usbmodem");
-#else
-                const bool relax_write = false;
-#endif
-                backend = new JadeAPI(info, relax_write, this);
+                backend = new JadeAPI(info, this);
                 connect(backend, &JadeAPI::onConnected, this, [=] {
                     // qDebug() << "OPEN OK" << system_location;
                     probe(backend);
@@ -174,7 +169,13 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
             device->setBackend(backend);
             device->setVersionInfo(version_info);
             device->setConnected(true);
-
+#ifdef Q_OS_MACOS
+            const auto system_location = m_backends.key(backend);
+            const auto board_type = version_info.value("BOARD_TYPE", "JADE").toString();
+            if (board_type != "JADE_V2" && system_location.contains("cu.usbmodem")) {
+                backend->setRelaxWrite(true);
+            }
+#endif
             DeviceManager::instance()->addDevice(device);
         }
 

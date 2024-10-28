@@ -5,11 +5,9 @@
 
 #include "jadeserialimpl.h"
 
-JadeSerialImpl::JadeSerialImpl(const QSerialPortInfo &deviceInfo, bool relax_write,
-                               QObject *parent)
-    : JadeConnection(parent),
-      m_serial(new QSerialPort(deviceInfo, this)), // take ownership
-      m_relax_write(relax_write)
+JadeSerialImpl::JadeSerialImpl(const QSerialPortInfo &deviceInfo, QObject *parent)
+    : JadeConnection(parent)
+    , m_serial(new QSerialPort(deviceInfo, this))
 {
     Q_ASSERT(m_serial);
 
@@ -94,12 +92,12 @@ int JadeSerialImpl::writeImpl(const QByteArray &data)
 
     int written = 0;
     while (written != data.length()) {
-        const qint64 wrote = m_serial->write(data.data() + written, qMin(256, data.length() - written));
+        const qint64 wrote = m_serial->write(data.data() + written, data.length());
         if (wrote == -1) {
             disconnectDevice();
             return written;
         } else {
-            m_serial->waitForBytesWritten(100);
+            //m_serial->waitForBytesWritten(100);
             written += wrote;
         }
         if (m_relax_write) QThread::msleep(100);

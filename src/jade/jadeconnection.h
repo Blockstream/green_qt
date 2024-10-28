@@ -21,6 +21,8 @@ public:
     // Send cbor message to Jade
     int send(const QCborMap &msg);
 
+    bool m_relax_write = false;
+
 protected:
     // Called by derived implmentation when new data arrived
     void onDataReceived(const QByteArray &data);
