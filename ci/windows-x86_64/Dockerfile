@@ -38,6 +38,10 @@ FROM base AS libserialport
 COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
 RUN tools/buildlibserialport.sh
 
+FROM base AS crashpad
+COPY tools/buildcrashpad.sh tools/
+RUN tools/buildcrashpad.sh
+
 FROM base
 COPY --from=hidapi /depends /depends
 COPY --from=countly /depends /depends
@@ -45,3 +49,4 @@ COPY --from=zxing /depends /depends
 COPY --from=gdk /depends /depends
 COPY --from=kdsa /depends /depends
 COPY --from=libserialport /depends /depends
+COPY --from=crashpad /depends /depends

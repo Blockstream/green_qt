@@ -14,5 +14,6 @@ fi
 ./tools/buildkdsingleapplication.sh
 ./tools/buildzxing.sh
 ./tools/buildlibserialport.sh
+./tools/buildcrashpad.sh
 
 rm -rf build
