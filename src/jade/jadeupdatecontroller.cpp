@@ -21,6 +21,7 @@ static const QString JADE_FW_SERVER_ONION = "http://vgza7wu4h7osixmrx6e4op5r72ok
 
 static const QString JADE_BOARD_TYPE_JADE = "JADE";
 static const QString JADE_BOARD_TYPE_JADE_V1_1 = "JADE_V1.1";
+static const QString JADE_BOARD_TYPE_JADE_V2 = "JADE_V2";
 static const QString JADE_FEATURE_SECURE_BOOT = "SB";
 
 } // namespace
@@ -187,6 +188,8 @@ void JadeFirmwareCheckController::check()
             type = secure_boot ? "jade" : "jadedev";
         } else if (board_type == JADE_BOARD_TYPE_JADE_V1_1) {
             type = secure_boot ? "jade1.1" : "jade1.1dev";
+        } else if (board_type == JADE_BOARD_TYPE_JADE_V2) {
+            type = secure_boot ? "jade2.0" : "jade2.0dev";
         }
 
         if (!type.isEmpty()) {
@@ -292,9 +295,11 @@ void JadeFirmwareController::check()
 {
     fetch("jade");
     fetch("jade1.1");
+    fetch("jade2.0");
     if (qApp->arguments().indexOf("--debugjade")) {
         fetch("jadedev");
         fetch("jade1.1dev");
+        fetch("jade2.0dev");
     }
 }
 
