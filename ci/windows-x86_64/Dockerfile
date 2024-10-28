@@ -1,4 +1,4 @@
-FROM ubuntu:lunar AS base
+FROM ubuntu:oracular AS base
 COPY ci/windows-x86_64/lunar.sh .
 RUN ./lunar.sh
 ENV PREFIX=/depends/windows-x86_64

@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed:
 - Improvements in receive drawer
-- Updates Qt to 6.7.3
-- Updates GDK to 0.73.2
+- Updates Qt to 6.8.0
+- Updates GDK to 0.73.3
 
 ## [2.0.12] - 2024-09-30
 ### Changed:

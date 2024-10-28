@@ -1,4 +1,4 @@
-FROM ubuntu:focal AS base
+FROM ubuntu:jammy AS base
 COPY ci/linux-x86_64/focal.sh .
 RUN ./focal.sh
 ENV PREFIX=/depends/linux-x86_64
@@ -6,7 +6,6 @@ ENV HOST=linux
 ENV ARCH=x86_64
 ENV PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
 ENV CMAKE_INSTALL_PREFIX=$PREFIX
-RUN ln -s /usr/bin/python3.8 /usr/bin/python3.10 && rm /usr/bin/python3 && ln -s /usr/bin/python3.8 /usr/bin/python3
 
 FROM base AS hidapi
 COPY tools/buildlibusb.sh tools/buildhidapi.sh tools/
