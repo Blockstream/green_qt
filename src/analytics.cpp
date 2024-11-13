@@ -115,7 +115,7 @@ void Analytics::start()
             const bool is_production = QStringLiteral("Production") == GREEN_ENV;
             // update remote config after 60s
             // unless last updated failed or it is not a production build
-            QTimer::singleShot(is_production && success ? 60000 : 1000, this, [=] {
+            QTimer::singleShot(is_production && success ? 60000 : 5000, this, [=] {
                 cly::Countly::getInstance().updateRemoteConfig();
             });
         });
