@@ -270,9 +270,6 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
 {
     if (!active) return;
     active = false;
-    if (!Settings::instance()->isAnalyticsEnabled()) {
-        QFile::remove(GetDataFile("app", "analytics.ini"));
-    }
     QMetaObject::invokeMethod(this, [=] {
         auto& countly = cly::Countly::getInstance();
         countly.stop();
