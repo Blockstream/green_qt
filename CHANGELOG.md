@@ -4,11 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.0.13] - 2024-11-14
+## Added:
+- Support in-app advertisement
+
 ### Changed:
-- Improvements in receive drawer
+- Improvements in send flow
+- Improvements in receive flow
 - Updates Qt to 6.8.0
 - Updates GDK to 0.73.3
+- Improvements in Jade detection
 
 ## [2.0.12] - 2024-09-30
 ### Changed:
