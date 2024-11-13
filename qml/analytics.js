@@ -92,6 +92,12 @@ function segmentationSession(Settings, context) {
     return segmentation
 }
 
+function segmentationPromo(Settings, context, promo) {
+    const segmentation = segmentationSession(Settings, context)
+    segmentation.promo_id = promo.id
+    return segmentation
+}
+
 function segmentationFirmwareUpdate(Settings, device, firmware) {
     const segmentation = {
         segment: 'Desktop',

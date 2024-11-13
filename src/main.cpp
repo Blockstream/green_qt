@@ -4,7 +4,10 @@
 #include <QFontDatabase>
 #include <QIcon>
 #include <QMediaDevices>
+#include <QNetworkAccessManager>
+#include <QNetworkDiskCache>
 #include <QQmlApplicationEngine>
+#include <QQmlNetworkAccessManagerFactory>
 #include <QQuickStyle>
 #include <QQuickWindow>
 #include <QStandardPaths>
@@ -26,6 +29,7 @@
 #include "ga.h"
 #include "httpmanager.h"
 #include "networkmanager.h"
+#include "promo.h"
 #include "sessionmanager.h"
 #include "settings.h"
 #include "util.h"
@@ -161,6 +165,23 @@ QString GetPlatformName()
     if (name == "windows") return name;
     return "linux";
 }
+
+class NetworkAccessManager : public QNetworkAccessManager {
+public:
+    explicit NetworkAccessManager(QObject *parent = nullptr) : QNetworkAccessManager(parent) {
+        auto cache = new QNetworkDiskCache(this);
+        cache->setCacheDirectory(GetDataDir("cache"));
+        cache->setMaximumCacheSize(500 * 1024 * 1024);
+        setCache(cache);
+    }
+};
+
+class QmlNetworkAccessManagerFactory : public QQmlNetworkAccessManagerFactory {
+public:
+    QNetworkAccessManager *create(QObject *parent) override {
+        return new NetworkAccessManager(parent);
+    }
+};
 
 int main(int argc, char *argv[])
 {
@@ -344,6 +365,7 @@ int main(int argc, char *argv[])
     HttpManager http_manager;
     Analytics analytics;
     AssetManager asset_manager;
+    PromoManager promo_manager;
 
     qInfo() << "Register singletons";
     qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
@@ -355,6 +377,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
     qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
     qmlRegisterSingletonInstance<AssetManager>("Blockstream.Green.Core", 0, 1, "AssetManager", AssetManager::instance());
+    qmlRegisterSingletonInstance<PromoManager>("Blockstream.Green.Core", 0, 1, "PromoManager", PromoManager::instance());
 
     if (g_args.isSet("testnet")) {
         const auto value = g_args.value("testnet");
@@ -382,6 +405,7 @@ int main(int argc, char *argv[])
 
     qInfo() << "Setup QML root context";
     QQmlApplicationEngine engine;
+    engine.setNetworkAccessManagerFactory(new QmlNetworkAccessManagerFactory);
     engine.setBaseUrl(QUrl("qrc:/Blockstream/Green/qml/"));
 
     QDirIterator it(":/i18n", QDirIterator::Subdirectories);

@@ -85,9 +85,102 @@ MainPage {
         padding: 60
         bottomPadding: 20
         contentItem: ColumnLayout {
+            spacing: 20
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/svg2/blockstream_green.svg'
+            }
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: false
+                visible: promos_repeater.count > 0
+                Repeater {
+                    id: promos_repeater
+                    model: {
+                        return [...PromoManager.promos]
+                            .filter(promo => !promo.dismissed)
+                            .filter(promo => promo.data.is_visible)
+                            .filter(promo => promo.data.screens.indexOf('Home') >= 0)
+                            .slice(0, 1)
+                    }
+                    delegate: PromoDelegate {
+                        required property Promo modelData
+                        Layout.minimumWidth: 400
+                        id: delegate
+                        promo: delegate.modelData
+                    }
+                }
+            }
+        }
+    }
+
+    component PromoDelegate: Page {
+        required property Promo promo
+        Component.onCompleted: {
+            Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, null, self.promo))
+        }
+        id: self
+        padding: 16
+        background: Rectangle {
+            border.width: 1
+            border.color: Qt.rgba(1, 1, 1, 0.04)
+            color: '#161921'
+            radius: 8
+            Image {
+                id: image
+                anchors.top: parent.top
+                anchors.topMargin: 16
+                anchors.right: parent.right
+                fillMode: Image.PreserveAspectFit
+                height: 100
+                horizontalAlignment: Image.AlignRight
+                verticalAlignment: Image.AlignTop
+                source: self.promo.data.image_small ?? ''
+                visible: image.status === Image.Ready
+            }
+        }
+        header: RowLayout {
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                Layout.alignment: Qt.AlignVCenter
+                Layout.minimumHeight: image.visible ? image.paintedHeight - 20 : null
+                Layout.margins: 16
+                Layout.maximumWidth: image.visible ? self.width - image.paintedWidth - 40 : null
+                id: title_small
+                font.pixelSize: 14
+                font.weight: 600
+                verticalAlignment: Label.AlignVCenter
+                text: self.promo.data.title_small ?? ''
+                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                visible: title_small.text.length > 0
+            }
+            CloseButton {
+                Layout.margins: 16
+                Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                onClicked: {
+                    Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(Settings, null, self.promo))
+                    self.promo.dismiss()
+                }
+            }
+        }
+        contentItem: ColumnLayout {
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                id: text_small
+                text: self.promo.data.text_small ?? ''
+                textFormat: Label.RichText
+                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                visible: text_small.text.length > 0
+            }
+            PrimaryButton {
+                Layout.fillWidth: true
+                text: self.promo.data.cta_small
+                onClicked: {
+                    Qt.openUrlExternally(self.promo.data.link)
+                    Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, null, self.promo))
+                }
             }
         }
     }

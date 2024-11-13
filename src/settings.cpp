@@ -185,6 +185,15 @@ void Settings::toggleRememberDevices()
     setRememberDevices(!m_remember_devices);
 }
 
+void Settings::dismissPromo(const QString &id)
+{
+    if (!m_promos_dismissed.contains(id)) {
+        m_promos_dismissed.append(id);
+        emit promosDismissedChanged();
+        saveLater();
+    }
+}
+
 void Settings::setUsePersonalNode(bool use_personal_node)
 {
     if (m_use_personal_node == use_personal_node) return;
@@ -321,6 +330,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_accepted_tos_version)
     LOAD(m_incognito)
     LOAD(m_remember_devices)
+    LOAD(m_promos_dismissed)
 #undef LOAD
 }
 
@@ -360,6 +370,7 @@ void Settings::saveNow()
     SAVE(m_accepted_tos_version)
     SAVE(m_incognito)
     SAVE(m_remember_devices)
+    SAVE(m_promos_dismissed)
 #undef SAVE
 }
 

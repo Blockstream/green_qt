@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -68,6 +69,30 @@ Pane {
                 id: fee_rate_card
                 context: self.context
             }
+            Separator {
+            }
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: false
+                visible: promos_repeater.count > 0
+                Repeater {
+                    id: promos_repeater
+                    model: {
+                        return [...PromoManager.promos]
+                            .filter(promo => !promo.dismissed)
+                            .filter(promo => promo.data.is_visible)
+                            .filter(promo => promo.data.screens.indexOf('WalletOverview') >= 0)
+                            .slice(0, 1)
+                    }
+                    delegate: PromoCard {
+                        required property Promo modelData
+                        Layout.minimumWidth: 400
+                        id: delegate
+                        context: self.context
+                        promo: delegate.modelData
+                    }
+                }
+            }
         }
     }
     Image {
@@ -98,5 +123,81 @@ Pane {
         Layout.fillHeight: true
         color: '#FFF'
         opacity: 0.04
+    }
+
+    component PromoCard: WalletHeaderCard {
+        required property Promo promo
+        Component.onCompleted: {
+            Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo))
+        }
+        id: self
+        padding: 16
+        background: Item {
+            Image {
+                id: image
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                fillMode: Image.PreserveAspectFit
+                height: 100
+                horizontalAlignment: Image.AlignRight
+                verticalAlignment: Image.AlignTop
+                source: self.promo.data.image_small ?? ''
+                visible: image.status === Image.Ready
+            }
+        }
+        spacing: 0
+        header: RowLayout {
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: 16
+                Layout.topMargin: 16
+                Layout.maximumWidth: image.visible ? self.width - image.paintedWidth - 40 : null
+                id: title_small
+                font.pixelSize: 14
+                font.weight: 600
+                verticalAlignment: Label.AlignVCenter
+                text: self.promo.data.title_small ?? ''
+                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                visible: title_small.text.length > 0
+            }
+            CloseButton {
+                Layout.margins: 16
+                Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                onClicked: {
+                    self.promo.dismiss()
+                    onClicked: {
+                        Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo))
+                        self.promo.dismiss()
+                    }
+                }
+            }
+        }
+        contentItem: ColumnLayout {
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                id: text_small
+                text: self.promo.data.text_small ?? ''
+                textFormat: Label.RichText
+                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                visible: text_small.text.length > 0
+            }
+            PrimaryButton {
+                font.pixelSize: 16
+                font.weight: 600
+                padding: 12
+                leftPadding: 14
+                rightPadding: 14
+                topPadding: 2
+                bottomPadding: 2
+                text: self.promo.data.cta_small
+                onClicked: {
+                    Qt.openUrlExternally(self.promo.data.link)
+                    Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo))
+                }
+            }
+        }
     }
 }
