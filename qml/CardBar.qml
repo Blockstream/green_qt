@@ -66,13 +66,6 @@ Pane {
                 context: self.context
             }
             Separator {
-                visible: fee_rate_card.visible
-            }
-            FeeRateCard {
-                id: fee_rate_card
-                context: self.context
-            }
-            Separator {
                 visible: promos_repeater.count > 0
             }
             Repeater {
@@ -91,6 +84,13 @@ Pane {
                     context: self.context
                     promo: delegate.modelData
                 }
+            }
+            Separator {
+                visible: fee_rate_card.visible
+            }
+            FeeRateCard {
+                id: fee_rate_card
+                context: self.context
             }
         }
     }
