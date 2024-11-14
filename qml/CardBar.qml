@@ -73,27 +73,23 @@ Pane {
                 context: self.context
             }
             Separator {
-            }
-            RowLayout {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: false
                 visible: promos_repeater.count > 0
-                Repeater {
-                    id: promos_repeater
-                    model: {
-                        return [...PromoManager.promos]
-                            .filter(promo => !promo.dismissed)
-                            .filter(promo => promo.data.is_visible)
-                            .filter(promo => promo.data.screens.indexOf('WalletOverview') >= 0)
-                            .slice(0, 1)
-                    }
-                    delegate: PromoCard {
-                        required property Promo modelData
-                        Layout.minimumWidth: 400
-                        id: delegate
-                        context: self.context
-                        promo: delegate.modelData
-                    }
+            }
+            Repeater {
+                id: promos_repeater
+                model: {
+                    return [...PromoManager.promos]
+                        .filter(promo => !promo.dismissed)
+                        .filter(promo => promo.data.is_visible)
+                        .filter(promo => promo.data.screens.indexOf('WalletOverview') >= 0)
+                        .slice(0, 1)
+                }
+                delegate: PromoCard {
+                    required property Promo modelData
+                    Layout.minimumWidth: 400
+                    id: delegate
+                    context: self.context
+                    promo: delegate.modelData
                 }
             }
         }
