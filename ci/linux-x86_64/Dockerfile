@@ -23,7 +23,12 @@ FROM base AS zxing
 COPY tools/buildzxing.sh tools/
 RUN tools/buildzxing.sh
 
+FROM base AS icu
+COPY tools/buildicu.sh tools/
+RUN tools/buildicu.sh
+
 FROM base AS qt
+COPY --from=icu /depends /depends
 COPY tools/buildqt.sh tools/
 RUN tools/buildqt.sh
 

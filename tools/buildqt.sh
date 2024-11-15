@@ -59,6 +59,8 @@ rm -rf linux
 mkdir linux
 cd linux
 
+export ICU_ROOT=$PREFIX
+
 echo "qt: configuring"
 ../$QT_BASENAME/configure \
   -release \
