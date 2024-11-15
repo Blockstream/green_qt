@@ -36,6 +36,7 @@ AppUpdateController::AppUpdateController(QObject *parent)
     if (period > 0) {
         m_timer->setInterval(period * 1000);
         m_timer->start();
+        checkNow();
     }
 }
 
