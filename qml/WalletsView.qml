@@ -12,6 +12,7 @@ MainPage {
     signal openWallet(Wallet wallet)
     signal openDevice(Device device)
     signal createWallet
+    signal promoClicked(Promo promo)
     readonly property int count: sww_repeater.count + hww_repeater.count
     readonly property var notifications: UtilJS.flatten(home_alert.notification)
     AnalyticsAlert {
@@ -108,6 +109,7 @@ MainPage {
                         Layout.minimumWidth: 400
                         id: delegate
                         promo: delegate.modelData
+                        onClicked: self.promoClicked(delegate.promo)
                     }
                 }
             }
@@ -115,9 +117,10 @@ MainPage {
     }
 
     component PromoDelegate: Page {
+        signal clicked()
         required property Promo promo
         Component.onCompleted: {
-            Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, null, self.promo))
+            Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, null, self.promo, 'Home'))
         }
         id: self
         padding: 16
@@ -159,7 +162,7 @@ MainPage {
                 Layout.margins: 16
                 Layout.alignment: Qt.AlignRight | Qt.AlignTop
                 onClicked: {
-                    Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(Settings, null, self.promo))
+                    Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(Settings, null, self.promo, 'Home'))
                     self.promo.dismiss()
                 }
             }
@@ -178,8 +181,13 @@ MainPage {
                 Layout.fillWidth: true
                 text: self.promo.data.cta_small
                 onClicked: {
-                    Qt.openUrlExternally(self.promo.data.link)
-                    Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, null, self.promo))
+                    if (self.promo.data.is_small) {
+                        Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, null, self.promo, 'Home'))
+                        Qt.openUrlExternally(self.promo.data.link)
+                    } else {
+                        Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, null, self.promo, 'Home'))
+                        self.clicked()
+                    }
                 }
             }
         }

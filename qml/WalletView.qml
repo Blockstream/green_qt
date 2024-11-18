@@ -11,6 +11,8 @@ MainPage {
     signal removeWallet(Wallet wallet)
     signal closeWallet(Wallet wallet)
     signal closeDevice(Device device)
+    signal promoClicked(Promo promo)
+
     property Wallet wallet
     property Device device
     readonly property Account currentAccount: stack_view.currentItem?.currentAccount ?? null
@@ -300,6 +302,7 @@ MainPage {
         OverviewPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: stack_view.replace(logout_page, StackView.PushTransition)
+            onPromoClicked: (promo) => self.promoClicked(promo)
         }
     }
 

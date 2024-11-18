@@ -92,9 +92,10 @@ function segmentationSession(Settings, context) {
     return segmentation
 }
 
-function segmentationPromo(Settings, context, promo) {
+function segmentationPromo(Settings, context, promo, screen) {
     const segmentation = segmentationSession(Settings, context)
     segmentation.promo_id = promo.id
+    segmentation.screen = screen
     return segmentation
 }
 

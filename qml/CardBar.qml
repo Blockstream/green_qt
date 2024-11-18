@@ -4,8 +4,11 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
+
 Pane {
     signal assetsClicked()
+    signal promoClicked(Promo promo)
     required property Context context
     id: self
     clip: true
@@ -128,7 +131,7 @@ Pane {
     component PromoCard: WalletHeaderCard {
         required property Promo promo
         Component.onCompleted: {
-            Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo))
+            Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo, 'WalletOverview'))
         }
         id: self
         padding: 16
@@ -166,11 +169,8 @@ Pane {
                 Layout.margins: 16
                 Layout.alignment: Qt.AlignRight | Qt.AlignTop
                 onClicked: {
+                    Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo, 'WalletOverview'))
                     self.promo.dismiss()
-                    onClicked: {
-                        Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo))
-                        self.promo.dismiss()
-                    }
                 }
             }
         }
@@ -194,8 +194,13 @@ Pane {
                 bottomPadding: 2
                 text: self.promo.data.cta_small
                 onClicked: {
-                    Qt.openUrlExternally(self.promo.data.link)
-                    Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo))
+                    if (self.promo.data.is_small) {
+                        Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo, 'WalletOverview'))
+                        Qt.openUrlExternally(self.promo.data.link)
+                    } else {
+                        Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo, 'WalletOverview'))
+                        self.promoClicked(self.promo)
+                    }
                 }
             }
         }

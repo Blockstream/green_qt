@@ -17,6 +17,7 @@ MainPageHeader {
     signal statusClicked()
     signal notificationsClicked()
     signal logoutClicked()
+    signal promoClicked(Promo promo)
 
     required property Context context
     required property Wallet wallet
@@ -281,6 +282,7 @@ MainPageHeader {
             contentItem: CardBar {
                 context: self.context
                 onAssetsClicked: self.assetsClicked()
+                onPromoClicked: (promo) => self.promoClicked(promo)
             }
         }
         HPane {
