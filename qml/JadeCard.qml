@@ -100,7 +100,7 @@ WalletHeaderCard {
             RegularButton {
                 visible: {
                     if (!self.debug) return false
-                    switch (self.context.device.state) {
+                    switch (self.context.device?.state) {
                     case JadeDevice.StateTemporary:
                     case JadeDevice.StateLocked:
                         return true
