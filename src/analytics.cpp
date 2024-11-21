@@ -34,10 +34,26 @@ class AnalyticsPrivate : public QObject
 {
     Analytics* const q;
 public:
-    AnalyticsPrivate(Analytics* const q) : q(q) {}
+    AnalyticsPrivate(Analytics* const q) : q(q) {
+        QSettings analytics(GetDataFile("app", "analytics.ini"), QSettings::IniFormat);
+
+        device_id = analytics.value("device_id").toString();
+        if (device_id.isEmpty()) {
+            device_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+            analytics.setValue("device_id", device_id);
+        }
+
+        auto to = analytics.value("timestamp_offset").toInt();
+        if (to == 0) {
+            to = QRandomGenerator::global()->bounded(12 * 3600);
+            analytics.setValue("timestamp_offset", to);
+        }
+        timestamp_offset = std::chrono::seconds(to);
+    }
     TaskDispatcher* dispatcher{nullptr};
     Session* session{nullptr};
     std::atomic_bool active{false};
+    QString device_id;
     std::chrono::seconds timestamp_offset{0};
     struct View {
         std::string name;
@@ -49,6 +65,7 @@ public:
     void start();
     void stop(Qt::ConnectionType type = Qt::AutoConnection);
     void restart();
+    void reset();
     void updateCustomUserDetails();
 };
 
@@ -199,7 +216,7 @@ void Analytics::start()
     connect(settings, &Settings::useProxyChanged, d, &AnalyticsPrivate::restart);
     connect(settings, &Settings::proxyHostChanged, d, &AnalyticsPrivate::restart);
     connect(settings, &Settings::proxyPortChanged, d, &AnalyticsPrivate::restart);
-    connect(settings, &Settings::analyticsChanged, d, &AnalyticsPrivate::restart);
+    connect(settings, &Settings::analyticsChanged, d, &AnalyticsPrivate::reset);
 
     countly.enableRemoteConfig();
 
@@ -230,24 +247,6 @@ void AnalyticsPrivate::updateCustomUserDetails()
 
 void AnalyticsPrivate::start()
 {
-    QString device_id;
-    {
-        QSettings analytics(GetDataFile("app", "analytics.ini"), QSettings::IniFormat);
-
-        device_id = analytics.value("device_id").toString();
-        if (device_id.isEmpty()) {
-            device_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
-            analytics.setValue("device_id", device_id);
-        }
-
-        auto to = analytics.value("timestamp_offset").toInt();
-        if (to == 0) {
-            to = QRandomGenerator::global()->bounded(12 * 3600);
-            analytics.setValue("timestamp_offset", to);
-        }
-        timestamp_offset = std::chrono::seconds(to);
-    }
-
     QMetaObject::invokeMethod(this, [=] {
         const bool is_production = QStringLiteral("Production") == GREEN_ENV;
         auto& countly = cly::Countly::getInstance();
@@ -283,6 +282,21 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
 void AnalyticsPrivate::restart()
 {
     stop();
+    start();
+}
+
+void AnalyticsPrivate::reset()
+{
+    stop();
+    if (!Settings::instance()->isAnalyticsEnabled()) {
+        const auto to = QRandomGenerator::global()->bounded(12 * 3600);
+        device_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+        timestamp_offset = std::chrono::seconds(to);
+
+        QSettings analytics(GetDataFile("app", "analytics.ini"), QSettings::IniFormat);
+        analytics.setValue("device_id", device_id);
+        analytics.setValue("timestamp_offset", to);
+    }
     start();
 }
 
