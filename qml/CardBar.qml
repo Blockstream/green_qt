@@ -194,15 +194,24 @@ Pane {
                 bottomPadding: 2
                 text: self.promo.data.cta_small
                 onClicked: {
+                    const context = self.context
+                    const promo = self.promo
+                    const screen = 'WalletOverview'
                     if (self.promo.data.is_small) {
-                        Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo, 'WalletOverview'))
+                        Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
                         Qt.openUrlExternally(self.promo.data.link)
                     } else {
-                        Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo, 'WalletOverview'))
-                        self.promoClicked(self.promo)
+                        Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
+                        promo_dialog.createObject(self.Window.window, { context, promo, screen }).open()
                     }
                 }
             }
+        }
+    }
+
+    Component {
+        id: promo_dialog
+        PromoDialog {
         }
     }
 }

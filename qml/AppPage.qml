@@ -133,10 +133,6 @@ MainPage {
         WalletManager.removeWallet(wallet)
         Analytics.recordEvent('wallet_delete')
     }
-    function showPromo(promo) {
-        promo_dialog.createObject(self, { promo }).open()
-        wallets_drawer.close()
-    }
 
     property Constants constants: Constants {}
 
@@ -182,7 +178,6 @@ MainPage {
                 onOpenWallet: (wallet) => self.openWallet(wallet)
                 onOpenDevice: (device) => self.openDevice(device)
                 onCreateWallet: self.openWallet(null)
-                onPromoClicked: (promo) => self.showPromo(promo)
                 AnalyticsView {
                     name: 'Home'
                     active: stack_layout.currentIndex === 0
@@ -208,7 +203,6 @@ MainPage {
             onCloseWallet: (wallet) => self.closeWallet(wallet)
             onCloseDevice: (device) => self.closeDevice(device)
             onRemoveWallet: (wallet) => remove_wallet_dialog.createObject(self, { wallet }).open()
-            onPromoClicked: (promo) => self.showPromo(promo)
         }
     }
 
@@ -289,12 +283,6 @@ MainPage {
                 side_bar.currentView = SideBar.View.Wallets
                 destroy()
             }
-        }
-    }
-
-    Component {
-        id: promo_dialog
-        PromoDialog {
         }
     }
 }

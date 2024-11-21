@@ -12,7 +12,6 @@ import "util.js" as UtilJS
 
 Page {
     signal logout()
-    signal promoClicked(Promo promo)
 
     required property Context context
     readonly property Wallet wallet: self.context.wallet
@@ -204,7 +203,6 @@ Page {
         onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
         onStatusClicked: status_drawer.open()
         onNotificationsClicked: notifications_drawer.open()
-        onPromoClicked: (promo) => self.promoClicked(promo)
         id: wallet_header
         context: self.context
         wallet: self.wallet

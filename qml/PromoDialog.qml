@@ -5,8 +5,12 @@ import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
+
 Dialog {
     required property var promo
+    required property Context context
+    required property string screen
     onClosed: self.destroy()
     id: self
     clip: true
@@ -53,6 +57,7 @@ Dialog {
             Layout.rightMargin: 20
             text: self.promo.data.cta_large
             onClicked: {
+                Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo, self.screen))
                 Qt.openUrlExternally(self.promo.data.link)
                 self.close()
             }
@@ -76,7 +81,7 @@ Dialog {
             id: title_large
             font.pixelSize: 14
             font.weight: 600
-            horizontalAlignment: Label.AlignHCenter
+            horizontalAlignment: Label.AlignLeft
             text: self.promo.data.title_large ?? ''
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
             visible: title_large.text.length > 0

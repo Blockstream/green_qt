@@ -12,7 +12,6 @@ MainPage {
     signal openWallet(Wallet wallet)
     signal openDevice(Device device)
     signal createWallet
-    signal promoClicked(Promo promo)
     readonly property int count: sww_repeater.count + hww_repeater.count
     readonly property var notifications: UtilJS.flatten(home_alert.notification)
     AnalyticsAlert {
@@ -109,10 +108,27 @@ MainPage {
                         Layout.minimumWidth: 400
                         id: delegate
                         promo: delegate.modelData
-                        onClicked: self.promoClicked(delegate.promo)
+                        onClicked: {
+                            const context = null
+                            const promo = delegate.promo
+                            const screen = 'Home'
+                            if (promo.data.is_small) {
+                                Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
+                                Qt.openUrlExternally(promo.data.link)
+                            } else {
+                                Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
+                                promo_dialog.createObject(self.Window.window, { context, promo, screen }).open()
+                            }
+                        }
                     }
                 }
             }
+        }
+    }
+
+    Component {
+        id: promo_dialog
+        PromoDialog {
         }
     }
 
@@ -180,15 +196,7 @@ MainPage {
             PrimaryButton {
                 Layout.fillWidth: true
                 text: self.promo.data.cta_small
-                onClicked: {
-                    if (self.promo.data.is_small) {
-                        Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, null, self.promo, 'Home'))
-                        Qt.openUrlExternally(self.promo.data.link)
-                    } else {
-                        Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, null, self.promo, 'Home'))
-                        self.clicked()
-                    }
-                }
+                onClicked: self.clicked()
             }
         }
     }
