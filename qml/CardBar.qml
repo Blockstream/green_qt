@@ -72,6 +72,7 @@ Pane {
                 id: promos_repeater
                 model: {
                     return [...PromoManager.promos]
+                        .filter(_ => !Settings.useTor)
                         .filter(promo => !promo.dismissed)
                         .filter(promo => promo.data.is_visible)
                         .filter(promo => promo.data.screens.indexOf('WalletOverview') >= 0)
