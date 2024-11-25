@@ -29,6 +29,7 @@ RUN tools/buildicu.sh
 
 FROM base AS qt
 COPY --from=icu /depends /depends
+COPY --from=gdk /build/gdk/build-gcc/external_deps/ /depends/linux-x86_64/
 COPY tools/buildqt.sh tools/
 RUN tools/buildqt.sh
 

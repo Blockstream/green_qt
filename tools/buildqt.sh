@@ -55,11 +55,16 @@ if [[ "$HOST" == "windows" ]]; then
     fi
 fi
 
+if [[ "$HOST" == "linux" ]]; then
+    export OPENSSL_USE_STATIC_LIBS=ON
+    export OPENSSL_ROOT_DIR=/external_deps
+    export ICU_ROOT=$PREFIX
+    OPTIONS=-openssl-linked
+fi
+
 rm -rf linux
 mkdir linux
 cd linux
-
-export ICU_ROOT=$PREFIX
 
 echo "qt: configuring"
 ../$QT_BASENAME/configure \
@@ -68,7 +73,7 @@ echo "qt: configuring"
   -prefix $PREFIX \
   -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtdatavis3d,qtdoc,qthttpserver,qtlanguageserver,qtlottie,qtmqtt,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtspeech,qtvirtualkeyboard,qtwebchannel,qtwebsockets,qtwebview,qtlocation,qtgraphs \
   -no-feature-sql -no-feature-sql-sqlite \
-  -nomake tests -nomake examples
+  -nomake tests -nomake examples $OPTIONS
 
 echo "qt: building"
 cmake --build . --parallel --target install
