@@ -1767,3 +1767,24 @@ bool EncodeBCURTask::call(GA_session* session, GA_auth_handler** auth_handler)
     const auto rc = GA_bcur_encode(session, Json::fromObject(m_details).get(), auth_handler);
     return rc == GA_OK;
 }
+
+RSAVerifyTask::RSAVerifyTask(const QString& pem, const QByteArray& challenge, const QByteArray& signature, Session* session)
+    : RSAVerifyTask({
+        { "pem", pem },
+        { "challenge", QString::fromLatin1(challenge.toHex()) },
+        { "signature", QString::fromLatin1(signature.toHex()) }
+    }, session)
+{
+}
+
+RSAVerifyTask::RSAVerifyTask(const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
+    , m_details(details)
+{
+}
+
+bool RSAVerifyTask::call(GA_session* session, GA_auth_handler** auth_handler)
+{
+    const auto rc = GA_rsa_verify(session, Json::fromObject(m_details).get(), auth_handler);
+    return rc == GA_OK;
+}
