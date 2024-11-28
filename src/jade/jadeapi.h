@@ -72,6 +72,9 @@ public:
 
     int logout(const ResponseHandler &cb);
 
+    // Sign an attestation challenge.
+    int signAttestation(const QByteArray& challenge, const ResponseHandler& cb);
+
     // OTA update the connected Jade
     // The passed ResponseHandler will be called multiple times during the update process
     int otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int chunksize, const ResponseHandler &cbProgress, const ResponseHandler &cb);

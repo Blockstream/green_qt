@@ -382,6 +382,15 @@ int JadeAPI::logout(const ResponseHandler &cb)
     return id;
 }
 
+int JadeAPI::signAttestation(const QByteArray &challenge, const ResponseHandler &cb)
+{
+    const int id = registerResponseHandler(cb);
+    const QCborMap params = { {"challenge", challenge} };
+    const QCborMap request = getRequest(id, "sign_attestation", params);
+    enqueue(request);
+    return id;
+}
+
 // OTA update the connected Jade
 int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb)
 {
