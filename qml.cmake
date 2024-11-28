@@ -254,7 +254,10 @@ SET(QML_FILES
     qml/VFlickable.qml
     qml/JadeFirmwareUpdatedPage.qml
     qml/AddressLabel.qml
+    qml/JadeGenuineCheckDialog.qml
     qml/PromoDialog.qml
+    qml/JadeGenuineCheckPage.qml
+    qml/JadeGenuineCheckingPage.qml
 )
 
 if (GREEN_NO_RESOURCES)

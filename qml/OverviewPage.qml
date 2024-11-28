@@ -360,17 +360,22 @@ Page {
                         }
                     }
                 }
-                footer: ColumnLayout {
-                    spacing: 0
-                    Hint1Pane {
-                        Layout.fillWidth: true
-                        id: hint1_page
-                        visible: (side_view.height - accounts_list.contentHeight) > hint1_page.height
-                    }
-                    Hint2Pane {
-                        Layout.fillWidth: true
-                        id: hint2_page
-                        visible: (side_view.height - accounts_list.contentHeight) > (hint1_page.height + 10 + hint2_page.height)
+                footer: Flickable {
+                    id: flickable
+                    clip: true
+                    contentWidth: flickable.width
+                    contentHeight: layout.height
+                    implicitHeight: side_view.height - accounts_list.contentHeight
+                    ColumnLayout {
+                        id: layout
+                        spacing: 0
+                        width: flickable.width
+                        JadeGenuineHintPane {
+                        }
+                        Hint1Pane {
+                        }
+                        Hint2Pane {
+                        }
                     }
                 }
             }
@@ -459,6 +464,96 @@ Page {
         }
         HoverHandler {
             cursorShape: Qt.PointingHandCursor
+        }
+    }
+
+    Component {
+        id: genuine_check_dialog
+        JadeGenuineCheckDialog {
+            id: dialog
+            onGenuine: {
+                if (Settings.rememberDevices) {
+                    const efusemac = self.context.device.versionInfo.EFUSEMAC
+                    Settings.registerEvent({ efusemac, result: 'genuine', type: 'jade_genuine_check' })
+                }
+                dialog.close()
+            }
+            onDiy: {
+                if (Settings.rememberDevices) {
+                    const efusemac = self.context.device.versionInfo.EFUSEMAC
+                    Settings.registerEvent({ efusemac, result: 'diy', type: 'jade_genuine_check' })
+                }
+                dialog.close()
+            }
+            onSkip: {
+                if (Settings.rememberDevices) {
+                    const efusemac = self.context.device.versionInfo.EFUSEMAC
+                    Settings.registerEvent({ efusemac, result: 'skip', type: 'jade_genuine_check' })
+                }
+                dialog.close()
+            }
+            onAbort: {
+                dialog.close()
+            }
+        }
+    }
+
+    component JadeGenuineHintPane: Pane {
+        Layout.fillWidth: true
+        Layout.topMargin: 10
+        id: hint
+        padding: 20
+        background: Rectangle {
+            border.width: 1
+            border.color: '#1F222A'
+            color: '#161921'
+            radius: 4
+        }
+        visible: {
+            const device = self.context.device
+            if (device instanceof JadeDevice) {
+                if (device.versionInfo.BOARD_TYPE === 'JADE_V2') {
+                    return true
+                }
+            }
+            return false
+        }
+        contentItem: RowLayout {
+            ColumnLayout {
+                Layout.fillWidth: true
+                Label {
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    font.pixelSize: 12
+                    font.weight: 600
+                    text: 'Verify the authenticity of your Jade.'
+                    wrapMode: Label.WordWrap
+                }
+                Label {
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    font.pixelSize: 11
+                    font.weight: 400
+                    opacity: 0.3
+                    text: 'Quickly confirm your Jade’s authenticity and security.'
+                    wrapMode: Label.WordWrap
+                }
+                PrimaryButton {
+                    leftPadding: 24
+                    rightPadding: 24
+                    topPadding: 7
+                    bottomPadding: 7
+                    text: 'Genuine Check'
+                    onClicked: {
+                        const dialog = genuine_check_dialog.createObject(self, { device: self.context.device })
+                        dialog.open()
+                    }
+                }
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/hints/jade_genuine.png'
+            }
         }
     }
 

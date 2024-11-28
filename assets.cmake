@@ -141,6 +141,7 @@ qt_add_resources(green "images"
         assets/png/2fa_telegram.png
 
         assets/hints/cpu.svg
+        assets/hints/jade_genuine.png
         assets/hints/jade3d.svg
 
         assets/svg2/alert.svg
@@ -229,11 +230,17 @@ qt_add_resources(green "images"
         assets/svg2/x-square.svg
         assets/svg2/x-circle.svg
         assets/svg2/zoom.svg
+        assets/svg2/check-light.svg
+        assets/svg2/fail-light.svg
+        assets/svg2/warning-light.svg
 
         assets/pdf/recovery-phrase-backup-template-12-words.pdf
 
         assets/svg2/amp_icon.svg
         assets/svg2/liquid_icon.svg
+
+        assets/png/jade_genuine_1.png
+        assets/png/jade_genuine_2.png
 )
 
 qt_add_resources(green "fonts"

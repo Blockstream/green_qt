@@ -63,6 +63,23 @@ protected:
     Network* m_network{nullptr};
 };
 
+class JadeGenuineCheckController : public JadeController
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    JadeGenuineCheckController(QObject* parent = nullptr);
+public slots:
+    void genuineCheck();
+signals:
+    void success();
+    void failed();
+    void unsupported();
+    void cancelled();
+private:
+    Session* m_session{nullptr};
+};
+
 class JadeQRController : public JadeController
 {
     Q_OBJECT

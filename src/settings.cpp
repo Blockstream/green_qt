@@ -192,6 +192,7 @@ void Settings::registerEvent(const QJsonObject& event)
     if (!m_registered_events.contains(id)) {
         m_registered_events.append(id);
         saveLater();
+        emit registeredEventsCountChanged();
     }
 }
 

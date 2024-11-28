@@ -36,6 +36,7 @@ class Settings : public QObject
     Q_PROPERTY(bool incognito READ incognito NOTIFY incognitoChanged)
     Q_PROPERTY(bool rememberDevices READ rememberDevices NOTIFY rememberDevicesChanged)
     Q_PROPERTY(QStringList promosDismissed READ promosDismissed NOTIFY promosDismissedChanged)
+    Q_PROPERTY(int registeredEventsCount READ registeredEventsCount NOTIFY registeredEventsCountChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -94,6 +95,7 @@ public:
     QStringList promosDismissed() const { return m_promos_dismissed; }
     Q_INVOKABLE bool isEventRegistered(const QJsonObject& event);
     Q_INVOKABLE void registerEvent(const QJsonObject& event);
+    int registeredEventsCount() const { return m_registered_events.size(); }
 public slots:
     void updateRecentWallet(const QString& id);
     void acceptTermsOfService();
@@ -127,6 +129,7 @@ signals:
     void incognitoChanged();
     void rememberDevicesChanged();
     void promosDismissedChanged();
+    void registeredEventsCountChanged();
 private:
     void load();
     void load(const QSettings& settings);

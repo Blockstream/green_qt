@@ -5,8 +5,8 @@ Item {
     property string background: 'qrc:/png/background.png'
     property bool fill: true
     property bool center: false
+    property real margins: 0
     id: self
-    clip: true
     Image {
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
@@ -14,6 +14,7 @@ Item {
     }
     Image {
         anchors.fill: self.fill ? parent : null
+        anchors.margins: self.margins
         anchors.centerIn: self.center ? parent : null
         fillMode: Image.PreserveAspectFit
         mipmap: true

@@ -51,6 +51,7 @@ Session::Session(Network* network, QObject* parent)
 
 Session::~Session()
 {
+    qDebug() << Q_FUNC_INFO;
     setActive(false);
 }
 

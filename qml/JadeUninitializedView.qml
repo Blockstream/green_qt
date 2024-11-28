@@ -17,6 +17,7 @@ VFlickable {
             controller.setup('mainnet')
         }
     }
+    StackView.onActivated: self.setup()
     id: self
     spacing: 10
     JadeSetupController {

@@ -7,6 +7,7 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal skipClicked()
+    signal genuineCheckClicked()
     signal firmwareSelected(var firmware)
     required property JadeDevice device
     required property bool showSkip

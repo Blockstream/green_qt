@@ -16,9 +16,32 @@
 
 #include <wally_wrapper.h>
 
+#include <QByteArray>
 #include <QCryptographicHash>
 #include <QFutureWatcher>
+#include <QRandomGenerator>
 #include <QtConcurrentRun>
+
+namespace {
+
+const QString g_ext_pubkey_pem{
+    "-----BEGIN PUBLIC KEY-----\n"
+    "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAyBnvF2+06j87PL4GztOf\n"
+    "6OVPXoHObwU/fV3PJDWAY1kpWO2MRQUaM7xtb+XwEzt+Vw9it378nCVvREJ/4IWQ\n"
+    "uVO8qQn2V1eASIoRtfM5HjERRtL4JUc7D1U2Vr4ecJEhQ1nSQuhuU9N2noo/tTxX\n"
+    "nYIMiFOBJNPqzjWr9gTzcLdE23UjpasKMKyWEVPw0AGWl/aOGo8oAaGYjqB870s4\n"
+    "29FBJeqOpaTHZqI/xp9Ac+R8gCP6H77vnSHGIxyZBIfcoPc9AFL83Ch0ugPLMQDf\n"
+    "BsUzfi8gANHp6tKAjrH00wgHV1JC1hT7BRHffeqh9Tc7ERUmxg06ajBZf0XdWbIr\n"
+    "tpNs6/YZJbv4S8+0VP9SRDOYigOuv/2nv16RyMO+TphH6PvwLQoRGixswICT2NBh\n"
+    "oqTDi2kIwse51EYjLZ5Wi/n5WH+YtKs0O5cVY+0/mUMvknD7fBPv6+rvOr0OZu28\n"
+    "1Qi+vZuP8it3qIdYybNmyD2FMGsYOb2OkIG2JC5GSn7YGwc+dRa87DGrG7S4rh4I\n"
+    "qRCB9pudTntGoQNhs0G9aNNa36sUSp+FUAPB8r55chmQPVDv2Uqt/2cpfgy/UIPE\n"
+    "DvMN0FWJF/3y6x0UOJiNK3VJKjhorYi6dRuJCmk6n+BLXHCaYvfLD7mEp0IEapo7\n"
+    "VTWr98cwCwEqT+NTHm2FaNMCAwEAAQ==\n"
+    "-----END PUBLIC KEY-----"
+};
+
+} // namespace
 
 JadeController::JadeController(QObject* parent)
     : Controller(parent)
@@ -487,5 +510,77 @@ void JadeQRController::processJadePin(const QJsonObject& result)
             emit resultEncoded(task->result().value("result").toObject());
         });
         dispatcher()->add(task);
+    });
+}
+
+JadeGenuineCheckController::JadeGenuineCheckController(QObject* parent)
+    : JadeController(parent)
+{
+}
+
+void JadeGenuineCheckController::genuineCheck()
+{
+    if (!m_device) return;
+    if (!m_device->api()) return;
+
+    QByteArray challenge(32, Qt::Uninitialized);
+    QRandomGenerator::global()->generate(challenge.begin(), challenge.end());
+
+    if (!m_context) {
+        setContext(new Context("mainnet", false, this));
+        // m_context->setDevice(m_device);
+    }
+
+    if (!m_monitor) {
+        setMonitor(new TaskGroupMonitor(this));
+    }
+
+    if (!m_session) {
+        auto network = m_context->primaryNetwork();
+        m_session = m_context->getOrCreateSession(network);
+    }
+
+    m_device->api()->signAttestation(challenge, [=](const QVariantMap& msg) {
+        qDebug() << Q_FUNC_INFO << msg;
+
+        if (msg.contains("result")) {
+            const auto result = msg.value("result").toMap();
+
+            const auto ext_signature = result.value("ext_signature").toByteArray();
+            const auto pubkey_pem = result.value("pubkey_pem").toString();
+            const auto signature = result.value("signature").toByteArray();
+
+            auto group = new TaskGroup(this);
+
+            group->add(new ConnectTask(m_session));
+            group->add(new RSAVerifyTask(pubkey_pem, challenge, signature, m_session));
+            group->add(new RSAVerifyTask(g_ext_pubkey_pem, pubkey_pem.toLatin1(), ext_signature, m_session));
+
+            connect(group, &TaskGroup::finished, this, &JadeGenuineCheckController::success);
+            connect(group, &TaskGroup::failed, this, &JadeGenuineCheckController::failed);
+
+            monitor()->add(group);
+            dispatcher()->add(group);
+
+            return;
+        }
+
+        if (msg.contains("error")) {
+            const auto error = msg.value("error").toMap();
+            const auto code = error.value("code").toLongLong();
+
+            if (code == -32000) {
+                emit cancelled();
+                return;
+            }
+
+            if (code == -32603) {
+                emit unsupported();
+                return;
+            }
+        }
+
+        qDebug() << Q_FUNC_INFO << msg;
+        emit failed();
     });
 }

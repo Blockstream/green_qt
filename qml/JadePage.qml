@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -59,7 +60,7 @@ StackViewPage {
         return fws
     }
 
-    property var latestFirmware: {
+    readonly property var latestFirmware: {
         for (const firmware of self.firmwares) {
             if (firmware.latest) {
                 return firmware
@@ -68,10 +69,28 @@ StackViewPage {
         return null
     }
 
+    readonly property bool runningLatest: {
+        return self.latestFirmware && self.device && self.device.version === self.latestFirmware.version
+    }
+
     onLatestFirmwareChanged: self.pushView()
+
+    property bool skipGenuineCheck: false
 
     function pushView(replace = false) {
         if (!replace && stack_view.depth > 0) return
+        if (self.device.versionInfo.BOARD_TYPE === 'JADE_V2') {
+            if (!self.skipGenuineCheck) {
+                const efusemac = self.device.versionInfo.EFUSEMAC
+                const check_genuine = Settings.isEventRegistered({ efusemac, result: 'genuine', type: 'jade_genuine_check' })
+                const check_diy = Settings.isEventRegistered({ efusemac, result: 'diy', type: 'jade_genuine_check' })
+                const check_skip = Settings.isEventRegistered({ efusemac, result: 'skip', type: 'jade_genuine_check' })
+                if (!check_genuine && !check_diy && !check_skip) {
+                    self.openGenuineCheckDialog()
+                    return
+                }
+            }
+        }
         if (self.debug) {
             if (replace) {
                 stack_view.replace(advanced_update_view, StackView.PushTransition)
@@ -80,8 +99,15 @@ StackViewPage {
             }
             return
         }
-        if (!self.device.connected) return
-        if (!self.device.updateRequired) {
+        if (!self.device.connected) {
+            self.closeClicked()
+            return
+        }
+        if (self.device.versionInfo.BOARD_TYPE === 'JADE_V2') {
+            skipFirmwareUpdate()
+            return
+        }
+        if (self.runningLatest) {
             skipFirmwareUpdate()
         } else if (self.latestFirmware) {
             if (replace) {
@@ -114,6 +140,23 @@ StackViewPage {
 
     function firmwareVersionAndType(version, config) {
         return `${version} (${config.toLowerCase() === 'noradio' ? qsTrId('id_noradio_firmware') : qsTrId('id_radio_firmware') })`
+    }
+
+    function registerEvent(result) {
+        if (Settings.rememberDevices) {
+            const efusemac = self.device.versionInfo.EFUSEMAC
+            Settings.registerEvent({ efusemac, result, type: 'jade_genuine_check' })
+        }
+        self.skipGenuineCheck = true
+    }
+
+
+    property JadeGenuineCheckDialog genuineCheckDialog
+
+    function openGenuineCheckDialog() {
+        if (self.genuineCheckDialog) return
+        self.genuineCheckDialog = genuine_check_dialog.createObject(self, { device: self.device })
+        self.genuineCheckDialog.open()
     }
 
     Component.onCompleted: pushView()
@@ -150,7 +193,36 @@ StackViewPage {
             device: self.device
             showSkip: true
             onSkipClicked: self.skipFirmwareUpdate()
+            onGenuineCheckClicked: self.openGenuineCheckDialog()
             onFirmwareSelected: (firmware) => stack_view.push(confirm_update_view, { firmware })
+        }
+    }
+
+    Component {
+        id: genuine_check_dialog
+        JadeGenuineCheckDialog {
+            id: dialog
+            onGenuine: {
+                self.registerEvent('genuine')
+                dialog.close()
+                self.pushView()
+            }
+            onDiy: {
+                self.registerEvent('diy')
+                dialog.close()
+                self.pushView()
+            }
+            onSkip: {
+                self.registerEvent('skip')
+                dialog.close()
+                self.pushView()
+            }
+            onAbort: {
+                self.closeClicked()
+            }
+            onClosed: {
+                self.genuineCheckDialog = null
+            }
         }
     }
 
