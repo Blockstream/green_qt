@@ -92,6 +92,8 @@ public:
     bool rememberDevices() const { return m_remember_devices; }
     void setRememberDevices(bool remember_devices);
     QStringList promosDismissed() const { return m_promos_dismissed; }
+    Q_INVOKABLE bool isEventRegistered(const QJsonObject& event);
+    Q_INVOKABLE void registerEvent(const QJsonObject& event);
 public slots:
     void updateRecentWallet(const QString& id);
     void acceptTermsOfService();
@@ -160,6 +162,7 @@ private:
     bool m_incognito{false};
     bool m_remember_devices{true};
     QStringList m_promos_dismissed;
+    QStringList m_registered_events;
 };
 
 #endif // GREEN_SETTINGS_H

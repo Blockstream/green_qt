@@ -180,6 +180,21 @@ void Settings::setRememberDevices(bool remember_devices)
     saveLater();
 }
 
+bool Settings::isEventRegistered(const QJsonObject& event)
+{
+    const auto id = Sha256(event);
+    return m_registered_events.contains(id);
+}
+
+void Settings::registerEvent(const QJsonObject& event)
+{
+    const auto id = Sha256(event);
+    if (!m_registered_events.contains(id)) {
+        m_registered_events.append(id);
+        saveLater();
+    }
+}
+
 void Settings::toggleRememberDevices()
 {
     setRememberDevices(!m_remember_devices);
@@ -330,6 +345,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_incognito)
     LOAD(m_remember_devices)
     LOAD(m_promos_dismissed)
+    LOAD(m_registered_events)
 #undef LOAD
 }
 
@@ -370,6 +386,7 @@ void Settings::saveNow()
     SAVE(m_incognito)
     SAVE(m_remember_devices)
     SAVE(m_promos_dismissed)
+    SAVE(m_registered_events)
 #undef SAVE
 }
 

@@ -2,6 +2,7 @@
 
 #include <QCryptographicHash>
 #include <QDir>
+#include <QJsonDocument>
 
 #ifdef Q_OS_MACOS
 #include <sys/sysctl.h>
@@ -87,6 +88,11 @@ QString Sha256(const QString &value)
     QCryptographicHash hash(QCryptographicHash::Sha256);
     hash.addData(value.toLocal8Bit());
     return QString::fromLocal8Bit(hash.result().toHex());
+}
+
+QString Sha256(const QJsonObject& value)
+{
+    return Sha256(QJsonDocument(value).toJson(QJsonDocument::Compact));
 }
 
 QString GetHardwareModel()

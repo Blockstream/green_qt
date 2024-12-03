@@ -21,6 +21,7 @@ QByteArray ParseByteArray(const QJsonValue& value);
 QByteArray ReverseByteArray(const QByteArray& byte_array);
 
 QString Sha256(const QString& value);
+QString Sha256(const QJsonObject& value);
 
 QString GetHardwareModel();
 
