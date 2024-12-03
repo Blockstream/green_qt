@@ -7,6 +7,11 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 MainPage {
+    function openPreferences() {
+        preferences_dialog.createObject(self).open()
+        wallets_drawer.close()
+        side_bar.currentView = SideBar.View.Preferences
+    }
     function openWallet(wallet) {
         for (let i = 0; i < stack_layout.children.length; ++i) {
             const child = stack_layout.children[i]
@@ -138,11 +143,7 @@ MainPage {
 
     Action {
         id: preferences_action
-        onTriggered: {
-            preferences_dialog.createObject(self).open()
-            wallets_drawer.close()
-            side_bar.currentView = SideBar.View.Preferences
-        }
+        onTriggered: self.openPreferences()
         shortcut: 'Ctrl+,'
     }
 
