@@ -137,11 +137,12 @@ WalletDrawer {
                                     implicitHeight: 196
                                     implicitWidth: 196
                                     radius: 8
+                                    border: 16
                                     corners: true
                                     AssetIcon {
                                         anchors.centerIn: parent
                                         asset: controller.asset
-                                        size: 64
+                                        size: 32
                                         border: 4
                                         visible: !!controller.asset
                                     }
