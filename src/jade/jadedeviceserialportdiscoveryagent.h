@@ -22,7 +22,6 @@ private:
     JadeDevice* deviceFromBackend(JadeAPI* backend);
 private:
     QMap<QString, JadeAPI*> m_backends;
-    QMap<JadeAPI*, int> m_attempts;
 };
 
 #endif // GREEN_JADEDEVICESERIALPORTDISCOVERYAGENT_H

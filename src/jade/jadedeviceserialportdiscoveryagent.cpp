@@ -137,8 +137,6 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
 void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 {
     if (backend->m_locked) return;
-    if (m_attempts.value(backend) > 3) return;
-    m_attempts[backend] ++;
     backend->connectDevice();
     backend->getVersionInfo(false, [=](const QVariantMap& data) {
         if (data.contains("error")) {
@@ -244,7 +242,6 @@ void JadeDeviceSerialPortDiscoveryAgent::remove(JadeAPI* backend)
         device->setStatus(JadeDevice::StatusIdle);
     }
 
-    m_attempts.remove(backend);
     backend->disconnectDevice();
     backend->deleteLater();
 }
