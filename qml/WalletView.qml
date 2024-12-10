@@ -308,13 +308,20 @@ MainPage {
         id: logout_page
         StackViewPage {
             Timer {
+                id: logout_timer
                 interval: 500
-                running: !self.wallet.context
-                onTriggered: self.closeWallet(self.wallet)
+                running: true
+                repeat: true
+                onTriggered: {
+                    if (!self.wallet || !self.wallet.context) {
+                        logout_timer.stop()
+                        self.closeWallet(self.wallet)
+                    }
+                }
             }
             id: page
             padding: 60
-            title: self.wallet.name
+            title: self.wallet?.name ?? ''
             contentItem: ColumnLayout {
                 VSpacer {
                 }

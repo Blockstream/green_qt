@@ -342,6 +342,7 @@ Page {
                 SplitView.preferredWidth: 380
                 SplitView.minimumWidth: 200
                 SplitView.maximumWidth: self.width / 3
+                implicitHeight: 0
                 id: side_view
                 padding: 0
                 background: null

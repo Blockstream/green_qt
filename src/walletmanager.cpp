@@ -190,14 +190,12 @@ void WalletManager::insertWallet(Wallet* wallet)
 void WalletManager::removeWallet(Wallet* wallet)
 {
     emit aboutToRemove(wallet);
-    // Q_ASSERT(wallet->connection() == Wallet::Disconnected);
     m_wallets.removeOne(wallet);
     emit changed();
     if (wallet->isPersisted()) {
         bool result = QFile::remove(GetDataFile("wallets2", wallet->m_id));
         Q_ASSERT(result);
     }
-    wallet->deleteLater();
 }
 
 QQmlListProperty<Wallet> WalletManager::wallets()

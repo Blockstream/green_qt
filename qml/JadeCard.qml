@@ -20,7 +20,10 @@ WalletHeaderCard {
     JadeFirmwareCheckController {
         id: controller
         index: firmware_controller.index
-        device: self.context?.device
+        device: {
+            const device = self.context?.device
+            return device instanceof JadeDevice ? device : null
+        }
     }
     id: self
     visible: self.context.wallet.login?.device?.type === 'jade'
@@ -143,7 +146,10 @@ WalletHeaderCard {
     JadeUnlockController {
         id: unlock_controller
         context: self.context
-        device: self.context?.device
+        device: {
+            const device = self.context?.device
+            return device instanceof JadeDevice ? device : null
+        }
         onHttpRequest: (request) => {
             const dialog = http_request_dialog.createObject(self, { request, context: self.context })
             dialog.open()
