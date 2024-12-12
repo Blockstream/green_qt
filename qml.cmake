@@ -255,9 +255,10 @@ SET(QML_FILES
     qml/JadeFirmwareUpdatedPage.qml
     qml/AddressLabel.qml
     qml/JadeGenuineCheckDialog.qml
-    qml/PromoDialog.qml
+    qml/PromoDrawer.qml
     qml/JadeGenuineCheckPage.qml
     qml/JadeGenuineCheckingPage.qml
+    qml/PromoCard.qml
 )
 
 if (GREEN_NO_RESOURCES)

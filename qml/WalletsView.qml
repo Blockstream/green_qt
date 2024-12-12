@@ -99,26 +99,29 @@ MainPage {
                     model: {
                         return [...PromoManager.promos]
                             .filter(_ => !Settings.useTor)
-                            .filter(promo => !promo.dismissed)
                             .filter(promo => promo.data.is_visible)
                             .filter(promo => promo.data.screens.indexOf('Home') >= 0)
+                            .filter(promo => !promo.dismissed)
+                            .filter(promo => promo.ready)
                             .slice(0, 1)
                     }
-                    delegate: PromoDelegate {
+                    delegate: PromoCard {
                         required property Promo modelData
                         Layout.minimumWidth: 400
-                        id: delegate
-                        promo: delegate.modelData
+                        Layout.maximumWidth: 400
+                        id: card
+                        screen: 'Home'
+                        promo: card.modelData
                         onClicked: {
                             const context = null
-                            const promo = delegate.promo
+                            const promo = card.promo
                             const screen = 'Home'
                             if (promo.data.is_small) {
                                 Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
                                 Qt.openUrlExternally(promo.data.link)
                             } else {
                                 Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
-                                promo_dialog.createObject(self.Window.window, { context, promo, screen }).open()
+                                promo_drawer.createObject(self, { context, promo, screen }).open()
                             }
                         }
                     }
@@ -128,79 +131,11 @@ MainPage {
     }
 
     Component {
-        id: promo_dialog
-        PromoDialog {
+        id: promo_drawer
+        PromoDrawer {
         }
     }
 
-    component PromoDelegate: Page {
-        signal clicked()
-        required property Promo promo
-        Component.onCompleted: {
-            Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, null, self.promo, 'Home'))
-        }
-        id: self
-        padding: 16
-        background: Rectangle {
-            border.width: 1
-            border.color: Qt.rgba(1, 1, 1, 0.04)
-            color: '#161921'
-            radius: 8
-            Image {
-                id: image
-                anchors.top: parent.top
-                anchors.topMargin: 16
-                anchors.right: parent.right
-                fillMode: Image.PreserveAspectFit
-                height: 100
-                horizontalAlignment: Image.AlignRight
-                verticalAlignment: Image.AlignTop
-                source: self.promo.data.image_small ?? ''
-                visible: image.status === Image.Ready
-            }
-        }
-        header: RowLayout {
-            Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                Layout.alignment: Qt.AlignVCenter
-                Layout.minimumHeight: image.visible ? image.paintedHeight - 20 : null
-                Layout.margins: 16
-                Layout.maximumWidth: image.visible ? self.width - image.paintedWidth - 40 : null
-                id: title_small
-                font.pixelSize: 14
-                font.weight: 600
-                verticalAlignment: Label.AlignVCenter
-                text: self.promo.data.title_small ?? ''
-                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                visible: title_small.text.length > 0
-            }
-            CloseButton {
-                Layout.margins: 16
-                Layout.alignment: Qt.AlignRight | Qt.AlignTop
-                onClicked: {
-                    Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(Settings, null, self.promo, 'Home'))
-                    self.promo.dismiss()
-                }
-            }
-        }
-        contentItem: ColumnLayout {
-            Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                id: text_small
-                text: self.promo.data.text_small ?? ''
-                textFormat: Label.RichText
-                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                visible: text_small.text.length > 0
-            }
-            PrimaryButton {
-                Layout.fillWidth: true
-                text: self.promo.data.cta_small
-                onClicked: self.clicked()
-            }
-        }
-    }
     footer: Pane {
         background: null
         padding: 60
