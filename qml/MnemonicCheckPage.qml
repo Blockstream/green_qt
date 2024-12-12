@@ -61,6 +61,7 @@ StackViewPage {
             readonly property bool match: self.mnemonic[checker.word] === field.text
             Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: 400
+            Layout.topMargin: 10
             collapsed: index > 0 && !repeater.itemAt(index - 1).match
             contentHeight: field.implicitHeight
             contentWidth: field.implicitWidth
