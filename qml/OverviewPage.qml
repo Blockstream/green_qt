@@ -471,6 +471,7 @@ Page {
         id: genuine_check_dialog
         JadeGenuineCheckDialog {
             id: dialog
+            autoCheck: true
             onGenuine: {
                 if (Settings.rememberDevices) {
                     const efusemac = self.context.device.versionInfo.EFUSEMAC

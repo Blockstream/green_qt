@@ -202,6 +202,7 @@ StackViewPage {
         id: genuine_check_dialog
         JadeGenuineCheckDialog {
             id: dialog
+            autoCheck: false
             onGenuine: {
                 self.registerEvent('genuine')
                 dialog.close()

@@ -10,6 +10,7 @@ Dialog {
     signal diy()
     signal skip()
     signal abort()
+    required property bool autoCheck
     required property JadeDevice device
     function openSupport() {
         const version = Qt.application.version
@@ -60,7 +61,11 @@ Dialog {
     }
     contentItem: GStackView {
         id: stack_view
-        initialItem: JadeGenuineCheckPage {
+        initialItem: self.autoCheck ? check_view : initial_view
+    }
+    Component {
+        id: initial_view
+        JadeGenuineCheckPage {
             device: self.device
             onStart: stack_view.replace(null, check_view, StackView.PushTransition)
             onClose: self.skip()
