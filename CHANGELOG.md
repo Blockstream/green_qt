@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unrelased
 ### Changed:
-- Updates GDK to 0.74.0
+- Updates GDK to 0.74.1
 
 ## [2.0.15] - 2024-11-21
 ### Fixed:
