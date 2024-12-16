@@ -94,7 +94,7 @@ AbstractDrawer {
                 anchors.fill: parent
                 autoPlay: true
                 fillMode: VideoOutput.PreserveAspectCrop
-                loops: MediaPlayer.Infinite
+                loops: platform === 'linux' ? 1 : MediaPlayer.Infinite
                 muted: true
                 source: self.promo.getOrCreateResource('video_large').path
                 onPlaybackStateChanged: {
@@ -102,7 +102,10 @@ AbstractDrawer {
                 }
                 onStopped: {
                     console.log('video stopped')
-                    video.play()
+                    if (platform === 'linux') {
+                        video.source = ''
+                        video.source = self.promo.getOrCreateResource('video_large').path
+                    }
                 }
             }
             Image {
