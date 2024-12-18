@@ -44,6 +44,17 @@ if (WIN32)
 elseif (APPLE)
     find_library(SECURITY Security REQUIRED)
 elseif (UNIX)
+    find_library(AVCODEC NAMES libavcodec.a REQUIRED)
+    find_library(AVDEVICE NAMES libavdevice.a REQUIRED)
+    find_library(AVFILTER NAMES libavfilter.a REQUIRED)
+    find_library(AVFORMAT NAMES libavformat.a REQUIRED)
+    find_library(AVUTIL NAMES libavutil.a REQUIRED)
+    find_library(SWSCALE NAMES libswscale.a REQUIRED)
+    find_library(SWRESAMPLE NAMES libswresample.a REQUIRED)
+    find_library(POSTPROC NAMES libpostproc.a REQUIRED)
+    set(FFMPEG_LIBRARIES /depends/linux-x86_64/plugins/multimedia/libffmpegmediaplugin.a ${AVDEVICE} ${AVFILTER} ${AVFORMAT} ${AVCODEC} ${POSTPROC} ${SWRESAMPLE} ${SWSCALE} ${AVUTIL} Xrandr Xrender)
+    message(STATUS "FFMPEG_LIBRARIES: ${FFMPEG_LIBRARIES}")
+
     if (GREEN_WAYLAND)
         find_package(Qt6 6.4 COMPONENTS WaylandClient REQUIRED)
     endif()
@@ -92,17 +103,18 @@ target_link_libraries(green
     hidapi::hidapi
     ${HID_LIB}
     KDAB::kdsingleapplication
+    ${FFMPEG_LIBRARIES}
 )
 
 if (WIN32)
 elseif (APPLE)
     set_target_properties(green PROPERTIES OUTPUT_NAME "Blockstream Green")
 elseif (UNIX)
-    target_link_libraries(green PRIVATE dl)
-    qt_import_plugins(green INCLUDE Qt6::QXcbIntegrationPlugin)
+    target_link_libraries(green PRIVATE dl Xrender)
+    qt_import_plugins(green INCLUDE Qt6::QXcbIntegrationPlugin Qt6::QFFmpegMediaPlugin)
     if (GREEN_WAYLAND)
-        target_link_libraries(green PRIVATE Qt6::WaylandClient)
-        qt_import_plugins(green INCLUDE Qt6::QWaylandIntegrationPlugin)
+        target_link_libraries(green PRIVATE Qt6::WaylandClient Xrender)
+        qt_import_plugins(green INCLUDE Qt6::QWaylandIntegrationPlugin Qt6::QFFmpegMediaPlugin)
     endif()
 endif()
 

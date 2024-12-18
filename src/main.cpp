@@ -38,6 +38,7 @@
 #include <KDSingleApplication>
 
 #if defined(QT_QPA_PLATFORM_WAYLAND)
+Q_IMPORT_PLUGIN(QFFmpegMediaPlugin)
 Q_IMPORT_PLUGIN(QWaylandIntegrationPlugin)
 Q_IMPORT_PLUGIN(QWaylandBrcmEglPlatformIntegrationPlugin)
 Q_IMPORT_PLUGIN(QWaylandEglPlatformIntegrationPlugin)
@@ -49,6 +50,7 @@ Q_IMPORT_PLUGIN(QWaylandXCompositeGlxPlatformIntegrationPlugin)
 Q_IMPORT_PLUGIN(QMinimalIntegrationPlugin);
 #endif
 #if defined(QT_QPA_PLATFORM_XCB)
+Q_IMPORT_PLUGIN(QFFmpegMediaPlugin);
 Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
 #elif defined(QT_QPA_PLATFORM_WINDOWS)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
