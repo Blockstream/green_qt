@@ -27,7 +27,12 @@ FROM base AS icu
 COPY tools/buildicu.sh tools/
 RUN tools/buildicu.sh
 
+FROM base AS ffmpeg
+COPY tools/buildffmpeg.sh tools/
+RUN tools/buildffmpeg.sh
+
 FROM base AS qt
+COPY --from=ffmpeg /depends /depends
 COPY --from=icu /depends /depends
 COPY --from=gdk /build/gdk/build-gcc/external_deps/ /depends/linux-x86_64/
 COPY tools/buildqt.sh tools/
