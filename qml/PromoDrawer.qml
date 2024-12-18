@@ -89,25 +89,6 @@ AbstractDrawer {
         id: bg1
         Rectangle {
             color: 'black'
-            Video {
-                id: video
-                anchors.fill: parent
-                autoPlay: true
-                fillMode: VideoOutput.PreserveAspectCrop
-                loops: platform === 'linux' ? 1 : MediaPlayer.Infinite
-                muted: true
-                source: self.promo.getOrCreateResource('video_large').path
-                onPlaybackStateChanged: {
-                    console.log('playback state changed', video.playbackState)
-                }
-                onStopped: {
-                    console.log('video stopped')
-                    if (platform === 'linux') {
-                        video.source = ''
-                        video.source = self.promo.getOrCreateResource('video_large').path
-                    }
-                }
-            }
             Image {
                 id: image
                 anchors.fill: parent
@@ -115,6 +96,24 @@ AbstractDrawer {
                 fillMode: Image.PreserveAspectCrop
                 source: self.promo.getOrCreateResource('image_large').path
                 visible: image.status === Image.Ready
+            }
+            Loader {
+                anchors.fill: parent
+                active: self.promo.getOrCreateResource('video_large').path !== ''
+                sourceComponent: Video {
+                    id: video
+                    autoPlay: true
+                    fillMode: VideoOutput.PreserveAspectCrop
+                    loops: platform === 'linux' ? 1 : MediaPlayer.Infinite
+                    muted: true
+                    source: self.promo.getOrCreateResource('video_large').path
+                    onStopped: {
+                        if (platform === 'linux') {
+                            video.source = ''
+                            video.source = self.promo.getOrCreateResource('video_large').path
+                        }
+                    }
+                }
             }
             Rectangle {
                 color: '#FFF'
