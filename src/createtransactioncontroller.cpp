@@ -163,8 +163,8 @@ void CreateTransactionController::update()
                 }
             } else {
                 const auto estimates = gdk::get_fee_estimates(session->m_session);
-                if (estimates.size() > 24) {
-                    details["fee_rate"] = estimates.at(24);
+                if (estimates.size() > 0) {
+                    details["fee_rate"] = estimates.at(0);
                 }
             }
             auto task = new CreateTransactionTask(details, session);
