@@ -4,7 +4,6 @@ import QtQuick.Layouts
 
 StackViewPage {
     signal timeout()
-    signal done()
     id: self
     Timer {
         id: timer
@@ -28,12 +27,7 @@ StackViewPage {
         text: qsTrId('Jade is rebooting')
         wrapMode: Label.WordWrap
     }
-    PrimaryButton {
+    BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        Layout.minimumWidth: 300
-        busy: self.StackView.status !== StackView.Active || timer.running
-        text: qsTrId('id_done')
-        enabled: self.StackView.status === StackView.Active && !timer.running
-        onClicked: self.done()
     }
 }

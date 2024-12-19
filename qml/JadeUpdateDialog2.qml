@@ -30,7 +30,7 @@ WalletDialog {
         id: firmware_updated_page
         JadeFirmwareUpdatedPage {
             header: null
-            onDone: self.close()
+            onTimeout: self.close()
         }
     }
 }

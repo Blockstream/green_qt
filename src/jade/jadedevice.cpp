@@ -600,6 +600,7 @@ void JadeDevice::updateVersionInfo()
             emit error();
             return;
         } else if (data.contains("result")) {
+            qDebug() << Q_FUNC_INFO;
             setVersionInfo(data.value("result").toMap());
         }
     });
@@ -635,10 +636,11 @@ JadeDevice::State JadeDeviceGetState(const QVariantMap& version_info)
 void JadeDevice::setVersionInfo(const QVariantMap& version_info)
 {
     if (m_version_info == version_info) return;
+    qDebug() << Q_FUNC_INFO << "before: " << m_version_info << "after:" << version_info;
     m_version_info = version_info;
     emit versionInfoChanged();
-    updateState();
-    m_name = QString("Jade %1").arg(version_info.value("EFUSEMAC").toString().mid(6));
+    setState(JadeDeviceGetState(m_version_info));
+    setName(QString("Jade %1").arg(version_info.value("EFUSEMAC").toString().mid(6)));
     emit nameChanged();
     emit detailsChanged();
 }
@@ -680,10 +682,11 @@ void JadeDevice::setState(JadeDevice::State state)
     }
 }
 
-void JadeDevice::updateState()
+void JadeDevice::setName(const QString& name)
 {
-    const auto state = JadeDeviceGetState(m_version_info);
-    setState(state);
+    if (m_name == name) return;
+    m_name = name;
+    emit nameChanged();
 }
 
 void JadeDevice::setStatus(Status status)

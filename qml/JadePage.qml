@@ -14,17 +14,7 @@ StackViewPage {
     required property JadeDevice device
     required property bool login
     readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
-    leftItem: BackButton {
-        onClicked: {
-            if (stack_view.currentItem && stack_view.currentItem.StackView.index > 0) {
-                stack_view.pop()
-            } else {
-                self.StackView.view.pop()
-            }
-        }
-        visible: stack_view.currentItem && stack_view.currentItem.StackView.index > 0 || self.StackView.index > 0
-        enabled: stack_view.currentItem && stack_view.currentItem.StackView.status === StackView.Active && self.StackView.status === StackView.Active
-    }
+    readonly property bool ready: (self.device?.connected && 'BOARD_TYPE' in self.device?.versionInfo)
     JadeFirmwareCheckController {
         id: update_controller
         index: firmware_controller.index
@@ -49,6 +39,7 @@ StackViewPage {
         }
     }
     readonly property var firmwares: {
+        if (!self.ready) return []
         if (firmware_controller.fetching) return []
         const fws = []
         for (const fw of update_controller.firmwares) {
@@ -62,6 +53,7 @@ StackViewPage {
     }
 
     readonly property var latestFirmware: {
+        if (!self.ready) return null
         if (firmware_controller.fetching) return null
         for (const firmware of self.firmwares) {
             if (firmware.latest) {
@@ -72,6 +64,7 @@ StackViewPage {
     }
 
     readonly property bool runningLatest: {
+        if (!self.ready) return false
         if (firmware_controller.fetching) return false
         if (self.latestFirmware) {
             return self.device && self.device.version === self.latestFirmware.version
@@ -82,13 +75,14 @@ StackViewPage {
         return false
     }
 
-    onLatestFirmwareChanged: self.pushView()
-    onRunningLatestChanged: self.pushView()
-
     property bool skipGenuineCheck: false
 
-    function pushView(replace = false) {
-        if (!replace && stack_view.depth > 0) return
+    function pushView() {
+        if (stack_view.depth > 0) return
+        if (!self.ready) return
+        if (self.genuineCheckDialog) return
+        if (firmware_controller.fetching) return
+        console.log('can push view: stack view empty, device ready, no genuine check dialog, not fetching fws')
         if (self.device.versionInfo.BOARD_TYPE === 'JADE_V2') {
             if (!self.skipGenuineCheck) {
                 const efusemac = self.device.versionInfo.EFUSEMAC
@@ -102,48 +96,32 @@ StackViewPage {
             }
         }
         if (self.debug) {
-            if (replace) {
-                stack_view.replace(advanced_update_view, StackView.PushTransition)
-            } else {
-                stack_view.push(advanced_update_view)
-            }
-            return
-        }
-        if (!self.device.connected) {
-            self.closeClicked()
-            return
-        }
-        if (self.device.versionInfo.BOARD_TYPE === 'JADE_V2') {
-            skipFirmwareUpdate()
+            stack_view.replace(advanced_update_view, StackView.PushTransition)
             return
         }
         if (self.runningLatest) {
             skipFirmwareUpdate()
         } else if (self.latestFirmware) {
-            if (replace) {
-                stack_view.replace(basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
-            } else {
-                stack_view.push(basic_update_view, { firmware: self.latestFirmware })
-            }
+            stack_view.replace(basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
         }
     }
 
     function skipFirmwareUpdate() {
         switch (self.device.state) {
         case JadeDevice.StateReady:
-            stack_view.push(login_view, { context: null, device: self.device })
+            stack_view.replace(null, login_view, { context: null, device: self.device }, StackView.PushTransition)
             break;
         case JadeDevice.StateTemporary:
         case JadeDevice.StateLocked:
             if (self.login) {
-                stack_view.push(unlock_view, { device: self.device })
+                stack_view.replace(null, unlock_view, { device: self.device }, StackView.PushTransition)
             } else {
-                stack_view.push(intialized_view)
+                stack_view.replace(null, intialized_view, StackView.PushTransition)
             }
             break
         case JadeDevice.StateUninitialized:
         case JadeDevice.StateUnsaved:
-            stack_view.push(unintialized_view)
+            stack_view.replace(null, unintialized_view, StackView.PushTransition)
             break
         }
     }
@@ -169,12 +147,17 @@ StackViewPage {
         self.genuineCheckDialog.open()
     }
 
-    Component.onCompleted: pushView()
+    Timer {
+        interval: 500
+        repeat: true
+        running: true
+        onTriggered: self.pushView()
+    }
 
     contentItem: Item {
         BusyIndicator {
             anchors.centerIn: parent
-            running: stack_view.depth === 0 && firmware_controller.fetching
+            running: stack_view.depth === 0
             visible: stack_view.depth === 0
         }
         GStackView {
@@ -191,9 +174,9 @@ StackViewPage {
         JadeBasicUpdateView {
             device: self.device
             fetching: firmware_controller.fetching
-            onAdvancedClicked: stack_view.push(advanced_update_view)
+            onAdvancedClicked: stack_view.replace(null, advanced_update_view, StackView.PushTransition)
             onSkipClicked: self.skipFirmwareUpdate()
-            onFirmwareSelected: (firmware) => stack_view.push(confirm_update_view, { firmware })
+            onFirmwareSelected: (firmware) => stack_view.replace(null, confirm_update_view, { firmware }, StackView.PushTransition)
         }
     }
 
@@ -204,7 +187,7 @@ StackViewPage {
             showSkip: true
             onSkipClicked: self.skipFirmwareUpdate()
             onGenuineCheckClicked: self.openGenuineCheckDialog()
-            onFirmwareSelected: (firmware) => stack_view.push(confirm_update_view, { firmware })
+            onFirmwareSelected: (firmware) => stack_view.replace(null, confirm_update_view, { firmware }, StackView.PushTransition)
         }
     }
 
@@ -216,17 +199,14 @@ StackViewPage {
             onGenuine: {
                 self.registerEvent('genuine')
                 dialog.close()
-                self.pushView()
             }
             onDiy: {
                 self.registerEvent('diy')
                 dialog.close()
-                self.pushView()
             }
             onSkip: {
                 self.registerEvent('skip')
                 dialog.close()
-                self.pushView()
             }
             onAbort: {
                 self.closeClicked()
@@ -254,7 +234,7 @@ StackViewPage {
         JadeUnlockView {
             context: null
             showRemember: true
-            onUnlockFinished: (context) => stack_view.push(login_view, { context, device: self.device })
+            onUnlockFinished: (context) => stack_view.replace(null, login_view, { context, device: self.device }, StackView.PushTransition)
             onUnlockFailed: stack_view.replace(null, intialized_view, StackView.PushTransition)
         }
     }
@@ -265,7 +245,7 @@ StackViewPage {
             device: self.device
             latestFirmware: self.latestFirmware
             onLoginClicked: self.skipFirmwareUpdate()
-            onUpdateClicked: stack_view.push(basic_update_view, { firmware: self.latestFirmware })
+            onUpdateClicked: stack_view.replace(null, basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
         }
     }
 
@@ -282,41 +262,15 @@ StackViewPage {
         JadeUninitializedView {
             device: self.device
             latestFirmware: self.latestFirmware
-            onUpdateClicked: stack_view.push(basic_update_view, { firmware: self.latestFirmware })
+            onUpdateClicked: stack_view.replace(null, basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
             onSetupFinished: (context) => stack_view.replace(null, login_view, { context, device: self.device }, StackView.PushTransition)
-        }
-    }
-
-    Component {
-        id: waiting_page
-        VFlickable {
-            readonly property bool ready: !stack_view.busy && self.device.connected
-            id: view
-            onReadyChanged: {
-                if (view.ready) {
-                    self.pushView(true)
-                }
-            }
-            BusyIndicator {
-                Layout.alignment: Qt.AlignCenter
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 22
-                font.weight: 600
-                horizontalAlignment: Label.AlignHCenter
-                text: qsTrId('id_connecting_to_your_device')
-                wrapMode: Label.WordWrap
-            }
         }
     }
 
     Component {
         id: firmware_updated_page
         JadeFirmwareUpdatedPage {
-            onTimeout: self.pushView(true)
+            onTimeout: stack_view.clear()
         }
     }
 }

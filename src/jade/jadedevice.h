@@ -41,6 +41,7 @@ public:
     Transport transport() const override { return Transport::USB; }
     Type type() const override { return Type::BlockstreamJade; }
     QString name() const override { return m_name; }
+    void setName(const QString& name);
     JadeAPI *api() const { return m_api; }
     void setBackend(JadeAPI* api);
     QJsonObject details() const override;
@@ -64,7 +65,6 @@ public:
     void setSystemLocation(const QString& system_location);
     State state() const { return m_state; }
     void setState(State state);
-    void updateState();
     Status status() const { return m_status; }
     void setStatus(Status status);
     bool unlocking() const { return m_unlocking; }

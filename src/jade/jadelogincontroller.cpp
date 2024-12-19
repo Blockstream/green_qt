@@ -196,6 +196,7 @@ void JadeSetupTask::update()
     device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
         device->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
+            qDebug() << Q_FUNC_INFO;
             device->updateVersionInfo();
             setStatus(Status::Finished);
         } else {
@@ -315,11 +316,6 @@ void JadeUnlockTask::update()
         return;
     }
 
-//    if (device->state() != JadeDevice::StateUnsaved && device->state() == JadeDevice::StateUnsaved) {
-//        setStatus(Status::Finished);
-//        return;
-//    }
-
     const auto network = m_controller->network();
     if (!network) return;
 
@@ -338,9 +334,6 @@ void JadeUnlockTask::update()
         } else {
             qDebug() << "INVALID PIN";
             setStatus(Status::Failed);
-            // TODO
-            // emit invalidPin();
-            // update();
         }
     }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
         QMetaObject::invokeMethod(m_controller, [=] {
@@ -373,6 +366,7 @@ void JadeIdentifyTask::update()
     if (device->state() == JadeDevice::StateLocked) return;
     if (device->state() == JadeDevice::StateTemporary) {
         device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
+            qDebug() << Q_FUNC_INFO;
             device->updateVersionInfo();
         }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
         });

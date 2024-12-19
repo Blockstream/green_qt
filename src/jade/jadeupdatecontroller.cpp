@@ -95,8 +95,6 @@ void JadeUpdateActivity::exec()
         progress()->setValue(double(uploaded) / double(m_data.size()));
     };
     auto done_cb = [=](const QVariantMap& result) {
-        backend->m_locked = false;
-
         if (result["result"] == true) {
             finish();
         } else {
@@ -127,8 +125,6 @@ void JadeUpdateActivity::exec()
     };
 
     const auto fwhash = m_firmware.value("fwhash").toString();
-
-    backend->m_locked = true;
 
     if (m_firmware.value("delta").toBool()) {
         const auto patch_size = m_firmware.value("patch_size").toInt();
@@ -359,6 +355,7 @@ float JadeFirmwareUpdateController::progress() const
 
 void JadeFirmwareUpdateController::update()
 {
+    m_device->api()->m_locked = true;
     m_updating = true;
     emit updatingChanged();
 
@@ -395,8 +392,10 @@ void JadeFirmwareUpdateController::update()
 
 void JadeFirmwareUpdateController::install(const QByteArray& data)
 {
+    m_device->api()->m_locked = true;
     m_started = false;
     auto activity = new JadeUpdateActivity(m_firmware, data, m_device);
+
     connect(activity->progress(), &Progress::valueChanged, this, [=] {
         m_progress = float(activity->progress()->value() - activity->progress()->from()) /
                      float(activity->progress()->to() - activity->progress()->from());
@@ -409,24 +408,36 @@ void JadeFirmwareUpdateController::install(const QByteArray& data)
     connect(activity, &JadeUpdateActivity::cancelled, this, [=] {
         activity->deleteLater();
         m_updating = false;
+        m_device->api()->m_locked = false;
         emit updatingChanged();
         emit updateCancelled();
     });
     connect(activity, &JadeUpdateActivity::locked, this, [=] {
         activity->deleteLater();
         m_updating = false;
+        m_device->api()->m_locked = false;
         emit updatingChanged();
         emit unlockRequired();
     });
     connect(activity, &Activity::failed, this, [=] {
         activity->deleteLater();
         m_updating = false;
+        m_device->api()->m_locked = false;
         emit updatingChanged();
         emit updateFailed();
     });
     connect(activity, &Activity::finished, this, [=] {
-        emit updateFinished();
-        m_device->api()->disconnectDevice();
+        auto version_info = m_device->versionInfo();
+        version_info["JADE_VERSION"] = m_firmware["version"];
+        version_info["JADE_CONFIG"] = m_firmware["config"];
+        if (version_info["JADE_STATE"].toString() == "READY") {
+            version_info["JADE_STATE"] = "LOCKED";
+        }
+        m_device->setVersionInfo(version_info);
+        QTimer::singleShot(5000, this, [=] {
+            m_device->api()->m_locked = false;
+            emit updateFinished();
+        });
     });
     emit activityCreated(activity);
     ActivityManager::instance()->exec(activity);
