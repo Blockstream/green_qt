@@ -49,6 +49,7 @@ StackViewPage {
         }
     }
     readonly property var firmwares: {
+        if (firmware_controller.fetching) return []
         const fws = []
         for (const fw of update_controller.firmwares) {
             if (fw.config !== self.device.versionInfo.JADE_CONFIG.toLowerCase()) continue
@@ -61,6 +62,7 @@ StackViewPage {
     }
 
     readonly property var latestFirmware: {
+        if (firmware_controller.fetching) return null
         for (const firmware of self.firmwares) {
             if (firmware.latest) {
                 return firmware
@@ -70,10 +72,18 @@ StackViewPage {
     }
 
     readonly property bool runningLatest: {
-        return self.latestFirmware && self.device && self.device.version === self.latestFirmware.version
+        if (firmware_controller.fetching) return false
+        if (self.latestFirmware) {
+            return self.device && self.device.version === self.latestFirmware.version
+        }
+        if (self.firmwares.length === 0) {
+            return true
+        }
+        return false
     }
 
     onLatestFirmwareChanged: self.pushView()
+    onRunningLatestChanged: self.pushView()
 
     property bool skipGenuineCheck: false
 
