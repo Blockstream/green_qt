@@ -17,11 +17,10 @@ Loader {
         Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, null, self.promo, self.screen))
     }
     sourceComponent: {
-        switch (self.promo.data.layout_small) {
+        switch (self.promo.data?.layout_small ?? 0) {
         case 0: return layout_0
         case 1: return layout_1
         case 2: return layout_2
-        default: null
         }
     }
     CloseButton {
