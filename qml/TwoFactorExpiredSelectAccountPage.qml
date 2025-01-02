@@ -40,36 +40,11 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.bottomMargin: 8
                 Layout.fillWidth: true
-                Layout.maximumWidth: 350
                 Layout.preferredWidth: 0
                 color: '#fff'
                 font.pixelSize: 14
                 font.weight: 400
-                text: `Some coins in your wallet haven't moved for a long time, so 2FA expired to keep you in control. To reactivate 2FA:`
-                wrapMode: Label.Wrap
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.bottomMargin: 8
-                Layout.fillWidth: true
-                Layout.maximumWidth: 350
-                Layout.preferredWidth: 0
-                color: '#fff'
-                font.pixelSize: 14
-                font.weight: 400
-                text: '\u2022 Send normally and refresh the 2FA on change coins (optimizes fees)'
-                wrapMode: Label.Wrap
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.bottomMargin: 16
-                Layout.fillWidth: true
-                Layout.maximumWidth: 350
-                Layout.preferredWidth: 0
-                color: '#fff'
-                font.pixelSize: 14
-                font.weight: 400
-                text: '\u2022 Redeposit all your expired 2FA coins'
+                text: `2FA Protected accounts are 2-of-2 wallets needing the user’s key and Blockstream’s 2FA signature. After a ~1-year timelock, they become 1-of-1, disabling 2FA, to ultimately keep you in control. Redeposit your coins to reactivate 2FA protection.`
                 wrapMode: Label.Wrap
             }
             Repeater {
