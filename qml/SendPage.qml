@@ -204,6 +204,9 @@ StackViewPage {
                             return error
                         }
                     }
+                    if (error === 'Fee change below the dust threshold') {
+                        return error
+                    }
                 }
                 onCleared: controller.recipient.greedy = false
                 onTextEdited: controller.recipient.greedy = false

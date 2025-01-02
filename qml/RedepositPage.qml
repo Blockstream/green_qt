@@ -138,6 +138,9 @@ StackViewPage {
                 if (error === 'id_invalid_replacement_fee_rate') return error
                 if (error === 'Insufficient funds for fees') return error
                 if (error === 'id_insufficient_funds') return error
+                if (error === 'Fee change below the dust threshold') {
+                    return error
+                }
             }
         }
         RowLayout {
