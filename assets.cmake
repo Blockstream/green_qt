@@ -124,10 +124,21 @@ qt_add_resources(green "images"
         assets/png/jade_5.png
         assets/png/jade_6.png
         assets/png/jade_7.png
+        assets/png/jade2_0.png
+        assets/png/jade2_1.png
+        assets/png/jade2_2.png
+        assets/png/jade2_3.png
+        assets/png/jade2_4.png
+        assets/png/jade2_5.png
+        assets/png/jade2_6.png
+        assets/png/jade2_7.png
 
         assets/png/background.png
         assets/png/ledger_3d.png
+        assets/png/jades.png
+        assets/png/jades_onboard.png
         assets/png/jade_card.png
+        assets/png/jade2_card.png
         assets/png/onboarding_globe.png
         assets/png/onboarding_cpu.png
 

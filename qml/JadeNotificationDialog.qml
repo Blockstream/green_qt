@@ -6,6 +6,8 @@ import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Window
 
+import "jade.js" as JadeJS
+
 Dialog {
     signal setupClicked(JadeDevice device)
     required property JadeDevice device
@@ -72,7 +74,7 @@ Dialog {
             Image {
                 anchors.centerIn: parent
                 scale: 0.2
-                source: 'qrc:/png/jade_0.png'
+                source: JadeJS.image(self.device, 0)
             }
         }
         PrimaryButton {

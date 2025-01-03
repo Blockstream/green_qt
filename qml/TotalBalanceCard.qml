@@ -55,7 +55,7 @@ WalletHeaderCard {
     contentItem: ColumnLayout {
         spacing: 10
         Label {
-            font.pixelSize: 24
+            font.pixelSize: 20
             font.weight: 600
             text: UtilJS.incognito(Settings.incognito, convert.output.label)
         }

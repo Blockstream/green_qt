@@ -185,7 +185,13 @@ void LoginController::loginWithDevice(Device* device)
             //     }
             // }
         }
-        if (!m_wallet) {
+        if (m_wallet) {
+            auto device_data = qobject_cast<DeviceData*>(m_wallet->login());
+            if (device_data) {
+                device_data->setDevice(device->details());
+                m_wallet->save();
+            }
+        } else {
             m_wallet = WalletManager::instance()->createWallet();
             m_wallet->m_deployment = m_context->deployment();
             m_wallet->setName(device->name());

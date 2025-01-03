@@ -32,7 +32,7 @@ StackViewPage {
             }
             MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                foreground: 'qrc:/png/jade_0.png'
+                foreground: 'qrc:/png/jades.png'
                 width: 352
                 height: 240
             }

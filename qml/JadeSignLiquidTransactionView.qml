@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
+import "jade.js" as JadeJS
 
 StackViewPage {
     signal closed()
@@ -34,7 +35,7 @@ StackViewPage {
             y: Math.max(0, (flickable.height - layout.height) / 2)
             MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                foreground: 'qrc:/png/jade_7.png'
+                foreground: JadeJS.image(self.resolver.session.context.device, 7)
                 width: 352
                 height: 240
             }

@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "jade.js" as JadeJS
 import "util.js" as UtilJS
 
 StackViewPage {
@@ -74,7 +75,7 @@ StackViewPage {
         }
         MultiImage {
             Layout.alignment: Qt.AlignCenter
-            foreground: 'qrc:/png/jade_0.png'
+            foreground: JadeJS.image(self.device, 0)
             width: 352
             height: 240
         }

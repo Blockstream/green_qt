@@ -341,6 +341,7 @@ QtObject {
     property Component jade_get_master_blinding_key_dialog: JadeGetMasterBlindingKeyView {
     }
 
+    /* TODO: refactor after ledger
     property Component jade_connect_view: ConnectJadePage {
         required property DeviceResolver resolver
         onDeviceSelected: (device) => self.target.push(jade_page, { device })
@@ -348,4 +349,5 @@ QtObject {
         rightItem: Item {}
         footer: Item {}
     }
+    */
 }

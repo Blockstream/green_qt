@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "jade.js" as JadeJS
+
 StackViewPage {
     required property Context context
     required property Address address
@@ -51,7 +53,7 @@ StackViewPage {
         }
         MultiImage {
             Layout.alignment: Qt.AlignCenter
-            foreground: 'qrc:/png/jade_7.png'
+            foreground: JadeJS.image(self.context.device, 7)
             width: 352
             height: 240
         }

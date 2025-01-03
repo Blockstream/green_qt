@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "jade.js" as JadeJS
+
 VFlickable {
     signal updateClicked()
     signal setupFinished(Context context)
@@ -48,7 +50,7 @@ VFlickable {
         }
         StepPane {
             title: 'Create or Restore'
-            image: 'qrc:/png/jade_7.png'
+            image: JadeJS.image(self.device, 7)
             PrimaryButton {
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 325
@@ -61,7 +63,7 @@ VFlickable {
         }
         StepPane {
             title: qsTrId('id_create_a_pin')
-            image: 'qrc:/png/jade_6.png'
+            image: JadeJS.image(self.device, 6)
             PrimaryButton {
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 325

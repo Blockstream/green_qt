@@ -8,6 +8,7 @@ qt_add_resources(green "qtquickcontrols2"
 
 SET(QML_FILES
     qml/analytics.js
+    qml/jade.js
     qml/util.js
     qml/WalletSecuritySettingsView.qml
     qml/GCard.qml

@@ -36,7 +36,14 @@ WalletHeaderCard {
             id: image
             x: details_column.width
             anchors.verticalCenter: parent.verticalCenter
-            source: 'qrc:/png/jade_card.png'
+            source: {
+                const device = self.context.device
+                if (device instanceof JadeDevice) {
+                    const type = device.versionInfo?.BOARD_TYPE
+                    return type === 'JADE_V2' ? 'qrc:/png/jade2_card.png' : 'qrc:/png/jade_card.png'
+                }
+                return ''
+            }
         }
     }
     headerItem: RowLayout {

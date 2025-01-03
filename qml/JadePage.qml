@@ -96,13 +96,16 @@ StackViewPage {
             }
         }
         if (self.debug) {
-            stack_view.replace(advanced_update_view, StackView.PushTransition)
+            console.log('push advanced update view')
+            stack_view.replace(null, advanced_update_view, StackView.PushTransition)
             return
         }
         if (self.runningLatest) {
+            console.log('skip firmware update')
             skipFirmwareUpdate()
         } else if (self.latestFirmware) {
-            stack_view.replace(basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
+            console.log('skip firmware update')
+            stack_view.replace(null, basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
         }
     }
 
@@ -124,6 +127,7 @@ StackViewPage {
             stack_view.replace(null, unintialized_view, StackView.PushTransition)
             break
         }
+        console.log('nothing to show, jade state is', self.device.state)
     }
 
     function firmwareVersionAndType(version, config) {

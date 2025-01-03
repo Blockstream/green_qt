@@ -34,11 +34,11 @@ StackViewPage {
         onClicked: self.addWallet()
     }
     OptionButton {
-        Layout.topMargin: 20
+        Layout.topMargin: 60
         title: 'On Hardware Wallet'
         description: qsTrId('id_your_keys_will_be_secured_on_a')
         tag: 'For Higher Security'
-        image: 'qrc:/svg2/funds_hww.svg'
+        image: 'qrc:/png/jades_onboard.png'
         offsetX: -20
         offsetY: -55
         onClicked: self.useDevice()

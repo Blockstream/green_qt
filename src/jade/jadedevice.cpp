@@ -537,7 +537,8 @@ void JadeDevice::setBackend(JadeAPI* backend)
 
 QJsonObject JadeDevice::details() const
 {
-    return {{"type", "jade"}, {"version", version()}, {"name", name()}};
+    const auto board_type = m_version_info.value("BOARD_TYPE").toString();
+    return {{"type", "jade"}, {"version", version()}, {"name", name()}, {"board", board_type}};
 }
 
 GetWalletPublicKeyActivity *JadeDevice::getWalletPublicKey(Network *network, const QVector<uint32_t>& path)

@@ -3,6 +3,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "jade.js" as JadeJS
+
 ColumnLayout {
     signal signed
     signal failed
@@ -22,7 +24,7 @@ ColumnLayout {
     }
     MultiImage {
         Layout.alignment: Qt.AlignHCenter
-        foreground: 'qrc:/png/jade_7.png'
+        foreground: JadeJS.image(self.resolver.session.context.device, 7)
         width: 352
         height: 240
     }

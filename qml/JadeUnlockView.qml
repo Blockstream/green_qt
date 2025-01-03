@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "jade.js" as JadeJS
+
 ColumnLayout {
     signal unlockFinished(Context context)
     signal unlockFailed()
@@ -32,7 +34,7 @@ ColumnLayout {
         Layout.alignment: Qt.AlignCenter
         width: 352
         height: 240
-        foreground: 'qrc:/png/jade_7.png'
+        foreground: JadeJS.image(self.device, 7)
     }
     Label {
         Layout.fillWidth: true
