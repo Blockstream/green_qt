@@ -165,7 +165,6 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 
             if (!device) device = new JadeDevice(this);
             device->setBackend(backend);
-            qDebug() << Q_FUNC_INFO;
             device->setVersionInfo(version_info);
             device->setConnected(true);
 #ifdef Q_OS_MACOS
@@ -209,7 +208,6 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
                         device->setStatus(JadeDevice::StatusIdle);
                     } else if (data.contains("result")) {
                         const auto version_info = data.value("result").toMap();
-                        qDebug() << Q_FUNC_INFO;
                         device->setVersionInfo(version_info);
                         device->setConnected(true);
                     }
