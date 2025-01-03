@@ -93,7 +93,8 @@ AbstractDrawer {
                 id: image
                 anchors.fill: parent
                 horizontalAlignment: Image.AlignHCenter
-                fillMode: Image.PreserveAspectCrop
+                verticalAlignment: Image.AlignVCenter
+                fillMode: Image.PreserveAspectFit
                 source: self.promo.getOrCreateResource('image_large').path
                 visible: image.status === Image.Ready
             }
@@ -103,7 +104,7 @@ AbstractDrawer {
                 sourceComponent: Video {
                     id: video
                     autoPlay: true
-                    fillMode: VideoOutput.PreserveAspectCrop
+                    fillMode: VideoOutput.PreserveAspectFit
                     loops: platform === 'linux' ? 1 : MediaPlayer.Infinite
                     muted: true
                     source: self.promo.getOrCreateResource('video_large').path
