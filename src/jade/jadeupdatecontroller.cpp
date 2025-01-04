@@ -217,7 +217,7 @@ void JadeFirmwareCheckController::check()
                 auto process = [&](bool delta, QJsonObject& firmware) {
                     const auto firmware_version = QVersionNumber::fromString(firmware.value("version").toString());
                     const bool same_version = QVersionNumber::fromString(version) == firmware_version;
-                    const bool newer_version = QVersionNumber::fromString(version) < firmware_version;
+                    const bool newer_version = QVersionNumber::fromString(version) <= firmware_version;
                     const bool same_config = config == firmware.value("config").toString();
                     const bool upgrade = newer_version || (same_version && !same_config);
                     const bool downgrade = firmware_version < QVersionNumber::fromString(version);
