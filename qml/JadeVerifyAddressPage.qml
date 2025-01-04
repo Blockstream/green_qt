@@ -43,15 +43,11 @@ StackViewPage {
     contentItem: ColumnLayout {
         VSpacer {
         }
-        Label {
+        AddressLabel {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            font.features: { 'calt': 0, 'zero': 1 }
-            font.pixelSize: 14
-            font.weight: 500
-            horizontalAlignment: Label.AlignHCenter
-            text: controller.address.address
-            wrapMode: Label.Wrap
+            address: controller.address
+            elide: AddressLabel.ElideNone
         }
         MultiImage {
             Layout.alignment: Qt.AlignCenter
