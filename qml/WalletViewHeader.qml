@@ -119,10 +119,6 @@ MainPageHeader {
 
     contentItem: ColumnLayout {
         spacing: 0
-        AlertView {
-            id: alert_view
-            alert: overview_alert
-        }
         HPane {
             contentItem: RowLayout {
                 spacing: 0
