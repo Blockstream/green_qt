@@ -436,6 +436,8 @@ void JadeFirmwareUpdateController::install(const QByteArray& data)
         m_device->setVersionInfo(version_info);
         QTimer::singleShot(5000, this, [=] {
             m_device->api()->m_locked = false;
+            m_device->api()->disconnectDevice();
+            m_device->api()->connectDevice();
             emit updateFinished();
         });
     });
