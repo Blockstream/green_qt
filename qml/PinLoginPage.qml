@@ -13,7 +13,11 @@ StackViewPage {
     signal removeClicked()
     signal closeClicked()
     required property Wallet wallet
-    readonly property bool connecting: controller.context?.sessions[0] ?? false
+    readonly property bool connecting: {
+        const session = controller.context?.sessions[0]
+        if (!session) return false
+        return !session.connected
+    }
     StackView.onDeactivated: {
         pin_field.clear()
     }
@@ -145,6 +149,7 @@ StackViewPage {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 Layout.bottomMargin: 30
+                Layout.topMargin: 10
                 font.pixelSize: 12
                 font.weight: 600
                 horizontalAlignment: Qt.AlignHCenter
