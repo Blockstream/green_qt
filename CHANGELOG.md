@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.17] - 2024-01-09
+### Added:
+- Graphical assets for Jade Plus
+- Support video advertisement on Linux
+- Show total spent amount in transaction details
+
+### Changed:
+- The default fee rate is now the 24 block fee rate estimate
+- Match address display format in Jade address verification flow
+- Updates Qt to 6.8.1
+
+### Fixed:
+- Display an error when the change output is dust in send flow
+- Aspect ratio of advertisement videos
+- Minor UI improvements
+
 ## [2.0.16] - 2024-12-19
 ### Added:
 - Genuine check flow
