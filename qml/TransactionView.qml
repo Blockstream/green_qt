@@ -30,6 +30,16 @@ StackViewPage {
         }
         return amounts
     }
+    readonly property var totals: {
+        const totals = []
+        if (self.transaction.type !== Transaction.Redeposit) {
+            for (let [id, satoshi] of Object.entries(self.transaction.data.satoshi)) {
+                const asset = AssetManager.assetWithId(self.context.deployment, id)
+                totals.push({ asset, satoshi: String(satoshi) })
+            }
+        }
+        return totals
+    }
     readonly property color tx_color: {
         if (self.confirmations === 0) return '#BB7B00'
         if (self.confirmations > self.network.liquid ? 2 : 6) return '#0A9252'
@@ -96,6 +106,8 @@ StackViewPage {
                         model: self.amounts
                         delegate: AssetIcon {
                             asset: modelData.asset
+                            border: 2
+                            borderColor: '#000'
                         }
                     }
                 }
@@ -121,7 +133,7 @@ StackViewPage {
             }
             TLabel {
                 Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 12
+                font.pixelSize: 14
                 font.weight: 400
                 color: '#929292'
                 text: UtilJS.formatTransactionTimestamp(self.transaction.data)
@@ -133,7 +145,7 @@ StackViewPage {
                 leftPadding: 8
                 rightPadding: 8
                 color: '#FFF'
-                font.pixelSize: 12
+                font.pixelSize: 14
                 font.weight: 700
                 text: {
                     switch (self.transaction.type) {
@@ -178,16 +190,20 @@ StackViewPage {
                                 Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
                                 Layout.fillWidth: false
                                 copyText: convert.output.label
+                                font.family: 'Roboto Mono'
+                                font.features: { 'calt': 0, 'zero': 1 }
                                 font.pixelSize: 24
                                 font.weight: 500
                                 text: UtilJS.incognito(Settings.incognito, convert.output.label)
                             }
                             TLabel {
                                 Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
+                                font.family: 'Roboto Mono'
+                                font.features: { 'calt': 0, 'zero': 1 }
                                 font.pixelSize: 14
                                 font.weight: 400
                                 opacity: 0.6
-                                text:  UtilJS.incognito(Settings.incognito, convert.fiat.label)
+                                text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
                                 visible: convert.fiat.available
                             }
                         }
@@ -195,8 +211,8 @@ StackViewPage {
                 }
             }
             LineSeparator {
-                Layout.bottomMargin: 20
-                Layout.topMargin: 20
+                Layout.bottomMargin: 10
+                Layout.topMargin: 10
             }
             GridLayout {
                 rowSpacing: 10
@@ -205,7 +221,7 @@ StackViewPage {
                 Label {
                     Layout.minimumWidth: 100
                     color: '#929292'
-                    font.pixelSize: 12
+                    font.pixelSize: 14
                     font.weight: 400
                     text: qsTrId('id_network_fee')
                 }
@@ -220,7 +236,9 @@ StackViewPage {
                         topPadding: 4
                         bottomPadding: 4
                         color: '#FFF'
-                        font.pixelSize: 12
+                        font.family: 'Roboto Mono'
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 14
                         font.weight: 400
                         text: UtilJS.incognito(Settings.incognito, fee_convert.output.label)
                     }
@@ -228,7 +246,9 @@ StackViewPage {
                         topPadding: 4
                         bottomPadding: 4
                         color: '#FFF'
-                        font.pixelSize: 12
+                        font.family: 'Roboto Mono'
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 14
                         font.weight: 400
                         opacity: 0.6
                         text: UtilJS.incognito(Settings.incognito, '~ ' + fee_convert.fiat.label)
@@ -238,7 +258,7 @@ StackViewPage {
                 }
                 Label {
                     color: '#929292'
-                    font.pixelSize: 12
+                    font.pixelSize: 14
                     font.weight: 400
                     text: qsTrId('id_fee_rate')
                 }
@@ -247,7 +267,9 @@ StackViewPage {
                         topPadding: 4
                         bottomPadding: 4
                         color: '#FFF'
-                        font.pixelSize: 12
+                        font.family: 'Roboto Mono'
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 14
                         font.weight: 400
                         text: Math.round(self.transaction.data.fee_rate / 100) / 10 + ' sat/vbyte'
                     }
@@ -255,9 +277,9 @@ StackViewPage {
                     }
                 }
                 Label {
-                    id: address_left_label
+                    Layout.alignment: Qt.AlignTop
                     color: '#929292'
-                    font.pixelSize: 12
+                    font.pixelSize: 14
                     font.weight: 400
                     text: {
                         if (!self.network.liquid && self.transaction.type === Transaction.Outgoing) {
@@ -268,36 +290,43 @@ StackViewPage {
                         }
                         return ''
                     }
-                    visible: address_left_label.text !== ''
+                    visible: address_label_repeater.count > 0
                 }
-                TLabel {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    id: address_right_label
-                    color: '#FFF'
-                    elide: Label.ElideMiddle
-                    font.pixelSize: 12
-                    font.weight: 400
-                    text: {
-                        if (!self.network.liquid && self.transaction.type === Transaction.Outgoing) {
-                            return self.transaction.data.outputs
-                                .filter(output => !output.is_relevant)
-                                .map(output => output.address)
-                                .join('\n')
+                ColumnLayout {
+                    visible: address_label_repeater.count > 0
+                    Repeater {
+                        id: address_label_repeater
+                        model: {
+                            const account = self.transaction.account
+                            if (!self.network.liquid && self.transaction.type === Transaction.Outgoing) {
+                                return self.transaction.data.outputs
+                                    .filter(output => !output.is_relevant)
+                                    .map(output => account.getOrCreateAddress(output))
+                            }
+                            if (!self.network.liquid && self.transaction.type === Transaction.Incoming) {
+                                return self.transaction.data.outputs
+                                    .filter(output => output.is_relevant)
+                                    .map(output => account.getOrCreateAddress(output))
+                            }
+                            return []
                         }
-                        if (!self.network.liquid && self.transaction.type === Transaction.Incoming) {
-                            return self.transaction.data.outputs
-                                .filter(output => output.is_relevant)
-                                .map(output => output.address)
-                                .join('\n')
+                        delegate: AddressLabel {
+                            required property var modelData
+                            Layout.fillWidth: true
+                            id: delegate
+                            address: delegate.modelData
+                            copyEnabled: true
+                            elide: AddressLabel.ElideNone
+                            font.pixelSize: 14
+                            font.weight: 400
+                            horizontalAlignment: Text.AlignLeft
                         }
-                        return ''
                     }
-                    visible: address_right_label.text !== ''
                 }
                 Label {
+                    Layout.alignment: Qt.AlignTop
                     color: '#929292'
-                    font.pixelSize: 12
+                    font.pixelSize: 14
                     font.weight: 400
                     text: qsTrId('id_transaction_id')
                 }
@@ -305,11 +334,74 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#FFF'
-                    elide: Label.ElideMiddle
-                    font.pixelSize: 12
+                    font.family: 'Roboto Mono'
+                    font.features: { 'calt': 0, 'zero': 1 }
+                    font.pixelSize: 14
                     font.weight: 400
                     text: self.transaction.data.txhash
                     onCopyClicked: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
+                    wrapMode: Label.WrapAnywhere
+                }
+            }
+            LineSeparator {
+                Layout.bottomMargin: 10
+                Layout.topMargin: 10
+                visible: self.transaction.type === Transaction.Outgoing
+            }
+            GridLayout {
+                rowSpacing: 10
+                columnSpacing: 20
+                columns: 2
+                visible: self.transaction.type === Transaction.Outgoing
+                Label {
+                    Layout.alignment: Qt.AlignTop
+                    Layout.minimumWidth: 100
+                    color: '#929292'
+                    font.pixelSize: 14
+                    font.weight: 400
+                    text: qsTrId('id_total_spent')
+                }
+                ColumnLayout {
+                    Repeater {
+                        model: self.totals
+                        delegate: Pane {
+                            required property var modelData
+                            Layout.fillWidth: true
+                            id: total_pane
+                            background: null
+                            padding: 0
+                            Convert {
+                                id: total_convert
+                                account: self.transaction.account
+                                asset: total_pane.modelData.asset
+                                input: ({ satoshi: String(total_pane.modelData.satoshi) })
+                                unit: self.transaction.account.session.unit
+                            }
+                            contentItem: ColumnLayout {
+                                spacing: 4
+                                TLabel {
+                                    Layout.alignment: Qt.AlignRight
+                                    Layout.fillWidth: false
+                                    copyText: total_convert.output.label
+                                    font.family: 'Roboto Mono'
+                                    font.features: { 'calt': 0, 'zero': 1 }
+                                    font.pixelSize: 14
+                                    font.weight: 400
+                                    text: UtilJS.incognito(Settings.incognito, total_convert.output.label)
+                                }
+                                TLabel {
+                                    Layout.alignment: Qt.AlignRight
+                                    font.family: 'Roboto Mono'
+                                    font.features: { 'calt': 0, 'zero': 1 }
+                                    font.pixelSize: 14
+                                    font.weight: 400
+                                    opacity: 0.6
+                                    text: UtilJS.incognito(Settings.incognito, total_convert.fiat.label)
+                                    visible: total_convert.fiat.available
+                                }
+                            }
+                        }
+                    }
                 }
             }
             Collapsible {
@@ -323,8 +415,8 @@ StackViewPage {
                     id: note_layout
                     width: note_collapsible.width
                     LineSeparator {
-                        Layout.bottomMargin: 20
-                        Layout.topMargin: 20
+                        Layout.bottomMargin: 10
+                        Layout.topMargin: 10
                     }
                     FieldTitle {
                         text: qsTrId('id_note')
@@ -453,7 +545,7 @@ StackViewPage {
                     color: '#0A9252'
                     radius: height / 2
                 }
-                font.pixelSize: 12
+                font.pixelSize: 14
                 font.weight: 700
                 text: button.badge ?? ''
                 visible: button.badge
@@ -520,8 +612,6 @@ StackViewPage {
         signal copyClicked()
         property string copyText: label.text
         id: label
-        topPadding: 4
-        bottomPadding: 4
         rightPadding: collapsible.width
         Collapsible {
             id: collapsible

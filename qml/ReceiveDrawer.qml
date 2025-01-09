@@ -56,7 +56,7 @@ WalletDrawer {
                 }
                 PrimaryButton {
                     Layout.fillWidth: true
-                    enabled: !controller.generating && controller.context.device?.connected
+                    enabled: !controller.generating && (controller.context.device?.connected ?? false)
                     text: qsTrId('id_verify_on_device')
                     visible: controller.context.wallet.login.device?.type === 'jade'
                     onClicked: {
