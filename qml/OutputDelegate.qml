@@ -72,16 +72,20 @@ ItemDelegate {
             }
             Label {
                 Layout.alignment: Qt.AlignRight
+                font.family: 'Roboto Mono'
+                font.features: { 'calt': 0, 'zero': 1 }
                 font.pixelSize: 14
                 font.weight: 600
-                text: convert.output.label
+                text: UtilJS.incognito(Settings.incognito, convert.output.label)
             }
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: '#929292'
+                font.family: 'Roboto Mono'
+                font.features: { 'calt': 0, 'zero': 1 }
                 font.pixelSize: 14
                 font.weight: 600
-                text: convert.fiat.label
+                text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
                 visible: convert.fiat.available
             }
         }
