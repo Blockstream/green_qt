@@ -105,15 +105,9 @@ AbstractDrawer {
                     id: video
                     autoPlay: true
                     fillMode: VideoOutput.PreserveAspectFit
-                    loops: platform === 'linux' ? 1 : MediaPlayer.Infinite
+                    loops: MediaPlayer.Infinite
                     muted: true
                     source: self.promo.getOrCreateResource('video_large').path
-                    onStopped: {
-                        if (platform === 'linux') {
-                            video.source = ''
-                            video.source = self.promo.getOrCreateResource('video_large').path
-                        }
-                    }
                 }
             }
             Rectangle {
