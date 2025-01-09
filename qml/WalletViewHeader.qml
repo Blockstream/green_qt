@@ -198,14 +198,20 @@ MainPageHeader {
                 HSpacer {
                 }
                 RowLayout {
+                    property real _opacity: -1
                     Layout.fillWidth: false
                     Layout.leftMargin: 20
                     Layout.rightMargin: 20
+                    id: task_info_layout
                     spacing: constants.s1
-                    visible: self.context?.dispatcher.busy ?? false
+                    opacity: Math.max(0, task_info_layout._opacity)
+                    Behavior on _opacity {
+                        SmoothedAnimation {
+                            velocity: 3
+                        }
+                    }
                     Label {
-                        text: {
-                            let name = ''
+                        property string task: {
                             const groups = self.context?.dispatcher?.groups ?? []
                             for (let i = 0; i < groups.length; i++) {
                                 const group = groups[i]
@@ -216,13 +222,17 @@ MainPageHeader {
                                         return task.type
                                     }
                                 }
-
-                                // if (group.status === TaskGroup.Active && group.name) {
-                                //     name = qsTrId(group.name)
-                                // }
                             }
-                            // return name
                             return ''
+                        }
+                        id: task_label
+                        onTaskChanged: {
+                            if (task_label.task.length > 0) {
+                                task_label.text = task_label.task
+                                task_info_layout._opacity = 1
+                            } else {
+                                task_info_layout._opacity = -1
+                            }
                         }
                     }
                     ProgressIndicator {
