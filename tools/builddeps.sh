@@ -6,8 +6,8 @@ if [ -d $PREFIX ]; then
     exit 0
 fi
 
-./tools/buildqt.sh
 ./tools/buildgdk.sh
+./tools/buildqt.sh
 ./tools/buildlibusb.sh
 ./tools/buildhidapi.sh
 ./tools/buildcountly.sh

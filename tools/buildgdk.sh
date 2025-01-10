@@ -17,6 +17,9 @@ cd gdk
 git rev-parse HEAD
 git checkout $GDK_COMMIT
 
+# patch boost url
+sed -i '' 's/boostorg\.jfrog\.io\/artifactory\/main/archives.boost.io/g' tools/builddeps.sh
+
 # unset to disable building gdk java support
 unset JAVA_HOME
 # unset because it clashes with gdk build script
