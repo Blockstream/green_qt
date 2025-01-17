@@ -260,6 +260,7 @@ SET(QML_FILES
     qml/JadeGenuineCheckPage.qml
     qml/JadeGenuineCheckingPage.qml
     qml/PromoCard.qml
+    qml/ReceivePage.qml
 )
 
 if (GREEN_NO_RESOURCES)
