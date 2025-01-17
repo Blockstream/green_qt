@@ -135,7 +135,11 @@ TTextField {
                 visible: unit_label.enabled
             }
         }
-        onClicked: unit_menu.open()
+        onClicked: {
+            if (!unit_menu.visible) {
+                unit_menu.open()
+            }
+        }
         background: Rectangle {
             border.width: 2
             border.color: '#00B45A'
@@ -144,10 +148,10 @@ TTextField {
         }
         GMenu {
             id: unit_menu
-            x: unit_label.width * 0.5 - unit_menu.width * 0.8
-            y: unit_label.height + 8
-            pointerX: 0.8
-            pointerY: 0
+            x: unit_menu_anchors.x
+            y: unit_menu_anchors.y
+            pointerX: unit_menu_anchors.pointerX
+            pointerY: unit_menu_anchors.pointerY
             GMenu.Item {
                 enabled: self.convert.fiat.available
                 hideIcon: true
@@ -168,6 +172,16 @@ TTextField {
                     }
                 }
             }
+        }
+    }
+    property var unit_menu_anchors: {
+        const p = UtilJS.dynamicScenePosition(unit_label, 0, unit_label.height + 8 + unit_menu.height)
+        const wh = ApplicationWindow.window?.height ?? 0
+        return {
+            x: unit_label.width * 0.5 - unit_menu.width * 0.8,
+            y: p.y > wh ? -unit_menu.height - 8 : unit_label.height + 8,
+            pointerX: 0.8,
+            pointerY: p.y > wh ? 1 : 0
         }
     }
     Label {
