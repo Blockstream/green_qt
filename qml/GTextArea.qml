@@ -3,17 +3,42 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 TextArea {
-    id: self
-    bottomPadding: 8
-    topPadding: 8
-    leftPadding: 8
-    rightPadding: 8
-    background: Rectangle {
-        implicitWidth: 200
-        radius: 4
-        opacity: self.activeFocus ? 1 : (self.enabled ? 0.8 : 0.5)
-        color: 'transparent'
-        border.color: self.activeFocus ? constants.g500 : constants.c500
-        border.width: self.activeFocus ? 1.5 : 0.5
+    readonly property bool visualFocus: {
+        if (!self.readOnly && self.activeFocus) {
+            switch (self.focusReason) {
+            case Qt.TabFocusReason:
+            case Qt.BacktabFocusReason:
+            case Qt.ShortcutFocusReason:
+                return true
+            }
+        }
+        return false
     }
+    id: self
+    topPadding: 14
+    bottomPadding: 13
+    leftPadding: 15
+    background: Item {
+        anchors.fill: parent
+        Rectangle {
+            anchors.fill: parent
+            border.width: 2
+            border.color: '#00B45A'
+            color: 'transparent'
+            radius: 5
+            visible: self.visualFocus
+        }
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: self.visualFocus ? 4 : 0
+            border.width: !!self.error ? 2 : 0
+            border.color: '#C91D36'
+            color: Qt.lighter('#222226', !self.readonly && self.hovered ? 1.2 : 1)
+            radius: self.visualFocus ? 1 : 5
+        }
+    }
+    font.pixelSize: 14
+    font.weight: 500
+    font.features: { 'calt': 0, 'zero': 1 }
+    wrapMode: TextArea.Wrap
 }
