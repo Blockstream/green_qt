@@ -88,15 +88,6 @@ PromoManager::PromoManager()
     g_promo_manager = this;
 
     connect(Analytics::instance(), &Analytics::remoteConfigChanged, this, &PromoManager::update);
-
-    if (!ExistsDataDir("promos")) {
-        QDirIterator it(GetDataDir("promos"));
-        while (it.hasNext()) {
-            QJsonObject data;
-            if (!ReadPromoRecord(it.next(), data)) continue;
-            getOrCreatePromo(data);
-        }
-    }
 }
 
 PromoManager::~PromoManager()
@@ -172,7 +163,16 @@ void PromoResource::download(const QString& source)
         setPath(QUrl::fromLocalFile(path).toString());
     } else {
         QNetworkRequest req{source};
-        auto net = qmlEngine(PromoManager::instance())->networkAccessManager();
+        auto engine = qmlEngine(PromoManager::instance());
+        if (!engine) {
+            qDebug() << Q_FUNC_INFO << "engine not set";
+            return;
+        }
+        auto net = engine->networkAccessManager();
+        if (!net) {
+            qDebug() << Q_FUNC_INFO << "network access manager not set";
+            return;
+        }
         m_reply = net->get(req);
         connect(m_reply, &QNetworkReply::finished, this, [=] {
             QFile file(path);
