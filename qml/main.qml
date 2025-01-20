@@ -42,7 +42,13 @@ ApplicationWindow {
     ApplicationController {
         id: controller
         onQuitRequested: controller.triggerQuit()
-        onQuitTriggered: stack_view.replace(null, quit_page, StackView.PushTransition)
+        onQuitTriggered: {
+            Settings.windowX = window.x
+            Settings.windowY = window.y
+            Settings.windowWidth = window.width
+            Settings.windowHeight = window.height
+            stack_view.replace(null, quit_page, StackView.PushTransition)
+        }
     }
 
     MediaDevices {
