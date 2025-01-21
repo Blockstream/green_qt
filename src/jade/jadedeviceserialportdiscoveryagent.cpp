@@ -167,8 +167,9 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
             device->setBackend(backend);
             device->setVersionInfo(version_info);
             device->setConnected(true);
-#ifdef Q_OS_MACOS
             const auto system_location = m_backends.key(backend);
+            device->setSystemLocation(system_location);
+#ifdef Q_OS_MACOS
             const auto board_type = version_info.value("BOARD_TYPE", "JADE").toString();
             if (board_type != "JADE_V2" && system_location.contains("cu.usbmodem")) {
                 backend->setRelaxWrite(true);
