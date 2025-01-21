@@ -54,34 +54,6 @@ ApplicationWindow {
     MediaDevices {
         id: media_devices
     }
-    Label {
-        parent: Overlay.overlay
-        visible: false
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.margins: 4
-        z: 1000
-        HoverHandler {
-            id: debug_focus_hover_handler
-        }
-        opacity: debug_focus_hover_handler.hovered ? 1.0 : 0.3
-        background: Rectangle {
-            color: Qt.rgba(1, 0, 0, 0.8)
-            radius: 4
-            border.width: 2
-            border.color: 'black'
-        }
-        padding: 8
-        text: {
-            const parts = []
-            let item = activeFocusItem
-            while (item) {
-                parts.unshift((''+item).split('(')[0])
-                item = item.parent
-            }
-            return parts.join(' > ')
-        }
-    }
 
     GStackView {
         id: stack_view
