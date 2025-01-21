@@ -244,6 +244,7 @@ qt_add_resources(green "images"
         assets/svg2/check-light.svg
         assets/svg2/fail-light.svg
         assets/svg2/warning-light.svg
+        assets/svg2/help.svg
 
         assets/pdf/recovery-phrase-backup-template-12-words.pdf
 
