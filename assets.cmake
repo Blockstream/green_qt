@@ -115,7 +115,6 @@ qt_add_resources(green "images"
         assets/png/no_transactions.png
 
         assets/png/canceled.png
-        assets/png/completed.png
         assets/png/jade_0.png
         assets/png/jade_1.png
         assets/png/jade_2.png
@@ -247,6 +246,7 @@ qt_add_resources(green "images"
         assets/svg2/help.svg
         assets/svg2/completed.svg
         assets/svg2/bug.svg
+        assets/svg2/headset.svg
 
         assets/pdf/recovery-phrase-backup-template-12-words.pdf
 

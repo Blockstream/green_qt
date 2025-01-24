@@ -104,9 +104,8 @@ StackViewPage {
             id: view
             VSpacer {
             }
-            Image {
+            CompletedImage {
                 Layout.alignment: Qt.AlignHCenter
-                source: 'qrc:/png/completed.png'
             }
             Label {
                 Layout.fillWidth: true

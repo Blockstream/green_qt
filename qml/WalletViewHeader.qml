@@ -53,8 +53,8 @@ MainPageHeader {
     component WalletMenu: GMenu {
         id: menu
         GMenu.Item {
-            text: 'Report a bug'
-            icon.source: 'qrc:/svg2/bug.svg'
+            text: 'Get Support'
+            icon.source: 'qrc:/svg2/headset.svg'
             onClicked: {
                 menu.close()
                 self.reportBugClicked()

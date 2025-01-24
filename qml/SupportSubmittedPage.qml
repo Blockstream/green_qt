@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
+    required property string type
     required property var request
     id: self
     title: qsTrId('id_support')
@@ -12,19 +13,20 @@ StackViewPage {
         spacing: 10
         VSpacer {
         }
-        MultiImage {
+        CompletedImage {
             Layout.alignment: Qt.AlignCenter
-            foreground: 'qrc:/svg2/completed.svg'
-            fill: false
-            center: true
-            width: 300
-            height: 182
         }
         Label {
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 26
             font.weight: 600
-            text: 'Support request created'
+            text: {
+                if (self.type === 'feedback') {
+                    return 'Thank you for your feedback'
+                } else {
+                    return 'Support request created'
+                }
+            }
         }
         // CopyAddressButton {
         //     Layout.alignment: Qt.AlignCenter
@@ -38,6 +40,7 @@ StackViewPage {
             Layout.maximumWidth: 300
             horizontalAlignment: Label.AlignHCenter
             text: 'You will receive an email from Blockstream Support'
+            visible: self.type !== 'feedback'
             wrapMode: Label.Wrap
         }
         VSpacer {

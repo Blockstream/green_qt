@@ -43,6 +43,7 @@ StackViewPage {
                 Layout.preferredWidth: 0
                 horizontalAlignment: Label.AlignHCenter
                 text: 'Please be as detailed as possible when describing the issue'
+                visible: type !== 'feedback'
                 wrapMode: Label.Wrap
             }
             FieldTitle {

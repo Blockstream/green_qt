@@ -448,7 +448,7 @@ AbstractDialog {
                     }
                 }
                 SubButton {
-                    text: 'Report a bug'
+                    text: 'Get Support'
                     onClicked: {
                         page.StackView.view.push(request_support_page, {
                             type: 'incident',
@@ -463,7 +463,9 @@ AbstractDialog {
         id: request_support_page
         RequestSupportPage {
             id: page
-            onSubmitted: (request) => page.StackView.view.replace(page, support_submitted_page, { request }, StackView.PushTransition)
+            onSubmitted: (request) => {
+                page.StackView.view.replace(page, support_submitted_page, { request, type: page.type }, StackView.PushTransition)
+            }
         }
     }
 
