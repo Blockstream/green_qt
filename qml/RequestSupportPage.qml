@@ -14,6 +14,10 @@ StackViewPage {
     property Context context
     RequestSupportController {
         id: controller
+        onFailed: (error) => {
+            self.enabled = true
+            error_badge.error = `Your request failed\n${error}`
+        }
         onSubmitted: (result) => self.submitted(result.request)
     }
     id: self
@@ -52,6 +56,7 @@ StackViewPage {
                 validator: RegularExpressionValidator {
                     regularExpression: /^(?:(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*)|(?:".+"))@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/
                 }
+                onTextChanged: error_badge.clear()
             }
             FieldTitle {
                 text: qsTrId('id_description')
@@ -61,6 +66,7 @@ StackViewPage {
                 Layout.fillWidth: true
                 Layout.minimumHeight: 200
                 id: description_field
+                onTextChanged: error_badge.clear()
             }
             Label {
                 Layout.alignment: Qt.AlignRight
@@ -74,11 +80,18 @@ StackViewPage {
     }
     footerItem: ColumnLayout {
         spacing: 10
+        FixedErrorBadge {
+            Layout.fillWidth: true
+            Layout.bottomMargin: 20
+            id: error_badge
+            pointer: false
+        }
         RowLayout {
             visible: self.type === 'incident'
             CheckBox {
                 id: logs_checkbox
                 checked: self.type === 'incident'
+                onCheckedChanged: error_badge.clear()
             }
             Label {
                 Layout.fillWidth: true
@@ -105,6 +118,7 @@ StackViewPage {
             enabled: email_field.acceptableInput && description_field.length > 0 && description_field.length <= 1000 & (!Settings.useTor || tor_checkbox.checked)
             text: qsTrId('id_submit')
             onClicked: {
+                error_badge.clear()
                 const custom_fields = []
                 if (self.context) {
                     const supportId = self.context.accounts

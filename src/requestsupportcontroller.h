@@ -13,6 +13,7 @@ public:
 public slots:
     void submit(bool share_logs, const QJsonObject& data);
 signals:
+    void failed(const QString& error);
     void submitted(const QJsonObject& result);
 };
 

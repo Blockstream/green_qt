@@ -95,9 +95,17 @@ void RequestSupportController::submit(bool share_logs, const QJsonObject& data)
     req->setData(QJsonObject{
         { "request", request }
     });
+    connect(req, &HttpRequestActivity::failed, this, [=] {
+        emit failed("Unknown error");
+    });
     connect(req, &HttpRequestActivity::finished, this, [=] {
-        const auto body = QJsonDocument::fromJson(req->response().value("body").toString().toUtf8());
-        emit submitted(body.object());
+        const auto error = req->response().value("error").toString();
+        if (error.isEmpty() || error == "Created") {
+            const auto body = QJsonDocument::fromJson(req->response().value("body").toString().toUtf8());
+            emit submitted(body.object());
+        } else {
+            emit failed(error);
+        }
     });
 
     HttpManager::instance()->exec(req);

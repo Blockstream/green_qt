@@ -23,6 +23,7 @@ signals:
     void sessionChanged();
 private slots:
     void dispatch();
+    void drain();
 private:
     TaskDispatcher* const m_dispatcher;
     QMutex m_mutex;

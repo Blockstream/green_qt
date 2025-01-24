@@ -93,12 +93,18 @@ void HttpManager::dispatch()
         qDebug() << "http: create session";
         auto network = NetworkManager::instance()->network("electrum-mainnet");
         m_session = SessionManager::instance()->create(network);
-        m_session->setActive(true);
         connect(m_session, &Session::connectedChanged, this, &HttpManager::dispatch);
         emit sessionChanged();
+    }
 
-        m_dispatcher->add(new ConnectTask(m_session));
-
+    if (!m_session->isActive()) {
+        m_session->setActive(true);
+        auto task = new ConnectTask(m_session);
+        connect(task, &Task::failed, this, [=] {
+            m_session->setActive(false);
+            drain();
+        });
+        m_dispatcher->add(task);
         return;
     }
 
@@ -120,4 +126,12 @@ void HttpManager::dispatch()
     });
 
     ActivityManager::instance()->exec(m_running);
+}
+
+void HttpManager::drain()
+{
+    while (!m_queue.isEmpty()) {
+        auto activity = m_queue.dequeue();
+        activity->fail();
+    }
 }
