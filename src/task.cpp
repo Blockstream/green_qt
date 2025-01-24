@@ -327,7 +327,7 @@ namespace {
                 params.insert("electrum_tls", session->enableElectrumTls());
             }
         }
-        if (!session->network()->isMainnet() && session->network()->isLiquid()) {
+        if (session->network()->isLiquid()) {
             params.insert("discount_fees", true);
         }
         return params;
