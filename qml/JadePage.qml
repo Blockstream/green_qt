@@ -11,6 +11,7 @@ StackViewPage {
     signal firmwareUpdated()
     signal skip(Device device)
     signal closeClicked()
+    signal detailsClicked()
     required property JadeDevice device
     required property bool login
     readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
@@ -32,6 +33,11 @@ StackViewPage {
             text: qsTrId('id_setup_guide')
             visible: self.device.state === JadeDevice.StateUninitialized
             onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/19629901272345-Set-up-Jade')
+        }
+        CircleButton {
+            icon.source: 'qrc:/svg2/info.svg'
+            visible: false
+            onClicked: self.detailsClicked()
         }
         WalletOptionsButton {
             wallet: null

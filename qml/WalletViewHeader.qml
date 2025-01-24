@@ -18,6 +18,7 @@ MainPageHeader {
     signal notificationsClicked()
     signal logoutClicked()
     signal promoClicked(Promo promo)
+    signal reportBugClicked()
 
     required property Context context
     required property Wallet wallet
@@ -51,6 +52,14 @@ MainPageHeader {
 
     component WalletMenu: GMenu {
         id: menu
+        GMenu.Item {
+            text: 'Report a bug'
+            icon.source: 'qrc:/svg2/bug.svg'
+            onClicked: {
+                menu.close()
+                self.reportBugClicked()
+            }
+        }
         GMenu.Item {
             enabled: name_field_loader.active
             text: qsTrId('id_rename')

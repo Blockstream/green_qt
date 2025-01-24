@@ -203,6 +203,14 @@ Page {
         onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
         onStatusClicked: status_drawer.open()
         onNotificationsClicked: notifications_drawer.open()
+        onReportBugClicked: {
+            const drawer = support_drawer.createObject(self, {
+                context: self.context,
+                type: 'incident',
+                subject: 'Bug report from green_qt'
+            })
+            drawer.open()
+        }
         id: wallet_header
         context: self.context
         wallet: self.wallet
@@ -544,6 +552,12 @@ Page {
             onAbort: {
                 dialog.close()
             }
+        }
+    }
+
+    Component {
+        id: support_drawer
+        SupportDrawer {
         }
     }
 

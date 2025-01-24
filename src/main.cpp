@@ -68,7 +68,7 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 
 extern QString g_data_location;
 QCommandLineParser g_args;
-static QFile g_log_file;
+QFile g_log_file;
 
 #include <boost/log/core.hpp>
 #include <boost/log/sinks/async_frontend.hpp>
@@ -402,8 +402,6 @@ int main(int argc, char *argv[])
 
     qInfo() << "Load wallets";
     wallet_manager.loadWallets();
-    qInfo() << "Start analytics";
-    analytics.start();
 
     qInfo() << "Setup QML root context";
     QQmlApplicationEngine engine;
@@ -461,6 +459,9 @@ int main(int argc, char *argv[])
 
     qDebug() << "Window:";
     qDebug() << "  Graphics API: " << qPrintable(GraphicsAPIToString(window->rendererInterface()->graphicsApi()));
+
+    qInfo() << "Start analytics";
+    analytics.start();
 
     int ret = hid_init();
     if (ret != 0) return ret;

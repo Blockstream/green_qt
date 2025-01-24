@@ -141,6 +141,7 @@ MainPage {
         padding: 60
         topPadding: 20
         contentItem: ColumnLayout {
+            spacing: 20
             WalletsDrawer.ListButton {
                 Layout.alignment: Qt.AlignCenter
                 Layout.maximumWidth: 400

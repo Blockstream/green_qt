@@ -22,6 +22,7 @@ public:
     void popView(const QString& id);
     std::chrono::seconds timestampOffset() const;
     QJsonValue getRemoteConfigValue(const QString& key) const;
+    QString countlyId() const;
 signals:
     void remoteConfigChanged();
 public slots:

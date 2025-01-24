@@ -408,6 +408,7 @@ AbstractDialog {
     Component {
         id: support_page
         StackViewPage {
+            id: page
             title: qsTrId('id_support')
             rightItem: CloseButton {
                 onClicked: self.close()
@@ -437,7 +438,38 @@ AbstractDialog {
                 }
                 VSpacer {
                 }
+                SubButton {
+                    text: 'Give us your feedback'
+                    onClicked: {
+                        page.StackView.view.push(request_support_page, {
+                            type: 'feedback',
+                            subject: 'Feedback from green_qt'
+                        })
+                    }
+                }
+                SubButton {
+                    text: 'Report a bug'
+                    onClicked: {
+                        page.StackView.view.push(request_support_page, {
+                            type: 'incident',
+                            subject: 'Bug report from green_qt'
+                        })
+                    }
+                }
             }
+        }
+    }
+    Component {
+        id: request_support_page
+        RequestSupportPage {
+            id: page
+            onSubmitted: (request) => page.StackView.view.replace(page, support_submitted_page, { request }, StackView.PushTransition)
+        }
+    }
+
+    Component {
+        id: support_submitted_page
+        SupportSubmittedPage {
         }
     }
 }

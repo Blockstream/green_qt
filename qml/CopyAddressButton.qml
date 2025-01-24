@@ -7,6 +7,8 @@ AbstractButton {
     property string content: self.text
     id: self
     padding: 10
+    font.pixelSize: 12
+    font.weight: 600
     background: Item {
         Rectangle {
             anchors.fill: parent
@@ -34,8 +36,7 @@ AbstractButton {
             }
         }
         Label {
-            font.pixelSize: 12
-            font.weight: 600
+            font: self.font
             text: self.text
         }
     }

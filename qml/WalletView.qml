@@ -22,6 +22,12 @@ MainPage {
             stack_view.currentItem.openSendDrawer(url)
         }
     }
+
+    function openJadeDetailsDrawer() {
+        const drawer = jade_details_drawer.createObject(self, { device: self.device })
+        drawer.open()
+    }
+
     AnalyticsAlert {
         id: login_alert
         screen: 'Login'
@@ -79,6 +85,7 @@ MainPage {
             }
             onFirmwareUpdated: stack_view.pop()
             onCloseClicked: self.closeDevice(self.device)
+            onDetailsClicked: self.openJadeDetailsDrawer()
         }
     }
 
@@ -418,6 +425,11 @@ MainPage {
     Component {
         id: http_request_dialog
         JadeHttpRequestDialog {
+        }
+    }
+    Component {
+        id: jade_details_drawer
+        JadeDetailsDrawer {
         }
     }
 }

@@ -238,6 +238,11 @@ QJsonValue Analytics::getRemoteConfigValue(const QString &key) const
     }
 }
 
+QString Analytics::countlyId() const
+{
+    return d->device_id;
+}
+
 void AnalyticsPrivate::updateCustomUserDetails()
 {
     std::map<std::string, std::string> user_details;

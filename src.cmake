@@ -85,6 +85,7 @@ SET(TARGET_SOURCES
         src/redepositcontroller.h src/redepositcontroller.cpp
         src/jadeverifyaddresscontroller.h src/jadeverifyaddresscontroller.cpp
         src/promo.h src/promo.cpp
+        src/requestsupportcontroller.h src/requestsupportcontroller.cpp
 )
 
 if (WIN32)
