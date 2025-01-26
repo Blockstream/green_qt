@@ -16,7 +16,7 @@ StackViewPage {
         id: controller
         onFailed: (error) => {
             self.enabled = true
-            error_badge.error = `Your request failed\n${error}`
+            error_badge.raise('Your request failed', error)
         }
         onSubmitted: (result) => self.submitted(result.request)
     }

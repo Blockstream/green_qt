@@ -44,12 +44,13 @@ StackViewPage {
         id: controller
         wallet: self.wallet
         onInvalidPin: {
+            error_badge.raise(qsTrId('id_invalid_pin'))
             pin_field.clear()
             pin_field.enabled = self.wallet.login.attempts > 0
         }
         onLoginFinished: context => self.loginFinished(context)
         onLoginFailed: error => {
-            error_badge.error = error
+            if (error) error_badge.raise(error)
             pin_field.clear()
             pin_field.enabled = true
         }

@@ -27,8 +27,10 @@ StackViewPage {
             }
         }
         onLoginFailed: (error) => {
-            console.log('login failed', error)
-            error_badge.error = error
+            if (error === 'decode' || error === 'too short') {
+                error = 'id_invalid_xpub'
+            }
+            error_badge.raise(error);
         }
     }
     id: self

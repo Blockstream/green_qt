@@ -35,7 +35,7 @@ StackViewPage {
             self.contentItem.enabled = true
             password_field.clear()
             password_field.forceActiveFocus()
-            error_badge.error = error
+            error_badge.raise(error)
         }
     }
     Action {
