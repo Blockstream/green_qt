@@ -312,34 +312,27 @@ StackViewPage {
                 text: '~ ' + fee_convert.fiat.label
             }
         }
-        RowLayout {
-            spacing: 20
-            RegularButton {
-                Layout.fillWidth: true
-                enabled: controller.asset?.id === controller.account.network.policyAsset
-                implicitWidth: 0
-                text: qsTrId('id_manual_coin_selection')
-                onClicked: {
-                    self.pushSelectCoinsPage()
-                }
-            }
-            PrimaryButton {
-                Layout.fillWidth: true
-                enabled: (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
-                implicitWidth: 0
-                text: qsTrId('id_next')
-                onClicked: {
-                    self.StackView.view.push(send_confirm_page, {
-                        context: self.context,
-                        account: controller.account,
-                        asset: controller.asset,
-                        recipient: controller.recipient,
-                        transaction: controller.transaction,
-                        fiat: amount_field.fiat,
-                        unit: amount_field.unit,
-                        address_input: address_field.address_input,
-                    })
-                }
+        LinkButton {
+            Layout.bottomMargin: 20
+            enabled: controller.asset?.id === controller.account.network.policyAsset
+            text: qsTrId('id_manual_coin_selection')
+            onClicked: self.pushSelectCoinsPage()
+        }
+        PrimaryButton {
+            Layout.fillWidth: true
+            enabled: (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
+            text: qsTrId('id_next')
+            onClicked: {
+                self.StackView.view.push(send_confirm_page, {
+                    context: self.context,
+                    account: controller.account,
+                    asset: controller.asset,
+                    recipient: controller.recipient,
+                    transaction: controller.transaction,
+                    fiat: amount_field.fiat,
+                    unit: amount_field.unit,
+                    address_input: address_field.address_input,
+                })
             }
         }
     }
