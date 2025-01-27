@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-VERSION=2.0.18
+VERSION=2.0.19
 
 if [[ -z "$CHANNEL" ]]; then
     echo "Must set CHANNEL environment variable" 1>&2
