@@ -3,6 +3,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 WalletHeaderCard {
     readonly property Session session: {
         for (let i = 0; i < self.context.sessions.length; i++) {
@@ -79,7 +81,7 @@ WalletHeaderCard {
             Layout.rightMargin: 7
             font.pixelSize: 12
             font.weight: 400
-            text: rate.name + ' (' + Math.round(rate.rate / 100) / 10 + ' sat/vbyte)'
+            text: `${rate.name} (${UtilJS.formatFeeRate(rate.rate, self.session.network)})`
         }
         Label {
             Layout.alignment: Qt.AlignCenter

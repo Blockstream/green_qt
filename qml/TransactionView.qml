@@ -271,7 +271,7 @@ StackViewPage {
                         font.features: { 'calt': 0, 'zero': 1 }
                         font.pixelSize: 14
                         font.weight: 400
-                        text: Math.round(self.transaction.data.fee_rate / 100) / 10 + ' sat/vbyte'
+                        text: UtilJS.formatFeeRate(self.transaction.data.fee_rate, self.transaction.account.network)
                     }
                     HSpacer {
                     }

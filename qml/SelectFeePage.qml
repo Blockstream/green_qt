@@ -84,7 +84,7 @@ StackViewPage {
                         Label {
                             font.pixelSize: 12
                             font.weight: 400
-                            text: Math.round(slider.value / 100) / 10 + ' sat/vbyte'
+                            text: UtilJS.formatFeeRate(slider.value, self.account.network)
                             opacity: 0.6
                         }
                     }
@@ -172,7 +172,7 @@ StackViewPage {
                 Label {
                     font.pixelSize: 12
                     font.weight: 400
-                    text: Math.round(button.rate / 100) / 10 + ' sat/vbyte'
+                    text: UtilJS.formatFeeRate(button.rate, self.account.network)
                     opacity: 0.6
                 }
             }
