@@ -1,6 +1,5 @@
 #include "settings.h"
 
-#include <QDebug>
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QLocale>
@@ -36,7 +35,6 @@ Settings* Settings::instance()
 
 void Settings::setWindowX(int window_x)
 {
-    qDebug() << Q_FUNC_INFO << m_window_x << window_x;
     if (m_window_x == window_x) return;
     m_window_x = window_x;
     emit windowXChanged();
@@ -353,7 +351,6 @@ void Settings::load(const QSettings& settings)
 
 void Settings::save()
 {
-    qDebug() << Q_FUNC_INFO << m_needs_save;
     if (!m_needs_save) return;
     m_needs_save = false;
     saveNow();
