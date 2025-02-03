@@ -204,6 +204,7 @@ StackViewPage {
                             return error
                         }
                     }
+                    if (error === 'id_amount_below_the_dust_threshold') return error
                     if (error === 'Fee change below the dust threshold') {
                         return error
                     }
