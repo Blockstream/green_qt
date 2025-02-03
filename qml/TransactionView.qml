@@ -424,6 +424,7 @@ StackViewPage {
                     TextArea {
                         Layout.fillWidth: true
                         id: note_text_area
+                        enabled: !self.context.watchonly
                         topPadding: 20
                         bottomPadding: 20
                         leftPadding: 20
@@ -434,7 +435,11 @@ StackViewPage {
                             color: Qt.lighter('#222226', note_text_area.hovered ? 1.2 : 1)
                             radius: 5
                         }
-                        onEditingFinished: self.transaction.updateMemo(note_text_area.text)
+                        onEditingFinished: {
+                            if (!self.context.watchonly) {
+                               self.transaction.updateMemo(note_text_area.text)
+                            }
+                        }
                     }
                 }
             }
