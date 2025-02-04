@@ -2,8 +2,8 @@
 set -eo pipefail
 
 GDK_REPO=https://github.com/Blockstream/gdk.git
-GDK_BRANCH=release_0.74.1
-GDK_COMMIT=6cfda8be5db1bd159356fb6736acd63e6b714e26
+GDK_BRANCH=release_0.74.3
+GDK_COMMIT=34ddd29efd335466498f7491475359da63aadcf0
 
 mkdir -p build
 
@@ -16,9 +16,6 @@ fi
 cd gdk
 git rev-parse HEAD
 git checkout $GDK_COMMIT
-
-# patch boost url
-sed -i '' 's/boostorg\.jfrog\.io\/artifactory\/main/archives.boost.io/g' tools/builddeps.sh
 
 # unset to disable building gdk java support
 unset JAVA_HOME
