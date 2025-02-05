@@ -38,7 +38,16 @@ FROM base AS libserialport
 COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
 RUN tools/buildlibserialport.sh
 
+FROM ubuntu:jammy AS uasm
+RUN apt update && \
+    apt install -y build-essential wget && \
+    wget https://github.com/Terraspace/UASM/archive/refs/tags/v2.57r.tar.gz && \
+    tar zxvf v2.57r.tar.gz && \
+    cd UASM-2.57r && make -f Makefile-Linux-GCC-64.mak && \
+    cp /UASM-2.57r/GccUnixR/uasm /usr/bin
+
 FROM base AS crashpad
+COPY --from=uasm /usr/bin/uasm /usr/bin
 COPY tools/buildcrashpad.sh tools/
 RUN tools/buildcrashpad.sh
 
