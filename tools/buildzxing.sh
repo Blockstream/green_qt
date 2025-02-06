@@ -1,21 +1,22 @@
 #!/bin/bash
-set -eo pipefail
+set -exo pipefail
 
-mkdir -p build
+ZXING_REPO=https://github.com/Blockstream/zxing-cpp.git
+ZXING_BRANCH=green_qt
+ZXING_COMMIT=a920817b6fe0508cc4aca9003003c2812a78e935
 
-cd build
+mkdir -p build && cd build
 
-if [ ! -d zxing ]; then
-    git clone --quiet --depth 1 --branch master --single-branch https://github.com/zxing-cpp/zxing-cpp.git zxing
-fi
+git clone --quiet --branch $ZXING_BRANCH --single-branch $ZXING_REPO zxing-cpp-src
+(cd zxing-cpp-src && git rev-parse HEAD && git checkout $ZXING_COMMIT)
 
-cd zxing
-git rev-parse HEAD
+cmake -S zxing-cpp-src -B zxing-cpp-bld \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DBUILD_SHARED_LIBS=OFF \
+  -DZXING_C_API=OFF \
+  -DZXING_EXAMPLES=OFF \
+  -DZXING_DEPENDENCIES=LOCAL \
+  -DZXING_USE_BUNDLED_ZINT=OFF
 
-rm -rf build
-mkdir build
-cd build
-
-cmake .. -DZXING_USE_BUNDLED_ZINT=OFF -DZXING_C_API=OFF -DZXING_EXAMPLES=OFF -DZXING_DEPENDENCIES=LOCAL -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release
-
-make -j install
+cmake --build zxing-cpp-bld
+cmake --install zxing-cpp-bld --strip --prefix $PREFIX
