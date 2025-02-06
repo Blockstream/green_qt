@@ -68,6 +68,11 @@ void Asset::setPolicy(bool policy)
     emit policyChanged();
 }
 
+int Asset::precision() const
+{
+    return data().value("precision").toInt(0);
+}
+
 void Asset::setData(const QJsonObject &data)
 {
     if (m_data == data) return;

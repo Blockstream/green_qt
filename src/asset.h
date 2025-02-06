@@ -54,6 +54,8 @@ public:
     bool policy() const { return m_policy; }
     void setPolicy(bool policy);
 
+    int precision() const;
+
     bool hasData() const { return !m_data.isEmpty(); }
     QJsonObject data() const { return m_data; }
     void setData(const QJsonObject& data);

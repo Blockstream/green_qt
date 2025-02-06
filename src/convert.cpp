@@ -124,7 +124,7 @@ void Convert::setResult(const QJsonObject& result)
 
 QVariantMap Convert::fiat() const
 {
-    if (m_result.contains("fiat") && m_result.contains("fiat_currency")) {
+    if (!m_liquid_asset && m_result.contains("fiat") && m_result.contains("fiat_currency")) {
         const auto currency = mainnet() ? m_result.value("fiat_currency").toString() : "FIAT";
         const auto amount = number_to_string(QLocale::system(), m_result.value("fiat").toString(), 2);
         return {
@@ -179,7 +179,7 @@ QVariantMap Convert::format(const QString& unit) const
     QVariantMap result{{ "label", "" }, { "amount", "" }, { unit, "" }};
     if (!m_context && !m_account) return result;
     if (m_liquid_asset) {
-        const auto precision = m_asset->data().value("precision").toInt(0);
+        const auto precision = m_asset->precision();
         const auto satoshi = m_result.value("satoshi").toString();
         auto amount = QLocale::c().toString(satoshi.toDouble() / qPow(10, precision), 'f', precision);
         result["bip21_amount"] = amount;
@@ -260,24 +260,14 @@ void Convert::update()
         }
     }
 
+    auto details = QJsonObject::fromVariantMap(input);
     if (m_liquid_asset) {
-        if (input.contains("text")) {
-            Q_ASSERT(input.value("text").typeId() == QMetaType::QString);
-            const auto text = input.value("text").toString();
-            const auto precision = m_asset->data().value("precision").toInt(0);
-            const auto satoshi = static_cast<qint64>(text.toDouble() * qPow(10, precision));
-            setResult({{ "satoshi", QLocale::c().toString(satoshi) }});
-        } else if (input.contains("satoshi")) {
-            Q_ASSERT(input.value("satoshi").typeId() == QMetaType::QString);
-            const auto satoshi = input.value("satoshi").toString();
-            setResult({{ "satoshi", satoshi }});
-        } else {
-            setResult({{ "satoshi", "0" }});
-        }
-        return;
+        details.insert("asset_info", QJsonObject{
+            { "asset_id", m_asset->id() },
+            { "precision", m_asset->precision() }
+        });
     }
 
-    auto details = QJsonObject::fromVariantMap(input);
     if (details.contains("text")) {
         const auto text = details.take("text").toString();
         const auto unit_key = m_unit == "\u00B5BTC" ? "ubtc" : m_unit.toLower();
