@@ -1,28 +1,24 @@
 #!/bin/bash
-set -eo pipefail
-
-mkdir -p build
-
-cd build
+set -exo pipefail
 
 CRASHPAD_REPO=https://github.com/Blockstream/crashpad.git
 CRASHPAD_BRANCH=green_qt
-CRASHPAD_COMMIT=1a4c92aca24ca52ffb4e3b798d4a3681f37116d4
+CRASHPAD_COMMIT=1df6b54e15263695de104c0b368df72a791467fb
 
-if [ ! -d crashpad ]; then
-    git clone --recurse-submodules --quiet --depth 1 --branch $CRASHPAD_BRANCH --single-branch $CRASHPAD_REPO crashpad
-fi
+mkdir -p build && cd build
 
-cd crashpad
-git rev-parse HEAD
-git checkout $CRASHPAD_COMMIT
+git clone --recurse-submodules --quiet --branch $CRASHPAD_BRANCH --single-branch $CRASHPAD_REPO crashpad-src
+
+(cd crashpad-src && git rev-parse HEAD && git checkout $CRASHPAD_COMMIT)
 
 if [[ "$HOST" == "windows" ]]; then
 cp /usr/x86_64-w64-mingw32/include/ntsecapi.h /usr/x86_64-w64-mingw32/include/NTSecAPI.h
 cp /usr/x86_64-w64-mingw32/include/windows.h /usr/x86_64-w64-mingw32/include/Windows.h
 fi
 
-cmake . -B build -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX -DCRASHPAD_ZLIB_SYSTEM=OFF
+cmake -S crashpad-src -B crashpad-bld \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCRASHPAD_ZLIB_SYSTEM=OFF
 
-make -C build all install
-
+cmake --build crashpad-bld
+cmake --install crashpad-bld --strip --prefix $PREFIX
