@@ -29,11 +29,7 @@ AbstractDrawer {
                     rowSpacing: 10
                     columnSpacing: 20
                     columns: 2
-                    Label {
-                        Layout.minimumWidth: 100
-                        color: '#929292'
-                        font.pixelSize: 14
-                        font.weight: 400
+                    KeyLabel {
                         text: qsTrId('id_model')
                     }
                     Label {
@@ -44,11 +40,34 @@ AbstractDrawer {
                             return board_type === 'JADE_V2' ? 'Jade Plus' : 'Jade Classic'
                         }
                     }
+                    KeyLabel {
+                        visible: {
+                            const board_type = self.device.versionInfo.BOARD_TYPE
+                            return board_type === 'JADE_V2'
+                        }
+                        text: 'Genuine check'
+                    }
                     Label {
-                        Layout.minimumWidth: 100
-                        color: '#929292'
-                        font.pixelSize: 14
-                        font.weight: 400
+                        Layout.fillWidth: true
+                        horizontalAlignment: Label.AlignRight
+                        visible: {
+                            const board_type = self.device.versionInfo.BOARD_TYPE
+                            return board_type === 'JADE_V2'
+                        }
+                        text: {
+                            const efusemac = self.device.versionInfo.EFUSEMAC
+                            if (Settings.isEventRegistered({ efusemac, result: 'genuine', type: 'jade_genuine_check' })) {
+                                return 'Your Jade is genuine!'
+                            }
+                            if (Settings.isEventRegistered({ efusemac, result: 'diy', type: 'jade_genuine_check' })) {
+                                return 'This Jade is not genuine'
+                            }
+                            return 'Not checked'
+                        }
+                    }
+                    Separator {
+                    }
+                    KeyLabel {
                         text: qsTrId('id_firmware')
                     }
                     Label {
@@ -56,11 +75,7 @@ AbstractDrawer {
                         horizontalAlignment: Label.AlignRight
                         text: self.device.version
                     }
-                    Label {
-                        Layout.minimumWidth: 100
-                        color: '#929292'
-                        font.pixelSize: 14
-                        font.weight: 400
+                    KeyLabel {
                         text: qsTrId('Configuration')
                     }
                     Label {
@@ -73,11 +88,41 @@ AbstractDrawer {
                             }
                         }
                     }
+                    KeyLabel {
+                        text: 'State'
+                    }
                     Label {
-                        Layout.minimumWidth: 100
-                        color: '#929292'
-                        font.pixelSize: 14
-                        font.weight: 400
+                        Layout.fillWidth: true
+                        horizontalAlignment: Label.AlignRight
+                        text: self.device.versionInfo.JADE_STATE
+                    }
+                    KeyLabel {
+                        text: 'Has PIN'
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Label.AlignRight
+                        text: self.device.versionInfo.JADE_CONFIG ? 'YES' : 'NO'
+                    }
+                    Separator {
+                    }
+                    KeyLabel {
+                        text: qsTrId('id_connection')
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Label.AlignRight
+                        text: 'USB'
+                    }
+                    KeyLabel {
+                        text: qsTrId('id_system_location')
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Label.AlignRight
+                        text: self.device.systemLocation
+                    }
+                    KeyLabel {
                         text: qsTrId('Battery')
                     }
                     Pane {
@@ -103,24 +148,8 @@ AbstractDrawer {
                             }
                         }
                     }
-                    Label {
-                        Layout.minimumWidth: 100
-                        color: '#929292'
-                        font.pixelSize: 14
-                        font.weight: 400
-                        text: qsTrId('id_system_location')
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        horizontalAlignment: Label.AlignRight
-                        text: self.device.systemLocation
-                    }
-                    Label {
-                        Layout.minimumWidth: 100
-                        color: '#929292'
-                        font.pixelSize: 14
-                        font.weight: 400
-                        text: qsTrId('id_stauts')
+                    KeyLabel {
+                        text: qsTrId('id_status')
                     }
                     Label {
                         Layout.fillWidth: true
@@ -134,6 +163,17 @@ AbstractDrawer {
                             }
                         }
                     }
+                    Separator {
+                    }
+                    KeyLabel {
+                        text: qsTrId('XPUB Hash ID')
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Label.AlignRight
+                        text: self.device?.session?.xpubHashId ?? 'N/A'
+                        wrapMode: Label.WrapAnywhere
+                    }
                 }
                 Label {
                     Layout.fillWidth: true
@@ -145,5 +185,19 @@ AbstractDrawer {
                 }
             }
         }
+    }
+    component Separator: Rectangle {
+        Layout.bottomMargin: 10
+        Layout.columnSpan: 2
+        Layout.fillWidth: true
+        Layout.preferredHeight: 1
+        Layout.topMargin: 10
+        color: '#313131'
+    }
+    component KeyLabel: Label {
+        Layout.minimumWidth: 100
+        color: '#929292'
+        font.pixelSize: 14
+        font.weight: 400
     }
 }

@@ -19,6 +19,7 @@ MainPageHeader {
     signal logoutClicked()
     signal promoClicked(Promo promo)
     signal reportBugClicked()
+    signal jadeDetailsClicked()
 
     required property Context context
     required property Wallet wallet
@@ -297,6 +298,7 @@ MainPageHeader {
             contentItem: CardBar {
                 context: self.context
                 onAssetsClicked: self.assetsClicked()
+                onJadeDetailsClicked: self.jadeDetailsClicked()
                 onPromoClicked: (promo) => self.promoClicked(promo)
             }
         }

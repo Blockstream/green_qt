@@ -36,7 +36,7 @@ StackViewPage {
         }
         CircleButton {
             icon.source: 'qrc:/svg2/info.svg'
-            visible: false
+            visible: Qt.application.arguments.indexOf('--debugjade') > 0
             onClicked: self.detailsClicked()
         }
         WalletOptionsButton {

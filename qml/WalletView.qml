@@ -24,8 +24,10 @@ MainPage {
     }
 
     function openJadeDetailsDrawer() {
-        const drawer = jade_details_drawer.createObject(self, { device: self.device })
-        drawer.open()
+        if (Qt.application.arguments.indexOf('--debugjade') > 0) {
+            const drawer = jade_details_drawer.createObject(self, { device: self.device })
+            drawer.open()
+        }
     }
 
     AnalyticsAlert {
@@ -308,6 +310,7 @@ MainPage {
         OverviewPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: stack_view.replace(logout_page, StackView.PushTransition)
+            onJadeDetailsClicked: self.openJadeDetailsDrawer()
         }
     }
 

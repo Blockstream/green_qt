@@ -4,6 +4,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 WalletHeaderCard {
+    signal detailsClicked
+    readonly property JadeDevice device: self.context?.device instanceof JadeDevice ? self.context.device : null
     readonly property var latestFirmware: {
         for (const firmware of controller.firmwares) {
             if (firmware.latest) {
@@ -29,7 +31,13 @@ WalletHeaderCard {
     visible: self.context.wallet.login?.device?.type === 'jade'
     TapHandler {
         enabled: self.context.device?.connected ?? false
-        onTapped: update_firmware_dialog.createObject(self).open()
+        onTapped: {
+          if (self.debug) {
+            self.detailsClicked()
+          } else {
+            update_firmware_dialog.createObject(self).open()
+          }
+        }
     }
     background: Item {
         Image {
@@ -97,15 +105,6 @@ WalletHeaderCard {
                     opacity: 0.8
                     text: self.context.device?.connected ? 'connected' : 'disconnected'
                 }
-            }
-            Label {
-                font.pixelSize: 8
-                text: [
-                    'state:' + (self.context?.device?.versionInfo?.JADE_STATE ?? 'n/a'),
-                    'wallet: ' + (self.context?.xpubHashId ?? 'n/a'),
-                    'jade: ' + (self.context?.device?.session?.xpubHashId ?? 'n/a')
-                ].join('\n')
-                visible: self.debug
             }
             RegularButton {
                 visible: {

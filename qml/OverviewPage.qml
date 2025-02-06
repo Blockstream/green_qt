@@ -11,6 +11,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 Page {
+    signal jadeDetailsClicked()
     signal logout()
 
     required property Context context
@@ -93,7 +94,6 @@ Page {
                 return label
         }
     }
-
 
     Component {
         id: notification_drawer
@@ -198,6 +198,7 @@ Page {
 
     header: WalletViewHeader {
         onAssetsClicked: open_assets_drawer_action.trigger()
+        onJadeDetailsClicked: self.jadeDetailsClicked()
         onSettingsClicked: settings_dialog.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
         onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()

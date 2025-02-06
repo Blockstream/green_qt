@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 Pane {
+    signal jadeDetailsClicked()
     signal assetsClicked()
     signal promoClicked(Promo promo)
     required property Context context
@@ -59,6 +60,7 @@ Pane {
             JadeCard {
                 id: jade_card
                 context: self.context
+                onDetailsClicked: self.jadeDetailsClicked()
             }
             Separator {
             }
