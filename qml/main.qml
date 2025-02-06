@@ -74,7 +74,11 @@ ApplicationWindow {
     Component {
         id: splash_page
         SplashPage {
-            onTimeout: app_page.active = true
+            onTimeout: {
+                if (!consent_dialog.visible) {
+                    app_page.active = true
+                }
+            }
         }
     }
 
@@ -95,6 +99,7 @@ ApplicationWindow {
         x: parent.width - consent_dialog.width - constants.s2
         y: parent.height - consent_dialog.height - constants.s2 - 30 + consent_dialog.offset_y
         // by default dialogs height depends on y, break that dependency to avoid binding loop on y
+        onClosed: app_page.active = true
         height: implicitHeight
         visible: Settings.analytics === ''
         enter: Transition {
