@@ -1,6 +1,6 @@
 FROM ubuntu:jammy AS base
-COPY ci/linux-x86_64/focal.sh .
-RUN ./focal.sh
+COPY ci/linux-x86_64/setup.sh .
+RUN ./setup.sh
 ENV PREFIX=/depends/linux-x86_64
 ENV HOST=linux
 ENV ARCH=x86_64

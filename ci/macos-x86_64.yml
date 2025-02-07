@@ -8,7 +8,7 @@
     CMAKE_INSTALL_PREFIX: "$PREFIX"
     gdk_ROOT: "$PREFIX/lib/x86_64-apple-darwin/gdk"
   cache:
-    key: macos_x86_64_20
+    key: macos_x86_64_21
     paths: [depends/]
   tags:
     - macos-x86_64

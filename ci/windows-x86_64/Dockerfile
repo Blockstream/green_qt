@@ -1,6 +1,6 @@
 FROM ubuntu:oracular AS base
-COPY ci/windows-x86_64/lunar.sh .
-RUN ./lunar.sh
+COPY ci/windows-x86_64/setup.sh .
+RUN ./setup.sh
 ENV PREFIX=/depends/windows-x86_64
 ENV HOST=windows
 ENV ARCH=x86_64
