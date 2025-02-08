@@ -20,6 +20,10 @@ StackViewPage {
             running: firmware_controller.fetching
         }
     }
+    StackView.onActivated: firmware_controller.check(self.device)
+    JadeFirmwareController {
+        id: firmware_controller
+    }
     JadeFirmwareCheckController {
         id: update_controller
         index: firmware_controller.index

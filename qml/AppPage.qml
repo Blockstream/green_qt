@@ -216,11 +216,6 @@ MainPage {
         }
     }
 
-    JadeFirmwareController {
-        id: firmware_controller
-        enabled: true
-    }
-
     JadeDeviceSerialPortDiscoveryAgent {
     }
     DeviceDiscoveryAgent {

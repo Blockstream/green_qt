@@ -16,6 +16,10 @@ StackViewPage {
     required property bool login
     readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
     readonly property bool ready: (self.device?.connected && 'BOARD_TYPE' in self.device?.versionInfo)
+    StackView.onActivated: firmware_controller.check(self.device);
+    JadeFirmwareController {
+        id: firmware_controller
+    }
     JadeFirmwareCheckController {
         id: update_controller
         index: firmware_controller.index

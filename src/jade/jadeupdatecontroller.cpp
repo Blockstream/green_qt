@@ -165,6 +165,24 @@ void JadeFirmwareCheckController::setIndex(const QJsonObject& index)
     check();
 }
 
+static QString TypeFromVersionInfo(const QVariantMap& version_info)
+{
+    const auto board_type = version_info.value("BOARD_TYPE", JADE_BOARD_TYPE_JADE).toString();
+    const auto features = version_info.value("JADE_FEATURES").toStringList();
+    const bool secure_boot = features.contains(JADE_FEATURE_SECURE_BOOT);
+
+    if (board_type == JADE_BOARD_TYPE_JADE) {
+        return secure_boot ? "jade" : "jadedev";
+    }
+    if (board_type == JADE_BOARD_TYPE_JADE_V1_1) {
+        return secure_boot ? "jade1.1" : "jade1.1dev";
+    }
+    if (board_type == JADE_BOARD_TYPE_JADE_V2) {
+        return secure_boot ? "jade2.0" : "jade2.0dev";
+    }
+    return {};
+}
+
 void JadeFirmwareCheckController::check()
 {
     m_firmwares.clear();
@@ -173,20 +191,9 @@ void JadeFirmwareCheckController::check()
     const bool debug_jade = qApp->arguments().contains("--debugjade");
     if (m_device && !m_index.isEmpty()) {
         const auto version_info = m_device->versionInfo();
+        const auto type = TypeFromVersionInfo(version_info);
         const auto version = version_info.value("JADE_VERSION").toString();
-        const auto board_type = version_info.value("BOARD_TYPE", JADE_BOARD_TYPE_JADE).toString();
         const auto config = version_info.value("JADE_CONFIG").toString().toLower();
-        const auto features = version_info.value("JADE_FEATURES").toStringList();
-        const bool secure_boot = features.contains(JADE_FEATURE_SECURE_BOOT);
-
-        QString type;
-        if (board_type == JADE_BOARD_TYPE_JADE) {
-            type = secure_boot ? "jade" : "jadedev";
-        } else if (board_type == JADE_BOARD_TYPE_JADE_V1_1) {
-            type = secure_boot ? "jade1.1" : "jade1.1dev";
-        } else if (board_type == JADE_BOARD_TYPE_JADE_V2) {
-            type = secure_boot ? "jade2.0" : "jade2.0dev";
-        }
 
         if (!type.isEmpty()) {
             QStringList channels;
@@ -271,45 +278,30 @@ void JadeFirmwareCheckController::check()
     emit firmwareAvailableChanged();
 }
 
+static QMap<QString, HttpRequestActivity*> g_jade_firmware_requests;
+static QMap<QString, QJsonObject> g_jade_firmware_results;
 
 JadeFirmwareController::JadeFirmwareController(QObject* parent)
     : QObject(parent)
 {
 }
 
-void JadeFirmwareController::setEnabled(bool enabled)
+void JadeFirmwareController::check(JadeDevice* device)
 {
-    if (m_enabled == enabled) return;
-    m_enabled = enabled;
-    emit enabledChanged();
-    if (m_fetching) return;
-    if (!m_index.isEmpty()) return;
-    check();
-}
-
-void JadeFirmwareController::check()
-{
-    fetch("jade");
-    fetch("jade1.1");
-    fetch("jade2.0");
-    if (qApp->arguments().indexOf("--debugjade")) {
-        fetch("jadedev");
-        fetch("jade1.1dev");
-        fetch("jade2.0dev");
+    if (!device) return;
+    const auto type = TypeFromVersionInfo(device->versionInfo());
+    if (g_jade_firmware_results.contains(type)) {
+        m_index[type] = g_jade_firmware_results.value(type);
+        emit indexChanged();
+        return;
     }
-}
 
-void JadeFirmwareController::fetch(const QString& type)
-{
-    auto req = new HttpRequestActivity(this);
-    req->setMethod("GET");
-    req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_HTTPS, type));
-    req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_ONION, type));
-
+    auto req = fetch(type);
     m_fetching ++;
     emit fetchingChanged();
 
     connect(req, &HttpRequestActivity::finished, this, [=] {
+        g_jade_firmware_results[type] = req->body().toJsonObject();
         m_index[type] = req->body().toJsonObject();
 
         emit indexChanged();
@@ -320,8 +312,25 @@ void JadeFirmwareController::fetch(const QString& type)
         m_fetching --;
         emit fetchingChanged();
     });
+}
 
+HttpRequestActivity* JadeFirmwareController::fetch(const QString& type)
+{
+    auto req = g_jade_firmware_requests.value(type);
+    if (req) return req;
+    req = new HttpRequestActivity(this);
+    g_jade_firmware_requests.insert(type, req);
+    req->setMethod("GET");
+    req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_HTTPS, type));
+    req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_ONION, type));
+    connect(req, &HttpRequestActivity::finished, this, [=] {
+        g_jade_firmware_requests.remove(type);
+    });
+    connect(req, &HttpRequestActivity::failed, this, [=] {
+        g_jade_firmware_requests.remove(type);
+    });
     HttpManager::instance()->exec(req);
+    return req;
 }
 
 JadeFirmwareUpdateController::JadeFirmwareUpdateController(QObject* parent)

@@ -15,22 +15,23 @@ WalletHeaderCard {
         return null
     }
     readonly property bool runningLatest: {
-        return self.context.device?.version === self.latestFirmware?.version
+        return self.device?.version === self.latestFirmware?.version
     }
     readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
 
+    Component.onCompleted: firmware_controller.check(self.device)
+    JadeFirmwareController {
+        id: firmware_controller
+    }
     JadeFirmwareCheckController {
         id: controller
         index: firmware_controller.index
-        device: {
-            const device = self.context?.device
-            return device instanceof JadeDevice ? device : null
-        }
+        device: self.device
     }
     id: self
     visible: self.context.wallet.login?.device?.type === 'jade'
     TapHandler {
-        enabled: self.context.device?.connected ?? false
+        enabled: self.device?.connected ?? false
         onTapped: {
           if (self.debug) {
             self.detailsClicked()
@@ -45,9 +46,8 @@ WalletHeaderCard {
             x: details_column.width
             anchors.verticalCenter: parent.verticalCenter
             source: {
-                const device = self.context.device
-                if (device instanceof JadeDevice) {
-                    const type = device.versionInfo?.BOARD_TYPE
+                if (self.device) {
+                    const type = self.device.versionInfo?.BOARD_TYPE
                     return type === 'JADE_V2' ? 'qrc:/png/jade2_card.png' : 'qrc:/png/jade_card.png'
                 }
                 return ''
@@ -92,7 +92,7 @@ WalletHeaderCard {
                 Layout.fillHeight: false
                 Rectangle {
                     Layout.alignment: Qt.AlignCenter
-                    color: self.context.device?.connected ? '#01B35A' : 'red'
+                    color: self.device?.connected ? '#01B35A' : 'red'
                     implicitWidth: 10
                     implicitHeight: 10
                     radius: 5
@@ -103,13 +103,13 @@ WalletHeaderCard {
                     font.pixelSize: 16
                     font.weight: 400
                     opacity: 0.8
-                    text: self.context.device?.connected ? 'connected' : 'disconnected'
+                    text: self.device?.connected ? 'connected' : 'disconnected'
                 }
             }
             RegularButton {
                 visible: {
                     if (!self.debug) return false
-                    switch (self.context.device?.state) {
+                    switch (self.device?.state) {
                     case JadeDevice.StateTemporary:
                     case JadeDevice.StateLocked:
                         return true
@@ -131,7 +131,7 @@ WalletHeaderCard {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 20
                 font.weight: 600
-                text: self.context?.device?.version ?? ''
+                text: self.device?.version ?? ''
             }
             PrimaryButton {
                 text: qsTrId('id_firmware_update')
@@ -146,16 +146,13 @@ WalletHeaderCard {
         id: update_firmware_dialog
         JadeUpdateDialog2 {
             context: self.context
-            device: self.context.device
+            device: self.device
         }
     }
     JadeUnlockController {
         id: unlock_controller
         context: self.context
-        device: {
-            const device = self.context?.device
-            return device instanceof JadeDevice ? device : null
-        }
+        device: self.device
         onHttpRequest: (request) => {
             const dialog = http_request_dialog.createObject(self, { request, context: self.context })
             dialog.open()

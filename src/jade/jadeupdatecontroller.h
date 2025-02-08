@@ -157,23 +157,20 @@ private:
 class JadeFirmwareController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool fetching READ fetching NOTIFY fetchingChanged)
     Q_PROPERTY(QJsonObject index READ index NOTIFY indexChanged)
     QML_ELEMENT
 public:
     explicit JadeFirmwareController(QObject* parent = nullptr);
-    bool isEnabled() const { return m_enabled; }
-    void setEnabled(bool enabled);
     bool fetching() const { return m_fetching > 0; }
     QJsonObject index() const { return m_index; }
+public slots:
+    void check(JadeDevice* device);
 signals:
-    void enabledChanged();
     void fetchingChanged();
     void indexChanged();
 private:
-    void check();
-    void fetch(const QString& path);
+    HttpRequestActivity* fetch(const QString& type);
     bool m_enabled{false};
     int m_fetching{0};
     QJsonObject m_index;

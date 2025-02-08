@@ -32,7 +32,6 @@ SET(QML_FILES
     qml/ChangePinDialog.qml
     qml/MnemonicView.qml
     qml/TwoFactorLimitDialog.qml
-    qml/JadeUpdateDialog.qml
     qml/JadeSignMessageView.qml
     qml/MainMenuBar.qml
     qml/GTextField.qml
