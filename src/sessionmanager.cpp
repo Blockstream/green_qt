@@ -1,7 +1,7 @@
 #include "networkmanager.h"
 #include "sessionmanager.h"
 #include "session.h"
-#include "settings.h"
+#include "green_settings.h"
 #include "task.h"
 
 static SessionManager* g_session_manager{nullptr};

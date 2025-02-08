@@ -8,7 +8,7 @@
 #include "network.h"
 #include "networkmanager.h"
 #include "session.h"
-#include "settings.h"
+#include "green_settings.h"
 #include "task.h"
 #include "wallet.h"
 #include "walletmanager.h"

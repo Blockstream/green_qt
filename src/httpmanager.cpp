@@ -5,7 +5,7 @@
 #include "networkmanager.h"
 #include "session.h"
 #include "sessionmanager.h"
-#include "settings.h"
+#include "green_settings.h"
 #include "task.h"
 
 static HttpManager* g_http_manager{nullptr};

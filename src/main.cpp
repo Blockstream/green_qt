@@ -31,7 +31,7 @@
 #include "networkmanager.h"
 #include "promo.h"
 #include "sessionmanager.h"
-#include "settings.h"
+#include "green_settings.h"
 #include "util.h"
 #include "walletmanager.h"
 

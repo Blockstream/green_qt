@@ -1,4 +1,4 @@
-#include "settings.h"
+#include "green_settings.h"
 
 #include <QFileInfo>
 #include <QGuiApplication>
@@ -207,6 +207,11 @@ void Settings::dismissPromo(const QString &id)
         emit promosDismissedChanged();
         saveLater();
     }
+}
+
+void Settings::crash()
+{
+    std::abort();
 }
 
 void Settings::setUsePersonalNode(bool use_personal_node)

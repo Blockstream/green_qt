@@ -25,7 +25,7 @@
 #include "networkmanager.h"
 #include "session.h"
 #include "sessionmanager.h"
-#include "settings.h"
+#include "green_settings.h"
 #include "task.h"
 #include "util.h"
 #include "walletmanager.h"

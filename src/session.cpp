@@ -9,7 +9,7 @@
 #include "context.h"
 #include "json.h"
 #include "network.h"
-#include "settings.h"
+#include "green_settings.h"
 #include "task.h"
 
 namespace  {

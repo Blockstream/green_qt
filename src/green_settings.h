@@ -102,6 +102,7 @@ public slots:
     void toggleIncognito();
     void toggleRememberDevices();
     void dismissPromo(const QString& id);
+    void crash();
 signals:
     void windowXChanged();
     void windowYChanged();
