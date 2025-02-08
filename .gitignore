@@ -81,6 +81,7 @@ qrc_*.cpp
 ui_*.h
 Makefile*
 *build-*
+config.h
 
 # Qt unit tests
 target_wrapper.*
