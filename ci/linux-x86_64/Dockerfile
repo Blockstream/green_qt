@@ -47,6 +47,11 @@ COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
 RUN tools/buildlibserialport.sh
 
 FROM base AS crashpad
+COPY --from=gdk /build/gdk/build-gcc/external_deps/ /depends/linux-x86_64/
+ENV OPENSSL_ROOT_DIR=$PREFIX
+COPY tools/buildlibcurl.sh tools/
+RUN tools/buildlibcurl.sh
+ENV CMAKE_PREFIX_PATH=$PREFIX
 COPY tools/buildcrashpad.sh tools/
 RUN tools/buildcrashpad.sh
 
