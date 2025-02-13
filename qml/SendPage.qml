@@ -321,7 +321,8 @@ StackViewPage {
         }
         PrimaryButton {
             Layout.fillWidth: true
-            enabled: (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
+            enabled: controller.monitor.idle && (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
+            busy: !controller.monitor.idle
             text: qsTrId('id_next')
             onClicked: {
                 self.StackView.view.push(send_confirm_page, {
