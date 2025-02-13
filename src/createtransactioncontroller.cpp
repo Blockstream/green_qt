@@ -40,6 +40,7 @@ CreateTransactionController::CreateTransactionController(QObject* parent)
     , m_recipient(new Recipient(this))
 {
     connect(m_recipient, &Recipient::changed, this, &CreateTransactionController::invalidate);
+    setMonitor(new TaskGroupMonitor(this));
 }
 
 void CreateTransactionController::setAccount(Account* account)
@@ -103,8 +104,7 @@ void CreateTransactionController::invalidate()
 void CreateTransactionController::update()
 {
     if (m_context && m_account) {
-        auto context = m_account->context();
-        auto dispatcher = context->dispatcher();
+        auto group = new TaskGroup(this);
 
         if (m_utxos.isNull()) {
             auto task = new GetUnspentOutputsTask(0, false, m_account);
@@ -114,9 +114,10 @@ void CreateTransactionController::update()
                 task->deleteLater();
                 update();
             });
-            dispatcher->add(task);
+            group->add(task);
         } else {
             if (m_recipient->address().trimmed().isEmpty()) {
+                delete group;
                 setTransaction({});
                 return;
             }
@@ -182,8 +183,10 @@ void CreateTransactionController::update()
                     setTransaction({});
                 }
             });
-            dispatcher->add(task);
+            group->add(task);
         }
+        monitor()->add(group);
+        dispatcher()->add(group);
     }
 }
 
