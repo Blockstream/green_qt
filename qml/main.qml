@@ -90,6 +90,7 @@ ApplicationWindow {
         onLoaded: stack_view.replace(null, app_page.item, StackView.PushTransition)
         sourceComponent: AppPage {
             StackView.onDeactivated: app_page.active = false
+            onCrashClicked: controller.triggerCrash()
         }
     }
 

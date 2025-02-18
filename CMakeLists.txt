@@ -3,12 +3,10 @@ cmake_minimum_required(VERSION 3.16)
 project(green VERSION 2.0.20 LANGUAGES CXX)
 
 option(GREEN_WAYLAND "Include Wayland support" OFF)
-
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Debug)
-endif()
+option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)
 
 if(NOT GREEN_ENV)
+    set(CMAKE_BUILD_TYPE Debug)
     set(GREEN_ENV Development)
     set(GREEN_BUILD_ID -dev)
     set(GREEN_LOG_FILE dev)
@@ -65,6 +63,18 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# https://gitlab.kitware.com/cmake/cmake/issues/20256
+if(APPLE)
+        find_program(DSYMUTIL_PROGRAM dsymutil)
+        if(DSYMUTIL_PROGRAM)
+                foreach(lang C CXX)
+                        foreach(var LINK_EXECUTABLE CREATE_SHARED_LIBRARY)
+                                set(CMAKE_${lang}_${var} "${CMAKE_${lang}_${var}}" "${DSYMUTIL_PROGRAM} <TARGET>")
+                        endforeach()
+                endforeach()
+        endif()
+endif()
+
 add_definitions(-DNO_ICONV)
 add_definitions(-DGDK_STATIC_DEFINE)
 
@@ -101,12 +111,38 @@ target_link_libraries(green
     Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
     ${SECURITY}
     hidapi::hidapi
-    ${HID_LIB}
     KDAB::kdsingleapplication
     ${FFMPEG_LIBRARIES}
 )
 
+if(ENABLE_SENTRY)
+    add_compile_definitions(ENABLE_SENTRY)
+
+    if (UNIX AND NOT APPLE)
+      find_package(CURL REQUIRED)
+    endif()
+
+    find_package(crashpad REQUIRED)
+
+    get_target_property(CRASHPAD_INCLUDE crashpad::client INTERFACE_INCLUDE_DIRECTORIES)
+
+    target_include_directories(green PRIVATE
+      ${CRASHPAD_INCLUDE}
+      ${CRASHPAD_INCLUDE}/..
+    )
+    target_link_libraries(green PRIVATE
+        crashpad::client
+        crashpad::handler
+        crashpad::minidump
+        crashpad::snapshot
+        crashpad::tools
+        crashpad::util
+        crashpad::zlib
+    )
+endif()
+
 if (WIN32)
+    target_link_libraries(green PRIVATE hid)
 elseif (APPLE)
     set_target_properties(green PROPERTIES OUTPUT_NAME "Blockstream Green")
 elseif (UNIX)

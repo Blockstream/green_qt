@@ -23,13 +23,22 @@ stages:
     GREEN_WAYLAND: "OFF"
   script:
     - |
-      $PREFIX/bin/qt-cmake . \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DGREEN_ENV=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "Production" || echo "Testing") \
-      -DGREEN_BUILD_ID=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "" || echo "-$CI_COMMIT_SHORT_SHA") \
-      -DGREEN_LOG_FILE=$CI_COMMIT_BRANCH \
-      -DGREEN_WAYLAND=$GREEN_WAYLAND
-    - make -j8
+      $PREFIX/bin/qt-cmake -S . -B build \
+        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DGREEN_ENV=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "Production" || echo "Testing") \
+        -DGREEN_BUILD_ID=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "" || echo "-$CI_COMMIT_SHORT_SHA") \
+        -DGREEN_LOG_FILE=$CI_COMMIT_BRANCH \
+        -DGREEN_WAYLAND=$GREEN_WAYLAND \
+        -DENABLE_SENTRY=ON \
+        -DSENTRY_KEY=$SENTRY_KEY
+    - cmake --build build --parallel 4
+    - curl -sL https://sentry.io/get-cli | INSTALL_DIR=$PWD sh
+    - |
+      ./sentry-cli --url https://sentry.blockstream.io debug-files upload \
+        --org $SENTRY_ORG \
+        --project $SENTRY_PROJECT \
+        --auth-token=$SENTRY_AUTH_TOKEN \
+        --log-level=$SENTRY_LOG_LEVEL build
 
 include:
   - local: "ci/docker.yaml"

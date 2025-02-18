@@ -177,6 +177,11 @@ void ApplicationController::quit()
     qApp->quit();
 }
 
+void ApplicationController::triggerCrash()
+{
+    qFatal() << Q_FUNC_INFO;
+}
+
 bool ApplicationController::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::Quit) {

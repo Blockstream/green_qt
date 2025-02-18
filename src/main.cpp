@@ -64,6 +64,16 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #include <windows.h>
 #endif
 
+#if __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
+#include <ApplicationServices/ApplicationServices.h>
+
+void DisableMacOSDockIcon() {
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+}
+#endif
+
 #include <hidapi/hidapi.h>
 
 extern QString g_data_location;
@@ -73,6 +83,13 @@ QFile g_log_file;
 #include <boost/log/core.hpp>
 #include <boost/log/sinks/async_frontend.hpp>
 #include <boost/log/sinks/basic_sink_backend.hpp>
+
+#ifdef ENABLE_SENTRY
+#include <crash_report_database.h>
+#include <settings.h>
+#include <crashpad_client.h>
+#include <handler/handler_main.h>
+#endif
 
 static QString GraphicsAPIToString(QSGRendererInterface::GraphicsApi api) {
     switch (api) {
@@ -160,14 +177,6 @@ void initLog()
     }
 }
 
-QString GetPlatformName()
-{
-    const auto name = QSysInfo::productType();
-    if (name == "macos") return name;
-    if (name == "windows") return name;
-    return "linux";
-}
-
 class NetworkAccessManager : public QNetworkAccessManager {
 public:
     explicit NetworkAccessManager(QObject *parent = nullptr) : QNetworkAccessManager(parent) {
@@ -185,6 +194,8 @@ public:
     }
 };
 
+int init(Application& app, int argc, char *argv[]);
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");
@@ -193,6 +204,22 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
 
     Application app(argc, argv);
+
+    return init(app, argc, argv);
+}
+
+int init(Application& app, int argc, char *argv[])
+{
+#ifdef ENABLE_SENTRY
+    for (auto arg : app.arguments()) {
+        if (arg.startsWith("--database")) {
+            HideApplication();
+            // Initialize and run the handler process
+            return crashpad::HandlerMain(argc, argv, nullptr);
+        }
+    }
+#endif // ENABLE_SENTRY
+
     KDSingleApplication kdsa("green_qt");
 
     SessionManager session_manager;
@@ -299,10 +326,54 @@ int main(int argc, char *argv[])
     QApplication::setWindowIcon(QIcon(":/icons/green.png"));
 #endif
 
+#ifdef ENABLE_SENTRY
+#ifdef Q_OS_WIN
+    base::FilePath database(GetDataDir("crashpad").toStdWString());
+    base::FilePath handler(app.arguments().first().toStdWString());
+#else
+    base::FilePath database(GetDataDir("crashpad").toStdString());
+    base::FilePath handler(app.arguments().first().toStdString());
+#endif
+    const std::string url = std::string("https://sentry.blockstream.io/api/2/minidump/?sentry_key=") + std::string(SENTRY_KEY);
+    std::map<std::string, std::string> annotations = {
+        { "version", GREEN_VERSION },
+        { "env", GREEN_ENV },
+        { "args", app.arguments().mid(1).join(" ").toStdString() }
+    };
+    std::vector<std::string> arguments = {
+        "--no-rate-limit"
+    };
+
+    std::unique_ptr<crashpad::CrashReportDatabase> db =
+        crashpad::CrashReportDatabase::Initialize(database);
+
+    if (db != nullptr && db->GetSettings() != nullptr) {
+        db->GetSettings()->SetUploadsEnabled(true);
+    }
+
+    crashpad::CrashpadClient client;
+    std::string http_proxy;
+    bool restartable = true;
+    bool asynchronous_start = false;
+    bool success = client.StartHandler(
+        handler,
+        database,
+        database,
+        url,
+        http_proxy,
+        annotations,
+        arguments,
+        restartable,
+        asynchronous_start);
+#endif // ENABLE_SENTRY
+
     auto video_inputs = QMediaDevices::videoInputs();
 
     qInfo() << qPrintable(QCoreApplication::organizationName()) << qPrintable(QCoreApplication::applicationName()) << qPrintable(QCoreApplication::applicationVersion());
     qInfo() << "Environment:" << GREEN_ENV;
+#ifdef ENABLE_SENTRY
+    qInfo() << "Sentry:" << success;
+#endif // ENABLE_SENTRY
     qInfo() << "System Information:";
     qInfo() << "  Build ABI:" << qPrintable(QSysInfo::buildAbi());
     qInfo() << "  Build CPU Architecture:" << qPrintable(QSysInfo::buildCpuArchitecture());

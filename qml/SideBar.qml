@@ -14,6 +14,7 @@ Pane {
     signal blockstreamClicked
     signal preferencesClicked
     signal walletsClicked
+    signal crashClicked
 
     property int currentView: SideBar.Wallets
 
@@ -57,6 +58,12 @@ Pane {
             text: qsTrId('id_wallets')
         }
         VSpacer {
+        }
+        SideButton {
+            visible: Qt.application.arguments.indexOf('--debug') > 0
+            icon.source: 'qrc:/svg2/bug.svg'
+            text: 'Crash'
+            onClicked: self.crashClicked()
         }
         SideButton {
             icon.source: 'qrc:/svg2/gear.svg'

@@ -25,4 +25,8 @@ QString Sha256(const QJsonObject& value);
 
 QString GetHardwareModel();
 
+QString GetPlatformName();
+
+void HideApplication();
+
 #endif // GREEN_UTIL_H

@@ -7,6 +7,8 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 MainPage {
+    signal crashClicked
+
     function openPreferences() {
         preferences_dialog.createObject(self).open()
         wallets_drawer.close()
@@ -234,6 +236,7 @@ MainPage {
         }
         onPreferencesClicked: preferences_action.trigger()
         onWalletsClicked: openWallets()
+        onCrashClicked: self.crashClicked()
     }
 
 

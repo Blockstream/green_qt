@@ -9,4 +9,6 @@
 #define GREEN_ENV "@GREEN_ENV@"
 #define GREEN_LOG_FILE "@GREEN_LOG_FILE@"
 
+#define SENTRY_KEY "@SENTRY_KEY@"
+
 #endif // GREEN_CONFIG_H

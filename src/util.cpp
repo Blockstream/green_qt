@@ -7,6 +7,8 @@
 #ifdef Q_OS_MACOS
 #include <sys/sysctl.h>
 #include <sys/types.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <ApplicationServices/ApplicationServices.h>
 #endif
 
 #ifdef Q_OS_WIN
@@ -134,4 +136,20 @@ QString GetHardwareModel()
         hardware_model = hardware_model.trimmed();
     }
     return hardware_model;
+}
+
+QString GetPlatformName()
+{
+    const auto name = QSysInfo::productType();
+    if (name == "macos") return name;
+    if (name == "windows") return name;
+    return "linux";
+}
+
+void HideApplication()
+{
+#ifdef Q_OS_MACOS
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+#endif
 }
