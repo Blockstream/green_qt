@@ -165,7 +165,7 @@ TTextField {
                 model: self.units
                 delegate: GMenu.Item {
                     hideIcon: true
-                    text: (self.convert.account.network.liquid ? 'L-' : '') + modelData
+                    text: (self.convert.account.network.liquid ? 'L' : '') + modelData
                     onClicked: {
                         unit_menu.close()
                         self.setUnit(modelData)

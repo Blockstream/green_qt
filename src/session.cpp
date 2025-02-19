@@ -163,7 +163,7 @@ QString ComputeDisplayUnit(Network* network, QString unit)
             unit = "sTEST";
         }
     }
-    if (network->isLiquid()) unit.prepend("L-");
+    if (network->isLiquid()) unit.prepend("L");
     return unit;
 }
 

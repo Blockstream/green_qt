@@ -196,7 +196,7 @@ QVariantMap Convert::format(const QString& unit) const
     } else if (!unit.isEmpty()) {
         const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
         const bool is_liquid = (m_account && m_account->isLiquid()) || (m_asset && m_asset->networkKey().contains("liquid"));
-        const QString prefix{is_liquid ? "L-" : ""};
+        const QString prefix{is_liquid ? "L" : ""};
         const QString display_unit = prefix + (mainnet() ? mainnetUnit(unit) : testnetUnit(unit));
         result["unit"] = display_unit;
         result["bip21_amount"] = m_result["btc"];

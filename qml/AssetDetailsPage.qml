@@ -12,6 +12,12 @@ StackViewPage {
     required property Asset asset
     property Account account
     property Action closeAction
+    readonly property string ticker: {
+        if (!self.asset) return
+        if (self.asset.id === '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d') return 'LBTC'
+        return self.asset.data.ticker
+    }
+
     id: self
     title: qsTrId('id_asset_details')
     rightItem: RowLayout {
@@ -71,15 +77,15 @@ StackViewPage {
                     font.pixelSize: 12
                     font.weight: 400
                     text: qsTrId('id_ticker')
-                    visible: self.asset.data.ticker ?? false
+                    visible: self.ticker ?? false
                 }
                 Label {
                     Layout.fillWidth: true
                     color: '#FFF'
                     font.pixelSize: 12
                     font.weight: 400
-                    text: self.asset.data.ticker ?? ''
-                    visible: self.asset.data.ticker ?? false
+                    text: self.ticker ?? ''
+                    visible: self.ticker ?? false
                 }
                 Label {
                     color: '#929292'
