@@ -136,6 +136,10 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
         <translation>Un compte 2of3 nécessite deux signatures sur trois pour dépenser des pièces. La troisième signature provient d&apos;une clé de sauvegarde que vous êtes le seul à connaître. Vous bénéficiez ainsi des avantages d&apos;un compte standard en matière de sécurité, tout en ayant la possibilité de déplacer vos pièces de manière indépendante à tout moment.</translation>
     </message>
     <message>
+        <source>id_a_fully_airgapped_workflow_no</source>
+        <translation>A fully air-gapped workflow, no USB or Bluetooth required</translation>
+    </message>
+    <message>
         <source>id_a_funding_fee_of_s_is_applied</source>
         <translation>A funding fee of %1 is applied when receiving amounts above your current receive capacity of %2</translation>
     </message>
@@ -177,7 +181,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_accept</source>
-        <translation>ACCEPTER</translation>
+        <translation>Accept</translation>
     </message>
     <message>
         <source>id_access</source>
@@ -414,6 +418,10 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     <message>
         <source>id_allows_you_to_quickly_check</source>
         <translation>Vous permet de consulter rapidement votre solde, de recevoir des fonds ou de balayer un paperwallet. Vous ne pouvez pas envoyer de fonds en mode watch-only.</translation>
+    </message>
+    <message>
+        <source>id_allows_you_to_sign_transactions</source>
+        <translation>Allows you to sign transactions and validate addresses using Jade&apos;s camera</translation>
     </message>
     <message>
         <source>id_always</source>
@@ -875,6 +883,10 @@ Simple et Sécurisé</translation>
         <translation>Check our store</translation>
     </message>
     <message>
+        <source>id_check_transaction_details</source>
+        <translation>Check transaction Details</translation>
+    </message>
+    <message>
         <source>id_check_your_backup</source>
         <translation>Vérifiez votre sauvegarde</translation>
     </message>
@@ -1029,6 +1041,10 @@ Simple et Sécurisé</translation>
     <message>
         <source>id_coming_soon</source>
         <translation>Bientôt disponible !</translation>
+    </message>
+    <message>
+        <source>id_comment</source>
+        <translation>Comment</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
@@ -1677,6 +1693,10 @@ N&apos;oubliez pas que vous ne pouvez restaurer ce portefeuille qu&apos;avec vot
         <translation>Edit Note</translation>
     </message>
     <message>
+        <source>id_electrum_server_gap_limit</source>
+        <translation>Electrum server gap limit</translation>
+    </message>
+    <message>
         <source>id_email</source>
         <translation>Email</translation>
     </message>
@@ -1709,6 +1729,10 @@ N&apos;oubliez pas que vous ne pouvez restaurer ce portefeuille qu&apos;avec vot
         <translation>Enable 2FA Call method</translation>
     </message>
     <message>
+        <source>id_enable_an_extra_layer_of</source>
+        <translation>Enable an extra layer of security when accessing your watch-only.</translation>
+    </message>
+    <message>
         <source>id_enable_bluetooth</source>
         <translation>Activez Bluetooth</translation>
     </message>
@@ -1731,6 +1755,10 @@ N&apos;oubliez pas que vous ne pouvez restaurer ce portefeuille qu&apos;avec vot
     <message>
         <source>id_enable_face_id</source>
         <translation>Activez Face ID</translation>
+    </message>
+    <message>
+        <source>id_enable_faceid</source>
+        <translation>Enable FaceID</translation>
     </message>
     <message>
         <source>id_enable_limited_usage_data</source>
@@ -1761,8 +1789,16 @@ N&apos;oubliez pas que vous ne pouvez restaurer ce portefeuille qu&apos;avec vot
         <translation>Activez testnet dans les paramètres de l&apos;application pour utiliser Jade.</translation>
     </message>
     <message>
+        <source>id_enable_tls</source>
+        <translation>Enable TLS</translation>
+    </message>
+    <message>
         <source>id_enable_touch_id</source>
         <translation>Activez Touch ID</translation>
+    </message>
+    <message>
+        <source>id_enable_touchid</source>
+        <translation>Enable TouchID</translation>
     </message>
     <message>
         <source>id_enable_twofactor_authentication</source>
@@ -2181,7 +2217,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_from</source>
-        <translation>DE</translation>
+        <translation>From</translation>
     </message>
     <message>
         <source>id_fully_airgapped_with_qr</source>
@@ -2230,6 +2266,10 @@ Standard messages and data rates may apply.</translation>
     <message>
         <source>id_get_started</source>
         <translation>Get Started</translation>
+    </message>
+    <message>
+        <source>id_get_watchonly_information_from</source>
+        <translation>Get watch-only information from Jade</translation>
     </message>
     <message>
         <source>id_give_bluetooth_permissions</source>
@@ -2452,6 +2492,10 @@ Standard messages and data rates may apply.</translation>
         <translation>Si, pour une raison quelconque, vous ne pouvez pas vous connecter à votre portefeuille, vous pouvez récupérer votre phrase de récupération à l&apos;aide de votre code PIN ou de vos données biométriques.</translation>
     </message>
     <message>
+        <source>id_if_jade_is_already_set_up</source>
+        <translation>If Jade is already set up, choose QR Mode &gt; QR PIN Unlock &gt; Continue &gt; Enter your PIN</translation>
+    </message>
+    <message>
         <source>id_if_you_agree_green_will_collect</source>
         <translation>Si vous êtes d&apos;accord, Green recueillera des données d&apos;utilisation limitées afin d&apos;optimiser l&apos;expérience de l&apos;utilisateur. Aucune information sensible sur l&apos;utilisateur ou le portefeuille n&apos;est collectée.</translation>
     </message>
@@ -2502,6 +2546,10 @@ Standard messages and data rates may apply.</translation>
     <message>
         <source>id_import_from_file</source>
         <translation>Import from file</translation>
+    </message>
+    <message>
+        <source>id_import_signed_transaction</source>
+        <translation>Import signed transaction</translation>
     </message>
     <message>
         <source>id_in_progress</source>
@@ -2589,11 +2637,11 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_for_fees</source>
-        <translation>Nombre de L-BTC insuffisant pour les frais</translation>
+        <translation>Nombre de LBTC insuffisant pour les frais</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_to_send_a</source>
-        <translation>Il manque des L-BTC pour procéder à la transaction. Dans Liquid, les L-BTC sont nécessaires pour payer les frais de transaction. Générer une adresse pour recevoir des L-BTC</translation>
+        <translation>Il manque des LBTC pour procéder à la transaction. Dans Liquid, les LBTC sont nécessaires pour payer les frais de transaction. Générer une adresse pour recevoir des LBTC</translation>
     </message>
     <message>
         <source>id_invalid_address</source>
@@ -2728,6 +2776,10 @@ Standard messages and data rates may apply.</translation>
         <translation>Il semble que vous n&apos;ayez pas de portefeuille. Cliquez ci-dessous pour en ajouter un.</translation>
     </message>
     <message>
+        <source>id_jade_already_unlocked</source>
+        <translation>Jade already unlocked</translation>
+    </message>
+    <message>
         <source>id_jade_is_a_specialized_device</source>
         <translation>Jade est un appareil spécialisé conçu pour stocker en toute sécurité les clés nécessaires pour dépenser vos bitcoins.</translation>
     </message>
@@ -2762,6 +2814,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Encore quelques étapes pour vous mettre en place.</translation>
     </message>
     <message>
+        <source>id_keep_your_keys_encrypted_on</source>
+        <translation>Keep your keys encrypted on Jade, easily accessible with PIN</translation>
+    </message>
+    <message>
         <source>id_label</source>
         <translation>Label</translation>
     </message>
@@ -2787,7 +2843,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
-        <translation>Le L-BTC n&apos;a pas d&apos;émetteur et est créé sur le réseau via un peg-in.</translation>
+        <translation>Le LBTC n&apos;a pas d&apos;émetteur et est créé sur le réseau via un peg-in.</translation>
     </message>
     <message>
         <source>id_learn_more</source>
@@ -2800,6 +2856,14 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     <message>
         <source>id_learn_more_about_s</source>
         <translation>En savoir plus sur %1.</translation>
+    </message>
+    <message>
+        <source>id_learn_more_about_using_qr_mode</source>
+        <translation>Learn more about using QR Mode with Jade</translation>
+    </message>
+    <message>
+        <source>id_ledger_bitcoin_app_detected</source>
+        <translation>Ledger Bitcoin app detected, please open the Bitcoin Legacy app to access.</translation>
     </message>
     <message>
         <source>id_ledger_dashboard_detected</source>
@@ -3250,6 +3314,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>SegWit natif</translation>
     </message>
     <message>
+        <source>id_navigate_on_your_jade_to</source>
+        <translation>Navigate on your Jade to Options &gt; Wallet &gt; Export Xpub (ensure the derivation path is m/84&apos;/0&apos;/0&apos;)</translation>
+    </message>
+    <message>
         <source>id_need_help</source>
         <translation>Besoin d&apos;aide ?</translation>
     </message>
@@ -3479,6 +3547,10 @@ Essayez de restaurer manuellement votre portefeuille.</translation>
         <translation>Pas sur la chaîne la plus longue</translation>
     </message>
     <message>
+        <source>id_not_vulnerable_to_bruteforce</source>
+        <translation>Not vulnerable to brute-force attacks due to Jade’s unique security model</translation>
+    </message>
+    <message>
         <source>id_note</source>
         <translation>Note</translation>
     </message>
@@ -3493,6 +3565,10 @@ Essayez de restaurer manuellement votre portefeuille.</translation>
     <message>
         <source>id_now</source>
         <translation>Maintenant</translation>
+    </message>
+    <message>
+        <source>id_number_of_consecutive_empty</source>
+        <translation>Number of consecutive empty addresses to monitor</translation>
     </message>
     <message>
         <source>id_of_24</source>
@@ -3525,6 +3601,10 @@ Essayez de restaurer manuellement votre portefeuille.</translation>
     <message>
         <source>id_on_hardware_wallet</source>
         <translation>On Hardware Wallet</translation>
+    </message>
+    <message>
+        <source>id_on_jade_select_qr__continue_</source>
+        <translation>On Jade select QR &gt; Continue &gt; Enter your PIN</translation>
     </message>
     <message>
         <source>id_on_this_device</source>
@@ -3689,6 +3769,10 @@ Essayez de restaurer manuellement votre portefeuille.</translation>
     <message>
         <source>id_payments_to_self_are_not</source>
         <translation>Payments to self are not supported in your lightning account.</translation>
+    </message>
+    <message>
+        <source>id_payments_will_fail</source>
+        <translation>Payments will fail!</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
@@ -3889,6 +3973,10 @@ Essayez de restaurer manuellement votre portefeuille.</translation>
     <message>
         <source>id_pseudonymous_identifier_country</source>
         <translation>Identifiant pseudonyme, pays</translation>
+    </message>
+    <message>
+        <source>id_qr_airgapped_mode</source>
+        <translation>QR Airgapped Mode</translation>
     </message>
     <message>
         <source>id_qr_code</source>
@@ -4143,6 +4231,10 @@ Essayez de restaurer manuellement votre portefeuille.</translation>
         <translation>Supprimer le portefeuille</translation>
     </message>
     <message>
+        <source>id_removing_wallet</source>
+        <translation>Removing wallet…</translation>
+    </message>
+    <message>
         <source>id_rename</source>
         <translation>Renommer</translation>
     </message>
@@ -4361,6 +4453,10 @@ Keep the app online.</translation>
         <translation>Scanner pour envoyer ici</translation>
     </message>
     <message>
+        <source>id_scan_with_jade</source>
+        <translation>Scan with Jade</translation>
+    </message>
+    <message>
         <source>id_screen_lock</source>
         <translation>Verrouillage de l&apos;écran</translation>
     </message>
@@ -4421,8 +4517,8 @@ Keep the app online.</translation>
         <translation>Sélectionner le compte</translation>
     </message>
     <message>
-        <source>id_select_account_amp_asset</source>
-        <translation>Select account &amp;amp; asset</translation>
+        <source>id_select_account__asset</source>
+        <translation>Select account &amp; asset</translation>
     </message>
     <message>
         <source>id_select_an_app_on_s</source>
@@ -4431,6 +4527,10 @@ Keep the app online.</translation>
     <message>
         <source>id_select_asset</source>
         <translation>Sélectionner l&apos;actif</translation>
+    </message>
+    <message>
+        <source>id_select_connection_via_qr_than</source>
+        <translation>Select connection via QR, than continue and choose a PIN</translation>
     </message>
     <message>
         <source>id_select_duration_of_twofactor</source>
@@ -4447,6 +4547,10 @@ Keep the app online.</translation>
     <message>
         <source>id_select_network</source>
         <translation>Sélectionnez le réseau</translation>
+    </message>
+    <message>
+        <source>id_select_s_on_jade_and_scan_this</source>
+        <translation>Select %1 on Jade and scan this QR code</translation>
     </message>
     <message>
         <source>id_select_the_s_app_on_your_ledger</source>
@@ -4619,6 +4723,10 @@ This address can be used only once</translation>
         <translation>Définir le nom du portefeuille</translation>
     </message>
     <message>
+        <source>id_set_your_pin_via_qr_on_your</source>
+        <translation>Set your PIN via QR on your Jade to get started</translation>
+    </message>
+    <message>
         <source>id_setting_up_your_wallet</source>
         <translation>Configurez votre portefeuille</translation>
     </message>
@@ -4647,12 +4755,20 @@ This address can be used only once</translation>
         <translation>Configuration de Jade</translation>
     </message>
     <message>
+        <source>id_setup_jade_and_backup_the</source>
+        <translation>Setup Jade and backup the recovery phrase</translation>
+    </message>
+    <message>
         <source>id_setup_pin</source>
         <translation>Définition du code PIN</translation>
     </message>
     <message>
         <source>id_setup_pin_and_s</source>
         <translation>Définition du code PIN et %1</translation>
+    </message>
+    <message>
+        <source>id_setup_pin_via_qr</source>
+        <translation>Setup PIN via QR</translation>
     </message>
     <message>
         <source>id_setup_your_jade</source>
@@ -4747,6 +4863,10 @@ This address can be used only once</translation>
         <translation>Sign Transaction</translation>
     </message>
     <message>
+        <source>id_sign_transaction_via_qr</source>
+        <translation>Sign transaction via QR</translation>
+    </message>
+    <message>
         <source>id_signature</source>
         <translation>Signature</translation>
     </message>
@@ -4831,8 +4951,8 @@ Réinitialisez ce paramètre, puis réactivez-le.</translation>
  </translation>
     </message>
     <message>
-        <source>id_some_accounts_can_not_be_logged</source>
-        <translation>Some accounts can not be logged in due to network issues. Please try again later.</translation>
+        <source>id_some_accounts_cannot_be_logged</source>
+        <translation>Some accounts cannot be logged into due to network issues. Please update the Green app and try again later.</translation>
     </message>
     <message>
         <source>id_some_coins_in_your_wallet</source>
@@ -4910,8 +5030,16 @@ Réinitialisez ce paramètre, puis réactivez-le.</translation>
         <translation>Lancez un processus de réinitialisation 2FA si vous avez perdu l&apos;accès à toutes vos méthodes d&apos;authentification à deux facteurs.</translation>
     </message>
     <message>
+        <source>id_start_qr_unlock</source>
+        <translation>Start QR Unlock</translation>
+    </message>
+    <message>
         <source>id_start_receiving_funds_and_set</source>
         <translation>Commencez à recevoir des fonds et définissez une adresse email pour recevoir les données de récupération de votre portefeuille.</translation>
+    </message>
+    <message>
+        <source>id_start_scan_qr_on_jade_and</source>
+        <translation>Start Scan QR on Jade and validate the transaction details on Jade</translation>
     </message>
     <message>
         <source>id_status</source>
@@ -5256,7 +5384,7 @@ Thanks for your patience!</translation>
     </message>
     <message>
         <source>id_to</source>
-        <translation>À</translation>
+        <translation>To</translation>
     </message>
     <message>
         <source>id_to_authorize_the_transaction</source>
@@ -5439,6 +5567,10 @@ Thanks for your patience!</translation>
         <translation>TXID</translation>
     </message>
     <message>
+        <source>id_type_an_amount_between_s_and_s</source>
+        <translation>Type an amount between %1 and %2. A minimum setup fee of %3 will be applied to the received amount.</translation>
+    </message>
+    <message>
         <source>id_type_the_next_word</source>
         <translation>Type the next word</translation>
     </message>
@@ -5489,6 +5621,10 @@ Thanks for your patience!</translation>
     <message>
         <source>id_unlock_green</source>
         <translation>Déverrouiller Green</translation>
+    </message>
+    <message>
+        <source>id_unlock_jade_before_signing_the</source>
+        <translation>Unlock Jade before signing the transaction</translation>
     </message>
     <message>
         <source>id_unlock_jade_to_continue</source>
@@ -5561,6 +5697,10 @@ Thanks for your patience!</translation>
     <message>
         <source>id_use_hardware_device</source>
         <translation>Utiliser un portefeuille matériel</translation>
+    </message>
+    <message>
+        <source>id_use_s_for_quick_access</source>
+        <translation>Use %1 for Quick Access</translation>
     </message>
     <message>
         <source>id_use_secure_display_and_screen</source>
@@ -5770,7 +5910,7 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     </message>
     <message>
         <source>id_warning_you_need_a_positive</source>
-        <translation>Attention! Vous devez avoir un solde positif de L-BTC pour pouvoir envoyer des transactions.</translation>
+        <translation>Attention! Vous devez avoir un solde positif de LBTC pour pouvoir envoyer des transactions.</translation>
     </message>
     <message>
         <source>id_watchonly</source>
@@ -6037,6 +6177,10 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
         <translation>Vous avez activé Tor, êtes-vous sûr de vouloir ouvrir cette page web ?</translation>
     </message>
     <message>
+        <source>id_you_just_created_a_pin_to</source>
+        <translation>You just created a PIN to unlock your Jade and sign transactions!</translation>
+    </message>
+    <message>
         <source>id_you_must_first_log_out_before</source>
         <translation>Vous devez vous déconnecter avant de vous reconnecter.</translation>
     </message>
@@ -6071,6 +6215,10 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     <message>
         <source>id_you_will_see_your_coins_here</source>
         <translation>Vous verrez vos pièces ici</translation>
+    </message>
+    <message>
+        <source>id_you_will_stop_receiving_push</source>
+        <translation>You will stop receiving push notifications for this lightning account. Notifications are helpful to improve the reliability of lightning payments.</translation>
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>
