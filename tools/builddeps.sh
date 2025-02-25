@@ -6,6 +6,7 @@ if [ -d $PREFIX ]; then
     exit 0
 fi
 
+./tools/buildbreakpad.sh
 ./tools/buildgdk.sh
 ./tools/buildqt.sh
 ./tools/buildlibusb.sh

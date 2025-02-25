@@ -1,8 +1,16 @@
 #include "application.h"
+#include "config.h"
+#include "util.h"
 #include "walletmanager.h"
 
 #include <QtConcurrentRun>
+#include <QDir>
+#include <QDirIterator>
 #include <QFileOpenEvent>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <QUrl>
 #include <QWindow>
 
 #include <ZXing/BitMatrix.h>
@@ -180,6 +188,49 @@ void ApplicationController::quit()
 void ApplicationController::triggerCrash()
 {
     qFatal() << Q_FUNC_INFO;
+}
+
+bool SentryPayloadFromMinidump(const QString& path, QByteArray& envelope);
+
+void ApplicationController::reportCrashes()
+{
+    auto engine = qmlEngine(this);
+    if (!engine) {
+        qDebug() << Q_FUNC_INFO << "engine not set";
+        return;
+    }
+    auto net = engine->networkAccessManager();
+    if (!net) {
+        qDebug() << Q_FUNC_INFO << "network access manager not set";
+        return;
+    }
+
+    QDir dir(GetDataDir("crashpad"));
+#if defined(Q_OS_WINDOWS)
+    dir.cd("reports");
+#else
+    dir.cd("completed");
+#endif
+    QDirIterator it(dir.absolutePath(), QDir::Files, QDirIterator::NoIteratorFlags);
+    while (it.hasNext()) {
+        const auto minidump_path = it.next();
+        qDebug() << Q_FUNC_INFO << minidump_path;
+        QByteArray envelope;
+        if (SentryPayloadFromMinidump(minidump_path, envelope)) {
+            QUrl url("https://sentry.blockstream.io/api/2/envelope/");
+            QNetworkRequest req(url);
+            req.setRawHeader("Content-Type", "application/json");
+            req.setRawHeader("X-Sentry-Auth", "Sentry sentry_key=" SENTRY_KEY);
+
+            auto reply = net->post(req, envelope);
+
+            connect(reply, &QNetworkReply::finished, this, [=] {
+                qDebug() << Q_FUNC_INFO << reply->readAll();
+                reply->deleteLater();
+            });
+        }
+        QFile::remove(minidump_path);
+    }
 }
 
 bool ApplicationController::eventFilter(QObject* obj, QEvent* event)

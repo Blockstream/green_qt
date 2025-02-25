@@ -55,6 +55,10 @@ ENV CMAKE_PREFIX_PATH=$PREFIX
 COPY tools/buildcrashpad.sh tools/
 RUN tools/buildcrashpad.sh
 
+FROM base AS breakpad
+COPY tools/buildbreakpad.sh tools/
+RUN tools/buildbreakpad.sh
+
 FROM base
 COPY --from=hidapi /depends /depends
 COPY --from=countly /depends /depends
@@ -63,3 +67,4 @@ COPY --from=gdk /depends /depends
 COPY --from=kdsa /depends /depends
 COPY --from=libserialport /depends /depends
 COPY --from=crashpad /depends /depends
+COPY --from=breakpad /depends /depends

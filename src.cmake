@@ -86,6 +86,7 @@ SET(TARGET_SOURCES
         src/jadeverifyaddresscontroller.h src/jadeverifyaddresscontroller.cpp
         src/promo.h src/promo.cpp
         src/requestsupportcontroller.h src/requestsupportcontroller.cpp
+        src/breakpad.cpp
 )
 
 if (WIN32)

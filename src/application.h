@@ -30,6 +30,7 @@ public slots:
     void triggerQuit();
     void quit();
     void triggerCrash();
+    void reportCrashes();
 signals:
     void quitRequested();
     void quitTriggered();

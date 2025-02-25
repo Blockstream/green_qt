@@ -116,6 +116,12 @@ target_link_libraries(green
 )
 
 if(ENABLE_SENTRY)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(BREAKPAD REQUIRED breakpad)
+
+    find_library(LIBBREAKPAD_LIB NAMES libbreakpad.a REQUIRED)
+    find_library(LIBDISASM_LIB NAMES libdisasm.a REQUIRED)
+
     add_compile_definitions(ENABLE_SENTRY)
 
     if (UNIX AND NOT APPLE)
@@ -129,6 +135,7 @@ if(ENABLE_SENTRY)
     target_include_directories(green PRIVATE
       ${CRASHPAD_INCLUDE}
       ${CRASHPAD_INCLUDE}/..
+      ${BREAKPAD_INCLUDE_DIRS}
     )
     target_link_libraries(green PRIVATE
         crashpad::client
@@ -138,6 +145,7 @@ if(ENABLE_SENTRY)
         crashpad::tools
         crashpad::util
         crashpad::zlib
+        ${LIBBREAKPAD_LIB} ${LIBDISASM_LIB}
     )
 endif()
 

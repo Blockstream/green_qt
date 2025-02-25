@@ -64,16 +64,6 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #include <windows.h>
 #endif
 
-#if __APPLE__
-#include <CoreFoundation/CoreFoundation.h>
-#include <ApplicationServices/ApplicationServices.h>
-
-void DisableMacOSDockIcon() {
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-    TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
-}
-#endif
-
 #include <hidapi/hidapi.h>
 
 extern QString g_data_location;
@@ -208,18 +198,47 @@ int main(int argc, char *argv[])
     return init(app, argc, argv);
 }
 
+int crash_handler(Application& app, int argc, char *argv[]) {
+    HideApplication();
+    // Initialize and run the handler process
+    return crashpad::HandlerMain(argc, argv, nullptr);
+}
+
+int ui_handler(Application& app, int argc, char *argv[]);
+int watchdog_handler(Application& app)
+{
+#ifdef _WIN32
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        freopen("CONOUT$", "w", stdout);
+        freopen("CONOUT$", "w", stderr);
+    }
+#endif
+    HideApplication();
+    QStringList args{"--ui"};
+    args.append(app.arguments().mid(1));
+    for (int attempts = 5; attempts > 0; --attempts) {
+        auto rc = QProcess::execute(app.arguments().first(), args);
+        if (rc == 0) break;
+    }
+    return 0;
+}
+
 int init(Application& app, int argc, char *argv[])
 {
-#ifdef ENABLE_SENTRY
     for (auto arg : app.arguments()) {
-        if (arg.startsWith("--database")) {
-            HideApplication();
-            // Initialize and run the handler process
-            return crashpad::HandlerMain(argc, argv, nullptr);
+        if (arg.startsWith("--ui")) {
+            return ui_handler(app, argc, argv);
         }
+#ifdef ENABLE_SENTRY
+        if (arg.startsWith("--database")) {
+            return crash_handler(app, argc, argv);
+        }
+#endif
     }
-#endif // ENABLE_SENTRY
+    return watchdog_handler(app);
+}
 
+int ui_handler(Application& app, int argc, char *argv[]) {
     KDSingleApplication kdsa("green_qt");
 
     SessionManager session_manager;
@@ -231,6 +250,7 @@ int init(Application& app, int argc, char *argv[])
     g_args.addOption(QCommandLineOption("tempdatadir"));
     g_args.addOption(QCommandLineOption("printtoconsole"));
     g_args.addOption(QCommandLineOption("debug"));
+    g_args.addOption(QCommandLineOption("ui"));
     g_args.addOption(QCommandLineOption("tor", "Configure Tor.", "enabled|disabled", ""));
     g_args.addOption(QCommandLineOption("proxy", "Configure Proxy.", "host:port", ""));
     g_args.addOption(QCommandLineOption("analytics", "Configure analytics.", "enabled|disabled", ""));
@@ -334,21 +354,14 @@ int init(Application& app, int argc, char *argv[])
     base::FilePath database(GetDataDir("crashpad").toStdString());
     base::FilePath handler(app.arguments().first().toStdString());
 #endif
-    const std::string url = std::string("https://sentry.blockstream.io/api/2/minidump/?sentry_key=") + std::string(SENTRY_KEY);
-    std::map<std::string, std::string> annotations = {
-        { "version", GREEN_VERSION },
-        { "env", GREEN_ENV },
-        { "args", app.arguments().mid(1).join(" ").toStdString() }
-    };
-    std::vector<std::string> arguments = {
-        "--no-rate-limit"
-    };
-
+    const std::string url;
+    std::map<std::string, std::string> annotations = {};
+    std::vector<std::string> arguments = {};
     std::unique_ptr<crashpad::CrashReportDatabase> db =
         crashpad::CrashReportDatabase::Initialize(database);
 
     if (db != nullptr && db->GetSettings() != nullptr) {
-        db->GetSettings()->SetUploadsEnabled(true);
+        db->GetSettings()->SetUploadsEnabled(false);
     }
 
     crashpad::CrashpadClient client;

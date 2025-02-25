@@ -89,6 +89,7 @@ ApplicationWindow {
         asynchronous: true
         onLoaded: stack_view.replace(null, app_page.item, StackView.PushTransition)
         sourceComponent: AppPage {
+            StackView.onActivated: controller.reportCrashes()
             StackView.onDeactivated: app_page.active = false
             onCrashClicked: controller.triggerCrash()
         }
