@@ -12,6 +12,7 @@ git clone --quiet --branch $ZXING_BRANCH --single-branch $ZXING_REPO zxing-cpp-s
 
 cmake -S zxing-cpp-src -B zxing-cpp-bld \
   -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
   -DBUILD_SHARED_LIBS=OFF \
   -DZXING_C_API=OFF \
   -DZXING_EXAMPLES=OFF \

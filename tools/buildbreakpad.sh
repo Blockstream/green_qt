@@ -13,6 +13,8 @@ fetch breakpad
 
 mkdir build && cd build
 
+export MACOSX_DEPLOYMENT_TARGET=12.0
+
 if [ "$HOST" = "linux" ]; then
     ../src/configure \
         CXXFLAGS="-static-libgcc -static-libstdc++" \

@@ -17,8 +17,9 @@ cp /usr/x86_64-w64-mingw32/include/windows.h /usr/x86_64-w64-mingw32/include/Win
 fi
 
 cmake -S crashpad-src -B crashpad-bld \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCRASHPAD_ZLIB_SYSTEM=OFF
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+    -DCRASHPAD_ZLIB_SYSTEM=OFF
 
 cmake --build crashpad-bld
 cmake --install crashpad-bld --strip --prefix $PREFIX
