@@ -14,6 +14,17 @@ StackViewPage {
     property Asset asset
     property url url
     property Transaction transaction
+    property var available: {
+        if (controller.coins.length > 0) {
+            let satoshi = 0
+            for (const output of controller.coins) {
+                satoshi += output.data.satoshi
+            }
+            return { satoshi: String(satoshi) }
+        } else {
+            return { satoshi: String(controller.account.json.satoshi[controller.asset?.key ?? 'btc']) }
+        }
+    }
     function pushSelectCoinsPage() {
         self.StackView.view.push(select_coins_page, {
             account: controller.account,
@@ -114,13 +125,7 @@ StackViewPage {
                         id: convert
                         account: controller.account
                         asset: controller.asset
-                        input: {
-                            let satoshi = 0
-                            for (const output of controller.coins) {
-                                satoshi += output.data.satoshi
-                            }
-                            return { satoshi: String(satoshi) }
-                        }
+                        input: self.available
                         unit: amount_field.unit
                     }
                     CircleButton {
@@ -215,13 +220,13 @@ StackViewPage {
             ErrorPane {
                 Layout.topMargin: -30
                 Layout.bottomMargin: 15
-                error: amount_field.error
+                error: amount_field.text.length > 0 ? amount_field.error : null
             }
             Convert {
                 id: available_convert
                 account: controller.account
                 asset: controller.asset
-                input: ({ satoshi: String(controller.account.json.satoshi[controller.asset?.key ?? 'btc']) })
+                input: self.available
                 unit: controller.recipient.convert.unit
             }
             RowLayout {
