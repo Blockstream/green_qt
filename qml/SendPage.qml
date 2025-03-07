@@ -202,6 +202,7 @@ StackViewPage {
                 convert: controller.recipient.convert
                 unit: self.account.session.unit
                 error: {
+                    if (amount_field.text.length === 0) return
                     const error = controller.transaction?.error
                     if (error === 'id_insufficient_funds') return error
                     if (error === 'id_invalid_amount') {
