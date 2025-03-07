@@ -112,6 +112,7 @@ int watchdog_handler(Application& app);
 int crash_handler(Application& app, int argc, char *argv[]);
 int ui_handler(Application& app, int argc, char *argv[]);
 
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");

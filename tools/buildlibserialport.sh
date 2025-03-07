@@ -12,8 +12,6 @@ git clone --quiet --depth 1 --branch $LIBSERIALPORT_BRANCH --single-branch $LIBS
 
 mkdir libserialport-bld && cd libserialport-bld
 
-export MACOSX_DEPLOYMENT_TARGET=12.0
-
 ../libserialport-src/autogen.sh
 
 if [ "$HOST" = "linux" ]; then

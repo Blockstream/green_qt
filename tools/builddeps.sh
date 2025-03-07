@@ -7,6 +7,7 @@ if [ -d $PREFIX ]; then
 fi
 
 ./tools/buildbreakpad.sh
+./tools/buildgpgme.sh
 ./tools/buildgdk.sh
 ./tools/buildqt.sh
 ./tools/buildlibusb.sh

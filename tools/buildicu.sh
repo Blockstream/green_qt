@@ -9,8 +9,6 @@ tar zxf icu4c-76_1-src.tgz
 
 cd icu/source
 
-export MACOSX_DEPLOYMENT_TARGET=12.0
-
 ./configure --prefix=$PREFIX --disable-shared --enable-static
 
 make install

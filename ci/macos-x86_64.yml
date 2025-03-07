@@ -7,8 +7,9 @@
     PKG_CONFIG_PATH: "$PREFIX/lib/pkgconfig"
     CMAKE_INSTALL_PREFIX: "$PREFIX"
     gdk_ROOT: "$PREFIX/lib/x86_64-apple-darwin/gdk"
+    MACOSX_DEPLOYMENT_TARGET: 12.0
   cache:
-    key: macos_x86_64_23
+    key: macos_x86_64_24
     paths: [depends/]
   tags:
     - macos-x86_64

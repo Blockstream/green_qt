@@ -15,7 +15,7 @@ endif()
 configure_file(config.h.in config.h @ONLY)
 configure_file(installer.iss.in installer.iss @ONLY)
 
-find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
+find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
 
 find_package(hidapi REQUIRED)
 find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
@@ -33,6 +33,10 @@ cmake_print_properties(TARGETS gdk::green_gdk_full PROPERTIES
 
 find_library(COUNTLY_LIB NAMES libcountly.a REQUIRED)
 find_library(LIBSERIALPORT_LIB NAMES libserialport.a REQUIRED)
+find_library(LIBGPGME_LIB NAMES libgpgme.a REQUIRED)
+find_library(LIBASSUAN_LIB NAMES libassuan.a REQUIRED)
+find_library(LIBGPGERROR_LIB NAMES libgpg-error.a REQUIRED)
+
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
@@ -108,11 +112,14 @@ target_link_libraries(green
     gdk::green_gdk_full
     ${COUNTLY_LIB}
     ${LIBSERIALPORT_LIB}
-    Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
+    Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
     ${SECURITY}
     hidapi::hidapi
     KDAB::kdsingleapplication
     ${FFMPEG_LIBRARIES}
+    ${LIBGPGME_LIB}
+    ${LIBASSUAN_LIB}
+    ${LIBGPGERROR_LIB}
 )
 
 if(ENABLE_SENTRY)

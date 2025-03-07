@@ -59,6 +59,10 @@ FROM base AS breakpad
 COPY tools/buildbreakpad.sh tools/
 RUN tools/buildbreakpad.sh
 
+FROM base AS gpgme
+COPY tools/buildgpgme.sh tools/
+RUN tools/buildgpgme.sh
+
 FROM base
 COPY --from=hidapi /depends /depends
 COPY --from=countly /depends /depends
@@ -68,3 +72,4 @@ COPY --from=kdsa /depends /depends
 COPY --from=libserialport /depends /depends
 COPY --from=crashpad /depends /depends
 COPY --from=breakpad /depends /depends
+COPY --from=gpgme /depends /depends
