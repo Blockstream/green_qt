@@ -15,6 +15,7 @@ SessionManager::SessionManager()
 
 SessionManager::~SessionManager()
 {
+    qDebug() << Q_FUNC_INFO;
     g_session_manager = nullptr;
 }
 
@@ -29,12 +30,12 @@ Session* SessionManager::create(Network* network)
     const auto settings = Settings::instance();
     if (settings->useTor() && !settings->useProxy() && !m_tor_session) {
         qDebug() << Q_FUNC_INFO << "created tor session";
-        m_tor_session = new Session(NetworkManager::instance()->network("electrum-mainnet"), this);
+        m_tor_session = new Session(NetworkManager::instance()->network("electrum-mainnet"), nullptr);
         m_tor_session->setActive(true);
         m_dispatcher->add(new ConnectTask(m_tor_session));
         connect(m_tor_session, &Session::torEvent, this, &SessionManager::setTor);
     }
-    auto session = new Session(network, this);
+    auto session = new Session(network, nullptr);
     m_sessions.append(session);
     qDebug() << Q_FUNC_INFO << "total sessions:" << m_sessions.count();
     return session;

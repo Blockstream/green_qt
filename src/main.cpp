@@ -184,7 +184,9 @@ public:
     }
 };
 
-int init(Application& app, int argc, char *argv[]);
+int watchdog_handler(Application& app);
+int crash_handler(Application& app, int argc, char *argv[]);
+int ui_handler(Application& app, int argc, char *argv[]);
 
 int main(int argc, char *argv[])
 {
@@ -195,7 +197,19 @@ int main(int argc, char *argv[])
 
     Application app(argc, argv);
 
-    return init(app, argc, argv);
+    SessionManager session_manager;
+
+    for (auto arg : app.arguments()) {
+        if (arg.startsWith("--ui")) {
+            return ui_handler(app, argc, argv);
+        }
+#ifdef ENABLE_SENTRY
+        if (arg.startsWith("--database")) {
+            return crash_handler(app, argc, argv);
+        }
+#endif
+    }
+    return watchdog_handler(app);
 }
 
 int crash_handler(Application& app, int argc, char *argv[]) {
@@ -204,7 +218,6 @@ int crash_handler(Application& app, int argc, char *argv[]) {
     return crashpad::HandlerMain(argc, argv, nullptr);
 }
 
-int ui_handler(Application& app, int argc, char *argv[]);
 int watchdog_handler(Application& app)
 {
 #ifdef _WIN32
@@ -223,25 +236,9 @@ int watchdog_handler(Application& app)
     return 0;
 }
 
-int init(Application& app, int argc, char *argv[])
-{
-    for (auto arg : app.arguments()) {
-        if (arg.startsWith("--ui")) {
-            return ui_handler(app, argc, argv);
-        }
-#ifdef ENABLE_SENTRY
-        if (arg.startsWith("--database")) {
-            return crash_handler(app, argc, argv);
-        }
-#endif
-    }
-    return watchdog_handler(app);
-}
-
 int ui_handler(Application& app, int argc, char *argv[]) {
     KDSingleApplication kdsa("green_qt");
 
-    SessionManager session_manager;
     WalletManager wallet_manager;
 
     g_args.addHelpOption();

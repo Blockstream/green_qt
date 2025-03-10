@@ -14,7 +14,6 @@
 #include "json.h"
 #include "network.h"
 #include "networkmanager.h"
-#include "session.h"
 #include "util.h"
 #include "wallet.h"
 
