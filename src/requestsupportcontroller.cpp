@@ -49,10 +49,16 @@ void RequestSupportController::submit(bool share_logs, const QJsonObject& data)
         { "id", "900009625166" },
         { "value", QCoreApplication::applicationVersion() }
     });
-    // Operating system: android, ios, windows, macos, linux
+    // Operating system: windows, macos, linux
     custom_fields.append(QJsonObject{
         { "id", "900008231623" },
-        { "value", QSysInfo::productType() }
+#if defined(Q_OS_MACOS)
+        { "value", "macos" }
+#elif defined(Q_OS_WINDOWS)
+        { "value", "windows" }
+#elif defined(Q_OS_LINUX)
+        { "value", "linux" }
+#endif
     });
     // Operating system version
     custom_fields.append(QJsonObject{
