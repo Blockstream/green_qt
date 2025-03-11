@@ -10,6 +10,7 @@
 bool ExistsDataDir(const QString& context);
 QString GetDataDir(const QString& context);
 QString GetDataFile(const QString& context, const QString& name);
+QString GetLogFilename();
 
 QVector<uint32_t> ParsePath(const QJsonArray& array);
 QVector<uint32_t> ParsePath(const QJsonValue& value);

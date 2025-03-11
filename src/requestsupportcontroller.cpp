@@ -2,16 +2,15 @@
 #include "httprequestactivity.h"
 #include "httpmanager.h"
 #include "requestsupportcontroller.h"
+#include "util.h"
 
 #include <QFile>
-
-extern QFile g_log_file;
 
 namespace {
 
 QString GetLogs()
 {
-    QFile file(g_log_file.fileName());
+    QFile file(GetLogFilename());
     auto rc = file.open(QIODevice::ReadOnly);
     if (!rc) return "failed to open log file";
     const auto content = QString::fromUtf8(file.readAll());

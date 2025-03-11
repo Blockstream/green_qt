@@ -37,5 +37,4 @@ else
     exit 1
 fi
 
-cp -R build-*/external_deps_build/include/boost $PREFIX/include
 cp -R build-*/external_deps_build/include/nlohmann $PREFIX/include

@@ -1,3 +1,4 @@
+#include "config.h"
 #include "util.h"
 
 #include <QCryptographicHash>
@@ -39,6 +40,14 @@ QString GetDataDir(const QString& context)
 QString GetDataFile(const QString& context, const QString& name)
 {
     return GetDataDir(context) + QDir::separator() + name;
+}
+
+QString GetLogFilename()
+{
+    const QString log_file(GREEN_LOG_FILE);
+    const QString version(GREEN_VERSION);
+
+    return GetDataFile("logs", QString("%1.txt").arg(log_file.isEmpty() ? version : log_file));
 }
 
 quint64 ParseSatoshi(const QJsonValue &value)

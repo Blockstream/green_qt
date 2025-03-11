@@ -65,14 +65,10 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #endif
 
 #include <hidapi/hidapi.h>
+#include <unistd.h>
 
 extern QString g_data_location;
 QCommandLineParser g_args;
-QFile g_log_file;
-
-#include <boost/log/core.hpp>
-#include <boost/log/sinks/async_frontend.hpp>
-#include <boost/log/sinks/basic_sink_backend.hpp>
 
 #ifdef ENABLE_SENTRY
 #include <crash_report_database.h>
@@ -92,78 +88,6 @@ static QString GraphicsAPIToString(QSGRendererInterface::GraphicsApi api) {
         case QSGRendererInterface::Metal: return "Metal";
         case QSGRendererInterface::Null: return "Null";
         default: return "Unknown";
-    }
-}
-
-void gMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
-    Q_UNUSED(context)
-
-    static QHash<QtMsgType, QString> msgLevelHash({{QtDebugMsg, "debug"}, {QtInfoMsg, "info"}, {QtWarningMsg, "warning"}, {QtCriticalMsg, "critical"}, {QtFatalMsg, "fatal"}});
-    QByteArray localMsg = msg.toLocal8Bit();
-    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
-    QString logLevelName = msgLevelHash[type];
-
-    QTextStream ts(&g_log_file);
-    ts << QString("[%1] [app:%2] %3").arg(timestamp, logLevelName, msg) << Qt::endl;
-
-    if (type == QtFatalMsg) abort();
-}
-
-class gdk_sink : public boost::log::sinks::basic_formatted_sink_backend<char> {
-public:
-    void consume(const boost::log::record_view&, const std::string& formatted_message)
-    {
-        QTextStream ts(&g_log_file);
-        QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
-        ts << QString("[%1] [gdk:info] %2").arg(timestamp, QString::fromStdString(formatted_message)) << Qt::endl;
-    }
-};
-
-static QString g_gdk_debug_buffer;
-
-void initLog()
-{
-    const QString log_file(GREEN_LOG_FILE);
-    const QString version(GREEN_VERSION);
-
-    g_log_file.setFileName(GetDataFile("logs", QString("%1.txt").arg(log_file.isEmpty() ? version : log_file)));
-
-    if (QString{"Development"} != GREEN_ENV) {
-        g_log_file.open(QIODevice::WriteOnly | QIODevice::Append);
-        qInstallMessageHandler(gMessageHandler);
-
-        using sink_t = boost::log::sinks::asynchronous_sink<gdk_sink>;
-        auto sink = boost::make_shared<sink_t>(boost::make_shared<gdk_sink>());
-        boost::log::core::get()->add_sink(sink);
-
-        auto logger_thread = std::thread([] {
-            int pipes[2];
-            setvbuf(stdout, 0, _IOLBF, 0);
-            setvbuf(stderr, 0, _IONBF, 0);
-    #ifdef _WIN32
-            _pipe(pipes, 1024, _O_NOINHERIT);
-            _dup2(pipes[1], 1);
-            _dup2(pipes[1], 2);
-    #else
-            pipe(pipes);
-            dup2(pipes[1], 1);
-            dup2(pipes[1], 2);
-    #endif
-            ssize_t read_size;
-            char buffer[1024];
-            while ((read_size = read(pipes[0], buffer, sizeof buffer - 1)) > 0) {
-                g_gdk_debug_buffer.append(QByteArray(buffer, read_size));
-                auto lines = g_gdk_debug_buffer.split('\n');
-                QTextStream ts(&g_log_file);
-                QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
-                while (lines.size() > 1) {
-                    ts << QString("[%1] [gdk:debug] %3").arg(timestamp, lines.takeFirst()) << Qt::endl;
-                }
-                g_gdk_debug_buffer = lines.first();
-            }
-        });
-        logger_thread.detach();
     }
 }
 
@@ -197,55 +121,13 @@ int main(int argc, char *argv[])
 
     Application app(argc, argv);
 
-    SessionManager session_manager;
-
-    for (auto arg : app.arguments()) {
-        if (arg.startsWith("--ui")) {
-            return ui_handler(app, argc, argv);
-        }
-#ifdef ENABLE_SENTRY
-        if (arg.startsWith("--database")) {
-            return crash_handler(app, argc, argv);
-        }
-#endif
-    }
-    return watchdog_handler(app);
-}
-
-int crash_handler(Application& app, int argc, char *argv[]) {
-    HideApplication();
-    // Initialize and run the handler process
-    return crashpad::HandlerMain(argc, argv, nullptr);
-}
-
-int watchdog_handler(Application& app)
-{
-#ifdef _WIN32
-    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-        freopen("CONOUT$", "w", stdout);
-        freopen("CONOUT$", "w", stderr);
-    }
-#endif
-    HideApplication();
-    QStringList args{"--ui"};
-    args.append(app.arguments().mid(1));
-    for (int attempts = 5; attempts > 0; --attempts) {
-        auto rc = QProcess::execute(app.arguments().first(), args);
-        if (rc == 0) break;
-    }
-    return 0;
-}
-
-int ui_handler(Application& app, int argc, char *argv[]) {
-    KDSingleApplication kdsa("green_qt");
-
-    WalletManager wallet_manager;
-
     g_args.addHelpOption();
     g_args.addVersionOption();
     g_args.addOption(QCommandLineOption("datadir", "", "path"));
     g_args.addOption(QCommandLineOption("tempdatadir"));
-    g_args.addOption(QCommandLineOption("printtoconsole"));
+    g_args.addOption(QCommandLineOption("database", "", "path"));
+    g_args.addOption(QCommandLineOption("metrics-dir", "", "path"));
+    g_args.addOption(QCommandLineOption("handshake-fd", "", "path"));
     g_args.addOption(QCommandLineOption("debug"));
     g_args.addOption(QCommandLineOption("ui"));
     g_args.addOption(QCommandLineOption("tor", "Configure Tor.", "enabled|disabled", ""));
@@ -262,6 +144,78 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     }
     g_args.addPositionalArgument("uri", "BIP21 payment");
     g_args.process(app);
+
+    if (g_args.isSet("tempdatadir")) {
+        QTemporaryDir dir;
+        Q_ASSERT(dir.isValid());
+        dir.setAutoRemove(false);
+        g_data_location = dir.path();
+    } else if (g_args.isSet("datadir")) {
+        QDir path(g_args.value("datadir"));
+        g_data_location = path.absolutePath();
+    } else {
+        g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    }
+
+    for (auto arg : app.arguments()) {
+        if (arg.startsWith("--ui")) {
+            return ui_handler(app, argc, argv);
+        }
+#ifdef ENABLE_SENTRY
+        if (arg.startsWith("--database")) {
+            return crash_handler(app, argc, argv);
+        }
+#endif
+    }
+    return watchdog_handler(app);
+}
+
+int crash_handler(Application& app, int argc, char *argv[]) {
+    HideApplication();
+    return crashpad::HandlerMain(argc, argv, nullptr);
+}
+
+int watchdog_handler(Application& app)
+{
+#ifdef _WIN32
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        freopen("CONOUT$", "w", stdout);
+        freopen("CONOUT$", "w", stderr);
+    }
+#endif
+    HideApplication();
+    QStringList args{"--ui"};
+    args.append(app.arguments().mid(1));
+    for (int attempts = 5; attempts > 0; --attempts) {
+        QFile file(GetLogFilename());
+        file.open(QFile::WriteOnly | QFile::Append);
+        QProcess process;
+        QEventLoop loop;
+        QObject::connect(&process, &QProcess::readyReadStandardOutput, &loop, [&] {
+            const auto data = process.readAllStandardOutput();
+            write(0, data.constData(), data.size());
+            file.write(data);
+            file.flush();
+        });
+        QObject::connect(&process, &QProcess::readyReadStandardError, &loop, [&] {
+            const auto data = process.readAllStandardError();
+            write(1, data.constData(), data.size());
+            file.write(data);
+            file.flush();
+        });
+        QObject::connect(&process, &QProcess::finished, &loop, &QEventLoop::quit);
+        process.start(app.arguments().constFirst(), args);
+        loop.exec();
+        if (process.exitStatus() == QProcess::NormalExit) break;
+    }
+    return 0;
+}
+
+int ui_handler(Application& app, int argc, char *argv[]) {
+    KDSingleApplication kdsa("green_qt");
+
+    SessionManager session_manager;
+    WalletManager wallet_manager;
 
     if (g_args.positionalArguments().size() > 0) {
         const auto uri = g_args.positionalArguments().first();
@@ -309,38 +263,16 @@ int ui_handler(Application& app, int argc, char *argv[]) {
         }
     });
 
-    if (g_args.isSet("tempdatadir")) {
-        QTemporaryDir dir;
-        Q_ASSERT(dir.isValid());
-        dir.setAutoRemove(false);
-        g_data_location = dir.path();
-    } else if (g_args.isSet("datadir")) {
-        QDir path(g_args.value("datadir"));
-        g_data_location = path.absolutePath();
-    } else {
-        g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-    }
-
-    // init log is called after setting the app name and version so that we have this information available for log location
-    initLog();
-
-#ifdef Q_OS_LINUX
+#if defined (Q_OS_LINUX)
     QCoreApplication::setApplicationName("Blockstream Green");
-#endif
-
-    if (g_args.isSet("printtoconsole")) {
-#ifdef _WIN32
-        if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-            freopen("CONOUT$", "w", stdout);
-            freopen("CONOUT$", "w", stderr);
-        }
-#else
-        Q_UNIMPLEMENTED();
-#endif
-    }
-
-#ifndef Q_OS_MACOS
+#elif defined (Q_OS_MACOS)
+    QCoreApplication::setApplicationName("Blockstream Green");
     QApplication::setWindowIcon(QIcon(":/icons/green.png"));
+#elif defined (Q_OS_WINDOWS)
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        freopen("CONOUT$", "w", stdout);
+        freopen("CONOUT$", "w", stderr);
+    }
 #endif
 
 #ifdef ENABLE_SENTRY
@@ -349,7 +281,7 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     base::FilePath handler(app.arguments().first().toStdWString());
 #else
     base::FilePath database(GetDataDir("crashpad").toStdString());
-    base::FilePath handler(app.arguments().first().toStdString());
+    base::FilePath handler(app.arguments().constFirst().toStdString());
 #endif
     const std::string url;
     std::map<std::string, std::string> annotations = {};
@@ -375,15 +307,13 @@ int ui_handler(Application& app, int argc, char *argv[]) {
         arguments,
         restartable,
         asynchronous_start);
+    if (!success) return 1;
 #endif // ENABLE_SENTRY
 
     auto video_inputs = QMediaDevices::videoInputs();
 
     qInfo() << qPrintable(QCoreApplication::organizationName()) << qPrintable(QCoreApplication::applicationName()) << qPrintable(QCoreApplication::applicationVersion());
     qInfo() << "Environment:" << GREEN_ENV;
-#ifdef ENABLE_SENTRY
-    qInfo() << "Sentry:" << success;
-#endif // ENABLE_SENTRY
     qInfo() << "System Information:";
     qInfo() << "  Build ABI:" << qPrintable(QSysInfo::buildAbi());
     qInfo() << "  Build CPU Architecture:" << qPrintable(QSysInfo::buildCpuArchitecture());
@@ -399,7 +329,7 @@ int ui_handler(Application& app, int argc, char *argv[]) {
         qInfo() << "    " << video_input.description() << (video_input.isDefault() ? "(default)" : "");
     }
     qInfo() << "Data directory:" << qPrintable(g_data_location);
-    qInfo() << "Log file:" << qPrintable(g_log_file.fileName());
+    qInfo() << "Log file:" << qPrintable(GetLogFilename());
     qInfo() << "Initialize GDK";
     gdk::init(g_args);
 
@@ -501,8 +431,8 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     engine.rootContext()->setContextProperty("languages", languages.values());
     engine.rootContext()->setContextProperty("data_location_path", g_data_location);
     engine.rootContext()->setContextProperty("data_location_url", QUrl::fromLocalFile(g_data_location));
-    engine.rootContext()->setContextProperty("log_file_path", g_log_file.fileName());
-    engine.rootContext()->setContextProperty("log_file_url", QUrl::fromLocalFile(g_log_file.fileName()));
+    engine.rootContext()->setContextProperty("log_file_path", GetLogFilename());
+    engine.rootContext()->setContextProperty("log_file_url", QUrl::fromLocalFile(GetLogFilename()));
     engine.rootContext()->setContextProperty("platform", GetPlatformName());
 
     if (Settings::instance()->language().isEmpty()) {
