@@ -66,7 +66,7 @@ echo "qt: configuring"
   -release \
   -static -static-runtime \
   -prefix $PREFIX \
-  -skip qt3d,qt5compat,qtactiveqt,qtcharts,qtcoap,qtdatavis3d,qtdoc,qthttpserver,qtlanguageserver,qtlottie,qtmqtt,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtspeech,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview,qtlocation,qtgraphs \
+  -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtdatavis3d,qtdoc,qthttpserver,qtlanguageserver,qtlottie,qtmqtt,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtspeech,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview,qtlocation,qtgraphs \
   -no-feature-sql -no-feature-sql-sqlite \
   -nomake tests -nomake examples $OPTIONS
 
