@@ -8,7 +8,6 @@ qt_add_translations(green
         i18n/green_he.ts
         i18n/green_it.ts
         i18n/green_ja.ts
-        i18n/green_ko.ts
         i18n/green_nl.ts
         i18n/green_pt_BR.ts
         i18n/green_pt_PT.ts
