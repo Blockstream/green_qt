@@ -61,21 +61,12 @@ Dialog {
             opacity: 0.4
             text: 'A new device has been detected, please set it up to start using it.'
         }
-        Item {
+        MultiImage {
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: 352
-            Layout.preferredHeight: 240
-            clip: true
-            Image {
-                anchors.centerIn: parent
-                scale: 0.2
-                source: 'qrc:/png/background.png'
-            }
-            Image {
-                anchors.centerIn: parent
-                scale: 0.2
-                source: JadeJS.image(self.device, 0)
-            }
+            Layout.preferredHeight: 260
+            Layout.preferredWidth: 320
+            foreground: JadeJS.image(self.device, 0)
+            margins: 30
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
