@@ -194,6 +194,8 @@ bool SentryPayloadFromMinidump(const QString& path, QByteArray& envelope);
 
 void ApplicationController::reportCrashes()
 {
+    qDebug() << Q_FUNC_INFO;
+
     auto engine = qmlEngine(this);
     if (!engine) {
         qDebug() << Q_FUNC_INFO << "engine not set";
@@ -209,7 +211,7 @@ void ApplicationController::reportCrashes()
 #if defined(Q_OS_WINDOWS)
     dir.cd("reports");
 #else
-    dir.cd("completed");
+    dir.cd("pending");
 #endif
     QDirIterator it(dir.absolutePath(), QDir::Files, QDirIterator::NoIteratorFlags);
     while (it.hasNext()) {
