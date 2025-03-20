@@ -184,18 +184,14 @@ int crash_handler(Application& app, int argc, char *argv[]) {
 
 int watchdog_handler(Application& app)
 {
-#ifdef _WIN32
-    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-        freopen("CONOUT$", "w", stdout);
-        freopen("CONOUT$", "w", stderr);
-    }
-#endif
     HideApplication();
     QStringList args{"--ui"};
     args.append(app.arguments().mid(1));
     for (int attempts = 5; attempts > 0; --attempts) {
         QFile file(GetLogFilename());
         file.open(QFile::WriteOnly | QFile::Append);
+        file.write("---------");
+        file.flush();
         QProcess process;
         QEventLoop loop;
         QObject::connect(&process, &QProcess::readyReadStandardOutput, &loop, [&] {
@@ -213,6 +209,7 @@ int watchdog_handler(Application& app)
         QObject::connect(&process, &QProcess::finished, &loop, &QEventLoop::quit);
         process.start(app.arguments().constFirst(), args);
         loop.exec();
+        QTextStream(&file) << Q_FUNC_INFO << process.exitStatus();
         if (process.exitStatus() == QProcess::NormalExit) break;
     }
     return 0;
