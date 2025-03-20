@@ -171,10 +171,12 @@ int main(int argc, char *argv[])
     return watchdog_handler(app);
 }
 
+#ifdef ENABLE_SENTRY
 int crash_handler(Application& app, int argc, char *argv[]) {
     HideApplication();
     return crashpad::HandlerMain(argc, argv, nullptr);
 }
+#endif
 
 int watchdog_handler(Application& app)
 {

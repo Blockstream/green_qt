@@ -194,6 +194,7 @@ bool SentryPayloadFromMinidump(const QString& path, QByteArray& envelope);
 
 void ApplicationController::reportCrashes()
 {
+#ifdef ENABLE_SENTRY
     qDebug() << Q_FUNC_INFO;
 
     auto engine = qmlEngine(this);
@@ -233,6 +234,7 @@ void ApplicationController::reportCrashes()
         }
         QFile::remove(minidump_path);
     }
+#endif
 }
 
 bool ApplicationController::eventFilter(QObject* obj, QEvent* event)

@@ -8,6 +8,8 @@
 #include <QUuid>
 #include <QTextStream>
 
+#ifdef ENABLE_SENTRY
+
 #include <common/using_std_string.h>
 #include <google_breakpad/processor/call_stack.h>
 #include <google_breakpad/processor/basic_source_line_resolver.h>
@@ -156,3 +158,5 @@ bool SentryPayloadFromMinidump(const QString& path, QByteArray& envelope)
 
     return true;
 }
+
+#endif
