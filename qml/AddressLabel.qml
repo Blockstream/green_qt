@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 
@@ -7,6 +8,7 @@ Label {
     property bool copyEnabled: false
     TapHandler {
         onTapped: {
+            timer.restart()
             Clipboard.copy(self.address.address)
         }
     }
