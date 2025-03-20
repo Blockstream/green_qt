@@ -1196,12 +1196,19 @@ void SendNLocktimesTask::update()
 
     QtConcurrent::run([=] {
         const auto rc = GA_send_nlocktimes(m_session->m_session);
-        if (rc != GA_OK) return false;
-        const auto settings = gdk::get_settings(m_session->m_session);
-        m_session->setSettings(settings);
-        return true;
-    }).then(this, [=](bool ok) {
-        setStatus(ok ? Status::Finished : Status::Failed);
+        if (rc == GA_OK) {
+            return qMakePair(true, gdk::get_settings(m_session->m_session));
+        } else {
+            return qMakePair(false, gdk::get_thread_error_details());
+        }
+    }).then(this, [=](QPair<bool, QJsonObject> result) {
+        if (result.first) {
+            m_session->setSettings(result.second);
+            setStatus(Status::Finished);
+        } else {
+            setError(result.second.value("details").toString());
+            setStatus(Status::Failed);
+        }
     });
 }
 

@@ -54,7 +54,6 @@ public:
 public slots:
     void changeSettings(const QJsonObject& data);
     void changeSessionSettings(Session* session, const QJsonObject& data);
-    void sendRecoveryTransactions();
     void setRecoveryEmail(const QString& email);
     void deleteWallet();
     void disableAllPins();
@@ -88,6 +87,7 @@ public slots:
     void requestTwoFactorReset(const QString& email);
     void cancelTwoFactorReset();
     void setUnspentOutputsStatus(Account* account, const QVariantList &outputs, const QString &status);
+    void sendRecoveryTransactions();
 signals:
     void sessionChanged();
     void failed(const QString& error);

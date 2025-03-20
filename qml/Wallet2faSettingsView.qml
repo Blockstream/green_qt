@@ -307,7 +307,87 @@ Page {
                     }
                 }
             }
-            VSpacer {
+            Repeater {
+                model: self.context.sessions.filter(session => !session.network.electrum && !session.network.liquid)
+                delegate: SettingsBox {
+                    required property var modelData
+                    readonly property Session session: box.modelData
+                    SessionController {
+                        id: controller
+                        context: self.context
+                        session: box.session
+                        onFailed: (error) => error_badge.raise(error)
+                        onFinished: success_badge.raise('id_recovery_transaction_request')
+                    }
+                    id: box
+                    title: qsTrId('id_recovery_transactions')
+                    contentItem: ColumnLayout {
+                        AbstractButton {
+                            Layout.fillWidth: true
+                            id: button2
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 15
+                            bottomPadding: 15
+                            background: Rectangle {
+                                radius: 5
+                                color: Qt.lighter('#222226', button2.enabled && button2.hovered ? 1.2 : 1)
+                            }
+                            contentItem: RowLayout {
+                                ColumnLayout {
+                                    spacing: 20
+                                    Label {
+                                        Layout.fillWidth: true
+                                        Layout.minimumWidth: 0
+                                        font.pixelSize: 14
+                                        font.weight: 600
+                                        text: qsTrId('id_request_recovery_transactions')
+
+                                        wrapMode: Text.WordWrap
+                                    }
+                                    Label {
+                                        Layout.fillWidth: true
+                                        Layout.preferredWidth: 0
+                                        color: '#6F6F6F'
+                                        font.pixelSize: 14
+                                        font.weight: 500
+                                        text: qsTrId('id_recovery_transaction_emails') + ' ' + box.session.config.email?.data ?? 'N/A'
+                                        wrapMode: Label.WordWrap
+                                    }
+                                }
+                                Image {
+                                    Layout.alignment: Qt.AlignCenter
+                                    source: 'qrc:/svg2/arrow_right.svg'
+                                    opacity: button2.enabled ? 1 : 0.6
+                                    visible: controller.monitor.idle
+                                }
+                                ProgressIndicator {
+                                    x: 10
+                                    width: 24
+                                    height: 24
+                                    indeterminate: !controller.monitor.idle
+                                    visible: !controller.monitor.idle
+                                }
+                            }
+                            onClicked: {
+                                if (controller.monitor.idle) {
+                                    error_badge.clear()
+                                    controller.sendRecoveryTransactions()
+                                }
+                            }
+                        }
+                        FixedErrorBadge {
+                            Layout.fillWidth: true
+                            id: error_badge
+                        }
+                        FixedErrorBadge {
+                            Layout.fillWidth: true
+                            id: success_badge
+                            pointer: false
+                            backgroundColor: '#00B45A'
+                        }
+                    }
+                }
             }
         }
     }

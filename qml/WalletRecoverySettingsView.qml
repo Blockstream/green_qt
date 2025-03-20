@@ -123,17 +123,6 @@ ColumnLayout {
                 text: qsTrId('id_the_qr_code_does_not_include')
                 visible: self.context.credentials?.bip39_passphrase ?? false
             }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                Layout.topMargin: 20
-                source: 'qrc:/svg2/house.svg'
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 12
-                font.weight: 600
-                text: qsTrId('id_make_sure_to_be_in_a_private')
-            }
         }
     }
 

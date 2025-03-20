@@ -121,15 +121,20 @@ void Controller::changeSessionSettings(Session* session, const QJsonObject& data
     }
 }
 
-void Controller::sendRecoveryTransactions()
+void SessionController::sendRecoveryTransactions()
 {
-    if (!m_context) return;
-
-    auto session = m_context->primarySession();
-
-    auto send_nlocktimes = new SendNLocktimesTask(session);
-
-    dispatcher()->add(send_nlocktimes);
+    if (!m_session) return;
+    auto group = new TaskGroup(this);
+    auto send_nlocktimes = new SendNLocktimesTask(m_session);
+    connect(send_nlocktimes, &Task::failed, this, [=](const QString& error) {
+        emit failed(error);
+    });
+    connect(send_nlocktimes, &Task::finished, this, [=]() {
+        emit finished();
+    });
+    group->add(send_nlocktimes);
+    monitor()->add(group);
+    dispatcher()->add(group);
 }
 
 void SessionController::requestTwoFactorReset(const QString& email)
