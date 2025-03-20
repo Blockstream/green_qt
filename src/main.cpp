@@ -126,9 +126,6 @@ int main(int argc, char *argv[])
     g_args.addVersionOption();
     g_args.addOption(QCommandLineOption("datadir", "", "path"));
     g_args.addOption(QCommandLineOption("tempdatadir"));
-    g_args.addOption(QCommandLineOption("database", "", "path"));
-    g_args.addOption(QCommandLineOption("metrics-dir", "", "path"));
-    g_args.addOption(QCommandLineOption("handshake-fd", "", "path"));
     g_args.addOption(QCommandLineOption("debug"));
     g_args.addOption(QCommandLineOption("ui"));
     g_args.addOption(QCommandLineOption("tor", "Configure Tor.", "enabled|disabled", ""));
@@ -139,6 +136,13 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("jade", "Configure Jade.", "enabled|disabled", "enabled"));
     g_args.addOption(QCommandLineOption("updatecheckperiod", "Update check Period.", "seconds", "3600"));
+    // crashpad arguments
+    g_args.addOption(QCommandLineOption("database", "", "path"));
+    g_args.addOption(QCommandLineOption("handshake-fd", "", "fd"));
+    g_args.addOption(QCommandLineOption("initial-client-data", "", "data"));
+    g_args.addOption(QCommandLineOption("initial-client-fd", "", "fd"));
+    g_args.addOption(QCommandLineOption("metrics-dir", "", "path"));
+    g_args.addOption(QCommandLineOption("shared-client-connection"));
     const bool is_production = QStringLiteral("Production") == GREEN_ENV;
     if (!is_production) {
         g_args.addOption(QCommandLineOption("mock-send", "Sending a transaction appears to succeed in the GUI but the transaction is not broadcasted to the network"));
