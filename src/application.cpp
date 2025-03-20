@@ -187,7 +187,8 @@ void ApplicationController::quit()
 
 void ApplicationController::triggerCrash()
 {
-    qFatal() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO;
+    abort();
 }
 
 bool SentryPayloadFromMinidump(const QString& path, QByteArray& envelope);
