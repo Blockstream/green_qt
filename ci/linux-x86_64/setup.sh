@@ -8,7 +8,7 @@ apt-get install --no-install-recommends --no-install-suggests -yqq unzip git aut
 
 apt-get install --no-install-recommends --no-install-suggests -yqq clang-12 libclang-12-dev llvm-12-dev libc++-12-dev
 
-curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.68.0
+curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.71.1
 source /root/.cargo/env
 
 update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
