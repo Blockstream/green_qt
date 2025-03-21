@@ -157,7 +157,7 @@ if(ENABLE_SENTRY)
 endif()
 
 if (WIN32)
-    target_link_libraries(green PRIVATE hid)
+    target_link_libraries(green PRIVATE hid ntdll)
 elseif (APPLE)
     set_target_properties(green PROPERTIES OUTPUT_NAME "Blockstream Green")
 elseif (UNIX)
