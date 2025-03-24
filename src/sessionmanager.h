@@ -20,12 +20,14 @@ public:
     Session* create(Network* network);
     void release(Session* session);
     Session* torSession() const { return m_tor_session; }
+    void exit();
 signals:
     void torChanged();
 private:
     TaskDispatcher* const m_dispatcher;
     Session* m_tor_session{nullptr};
     QList<Session*> m_sessions;
+    QList<Session*> m_garbage;
     QJsonObject m_tor;
 };
 

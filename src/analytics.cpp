@@ -223,6 +223,11 @@ void Analytics::start()
     d->start();
 }
 
+void Analytics::stop()
+{
+    d->stop(Qt::BlockingQueuedConnection);
+}
+
 QJsonValue Analytics::getRemoteConfigValue(const QString &key) const
 {
     auto& countly = cly::Countly::getInstance();

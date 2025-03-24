@@ -18,6 +18,7 @@ public:
     ~Analytics();
     static Analytics* instance();
     void start();
+    void stop();
     QString pushView(const QString &name, const QVariantMap &segmentation);
     void popView(const QString& id);
     std::chrono::seconds timestampOffset() const;

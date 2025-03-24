@@ -66,6 +66,14 @@ void HttpManager::exec(SessionActivity* activity)
     QMetaObject::invokeMethod(this, [=] { dispatch(); }, Qt::QueuedConnection);
 }
 
+void HttpManager::stop()
+{
+    drain();
+    if (m_session) {
+        SessionManager::instance()->release(m_session);
+    }
+}
+
 void HttpManager::dispatch()
 {
     m_idle_timer->stop();

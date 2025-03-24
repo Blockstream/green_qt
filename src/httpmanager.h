@@ -19,6 +19,7 @@ public:
     static HttpManager* instance();
     void exec(SessionActivity* activity);
     Session* session() const { return m_session; }
+    void stop();
 signals:
     void sessionChanged();
 private slots:

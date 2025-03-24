@@ -48,8 +48,8 @@ Context::Context(const QString& deployment, bool bip39, QObject* parent)
 
 Context::~Context()
 {
-    // TODO: remove context from session
     for (auto session : m_sessions_list) {
+        SessionManager::instance()->release(session);
         session->setContext(nullptr);
     }
 }

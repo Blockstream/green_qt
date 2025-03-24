@@ -498,6 +498,11 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     ret = app.exec();
     qDebug() << "Event loop quit";
     hid_exit();
+
+    analytics.stop();
+    http_manager.stop();
+    session_manager.exit();
+
     return ret;
 }
 

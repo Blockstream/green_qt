@@ -276,7 +276,6 @@ void Session::update()
     }
 
     if (!m_active && m_session) {
-#if 1
         {
             QMutexLocker locker(&g_session_mutex);
             g_sessions.remove(m_id);
@@ -285,14 +284,6 @@ void Session::update()
 
         GA_reconnect_hint(m_session, Json::fromObject({{ "hint", "disconnect" }}).get());
         int rc = GA_destroy_session(m_session);
-#else
-        m_self->clear();
-        const auto session = m_session;
-        QTimer::singleShot(60 * 1000, qApp, [session] {
-            GA_set_notification_handler(session, nullptr, nullptr);
-            int rc = GA_destroy_session(session);
-        });
-#endif
         m_session = nullptr;
         return;
     }

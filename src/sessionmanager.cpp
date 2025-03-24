@@ -30,12 +30,12 @@ Session* SessionManager::create(Network* network)
     const auto settings = Settings::instance();
     if (settings->useTor() && !settings->useProxy() && !m_tor_session) {
         qDebug() << Q_FUNC_INFO << "created tor session";
-        m_tor_session = new Session(NetworkManager::instance()->network("electrum-mainnet"), nullptr);
+        m_tor_session = new Session(NetworkManager::instance()->network("electrum-mainnet"), this);
         m_tor_session->setActive(true);
         m_dispatcher->add(new ConnectTask(m_tor_session));
         connect(m_tor_session, &Session::torEvent, this, &SessionManager::setTor);
     }
-    auto session = new Session(network, nullptr);
+    auto session = new Session(network, this);
     m_sessions.append(session);
     qDebug() << Q_FUNC_INFO << "total sessions:" << m_sessions.count();
     return session;
@@ -44,10 +44,22 @@ Session* SessionManager::create(Network* network)
 void SessionManager::release(Session* session)
 {
     Q_ASSERT(session);
-    m_sessions.removeOne(session);
     qDebug() << Q_FUNC_INFO << "total sessions:" << m_sessions.count();
-    session->setActive(false);
-    // TODO: session->deleteLater();
+    m_sessions.removeOne(session);
+    m_garbage.append(session);
+}
+
+void SessionManager::exit()
+{
+    if (!m_sessions.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << "total sessions:" << m_sessions.count() << m_garbage.count();
+    }
+    while (!m_garbage.isEmpty()) {
+        delete m_garbage.takeFirst();
+    }
+    if (m_tor_session) {
+        delete m_tor_session;
+    }
 }
 
 void SessionManager::setTor(const QJsonObject& tor)
