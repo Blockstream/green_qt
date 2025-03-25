@@ -16,10 +16,14 @@
 Account::Account(int pointer, Session* session)
     : QObject(session)
     , m_session(session)
-    , m_context(session->context())
     , m_network(session->network())
     , m_pointer(pointer)
 {
+}
+
+Context *Account::context() const
+{
+    return m_session->context();
 }
 
 void Account::setSynced(bool synced)
@@ -141,9 +145,11 @@ void Account::timerEvent(QTimerEvent* event)
     if (event->timerId() == m_load_balance_timer_id) {
         killTimer(m_load_balance_timer_id);
         m_load_balance_timer_id = -1;
-        m_context->dispatcher()->add(new LoadBalanceTask(this));
-        if (m_context->isWatchonly() && m_network->isElectrum()) {
-            m_context->dispatcher()->add(new LoadAccountTask(m_pointer, m_session));
+        if (auto ctx = context()) {
+            ctx->dispatcher()->add(new LoadBalanceTask(this));
+            if (ctx->isWatchonly() && m_network->isElectrum()) {
+                ctx->dispatcher()->add(new LoadAccountTask(m_pointer, m_session));
+            }
         }
     }
 }

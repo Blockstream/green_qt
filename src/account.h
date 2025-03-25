@@ -34,7 +34,7 @@ public:
     explicit Account(int pointer, Session* session);
 
     Session* session() const { return m_session; }
-    Context* context() const { return m_context; }
+    Context* context() const;
     Network* network() const { return m_network; }
     quint32 pointer() const { return m_pointer; }
     QString type() const { return m_type; }
@@ -83,7 +83,6 @@ signals:
     void addressGenerated();
 private:
     Session* const m_session;
-    Context* const m_context;
     Network* const m_network;
     const quint32 m_pointer;
     QString m_type;
