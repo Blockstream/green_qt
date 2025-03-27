@@ -270,8 +270,14 @@ void Convert::update()
 
     if (details.contains("text")) {
         const auto text = details.take("text").toString();
-        const auto unit_key = m_unit == "\u00B5BTC" ? "ubtc" : m_unit.toLower();
-        if (!text.isEmpty()) details.insert(unit_key, text);
+        if (text.isEmpty()) {
+            // no-op
+        } else if (m_liquid_asset) {
+            details.insert(m_asset->id(), text);
+        } else {
+            const auto unit_key = m_unit == "\u00B5BTC" ? "ubtc" : m_unit.toLower();
+            details.insert(unit_key, text);
+        }
     }
 
     auto satoshi = details.value("satoshi");
