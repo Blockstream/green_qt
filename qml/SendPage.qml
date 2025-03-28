@@ -42,14 +42,14 @@ StackViewPage {
         })
     }
     Component.onCompleted: {
-        if (self.url.toString().length > 0) {
+        if (self.url?.length > 0) {
             controller.recipient.address = self.url
         }
     }
 
     FeeEstimates {
         id: estimates
-        session: self.account.session
+        session: controller.account.session
     }
     CreateTransactionController {
         id: controller
@@ -57,12 +57,12 @@ StackViewPage {
         account: self.account
         asset: self.asset
         previousTransaction: self.transaction
-        recipient.convert.unit: self.account.session.unit
+        recipient.convert.unit: controller.account.session.unit
     }
     AnalyticsView {
         name: 'Send'
         active: self.StackView.visible
-        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(Settings, controller.account)
     }
     id: self
     title: qsTrId('id_send')
@@ -83,7 +83,7 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 alert: AnalyticsAlert {
                     screen: 'Send'
-                    network: self.account.network.id
+                    network: controller.account.network.id
                 }
             }
             FieldTitle {
@@ -200,7 +200,7 @@ StackViewPage {
                 id: amount_field
                 readOnly: !!controller.previousTransaction
                 convert: controller.recipient.convert
-                unit: self.account.session.unit
+                unit: controller.account.session.unit
                 error: {
                     if (amount_field.text.length === 0) return
                     const error = controller.transaction?.error
@@ -353,6 +353,7 @@ StackViewPage {
                 controller.account = account
                 controller.asset = asset
                 controller.coins = []
+                amount_field.clear()
             }
         }
     }

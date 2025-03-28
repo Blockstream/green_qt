@@ -51,7 +51,7 @@ Page {
         drawer.open()
     }
 
-    function openSendDrawer(url) {
+    function openSendDrawer(url = '') {
         const context = self.context
         const account = self.currentAccount
         const network = account.network

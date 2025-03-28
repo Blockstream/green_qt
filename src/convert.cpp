@@ -2,6 +2,7 @@
 #include "asset.h"
 #include "context.h"
 #include "convert.h"
+#include "ga.h"
 #include "json.h"
 #include "network.h"
 #include "networkmanager.h"
@@ -59,7 +60,6 @@ void Convert::setContext(Context* context)
 void Convert::setAccount(Account* account)
 {
     if (m_account == account) return;
-    if (m_account) clearInput();
     m_account = account;
     emit accountChanged();
     invalidate();
@@ -98,7 +98,6 @@ void Convert::setSession(Session* session)
 void Convert::setAsset(Asset* asset)
 {
     if (m_asset == asset) return;
-    if (m_asset) clearInput();
     m_asset = asset;
     emit assetChanged();
     invalidate();
@@ -212,7 +211,7 @@ QVariantMap Convert::format(const QString& unit) const
 void Convert::invalidate()
 {
     if (m_timer_id != -1) killTimer(m_timer_id);
-    m_timer_id = startTimer(0);
+    m_timer_id = startTimer(50);
 }
 
 void Convert::update()
@@ -284,7 +283,7 @@ void Convert::update()
     if (satoshi.isString()) {
         details["satoshi"] = satoshi.toString().toLongLong();
     }
-    if (details.isEmpty()) {
+    if (details.isEmpty() || (details.keys().size() == 1 && details.keys()[0] == "asset_info")) {
         details["satoshi"] = 0;
     }
 
@@ -299,6 +298,7 @@ void Convert::update()
             GA_destroy_json(output);
             return result;
         } else {
+            qDebug() << Q_FUNC_INFO << details << gdk::get_thread_error_details();
             return QJsonObject{};
         }
     }));
