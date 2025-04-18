@@ -114,7 +114,6 @@ void Convert::setUnit(const QString& unit)
 void Convert::setResult(const QJsonObject& result)
 {
     Q_ASSERT(!result.contains("satoshi") || result.value("satoshi").type() == QJsonValue::String);
-    if (m_result == result) return;
     m_result = result;
     emit resultChanged();
     emit fiatChanged();
@@ -123,7 +122,7 @@ void Convert::setResult(const QJsonObject& result)
 
 QVariantMap Convert::fiat() const
 {
-    if (!m_liquid_asset && m_result.contains("fiat") && m_result.contains("fiat_currency")) {
+    if (!isLiquidAsset() && m_result.contains("fiat") && m_result.contains("fiat_currency")) {
         const auto currency = mainnet() ? m_result.value("fiat_currency").toString() : "FIAT";
         const auto amount = number_to_string(QLocale::system(), m_result.value("fiat").toString(), 2);
         return {
@@ -165,7 +164,15 @@ static QString testnetUnit(const QString& unit)
 
 QVariantMap Convert::output() const
 {
-    return format(m_unit);
+    const auto result = format(m_unit);
+    if (m_debug) qDebug() << Q_FUNC_INFO << result;
+    return result;
+}
+
+void Convert::setDebug(bool debug)
+{
+    m_debug = debug;
+    emit debugChanged();
 }
 
 QString Convert::satoshi() const
@@ -177,7 +184,7 @@ QVariantMap Convert::format(const QString& unit) const
 {
     QVariantMap result{{ "label", "" }, { "amount", "" }, { unit, "" }};
     if (!m_context && !m_account) return result;
-    if (m_liquid_asset) {
+    if (isLiquidAsset()) {
         const auto precision = m_asset->precision();
         const auto satoshi = m_result.value("satoshi").toString();
         auto amount = QLocale::c().toString(satoshi.toDouble() / qPow(10, precision), 'f', precision);
@@ -208,6 +215,27 @@ QVariantMap Convert::format(const QString& unit) const
     return result;
 }
 
+bool Convert::isLiquidAsset() const
+{
+  if (m_account) {
+    const auto network = m_account->network();
+    return m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
+  }
+
+  if (m_asset) {
+    for (const auto network : NetworkManager::instance()->networks()) {
+      if (network->deployment() == m_context->deployment()) {
+        if (network->policyAsset() == m_asset->id()) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  return false;
+}
+
 void Convert::invalidate()
 {
     if (m_timer_id != -1) killTimer(m_timer_id);
@@ -216,27 +244,12 @@ void Convert::invalidate()
 
 void Convert::update()
 {
+    if (m_debug) qDebug() << Q_FUNC_INFO;
+
     if (!m_context && !m_account) {
         setInput({});
         setResult({});
         return;
-    }
-
-    if (m_account) {
-        const auto network = m_account->network();
-        m_liquid_asset = m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
-    } else if (m_asset) {
-        m_liquid_asset = true;
-        for (const auto network : NetworkManager::instance()->networks()) {
-            if (network->deployment() == m_context->deployment()) {
-                if (network->policyAsset() == m_asset->id()) {
-                    m_liquid_asset = false;
-                    break;
-                }
-            }
-        }
-    } else {
-        m_liquid_asset = false;
     }
 
     auto input = m_input;
@@ -260,7 +273,7 @@ void Convert::update()
     }
 
     auto details = QJsonObject::fromVariantMap(input);
-    if (m_liquid_asset) {
+    if (isLiquidAsset()) {
         details.insert("asset_info", QJsonObject{
             { "asset_id", m_asset->id() },
             { "precision", m_asset->precision() }
@@ -271,7 +284,7 @@ void Convert::update()
         const auto text = details.take("text").toString();
         if (text.isEmpty()) {
             // no-op
-        } else if (m_liquid_asset) {
+        } else if (isLiquidAsset()) {
             details.insert(m_asset->id(), text);
         } else {
             const auto unit_key = m_unit == "\u00B5BTC" ? "ubtc" : m_unit.toLower();
@@ -296,6 +309,7 @@ void Convert::update()
         if (rc == GA_OK) {
             const auto result = Json::toObject(output);
             GA_destroy_json(output);
+            if (m_debug) qDebug() << Q_FUNC_INFO << session->network()->isLiquid() << details << result;
             return result;
         } else {
             qDebug() << Q_FUNC_INFO << details << gdk::get_thread_error_details();

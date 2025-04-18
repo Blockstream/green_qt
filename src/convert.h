@@ -17,6 +17,7 @@ class Convert : public QObject
     Q_PROPERTY(QVariantMap fiat READ fiat NOTIFY fiatChanged)
     Q_PROPERTY(QVariantMap output READ output NOTIFY outputChanged)
     Q_PROPERTY(QString unit READ unit WRITE setUnit NOTIFY unitChanged)
+    Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
     QML_ELEMENT
 public:
     Convert(QObject* parent = nullptr);
@@ -35,11 +36,15 @@ public:
     void setResult(const QJsonObject& result);
     QVariantMap fiat() const;
     QVariantMap output() const;
+    bool debug() const { return m_debug; }
+    void setDebug(bool debug);
 
     QString satoshi() const;
 
     Q_INVOKABLE QVariantMap format(const QString& unit) const;
 
+private:
+    bool isLiquidAsset() const;
 signals:
     void contextChanged();
     void accountChanged();
@@ -50,6 +55,7 @@ signals:
     void inputChanged();
     void inputCleared();
     void outputChanged();
+    void debugChanged();
 private:
     void setSession(Session* session);
     void invalidate();
@@ -61,11 +67,11 @@ private:
     Context* m_context{nullptr};
     Account* m_account{nullptr};
     Asset* m_asset{nullptr};
-    bool m_liquid_asset{false};
     QString m_unit;
     QVariantMap m_input;
     QJsonObject m_result;
-    int m_timer_id{-1};
+    int m_timer_id{-1};    
+    bool m_debug{false};
 };
 
 #endif // GREEN_CONVERT_H

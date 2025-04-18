@@ -353,7 +353,8 @@ StackViewPage {
                 controller.account = account
                 controller.asset = asset
                 controller.coins = []
-                amount_field.clear()
+                amount_field.fiat = false
+                amount_field.clearText()
             }
         }
     }
