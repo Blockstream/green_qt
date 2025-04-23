@@ -202,7 +202,7 @@ StackViewPage {
                 convert: controller.recipient.convert
                 unit: controller.account.session.unit
                 error: {
-                    if (amount_field.text.length === 0) return
+                    if (amount_field.text.length === 0 && !controller.recipient.greedy) return
                     const error = controller.transaction?.error
                     if (error === 'id_insufficient_funds') return error
                     if (error === 'id_invalid_amount') {
@@ -221,7 +221,7 @@ StackViewPage {
             ErrorPane {
                 Layout.topMargin: -30
                 Layout.bottomMargin: 15
-                error: amount_field.text.length > 0 ? amount_field.error : null
+                error: amount_field.text.length > 0 || controller.recipient.greedy ? amount_field.error : null
             }
             Convert {
                 id: available_convert
