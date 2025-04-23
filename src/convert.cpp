@@ -224,10 +224,8 @@ bool Convert::isLiquidAsset() const
 
   if (m_asset) {
     for (const auto network : NetworkManager::instance()->networks()) {
-      if (network->deployment() == m_context->deployment()) {
-        if (network->policyAsset() == m_asset->id()) {
-          return false;
-        }
+      if (network->policyAsset() == m_asset->id()) {
+        return false;
       }
     }
     return true;
