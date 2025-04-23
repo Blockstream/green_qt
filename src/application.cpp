@@ -209,15 +209,21 @@ void ApplicationController::reportCrashes()
         return;
     }
 
-    QDir dir(GetDataDir("crashpad"));
+    QDir completed(GetDataDir("crashpad"));
+    completed.mkdir("completed");
+    completed.cd("completed");
+    QDir pending(GetDataDir("crashpad"));
 #if defined(Q_OS_WINDOWS)
-    dir.cd("reports");
+    pending.cd("reports");
 #else
-    dir.cd("pending");
+    pending.cd("pending");
 #endif
-    QDirIterator it(dir.absolutePath(), QDir::Files, QDirIterator::NoIteratorFlags);
-    while (it.hasNext()) {
-        const auto minidump_path = it.next();
+    while (true) {
+        QDirIterator it(pending.absolutePath(), QDir::Files, QDirIterator::NoIteratorFlags);
+        if (!it.hasNext()) break;
+        QFileInfo info(it.next());
+        const auto minidump_path = completed.absoluteFilePath(info.fileName());
+        QFile::rename(info.absoluteFilePath(), minidump_path);
         qDebug() << Q_FUNC_INFO << minidump_path;
         QByteArray envelope;
         if (SentryPayloadFromMinidump(minidump_path, envelope)) {
