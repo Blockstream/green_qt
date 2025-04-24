@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(green VERSION 2.0.23 LANGUAGES CXX)
+project(green VERSION 2.0.25 LANGUAGES CXX)
 
 option(GREEN_WAYLAND "Include Wayland support" OFF)
 option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)

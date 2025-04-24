@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.25] - 2024-04-23
+### Fixes:
+- Previous release had wrong version
+
 ## [2.0.24] - 2024-04-23
 ### Changed:
 - Update GDK to 0.75.1
