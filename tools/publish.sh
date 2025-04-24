@@ -1,13 +1,16 @@
 #!/bin/bash
 set -eo pipefail
 
-VERSION=2.0.25
+TOP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
+VERSION=$(grep -Eo 'project\(.*VERSION [0-9]+\.[0-9]+\.[0-9]+' $TOP_DIR/CMakeLists.txt | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
 
 if [[ -z "$CHANNEL" ]]; then
     echo "Must set CHANNEL environment variable" 1>&2
     echo "For public release set CHANNEL=latest" 1>&2
     exit 1
 fi
+
+echo Publishing version $VERSION to channel $CHANNEL
 
 cp ../tools/templates/channel.json ${CHANNEL}.json
 
