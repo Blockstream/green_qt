@@ -9,7 +9,7 @@
     gdk_ROOT: "$PREFIX/lib/arm64-apple-darwin/gdk"
     MACOSX_DEPLOYMENT_TARGET: 12.0
   cache:
-    key: macos_arm64_26
+    key: macos_arm64_27
     paths: [depends/]
   tags:
     - macos-arm64
