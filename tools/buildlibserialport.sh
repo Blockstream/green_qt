@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eox pipefail
 
-LIBSERIALPORT_REPO=git://sigrok.org/libserialport
+LIBSERIALPORT_REPO=https://github.com/sigrokproject/libserialport
 LIBSERIALPORT_BRANCH=master
 LIBSERIALPORT_COMMIT=21b3dfe5f68c205be4086469335fd2fc2ce11ed2
 
