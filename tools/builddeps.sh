@@ -6,16 +6,16 @@ if [ -d $PREFIX ]; then
     exit 0
 fi
 
-./tools/buildbreakpad.sh
-./tools/buildgpgme.sh
 ./tools/buildgdk.sh
-./tools/buildqt.sh
+./tools/buildbreakpad.sh
+./tools/buildcrashpad.sh
+./tools/buildgpgme.sh
 ./tools/buildlibusb.sh
 ./tools/buildhidapi.sh
 ./tools/buildcountly.sh
-./tools/buildkdsingleapplication.sh
 ./tools/buildzxing.sh
 ./tools/buildlibserialport.sh
-./tools/buildcrashpad.sh
+./tools/buildqt.sh
+./tools/buildkdsingleapplication.sh
 
 rm -rf build
