@@ -2,12 +2,11 @@
 set -exo pipefail
 
 ZXING_REPO=https://github.com/Blockstream/zxing-cpp.git
-ZXING_BRANCH=green_qt
-ZXING_COMMIT=a920817b6fe0508cc4aca9003003c2812a78e935
+ZXING_COMMIT=1a5337abde0be7aef84907f5f1ca3ed09d34f713
 
 mkdir -p build && cd build
 
-git clone --quiet --branch $ZXING_BRANCH --single-branch $ZXING_REPO zxing-cpp-src
+git clone --quiet --no-checkout $ZXING_REPO zxing-cpp-src
 (cd zxing-cpp-src && git rev-parse HEAD && git checkout $ZXING_COMMIT)
 
 cmake -S zxing-cpp-src -B zxing-cpp-bld \
