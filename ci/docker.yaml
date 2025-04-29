@@ -1,21 +1,20 @@
-.docker_build:
-  image: blockstream/gcloud-docker-tf:1.1.7
-  services:
-    - docker:20.10.12-dind
-  tags:
-    - cloud
+.docker_build_base:
+  needs: []
   retry:
     max: 2
     when:
       - runner_system_failure
       - unknown_failure
       - stuck_or_timeout_failure
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  stage: depends
+  services:
+    - docker:23-dind
+  tags:
+    - cloud
 
 docker_codesigntool:
-  extends: .docker_build
-  stage: depends
+  image: blockstream/gcloud-docker-tf:1.1.7
+  extends: .docker_build_base
   script:
     - docker build
       --network=host
@@ -24,6 +23,53 @@ docker_codesigntool:
       -f ci/codesigntool/Dockerfile
       .
     - docker push $CI_REGISTRY_IMAGE/codesigntool:latest
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   rules:
     - changes:
         - ci/codesigntool/**/*
+
+
+.docker_build:
+  extends: .docker_build_base
+  when: manual
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_BUILDKIT: 1
+    BUILDX_GIT_INFO: false
+  image: docker:23
+  script:
+    - docker pull ${IMAGE}:latest || true
+    - >
+      docker build
+      --network=host
+      --build-arg BUILDKIT_INLINE_CACHE=1
+      --cache-from ${IMAGE}:latest
+      -t ${IMAGE}:$CI_COMMIT_SHA
+      -t ${IMAGE}:latest
+      -f ${DOCKER_BUILD_CONTEXT}/Dockerfile
+      .
+      --progress=plain &>docker-build.log
+    - tail -n 1000 docker-build.log
+    - docker push ${IMAGE}:${CI_COMMIT_SHA}
+    - if [ ${CI_COMMIT_BRANCH} == "master" ]; then docker push ${IMAGE}:latest; fi
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 hour
+    when: always
+    paths:
+    - docker-build.log
+
+
+build_linux-x86_64:
+  extends: .docker_build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/linux-x86_64
+    DOCKER_BUILD_CONTEXT: ci/linux-x86_64
+
+build_windows-x86_64:
+  extends: .docker_build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/windows-x86_64
+    DOCKER_BUILD_CONTEXT: ci/windows-x86_64
