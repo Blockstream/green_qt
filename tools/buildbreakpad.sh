@@ -1,13 +1,13 @@
 #!/bin/bash
 set -exo pipefail
 
-mkdir -p build && cd build
+mkdir -p build && cd build && rm -rf depot_tools
 
 git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 
 export PATH=$(pwd)/depot_tools:$PATH
 
-mkdir -p breakpad && cd breakpad
+rm -rf breakpad && mkdir -p breakpad && cd breakpad
 
 fetch breakpad
 
