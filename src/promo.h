@@ -75,8 +75,9 @@ signals:
 private slots:
     void update();
 private:
-    Promo* getOrCreatePromo(const QJsonObject& data);
+    void createOrUpdatePromo(const QJsonObject& data);
 private:
+    QJsonValue m_config;
     QList<Promo*> m_promos;
     QMap<QString, Promo*> m_promo_by_id;
 };

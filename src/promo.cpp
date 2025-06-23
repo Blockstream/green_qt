@@ -110,15 +110,16 @@ void PromoManager::update()
 {
     const auto config = Analytics::instance()->getRemoteConfigValue("promos");
     if (!config.isArray()) return;
+    if (m_config == config) return;
+    m_config = config;
     for (const auto value : config.toArray()) {
         if (!value.isObject()) continue;
-        const auto data = value.toObject();
-        getOrCreatePromo(data);
+        createOrUpdatePromo(value.toObject());
     }
     emit changed();
 }
 
-Promo* PromoManager::getOrCreatePromo(const QJsonObject& data)
+void PromoManager::createOrUpdatePromo(const QJsonObject& data)
 {
     const auto id = data.value("id").toString();
     auto promo = m_promo_by_id.value(id);
@@ -127,9 +128,7 @@ Promo* PromoManager::getOrCreatePromo(const QJsonObject& data)
         m_promo_by_id.insert(id, promo);
         m_promos.append(promo);
     }
-
     promo->setData(data);
-    return promo;
 }
 
 PromoResource::PromoResource(QObject* parent)
