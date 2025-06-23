@@ -214,3 +214,37 @@ function formatFeeRate(fee_rate, network) {
         return Math.round(fee_rate / 100) / 10 + ' sat/vbyte'
     }
 }
+
+function filterPromo(wallets, promo) {
+    const target = promo?.data?.target
+    if (!target) return true
+    let sww = 0
+    let hww = 0
+    let jade_classic = 0
+    let jade_plus = 0
+    for (let i = 0; i < wallets.length; i++) {
+        const wallet = wallets[i]
+        if (wallet.login instanceof DeviceData) {
+            hww ++
+            const device = wallet.login.device
+            if (device.type === 'jade') {
+                if (device.board === 'JADE_V2') {
+                    jade_plus ++
+                } else {
+                    jade_classic ++
+                }
+            }
+        } else {
+            sww ++
+        }
+    }
+    console.log('filter pomo', promo.id, target, sww, hww, jade_classic, jade_plus)
+    if (target === 'only_sww') {
+        return sww > 0 && hww === 0
+    } else if (target === 'jade_user') {
+        return jade_classic > 0 && jade_plus === 0
+    } else if (target === 'jadeplus_user') {
+        return jade_plus > 0
+    }
+    return true
+}

@@ -112,11 +112,18 @@ void PromoManager::update()
     if (!config.isArray()) return;
     if (m_config == config) return;
     m_config = config;
+    m_promos.clear();
     for (const auto value : config.toArray()) {
         if (!value.isObject()) continue;
         createOrUpdatePromo(value.toObject());
     }
     emit changed();
+    for (auto promo : m_promo_by_id.values()) {
+        if (!m_promos.contains(promo)) {
+            m_promo_by_id.remove(promo->id());
+            promo->deleteLater();
+        }
+    }
 }
 
 void PromoManager::createOrUpdatePromo(const QJsonObject& data)
@@ -126,8 +133,8 @@ void PromoManager::createOrUpdatePromo(const QJsonObject& data)
     if (!promo) {
         promo = new Promo(id, this);
         m_promo_by_id.insert(id, promo);
-        m_promos.append(promo);
     }
+    m_promos.append(promo);
     promo->setData(data);
 }
 

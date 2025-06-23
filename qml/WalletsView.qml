@@ -99,10 +99,11 @@ MainPage {
                     model: {
                         return [...PromoManager.promos]
                             .filter(_ => !Settings.useTor)
-                            .filter(promo => promo.data.is_visible)
-                            .filter(promo => promo.data.screens.indexOf('Home') >= 0)
                             .filter(promo => !promo.dismissed)
                             .filter(promo => promo.ready)
+                            .filter(promo => UtilJS.filterPromo(WalletManager.wallets, promo))
+                            .filter(promo => promo.data.is_visible)
+                            .filter(promo => promo.data.screens.indexOf('Home') >= 0)
                             .slice(0, 1)
                     }
                     delegate: PromoCard {
