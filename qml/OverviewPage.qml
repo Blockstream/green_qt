@@ -427,12 +427,6 @@ Page {
                         }
                         JadeGenuineHintPane {
                         }
-                        Hint1Pane {
-                            visible: promos_repeater.count === 0
-                        }
-                        Hint2Pane {
-                            visible: promos_repeater.count === 0
-                        }
                     }
                 }
             }
@@ -617,66 +611,6 @@ Page {
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/hints/jade_genuine.png'
-            }
-        }
-    }
-
-    component Hint1Pane: HintPane {
-        onClicked: Qt.openUrlExternally('https://store.blockstream.com/products/blockstream-jade-hardware-wallet')
-        contentItem: RowLayout {
-            ColumnLayout {
-                Layout.fillWidth: true
-                Label {
-                    Layout.preferredWidth: 0
-                    Layout.fillWidth: true
-                    font.pixelSize: 12
-                    font.weight: 600
-                    text: qsTrId('id_a_powerful_hardware_wallet_for')
-                    wrapMode: Label.WordWrap
-                }
-                Label {
-                    Layout.preferredWidth: 0
-                    Layout.fillWidth: true
-                    font.pixelSize: 11
-                    font.weight: 400
-                    opacity: 0.3
-                    text: qsTrId('id_jade_is_an_opensource_hardware')
-                    wrapMode: Label.WordWrap
-                }
-            }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/hints/jade3d.svg'
-            }
-        }
-    }
-
-    component Hint2Pane: HintPane {
-        onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900001391763-How-does-Blockstream-Green-s-2FA-multisig-protection-work-')
-        contentItem: RowLayout {
-            ColumnLayout {
-                Layout.fillWidth: true
-                Label {
-                    Layout.preferredWidth: 0
-                    Layout.fillWidth: true
-                    font.pixelSize: 12
-                    font.weight: 600
-                    text: qsTrId('id_the_importance_of_twofactor')
-                    wrapMode: Label.WordWrap
-                }
-                Label {
-                    Layout.preferredWidth: 0
-                    Layout.fillWidth: true
-                    font.pixelSize: 11
-                    font.weight: 400
-                    opacity: 0.3
-                    text: qsTrId('id_protect_your_bitcoin_with_a')
-                    wrapMode: Label.WordWrap
-                }
-            }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/hints/cpu.svg'
             }
         }
     }
