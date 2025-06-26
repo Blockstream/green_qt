@@ -10,6 +10,9 @@ MainPage {
     signal crashClicked
 
     function openPreferences() {
+        if (side_bar.currentView === SideBar.View.Preferences) {
+            return
+        }
         preferences_dialog.createObject(self).open()
         wallets_drawer.close()
         side_bar.currentView = SideBar.View.Preferences
