@@ -117,14 +117,6 @@ QString Settings::country() const
     return code;
 }
 
-void Settings::setShowNews(bool show_news)
-{
-    if (m_show_news == show_news) return;
-    m_show_news = show_news;
-    emit showNewsChanged();
-    saveLater();
-}
-
 void Settings::setEnableExperimental(bool enable_experimental)
 {
     if (m_enable_experimental == enable_experimental) return;

@@ -45,13 +45,6 @@ Pane {
             source: 'qrc:/svg/home.svg'
         }
         SideButton {
-            icon.source: 'qrc:/svg/blockstream-logo.svg'
-            isCurrent: self.currentView === SideBar.View.Blockstream
-            onClicked: self.blockstreamClicked()
-            text: 'Blockstream News'
-            visible: false // Settings.showNews
-        }
-        SideButton {
             icon.source: 'qrc:/svg2/wallet.svg'
             isCurrent: self.currentView === SideBar.View.Wallets
             onClicked: self.walletsClicked()

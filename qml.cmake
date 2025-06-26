@@ -23,7 +23,6 @@ SET(QML_FILES
     qml/SignLiquidTransactionResolverView.qml
     qml/GHeader.qml
     qml/Wallet2faSettingsView.qml
-    qml/BlockstreamView.qml
     qml/GComboBox.qml
     qml/TwoFactorAuthExpiryDialog.qml
     qml/Tag.qml
