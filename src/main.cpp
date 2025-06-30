@@ -150,14 +150,14 @@ int main(int argc, char *argv[])
     g_args.addPositionalArgument("uri", "BIP21 payment");
     g_args.process(app);
 
-    if (g_args.isSet("tempdatadir")) {
+    if (g_args.isSet("datadir")) {
+        QDir path(g_args.value("datadir"));
+        g_data_location = path.absolutePath();
+    } else if (g_args.isSet("tempdatadir")) {
         QTemporaryDir dir;
         Q_ASSERT(dir.isValid());
         dir.setAutoRemove(false);
         g_data_location = dir.path();
-    } else if (g_args.isSet("datadir")) {
-        QDir path(g_args.value("datadir"));
-        g_data_location = path.absolutePath();
     } else {
         g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     }
@@ -185,8 +185,19 @@ int crash_handler(Application& app, int argc, char *argv[]) {
 int watchdog_handler(Application& app)
 {
     HideApplication();
-    QStringList args{"--ui"};
-    args.append(app.arguments().mid(1));
+    QStringList args = app.arguments().mid(1);
+    for (int i = 0; i < args.length();) {
+        if (args[i] == "--tempdatadir") {
+            args.removeAt(i);
+        } else if (args[i] == "--datadir") {
+            args.removeAt(i);
+            args.removeAt(i);
+        } else {
+            i ++;
+        }
+    }
+    args.append({ "--ui", "--datadir", g_data_location });
+
     for (int attempts = 5; attempts > 0; --attempts) {
         QFile file(GetLogFilename());
         file.open(QFile::WriteOnly | QFile::Append);
