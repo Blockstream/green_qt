@@ -4,23 +4,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.25] - 2024-04-23
+## [2.0.26] - 2025-04-23
+### Changed:
+- Green is now Blockstream App, application style is updated to match the rebrand
+- Hardware wallet advertisement segmentation
+
+### Fixes:
+- Child process must receive datadir form the parent process
+- Prevent multiple app settings dialogs
+
+## [2.0.25] - 2025-04-23
 ### Fixes:
 - Previous release had wrong version
 
-## [2.0.24] - 2024-04-23
+## [2.0.24] - 2025-04-23
 ### Changed:
 - Update GDK to 0.75.1
 
 ### Fixes:
 - Amount parsing when changing from fiat denomination to Liquid asset
 
-## [2.0.23] - 2024-03-27
+## [2.0.23] - 2025-03-27
 ### Fixes:
 - Correct amount parsing when sending a Liquid asset
 - Prevent a crash when the wallet logouts and a balance refresh was about to occur
 
-## [2.0.22] - 2024-03-20
+## [2.0.22] - 2025-03-20
 ### Added:
 - Option to request an email containing the user’s nLockTime transactions
 
@@ -28,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Image size when a new Jade device is detected
 - Correct location of crash reports on macOS and Linux
 
-## [2.0.21] - 2024-03-07
+## [2.0.21] - 2025-03-07
 ### Added:
 - Crash reporting
 
@@ -43,23 +52,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent invalid transaction creation under slow networking
 - Available amount displayed after manual coin selection
 
-## [2.0.20] - 2024-02-03
+## [2.0.20] - 2025-02-03
 ### Added:
 - Enable Liquid discounted fees for Confidential Transactions (CT).
 
 ### Fixed:
 - Can not change transaction notes on watch-only
 
-## [2.0.19] - 2024-01-27
+## [2.0.19] - 2025-01-27
 ### Added:
 - Create support tickets from the application
 
-## [2.0.18] - 2024-01-23
+## [2.0.18] - 2025-01-23
 ### Fixed:
 - Revert Qt to 6.8.0 to fix crash on macOS Intel
 - Prevent overflow of unit selector
 
-## [2.0.17] - 2024-01-09
+## [2.0.17] - 2025-01-09
 ### Added:
 - Graphical assets for Jade Plus
 - Support video advertisement on Linux
