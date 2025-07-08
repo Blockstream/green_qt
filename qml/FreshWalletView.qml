@@ -11,7 +11,12 @@ Pane {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/svg2/fresh_wallet.svg'
+            Layout.preferredHeight: 184
+            antialiasing: true
+            fillMode: Image.PreserveAspectFit
+            mipmap: true
+            smooth: true
+            source: 'qrc:/svg3/Wallet.svg'
         }
         Label {
             Layout.alignment: Qt.AlignCenter

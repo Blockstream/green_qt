@@ -20,7 +20,7 @@ ItemDelegate {
     background: Item {
         Rectangle {
             anchors.fill: parent
-            color: Qt.alpha('#00B45A', (self.highlighted ? 0.2 : 0) + (self.hovered ? 0.1 : 0))
+            color: Qt.alpha('#00BCFF', (self.highlighted ? 0.2 : 0) + (self.hovered ? 0.1 : 0))
         }
         Rectangle {
             color: '#1F222A'

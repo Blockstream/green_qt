@@ -103,7 +103,7 @@ StackViewPage {
             radius: 4
             color: Qt.lighter('#2F2F35', !delegate.highlighted && delegate.enabled && delegate.hovered ? 1.2 : 1)
             border.width: delegate.highlighted ? 2 : 0
-            border.color: '#00B45A'
+            border.color: '#00BCFF'
         }
         contentItem: ColumnLayout {
             spacing: 0
@@ -144,7 +144,7 @@ StackViewPage {
                         padding: 10
                         visible: delegate.amp
                         background: Rectangle {
-                            color: '#00B45A'
+                            color: '#00BCFF'
                             opacity: 0.2
                         }
                         contentItem: RowLayout {
@@ -156,7 +156,7 @@ StackViewPage {
                             Label {
                                 Layout.preferredWidth: 0
                                 Layout.fillWidth: true
-                                color: '#00B45A'
+                                color: '#00BCFF'
                                 font.pixelSize: 12
                                 font.weight: 600
                                 text: {
@@ -173,7 +173,7 @@ StackViewPage {
                     Rectangle {
                         width: parent.width
                         height: 2
-                        color: delegate.highlighted ? '#00B45A' : 'transparent'
+                        color: delegate.highlighted ? '#00BCFF' : 'transparent'
                     }
                     Repeater {
                         id: accounts_repeater
@@ -236,7 +236,7 @@ StackViewPage {
                 anchors.fill: parent
                 anchors.margins: -4
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 9
                 visible: {
@@ -291,7 +291,7 @@ StackViewPage {
             }
             Rectangle {
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 4
                 anchors.fill: parent

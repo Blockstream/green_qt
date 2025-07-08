@@ -28,7 +28,7 @@ Collapsible {
         x: 25
         width: self.width - 50
         background: Rectangle {
-            color: '#00B45A'
+            color: '#00BCFF'
             radius: 8
         }
         contentItem: RowLayout {

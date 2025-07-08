@@ -14,14 +14,15 @@ ProgressBar {
     }
     id: self
     background: Rectangle {
-        color: "#235B35"
+        color: '#00BCFF'
         implicitHeight: 8
+        opacity: 0.8
         radius: 4
     }
     contentItem: Item {
         implicitHeight: 8
         Rectangle {
-            color: '#46B068'
+            color: '#00BCFF'
             height: 8
             radius: 4
             x: (self.indeterminate ? (0.5 - 0.5 * self._indeterminate_position) : 0) * self.contentItem.width

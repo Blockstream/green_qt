@@ -22,7 +22,7 @@ StackViewPage {
         }
         MultiImage {
             Layout.alignment: Qt.AlignHCenter
-            foreground: `qrc:/png/2fa_${self.method}.png`
+            foreground: `qrc:/svg3/2fa_${self.method}.svg`
             width: 280
             height: 160
         }

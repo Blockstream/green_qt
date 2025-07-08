@@ -3,9 +3,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
-    property color fillColor: '#00B45A'
-    property color borderColor: '#00B45A'
-    property color textColor: '#FFFFFF'
+    property color fillColor: '#00BCFF'
+    property color borderColor: '#00BCFF'
+    property color textColor: '#000000'
     property bool busy: false
     HoverHandler {
         cursorShape: Qt.PointingHandCursor

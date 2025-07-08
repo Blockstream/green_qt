@@ -75,10 +75,19 @@ ApplicationWindow {
         id: splash_page
         SplashPage {
             onTimeout: {
-                if (!consent_dialog.visible) {
+                if (Settings.analytics === '') {
+                    stack_view.replace(null, analytics_consent_page, StackView.PushTransition)
+                } else {
                     app_page.active = true
                 }
             }
+        }
+    }
+
+    property bool splashDone: false
+    function pushAppPage() {
+        if (!consent_dialog.visible && window.splashDone) {
+            app_page.active = true
         }
     }
 
@@ -95,26 +104,11 @@ ApplicationWindow {
         }
     }
 
-    AnalyticsConsentDialog {
-        property real offset_y
-        id: consent_dialog
-        x: parent.width - consent_dialog.width - constants.s2
-        y: parent.height - consent_dialog.height - constants.s2 - 30 + consent_dialog.offset_y
-        // by default dialogs height depends on y, break that dependency to avoid binding loop on y
-        onClosed: app_page.active = true
-        height: implicitHeight
-        visible: Settings.analytics === ''
-        enter: Transition {
-            SequentialAnimation {
-                PropertyAction { property: 'x'; value: 0 }
-                PropertyAction { property: 'offset_y'; value: 100 }
-                PropertyAction { property: 'opacity'; value: 0 }
-                PauseAnimation { duration: 2000 }
-                ParallelAnimation {
-                    NumberAnimation { property: 'opacity'; to: 1; easing.type: Easing.OutCubic; duration: 1000 }
-                    NumberAnimation { property: 'offset_y'; to: 0; easing.type: Easing.OutCubic; duration: 1000 }
-                }
-            }
+
+    Component {
+        id: analytics_consent_page
+        AnalyticsConsentPage {
+            onDone: app_page.active = true
         }
     }
 }

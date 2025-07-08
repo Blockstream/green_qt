@@ -32,7 +32,7 @@ TTextField {
         contentItem: RowLayout {
             spacing: 4
             Label {
-                color: country_button.enabled && country_button.hovered ? '#00DD6E' : '#00B45A'
+                color: '#00BCFF'
                 font: self.font
                 text: '+' + self.country.code
             }
@@ -44,7 +44,7 @@ TTextField {
         onClicked: countries_menu.visible ? countries_menu.close() : countries_menu.open()
         background: Rectangle {
             border.width: 2
-            border.color: '#00B45A'
+            border.color: '#00BCFF'
             color: 'transparent'
             visible: country_button.visualFocus
         }

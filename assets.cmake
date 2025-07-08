@@ -3,6 +3,8 @@ qt_add_resources(green "images"
     BASE assets
     FILES
         assets/icons/green.png
+        assets/icons/production.png
+        assets/icons/mac-production.png
         assets/svg/wallet-rename.svg
         assets/svg/wallet-settings.svg
         assets/svg/archive.svg
@@ -61,21 +63,11 @@ qt_add_resources(green "images"
         assets/svg/ledger.svg
         assets/svg/ledger_nano_s.svg
         assets/svg/ledger_nano_x.svg
-        assets/svg/leftbar.svg
         assets/svg/liquid.svg
         assets/svg/logout.svg
         assets/svg/network.svg
-        assets/svg/network_selector.svg
-        assets/svg/network_selector_active.svg
         assets/svg/new.svg
         assets/svg/next.svg
-        assets/svg/notifications.svg
-        assets/svg/notifications_2.svg
-        assets/svg/notifications_clicked.svg
-        assets/svg/notifications_clicked_2.svg
-        assets/svg/onboarding_illustration.svg
-        assets/svg/onboarding_noonline.svg
-        assets/svg/onboarding_noscrshot.svg
         assets/svg/onboarding_write.svg
         assets/svg/overview.svg
         assets/svg/paste.svg
@@ -109,12 +101,7 @@ qt_add_resources(green "images"
         assets/svg/warning.svg
         assets/svg/warning_black.svg
         assets/svg/x.svg
-        assets/png/lbtc.png
-        assets/png/amp_background.png
-        assets/png/liquid_background.png
-        assets/png/no_transactions.png
 
-        assets/png/canceled.png
         assets/png/jade_0.png
         assets/png/jade_1.png
         assets/png/jade_2.png
@@ -132,21 +119,9 @@ qt_add_resources(green "images"
         assets/png/jade2_6.png
         assets/png/jade2_7.png
 
-        assets/png/background.png
-        assets/png/ledger_3d.png
-        assets/png/jades.png
-        assets/png/jades_onboard.png
         assets/png/jade_card.png
         assets/png/jade2_card.png
-        assets/png/onboarding_globe.png
-        assets/png/onboarding_cpu.png
 
-        assets/png/2fa.png
-        assets/png/2fa_email.png
-        assets/png/2fa_expired.png
-        assets/png/2fa_gauth.png
-        assets/png/2fa_phone.png
-        assets/png/2fa_sms.png
         assets/png/2fa_u2f.png
         assets/png/2fa_telegram.png
 
@@ -160,7 +135,7 @@ qt_add_resources(green "images"
         assets/svg2/backspace.svg
         assets/svg2/bell.svg
         assets/svg2/beta.svg
-        assets/svg2/blockstream_green.svg
+        assets/svg2/blockstream-app.svg
         assets/svg2/bolt.svg
         assets/svg2/caret-down.svg
         assets/svg2/caret-down-white.svg
@@ -180,9 +155,6 @@ qt_add_resources(green "images"
         assets/svg2/eye.svg
         assets/svg2/eye_closed.svg
         assets/svg2/flask.svg
-        assets/svg2/fresh_wallet.svg
-        assets/svg2/funds_hww.svg
-        assets/svg2/funds_sww.svg
         assets/svg2/gauge-green.svg
         assets/svg2/gear.svg
         assets/svg2/globe.svg
@@ -191,6 +163,7 @@ qt_add_resources(green "images"
         assets/svg2/import.svg
         assets/svg2/incoming.svg
         assets/svg2/info.svg
+        assets/svg2/info_black.svg
         assets/svg2/info_red.svg
         assets/svg2/info_white.svg
         assets/svg2/jade-logo.svg
@@ -224,14 +197,13 @@ qt_add_resources(green "images"
         assets/svg2/seal-check.svg
         assets/svg2/sun.svg
         assets/svg2/sun-dim.svg
-        assets/svg2/take_control.svg
-        assets/svg2/take_control2.svg
         assets/svg2/trash.svg
         assets/svg2/tx-incoming.svg
         assets/svg2/tx-outgoing.svg
         assets/svg2/tx-redeposit.svg
         assets/svg2/wallet.svg
         assets/svg2/warning.svg
+        assets/svg2/warning_black.svg
         assets/svg2/warning_white.svg
         assets/svg2/watermark_bitcoin.svg
         assets/svg2/watermark_liquid.svg
@@ -242,9 +214,9 @@ qt_add_resources(green "images"
         assets/svg2/fail-light.svg
         assets/svg2/warning-light.svg
         assets/svg2/help.svg
-        assets/svg2/completed.svg
         assets/svg2/bug.svg
         assets/svg2/headset.svg
+        assets/svg2/green-rebrand.svg
 
         assets/pdf/recovery-phrase-backup-template-12-words.pdf
 
@@ -253,6 +225,24 @@ qt_add_resources(green "images"
 
         assets/png/jade_genuine_1.png
         assets/png/jade_genuine_2.png
+
+        assets/svg3/2fa_email.svg
+        assets/svg3/2fa_expired.svg
+        assets/svg3/2fa_gauth.svg
+        assets/svg3/2fa_phone.svg
+        assets/svg3/2fa_sms.svg
+        assets/svg3/Authenticator.svg
+        assets/svg3/Authenticator-2.svg
+        assets/svg3/Authenticator-3.svg
+        assets/svg3/Cancel.svg
+        assets/svg3/Check.svg
+        assets/svg3/Chip.svg
+        assets/svg3/Desktop-Keys.svg
+        assets/svg3/Globe.svg
+        assets/svg3/Ledger.svg
+        assets/svg3/Notifications.svg
+        assets/svg3/Trade.svg
+        assets/svg3/Wallet.svg
 )
 
 qt_add_resources(green "fonts"

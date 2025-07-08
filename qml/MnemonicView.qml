@@ -27,7 +27,7 @@ GridLayout {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 30
                 id: word
-                color: '#2FD058'
+                color: '#00BCFF'
                 text: modelData
                 textFormat: Text.RichText
                 font.pixelSize : 14

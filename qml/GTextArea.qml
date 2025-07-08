@@ -23,7 +23,7 @@ TextArea {
         Rectangle {
             anchors.fill: parent
             border.width: 2
-            border.color: '#00B45A'
+            border.color: '#00BCFF'
             color: 'transparent'
             radius: 5
             visible: self.visualFocus

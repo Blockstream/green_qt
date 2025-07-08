@@ -1,7 +1,7 @@
 import QtQuick
 
 MultiImage {
-    foreground: 'qrc:/svg2/completed.svg'
+    foreground: 'qrc:/svg3/Check.svg'
     width: 300
     height: 182
 }

@@ -42,7 +42,7 @@ StackViewPage {
     }
     readonly property color tx_color: {
         if (self.confirmations === 0) return '#BB7B00'
-        if (self.confirmations > self.network.liquid ? 2 : 6) return '#0A9252'
+        if (self.confirmations > self.network.liquid ? 2 : 6) return '#00BCFF'
         return '#929292'
     }
 
@@ -538,7 +538,7 @@ StackViewPage {
             }
             Label {
                 Layout.fillWidth: true
-                color: '#0A9252'
+                color: '#00BCFF'
                 text: button.text
             }
             Label {
@@ -547,7 +547,7 @@ StackViewPage {
                 topPadding: 3
                 bottomPadding: 3
                 background: Rectangle {
-                    color: '#0A9252'
+                    color: '#00BCFF'
                     radius: height / 2
                 }
                 font.pixelSize: 14

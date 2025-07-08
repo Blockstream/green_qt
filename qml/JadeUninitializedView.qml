@@ -116,14 +116,14 @@ VFlickable {
             background: Rectangle {
                 radius: 4
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: '#222226'
             }
             contentItem: ColumnLayout {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    color: '#00B45A'
+                    color: '#00BCFF'
                     font.pixelSize: 12
                     font.weight: 600
                     font.capitalization: Font.AllUppercase

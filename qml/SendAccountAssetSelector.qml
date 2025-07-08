@@ -78,7 +78,7 @@ StackViewPage {
                     radius: 4
                     color: Qt.lighter('#2F2F35', !delegate.highlighted && delegate.hovered ? 1.2 : 1)
                     border.width: delegate.ListView.isCurrentItem ? 2 : 0
-                    border.color: '#00B45A'
+                    border.color: '#00BCFF'
                 }
                 contentItem: ColumnLayout {
                     spacing: 0
@@ -119,7 +119,7 @@ StackViewPage {
                                 padding: 10
                                 visible: delegate.asset.amp
                                 background: Rectangle {
-                                    color: '#00B45A'
+                                    color: '#00BCFF'
                                     opacity: 0.2
                                 }
                                 contentItem: RowLayout {
@@ -131,7 +131,7 @@ StackViewPage {
                                     Label {
                                         Layout.preferredWidth: 0
                                         Layout.fillWidth: true
-                                        color: '#00B45A'
+                                        color: '#00BCFF'
                                         font.pixelSize: 12
                                         font.weight: 600
                                         text: `${delegate.asset.name} is an AMP asset. You need an AMP account in order to receive it.`
@@ -142,7 +142,7 @@ StackViewPage {
                             Rectangle {
                                 width: parent.width
                                 height: 2
-                                color: delegate.ListView.isCurrentItem ? '#00B45A' : 'transparent'
+                                color: delegate.ListView.isCurrentItem ? '#00BCFF' : 'transparent'
                             }
                             Repeater {
                                 id: accounts_repeater
@@ -190,7 +190,7 @@ StackViewPage {
             }
             Rectangle {
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 4
                 anchors.fill: parent

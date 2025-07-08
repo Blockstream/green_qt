@@ -46,10 +46,10 @@ Page {
             spacing: 20
             visible: !self.search & self.empty
             Image {
-                Layout.preferredWidth: 350
+                Layout.preferredWidth: 200
                 Layout.preferredHeight: 200
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/png/no_transactions.png'
+                source: 'qrc:/svg3/Trade.svg'
             }
             Label {
                 Layout.alignment: Qt.AlignCenter

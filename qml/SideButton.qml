@@ -26,7 +26,7 @@ AbstractButton {
         }
         Rectangle {
             border.width: 2
-            border.color: '#00B45A'
+            border.color: '#00BCFF'
             color: 'transparent'
             radius: 4
             anchors.fill: parent

@@ -75,7 +75,7 @@ Item {
         width: 120
         height: 120
         border.width: 6
-        border.color: '#00B45A'
+        border.color: '#00BCFF'
         color: 'transparent'
         radius: self.radius + 12
     }

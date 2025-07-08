@@ -29,7 +29,7 @@ ItemDelegate {
         Rectangle {
             anchors.fill: parent
             visible: self.hovered
-            color: '#00B45A'
+            color: '#00BCFF'
             opacity: 0.08
         }
         Rectangle {
@@ -138,7 +138,7 @@ ItemDelegate {
                         input: ({ satoshi: modelData.satoshi })
                     }
                     Layout.alignment: Qt.AlignRight
-                    color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
+                    color: transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
                     font.pixelSize: 14
                     font.weight: 600
                     text: UtilJS.incognito(Settings.incognito, convert.output.label)
@@ -156,7 +156,7 @@ ItemDelegate {
             }
             Label {
                 Layout.alignment: Qt.AlignRight
-                color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
+                color: transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
                 font.pixelSize: 14
                 font.weight: 600
                 text: UtilJS.incognito(Settings.incognito, convert.output.label)

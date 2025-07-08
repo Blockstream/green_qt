@@ -74,7 +74,7 @@ StackLayout {
             model: task.result?.methods ?? []
             Button {
                 property string method: modelData
-                icon.source: `qrc:/svg/2fa_${method}.svg`
+                icon.source: `qrc:/svg3/2fa_${method}.svg`
                 icon.color: 'transparent'
                 flat: true
                 Layout.alignment: Qt.AlignCenter
@@ -96,7 +96,7 @@ StackLayout {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
-            source: `qrc:/svg/2fa_${task.result.method}.svg`
+            source: `qrc:/svg3/2fa_${task.result.method}.svg`
             sourceSize.width: 32
             sourceSize.height: 32
         }

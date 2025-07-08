@@ -80,7 +80,7 @@ SET(QML_FILES
     qml/AccountView.qml
     qml/TwoFactorDisableDialog.qml
     qml/TransactionDelegate.qml
-    qml/AnalyticsConsentDialog.qml
+    qml/AnalyticsConsentPage.qml
     qml/JadeSignTransactionView.qml
     qml/SideBar.qml
     qml/AlertView.qml
@@ -90,7 +90,6 @@ SET(QML_FILES
     qml/EditableLabel.qml
     qml/FixedErrorBadge.qml
     qml/QRCodePopup.qml
-    qml/GListView.qml
     qml/ProgressIndicator.qml
     qml/ScannerView.qml
     qml/StatusBar.qml

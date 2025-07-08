@@ -72,7 +72,7 @@ WalletDialog {
                 }
                 MultiImage {
                     Layout.alignment: Qt.AlignCenter
-                    foreground: `qrc:/png/2fa_${method}.png`
+                    foreground: `qrc:/svg3/2fa_${method}.svg`
                     width: 350
                     height: 200
                 }

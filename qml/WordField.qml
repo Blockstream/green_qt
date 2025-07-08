@@ -24,7 +24,7 @@ TextField {
         color: self.invalid ? Qt.alpha('#F00', 0.2) : '#2F2F35'
         Rectangle {
             border.width: 2
-            border.color: '#00B45A'
+            border.color: '#00BCFF'
             color: 'transparent'
             radius: 9
             anchors.fill: parent

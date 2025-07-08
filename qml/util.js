@@ -14,7 +14,7 @@ function flatten(...args) {
 }
 
 function link(url, text) {
-    return `<style>a:link { color: "#00B45A"; text-decoration: none; }</style><a href="${url}">${text || url}</a>`
+    return `<style>a:link { color: "#00BCFF"; text-decoration: none; }</style><a href="${url}">${text || url}</a>`
 }
 
 function iconFor(target) {

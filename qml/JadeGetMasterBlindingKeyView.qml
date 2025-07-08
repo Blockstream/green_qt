@@ -19,7 +19,7 @@ ColumnLayout {
     }
     MultiImage {
         Layout.alignment: Qt.AlignCenter
-        foreground: 'qrc:/png/2fa.png'
+        foreground: 'qrc:/svg3/Authenticator.svg'
         width: 352
         height: 240
     }

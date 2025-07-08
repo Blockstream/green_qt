@@ -20,7 +20,7 @@ ItemDelegate {
         Rectangle {
             anchors.fill: parent
             visible: self.hovered
-            color: '#00B45A'
+            color: '#00BCFF'
             opacity: 0.08
         }
         Rectangle {

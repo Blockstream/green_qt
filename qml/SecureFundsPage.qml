@@ -28,17 +28,17 @@ StackViewPage {
         title: qsTrId('id_on_this_device')
         description: 'Your computer will store the keys to your bitcoin, PIN protected.'
         tag: qsTrId('id_for_ease_of_use')
-        image: 'qrc:/svg2/funds_sww.svg'
-        offsetX: -65
+        image: 'qrc:/svg3/Desktop-Keys.svg'
+        offsetX: -25
         offsetY: -30
         onClicked: self.addWallet()
     }
     OptionButton {
         Layout.topMargin: 60
-        title: 'On Hardware Wallet'
+        title: qsTrId('id_on_hardware_wallet')
         description: qsTrId('id_your_keys_will_be_secured_on_a')
-        tag: 'For Higher Security'
-        image: 'qrc:/png/jades_onboard.png'
+        tag: qsTrId('id_for_higher_security')
+        image: 'qrc:/svg3/Authenticator-3.svg'
         offsetX: -20
         offsetY: -55
         onClicked: self.useDevice()
@@ -75,12 +75,17 @@ StackViewPage {
                 anchors.rightMargin: button.offsetX
                 anchors.top: parent.top
                 anchors.topMargin: button.offsetY
-                visible: self.enabled
+                antialiasing: true
+                height: 166
+                mipmap: true
+                smooth: true
                 source: button.image
+                visible: self.enabled
+                width: 166
             }
             Rectangle {
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 8
                 anchors.fill: parent

@@ -183,18 +183,18 @@ Collapsible {
         id: system_message_banner
         Banner {
             id: banner
-            backgroundColor: '#00B45A'
+            backgroundColor: '#00BCFF'
             contentItem: RowLayout {
                 spacing: 20
                 Image {
                     Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/svg2/info_white.svg'
+                    source: 'qrc:/svg2/info_black.svg'
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    color: '#FFFFFF'
+                    color: '#000'
                     font.pixelSize: 13
                     font.weight: 700
                     text: banner.notification.message
@@ -203,12 +203,11 @@ Collapsible {
                 }
                 PrimaryButton {
                     Layout.alignment: Qt.AlignCenter
-                    borderColor: '#FFFFFF'
-                    fillColor: '#FFFFFF'
+                    borderColor: '#000'
+                    fillColor: 'transparent'
                     font.pixelSize: 12
                     font.weight: 500
                     text: qsTrId('id_accept')
-                    textColor: '#1C1C1C'
                     onClicked: banner.notification.trigger()
                 }
                 CloseButton {
@@ -222,19 +221,19 @@ Collapsible {
         id: analytics_alert_banner
         Banner {
             id: banner
-            backgroundColor: '#00B45A'
+            backgroundColor: '#00BCFF'
             contentItem: RowLayout {
                 spacing: 20
                 Image {
                     Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/svg2/warning_white.svg'
+                    source: 'qrc:/svg2/warning_black.svg'
                 }
                 ColumnLayout {
                     Label {
                         Layout.alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
-                        color: '#FFFFFF'
+                        color: '#000'
                         font.pixelSize: 13
                         font.weight: 700
                         text: notification.alert.title
@@ -244,7 +243,7 @@ Collapsible {
                         Layout.alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
-                        color: '#FFFFFF'
+                        color: '#000'
                         font.pixelSize: 13
                         font.weight: 400
                         opacity: 0.75
@@ -257,7 +256,7 @@ Collapsible {
                     font.bold: true
                     font.pixelSize: 14
                     text: qsTrId('id_learn_more')
-                    textColor: '#FFFFFF'
+                    textColor: '#000'
                     onClicked: Qt.openUrlExternally(notification.alert.link)
                 }
                 CloseButton {
@@ -273,7 +272,7 @@ Collapsible {
         id: update_banner
         Banner {
             id: banner
-            backgroundColor: '#00B45A'
+            backgroundColor: '#00BCFF'
             contentItem: RowLayout {
                 spacing: 20
                 Image {

@@ -68,7 +68,7 @@ Popup {
                 anchors.fill: parent
                 layer.samples: 4
                 PopupBalloon {
-                    strokeColor: constants.g400
+                    strokeColor: '#00BCFF'
                     strokeWidth: 1
                     fillColor: 'transparent'
                 }

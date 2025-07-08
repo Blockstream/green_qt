@@ -11,7 +11,7 @@ StackViewPage {
     id: self
     Image {
         Layout.alignment: Qt.AlignCenter
-        source: 'qrc:/svg2/blockstream_green.svg'
+        source: 'qrc:/svg2/blockstream-app.svg'
     }
     Label {
         Layout.alignment: Qt.AlignCenter

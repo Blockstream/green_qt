@@ -16,15 +16,19 @@ Pane {
     background: null
     padding: 0
     contentItem: ColumnLayout {
-        MultiImage {
+        Image {
             Layout.alignment: Qt.AlignCenter
-            foreground: 'qrc:/png/jades.png'
-            width: 352
-            height: 240
+            Layout.preferredHeight: 240
+            antialiasing: true
+            fillMode: Image.PreserveAspectFit
+            mipmap: true
+            smooth: true
+            source: 'qrc:/svg3/Authenticator-2.svg'
         }
         SwipeView {
             Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: 400
+            Layout.minimumHeight: 120
             Keys.onLeftPressed: swipe_view.currentIndex = (swipe_view.currentIndex - 1 + swipe_view.count) % swipe_view.count
             Keys.onRightPressed: swipe_view.currentIndex = (swipe_view.currentIndex + 1) % swipe_view.count
             id: swipe_view
@@ -73,7 +77,7 @@ Pane {
             Label {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                color: '#00B45A'
+                color: '#00BCFF'
                 font.pixelSize: 12
                 font.weight: 700
                 horizontalAlignment: Label.AlignHCenter

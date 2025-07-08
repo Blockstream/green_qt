@@ -54,20 +54,14 @@ StackViewPage {
         background: null
         padding: 0
         contentItem: ColumnLayout {
-            Item {
+            Image {
                 Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: 352
                 Layout.preferredHeight: 352
-                Image {
-                    anchors.centerIn: parent
-                    scale: 0.2
-                    source: 'qrc:/png/background.png'
-                }
-                Image {
-                    anchors.centerIn: parent
-                    scale: 0.2
-                    source: 'qrc:/png/ledger_3d.png'
-                }
+                antialiasing: true
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                source: 'qrc:/svg3/Ledger.svg'
+                smooth: true
             }
             Label {
                 Layout.alignment: Qt.AlignCenter

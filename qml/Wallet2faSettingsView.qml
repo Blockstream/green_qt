@@ -384,7 +384,7 @@ Page {
                             Layout.fillWidth: true
                             id: success_badge
                             pointer: false
-                            backgroundColor: '#00B45A'
+                            backgroundColor: '#00BCFF'
                         }
                     }
                 }
@@ -474,7 +474,7 @@ Page {
                 anchors.fill: parent
                 anchors.margins: -4
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 8
                 visible: option.visualFocus

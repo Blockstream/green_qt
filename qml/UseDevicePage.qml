@@ -30,11 +30,14 @@ StackViewPage {
         ColumnLayout {
             VSpacer {
             }
-            MultiImage {
+            Image {
                 Layout.alignment: Qt.AlignCenter
-                foreground: 'qrc:/png/jades.png'
-                width: 352
-                height: 240
+                Layout.preferredHeight: 240
+                antialiasing: true
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                smooth: true
+                source: 'qrc:/svg3/Authenticator-2.svg'
             }
             Label {
                 Layout.fillWidth: true
@@ -61,11 +64,14 @@ StackViewPage {
         ColumnLayout {
             VSpacer {
             }
-            MultiImage {
+            Image {
                 Layout.alignment: Qt.AlignCenter
-                foreground: 'qrc:/png/onboarding_cpu.png'
-                width: 352
-                height: 240
+                Layout.preferredHeight: 240
+                antialiasing: true
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                smooth: true
+                source: 'qrc:/svg3/Chip.svg'
             }
             Label {
                 Layout.fillWidth: true
@@ -92,11 +98,14 @@ StackViewPage {
         ColumnLayout {
             VSpacer {
             }
-            MultiImage {
+            Image {
                 Layout.alignment: Qt.AlignCenter
-                foreground: 'qrc:/png/onboarding_globe.png'
-                width: 352
-                height: 240
+                Layout.preferredHeight: 240
+                antialiasing: true
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                smooth: true
+                source: 'qrc:/svg3/Globe.svg'
             }
             Label {
                 Layout.fillWidth: true

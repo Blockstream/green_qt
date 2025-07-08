@@ -228,7 +228,7 @@ Pane {
                         Layout.alignment: Qt.AlignCenter
                         id: ok_badge
                         pointer: false
-                        backgroundColor: '#00B45A'
+                        backgroundColor: '#00BCFF'
                     }
                     VSpacer {
                     }

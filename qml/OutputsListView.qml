@@ -151,7 +151,7 @@ Page {
             contentItem: RowLayout {
                 spacing: 4
                 Label {
-                    color: unit_label.enabled && unit_label.hovered ? '#00DD6E' : '#00B45A'
+                    color: unit_label.enabled && unit_label.hovered ? '#00DD6E' : '#00BCFF'
                     font.pixelSize: 16
                     font.weight: 500
                     text: localizedLabel(self.filter)
@@ -165,7 +165,7 @@ Page {
             onClicked: unit_menu.open()
             background: Rectangle {
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 visible: unit_label.visualFocus
             }

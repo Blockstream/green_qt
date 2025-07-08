@@ -140,12 +140,12 @@ AbstractDrawer {
                 name: 'SystemMessage'
             }
             id: item
-            backgroundColor: '#00B45A'
+            backgroundColor: '#00BCFF'
             contentItem: RowLayout {
                 spacing: 16
                     Image {
                     Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/svg2/info_white.svg'
+                    source: 'qrc:/svg2/info_black.svg'
                 }
                 ColumnLayout {
                     spacing: 0
@@ -153,7 +153,7 @@ AbstractDrawer {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
                         clip: true
-                        color: '#FFF'
+                        color: '#000'
                         font.pixelSize: 13
                         font.weight: 700
                         text: item.notification.network.displayName
@@ -163,7 +163,7 @@ AbstractDrawer {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
                         clip: true
-                        color: '#FFF'
+                        color: '#000'
                         font.pixelSize: 13
                         font.weight: 400
                         text: item.notification.message
@@ -182,21 +182,20 @@ AbstractDrawer {
                         Label {
                             Layout.fillWidth: true
                             Layout.preferredWidth: 0
-                            color: '#FFF'
+                            color: '#000'
                             text: qsTrId('id_i_confirm_i_have_read_and')
                             wrapMode: Label.Wrap
                         }
                         PrimaryButton {
                             Layout.alignment: Qt.AlignRight
                             Layout.leftMargin: 15
-                            borderColor: '#FFFFFF'
-                            fillColor: '#FFFFFF'
+                            borderColor: '#000'
+                            fillColor: 'transparent'
                             font.pixelSize: 12
                             font.weight: 500
                             enabled: confirm_checkbox.checked
                             font.capitalization: Font.Capitalize
                             text: qsTrId('id_accept').toLowerCase()
-                            textColor: '#1C1C1C'
                             onClicked: item.notification.accept(controller.monitor)
                         }
                     }

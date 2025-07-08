@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Switch {
-    property color baseColor: self.checked ? '#00DD6E' : Qt.alpha('#000', 0.4)
+    property color baseColor: self.checked ? '#00BCFF' : Qt.alpha('#000', 0.4)
     Behavior on baseColor {
         ColorAnimation {
             duration: 200
@@ -51,7 +51,7 @@ Switch {
     background: Item {
         Rectangle {
             border.width: 2
-            border.color: '#00B45A'
+            border.color: '#00BCFF'
             color: 'transparent'
             radius: height / 2
             anchors.fill: parent

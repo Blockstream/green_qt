@@ -133,7 +133,7 @@ QtObject {
             }
             MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                foreground: 'qrc:/png/2fa.png'
+                foreground: 'qrc:/svg3/Authenticator.svg'
                 width: 280
                 height: 160
             }
@@ -210,21 +210,26 @@ QtObject {
         contentItem: ColumnLayout {
             VSpacer {
             }
-            MultiImage {
+            Image {
                 Layout.alignment: Qt.AlignCenter
-                foreground: `qrc:/png/2fa_${view.prompt.result.method}.png`
-                width: 280
-                height: 160
-                visible: !(view.prompt.task instanceof ChangeTwoFactorTask)
+                Layout.preferredHeight: 160
+                antialiasing: true
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                smooth: true
+                source: `qrc:/svg3/2fa_${view.prompt.result.method}.svg`
             }
             Label {
-                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                horizontalAlignment: Label.AlignHCenter
+                font.pixelSize: 20
+                font.weight: 800
                 text: {
                     const label = UtilJS.twoFactorMethodLabel(view.prompt.result.method)
                     return qsTrId('id_please_provide_your_1s_code').arg(label)
                 }
-                font.pixelSize: 20
-                font.weight: 800
+                wrapMode: Label.Wrap
             }
             Label {
                 Layout.alignment: Qt.AlignCenter

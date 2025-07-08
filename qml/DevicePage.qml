@@ -114,7 +114,7 @@ StackViewPage {
                             anchors.centerIn: parent
                             implicitHeight: 2
                             radius: 1
-                            color: '#00B45A'
+                            color: '#00BCFF'
                             NumberAnimation on implicitWidth {
                                 easing.type: Easing.OutCubic
                                 from: 400

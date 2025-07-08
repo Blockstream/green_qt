@@ -124,7 +124,8 @@ TTextField {
         contentItem: RowLayout {
             spacing: 4
             Label {
-                color: unit_label.enabled && unit_label.hovered ? '#00DD6E' : '#00B45A'
+                color: '#00BCFF'
+                opacity: unit_label.enabled && unit_label.hovered ? 1 : 0.9
                 font.pixelSize: 18
                 font.weight: 500
                 text: (self.fiat ? self.convert.fiat.currency : self.convert.output.unit) ?? ''
@@ -142,7 +143,7 @@ TTextField {
         }
         background: Rectangle {
             border.width: 2
-            border.color: '#00B45A'
+            border.color: '#00BCFF'
             color: 'transparent'
             visible: unit_label.visualFocus
         }

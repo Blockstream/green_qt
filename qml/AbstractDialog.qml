@@ -60,7 +60,6 @@ Dialog {
     }
 
     background: Rectangle {
-        anchors.fill: parent
         radius: 10
         color: '#13161D'
         border.width: 0.5

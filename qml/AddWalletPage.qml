@@ -13,13 +13,14 @@ StackViewPage {
     id: self
     footer: null
     padding: 60
-    MultiImage {
+    Image {
         Layout.alignment: Qt.AlignCenter
-        //Layout.bottomMargin: -70
-        foreground: 'qrc:/svg2/take_control2.svg'
-        clip: false
-        width: 300
-        height: 182
+        Layout.preferredHeight: 240
+        antialiasing: true
+        fillMode: Image.PreserveAspectFit
+        mipmap: true
+        smooth: true
+        source: 'qrc:/svg3/Desktop-Keys.svg'
     }
     Label {
         Layout.alignment: Qt.AlignCenter

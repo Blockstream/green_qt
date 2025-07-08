@@ -20,7 +20,6 @@ MainPage {
     }
     id: self
     padding: 60
-    title: qsTrId('id_wallets')
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
         }
@@ -88,7 +87,8 @@ MainPage {
             spacing: 20
             Image {
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/blockstream_green.svg'
+                scale: 0.75
+                source: 'qrc:/svg2/blockstream-app.svg'
             }
             RowLayout {
                 Layout.alignment: Qt.AlignCenter

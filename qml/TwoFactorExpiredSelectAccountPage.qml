@@ -24,7 +24,7 @@ StackViewPage {
             width: flickable.width
             MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                foreground: 'qrc:/png/2fa_expired.png'
+                foreground: 'qrc:/svg3/2fa_expired.svg'
                 width: 352
                 height: 240
             }

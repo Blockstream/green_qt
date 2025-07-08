@@ -83,7 +83,7 @@ StackViewPage {
                 anchors.fill: parent
                 anchors.margins: -4
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 9
                 visible: {
@@ -139,7 +139,7 @@ StackViewPage {
                 anchors.fill: parent
                 anchors.margins: -4
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 9
                 visible: {
@@ -158,7 +158,7 @@ StackViewPage {
             Rectangle {
                 anchors.fill: parent
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 5
                 visible: delegate.highlighted

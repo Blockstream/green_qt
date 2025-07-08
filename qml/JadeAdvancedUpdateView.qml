@@ -167,10 +167,10 @@ StackViewPage {
             color: Qt.lighter('#222226', control.down ? 1.5 : control.enabled && control.hovered ? 1.2 : 1)
             radius: 5
             border.width: control.checked ? 2 : 0
-            border.color: '#00B45A'
+            border.color: '#00BCFF'
             Rectangle {
                 border.width: 2
-                border.color: '#00B45A'
+                border.color: '#00BCFF'
                 color: 'transparent'
                 radius: 9
                 anchors.fill: parent
@@ -214,7 +214,7 @@ StackViewPage {
             const tags = []
             if (firmware.latest) tags.push({ color: '#FFFFFF', text: 'LATEST' })
             if (firmware.channel === 'beta') tags.push({ color: '#dba5ff', text: 'BETA' })
-            if (firmware.installed) tags.push({ color: constants.g300, text: qsTrId('id_current_version') })
+            if (firmware.installed) tags.push({ color: '#00BCFF', text: qsTrId('id_current_version') })
             return tags
         }
         id: control

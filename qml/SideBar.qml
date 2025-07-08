@@ -40,8 +40,8 @@ Pane {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20
             Layout.bottomMargin: 20
-            Layout.preferredWidth: 24
-            Layout.preferredHeight: 24
+            Layout.preferredWidth: 39
+            Layout.preferredHeight: 39
             source: 'qrc:/svg/home.svg'
         }
         SideButton {

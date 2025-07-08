@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 
 AbstractButton {
-    property color textColor: '#00B45A'
+    property color textColor: '#00BCFF'
     HoverHandler {
         cursorShape: Qt.PointingHandCursor
     }

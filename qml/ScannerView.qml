@@ -57,10 +57,10 @@ Item {
             model: detector.results
             delegate: Shape {
                 ShapePath {
-                    fillColor: Qt.alpha('#00B45A', 0.25)
+                    fillColor: Qt.alpha('#00BCFF', 0.25)
                     startX: modelData.points[0].x
                     startY: modelData.points[0].y
-                    strokeColor: Qt.alpha('#00B45A', 0.75)
+                    strokeColor: Qt.alpha('#00BCFF', 0.75)
                     strokeWidth: 10
                     joinStyle: ShapePath.RoundJoin
                     PathLine {
