@@ -166,8 +166,8 @@ Collapsible {
                 Layout.alignment: Qt.AlignCenter
                 borderColor: '#1C1C1C'
                 fillColor: '#1C1C1C'
-                font.pixelSize: 12
-                font.weight: 500
+                font.capitalization: Font.Capitalize
+                font.pixelSize: 14
                 text: 'Re-enable 2FA'
                 textColor: '#FFFFFF'
                 onClicked: banner.notification.trigger()
@@ -204,14 +204,16 @@ Collapsible {
                 PrimaryButton {
                     Layout.alignment: Qt.AlignCenter
                     borderColor: '#000'
+                    borderWidth: 2
                     fillColor: 'transparent'
-                    font.pixelSize: 12
-                    font.weight: 500
+                    font.capitalization: Font.Capitalize
+                    font.pixelSize: 14
                     text: qsTrId('id_accept')
                     onClicked: banner.notification.trigger()
                 }
                 CloseButton {
                     Layout.alignment: Qt.AlignCenter
+                    black: true
                     onClicked: banner.notification.dismiss()
                 }
             }
@@ -277,24 +279,24 @@ Collapsible {
                 spacing: 20
                 Image {
                     Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/svg2/star_white.svg'
+                    source: 'qrc:/svg2/star_black.svg'
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    color: '#FFFFFF'
-                    font.pixelSize: 13
-                    font.weight: 700
+                    color: '#000'
+                    font.pixelSize: 14
+                    font.weight: 600
                     text: qsTrId('There is a newer version of Green Desktop available')
                     wrapMode: Label.WordWrap
                 }
                 PrimaryButton {
                     Layout.alignment: Qt.AlignCenter
-                    borderColor: '#FFFFFF'
-                    fillColor: '#FFFFFF'
-                    font.pixelSize: 12
-                    font.weight: 500
+                    borderColor: '#000'
+                    borderWidth: 2
+                    fillColor: 'transparent'
+                    font.pixelSize: 14
                     text: qsTrId('Download %1').arg(notification.version)
                     textColor: '#1C1C1C'
                     onClicked: Qt.openUrlExternally('https://blockstream.com/green/')

@@ -178,6 +178,7 @@ AbstractDrawer {
                         CheckBox {
                             Layout.alignment: Qt.AlignCenter
                             id: confirm_checkbox
+                            Material.theme: Material.Light
                         }
                         Label {
                             Layout.fillWidth: true
@@ -191,8 +192,7 @@ AbstractDrawer {
                             Layout.leftMargin: 15
                             borderColor: '#000'
                             fillColor: 'transparent'
-                            font.pixelSize: 12
-                            font.weight: 500
+                            font.pixelSize: 14
                             enabled: confirm_checkbox.checked
                             font.capitalization: Font.Capitalize
                             text: qsTrId('id_accept').toLowerCase()

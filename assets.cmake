@@ -193,6 +193,7 @@ qt_add_resources(green "images"
         assets/svg2/shield_check.svg
         assets/svg2/shield_warning.svg
         assets/svg2/star.svg
+        assets/svg2/star_black.svg
         assets/svg2/star_white.svg
         assets/svg2/seal-check.svg
         assets/svg2/sun.svg

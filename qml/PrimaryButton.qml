@@ -5,6 +5,7 @@ import QtQuick.Layouts
 AbstractButton {
     property color fillColor: '#00BCFF'
     property color borderColor: '#00BCFF'
+    property real borderWidth: 1
     property color textColor: '#000000'
     property bool busy: false
     HoverHandler {
@@ -23,8 +24,8 @@ AbstractButton {
     background: Item {
         Rectangle {
             anchors.fill: parent
-            border.width: 2
             border.color: self.borderColor
+            border.width: 2
             color: 'transparent'
             radius: 8
             visible: self.visualFocus
@@ -34,6 +35,7 @@ AbstractButton {
             anchors.margins: self.visualFocus ? 4 : 0
             color: Qt.lighter(self.fillColor, self.enabled && self.hovered ? 1.1 : 1)
             border.color: Qt.lighter(self.borderColor, self.enabled && self.hovered ? 1.1 : 1)
+            border.width: self.borderWidth
             radius: self.visualFocus ? 4 : 8
         }
     }
