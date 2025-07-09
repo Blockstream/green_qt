@@ -209,6 +209,7 @@ StackViewPage {
                     }
                     CreateAccountButton {
                         Layout.fillWidth: true
+                        visible: !self.context.watchonly
                         onClicked: {
                             self.StackView.view.push(create_account_page, {
                                 asset: delegate.asset,
