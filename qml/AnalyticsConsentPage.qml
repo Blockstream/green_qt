@@ -42,7 +42,6 @@ MainPage {
             Layout.topMargin: 20
             Layout.maximumWidth: 400
             Label {
-                Layout.alignment: Qt.AlignCenter
                 Layout.topMargin: 20
                 font.bold: true
                 text: qsTrId('id_whats_collected')
@@ -60,7 +59,6 @@ MainPage {
                 wrapMode: Label.WordWrap
             }
             Label {
-                Layout.alignment: Qt.AlignCenter
                 Layout.topMargin: 20
                 font.bold: true
                 text: qsTrId('id_whats_not_collected')
