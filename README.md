@@ -1,16 +1,14 @@
-# Blockstream Green Desktop App
+# Blockstream App - desktop version
 
-Build status: [![Build Status](https://travis-ci.org/Blockstream/green_qt.png?branch=master)](https://travis-ci.org/Blockstream/green_qt)
-
-Blockstream Green is a non-custodial Bitcoin wallet - it allows you to safely store, send, and receive your Bitcoin.
+Blockstream App is a non-custodial Bitcoin wallet - it allows you to safely store, send, and receive your Bitcoin.
 
 It is also available for [Android](https://github.com/Blockstream/green_android) and [iOS](https://github.com/Blockstream/green_ios), and it is based on [gdk](https://github.com/blockstream/gdk), our cross-platform wallet library.
 
-You can read more about Blockstream Green [here](https://blockstream.com/green/).
+You can read more about Blockstream App [here](https://blockstream.com/app/).
 
 ## Build
 
-For instructions on how to build Blockstream Green please refer to [BUILD.md](BUILD.md)
+For instructions on how to build Blockstream App please refer to [BUILD.md](BUILD.md)
 
 ## Application data directory
 
@@ -22,7 +20,7 @@ Mac OS:
 
 `$HOME/Library/Application Support/Blockstream/Green`
 
-Windows 10:
+Windows:
 
 `C:/Users/<USER>/AppData/Local/Blockstream/Green`
 
@@ -34,7 +32,7 @@ You can help translating this app [here](https://www.transifex.com/blockstream/b
 
 Need help?
 
-Read [our FAQ](https://greenaddress.it/en/faq.html) or contact us at [info@greenaddress.it](mailto:info@greenaddress.it).
+Visit the [Blockstream Help Center](https://help.blockstream.com/)
 
 ## Verifying releases
 
@@ -42,4 +40,4 @@ Read our article on how to [verify signatures for new software releases](https:/
 
 ## License
 
-Blockstream Green is released under the terms of the GNU General Public License. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/GPL-3.0
+Blockstream App is released under the terms of the GNU General Public License. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/GPL-3.0
