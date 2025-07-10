@@ -81,6 +81,7 @@ StackViewPage {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
+                Layout.maximumWidth: 450
                 Layout.preferredWidth: 0
                 font.pixelSize: 26
                 font.weight: 600
@@ -92,12 +93,12 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.bottomMargin: 26
                 Layout.fillWidth: true
-                Layout.preferredWidth: 0
                 Layout.maximumWidth: 450
+                Layout.preferredWidth: 0
+                Layout.topMargin: 20
                 font.pixelSize: 14
                 font.weight: 400
                 horizontalAlignment: Label.AlignHCenter
-                opacity: 0.4
                 text: qsTrId('id_youll_need_your_pin_to_log_in')
                 wrapMode: Label.Wrap
             }

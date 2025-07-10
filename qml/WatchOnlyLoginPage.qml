@@ -65,21 +65,23 @@ StackViewPage {
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
+            Layout.maximumWidth: 450
             Layout.preferredWidth: 0
             font.pixelSize: 26
             font.weight: 600
             horizontalAlignment: Label.AlignHCenter
-            text: qsTrId('id_login')
+            text: qsTrId('id_watchonly_login')
             wrapMode: Label.WordWrap
         }
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
+            Layout.maximumWidth: 450
             Layout.preferredWidth: 0
+            Layout.topMargin: 20
             font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
-            opacity: 0.4
             text: qsTrId('id_log_in_via_watchonly_to_receive')
             wrapMode: Label.Wrap
         }
