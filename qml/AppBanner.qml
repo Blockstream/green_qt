@@ -301,6 +301,11 @@ Collapsible {
                     textColor: '#1C1C1C'
                     onClicked: Qt.openUrlExternally('https://blockstream.com/green/')
                 }
+                CloseButton {
+                    Layout.alignment: Qt.AlignCenter
+                    black: true
+                    onClicked: banner.notification.dismiss()
+                }
             }
         }
     }

@@ -73,4 +73,5 @@ UpdateNotification::UpdateNotification(const QString& version, QObject* parent)
     : Notification(parent)
     , m_version(version)
 {
+    setDismissable(true);
 }
