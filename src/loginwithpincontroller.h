@@ -63,6 +63,8 @@ public:
     PinDataController(QObject * parent = nullptr);
 public slots:
     void update(const QString& pin);
+signals:
+    void updateFailed(const QString& error);
 };
 
 #endif // GREEN_LOGINWITHPINCONTROLLER_H

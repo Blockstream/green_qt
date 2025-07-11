@@ -364,5 +364,8 @@ void PinDataController::update(const QString& pin)
         wallet->save();
         emit finished();
     });
+    connect(task, &Task::failed, this, [=] {
+        emit updateFailed(task->error());
+    });
     dispatcher()->add(task);
 }
