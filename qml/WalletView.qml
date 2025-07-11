@@ -193,6 +193,10 @@ MainPage {
         id: setup_pin_page
         SetupPinPage {
             onFinished: (context) => stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+            onCloseClicked: {
+                self.closeWallet(self.wallet)
+                WalletManager.removeWallet(self.wallet)
+            }
         }
     }
 

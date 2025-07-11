@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal finished(Context context)
+    signal closeClicked()
     required property Context context
     property string pin
 
@@ -15,6 +16,11 @@ StackViewPage {
         id: controller
         context: self.context
         onFinished: self.finished(self.context)
+        onUpdateFailed: error => {
+            if (error) error_badge.raise(error)
+            pin_field.clear()
+        }
+
     }
     StackView.onActivated: pin_field.forceActiveFocus()
     id: self
@@ -22,6 +28,9 @@ StackViewPage {
     padding: 60
     title: self.context?.wallet?.name ?? ''
     leftItem: Item {
+    }
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
     }
     Label {
         Layout.alignment: Qt.AlignCenter
