@@ -522,7 +522,6 @@ void JadeGenuineCheckController::genuineCheck()
 
     if (!m_context) {
         setContext(new Context("mainnet", false, this));
-        // m_context->setDevice(m_device);
     }
 
     if (!m_monitor) {
@@ -535,8 +534,6 @@ void JadeGenuineCheckController::genuineCheck()
     }
 
     m_device->api()->signAttestation(challenge, [=](const QVariantMap& msg) {
-        qDebug() << Q_FUNC_INFO << msg;
-
         if (msg.contains("result")) {
             const auto result = msg.value("result").toMap();
 
