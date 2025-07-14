@@ -611,7 +611,7 @@ Page {
             }
             Image {
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/hints/jade_genuine.png'
+                source: 'qrc:/png/jade_genuine.png'
             }
         }
     }
