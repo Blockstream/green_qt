@@ -50,9 +50,11 @@ MainPage {
                 Layout.fillWidth: true
                 Layout.maximumWidth: 500
                 Layout.preferredWidth: 0
+                Layout.topMargin: 20
                 font.pixelSize: 14
                 font.weight: 400
                 horizontalAlignment: Label.AlignHCenter
+                lineHeight: 1.25
                 text: `All your settings and funds are safe and exactly where you left them.<br/>Your app icon will update in upcoming releases, and remember: our only official website is ${UtilJS.link('https://blockstream.com', qsTrId('blockstream.com'))}. Stay vigilant against scams!`
                 wrapMode: Label.Wrap
             }

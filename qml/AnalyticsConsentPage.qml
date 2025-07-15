@@ -28,11 +28,12 @@ MainPage {
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.maximumWidth: 550
-            Layout.topMargin: 10
+            Layout.topMargin: 20
             color: '#FFF'
             font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
+            lineHeight: 1.25
             text: qsTrId('id_if_you_agree_green_will_collect').replace('Green', 'Blockstream App')
             wrapMode: Label.WordWrap
         }
