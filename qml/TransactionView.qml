@@ -654,6 +654,7 @@ StackViewPage {
             title: qsTrId('id_increase_fee')
             context: self.transaction.account.context
             account: self.transaction.account
+            asset: self.context.getOrCreateAsset(network.policyAsset)
             transaction: self.transaction
             onClosed: self.closed()
         }

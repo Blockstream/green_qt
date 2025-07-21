@@ -70,11 +70,6 @@ void CreateTransactionController::setPreviousTransaction(Transaction* previous_t
     if (m_previous_transaction) {
         setContext(m_previous_transaction->context());
         setAccount(m_previous_transaction->account());
-        const auto output = m_previous_transaction->destination();
-        const auto address = output.value("address").toString();
-        const auto satoshi = output.value("satoshi").toInteger();
-        m_recipient->setAddress(address);
-        m_recipient->convert()->setInput({{ "satoshi", QString::number(satoshi) }});
     }
     invalidate();
 }
@@ -106,7 +101,7 @@ void CreateTransactionController::update()
     if (m_context && m_account) {
         auto group = new TaskGroup(this);
 
-        if (m_utxos.isNull()) {
+        if (!m_previous_transaction && m_utxos.isNull()) {
             auto task = new GetUnspentOutputsTask(0, false, m_account);
             connect(task, &Task::finished, this, [=] {
                 m_utxos = task->unspentOutputs();
@@ -116,7 +111,7 @@ void CreateTransactionController::update()
             });
             group->add(task);
         } else {
-            if (m_recipient->address().trimmed().isEmpty()) {
+            if (!m_previous_transaction && m_recipient->address().trimmed().isEmpty()) {
                 delete group;
                 setTransaction({});
                 return;
@@ -125,7 +120,7 @@ void CreateTransactionController::update()
             auto session = m_account->session();
 
             QJsonObject details;
-            if (m_coins.isEmpty()) {
+            if (!m_previous_transaction && m_coins.isEmpty()) {
                 details["utxos"] = m_utxos;
             } else {
                 qDebug() << "use coins";
@@ -211,24 +206,26 @@ void CreateTransactionController::setTransaction(const QJsonObject& transaction)
     const auto addressees = m_transaction.value("addressees").toArray();
     if (addressees.size() > 0) {
         const auto addressee = addressees.at(0).toObject();
-        const auto bip21_params = addressee.value("bip21-params").toObject();
         if (addressee.contains("bip21-params")) {
-        if (bip21_params.contains("assetid")) {
-            const auto asset_id = bip21_params.value("assetid").toString();
-            const auto asset = m_context->getOrCreateAsset(asset_id);
-            setAsset(asset);
-        }
-        const auto address = addressee.value("address").toString();
-        if (!address.isEmpty()) {
+            const auto bip21_params = addressee.value("bip21-params").toObject();
+            if (bip21_params.contains("assetid")) {
+                const auto asset_id = bip21_params.value("assetid").toString();
+                const auto asset = m_context->getOrCreateAsset(asset_id);
+                setAsset(asset);
+            }
+            const auto address = addressee.value("address").toString();
+            if (!address.isEmpty()) {
+                m_recipient->setAddress(address);
+            }
+            if (bip21_params.contains("amount")) {
+                m_recipient->setGreedy(false);
+                const auto satoshi = addressee.value("satoshi").toInteger();
+                m_recipient->convert()->setInput({{ "satoshi", satoshi }});
+            }
+        } else if (m_previous_transaction || addressee.value("is_greedy").toBool()) {
+            const auto address = addressee.value("address").toString();
+            const auto satoshi = addressee.value("satoshi").toInteger();
             m_recipient->setAddress(address);
-        }
-        if (bip21_params.contains("amount")) {
-            m_recipient->setGreedy(false);
-            const auto satoshi = addressee.value("satoshi").toInteger();
-            m_recipient->convert()->setInput({{ "satoshi", satoshi }});
-        }
-        } else if (addressee.value("is_greedy").toBool()) {
-            const auto satoshi = addressee.value("satoshi").toInteger();
             m_recipient->convert()->setInput({{ "satoshi", satoshi }});
         }
     }
