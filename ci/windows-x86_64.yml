@@ -43,7 +43,6 @@ windows-x86_64:build:
 windows-x86_64:sign:
   extends: .windows:sign
   stage: staple
-  when: manual
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
@@ -51,7 +50,13 @@ windows-x86_64:sign:
     paths:
       - installer.iss
       - "Blockstream.exe"
-  needs: ["windows-x86_64:build"]
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^release_.*$/'
+      when: on_success
+    - when: manual
+  needs:
+    - job: windows-x86_64:build
+      optional: true
   variables:
     INPUT_FILE: blockstream.exe
     OUTPUT_FILE: "Blockstream.exe"
@@ -77,7 +82,6 @@ windows-x86_64:installer:
 windows-x86_64:sign-installer:
   extends: .windows:sign
   stage: installer
-  when: manual
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
