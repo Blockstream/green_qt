@@ -22,11 +22,11 @@ gcloud auth activate-service-account --key-file=.key
 gsutil -h "Cache-Control: no-store" cp ${CHANNEL}.json gs://${GCLOUD_BUCKET}/desktop/
 
 gsutil cp SHA256SUMS.asc gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp BlockstreamGreen-x86_64.AppImage gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp BlockstreamGreen-linux-x86_64.tar.gz gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp BlockstreamGreen-universal.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp BlockstreamGreen-arm64.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp BlockstreamGreen-x86_64.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp BlockstreamGreenSetup-x86_64.exe gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
+gsutil cp Blockstream-x86_64.AppImage gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
+gsutil cp Blockstream-linux-x86_64.tar.gz gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
+gsutil cp Blockstream-universal.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
+gsutil cp Blockstream-arm64.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
+gsutil cp Blockstream-x86_64.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
+gsutil cp BlockstreamSetup-x86_64.exe gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
 
 rm .key

@@ -1,14 +1,14 @@
-# Blockstream App - desktop version
+# Blockstream - Desktop application
 
-Blockstream App is a non-custodial Bitcoin wallet - it allows you to safely store, send, and receive your Bitcoin.
+Blockstream is a non-custodial Bitcoin wallet - it allows you to safely store, send, and receive your Bitcoin.
 
 It is also available for [Android](https://github.com/Blockstream/green_android) and [iOS](https://github.com/Blockstream/green_ios), and it is based on [gdk](https://github.com/blockstream/gdk), our cross-platform wallet library.
 
-You can read more about Blockstream App [here](https://blockstream.com/app/).
+You can read more about Blockstream application [here](https://blockstream.com/app/).
 
 ## Build
 
-For instructions on how to build Blockstream App please refer to [BUILD.md](BUILD.md)
+For instructions on how to build application please refer to [BUILD.md](BUILD.md)
 
 ## Application data directory
 
@@ -40,4 +40,4 @@ Read our article on how to [verify signatures for new software releases](https:/
 
 ## License
 
-Blockstream App is released under the terms of the GNU General Public License. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/GPL-3.0
+Blockstream is released under the terms of the GNU General Public License. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/GPL-3.0

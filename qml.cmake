@@ -1,4 +1,4 @@
-qt_add_resources(green "qtquickcontrols2"
+qt_add_resources(${APP_TARGET} "qtquickcontrols2"
     PREFIX "/"
     BASE qml
     FILES
@@ -267,12 +267,12 @@ SET(QML_FILES
 
 if (GREEN_NO_RESOURCES)
     set(QML_FILES_2)
-    target_compile_definitions(green PRIVATE SOURCE_DIR=${CMAKE_SOURCE_DIR})
+    target_compile_definitions(${APP_TARGET} PRIVATE SOURCE_DIR=${CMAKE_SOURCE_DIR})
 else()
     set(QML_FILES_2 ${QML_FILES})
 endif()
 
-qt_add_qml_module(green
+qt_add_qml_module(${APP_TARGET}
     URI Blockstream.Green
     VERSION 1.0
     NO_PLUGIN

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(green VERSION 2.0.26 LANGUAGES CXX)
+project(blockstream VERSION 2.0.27 LANGUAGES CXX)
+
+set(APP_TARGET blockstream)
 
 option(GREEN_WAYLAND "Include Wayland support" OFF)
 option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)
@@ -84,21 +86,21 @@ add_definitions(-DGDK_STATIC_DEFINE)
 
 include(src.cmake)
 
-set(app_icon_macos "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons/green.icns")
+set(app_icon_macos "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons/production.icns")
 set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     enable_language("RC")
-    set(app_icon_win "${CMAKE_CURRENT_SOURCE_DIR}/green.rc")
+    set(app_icon_win "${CMAKE_CURRENT_SOURCE_DIR}/production.rc")
 endif()
 
-qt_add_executable(green WIN32 MACOSX_BUNDLE
+qt_add_executable(${APP_TARGET} WIN32 MACOSX_BUNDLE
     ${TARGET_SOURCES}
     ${app_icon_macos}
     ${app_icon_win}
 )
 
-set_target_properties(green PROPERTIES
+set_target_properties(${APP_TARGET} PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist.in
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
@@ -106,7 +108,7 @@ set_target_properties(green PROPERTIES
     LINK_SEARCH_END_STATIC ON
 )
 
-target_link_libraries(green
+target_link_libraries(${APP_TARGET}
     PRIVATE
     ZXing::Core
     gdk::green_gdk_full
@@ -139,12 +141,12 @@ if(ENABLE_SENTRY)
 
     get_target_property(CRASHPAD_INCLUDE crashpad::client INTERFACE_INCLUDE_DIRECTORIES)
 
-    target_include_directories(green PRIVATE
+    target_include_directories(${APP_TARGET} PRIVATE
       ${CRASHPAD_INCLUDE}
       ${CRASHPAD_INCLUDE}/..
       ${BREAKPAD_INCLUDE_DIRS}
     )
-    target_link_libraries(green PRIVATE
+    target_link_libraries(${APP_TARGET} PRIVATE
         crashpad::client
         crashpad::handler
         crashpad::minidump
@@ -157,25 +159,25 @@ if(ENABLE_SENTRY)
 endif()
 
 if (WIN32)
-    target_link_libraries(green PRIVATE hid ntdll)
+    target_link_libraries(${APP_TARGET} PRIVATE hid ntdll)
 elseif (APPLE)
-    set_target_properties(green PROPERTIES OUTPUT_NAME "Blockstream Green")
+    set_target_properties(${APP_TARGET} PROPERTIES OUTPUT_NAME "Blockstream")
 elseif (UNIX)
-    target_link_libraries(green PRIVATE dl Xrender)
-    qt_import_plugins(green INCLUDE Qt6::QXcbIntegrationPlugin Qt6::QFFmpegMediaPlugin)
+    target_link_libraries(${APP_TARGET} PRIVATE dl Xrender)
+    qt_import_plugins(${APP_TARGET} INCLUDE Qt6::QXcbIntegrationPlugin Qt6::QFFmpegMediaPlugin)
     if (GREEN_WAYLAND)
-        target_link_libraries(green PRIVATE Qt6::WaylandClient Xrender)
-        qt_import_plugins(green INCLUDE Qt6::QWaylandIntegrationPlugin Qt6::QFFmpegMediaPlugin)
+        target_link_libraries(${APP_TARGET} PRIVATE Qt6::WaylandClient Xrender)
+        qt_import_plugins(${APP_TARGET} INCLUDE Qt6::QWaylandIntegrationPlugin Qt6::QFFmpegMediaPlugin)
     endif()
 endif()
 
-install(TARGETS green
+install(TARGETS ${APP_TARGET}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 get_target_property(GDK_INCLUDE gdk::green_gdk_full INTERFACE_INCLUDE_DIRECTORIES)
 
-target_include_directories(green PRIVATE
+target_include_directories(${APP_TARGET} PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers
   ${GDK_INCLUDE}/libwally-core/
   "${CMAKE_CURRENT_BINARY_DIR}"

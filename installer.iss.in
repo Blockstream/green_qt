@@ -1,26 +1,26 @@
-#define MyAppName "Blockstream Green"
-#define MyAppVersion "@PROJECT_VERSION@"
-#define MyAppPublisher "Blockstream"
-#define MyAppURL "https://blockstream.com/green/"
+#define AppName "Blockstream"
+#define AppVersion "@PROJECT_VERSION@"
+#define AppPublisher "Blockstream"
+#define MyAppURL "https://blockstream.com/app/"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{3AD17C10-A864-47AB-895F-FA44CA654295}
-AppName={#MyAppName}
-AppVersion={#MyAppVersion}
-AppVerName={#MyAppName} {#MyAppVersion}
-AppPublisher={#MyAppPublisher}
+AppName={#AppName}
+AppVersion={#AppVersion}
+AppVerName="Blockstream {#AppVersion}"
+AppPublisher={#AppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppPublisher}\{#MyAppName}
-UninstallFilesDir={pf}\{#MyAppPublisher}\{#MyAppName}
-UninstallDisplayIcon={app}\{#MyAppName}.exe
-DefaultGroupName={#MyAppPublisher}
+DefaultDirName={pf}\{#AppPublisher}\{#AppName}
+UninstallFilesDir={pf}\{#AppPublisher}\{#AppName}
+UninstallDisplayIcon={app}\{#AppName}.exe
+DefaultGroupName={#AppPublisher}
 OutputDir=.
-OutputBaseFilename=GreenSetup
+OutputBaseFilename=Setup
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=true
@@ -36,13 +36,16 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "{#MyAppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"; Tasks: quicklaunchicon
+Name: "{group}\{#AppName}"; Filename: "{app}\{#AppName}.exe"; IconFilename: "{app}\{#AppName}.exe"; IconIndex: 0;
+Name: "{group}\{cm:UninstallProgram,{#AppName}}"; Filename: "{uninstallexe}"
+Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppName}.exe"; Tasks: desktopicon
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#AppName}"; Filename: "{app}\{#AppName}.exe"; Tasks: quicklaunchicon
+
+[InstallDelete]
+Type: files; Name: "{group}\{#AppName}.lnk"
 
 [Code]
 const
@@ -55,7 +58,7 @@ var winHwnd: Longint;
 begin
   Result := True;
   try
-    strProg := 'Blockstream Green';
+    strProg := 'Blockstream';
     winHwnd := FindWindowByClassName(strProg);
     winHwnd := FindWindowByWindowName(strProg);
     Log('winHwnd: ' + IntToStr(winHwnd));
@@ -72,7 +75,7 @@ var winHwnd: Longint;
 begin
   Result := True;
   try
-    strProg := 'Blockstream Green';
+    strProg := 'Blockstream';
     winHwnd := FindWindowByClassName(strProg);
     winHwnd := FindWindowByWindowName(strProg);
     Log('winHwnd: ' + IntToStr(winHwnd));

@@ -31,7 +31,7 @@ ApplicationWindow {
         const title = stack_view.currentItem?.title
         const parts = []
         if (title) parts.push(title)
-        parts.push('Blockstream Green');
+        parts.push('Blockstream');
         if (env !== 'Production') parts.push(`[${env}]`)
         return parts.join(' - ');
     }

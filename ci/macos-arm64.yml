@@ -26,12 +26,12 @@ macos-arm64:build:
   needs: ["macos-arm64:depends"]
   after_script:
     - mkdir macos-arm64
-    - mv build/"Blockstream Green.app" macos-arm64
+    - mv build/"Blockstream.app" macos-arm64
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
-      - "macos-arm64/Blockstream Green.app"
+      - "macos-arm64/Blockstream.app"
 
 macos-arm64:staple:
   tags:
@@ -42,12 +42,12 @@ macos-arm64:staple:
     expire_in: 1 week
     when: always
     paths:
-      - "macos-arm64/Blockstream Green.app"
-      - "macos-arm64/Blockstream Green.dmg"
+      - "macos-arm64/Blockstream.app"
+      - "macos-arm64/Blockstream.dmg"
   needs: ["macos-arm64:build"]
   script:
-    - mv "macos-arm64/Blockstream green.app" "Blockstream green.app"
-    - tools/macos-staple.sh "Blockstream green.app"
-    - tools/packdmg.sh "Blockstream Green.app"
-    - tools/macos-staple.sh "Blockstream Green.dmg"
-    - mv "Blockstream Green.app" "Blockstream Green.dmg" macos-arm64/
+    - mv "macos-arm64/Blockstream.app" "Blockstream.app"
+    - tools/macos-staple.sh "Blockstream.app"
+    - tools/packdmg.sh "Blockstream.app"
+    - tools/macos-staple.sh "Blockstream.dmg"
+    - mv "Blockstream.app" "Blockstream.dmg" macos-arm64/

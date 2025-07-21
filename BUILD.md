@@ -1,4 +1,4 @@
-# Build Blockstream Green for Windows, Mac OS and Linux
+# Build Blockstream for Windows, Mac OS and Linux
 
 ## Before you build
 
@@ -30,7 +30,7 @@ docker run -v $PWD:/ga greenaddress/ci@sha256:c9c0bfc0eef0575d5822f9308ab16ff904
 ## Build static release on Linux
 
 ```
-docker run -v $PWD:/ga greenaddress/ci@sha256:c9c0bfc0eef0575d5822f9308ab16ff904a8bf99946c67938dd7637d70998220 /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux && cp /docker_bld_root/build-linux-gcc/green /docker_bld_root/build-linux-gcc/BlockstreamGreen-x86_64.AppImage /ga"
+docker run -v $PWD:/ga greenaddress/ci@sha256:c9c0bfc0eef0575d5822f9308ab16ff904a8bf99946c67938dd7637d70998220 /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux && cp /docker_bld_root/build-linux-gcc/green /docker_bld_root/build-linux-gcc/Blockstream-x86_64.AppImage /ga"
 ```
 
 ## Build static release on Linux for Windows

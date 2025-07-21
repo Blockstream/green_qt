@@ -1,4 +1,4 @@
-qt_add_translations(green
+qt_add_translations(${APP_TARGET}
     TS_FILES
         i18n/green_cs.ts
         i18n/green_de.ts

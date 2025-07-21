@@ -8,21 +8,21 @@ package:build:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
-    - $CI_PROJECT_DIR/green_qt_dist
+    - $CI_PROJECT_DIR/dist
     when: on_success
   script:
     - cd $CI_PROJECT_DIR
-    - rm -fr green_qt_dist
-    - mkdir green_qt_dist
-    - mv BlockstreamGreenSetup.exe green_qt_dist/BlockstreamGreenSetup-x86_64.exe
-    - mv "macos-arm64/Blockstream Green.dmg" green_qt_dist/BlockstreamGreen-arm64.dmg
-    - mv "macos-x86_64/Blockstream Green.dmg" green_qt_dist/BlockstreamGreen-x86_64.dmg
-    - mv "macos-universal/Blockstream Green.dmg" green_qt_dist/BlockstreamGreen-universal.dmg
-    - chmod +x green
-    - tar czf green_qt_dist/BlockstreamGreen-linux-x86_64.tar.gz -C . green
-    - cp BlockstreamGreen-x86_64.AppImage green_qt_dist
-    - chmod +x green_qt_dist/BlockstreamGreen-x86_64.AppImage
-    - cd green_qt_dist
+    - rm -fr dist
+    - mkdir dist
+    - mv BlockstreamSetup.exe dist/BlockstreamSetup-x86_64.exe
+    - mv "macos-arm64/Blockstream.dmg" dist/Blockstream-arm64.dmg
+    - mv "macos-x86_64/Blockstream.dmg" dist/Blockstream-x86_64.dmg
+    - mv "macos-universal/Blockstream.dmg" dist/Blockstream-universal.dmg
+    - chmod +x blockstream
+    - tar czf dist/Blockstream-linux-x86_64.tar.gz -C . blockstream
+    - cp Blockstream-x86_64.AppImage dist
+    - chmod +x dist/Blockstream-x86_64.AppImage
+    - cd dist
     - /opt/process_release
     - cat SHA256SUMS.asc
   needs:
@@ -41,7 +41,7 @@ package:build:
   needs: ["package:build"]
   image: glregistry.blockstream.io/blockstream/p/gcloud-docker:tf0.15.4
   script:
-    - cd green_qt_dist
+    - cd dist
     - ../tools/publish.sh
 
 package:publish-rc:

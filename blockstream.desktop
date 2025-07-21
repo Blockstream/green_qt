@@ -2,8 +2,9 @@
 Version=1.0
 Terminal=false
 Type=Application
-Icon=green
-Name=Blockstream Green
-Exec=green %U
+Icon=linux_production
+Name=Blockstream 
+Exec=blockstream %U
 Categories=Office;Finance;
+Keywords=Blockstream;Wallet;Bitcoin;Blockstream;Liquid;
 MimeType=x-scheme-handler/bitcoin;x-scheme-handler/liquidnetwork;

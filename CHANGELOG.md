@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.26] - 2025-04-23
+## [2.0.27] - 2025-07-28
+### Changed:
+- Updated application name, icon and installers
+- Minor user interface improvements
+- Option to dismiss new version banner
+
+### Fixes:
+- Handle network failure when setting the wallet pin
+
+## [2.0.26] - 2025-07-10
 ### Changed:
 - Green is now Blockstream App, application style is updated to match the rebrand
 - Hardware wallet advertisement segmentation

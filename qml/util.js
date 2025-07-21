@@ -238,7 +238,7 @@ function filterPromo(wallets, promo) {
             sww ++
         }
     }
-    console.log('filter pomo', promo.id, target, sww, hww, jade_classic, jade_plus)
+    console.log('filter promo', promo.id, target, sww, hww, jade_classic, jade_plus)
     if (target === 'only_sww') {
         return sww > 0 && hww === 0
     } else if (target === 'jade_user') {

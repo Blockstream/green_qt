@@ -162,6 +162,9 @@ int main(int argc, char *argv[])
         g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     }
 
+    // only change app name after setting g_data_location
+    QCoreApplication::setApplicationName("Blockstream");
+
     for (auto arg : app.arguments()) {
         if (arg.startsWith("--ui")) {
             return ui_handler(app, argc, argv);
@@ -279,11 +282,11 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     });
 
 #if defined (Q_OS_LINUX)
-    QCoreApplication::setApplicationName("Blockstream Green");
+    QApplication::setWindowIcon(QIcon(":/icons/production.png"));
 #elif defined (Q_OS_MACOS)
-    QCoreApplication::setApplicationName("Blockstream Green");
-    QApplication::setWindowIcon(QIcon(":/icons/green.png"));
+    QApplication::setWindowIcon(QIcon(":/icons/mac-production.png"));
 #elif defined (Q_OS_WINDOWS)
+    QApplication::setWindowIcon(QIcon(":/icons/production.png"));
     if (AttachConsole(ATTACH_PARENT_PROCESS)) {
         freopen("CONOUT$", "w", stdout);
         freopen("CONOUT$", "w", stderr);

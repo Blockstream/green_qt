@@ -1,4 +1,4 @@
-qt_add_resources(green "images"
+qt_add_resources(${APP_TARGET} "images"
     PREFIX "/"
     BASE assets
     FILES
@@ -246,7 +246,7 @@ qt_add_resources(green "images"
         assets/svg3/Wallet.svg
 )
 
-qt_add_resources(green "fonts"
+qt_add_resources(${APP_TARGET} "fonts"
     PREFIX "/"
     BASE assets
     FILES

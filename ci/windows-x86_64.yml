@@ -3,7 +3,7 @@ windows-x86_64:build:
   extends:
     - .build
   after_script:
-    - mv build/installer.iss build/green.exe .
+    - mv build/installer.iss build/blockstream.exe .
   tags:
     - cloud
   variables:
@@ -13,7 +13,7 @@ windows-x86_64:build:
     expire_in: 1 week
     paths:
       - installer.iss
-      - green.exe
+      - blockstream.exe
 
 .windows:sign:
   image:
@@ -50,11 +50,11 @@ windows-x86_64:sign:
     when: always
     paths:
       - installer.iss
-      - "Blockstream Green.exe"
+      - "Blockstream.exe"
   needs: ["windows-x86_64:build"]
   variables:
-    INPUT_FILE: green.exe
-    OUTPUT_FILE: "Blockstream Green.exe"
+    INPUT_FILE: blockstream.exe
+    OUTPUT_FILE: "Blockstream.exe"
 
 windows-x86_64:installer:
   image:
@@ -68,7 +68,7 @@ windows-x86_64:installer:
     expire_in: 1 week
     when: always
     paths:
-      - GreenSetup.exe
+      - Setup.exe
   needs: ["windows-x86_64:sign"]
   script:
     - ls -la
@@ -83,8 +83,8 @@ windows-x86_64:sign-installer:
     expire_in: 1 week
     when: always
     paths:
-      - BlockstreamGreenSetup.exe
+      - BlockstreamSetup.exe
   needs: ["windows-x86_64:installer"]
   variables:
-    INPUT_FILE: GreenSetup.exe
-    OUTPUT_FILE: "BlockstreamGreenSetup.exe"
+    INPUT_FILE: Setup.exe
+    OUTPUT_FILE: "BlockstreamSetup.exe"

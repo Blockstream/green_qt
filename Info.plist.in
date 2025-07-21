@@ -7,11 +7,11 @@
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleName</key>
-  <string>Blockstream Green</string>
+  <string>Blockstream</string>
   <key>CFBundleIdentifier</key>
-  <string>com.blockstream.Green</string>
+  <string>com.blockstream.App</string>
   <key>CFBundleExecutable</key>
-  <string>Blockstream Green</string>
+  <string>Blockstream</string>
   <key>CFBundleVersion</key>
   <string>@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@</string>
   <key>CFBundleShortVersionString</key>
@@ -21,7 +21,7 @@
   <key>NSHumanReadableCopyright</key>
   <string></string>
   <key>CFBundleIconFile</key>
-  <string>green.icns</string>
+  <string>production.icns</string>
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>NSPrincipalClass</key>
@@ -38,7 +38,7 @@
       <key>CFBundleTypeRole</key>
       <string>Editor</string>
       <key>CFBundleURLName</key>
-      <string>com.blockstream.green</string>
+      <string>com.blockstream.app</string>
       <key>CFBundleURLSchemes</key>
       <array>
         <string>bitcoin</string>

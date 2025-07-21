@@ -2,11 +2,11 @@
     "version" : "VERSION_STRING",
     "shasums": "CHANNEL_STRING/VERSION_STRING/SHA256SUMS.asc",
     "files" : [
-      { "arch":"x86_64", "sys":"linux", "label": "appimage", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-x86_64.AppImage" },
-      { "arch":"x86_64", "sys":"linux", "label": "standalone", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-linux-x86_64.tar.gz" },
-      { "arch":"universal", "sys":"macos", "label": "application", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-universal.dmg" },
-      { "arch":"arm64", "sys":"macos", "label": "application", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-arm64.dmg" },
-      { "arch":"x86_64", "sys":"macos", "label": "application", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-x86_64.dmg" },
-      { "arch":"x86_64", "sys":"windows", "label": "installer", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreenSetup-x86_64.exe" }
+      { "arch":"x86_64", "sys":"linux", "label": "appimage", "filename":"CHANNEL_STRING/VERSION_STRING/Blockstream-x86_64.AppImage" },
+      { "arch":"x86_64", "sys":"linux", "label": "standalone", "filename":"CHANNEL_STRING/VERSION_STRING/Blockstream-linux-x86_64.tar.gz" },
+      { "arch":"universal", "sys":"macos", "label": "application", "filename":"CHANNEL_STRING/VERSION_STRING/Blockstream-universal.dmg" },
+      { "arch":"arm64", "sys":"macos", "label": "application", "filename":"CHANNEL_STRING/VERSION_STRING/Blockstream-arm64.dmg" },
+      { "arch":"x86_64", "sys":"macos", "label": "application", "filename":"CHANNEL_STRING/VERSION_STRING/Blockstream-x86_64.dmg" },
+      { "arch":"x86_64", "sys":"windows", "label": "installer", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamSetup-x86_64.exe" }
     ]
 }

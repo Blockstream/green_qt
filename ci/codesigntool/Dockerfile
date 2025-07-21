@@ -1,4 +1,4 @@
-from debian:buster-slim
+FROM debian:stable-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NAME=CodeSignTool
@@ -6,7 +6,7 @@ ENV VERSION=v1.3.2
 ENV CODE_SIGN_TOOL_PATH=/$NAME-$VERSION
 ENV PATH=$CODE_SIGN_TOOL_PATH:$PATH
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl openjdk-11-jre unzip
+RUN apt-get update && apt-get install -y --no-install-recommends curl openjdk-17-jre unzip
 
 RUN curl -o archive.zip https://www.ssl.com/download/codesigntool-for-linux-and-macos/
 
