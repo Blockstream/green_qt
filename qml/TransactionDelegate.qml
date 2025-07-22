@@ -67,6 +67,9 @@ ItemDelegate {
         if (transaction.type === Transaction.Mixed) {
             return qsTrId('id_swap')
         }
+        if (transaction.type === Transaction.NotUnblindable) {
+            return 'Not unblindable'
+        }
         return JSON.stringify(tx, null, '\t')
     }
     contentItem: RowLayout {

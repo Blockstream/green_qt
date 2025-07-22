@@ -59,6 +59,7 @@ public:
         Outgoing,
         Redeposit,
         Mixed,
+        NotUnblindable,
     };
     Q_ENUM(Type)
     enum class SPVStatus {

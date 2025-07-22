@@ -18,6 +18,7 @@ Transaction::Type ParseType(const QString& type)
     if (type == QStringLiteral("outgoing")) return Transaction::Type::Outgoing;
     if (type == QStringLiteral("redeposit")) return Transaction::Type::Redeposit;
     if (type == QStringLiteral("mixed")) return Transaction::Type::Mixed;
+    if (type == QStringLiteral("not unblindable")) return Transaction::Type::NotUnblindable;
     return Transaction::Type::Unknown;
 }
 
