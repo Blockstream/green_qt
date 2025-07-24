@@ -43,22 +43,19 @@ Label {
     elide: Label.ElideMiddle
     rightPadding: collapsible.width
     text: {
-        if (self.address instanceof Address) {
-            let parts = self.address.address.match(/.{1,4}/g) ?? []
-            parts = parts
-                .map((part, index) => `<span style="color:${index < 2 || index > parts.length - 3 ? '#00BCFF' : '#FFFFFF'}">${part}</span>`)
-            if (self.elide !== Label.ElideNone) {
-                if (parts.length > 8) {
-                    return parts.slice(0, 4).join(' ') + '<br/>⋯<br/>' + parts.slice(-4).join(' ')
-                }
-                if (parts.length === 8) {
-                    return parts.slice(0, 4).join(' ') + '<br/>' + parts.slice(-4).join(' ')
-                }
+        const text = self.address instanceof Address ? self.address.address : self.address ?? ''
+        let parts = text.match(/.{1,4}/g) ?? []
+        parts = parts
+            .map((part, index) => `<span style="color:${index < 2 || index > parts.length - 3 ? '#00BCFF' : '#FFFFFF'}">${part}</span>`)
+        if (self.elide !== Label.ElideNone) {
+            if (parts.length > 8) {
+                return parts.slice(0, 4).join(' ') + '<br/>⋯<br/>' + parts.slice(-4).join(' ')
             }
-            return parts.join(' ')
-        } else {
-            return self.address ?? ''
+            if (parts.length === 8) {
+                return parts.slice(0, 4).join(' ') + '<br/>' + parts.slice(-4).join(' ')
+            }
         }
+        return parts.join(' ')
     }
     textFormat: Label.RichText
     wrapMode: Label.WordWrap
