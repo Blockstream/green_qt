@@ -25,6 +25,7 @@ StackViewPage {
             return { satoshi: String(controller.account.json.satoshi[controller.asset?.key ?? 'btc']) }
         }
     }
+    readonly property bool bumpRedeposit: controller.previousTransaction?.type === Transaction.Redeposit
     function pushSelectCoinsPage() {
         self.StackView.view.push(select_coins_page, {
             account: controller.account,
@@ -167,6 +168,7 @@ StackViewPage {
             }
             FieldTitle {
                 text: qsTrId('id_address')
+                visible: !self.bumpRedeposit
             }
             AddressField {
                 Layout.bottomMargin: 15
@@ -185,14 +187,17 @@ StackViewPage {
                     if (error === 'id_assets_cannot_be_used_on_bitcoin') return error
                 }
                 readOnly: !!self.transaction
+                visible: !self.bumpRedeposit
             }
             ErrorPane {
                 Layout.topMargin: -30
                 Layout.bottomMargin: 15
                 error: address_field.error
+                visible: !self.bumpRedeposit
             }
             FieldTitle {
                 text: qsTrId('id_amount')
+                visible: !self.bumpRedeposit
             }
             AmountField {
                 Layout.bottomMargin: 15
@@ -215,6 +220,7 @@ StackViewPage {
                         return error
                     }
                 }
+                visible: !self.bumpRedeposit
                 onCleared: controller.recipient.greedy = false
                 onTextEdited: controller.recipient.greedy = false
             }
@@ -222,6 +228,7 @@ StackViewPage {
                 Layout.topMargin: -30
                 Layout.bottomMargin: 15
                 error: amount_field.text.length > 0 || controller.recipient.greedy ? amount_field.error : null
+                visible: !self.bumpRedeposit
             }
             Convert {
                 id: available_convert
@@ -340,6 +347,7 @@ StackViewPage {
                     fiat: amount_field.fiat,
                     unit: amount_field.unit,
                     address_input: address_field.address_input,
+                    bumpRedeposit: self.bumpRedeposit,
                 })
             }
         }

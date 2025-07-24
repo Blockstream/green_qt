@@ -16,6 +16,7 @@ StackViewPage {
     required property bool fiat
     required property string unit
     required property var transaction
+    required property bool bumpRedeposit
     property bool note: controller.memo.length > 0
     property string address_input
     StackView.onActivated: controller.cancel()
@@ -89,6 +90,7 @@ StackViewPage {
             }
             FieldTitle {
                 text: qsTrId('id_address')
+                visible: !self.bumpRedeposit
             }
             AddressLabel {
                 Layout.bottomMargin: 15
@@ -99,9 +101,11 @@ StackViewPage {
                     radius: 5
                 }
                 padding: 20
+                visible: !self.bumpRedeposit
             }
             FieldTitle {
                 text: qsTrId('id_amount')
+                visible: !self.bumpRedeposit
             }
             AmountField {
                 Layout.bottomMargin: 15
@@ -110,6 +114,7 @@ StackViewPage {
                 fiat: self.fiat
                 convert: self.recipient.convert
                 readOnly: true
+                visible: !self.bumpRedeposit
             }
             LinkButton {
                 Layout.alignment: Qt.AlignCenter
