@@ -78,7 +78,7 @@ StackViewPage {
                 }
             }
             FieldTitle {
-                text: 'Asset & Account'
+                text: qsTrId('id_account__asset')
             }
             AccountAssetField {
                 Layout.bottomMargin: 15
