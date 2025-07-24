@@ -90,18 +90,15 @@ StackViewPage {
             FieldTitle {
                 text: qsTrId('id_address')
             }
-            Label {
+            AddressLabel {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
+                address: self.recipient.address
                 background: Rectangle {
                     color: '#222226'
                     radius: 5
                 }
                 padding: 20
-                font.pixelSize: 14
-                font.weight: 500
-                elide: Label.ElideMiddle
-                text: self.recipient.address
             }
             FieldTitle {
                 text: qsTrId('id_amount')
