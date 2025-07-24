@@ -263,6 +263,12 @@ StackViewPage {
     }
     footerItem: ColumnLayout {
         Convert {
+            id: previous_fee_convert
+            account: controller.account
+            input: ({ satoshi: String(controller.previousTransaction?.data?.fee ?? 0) })
+            unit: controller.account.session.unit
+        }
+        Convert {
             id: fee_convert
             account: controller.account
             input: ({ satoshi: String(controller.transaction.fee ?? 0) })
@@ -273,6 +279,35 @@ StackViewPage {
                 const error = controller.transaction?.error
                 if (error === 'id_invalid_replacement_fee_rate') return error
                 if (error === 'Insufficient funds for fees') return error
+            }
+        }
+        RowLayout {
+            visible: !!controller.previousTransaction
+            Label {
+                font.pixelSize: 14
+                font.weight: 500
+                text: qsTrId('id_previous_fee')
+            }
+            HSpacer {
+            }
+            Label {
+                font.features: { 'calt': 0, 'zero': 1 }
+                font.pixelSize: 14
+                font.weight: 500
+                text: previous_fee_convert.output.label
+            }
+        }
+        RowLayout {
+            Layout.bottomMargin: 20
+            visible: !!controller.previousTransaction
+            HSpacer {
+            }
+            Label {
+                font.features: { 'calt': 0, 'zero': 1 }
+                color: '#6F6F6F'
+                font.pixelSize: 12
+                font.weight: 400
+                text: '~ ' + previous_fee_convert.fiat.label
             }
         }
         RowLayout {

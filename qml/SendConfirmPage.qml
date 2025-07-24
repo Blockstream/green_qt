@@ -149,6 +149,12 @@ StackViewPage {
     footer: ColumnLayout {
         spacing: 10
         Convert {
+            id: previous_fee_convert
+            account: self.account
+            input: ({ satoshi: String(self.transaction.previous_transaction?.fee ?? 0) })
+            unit: self.account.session.unit
+        }
+        Convert {
             id: fee_convert
             account: self.account
             input: ({ satoshi: String(self.transaction.fee) })
@@ -163,6 +169,34 @@ StackViewPage {
                 return { satoshi: String(total) }
             }
             unit: self.account.session.unit
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            visible: !!self.transaction.previous_transaction
+            Label {
+                Layout.alignment: Qt.AlignTop
+                Layout.fillWidth: true
+                font.pixelSize: 14
+                font.weight: 500
+                opacity: 0.5
+                text: qsTrId('id_previous_fee')
+            }
+            ColumnLayout {
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    opacity: 0.5
+                    font.pixelSize: 14
+                    font.weight: 500
+                    text: previous_fee_convert.output.label
+                }
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    opacity: 0.5
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: '~ ' + previous_fee_convert.fiat.label
+                }
+            }
         }
         RowLayout {
             Layout.fillWidth: true
