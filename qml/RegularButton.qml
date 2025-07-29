@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
+    property bool black: false
     property bool busy: false
     HoverHandler {
         cursorShape: Qt.PointingHandCursor
@@ -21,7 +22,7 @@ AbstractButton {
         Rectangle {
             anchors.fill: parent
             border.width: 2
-            border.color: '#00BCFF'
+            border.color: self.black ? '#fff' : '#00BCFF'
             color: 'transparent'
             radius: 8
             visible: self.visualFocus
@@ -29,9 +30,9 @@ AbstractButton {
         Rectangle {
             anchors.fill: parent
             anchors.margins: self.visualFocus ? 4 : 0
-            color: Qt.alpha('#FFF', self.enabled && self.hovered ? 0.2 : 0)
+            color: Qt.alpha(self.black ? '#000' : '#FFF', self.enabled && self.hovered ? 0.2 : 0)
             border.width: 1
-            border.color: '#FFF'
+            border.color: self.black ? '#000' : '#FFF'
             radius: self.visualFocus ? 4 : 8
         }
     }
@@ -45,6 +46,7 @@ AbstractButton {
             visible: image.status === Image.Ready
         }
         Label {
+            color: self.black ? '#000' : '#fff'
             font: self.font
             horizontalAlignment: Text.AlignHCenter
             text: self.text
@@ -63,6 +65,7 @@ AbstractButton {
             horizontalCollapse: true
             verticalCollapse: false
             ProgressIndicator {
+                black: self.black
                 x: 10
                 width: 24
                 height: 24

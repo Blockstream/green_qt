@@ -29,4 +29,9 @@ WalletDrawer {
         active: true
         segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
     }
+    onClosed: {
+        if (self.url && stack_view.currentItem instanceof SendPage) {
+            WalletManager.openUrl = self.url
+        }
+    }
 }

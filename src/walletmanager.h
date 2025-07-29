@@ -14,7 +14,7 @@ class WalletManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<Wallet> wallets READ wallets NOTIFY changed)
     Q_PROPERTY(bool hasOpenUrl READ hasOpenUrl NOTIFY openUrlChanged FINAL)
-    Q_PROPERTY(QString openUrl READ openUrl NOTIFY openUrlChanged FINAL)
+    Q_PROPERTY(QString openUrl READ openUrl WRITE setOpenUrl NOTIFY openUrlChanged FINAL)
 public:
     explicit WalletManager();
     virtual ~WalletManager();

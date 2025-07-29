@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Canvas {
+    property bool black: false
     property int current: 0
     property int max: 0
     property real progress: 0
@@ -39,7 +40,7 @@ Canvas {
         var ctx = getContext("2d");
         ctx.clearRect(0, 0, width, height)
         ctx.lineWidth = 1
-        ctx.strokeStyle = '#FFF'
+        ctx.strokeStyle = self.black ? '#000' : '#FFF'
         ctx.beginPath()
         ctx.arc(centerX, centerY, radius, startAngle - Math.PI / 2, startAngle +  sweepAngle - Math.PI / 2)
         ctx.stroke()

@@ -35,7 +35,7 @@ Collapsible {
             spacing: 20
             ColumnLayout {
                 Label {
-                    color: '#FFF'
+                    color: '#000'
                     font.pixelSize: 16
                     font.weight: 500
                     opacity: 0.9
@@ -49,7 +49,7 @@ Collapsible {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    color: '#FFF'
+                    color: '#000'
                     elide: Label.ElideMiddle
                     font.pixelSize: 12
                     font.weight: 600
@@ -57,6 +57,7 @@ Collapsible {
                 }
             }
             RegularButton {
+                black: true
                 topPadding: 10
                 bottomPadding: 10
                 enabled: self.compatible
@@ -68,6 +69,7 @@ Collapsible {
                 }
             }
             RegularButton {
+                black: true
                 topPadding: 10
                 bottomPadding: 10
                 text: qsTrId('id_cancel')
@@ -75,6 +77,7 @@ Collapsible {
                 onClicked: WalletManager.clearOpenUrl()
             }
             CloseButton {
+                black: true
                 visible: !self.context
                 onClicked: WalletManager.clearOpenUrl()
             }
