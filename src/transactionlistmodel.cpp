@@ -46,6 +46,9 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
 
     if (m_get_transactions) return;
 
+    auto context = m_account->context();
+    if (!context) return;
+
     m_get_transactions = new GetTransactionsTask(offset, count, m_account);
 
     connect(m_get_transactions, &Task::finished, this, [=] {
@@ -80,7 +83,7 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
             fetch(false, offset + count, count);
         }
     });
-    m_account->context()->dispatcher()->add("transaction list model", m_get_transactions);
+    context->dispatcher()->add("transaction list model", m_get_transactions);
 }
 
 QHash<int, QByteArray> TransactionListModel::roleNames() const
