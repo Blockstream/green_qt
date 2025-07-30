@@ -208,11 +208,14 @@ QString Transaction::unblindedLink()
 
 void Transaction::updateMemo(const QString& memo)
 {
-    Q_ASSERT(memo.length() <= 1024);
+    if (memo.length() > 1024) return;
     if (m_memo == memo) return;
     auto txhash = m_data.value("txhash").toString().toLocal8Bit();
-    int err = GA_set_transaction_memo(m_account->session()->m_session, txhash.constData(), memo.toUtf8().constData(), 0);
-    Q_ASSERT(err == GA_OK);
+    if (!m_account->session()) return;
+    auto session = m_account->session()->m_session;
+    if (!session) return;
+    int rc = GA_set_transaction_memo(session, txhash.constData(), memo.toUtf8().constData(), 0);
+    if (rc != GA_OK) return;
     setMemo(memo);
 }
 
