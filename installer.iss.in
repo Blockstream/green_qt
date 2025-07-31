@@ -1,20 +1,18 @@
 #define AppName "Blockstream"
+#define PreviousAppName "Blockstream Green"
 #define AppVersion "@PROJECT_VERSION@"
 #define AppPublisher "Blockstream"
-#define MyAppURL "https://blockstream.com/app/"
+#define AppURL "https://blockstream.com/app/"
 
 [Setup]
-; NOTE: The value of AppId uniquely identifies this application.
-; Do not use the same AppId value in installers for other applications.
-; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{3AD17C10-A864-47AB-895F-FA44CA654295}
+AppId={{e6223cfe-f798-4592-a835-c6a9b3d874d8}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppVerName="Blockstream {#AppVersion}"
 AppPublisher={#AppPublisher}
-AppPublisherURL={#MyAppURL}
-AppSupportURL={#MyAppURL}
-AppUpdatesURL={#MyAppURL}
+AppPublisherURL={#AppURL}
+AppSupportURL={#AppURL}
+AppUpdatesURL={#AppURL}
 DefaultDirName={pf}\{#AppPublisher}\{#AppName}
 UninstallFilesDir={pf}\{#AppPublisher}\{#AppName}
 UninstallDisplayIcon={app}\{#AppName}.exe
@@ -27,13 +25,13 @@ ChangesEnvironment=true
 PrivilegesRequired=admin
 ArchitecturesInstallIn64BitMode=x64
 CloseApplications=force
+DisableWelcomePage=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
 Source: "{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -42,10 +40,23 @@ Source: "{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppName}.exe"; IconFilename: "{app}\{#AppName}.exe"; IconIndex: 0;
 Name: "{group}\{cm:UninstallProgram,{#AppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppName}.exe"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#AppName}"; Filename: "{app}\{#AppName}.exe"; Tasks: quicklaunchicon
+
+[Registry]
+Root: HKLM; Subkey: "Software\{#PreviousAppName}"; Flags: deletekey
+Root: HKLM; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{3AD17C10-A864-47AB-895F-FA44CA654295}_is1"; Flags: deletekey
 
 [InstallDelete]
-Type: files; Name: "{group}\{#AppName}.lnk"
+Type: files; Name: "{group}\{#PreviousAppName}.lnk"
+Type: files; Name: "{group}\Uninstall {#PreviousAppName}.lnk"
+Type: files; Name: "{userdesktop}\{#PreviousAppName}.lnk"
+Type: files; Name: "{commondesktop}\{#PreviousAppName}.lnk"
+Type: filesandordirs; Name: "{pf32}\{#AppPublisher}\{#PreviousAppName}"
+Type: filesandordirs; Name: "{pf64}\{#AppPublisher}\{#PreviousAppName}"
+Type: filesandordirs; Name: "{pf}\{#AppPublisher}\{#PreviousAppName}"
+
+[Messages]
+WelcomeLabel1=Before we start
+WelcomeLabel2=To access your existing wallets, please use the new Blockstream app. The installer will replace the old Blockstream Green app, but rest assured, all your wallets are safe and will be fully accessible in the new application.
 
 [Code]
 const

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(blockstream VERSION 2.0.27 LANGUAGES CXX)
+project(blockstream VERSION 2.0.28 LANGUAGES CXX)
 
 set(APP_TARGET blockstream)
 
