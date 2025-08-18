@@ -1,5 +1,5 @@
 windows-x86_64:build:
-  image: $CI_REGISTRY_IMAGE/windows-x86_64@sha256:3b109f6fd4a687d12dd614fe470cfd507816505678868200af3d561f4b76786b
+  image: $CI_REGISTRY_IMAGE/windows-x86_64@sha256:8d08bbdd8bae129cab3d7a0a19177c9ff2637bae49a68ba33f86e2779738199c
   extends:
     - .build
   after_script:

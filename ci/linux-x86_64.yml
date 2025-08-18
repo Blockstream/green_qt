@@ -1,5 +1,5 @@
 .linux-x86_64:
-  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:312badfb7ff08d5691b3b187d133a61fe6d304965135acc10c5c0473753d5672
+  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:388d18d57d17d9785931638a51e475b1ca9a149eb3fabd7b5fc6591215eb0275
   extends:
     - .build
   tags:
