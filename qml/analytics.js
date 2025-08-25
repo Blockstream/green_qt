@@ -69,7 +69,6 @@ function segmentationSession(Settings, context) {
     if (Settings.useProxy) app_settings.push('proxy')
     if (Settings.enableTestnet) app_settings.push('testnet')
     if (Settings.usePersonalNode) app_settings.push('electrum_server')
-    if (Settings.enableSPV) app_settings.push('spv')
     segmentation.app_settings = app_settings.join(',')
     if (context) {
         const device = context.device
@@ -112,7 +111,6 @@ function segmentationFirmwareUpdate(Settings, device, firmware) {
     if (Settings.useProxy) app_settings.push('proxy')
     if (Settings.enableTestnet) app_settings.push('testnet')
     if (Settings.usePersonalNode) app_settings.push('electrum_server')
-    if (Settings.enableSPV) app_settings.push('spv')
     segmentation.app_settings = app_settings.join(',')
     if (device instanceof JadeDevice) {
         segmentation.brand = 'Blockstream'

@@ -389,16 +389,6 @@ AbstractDialog {
                         }
                     }
                 }
-                SectionLabel {
-                    Layout.topMargin: 30
-                    text: qsTrId('id_spv_verification')
-                }
-                SwitchButton {
-                    icon.source: 'qrc:/svg/tx-check.svg'
-                    text: qsTrId('id_verify_your_bitcoin')
-                    checked: Settings.enableSPV
-                    onClicked: Settings.enableSPV = !Settings.enableSPV
-                }
                 VSpacer {
                 }
             }

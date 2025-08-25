@@ -9,16 +9,6 @@ Label {
     readonly property bool liquid: self.transaction.account.network.liquid
     readonly property bool completed: self.confirmations >= (self.liquid ? 2 : 6)
     readonly property var status: {
-        switch (self.transaction.spv) {
-        case Transaction.Verified:
-            return { color: '#0A9252', text: qsTrId('id_verified'), visible: true }
-        case Transaction.NotVerified:
-            return { color: '#FF0000', text: qsTrId('id_invalid_merkle_proof'), visible: true }
-        case Transaction.NotLongest:
-            return { color: '#FF6600', text: qsTrId('id_not_on_longest_chain'), visible: true }
-        case Transaction.InProgress:
-            return { color: '#d2934a', text: qsTrId('id_verifying_transactions'), visible: true }
-        }
         if (self.completed) {
             return { color: '#0A9252', text: qsTrId('id_completed'), visible: false }
         }

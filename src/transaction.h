@@ -47,7 +47,6 @@ class Transaction : public QObject
     Q_PROPERTY(QQmlListProperty<TransactionAmount> amounts READ amounts NOTIFY amountsChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     Q_PROPERTY(QString memo READ memo NOTIFY memoChanged)
-    Q_PROPERTY(SPVStatus spv READ spvStatus NOTIFY spvStatusChanged)
     Q_PROPERTY(QJsonObject destination READ destination NOTIFY dataChanged)
     Q_PROPERTY(QUrl url READ url NOTIFY dataChanged)
     QML_ELEMENT
@@ -62,15 +61,6 @@ public:
         NotUnblindable,
     };
     Q_ENUM(Type)
-    enum class SPVStatus {
-        Disabled,
-        Unconfirmed,
-        InProgress,
-        Verified,
-        NotVerified,
-        NotLongest,
-    };
-    Q_ENUM(SPVStatus)
 
     explicit Transaction(Account* account);
     virtual ~Transaction();
@@ -78,7 +68,6 @@ public:
     Type type() const { return m_type; }
     QString hash() const { return m_data.value("txhash").toString(); }
     QString memo() const { return m_memo; }
-    SPVStatus spvStatus() const { return m_spv_status; }
 
     bool isUnconfirmed() const;
 
@@ -105,19 +94,16 @@ signals:
     void amountsChanged();
     void dataChanged();
     void memoChanged();
-    void spvStatusChanged();
 
 private:
     void setType(Type type);
     void setMemo(const QString& memo);
-    void setSpvStatus(SPVStatus spv_status);
 public:
     Account* const m_account;
     Type m_type{Type::Unknown};
     QList<TransactionAmount*> m_amounts;
     QJsonObject m_data;
     QString m_memo;
-    SPVStatus m_spv_status{SPVStatus::Disabled};
 };
 
 #endif // GREEN_TRANSACTION_H

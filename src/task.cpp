@@ -313,8 +313,7 @@ namespace {
         QJsonObject params{
             { "name", network->id() },
             { "use_tor", session->useTor() },
-            { "user_agent", user_agent },
-            { "spv_enabled", session->enableSPV() }
+            { "user_agent", user_agent }
         };
         if (!session->proxy().isEmpty()) {
             params.insert("proxy", session->proxy());

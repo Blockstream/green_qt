@@ -25,7 +25,6 @@ class Session : public Entity
     Q_PROPERTY(bool useTor READ useTor CONSTANT)
     Q_PROPERTY(bool useProxy READ useProxy CONSTANT)
     Q_PROPERTY(QString proxy READ proxy CONSTANT)
-    Q_PROPERTY(bool enableSPV READ enableSPV CONSTANT)
     Q_PROPERTY(bool usePersonalNode READ usePersonalNode CONSTANT)
     Q_PROPERTY(bool enableElectrumTls READ enableElectrumTls CONSTANT)
     Q_PROPERTY(QString electrumUrl READ electrumUrl CONSTANT)
@@ -52,7 +51,6 @@ public:
     bool useTor() const { return m_use_tor; }
     bool useProxy() const { return m_use_proxy; }
     QString proxy() const { return m_proxy; }
-    bool enableSPV() const { return m_enable_spv; }
     bool usePersonalNode() const { return !m_electrum_url.isEmpty(); }
     bool enableElectrumTls() const { return m_enable_electrum_tls; }
     QString electrumUrl() const { return m_electrum_url; }
@@ -120,7 +118,6 @@ private:
     bool const m_use_tor;
     bool const m_use_proxy;
     QString const m_proxy;
-    bool const m_enable_spv;
     bool const m_enable_electrum_tls;
     QString const m_electrum_url;
     bool m_active{false};

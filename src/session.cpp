@@ -35,7 +35,6 @@ Session::Session(Network* network, QObject* parent)
     , m_use_tor(Settings::instance()->useTor())
     , m_use_proxy(Settings::instance()->useProxy())
     , m_proxy(Settings::instance()->proxy())
-    , m_enable_spv(!network->isLiquid() ? Settings::instance()->enableSPV() : false)
     , m_enable_electrum_tls(Settings::instance()->enableElectrumTls())
     , m_electrum_url(ElectrumUrlForNetwork(network))
 {
