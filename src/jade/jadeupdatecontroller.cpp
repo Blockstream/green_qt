@@ -6,6 +6,7 @@
 #include "jadedevice.h"
 #include "json.h"
 #include "session.h"
+#include "progress.h"
 
 #include <QCryptographicHash>
 #include <QFile>

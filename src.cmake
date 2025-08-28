@@ -2,7 +2,8 @@ SET(TARGET_SOURCES
 	src/account.cpp
 	src/accountcontroller.cpp
 	src/accountlistmodel.cpp
-	src/activity.cpp
+	src/activity.h src/activity.cpp
+	src/progress.h src/progress.cpp
 	src/activitymanager.cpp
 	src/address.cpp
 	src/addresslistmodel.cpp
