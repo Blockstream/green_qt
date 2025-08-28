@@ -1,7 +1,7 @@
 #ifndef GREEN_RECEIVEADDRESSCONTROLLER_H
 #define GREEN_RECEIVEADDRESSCONTROLLER_H
 
-#include "controller.h"
+#include "sessioncontroller.h"
 
 #include <QJsonObject>
 #include <QObject>

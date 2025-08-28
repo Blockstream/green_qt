@@ -13,8 +13,13 @@ SET(TARGET_SOURCES
 	src/command.cpp
         src/context.cpp
         src/context.h
-	src/controller.cpp
-	src/controller.h
+	src/controllers/abstractcontroller.h src/controllers/abstractcontroller.cpp
+	src/controller.h src/controller.cpp
+	src/controllers/sessioncontroller.h src/controllers/sessioncontroller.cpp
+	src/controllers/watchonlycontroller.h src/controllers/watchonlycontroller.cpp
+	src/controllers/twofactorcontroller.h src/controllers/twofactorcontroller.cpp
+	src/controllers/signmessagecontroller.h src/controllers/signmessagecontroller.cpp
+	src/controllers/bcurcontroller.h src/controllers/bcurcontroller.cpp
 	src/convert.cpp
 	src/convert.h
 	src/createaccountcontroller.cpp
