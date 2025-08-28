@@ -23,7 +23,9 @@ SET(TARGET_SOURCES
 	src/convert.cpp
 	src/convert.h
 	src/createaccountcontroller.cpp
-	src/device.cpp
+	src/device.h src/device.cpp
+	src/deviceactivities.h src/deviceactivities.cpp
+	src/devicesession.h src/devicesession.cpp
 	src/devicediscoveryagent.cpp
 	src/devicediscoveryagent_linux.cpp
 	src/devicediscoveryagent_macos.cpp
