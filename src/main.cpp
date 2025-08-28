@@ -22,7 +22,9 @@
 
 #include "config.h"
 #include "application.h"
+#include "applicationcontroller.h"
 #include "analytics.h"
+#include "zxing.h"
 #include "asset.h"
 #include "clipboard.h"
 #include "devicemanager.h"

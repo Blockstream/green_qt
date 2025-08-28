@@ -81,6 +81,8 @@ SET(TARGET_SOURCES
 	src/signtransactioncontroller.h src/signtransactioncontroller.cpp
         src/notification.h src/notification.cpp
         src/application.h src/application.cpp
+        src/applicationcontroller.h src/applicationcontroller.cpp
+        src/zxing.h src/zxing.cpp
         src/redepositcontroller.h src/redepositcontroller.cpp
         src/jadeverifyaddresscontroller.h src/jadeverifyaddresscontroller.cpp
         src/promo.h src/promo.cpp
