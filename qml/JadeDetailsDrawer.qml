@@ -117,7 +117,7 @@ AbstractDrawer {
                     KeyLabel {
                         text: qsTrId('id_system_location')
                     }
-                    Label {
+                    CopyableLabel {
                         Layout.fillWidth: true
                         horizontalAlignment: Label.AlignRight
                         text: self.device.systemLocation
