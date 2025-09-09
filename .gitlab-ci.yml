@@ -8,9 +8,18 @@ stages:
   - lint
   - depends
   - build
+  - test
   - staple
   - installer
   - package
+
+sast:
+  stage: test
+  before_script:
+    - if [[ "$IGNORE_SECURITY" == "true" ]]; then exit 0; fi
+  tags:
+    - k8s-docker
+
 
 .depends:
   stage: depends
@@ -49,3 +58,5 @@ include:
   - local: "ci/macos-x86_64.yml"
   - local: "ci/macos-universal.yml"
   - local: "ci/package.yml"
+  - template: Jobs/SAST.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
