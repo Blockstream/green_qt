@@ -1,5 +1,5 @@
 FROM ubuntu:jammy AS base0
-COPY ci/linux-x86_64/setup.sh .
+COPY ci/linux-x86_64-shared/setup.sh .
 RUN ./setup.sh
 ENV PREFIX=/depends/linux-x86_64
 ENV HOST=linux
@@ -12,7 +12,7 @@ RUN curl -L -O https://download.qt.io/official_releases/online_installers/qt-onl
 RUN chmod +x qt-online-installer-linux-x64-online.run
 ARG QT_INSTALLER_JWT_TOKEN
 ENV QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN}
-RUN ./qt-online-installer-linux-x64-online.run --root /qt --accept-licenses --default-answer --confirm-command --accept-obligations install qt.qt6.683.linux_gcc_64 qt.qt6.683.addons.qt5compat qt.qt6.683.addons.qtconnectivity qt.qt6.683.addons.qtmultimedia qt.qt6.683.addons.qtserialport qt.qt6.683.addons.qtconnectivity
+RUN ./qt-online-installer-linux-x64-online.run --root /qt --accept-licenses --default-answer --confirm-command --accept-obligations install qt.qt6.683.linux_gcc_64 qt.qt6.683.addons.qt5compat qt.qt6.683.addons.qtconnectivity qt.qt6.683.addons.qtmultimedia qt.qt6.683.addons.qtserialport qt.qt6.683.addons.qtconnectivity qt.qt6.683.addons.qtpositioning extensions.qtwebengine.683 qt.qt6.683.addons.qtwebview qt.qt6.683.addons.qtwebchannel
 ENV PATH="/qt/6.8.3/gcc_64/bin/:$PATH"
 
 FROM base AS hidapi

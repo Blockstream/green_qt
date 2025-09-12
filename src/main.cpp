@@ -13,6 +13,7 @@
 #include <QStandardPaths>
 #include <QStyleHints>
 #include <QtPlugin>
+#include <QtWebEngineQuick>
 #include <QSGRendererInterface>
 #include <QSettings>
 #include <QTemporaryDir>
@@ -134,6 +135,9 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("Blockstream");
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
+
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QtWebEngineQuick::initialize();
 
     Application app(argc, argv);
 

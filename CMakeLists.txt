@@ -27,7 +27,7 @@ endif()
 configure_file(config.h.in config.h @ONLY)
 configure_file(installer.iss.in installer.iss @ONLY)
 
-find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
+find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia WebEngineQuick REQUIRED)
 find_package(Countly REQUIRED)
 find_package(hidapi REQUIRED)
 find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
@@ -105,7 +105,7 @@ target_link_libraries(${APP_TARGET}
     ZXing::Core
     Countly::SDK
     libserialport::libserialport
-    Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
+    Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia Qt6::WebEngineQuick
     ${SECURITY}
     hidapi::hidapi
     KDAB::kdsingleapplication
