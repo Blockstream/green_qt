@@ -6,10 +6,14 @@ TEAM_ID=D9W37S9468
 ENTITLEMENTS=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "entitlements.plist" || echo "entitlements_debug.plist")
 
 codesign \
+  --verbose=4 \
   --options runtime \
+  --force \
   --entitlements $ENTITLEMENTS \
   --deep "$FILE" \
   -s "Developer ID Application: Blockstream Corporation ($TEAM_ID)"
+
+codesign --verbose=4 --strict --verify --deep $FILE
 
 ditto -c -k --keepParent "$FILE" "$FILE.zip"
 

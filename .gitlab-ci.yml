@@ -27,12 +27,15 @@ sast:
     - tools/builddeps.sh
 
 .build:
+  when: manual
   stage: build
   variables:
     GREEN_WAYLAND: "OFF"
+  before_script:
+    - export PATH="$PREFIX/bin:$PATH"
   script:
     - |
-      $PREFIX/bin/qt-cmake -S . -B build \
+      qt-cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
         -DGREEN_ENV=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "Production" || echo "Testing") \
         -DGREEN_BUILD_ID=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "" || echo "-$CI_COMMIT_SHORT_SHA") \
