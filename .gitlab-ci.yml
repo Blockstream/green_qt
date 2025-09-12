@@ -59,6 +59,7 @@ include:
   - local: "ci/linux-x86_64.yml"
   - local: "ci/windows-x86_64.yml"
   - local: "ci/macos-arm64.yml"
+  - local: "ci/macos-arm64-shared.yml"
   - local: "ci/macos-x86_64.yml"
   - local: "ci/macos-universal.yml"
   - local: "ci/package.yml"
