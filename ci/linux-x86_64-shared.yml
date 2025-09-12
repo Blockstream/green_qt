@@ -1,0 +1,23 @@
+.linux-x86_64-shared:
+  image: $CI_REGISTRY_IMAGE/linux-x86_64-shared@sha256:1db0c65c83e7b0330478950ef07a5e8a9eb5391d102d31246cd4c1d52dd07a60
+  extends:
+    - .build
+  tags:
+    - cloud
+
+linux-x86_64-shared:build-appimage:
+  extends:
+    - .linux-x86_64-shared
+  before_script:
+    - export PATH="/qt/6.8.3/gcc_64/bin:$PREFIX/bin/:$PATH"
+    - export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH"
+  after_script:
+    - mv build/blockstream .
+    - tools/appimage.sh --plugin-qt $CI_PROJECT_DIR
+    - mkdir linux-x86_64-shared
+    - mv Blockstream-x86_64.AppImage linux-x86_64-shared/
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    paths:
+      - linux-x86_64-shared/Blockstream-x86_64.AppImage

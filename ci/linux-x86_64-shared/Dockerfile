@@ -1,4 +1,4 @@
-FROM ubuntu:jammy AS base
+FROM ubuntu:jammy AS base0
 COPY ci/linux-x86_64/setup.sh .
 RUN ./setup.sh
 ENV PREFIX=/depends/linux-x86_64
@@ -6,7 +6,15 @@ ENV HOST=linux
 ENV ARCH=x86_64
 ENV PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
 ENV CMAKE_INSTALL_PREFIX=$PREFIX
-ENV PATH="$PREFIX/bin/:$PATH"
+
+FROM base0 AS base
+RUN curl -L -O https://download.qt.io/official_releases/online_installers/qt-online-installer-linux-x64-online.run
+RUN chmod +x qt-online-installer-linux-x64-online.run
+ARG QT_INSTALLER_JWT_TOKEN
+ENV QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN}
+RUN ./qt-online-installer-linux-x64-online.run --root /qt --accept-licenses --default-answer --confirm-command --accept-obligations install qt6.8.3-full-dev
+ENV PATH="/qt/6.8.3/gcc_64/bin/:$PATH"
+RUN apt install -yqq libnss3-dev libasound2-dev libxdamage-dev libxkbfile-dev
 
 FROM base AS hidapi
 COPY tools/buildlibusb.sh tools/buildhidapi.sh tools/
@@ -24,22 +32,7 @@ FROM base AS zxing
 COPY tools/buildzxing.sh tools/
 RUN tools/buildzxing.sh
 
-FROM base AS icu
-COPY tools/buildicu.sh tools/
-RUN tools/buildicu.sh
-
-FROM base AS ffmpeg
-COPY tools/buildffmpeg.sh tools/
-RUN tools/buildffmpeg.sh
-
-FROM base AS qt
-COPY --from=ffmpeg /depends /depends
-COPY --from=icu /depends /depends
-COPY --from=gdk /build/gdk/build-gcc/external_deps/ /depends/linux-x86_64/
-COPY tools/buildqt.sh tools/
-RUN tools/buildqt.sh
-
-FROM qt AS kdsa
+FROM base AS kdsa
 COPY tools/buildkdsingleapplication.sh tools/
 RUN tools/buildkdsingleapplication.sh
 
