@@ -37,6 +37,7 @@ docker_codesigntool:
     DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
     DOCKER_BUILDKIT: 1
+    DOCKER_BUILD_ARGS: ""
     BUILDX_GIT_INFO: false
   image: docker:23
   script:
@@ -46,6 +47,7 @@ docker_codesigntool:
       --network=host
       --build-arg BUILDKIT_INLINE_CACHE=1
       --cache-from ${IMAGE}:latest
+      ${DOCKER_BUILD_ARGS}
       -t ${IMAGE}:$CI_COMMIT_SHA
       -t ${IMAGE}:latest
       -f ${DOCKER_BUILD_CONTEXT}/Dockerfile
