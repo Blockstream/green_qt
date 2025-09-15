@@ -7,8 +7,14 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal start()
+    signal closeClicked()
 
     id: self
+    padding: 60
+    leftItem: BackButton {
+        text: qsTrId('id_wallets')
+        onClicked: self.closeClicked()
+    }
     Image {
         Layout.alignment: Qt.AlignCenter
         source: 'qrc:/svg2/blockstream-app.svg'

@@ -112,6 +112,7 @@ MainPage {
         id: terms_of_service_page
         TermOfServicePage {
             onStart: stack_view.push(secure_funds_page)
+            onCloseClicked: self.closeWallet(self.wallet)
         }
     }
 
