@@ -12,28 +12,28 @@
 #include "wallet.h"
 
 #include <gdk.h>
-#include <nlohmann/json.hpp>
 
 namespace {
 void UpdateAsset(GA_session* session, Asset* asset)
 {
-    const auto id = asset->id().toStdString();
+    const auto id = asset->id();
 
-    const nlohmann::json params = {{ "assets_id", { id } }};
-    nlohmann::json* output;
+    auto params = Json::fromObject({{ "assets_id", QJsonArray{id} }});
+    GA_json* output;
 
-    const auto err = GA_get_assets(session, (const GA_json*) &params, (GA_json**) &output);
+    const auto err = GA_get_assets(session, params.get(), &output);
     Q_ASSERT(err == GA_OK);
 
-    if (output->at("assets").contains(id)) {
-        const auto data = output->at("assets").at(id);
-        asset->setData(Json::toObject((GA_json*) &data));
+    const auto result = Json::toObject(output);
+    const auto data = result.value("assets").toObject().value(id);
+    if (!data.isNull()) {
+      asset->setData(data.toObject());
     }
-    if (output->at("icons").contains(id)) {
-        const auto icon = output->at("icons").at(id).get<std::string>();
-        asset->setIcon(QString("data:image/png;base64,") + QString::fromStdString(icon));
+    const auto icon = result.value("icons").toObject().value(id);
+    if (!icon.isNull()) {
+        asset->setIcon(QString("data:image/png;base64,") + icon.toString());
     }
-    GA_destroy_json((GA_json*) output);
+    GA_destroy_json(output);
 }
 }
 

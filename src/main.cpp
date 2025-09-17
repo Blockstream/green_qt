@@ -72,7 +72,10 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #endif
 
 #include <hidapi/hidapi.h>
+
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 extern QString g_data_location;
 QCommandLineParser g_args;
