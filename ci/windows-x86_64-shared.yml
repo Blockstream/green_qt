@@ -1,0 +1,19 @@
+windows-x86_64-shared:build-gdk:
+  extends: .docker_build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/windows-x86_64-shared
+    DOCKER_BUILD_CONTEXT: ci/windows-x86_64-shared
+
+windows-x86_64-shared:share-gdk:
+  image: $CI_REGISTRY_IMAGE/windows-x86_64-shared@sha256:31d1e7a04bc8bfa79c0786c366eb4352e4888135981d57d422bc0026cc11f973
+  script:
+    - cp -R /depends depends
+  stage: depends
+  tags:
+    - cloud
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    paths:
+      - depends
+
