@@ -28,11 +28,11 @@ pip install -r tools/requirements.txt
 pip install setuptools
 
 if [ "$HOST" = "linux" ]; then
-    tools/build.sh --gcc --buildtype release --static --install $PREFIX --parallel 8
+    tools/build.sh --gcc --buildtype release $1 --install $PREFIX --parallel 8
 elif [ "$HOST" = "windows" ]; then
-    tools/build.sh --mingw-w64 --buildtype release --static --install $PREFIX --parallel 8
+    tools/build.sh --mingw-w64 --buildtype release $1 --install $PREFIX --parallel 8
 elif [ "$HOST" = "macos" ]; then
-    tools/build.sh --clang --buildtype release --static --install $PREFIX --parallel 8
+    tools/build.sh --clang --buildtype release $1 --install $PREFIX --parallel 8
 else
     exit 1
 fi

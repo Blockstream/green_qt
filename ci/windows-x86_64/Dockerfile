@@ -20,7 +20,7 @@ RUN tools/buildcountly.sh
 
 FROM base AS gdk
 COPY tools/buildgdk.sh tools/
-RUN . /root/.cargo/env && tools/buildgdk.sh
+RUN . /root/.cargo/env && tools/buildgdk.sh --static
 
 FROM base AS zxing
 COPY tools/buildzxing.sh tools/

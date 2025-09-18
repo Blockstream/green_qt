@@ -33,7 +33,7 @@ macos-arm64-shared:depends:
     - tools/buildzxing.sh
     - tools/buildbreakpad.sh
     - tools/buildcrashpad.sh
-    - tools/buildgdk.sh
+    - tools/buildgdk.sh --static
     - tools/buildgpgme.sh
 
 macos-arm64-shared:build:

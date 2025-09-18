@@ -23,8 +23,19 @@ sast:
 
 .depends:
   stage: depends
+  when: manual
   script:
-    - tools/builddeps.sh
+    - tools/buildgdk.sh --static
+    - tools/buildbreakpad.sh
+    - tools/buildcrashpad.sh
+    - tools/buildgpgme.sh
+    - tools/buildlibusb.sh
+    - tools/buildhidapi.sh
+    - tools/buildcountly.sh
+    - tools/buildzxing.sh
+    - tools/buildlibserialport.sh
+    - tools/buildqt.sh
+    - tools/buildkdsingleapplication.sh
 
 .build:
   when: manual
