@@ -1,4 +1,4 @@
-FROM ubuntu:oracular AS base
+FROM ubuntu:plucky AS base
 COPY ci/windows-x86_64/setup.sh .
 RUN ./setup.sh
 ENV PREFIX=/depends/windows-x86_64
@@ -8,6 +8,7 @@ ENV PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
 ENV CMAKE_INSTALL_PREFIX=$PREFIX
 ENV CMAKE_TOOLCHAIN_FILE=$PWD/cmake/mingw-w64-x86_64.cmake
 ENV QT_HOST_PATH=/depends/linux-x86_64
+ENV PATH="$PREFIX/bin/:$PATH"
 COPY cmake cmake
 
 FROM base AS hidapi
@@ -36,7 +37,7 @@ RUN tools/buildkdsingleapplication.sh
 
 FROM base AS libserialport
 COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
-RUN tools/buildlibserialport.sh
+RUN tools/buildlibserialport.sh --disable-shared
 
 FROM ubuntu:jammy AS uasm
 RUN apt update && \

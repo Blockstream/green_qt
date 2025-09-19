@@ -2,8 +2,8 @@
 set -eox pipefail
 
 COUNTLY_REPO=https://github.com/Blockstream/countly-sdk-cpp
-COUNTLY_BRANCH=bump2
-COUNTLY_COMMIT=13ff517e12966be52e02677aadd654ff241a5bfc
+COUNTLY_BRANCH=green_qt
+COUNTLY_COMMIT=fdbf11eea8868fcd41196f0f90cb58296673820a
 
 mkdir -p build && cd build
 

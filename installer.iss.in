@@ -34,7 +34,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppName}.exe"; IconFilename: "{app}\{#AppName}.exe"; IconIndex: 0;
@@ -64,7 +64,6 @@ const
 
 function InitializeSetup : Boolean;
 var winHwnd: Longint;
-    retVal : Boolean;
     strProg: string;
 begin
   Result := True;
@@ -81,7 +80,6 @@ end;
 
 function InitializeUninstall : Boolean;
 var winHwnd: Longint;
-    retVal : Boolean;
     strProg: string;
 begin
   Result := True;

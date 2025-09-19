@@ -10,7 +10,6 @@
 
 #ifdef ENABLE_SENTRY
 
-#include <common/using_std_string.h>
 #include <google_breakpad/processor/call_stack.h>
 #include <google_breakpad/processor/basic_source_line_resolver.h>
 #include <google_breakpad/processor/stack_frame.h>

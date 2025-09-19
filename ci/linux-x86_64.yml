@@ -1,5 +1,11 @@
+linux-x86_64:build-image:
+  extends: .docker_build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/linux-x86_64
+    DOCKER_FILE: ci/linux-x86_64/Dockerfile
+
 .linux-x86_64:
-  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:388d18d57d17d9785931638a51e475b1ca9a149eb3fabd7b5fc6591215eb0275
+  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:f58c1afe95b49fe9d5c864fde52a9c0b84b410bdb43f721f91657351b08a3bef
   extends:
     - .build
   tags:

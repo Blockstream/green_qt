@@ -6,11 +6,13 @@ macos-universal:build:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
-      - "macos-universal/Blockstream.app"
-  needs: ["macos-arm64:build", "macos-x86_64:build"]
+      - macos-universal/Blockstream.app
+  needs:
+    - macos-arm64:build
+    - macos-x86_64:build
   script:
     - mkdir macos-universal
-    - cp -R "macos-x86_64/Blockstream.app" macos-universal/
+    - cp -R macos-x86_64/Blockstream.app macos-universal/
     - lipo -create -output "macos-universal/Blockstream.app/Contents/MacOS/Blockstream" "macos-arm64/Blockstream.app/Contents/MacOS/Blockstream" "macos-x86_64/Blockstream.app/Contents/MacOS/Blockstream"
 
 macos-universal:staple:
@@ -22,12 +24,13 @@ macos-universal:staple:
     expire_in: 1 week
     when: always
     paths:
-      - "macos-universal/Blockstream.app"
-      - "macos-universal/Blockstream.dmg"
-  needs: ["macos-universal:build"]
+      - macos-universal/Blockstream.app
+      - macos-universal/Blockstream.dmg
+  needs:
+    - macos-universal:build
   script:
-    - mv "macos-universal/Blockstream.app" "Blockstream.app"
-    - tools/macos-staple.sh "Blockstream.app"
-    - tools/packdmg.sh "Blockstream.app"
-    - tools/macos-staple.sh "Blockstream.dmg"
-    - mv "Blockstream.app" "Blockstream.dmg" macos-universal/
+    - mv macos-universal/Blockstream.app Blockstream.app
+    - tools/macos-staple.sh Blockstream.app
+    - tools/packdmg.sh Blockstream.app
+    - tools/macos-staple.sh Blockstream.dmg
+    - mv Blockstream.app Blockstream.dmg macos-universal/

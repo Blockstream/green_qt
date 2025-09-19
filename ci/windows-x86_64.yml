@@ -1,5 +1,11 @@
+windows-x86_64:build-image:
+  extends: .docker_build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/windows-x86_64
+    DOCKER_FILE: ci/windows-x86_64/Dockerfile
+
 windows-x86_64:build:
-  image: $CI_REGISTRY_IMAGE/windows-x86_64@sha256:8d08bbdd8bae129cab3d7a0a19177c9ff2637bae49a68ba33f86e2779738199c
+  image: $CI_REGISTRY_IMAGE/windows-x86_64@sha256:6d1287f3c7c44e88b3ffd0852cd5a9b3b1a667fd7a147db608683e2f20425e3f
   extends:
     - .build
   after_script:
@@ -31,7 +37,7 @@ windows-x86_64:build:
       - stuck_or_timeout_failure
   script:
     - mkdir -p signed
-    - CodeSignTool.sh sign
+    - bash CodeSignTool.sh sign
       -credential_id="$SSL_COM_CREDENTIAL_ID"
       -username=$SSL_COM_USERNAME
       -password="$SSL_COM_PASSWORD"
@@ -39,6 +45,7 @@ windows-x86_64:build:
       -output_dir_path=signed
       -input_file_path="$INPUT_FILE"
     - mv "signed/$INPUT_FILE" "$OUTPUT_FILE"
+  when: manual
 
 windows-x86_64:sign:
   extends: .windows:sign
@@ -50,13 +57,8 @@ windows-x86_64:sign:
     paths:
       - installer.iss
       - "Blockstream.exe"
-  rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^release_.*$/'
-      when: on_success
-    - when: manual
   needs:
     - job: windows-x86_64:build
-      optional: true
   variables:
     INPUT_FILE: blockstream.exe
     OUTPUT_FILE: "Blockstream.exe"

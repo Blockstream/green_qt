@@ -22,29 +22,25 @@ find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWid
 find_package(hidapi REQUIRED)
 find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
 
-find_package(gdk REQUIRED COMPONENT green_gdk_full)
+if (WIN32 AND NOT QT_FEATURE_static)
+    add_library(green_gdk_full SHARED IMPORTED GLOBAL)
+else()
+    find_package(gdk REQUIRED COMPONENT green_gdk_full)
+    find_library(LIBSERIALPORT_LIB NAMES libserialport.a libserialport-0.lib REQUIRED)
+    find_library(LIBGPGME_LIB NAMES libgpgme.a REQUIRED)
+    find_library(LIBASSUAN_LIB NAMES libassuan.a REQUIRED)
+    find_library(LIBGPGERROR_LIB NAMES libgpg-error.a REQUIRED)
+endif()
 
 find_package(ZXing REQUIRED)
 
-include(CMakePrintHelpers)
-cmake_print_properties(TARGETS gdk::green_gdk_full PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES
-    INTERFACE_LINK_LIBRARIES
-    IMPORTED_LOCATION_RELEASE
-)
-
-find_library(COUNTLY_LIB NAMES libcountly.a REQUIRED)
-find_library(LIBSERIALPORT_LIB NAMES libserialport.a REQUIRED)
-find_library(LIBGPGME_LIB NAMES libgpgme.a REQUIRED)
-find_library(LIBASSUAN_LIB NAMES libassuan.a REQUIRED)
-find_library(LIBGPGERROR_LIB NAMES libgpg-error.a REQUIRED)
-
+find_library(COUNTLY_LIB NAMES libcountly.a countly.lib REQUIRED)
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
 if (WIN32)
-    find_library(HID_LIB NAMES libhid.a REQUIRED)
-    set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -fstack-protector")
+    #find_library(HID_LIB NAMES libhid.a REQUIRED)
+    #set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -fstack-protector")
 elseif (APPLE)
     find_library(SECURITY Security REQUIRED)
 elseif (UNIX)
@@ -125,6 +121,19 @@ target_link_libraries(${APP_TARGET}
     ${LIBGPGERROR_LIB}
 )
 
+if (WIN32 AND NOT QT_FEATURE_static)
+    target_link_libraries(${APP_TARGET}
+        PRIVATE
+        "C:/depends/windows-x86_64/lib/libgreen_gdk.lib"
+        "C:/depends/windows-x86_64/lib/libserialport-0.lib"
+    )
+    target_include_directories(${APP_TARGET} PRIVATE
+        "C:/depends/windows-x86_64/include"
+        "C:/depends/windows-x86_64/include/gdk"
+        "C:/depends/windows-x86_64/include/gdk/libwally-core"
+    )
+endif()
+
 if(ENABLE_SENTRY)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(BREAKPAD REQUIRED breakpad)
@@ -176,7 +185,15 @@ install(TARGETS ${APP_TARGET}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-get_target_property(GDK_INCLUDE gdk::green_gdk_full INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(${APP_TARGET} PRIVATE
+  src src/jade src/resolvers src/controllers src/ledger src/handlers
+  "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+if (TARGET gdk::green_gdk_full)
+    get_target_property(GDK_INCLUDE gdk::green_gdk_full INTERFACE_INCLUDE_DIRECTORIES)
+    target_include_directories(${APP_TARGET} PRIVATE ${GDK_INCLUDE}/libwally-core/)
+endif()
 
 target_include_directories(${APP_TARGET} PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers

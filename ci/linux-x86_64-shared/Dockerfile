@@ -38,7 +38,7 @@ RUN tools/buildkdsingleapplication.sh
 
 FROM base AS libserialport
 COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
-RUN tools/buildlibserialport.sh
+RUN tools/buildlibserialport.sh --disable-shared
 
 FROM base AS crashpad
 COPY --from=gdk /build/gdk/build-gcc/external_deps/ /depends/linux-x86_64/

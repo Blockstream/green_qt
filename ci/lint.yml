@@ -7,3 +7,4 @@ cpplint:
   script:
     - pip install cpplint
     - ./tools/lint/cpplint.sh
+  when: manual

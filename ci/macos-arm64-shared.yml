@@ -21,12 +21,8 @@ macos-arm64-shared:depends:
   extends:
     - .macos-arm64-shared
   script:
-    - if [ -d $PREFIX ]; then
-        echo "using cached depends";
-        exit 0;
-      fi
     - tools/buildkdsingleapplication.sh
-    - tools/buildlibserialport.sh
+    - tools/buildlibserialport.sh --disable-shared
     - tools/buildlibusb.sh
     - tools/buildhidapi.sh
     - tools/buildcountly.sh
@@ -35,12 +31,12 @@ macos-arm64-shared:depends:
     - tools/buildcrashpad.sh
     - tools/buildgdk.sh --static
     - tools/buildgpgme.sh
+  when: manual
 
 macos-arm64-shared:build:
   extends:
     - .build
     - .macos-arm64-shared
-  needs: ["macos-arm64-shared:depends"]
   after_script:
     - $HOME/qt-install/6.8.3/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
     - rm -rf build/Blockstream.app/Contents/MacOS/Blockstream.dSYM

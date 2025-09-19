@@ -228,51 +228,14 @@ void Analytics::stop()
     d->stop(Qt::BlockingQueuedConnection);
 }
 
-QJsonValue nlohmann_to_qt(const nlohmann::json& json)
-{
-  if (json.is_object()) {
-    QJsonObject object;
-    for (auto& [key, val] : json.items()) {
-      object[QString::fromStdString(key)] = nlohmann_to_qt(val);
-    }
-    return object;
-  }
-  if (json.is_string()) {
-    return QString::fromStdString(json.get<std::string>());
-  }
-  if (json.is_number_unsigned()) {
-    const auto uv = json.get<quint64>();
-    const auto sv = json.get<qint64>();
-    Q_ASSERT(uv == static_cast<quint64>(sv));
-    return sv;
-  }
-  if (json.is_number_integer()) {
-    return json.get<qint64>();
-  }
-  if (json.is_number_float()) {
-    return json.get<double>();
-  }
-  if (json.is_boolean()) {
-    return json.get<bool>();
-  }
-  if (json.is_array()) {
-    QJsonArray array;
-    for (auto& it : json) {
-      array.append(nlohmann_to_qt(it));
-    }
-    return array;
-  }
-  if (json.is_null()) {
-    return QJsonValue::Null;
-  }
-  Q_UNREACHABLE();
-}
-
 QJsonValue Analytics::getRemoteConfigValue(const QString &key) const
 {
     auto& countly = cly::Countly::getInstance();
-    const nlohmann::json value = countly.getRemoteConfigValue(key.toStdString());
-    return nlohmann_to_qt(value);
+    const auto value = countly.getRemoteConfigValueString(key.toStdString());
+    const auto doc = QJsonDocument::fromJson(QByteArray::fromStdString(value));
+    if (doc.isObject()) return doc.object();
+    if (doc.isArray()) return doc.array();
+    return {};
 }
 
 QString Analytics::countlyId() const

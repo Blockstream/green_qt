@@ -1,5 +1,12 @@
+linux-x86_64-shared:build-image:
+  extends: .docker_build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/linux-x86_64-shared
+    DOCKER_FILE: ci/linux-x86_64-shared/Dockerfile
+    DOCKER_BUILD_ARGS: --build-arg QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN}
+
 .linux-x86_64-shared:
-  image: $CI_REGISTRY_IMAGE/linux-x86_64-shared@sha256:1db0c65c83e7b0330478950ef07a5e8a9eb5391d102d31246cd4c1d52dd07a60
+  image: $CI_REGISTRY_IMAGE/linux-x86_64-shared@sha256:38b2f4bf094d75e5ccd5d5c8e3389c56b203f221b8611711b60bb2f2be8a84da
   extends:
     - .build
   tags:

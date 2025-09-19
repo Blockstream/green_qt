@@ -28,17 +28,19 @@ docker_codesigntool:
   rules:
     - changes:
         - ci/codesigntool/**/*
-
+  when: manual
 
 .docker_build:
   extends: .docker_build_base
   when: manual
   variables:
     DOCKER_HOST: tcp://localhost:2375
-    DOCKER_TLS_CERTDIR: ""
     DOCKER_BUILDKIT: 1
     DOCKER_BUILD_ARGS: ""
     BUILDX_GIT_INFO: false
+    DOCKER_FILE: Dockerfile
+    DOCKER_PATH: .
+    DOCKER_TLS_CERTDIR: ""
   image: docker:23
   script:
     - docker pull ${IMAGE}:latest || true
@@ -50,8 +52,8 @@ docker_codesigntool:
       ${DOCKER_BUILD_ARGS}
       -t ${IMAGE}:$CI_COMMIT_SHA
       -t ${IMAGE}:latest
-      -f ${DOCKER_BUILD_CONTEXT}/Dockerfile
-      .
+      -f ${DOCKER_FILE}
+      ${DOCKER_PATH}
       --progress=plain &>docker-build.log
     - tail -n 1000 docker-build.log
     - docker push ${IMAGE}:${CI_COMMIT_SHA}
@@ -62,23 +64,3 @@ docker_codesigntool:
     when: always
     paths:
     - docker-build.log
-
-
-build_linux-x86_64:
-  extends: .docker_build
-  variables:
-    IMAGE: $CI_REGISTRY_IMAGE/linux-x86_64
-    DOCKER_BUILD_CONTEXT: ci/linux-x86_64
-
-build_linux-x86_64-shared:
-  extends: .docker_build
-  variables:
-    IMAGE: $CI_REGISTRY_IMAGE/linux-x86_64-shared
-    DOCKER_BUILD_CONTEXT: ci/linux-x86_64-shared
-    DOCKER_BUILD_ARGS: --build-arg QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN}
-
-build_windows-x86_64:
-  extends: .docker_build
-  variables:
-    IMAGE: $CI_REGISTRY_IMAGE/windows-x86_64
-    DOCKER_BUILD_CONTEXT: ci/windows-x86_64

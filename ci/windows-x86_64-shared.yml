@@ -2,10 +2,10 @@ windows-x86_64-shared:build-gdk:
   extends: .docker_build
   variables:
     IMAGE: $CI_REGISTRY_IMAGE/windows-x86_64-shared
-    DOCKER_BUILD_CONTEXT: ci/windows-x86_64-shared
+    DOCKER_FILE: ci/windows-x86_64-shared/Dockerfile
 
 windows-x86_64-shared:share-gdk:
-  image: $CI_REGISTRY_IMAGE/windows-x86_64-shared@sha256:31d1e7a04bc8bfa79c0786c366eb4352e4888135981d57d422bc0026cc11f973
+  image: $CI_REGISTRY_IMAGE/windows-x86_64-shared@sha256:08197b17eed2fe38cb8b0404a5b1b1ecd3c99d89d02089b8d02b37e1cc0912bf
   script:
     - cp -R /depends depends
   stage: depends
@@ -16,4 +16,123 @@ windows-x86_64-shared:share-gdk:
     expire_in: 1 week
     paths:
       - depends
+  when: manual
 
+windows-x86_64-shared:build-image:
+  stage: depends
+  image: docker:27
+  when: manual
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - unknown_failure
+      - stuck_or_timeout_failure
+  variables:
+    DOCKER_BUILDKIT: 0
+    DOCKER_DRIVER: null
+    DOCKER_HOST: null
+    GIT_CLEAN_FLAGS: -ffdx
+  needs:
+    - windows-x86_64-shared:share-gdk
+  tags:
+    - windows
+  script:
+    - xcopy depends ci\x64-windows\depends /E /I /H /Y
+    - dir ci\x64-windows\depends
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull ${CI_REGISTRY_IMAGE}/x64-windows:latest
+    - docker build ci\x64-windows --build-arg QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN} -t ${CI_REGISTRY_IMAGE}/x64-windows:${CI_COMMIT_SHA} -t ${CI_REGISTRY_IMAGE}/x64-windows:latest
+    - docker push ${CI_REGISTRY_IMAGE}/x64-windows:${CI_COMMIT_SHA}
+    - docker push ${CI_REGISTRY_IMAGE}/x64-windows:latest
+
+windows-x86_64-shared:build:
+  stage: build
+  tags:
+    - windows
+  variables:
+    DOCKER_BUILDKIT: 0
+    DOCKER_DRIVER: null
+    DOCKER_HOST: null
+    GIT_CLEAN_FLAGS: -ffdx
+    IMAGE: $CI_REGISTRY_IMAGE/x64-windows@sha256:7f536d26328ad7c2266d2a1d46b7dc02ecf4f0e107acee017af1ef93307cfb09
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker image inspect $IMAGE || docker pull $IMAGE
+    - docker run --rm -v ${CI_PROJECT_DIR}:C:\src $IMAGE cmd /c C:\src\build.bat
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    paths:
+      - bld/installer.iss
+      - bld/Release
+
+windows-x86_64-shared:sign:
+  image:
+    name: $CI_REGISTRY_IMAGE/codesigntool:latest
+    pull_policy: always
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - k8s
+  needs:
+    - windows-x86_64-shared:build
+  script:
+    - |
+      bash CodeSignTool.sh sign \
+      -credential_id="$SSL_COM_CREDENTIAL_ID" \
+      -username="$SSL_COM_USERNAME" \
+      -password="$SSL_COM_PASSWORD" \
+      -totp_secret="$SSL_COM_TOTP_SECRET" \
+      -input_file_path=bld/Release/blockstream.exe \
+      -override
+    - |
+      find bld -type f \( -iname "*.exe" -o -iname "*.dll" \) -exec echo bash CodeSignTool.sh sign \
+        -credential_id="$SSL_COM_CREDENTIAL_ID" \
+        -username="$SSL_COM_USERNAME" \
+        -password="$SSL_COM_PASSWORD" \
+        -totp_secret="$SSL_COM_TOTP_SECRET" \
+        -input_file_path={} \
+        -override \;
+  stage: staple
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    paths:
+      - bld/installer.iss
+      - bld/Release
+
+windows-x86_64-shared:installer:
+  image:
+    name: amake/innosetup
+    entrypoint: [""]
+  stage: installer
+  tags:
+    - ga
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    when: always
+    paths:
+      - Setup.exe
+  needs:
+    - windows-x86_64-shared:sign
+  script:
+    - mv bld/installer.iss bld/Release/
+    - iscc bld/Release/installer.iss
+    - mv bld/Release/Setup.exe .
+
+windows-x86_64-shared:sign-installer:
+  extends: .windows:sign
+  stage: installer
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    when: always
+    paths:
+      - BlockstreamSetup.exe
+  needs:
+    - windows-x86_64-shared:installer
+  variables:
+    INPUT_FILE: Setup.exe
+    OUTPUT_FILE: "BlockstreamSetup.exe"

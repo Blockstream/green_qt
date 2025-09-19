@@ -15,11 +15,11 @@ mkdir libserialport-bld && cd libserialport-bld
 ../libserialport-src/autogen.sh
 
 if [ "$HOST" = "linux" ]; then
-    ../libserialport-src/configure --prefix=$PREFIX --disable-shared
+    ../libserialport-src/configure --prefix=$PREFIX $1
 elif [ "$HOST" = "windows" ]; then
-    ../libserialport-src/configure --host=x86_64-w64-mingw32 --prefix=$PREFIX --disable-shared
+    ../libserialport-src/configure --host=x86_64-w64-mingw32 --prefix=$PREFIX $1
 elif [ "$HOST" = "macos" ]; then
-    ../libserialport-src/configure --prefix=$PREFIX --disable-shared
+    ../libserialport-src/configure --prefix=$PREFIX $1
 else
     exit 1
 fi

@@ -1,8 +1,10 @@
-variables:
-  CI_DISPOSABLE_ENVIRONMENT: "true"
-  DOCKER_DRIVER: overlay2
-  DOCKER_HOST: tcp://localhost:2375
-  DOCKER_TLS_CERTDIR: ""
+default:
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - unknown_failure
+      - stuck_or_timeout_failure
 
 stages:
   - lint
@@ -24,6 +26,8 @@ sast:
 .depends:
   stage: depends
   when: manual
+  before_script:
+    - export PATH="$PREFIX/bin:$PATH"
   script:
     - tools/buildgdk.sh --static
     - tools/buildbreakpad.sh
@@ -33,12 +37,11 @@ sast:
     - tools/buildhidapi.sh
     - tools/buildcountly.sh
     - tools/buildzxing.sh
-    - tools/buildlibserialport.sh
+    - tools/buildlibserialport.sh --disable-shared
     - tools/buildqt.sh
     - tools/buildkdsingleapplication.sh
 
 .build:
-  when: manual
   stage: build
   variables:
     GREEN_WAYLAND: "OFF"
