@@ -144,6 +144,7 @@ SET(QML_FILES
     qml/PriceCard.qml
     qml/FeeRateCard.qml
     qml/CardBar.qml
+    qml/LineChart.qml
     qml/StackViewPage.qml
     qml/SelectRecoveryKeyPage.qml
     qml/MnemonicSizeSelector.qml

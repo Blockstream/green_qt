@@ -96,6 +96,7 @@ SET(TARGET_SOURCES
         src/promo.h src/promo.cpp
         src/requestsupportcontroller.h src/requestsupportcontroller.cpp
         src/breakpad.cpp
+        src/chartpriceservice.h src/chartpriceservice.cpp
 )
 
 if (WIN32)

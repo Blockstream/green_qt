@@ -433,7 +433,7 @@ Page {
             }
             Item {
                 SplitView.fillWidth: true
-                SplitView.minimumWidth: self.width / 2
+                SplitView.minimumWidth: self.width / 4
                 StackView {
                     id: stack_view
                     anchors.fill: parent
@@ -491,6 +491,25 @@ Page {
                             }
                         }
                     }
+                }
+            }
+            ColumnLayout {
+                SplitView.preferredWidth: 380
+                SplitView.minimumWidth: 200
+                LineChart {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.maximumHeight: 400
+                    leftPadding: constants.p3
+                    rightPadding: constants.p3
+                    topPadding: constants.p3
+                    bottomPadding: constants.p3
+                    title: qsTr("Bitcoin price")
+                    iconSource: 'qrc:/svg/btc.svg'
+                    selectedIndex: 0
+                    showRangeButtons: true
+                }
+                VSpacer {
                 }
             }
         }

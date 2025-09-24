@@ -251,6 +251,9 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg/menu-security.svg
         assets/svg/menu-settings.svg
         assets/svg/menu-wallet.svg
+
+        assets/svg3/Arrow_price_down.svg
+        assets/svg3/Arrow_price_up.svg
 )
 
 qt_add_resources(${APP_TARGET} "fonts"
