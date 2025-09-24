@@ -1,10 +1,9 @@
 cpplint:
   image: python:3
   tags:
-    - ga
+    - k8s
   stage: lint
   allow_failure: true
   script:
     - pip install cpplint
     - ./tools/lint/cpplint.sh
-  when: manual

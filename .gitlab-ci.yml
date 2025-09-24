@@ -68,16 +68,20 @@ sast:
         --log-level=$SENTRY_LOG_LEVEL build
 
 include:
-  - local: "ci/docker.yaml"
-  - local: "ci/lint.yml"
-  - local: "ci/linux-x86_64.yml"
-  - local: "ci/linux-x86_64-shared.yml"
-  - local: "ci/macos-arm64.yml"
-  - local: "ci/macos-arm64-shared.yml"
-  - local: "ci/macos-x86_64.yml"
-  - local: "ci/macos-universal.yml"
-  - local: "ci/windows-x86_64.yml"
-  - local: "ci/windows-x86_64-shared.yml"
-  - local: "ci/package.yml"
+  - local: ci/docker.yaml
+  - local: ci/lint.yml
+  - local: ci/linux-x86_64.yml
+  - local: ci/linux-x86_64-shared.yml
+  - local: ci/macos.yml
+  - local: ci/macos-arm64.yml
+  - local: ci/macos-arm64-shared.yml
+  - local: ci/macos-x86_64.yml
+  - local: ci/macos-x86_64-shared.yml
+  - local: ci/macos-universal.yml
+  - local: ci/macos-universal-shared.yml
+  - local: ci/windows-x86_64.yml
+  - local: ci/windows-x86_64-shared.yml
+  - local: ci/package.yml
+  - local: ci/package-shared.yml
   - template: Jobs/SAST.gitlab-ci.yml
   - template: Jobs/Secret-Detection.gitlab-ci.yml

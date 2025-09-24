@@ -13,12 +13,11 @@ macos-universal:build:
   script:
     - mkdir macos-universal
     - cp -R macos-x86_64/Blockstream.app macos-universal/
-    - lipo -create -output "macos-universal/Blockstream.app/Contents/MacOS/Blockstream" "macos-arm64/Blockstream.app/Contents/MacOS/Blockstream" "macos-x86_64/Blockstream.app/Contents/MacOS/Blockstream"
+    - lipo -create -output macos-universal/Blockstream.app/Contents/MacOS/Blockstream macos-arm64/Blockstream.app/Contents/MacOS/Blockstream macos-x86_64/Blockstream.app/Contents/MacOS/Blockstream
 
 macos-universal:staple:
-  tags:
-    - osxsigner
-  stage: staple
+  extends:
+    - .macos:staple
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
@@ -34,3 +33,4 @@ macos-universal:staple:
     - tools/packdmg.sh Blockstream.app
     - tools/macos-staple.sh Blockstream.dmg
     - mv Blockstream.app Blockstream.dmg macos-universal/
+  when: on_success

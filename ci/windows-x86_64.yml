@@ -61,7 +61,7 @@ windows-x86_64:sign:
     - job: windows-x86_64:build
   variables:
     INPUT_FILE: blockstream.exe
-    OUTPUT_FILE: "Blockstream.exe"
+    OUTPUT_FILE: Blockstream.exe
 
 windows-x86_64:installer:
   image:
@@ -76,7 +76,8 @@ windows-x86_64:installer:
     when: always
     paths:
       - Setup.exe
-  needs: ["windows-x86_64:sign"]
+  needs:
+    - windows-x86_64:sign
   script:
     - ls -la
     - iscc installer.iss
@@ -90,7 +91,8 @@ windows-x86_64:sign-installer:
     when: always
     paths:
       - BlockstreamSetup.exe
-  needs: ["windows-x86_64:installer"]
+  needs:
+    - windows-x86_64:installer
   variables:
     INPUT_FILE: Setup.exe
-    OUTPUT_FILE: "BlockstreamSetup.exe"
+    OUTPUT_FILE: BlockstreamSetup.exe

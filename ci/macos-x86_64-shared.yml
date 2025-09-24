@@ -1,24 +1,24 @@
-.macos-arm64-shared:
+.macos-x86_64-shared:
   extends:
     - .macos
   variables:
-    PREFIX: "$CI_PROJECT_DIR/depends/macos-arm64-shared"
-    ARCH: "arm64"
+    PREFIX: "$CI_PROJECT_DIR/depends/macos-x86_64-shared"
+    ARCH: "x86_64"
     PKG_CONFIG_PATH: "$PREFIX/lib/pkgconfig"
     CMAKE_INSTALL_PREFIX: "$PREFIX"
-    gdk_ROOT: "$PREFIX/lib/arm64-apple-darwin/gdk"
+    gdk_ROOT: "$PREFIX/lib/x86_64-apple-darwin/gdk"
   cache:
-    key: macos_arm64_shared_2
+    key: macos_x86_64_shared_2
     paths: [depends/]
   before_script:
     - export PATH="$HOME/qt-install/6.8.3/macos/bin/:$PATH"
   tags:
-    - macos-arm64
+    - macos-x86_64
 
-macos-arm64-shared:depends:
+macos-x86_64-shared:depends:
   stage: depends
   extends:
-    - .macos-arm64-shared
+    - .macos-x86_64-shared
   script:
     - tools/buildkdsingleapplication.sh
     - tools/buildlibserialport.sh --disable-shared
@@ -32,22 +32,22 @@ macos-arm64-shared:depends:
     - tools/buildgpgme.sh
   when: manual
 
-macos-arm64-shared:build:
+macos-x86_64-shared:build:
   extends:
     - .build
-    - .macos-arm64-shared
+    - .macos-x86_64-shared
   after_script:
     - $HOME/qt-install/6.8.3/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
     - rm -rf build/Blockstream.app/Contents/MacOS/Blockstream.dSYM
-    - mkdir macos-arm64-shared
-    - mv build/Blockstream.app macos-arm64-shared
+    - mkdir macos-x86_64-shared
+    - mv build/Blockstream.app macos-x86_64-shared
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
-      - macos-arm64-shared/Blockstream.app
+      - macos-x86_64-shared/Blockstream.app
 
-macos-arm64-shared:staple:
+macos-x86_64-shared:staple:
   extends:
     - .macos:staple
   artifacts:
@@ -55,13 +55,13 @@ macos-arm64-shared:staple:
     expire_in: 1 week
     when: always
     paths:
-      - macos-arm64-shared/Blockstream.app
-      - macos-arm64-shared/Blockstream.dmg
+      - macos-x86_64-shared/Blockstream.app
+      - macos-x86_64-shared/Blockstream.dmg
   needs:
-    - macos-arm64-shared:build
+    - macos-x86_64-shared:build
   script:
-    - mv macos-arm64-shared/Blockstream.app Blockstream.app
+    - mv macos-x86_64-shared/Blockstream.app Blockstream.app
     - tools/macos-staple.sh Blockstream.app
     - tools/packdmg.sh Blockstream.app
     - tools/macos-staple.sh Blockstream.dmg
-    - mv Blockstream.app Blockstream.dmg macos-arm64-shared/
+    - mv Blockstream.app Blockstream.dmg macos-x86_64-shared/

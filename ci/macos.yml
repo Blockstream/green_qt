@@ -1,0 +1,11 @@
+.macos:
+  variables:
+    HOST: "macos"
+    MACOSX_DEPLOYMENT_TARGET: 12.0
+    SHA256SUM: "shasum -a 256"
+
+.macos:staple:
+  tags:
+    - osxsigner
+  stage: staple
+  when: manual

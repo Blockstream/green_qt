@@ -38,7 +38,8 @@ package:build:
     - ga
   stage: package
   when: manual
-  needs: ["package:build"]
+  needs:
+    - package:build
   image: glregistry.blockstream.io/blockstream/p/gcloud-docker:tf0.15.4
   script:
     - cd dist
