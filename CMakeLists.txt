@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 project(blockstream VERSION 2.0.28 LANGUAGES CXX)
 
 set(APP_TARGET blockstream)
@@ -19,6 +21,7 @@ configure_file(installer.iss.in installer.iss @ONLY)
 
 find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
 
+find_package(Countly REQUIRED)
 find_package(hidapi REQUIRED)
 find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
 
@@ -33,8 +36,6 @@ else()
 endif()
 
 find_package(ZXing REQUIRED)
-
-find_library(COUNTLY_LIB NAMES libcountly.a countly.lib REQUIRED)
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
@@ -109,7 +110,7 @@ target_link_libraries(${APP_TARGET}
     PRIVATE
     ZXing::Core
     gdk::green_gdk_full
-    ${COUNTLY_LIB}
+    Countly::SDK
     ${LIBSERIALPORT_LIB}
     Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
     ${SECURITY}
