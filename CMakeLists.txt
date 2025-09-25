@@ -24,12 +24,12 @@ find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWid
 find_package(Countly REQUIRED)
 find_package(hidapi REQUIRED)
 find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
+find_package(libserialport REQUIRED)
 
 if (WIN32 AND NOT QT_FEATURE_static)
     add_library(green_gdk_full SHARED IMPORTED GLOBAL)
 else()
     find_package(gdk REQUIRED COMPONENT green_gdk_full)
-    find_library(LIBSERIALPORT_LIB NAMES libserialport.a libserialport-0.lib REQUIRED)
     find_library(LIBGPGME_LIB NAMES libgpgme.a REQUIRED)
     find_library(LIBASSUAN_LIB NAMES libassuan.a REQUIRED)
     find_library(LIBGPGERROR_LIB NAMES libgpg-error.a REQUIRED)
@@ -111,7 +111,7 @@ target_link_libraries(${APP_TARGET}
     ZXing::Core
     gdk::green_gdk_full
     Countly::SDK
-    ${LIBSERIALPORT_LIB}
+    libserialport::libserialport
     Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
     ${SECURITY}
     hidapi::hidapi
@@ -126,10 +126,8 @@ if (WIN32 AND NOT QT_FEATURE_static)
     target_link_libraries(${APP_TARGET}
         PRIVATE
         "C:/depends/windows-x86_64/lib/libgreen_gdk.lib"
-        "C:/depends/windows-x86_64/lib/libserialport-0.lib"
     )
     target_include_directories(${APP_TARGET} PRIVATE
-        "C:/depends/windows-x86_64/include"
         "C:/depends/windows-x86_64/include/gdk"
         "C:/depends/windows-x86_64/include/gdk/libwally-core"
     )
