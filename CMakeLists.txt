@@ -24,15 +24,13 @@ find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWid
 find_package(Countly REQUIRED)
 find_package(hidapi REQUIRED)
 find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
+find_package(libgpgme)
 find_package(libserialport REQUIRED)
 
 if (WIN32 AND NOT QT_FEATURE_static)
     add_library(green_gdk_full SHARED IMPORTED GLOBAL)
 else()
     find_package(gdk REQUIRED COMPONENT green_gdk_full)
-    find_library(LIBGPGME_LIB NAMES libgpgme.a REQUIRED)
-    find_library(LIBASSUAN_LIB NAMES libassuan.a REQUIRED)
-    find_library(LIBGPGERROR_LIB NAMES libgpg-error.a REQUIRED)
 endif()
 
 find_package(ZXing REQUIRED)
@@ -117,10 +115,11 @@ target_link_libraries(${APP_TARGET}
     hidapi::hidapi
     KDAB::kdsingleapplication
     ${FFMPEG_LIBRARIES}
-    ${LIBGPGME_LIB}
-    ${LIBASSUAN_LIB}
-    ${LIBGPGERROR_LIB}
 )
+
+if(TARGET libgpgme::libgpgme)
+  target_link_libraries(${APP_TARGET} PRIVATE libgpgme::libgpgme)
+endif()
 
 if (WIN32 AND NOT QT_FEATURE_static)
     target_link_libraries(${APP_TARGET}
