@@ -3,7 +3,7 @@ set -exo pipefail
 
 CRASHPAD_REPO=https://github.com/Blockstream/crashpad.git
 CRASHPAD_BRANCH=green_qt
-CRASHPAD_COMMIT=97e33592352f10059b84290afdfd19e086cffaf5
+CRASHPAD_COMMIT=0e1c04fca252abc671088819730ec2b35f9faf18
 
 mkdir -p build && cd build && rm -rf crashpad-src
 
