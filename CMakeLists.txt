@@ -4,10 +4,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 project(blockstream VERSION 2.0.28 LANGUAGES CXX)
 
-set(APP_TARGET blockstream)
-
 option(GREEN_WAYLAND "Include Wayland support" OFF)
 option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)
+
+set(APP_TARGET blockstream)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(NOT GREEN_ENV)
     set(CMAKE_BUILD_TYPE Debug)
@@ -20,22 +23,18 @@ configure_file(config.h.in config.h @ONLY)
 configure_file(installer.iss.in installer.iss @ONLY)
 
 find_package(Qt6 6.7 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
-
 find_package(Countly REQUIRED)
 find_package(hidapi REQUIRED)
 find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
 find_package(libgpgme)
 find_package(libserialport REQUIRED)
+find_package(ZXing REQUIRED)
 
 if (WIN32 AND NOT QT_FEATURE_static)
     add_library(green_gdk_full SHARED IMPORTED GLOBAL)
 else()
     find_package(gdk REQUIRED COMPONENT green_gdk_full)
 endif()
-
-find_package(ZXing REQUIRED)
-
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
 if (WIN32)
     #find_library(HID_LIB NAMES libhid.a REQUIRED)
@@ -61,24 +60,17 @@ elseif (UNIX)
     set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -fstack-protector -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f")
 endif()
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # https://gitlab.kitware.com/cmake/cmake/issues/20256
 if(APPLE)
-        find_program(DSYMUTIL_PROGRAM dsymutil)
-        if(DSYMUTIL_PROGRAM)
-                foreach(lang C CXX)
-                        foreach(var LINK_EXECUTABLE CREATE_SHARED_LIBRARY)
-                                set(CMAKE_${lang}_${var} "${CMAKE_${lang}_${var}}" "${DSYMUTIL_PROGRAM} <TARGET>")
-                        endforeach()
-                endforeach()
-        endif()
+  find_program(DSYMUTIL_PROGRAM dsymutil)
+  if(DSYMUTIL_PROGRAM)
+    foreach(lang C CXX)
+      foreach(var LINK_EXECUTABLE CREATE_SHARED_LIBRARY)
+        set(CMAKE_${lang}_${var} "${CMAKE_${lang}_${var}}" "${DSYMUTIL_PROGRAM} <TARGET>")
+      endforeach()
+    endforeach()
+  endif()
 endif()
-
-add_definitions(-DNO_ICONV)
-add_definitions(-DGDK_STATIC_DEFINE)
 
 include(src.cmake)
 
