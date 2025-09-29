@@ -16,9 +16,10 @@ RUN `
         --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" `
         --add Microsoft.VisualStudio.Workload.VCTools `
         --add Microsoft.VisualStudio.Component.VC.CMake.Project `
+        --add Microsoft.VisualStudio.Component.VC.ATL `
+        --add Microsoft.VisualStudio.Component.VC.MFC `
         --add Microsoft.VisualStudio.Component.CMake `
         --add Microsoft.VisualStudio.Component.Ninja `
-        --add Microsoft.VisualStudio.Component.Vcpkg `
         --includeRecommended `
         || IF "%ERRORLEVEL%"=="3010" EXIT 0) `
     `
