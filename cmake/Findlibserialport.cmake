@@ -1,10 +1,15 @@
 include(FindPackageHandleStandardArgs)
 
 find_path(LIBSERIALPORT_INCLUDE_DIR libserialport.h)
-find_library(LIBSERIALPORT_LIBRARY NAMES libserialport.a libserialport-0.lib)
+
+if(MSVC)
+  find_library(LIBSERIALPORT_LIBRARY NAMES libserialport-0.lib)
+else()
+  find_library(LIBSERIALPORT_LIBRARY NAMES libserialport.a)
+endif()
 
 find_package_handle_standard_args(libserialport
-  REQUIRED_VARS LIBSERIALPORT_INCLUDE_DIR LIBSERIALPORT_LIBRARY
+  REQUIRED_VARS LIBSERIALPORT_LIBRARY LIBSERIALPORT_INCLUDE_DIR
 )
 
 if(libserialport_FOUND)
