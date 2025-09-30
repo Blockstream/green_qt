@@ -67,31 +67,25 @@ AbstractButton {
 
     component Digit: Item {
         required property int index
-        readonly property bool visualFocus: self.visualFocus && digit.index === self.pin.length
+        readonly property bool visualFocus: self.activeFocus && digit.index === self.pin.length
         id: digit
-        implicitWidth: 43
+        implicitWidth: 69
         implicitHeight: 69
         opacity: self.enabled ? 1 : 0.5
         Rectangle {
             anchors.fill: parent
             border.width: 2
-            border.color: '#00BCFF'
+            border.color: digit.visualFocus ? '#00BCFF' : '#333'
             color: 'transparent'
             radius: 10
-            visible: digit.visualFocus
         }
-        Rectangle {
-            anchors.fill: parent
-            anchors.margins: digit.visualFocus ? 4 : 0
-            color: '#FFF'
-            radius: digit.visualFocus ? 6 : 10
-        }
-        Rectangle {
+        Label {
             anchors.centerIn: parent
-            radius: 7
-            width: 14
-            height: 14
-            color: digit.index < self.pin.length ? '#212121' : '#D3D3D3'
+            font.pixelSize: 26
+            font.weight: 600
+            text: '*'
+            visible: digit.index < self.pin.length
+            color: '#00BCFF'
         }
     }
 }

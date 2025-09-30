@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 AbstractButton {
     property bool black: false
+    property bool cyan: false
     property bool busy: false
     HoverHandler {
         cursorShape: Qt.PointingHandCursor
@@ -32,7 +33,7 @@ AbstractButton {
             anchors.margins: self.visualFocus ? 4 : 0
             color: Qt.alpha(self.black ? '#000' : '#FFF', self.enabled && self.hovered ? 0.2 : 0)
             border.width: 1
-            border.color: self.black ? '#000' : '#FFF'
+            border.color: self.black ? '#000' : self.cyan ? '#00BCFF' : '#FFF'
             radius: self.visualFocus ? 4 : 8
         }
     }
@@ -46,7 +47,7 @@ AbstractButton {
             visible: image.status === Image.Ready
         }
         Label {
-            color: self.black ? '#000' : '#fff'
+            color: self.black ? '#000' : self.cyan ? '#00BCFF' : '#fff'
             font: self.font
             horizontalAlignment: Text.AlignHCenter
             text: self.text

@@ -24,6 +24,8 @@ RegularButton {
     bottomPadding: 12
     rightPadding: 13
     onClicked: collapsible.toggle()
+    cyan: true
+    focusPolicy: Qt.NoFocus
     contentItem: ColumnLayout {
         spacing: 0
         RowLayout {
@@ -40,6 +42,7 @@ RegularButton {
                 font.weight: 700
                 horizontalAlignment: Text.AlignHCenter
                 text: self.text
+                color: '#00BCFF'
                 verticalAlignment: Text.AlignVCenter
             }
             HSpacer {
@@ -66,7 +69,9 @@ RegularButton {
                     RegularButton {
                         Layout.preferredWidth: 56
                         text: modelData
+                        cyan: true
                         onClicked: self.target.append(modelData)
+                        focusPolicy: Qt.NoFocus
                     }
                 }
                 PadButton {
@@ -74,11 +79,14 @@ RegularButton {
                     Layout.preferredWidth: 56
                     icon.source: 'qrc:/svg2/arrows-counter-clockwise.svg'
                     onClicked: self.scramble()
+                    focusPolicy: Qt.NoFocus
                 }
                 RegularButton {
                     Layout.preferredWidth: 56
                     text: self.keys[9]
+                    cyan: true
                     onClicked: self.target.append(self.keys[9])
+                    focusPolicy: Qt.NoFocus
                 }
                 PadButton {
                     Layout.fillHeight: true
@@ -86,6 +94,7 @@ RegularButton {
                     icon.source: 'qrc:/svg2/backspace.svg'
                     enabled: self.target.pin.length > 0
                     onClicked: self.target.remove()
+                    focusPolicy: Qt.NoFocus
                 }
             }
         }
@@ -103,7 +112,7 @@ RegularButton {
         background: Rectangle {
             color: Qt.alpha('#FFF', self.enabled && self.hovered ? 0.2 : 0)
             border.width: 1
-            border.color: '#FFF'
+            border.color: '#00BCFF'
             radius: 8
             Rectangle {
                 border.width: 2

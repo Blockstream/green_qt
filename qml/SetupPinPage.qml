@@ -24,7 +24,6 @@ StackViewPage {
     }
     StackView.onActivated: pin_field.forceActiveFocus()
     id: self
-    footer: null
     padding: 60
     title: self.context?.wallet?.name ?? ''
     leftItem: Item {
@@ -42,6 +41,9 @@ StackViewPage {
         text: self.pin && pin_field.enabled ? qsTrId('id_confirm_your_new_pin') : qsTrId('id_set_a_new_pin')
         wrapMode: Label.WordWrap
     }
+    HSpacer {
+        Layout.minimumHeight: 5
+    }
     Label {
         Layout.alignment: Qt.AlignCenter
         Layout.fillWidth: true
@@ -49,7 +51,7 @@ StackViewPage {
         font.pixelSize: 14
         font.weight: 400
         horizontalAlignment: Label.AlignHCenter
-        opacity: 0.4
+        color: '#A0A0A0'
         text: qsTrId('id_youll_need_your_pin_to_log_in')
         wrapMode: Label.Wrap
     }
@@ -58,6 +60,7 @@ StackViewPage {
         Layout.topMargin: 36
         id: pin_field
         focus: true
+        Component.onCompleted: forceActiveFocus()
         onPinEntered: (pin) => {
             if (self.pin) {
                 if (self.pin === pin) {
@@ -103,8 +106,7 @@ StackViewPage {
         enabled: pin_field.enabled
         target: pin_field
     }
-    RowLayout {
-        Layout.topMargin: 20
+    footer: RowLayout {
         spacing: 0
         Item {
             Layout.alignment: Qt.AlignCenter
@@ -116,6 +118,7 @@ StackViewPage {
         HSpacer {
         }
         ColumnLayout {
+            Layout.bottomMargin: 20
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/svg2/house.svg'
