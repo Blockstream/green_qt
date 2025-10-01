@@ -5,7 +5,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 
-import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 MainPage {
@@ -19,7 +18,31 @@ MainPage {
         screen: 'Home'
     }
     id: self
-    padding: 60
+    leftPadding: 40
+    rightPadding: 40
+    bottomPadding: 40
+    topPadding: 40
+    spacing: 36
+    header: Pane {
+        background: null
+        padding: 40
+        contentItem: RowLayout {
+            Label {
+                color: '#FFF'
+                font.family: 'Inter'
+                font.pixelSize: 24
+                font.weight: 500
+                text: 'My Wallets'
+            }
+            HSpacer {
+            }
+            RegularButton {
+                text: qsTrId('id_setup_a_new_wallet')
+                font.pixelSize: 14
+                font.weight: 600
+            }
+        }
+    }
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
         }
@@ -76,93 +99,6 @@ MainPage {
                     id: wallet_button
                     onClicked: self.openWallet(wallet_button.wallet)
                 }
-            }
-        }
-    }
-    header: Pane {
-        background: null
-        padding: 60
-        bottomPadding: 20
-        contentItem: ColumnLayout {
-            spacing: 20
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                scale: 0.75
-                source: 'qrc:/svg2/blockstream-app.svg'
-            }
-            RowLayout {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: false
-                visible: promos_repeater.count > 0
-                Repeater {
-                    id: promos_repeater
-                    model: {
-                        return [...PromoManager.promos]
-                            .filter(_ => !Settings.useTor)
-                            .filter(promo => !promo.dismissed)
-                            .filter(promo => promo.ready)
-                            .filter(promo => UtilJS.filterPromo(WalletManager.wallets, promo))
-                            .filter(promo => promo.data.is_visible)
-                            .filter(promo => promo.data.screens.indexOf('Home') >= 0)
-                            .slice(0, 1)
-                    }
-                    delegate: PromoCard {
-                        required property Promo modelData
-                        Layout.minimumWidth: 400
-                        Layout.maximumWidth: 400
-                        id: card
-                        screen: 'Home'
-                        promo: card.modelData
-                        onClicked: {
-                            const context = null
-                            const promo = card.promo
-                            const screen = 'Home'
-                            if (promo.data.is_small) {
-                                Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
-                                Qt.openUrlExternally(promo.data.link)
-                            } else {
-                                Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
-                                promo_drawer.createObject(self, { context, promo, screen }).open()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    Component {
-        id: promo_drawer
-        PromoDrawer {
-        }
-    }
-
-    footer: Pane {
-        background: null
-        padding: 60
-        topPadding: 20
-        contentItem: ColumnLayout {
-            spacing: 20
-            WalletsDrawer.ListButton {
-                Layout.alignment: Qt.AlignCenter
-                Layout.maximumWidth: 400
-                contentItem: RowLayout {
-                    spacing: 14
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-                        font.pixelSize: 14
-                        font.weight: 500
-                        text:  qsTrId('id_setup_a_new_wallet')
-                        elide: Label.ElideRight
-                    }
-                    Image {
-                        Layout.alignment: Qt.AlignCenter
-                        source: 'qrc:/svg2/right.svg'
-                    }
-                }
-                onClicked: self.createWallet()
             }
         }
     }

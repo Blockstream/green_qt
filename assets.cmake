@@ -244,6 +244,13 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg3/Notifications.svg
         assets/svg3/Trade.svg
         assets/svg3/Wallet.svg
+
+        assets/svg/blockstream.svg
+        assets/svg/menu-home.svg
+        assets/svg/menu-transactions.svg
+        assets/svg/menu-security.svg
+        assets/svg/menu-settings.svg
+        assets/svg/menu-wallet.svg
 )
 
 qt_add_resources(${APP_TARGET} "fonts"

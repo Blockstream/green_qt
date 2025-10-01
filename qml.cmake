@@ -100,7 +100,6 @@ SET(QML_FILES
     qml/SectionLabel.qml
     qml/AddressDelegate.qml
     qml/Constants.qml
-    qml/SideButton.qml
     qml/SettingsBox.qml
     qml/WalletRecoverySettingsView.qml
     qml/CoinDelegate.qml

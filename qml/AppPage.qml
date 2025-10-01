@@ -22,11 +22,13 @@ MainPage {
             const child = stack_layout.children[i]
             if (child instanceof WalletView && child.wallet === wallet) { // && !child.device) {
                 stack_layout.currentIndex = i;
+                side_bar.currentView = stack_layout.itemAt(i)
                 return
             }
         }
         wallet_view.createObject(stack_layout, { wallet })
         stack_layout.currentIndex = stack_layout.children.length - 1
+        side_bar.currentWalletView = stack_layout.itemAt(stack_layout.currentIndex)
         side_bar.currentView = SideBar.View.Wallets
     }
     function openDevice(device, options) {
@@ -231,7 +233,7 @@ MainPage {
         height: parent?.height ?? 0
         parent: Overlay.overlay
         z: 1
-        x: -side_bar.width
+        x: -side_bar.implicitWidth
         Behavior on x {
             SmoothedAnimation {
                 velocity: 200
