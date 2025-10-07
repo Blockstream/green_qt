@@ -159,8 +159,10 @@ if(ENABLE_SENTRY)
 
     # Avoid linking to llvm@16 libunwind.1.dylib
     if (APPLE)
-        find_library(LIBUNWIND_LIB NAMES libunwind.a REQUIRED)
-        target_link_libraries(${APP_TARGET} PRIVATE ${LIBUNWIND_LIB})
+        find_library(LIBUNWIND_LIB NAMES libunwind.a)
+        if (LIBUNWIND_LIB)
+            target_link_libraries(${APP_TARGET} PRIVATE ${LIBUNWIND_LIB})
+        endif()
     endif()
 endif()
 
