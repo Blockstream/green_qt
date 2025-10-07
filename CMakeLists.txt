@@ -156,6 +156,12 @@ if(ENABLE_SENTRY)
         crashpad::zlib
         ${LIBBREAKPAD_LIB} ${LIBDISASM_LIB}
     )
+
+    # Avoid linking to llvm@16 libunwind.1.dylib
+    if (APPLE)
+        find_library(LIBUNWIND_LIB NAMES libunwind.a REQUIRED)
+        target_link_libraries(${APP_TARGET} PRIVATE ${LIBUNWIND_LIB})
+    endif()
 endif()
 
 if (WIN32)
