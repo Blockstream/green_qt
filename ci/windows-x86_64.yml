@@ -78,7 +78,7 @@ windows-x86_64:installer:
   needs:
     - windows-x86_64:sign
   script:
-    - ls -la
+    - cp assets/installer/* .
     - iscc installer.iss
 
 windows-x86_64:sign-installer:

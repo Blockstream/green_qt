@@ -119,6 +119,7 @@ windows-x86_64-shared:installer:
     - windows-x86_64-shared:sign
   script:
     - mv bld/installer.iss bld/Release/
+    - cp assets/installer/* bld/Release/
     - iscc bld/Release/installer.iss
     - mv bld/Release/Setup.exe .
 

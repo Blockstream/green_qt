@@ -26,6 +26,8 @@ PrivilegesRequired=admin
 ArchitecturesInstallIn64BitMode=x64
 CloseApplications=force
 DisableWelcomePage=no
+WizardImageFile=wizard.bmp
+WizardSmallImageFile=wizard-small.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
