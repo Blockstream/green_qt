@@ -101,7 +101,6 @@ windows-x86_64-shared:sign:
     paths:
       - bld/installer.iss
       - bld/Release
-  when: manual
 
 windows-x86_64-shared:installer:
   image:

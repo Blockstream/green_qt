@@ -45,7 +45,6 @@ windows-x86_64:build:
       -output_dir_path=signed
       -input_file_path="$INPUT_FILE"
     - mv "signed/$INPUT_FILE" "$OUTPUT_FILE"
-  when: manual
 
 windows-x86_64:sign:
   extends: .windows:sign
