@@ -59,13 +59,13 @@ windows-x86_64-shared:build:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker image inspect $IMAGE || docker pull $IMAGE
-    - docker run --rm -v ${CI_PROJECT_DIR}:C:\src $IMAGE cmd /c C:\src\build.bat
+    - docker run --rm -v ${CI_PROJECT_DIR}:C:\src -e CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH -e SENTRY_KEY=$SENTRY_KEY $IMAGE cmd /c C:\src\build.bat
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
       - bld/installer.iss
-      - bld/Release
+      - bld/RelWithDebInfo
 
 windows-x86_64-shared:sign:
   image:
@@ -84,7 +84,7 @@ windows-x86_64-shared:sign:
       -username="$SSL_COM_USERNAME" \
       -password="$SSL_COM_PASSWORD" \
       -totp_secret="$SSL_COM_TOTP_SECRET" \
-      -input_file_path=bld/Release/blockstream.exe \
+      -input_file_path=bld/RelWithDebInfo/blockstream.exe \
       -override
     - |
       find bld -type f \( -iname "*.exe" -o -iname "*.dll" \) -exec echo bash CodeSignTool.sh sign \
@@ -100,7 +100,7 @@ windows-x86_64-shared:sign:
     expire_in: 1 week
     paths:
       - bld/installer.iss
-      - bld/Release
+      - bld/RelWithDebInfo
 
 windows-x86_64-shared:installer:
   image:
@@ -118,10 +118,10 @@ windows-x86_64-shared:installer:
   needs:
     - windows-x86_64-shared:sign
   script:
-    - mv bld/installer.iss bld/Release/
-    - cp assets/installer/* bld/Release/
-    - iscc bld/Release/installer.iss
-    - mv bld/Release/Setup.exe .
+    - mv bld/installer.iss bld/RelWithDebInfo/
+    - cp assets/installer/* bld/RelWithDebInfo/
+    - iscc bld/RelWithDebInfo/installer.iss
+    - mv bld/RelWithDebInfo/Setup.exe .
 
 windows-x86_64-shared:sign-installer:
   extends: .windows:sign
