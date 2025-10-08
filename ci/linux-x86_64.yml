@@ -10,6 +10,7 @@ linux-x86_64:build-image:
     - .build
   tags:
     - cloud
+  when: manual
 
 linux-x86_64:build-appimage:
   extends:

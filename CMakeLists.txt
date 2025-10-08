@@ -31,7 +31,6 @@ find_package(libserialport REQUIRED)
 find_package(ZXing REQUIRED)
 
 if (WIN32 AND NOT QT_FEATURE_static)
-    add_library(green_gdk_full SHARED IMPORTED GLOBAL)
 else()
     find_package(gdk REQUIRED COMPONENT green_gdk_full)
 endif()
@@ -99,7 +98,6 @@ set_target_properties(${APP_TARGET} PROPERTIES
 target_link_libraries(${APP_TARGET}
     PRIVATE
     ZXing::Core
-    gdk::green_gdk_full
     Countly::SDK
     libserialport::libserialport
     Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
@@ -122,6 +120,10 @@ if (WIN32 AND NOT QT_FEATURE_static)
         "C:/depends/windows-x86_64/include/gdk"
         "C:/depends/windows-x86_64/include/gdk/libwally-core"
     )
+else()
+    target_link_libraries(${APP_TARGET} PRIVATE gdk::green_gdk_full)
+    get_target_property(GDK_INCLUDE gdk::green_gdk_full INTERFACE_INCLUDE_DIRECTORIES)
+    target_include_directories(${APP_TARGET} PRIVATE ${GDK_INCLUDE}/libwally-core/)
 endif()
 
 if(ENABLE_SENTRY)
@@ -187,11 +189,6 @@ target_include_directories(${APP_TARGET} PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers
   "${CMAKE_CURRENT_BINARY_DIR}"
 )
-
-if (TARGET gdk::green_gdk_full)
-    get_target_property(GDK_INCLUDE gdk::green_gdk_full INTERFACE_INCLUDE_DIRECTORIES)
-    target_include_directories(${APP_TARGET} PRIVATE ${GDK_INCLUDE}/libwally-core/)
-endif()
 
 target_include_directories(${APP_TARGET} PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers

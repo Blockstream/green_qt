@@ -30,6 +30,7 @@ macos-x86_64:build:
     expire_in: 1 week
     paths:
       - macos-x86_64/Blockstream.app
+  when: manual
 
 macos-x86_64:staple:
   extends:

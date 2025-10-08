@@ -20,6 +20,7 @@ windows-x86_64:build:
     paths:
       - installer.iss
       - blockstream.exe
+  when: manual
 
 .windows:sign:
   image:
