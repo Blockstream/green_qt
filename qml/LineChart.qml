@@ -24,10 +24,17 @@ Page {
     }
 
     property color fillColor: Qt.rgba(0.0, 0.737, 1.0, 0.2) // top gradient color
-
     property bool loading: root.pairCount === 0
     property int selectedIndex: 0
     property bool showRangeButtons: true
+    property int horizontalGridLinesCount: 6
+    property int verticalGridLinesCount: 5
+    readonly property int dynamicVerticalGridLinesCount: {
+        if (width < 200) return Math.min(3, verticalGridLinesCount)
+        if (width < 300) return Math.min(4, verticalGridLinesCount)
+        if (width < 400) return Math.min(5, verticalGridLinesCount)
+        return verticalGridLinesCount
+    }
     readonly property var bounds: {
         let xMin = Number.POSITIVE_INFINITY
         let xMax = Number.NEGATIVE_INFINITY
@@ -102,14 +109,28 @@ Page {
         if (n >= 1e3) return `${sign}${(n/1e3).toFixed(1)}k`
         return `${sign}${Math.round(n)}`
     }
-
-    background: Rectangle {
-        radius: 4
-        color: '#161921'
-        border.width: 1
-        border.color: '#1F222A'
+    function _coerceMillis(timestamp) {
+        const numericTimestamp = Number(timestamp)
+        return numericTimestamp > 1e12 ? numericTimestamp : numericTimestamp * 1000
     }
-
+    function _pad2(value) { return value < 10 ? '0' + value : '' + value }
+    function formatDateTick(timestamp) {
+        if (!isFinite(timestamp)) return ''
+        const milliseconds = _coerceMillis(timestamp)
+        const dateObj = new Date(milliseconds)
+        const locale = Qt.locale()
+        switch (root.selectedIndex) {
+        case 0: // 1D
+            return _pad2(dateObj.getHours()) + ':' + _pad2(dateObj.getMinutes())
+        case 1: // 1W
+        case 2: // 1M
+            return _pad2(dateObj.getDate()) + ' ' + locale.monthName(dateObj.getMonth(), Locale.ShortFormat)
+        case 3: // 1Y
+        case 4: // 5Y
+            return locale.monthName(dateObj.getMonth(), Locale.ShortFormat) + ' ' + dateObj.getFullYear()
+        }
+        return dateObj.toLocaleDateString()
+    }
     readonly property var scaledPoints: {
         const arr = []
         const dx = bounds.xMax - bounds.xMin
@@ -150,6 +171,13 @@ Page {
         return d + ` L ${chartArea.plotWidth} ${chartArea.height} L 0 ${chartArea.height} Z`
     }
 
+    background: Rectangle {
+        radius: 4
+        color: '#161921'
+        border.width: 1
+        border.color: '#1F222A'
+    }
+
     header: Pane {
         background: null
         padding: 12
@@ -164,27 +192,40 @@ Page {
                 height: 28
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
+                Layout.minimumWidth: 28
             }
             Label {
+                visible: parent.width > 220
                 Layout.fillWidth: true
+                Layout.minimumWidth: 60
+                Layout.maximumWidth: parent.width - 180
                 text: root.title
                 font.pixelSize: 18
                 font.weight: 600
                 color: "#ffffff"
                 opacity: 0.95
+                elide: Text.ElideRight
+            }
+            Item {
+                visible: parent.width <= 180 || (parent.width - 180) <= 80
+                Layout.fillWidth: true
             }
             ColumnLayout {
                 visible: !root.loading
-                Layout.alignment: Qt.AlignVCenter
+                Layout.alignment: Qt.AlignRight
+                Layout.minimumWidth: 80
+                Layout.maximumWidth: 120
+                Layout.preferredWidth: 120
                 spacing: 4
                 RowLayout {
                     spacing: 4
                     Layout.alignment: Qt.AlignRight
                     Label {
-                    text: root.formatPercent(root.percentChange)
+                        text: root.formatPercent(root.percentChange)
                         font.pixelSize: 14
                         font.weight: 600
                         color: root.percentChange >= 0 ? "#00D084" : "#FF4D4F"
+                        Layout.minimumWidth: 50
                     }
                     Image {
                         source: root.percentChange >= 0 ? 'qrc:/svg3/Arrow_price_up.svg' : 'qrc:/svg3/Arrow_price_down.svg'
@@ -193,6 +234,7 @@ Page {
                         sourceSize.width: 14
                         sourceSize.height: 14
                         fillMode: Image.PreserveAspectFit
+                        Layout.minimumWidth: 14
                     }
                 }
                 Label {
@@ -202,105 +244,153 @@ Page {
                     font.weight: 600
                     color: "#ffffff"
                     opacity: 1.0
+                    Layout.alignment: Qt.AlignRight
+                    elide: Text.ElideRight
                 }
             }
         }
     }
 
     contentItem: Item {
-        anchors.fill: parent
-        anchors.topMargin: (header?.height ?? 0) + 12
-        anchors.bottomMargin: (footer?.height ?? 0) + 12
-        Item {
-            id: chartArea
-            anchors.fill: parent
-            property int axisWidth: 48
-            readonly property int plotWidth: width - axisWidth
+        id: chartArea
+        property int axisWidth: root.width < 250 ? 0 : 48
+        readonly property int plotWidth: width - axisWidth
 
-            BusyIndicator {
-                id: initial_spinner
-                running: initial_spinner.visible
-                visible: root.loading
-                width: 60
-                height: 60
-                anchors.centerIn: parent
-                anchors.leftMargin: chartArea.axisWidth + (chartArea.plotWidth - width) / 2
+        BusyIndicator {
+            id: initial_spinner
+            running: initial_spinner.visible
+            visible: root.loading
+            width: 60
+            height: 60
+            anchors.centerIn: parent
+            anchors.leftMargin: chartArea.axisWidth + (chartArea.plotWidth - width) / 2
+        }
+
+        //Horizontal Grid lines and labels
+        Repeater {
+            model: root.loading ? 0 : root.horizontalGridLinesCount
+            delegate: Item {
+                required property int index
+                width: chartArea.width
+                height: 1
+                readonly property real _pad: 0.05
+                readonly property real _t: _pad + (index / (root.horizontalGridLinesCount - 1)) * (1 - 2 * _pad)
+                y: _t * chartArea.height
+                z: 0
+                Rectangle {
+                    x: chartArea.axisWidth
+                    width: chartArea.plotWidth
+                    height: 1
+                    color: '#3D3D3D'
+                    opacity: 0.5
+                    z: 0
+                }
+                Label {
+                    visible: root.width >= 250
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: 0
+                    width: chartArea.axisWidth - 6
+                    horizontalAlignment: Text.AlignRight
+                    color: '#A0A0A0'
+                    font.pixelSize: 12
+                    z: 2
+                    elide: Text.ElideRight
+                    rightPadding: 4
+                    text: {
+                        const b = root.bounds
+                        const pad = 0.05
+                        const t = pad + (index / 5) * (1 - 2 * pad)
+                        const val = Number(b.yMax) - t * (Number(b.yMax) - Number(b.yMin))
+                        return root.formatCompact(val)
+                    }
+                }
             }
+        }
 
-            // Grid lines and labels
+        // Vertical grid lines and date labels
+        Item {
+            anchors.fill: parent
+            visible: !root.loading
+            z: 2
             Repeater {
-                model: root.loading ? 0 : 6
+                model: root.dynamicVerticalGridLinesCount
                 delegate: Item {
                     required property int index
-                    width: chartArea.width
-                    height: 1
-                    // position from top with 5% padding top/bottom
+                    width: 1
+                    height: chartArea.height
                     readonly property real _pad: 0.05
-                    readonly property real _t: _pad + (index / 5) * (1 - 2 * _pad)
-                    y: _t * chartArea.height
+                    readonly property real _t: _pad + (index / (root.dynamicVerticalGridLinesCount - 1)) * (1 - 2 * _pad)
+                    x: chartArea.axisWidth + _t * chartArea.plotWidth
+                    y: 0
                     z: 0
-                    // grid line
-                    Rectangle {
-                        x: chartArea.axisWidth
-                        width: chartArea.plotWidth
-                        height: 1
-                        color: '#3D3D3D'
-                        opacity: 0.5
-                        z: 0
-                    }
-                    // label at left gutter
-                    Label {
-                        anchors.verticalCenter: parent.verticalCenter
-                        x: 0
-                        width: chartArea.axisWidth - 6
-                        horizontalAlignment: Text.AlignRight
-                        color: '#A0A0A0'
-                        font.pixelSize: 12
-                        z: 2
-                        elide: Text.ElideRight
-                        rightPadding: 4
-                        text: {
-                            const b = root.bounds
-                            const pad = 0.05
-                            const t = pad + (index / 5) * (1 - 2 * pad)
-                            const val = Number(b.yMax) - t * (Number(b.yMax) - Number(b.yMin))
-                            return root.formatCompact(val)
+                    Repeater {
+                        model: Math.floor(parent.height / 8)
+                        delegate: Rectangle {
+                            width: 1
+                            height: 4
+                            x: -0.5
+                            y: index * 8
+                            color: '#3D3D3D'
+                            opacity: 0.5
+                            z: 0
                         }
                     }
                 }
             }
 
-            // Chart paths
-            Shape {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.leftMargin: chartArea.axisWidth
-                antialiasing: true
-                layer.enabled: true
-                layer.samples: 4
-                z: 1
-
-                ShapePath {
-                    strokeWidth: 0
-                    fillGradient: LinearGradient {
-                        x1: 0; y1: 0
-                        x2: 0; y2: chartArea.height
-                        GradientStop { position: 0.0; color: root.fillColor }
-                        GradientStop { position: 1.0; color: Qt.rgba(0.0, 0.737, 1.0, 0.0) }
+            Repeater {
+                model: root.dynamicVerticalGridLinesCount
+                delegate: Item {
+                    required property int index
+                    width: 1; height: 1
+                    readonly property real _pad: 0.05
+                    readonly property real _t: _pad + (index / (root.dynamicVerticalGridLinesCount - 1)) * (1 - 2 * _pad)
+                    readonly property real _xPix: chartArea.axisWidth + _t * chartArea.plotWidth
+                    readonly property real _xVal: Number(root.bounds.xMin) + _t * (Number(root.bounds.xMax) - Number(root.bounds.xMin))
+                    Label {
+                        x: _xPix - width / 2
+                        y: chartArea.height + 4
+                        text: root.formatDateTick(_xVal)
+                        color: '#A0A0A0'
+                        font.pixelSize: 12
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                        width: Math.min(80, chartArea.plotWidth / root.dynamicVerticalGridLinesCount)
                     }
-                    PathSvg { path: buildAreaPath }
                 }
+            }
+        }
 
-                ShapePath {
-                    strokeColor: '#00BCFF'
-                    strokeWidth: 1.5
-                    fillColor: "transparent"
-                    joinStyle: ShapePath.RoundJoin
-                    capStyle: ShapePath.RoundCap
-                    PathSvg { path: root.buildSmoothPath }
+        // Chart paths
+        Shape {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: chartArea.axisWidth
+            antialiasing: true
+            layer.enabled: true
+            layer.samples: 4
+            z: 1
+
+            ShapePath {
+                strokeWidth: 0
+                fillGradient: LinearGradient {
+                    x1: 0; y1: 0
+                    x2: 0; y2: chartArea.height
+                    GradientStop { position: 0.0; color: root.fillColor }
+                    GradientStop { position: 1.0; color: Qt.rgba(0.0, 0.737, 1.0, 0.0) }
                 }
+                PathSvg { path: buildAreaPath }
+            }
+
+            ShapePath {
+                strokeColor: '#00BCFF'
+                strokeWidth: 1.5
+                fillColor: "transparent"
+                joinStyle: ShapePath.RoundJoin
+                capStyle: ShapePath.RoundCap
+                PathSvg { path: root.buildSmoothPath }
             }
         }
     }
@@ -313,18 +403,34 @@ Page {
             spacing: 0
             HSpacer {
             }
-            Repeater {
-                model: [
-                    { text: qsTr('1D'), index: 0 },
-                    { text: qsTr('1W'), index: 1 },
-                    { text: qsTr('1M'), index: 2 },
-                    { text: qsTr('1Y'), index: 3 },
-                    { text: qsTr('5Y'), index: 4 }
-                ]
-                delegate: RangeButton {
-                    onClicked: root.selectedIndex = index
-                    checked: root.selectedIndex === index
-                    text: modelData.text
+            RowLayout {
+                id: buttonContainer
+                spacing: 0
+                Layout.alignment: Qt.AlignHCenter
+
+                // Calculate if buttons need to be resized
+                readonly property real optimalButtonWidth: 42
+                readonly property real minButtonWidth: 28
+                readonly property real totalOptimalWidth: 5 * optimalButtonWidth
+                readonly property real availableWidth: parent.width - 24
+                readonly property bool needsResize: availableWidth < totalOptimalWidth
+                readonly property real buttonWidth: needsResize ? Math.max(minButtonWidth, availableWidth / 5) : optimalButtonWidth
+                
+                Repeater {
+                    model: [
+                        { text: qsTr('1D'), index: 0 },
+                        { text: qsTr('1W'), index: 1 },
+                        { text: qsTr('1M'), index: 2 },
+                        { text: qsTr('1Y'), index: 3 },
+                        { text: qsTr('5Y'), index: 4 }
+                    ]
+                    delegate: RangeButton {
+                        onClicked: root.selectedIndex = index
+                        checked: root.selectedIndex === index
+                        text: modelData.text
+                        needsResize: buttonContainer.needsResize
+                        buttonWidth: buttonContainer.buttonWidth
+                    }
                 }
             }
             HSpacer {
@@ -335,10 +441,16 @@ Page {
     component RangeButton: AbstractButton {
         id: button
         checkable: true
-        leftPadding: 14
-        rightPadding: 14
+        property bool needsResize: false
+        property real buttonWidth: 42
+        
+        leftPadding: needsResize ? Math.max(4, buttonWidth / 4) : 14
+        rightPadding: needsResize ? Math.max(4, buttonWidth / 4) : 14
         topPadding: 4
         bottomPadding: 4
+        
+        implicitWidth: needsResize ? buttonWidth : undefined
+        
         background: Rectangle {
             radius: button.background.height / 2
             color: button.checked ? '#262626' : 'transparent'
@@ -347,8 +459,10 @@ Page {
         contentItem: Label {
             text: button.text
             color: button.checked ? '#FFFFFF' : '#A0A0A0'
-            font.pixelSize: 12
+            font.pixelSize: needsResize ? Math.max(10, Math.min(12, buttonWidth / 4)) : 12
             font.weight: 400
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
     }
 }
