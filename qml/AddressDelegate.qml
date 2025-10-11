@@ -16,6 +16,7 @@ ItemDelegate {
     rightPadding: 20
     topPadding: 20
     bottomPadding: 20
+    width: ListView.view.width
     background: Item {
         Rectangle {
             anchors.fill: parent

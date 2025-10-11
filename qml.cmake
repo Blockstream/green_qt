@@ -170,7 +170,6 @@ SET(QML_FILES
     qml/UsernameField.qml
     qml/PasswordField.qml
     qml/WatchOnlyNetworkPage.qml
-    qml/FreshWalletView.qml
     qml/AbstractDrawer.qml
     qml/WalletsDrawer.qml
     qml/AlreadyRestoredPage.qml
@@ -263,6 +262,13 @@ SET(QML_FILES
     qml/RequestSupportPage.qml
     qml/SupportSubmittedPage.qml
     qml/SupportDrawer.qml
+    qml/AssetsView.qml
+    qml/HomePage.qml
+    qml/TransactionsPage.qml
+    qml/FilterPopup.qml
+    qml/AccountFilterPopup.qml
+    qml/AssetFilterPopup.qml
+    qml/AddressFilterPopup.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -30,6 +30,11 @@ MainPage {
         }
     }
 
+    readonly property OverviewPage overviewPage
+        : stack_view.currentItem instanceof OverviewPage
+        ? stack_view.currentItem as OverviewPage
+        : null
+
     AnalyticsAlert {
         id: login_alert
         screen: 'Login'

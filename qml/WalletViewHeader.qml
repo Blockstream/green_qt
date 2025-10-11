@@ -23,11 +23,7 @@ MainPageHeader {
 
     required property Context context
     required property Wallet wallet
-    required property Account currentAccount
-    readonly property bool archived: self.currentAccount ? self.currentAccount.hidden : false
-    required property real accountListWidth
-    property Item toolbarItem: toolbar
-    property string view: 'transactions'
+    required property int view
     id: self
 
     readonly property bool busy: {
@@ -42,6 +38,7 @@ MainPageHeader {
     topPadding: 0
     leftPadding: 0
     rightPadding: 0
+    bottomPadding: 16
 
     component HPane: GPane {
         padding: 4
@@ -74,7 +71,6 @@ MainPageHeader {
         }
         GMenu.Item {
             text: qsTrId('id_settings')
-            enabled: self.currentAccount
             icon.source: 'qrc:/svg/wallet-settings.svg'
             onClicked: {
                 menu.close()
@@ -97,7 +93,7 @@ MainPageHeader {
         GMenu.Item {
             text: qsTrId('id_refresh')
             icon.source: 'qrc:/svg2/refresh.svg'
-            enabled: self.currentAccount && !(self.context?.dispatcher.busy ?? false)
+            enabled: !(self.context?.dispatcher.busy ?? false)
             onClicked: {
                 menu.close()
                 self.context.refreshAccounts()
@@ -141,9 +137,14 @@ MainPageHeader {
                         spacing: 0
                         Label {
                             verticalAlignment: Qt.AlignVCenter
-                            text: qsTrId('id_overview')
                             font.pixelSize: 24
                             font.weight: 700
+                            text: {
+                                if (self.view === OverviewPage.Home) return qsTrId('id_overview')
+                                if (self.view === OverviewPage.Transactions) return qsTrId('id_transactions')
+                                if (self.view === OverviewPage.Security) return qsTrId('id_security')
+                                if (self.view === OverviewPage.Settings) return qsTrId('id_settings')
+                            }
                         }
                         Label {
                             Layout.leftMargin: 8
@@ -294,82 +295,12 @@ MainPageHeader {
             }
         }
         HPane {
-            Layout.bottomMargin: 20
             contentItem: CardBar {
                 context: self.context
                 onAssetsClicked: self.assetsClicked()
                 onJadeDetailsClicked: self.jadeDetailsClicked()
                 onPromoClicked: (promo) => self.promoClicked(promo)
             }
-        }
-        HPane {
-            visible: self.currentAccount
-            contentItem: RowLayout {
-                id: toolbar
-                Layout.fillWidth: true
-                Layout.fillHeight: false
-                spacing: 24
-                Label {
-                    Layout.minimumWidth: self.accountListWidth
-                    text: qsTrId('id_accounts')
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-                RowLayout {
-                    Layout.fillWidth: false
-                    spacing: 24
-                    TabButton2 {
-                        view: 'transactions'
-                    }
-                    TabButton2 {
-                        view: 'addresses'
-                    }
-                    TabButton2 {
-                        view: 'coins'
-                    }
-                    TabButton2 {
-                        view: 'assets'
-                        enabled: self.currentAccount?.network.liquid ?? false
-                    }
-                }
-                HSpacer {
-                }
-            }
-        }
-    }
-
-    component TabButton2: Button {
-        id: tab_button
-        required property string view
-        padding: 0
-        verticalPadding: 0
-        topPadding: 4
-        bottomPadding: 4
-        leftPadding: 0
-        rightPadding: 0
-        background: null
-        checked: self.view === tab_button.view
-        visible: enabled
-        action: Action {
-            text: qsTrId('id_' + tab_button.view)
-            shortcut: {
-                let j = -1
-                for (let i = 0; i < parent.children.length; i++) {
-                    const item = parent.children[i]
-                    if (!item.visible) continue
-                    j ++
-                    if (item === tab_button) return 'Ctrl+' + (j + 1)
-                }
-                return null
-            }
-            onTriggered: self.view = tab_button.view
-        }
-        contentItem: Label {
-            text: tab_button.text
-            opacity: tab_button.checked ? 1 : tab_button.hovered ? 0.8 : 0.5
-            font.pixelSize: 16
-            font.bold: true
-            horizontalAlignment: Label.AlignHCenter
         }
     }
 

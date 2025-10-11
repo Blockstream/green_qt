@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 Pane {
     enum View {
-        Blockstream,
+        Wallet,
         Wallets,
         Preferences
     }
@@ -16,6 +16,8 @@ Pane {
     signal crashClicked
 
     property WalletView currentWalletView
+    property OverviewPage currentOverviewPage: currentWalletView?.overviewPage ?? null
+
     property int currentView: SideBar.Wallets
     property real maximumWidth: 250
     readonly property real position: (width - self.implicitWidth) / (self.maximumWidth - self.implicitWidth)
@@ -26,7 +28,6 @@ Pane {
             velocity: 500
         }
     }
-
 
     id: self
     focusPolicy: Qt.ClickFocus
@@ -51,7 +52,7 @@ Pane {
             dragThreshold: 1
             target: null
             enabled: !width_animation.running
-            margin: 24
+            margin: 0
             onActiveChanged: {
                 if (drag_handler.active) {
                     drag_handler.startWidth = self.width
@@ -68,29 +69,30 @@ Pane {
             }
         }
     }
+
     contentItem: ColumnLayout {
         spacing: 0
         Logo {
         }
-        SideButton {
+        WalletSideButton {
             icon.source: 'qrc:/svg/menu-home.svg'
             text: qsTrId('id_home')
-            visible: self.currentWalletView?.wallet?.context ?? false
+            view: OverviewPage.Home
         }
-        SideButton {
+        WalletSideButton {
             icon.source: 'qrc:/svg/menu-transactions.svg'
             text: qsTrId('id_transactions')
-            visible: self.currentWalletView?.wallet?.context ?? false
+            view: OverviewPage.Transactions
         }
-        SideButton {
+        WalletSideButton {
             icon.source: 'qrc:/svg/menu-security.svg'
             text: qsTrId('id_security')
-            visible: self.currentWalletView?.wallet?.context ?? false
+            view: OverviewPage.Security
         }
-        SideButton {
+        WalletSideButton {
             icon.source: 'qrc:/svg/menu-settings.svg'
             text: qsTrId('id_settings')
-            visible: self.currentWalletView?.wallet?.context ?? false
+            view: OverviewPage.Settings
         }
         VSpacer {
         }
@@ -209,5 +211,13 @@ Pane {
                 wrapMode: Label.NoWrap
             }
         }
+    }
+
+    component WalletSideButton: SideButton {
+        required property int view
+        id: button
+        isCurrent: self.currentOverviewPage?.view === button.view
+        visible: !!self.currentOverviewPage
+        onClicked: self.currentView === SideBar.Wallet && self.currentOverviewPage.showView(button.view)
     }
 }

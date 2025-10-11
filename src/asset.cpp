@@ -191,7 +191,6 @@ AssetsModel::AssetsModel(QObject* parent)
 {
     setSourceModel(AssetManager::instance()->model());
     setDynamicSortFilter(true);
-    setDynamicSortFilter(true);
     sort(0); // NOLINT(build/include_what_you_use)
 }
 

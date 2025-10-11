@@ -17,7 +17,7 @@ Collapsible {
     id: self
     collapsed: !WalletManager.hasOpenUrl
     contentWidth: self.width
-    contentHeight: pane.height - 20
+    contentHeight: pane.height - 10
     animationVelocity: 200
     Pane {
         id: pane
@@ -26,6 +26,7 @@ Collapsible {
         topPadding: 10
         bottomPadding: 30
         x: 25
+        y: 5
         width: self.width - 50
         background: Rectangle {
             color: '#00BCFF'

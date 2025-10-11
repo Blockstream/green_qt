@@ -139,7 +139,6 @@ Page {
         }
     }
     RowLayout {
-        parent: toolbarItem
         visible: self.visible
         spacing: 10
         AbstractButton {

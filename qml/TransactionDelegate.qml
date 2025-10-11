@@ -10,9 +10,9 @@ import "util.js" as UtilJS
 
 ItemDelegate {
     signal transactionClicked(Transaction transaction)
-    required property Transaction transaction
-    required property Account account
     required property Context context
+    required property Transaction transaction
+    property Account account: transaction.account
 
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
@@ -78,25 +78,21 @@ ItemDelegate {
             Layout.alignment: Qt.AlignCenter
             source: `qrc:/svg2/tx-${transaction.data.type}.svg`
         }
-        ColumnLayout {
-            Layout.fillWidth: false
-            Layout.fillHeight: false
-            Layout.alignment: Qt.AlignCenter
-            spacing: 1
-            Label {
-                color: '#FFF'
-                font.pixelSize: 14
-                font.weight: 600
-                text: txType(tx)
-            }
-            Label {
-                color: '#929292'
-                text: UtilJS.formatTransactionTimestamp(tx)
-                font.pixelSize: 12
-                font.weight: 400
-                font.capitalization: Font.AllUppercase
-                opacity: 0.6
-            }
+        Label {
+            Layout.minimumWidth: self.width / 5
+            color: '#FFF'
+            font.pixelSize: 14
+            font.weight: 600
+            text: txType(tx)
+        }
+        Label {
+            Layout.minimumWidth: self.width / 5
+            color: '#929292'
+            text: UtilJS.formatTransactionTimestamp(tx)
+            font.pixelSize: 12
+            font.weight: 400
+            font.capitalization: Font.AllUppercase
+            opacity: 0.6
         }
         Label {
             Layout.alignment: Qt.AlignCenter
@@ -115,30 +111,33 @@ ItemDelegate {
             transaction: self.transaction
             confirmations: self.confirmations
         }
+        Repeater {
+            id: assets_repeater
+            model: self.transaction.amounts
+            delegate: AssetIcon {
+                asset: modelData.asset
+            }
+        }
+        Label {
+            Layout.alignment: Qt.AlignRight
+            color: '#929292'
+            font.pixelSize: 12
+            font.weight: 400
+            text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
+            visible: Number(convert.result.satoshi ?? '0') !== 0
+        }
         ColumnLayout {
             Layout.fillWidth: false
             Layout.minimumWidth: self.width / 5
             spacing: 1
             Repeater {
-                model: {
-                    const assets = []
-                    if (self.transaction.type !== Transaction.Redeposit) {
-                        if (self.account.network.liquid) {
-                            for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
-                                if (self.account.network.policyAsset === id) continue
-                                const asset = AssetManager.assetWithId(self.account.context.deployment, id)
-                                assets.push({ asset, satoshi: String(satoshi) })
-                            }
-                        }
-                    }
-                    return assets
-                }
+                model: self.transaction.amounts
                 delegate: Label {
                     Convert {
                         id: convert
                         account: self.account
                         asset: modelData.asset
-                        input: ({ satoshi: modelData.satoshi })
+                        input: ({ satoshi: modelData.amount })
                     }
                     Layout.alignment: Qt.AlignRight
                     color: transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
@@ -147,16 +146,18 @@ ItemDelegate {
                     text: UtilJS.incognito(Settings.incognito, convert.output.label)
                 }
             }
+
             Convert {
                 id: convert
                 account: self.account
                 input: {
                     const network = transaction.account.network
                     const satoshi = transaction.data.satoshi
-                    return { satoshi: String(satoshi[network.policyAsset] ?? 0) }
+                    return { satoshi: String((satoshi[network.policyAsset] ?? 0) - transaction.data.fee) }
                 }
                 unit: self.account.session.unit
             }
+            /*
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
@@ -164,37 +165,7 @@ ItemDelegate {
                 font.weight: 600
                 text: UtilJS.incognito(Settings.incognito, convert.output.label)
                 visible: Number(convert.result.satoshi ?? '0') !== 0
-            }
-            Label {
-                Layout.alignment: Qt.AlignRight
-                color: '#929292'
-                font.pixelSize: 12
-                font.weight: 400
-                text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
-                visible: Number(convert.result.satoshi ?? '0') !== 0
-            }
+            }*/
         }
-        Item {
-            Layout.minimumWidth: 32
-            visible: self.account.network.liquid && assets_repeater.count === 0
-        }
-        Repeater {
-            id: assets_repeater
-            model: {
-                const assets = []
-                if (self.account.network.liquid) {
-                    for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
-                        if (self.account.network.policyAsset === id) continue
-                        const asset = AssetManager.assetWithId(self.account.context.deployment, id)
-                        if (asset && asset.icon) assets.push(asset)
-                    }
-                }
-                return assets
-            }
-            delegate: AssetIcon {
-                asset: modelData
-            }
-        }
-
     }
 }

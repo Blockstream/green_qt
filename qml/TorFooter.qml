@@ -11,7 +11,7 @@ Collapsible {
     id: self
     animationVelocity: 200
     contentWidth: self.width
-    contentHeight: pane.height
+    contentHeight: pane.height + 10
     collapsed: !self.show || self.dismissed
     Pane {
         id: pane
@@ -20,6 +20,7 @@ Collapsible {
         topPadding: 10
         bottomPadding: 10
         x: 25
+        y: 5
         width: self.width - 50
         background: Rectangle {
             color: '#7D4698'

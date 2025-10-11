@@ -5,12 +5,14 @@ import QtQuick.Layouts
 
 Popup {
     property real pointerX: 0.5
+    property real pointerXOffset: 0
     property real pointerY: 0
     default property alias contentItemData: content_item.data
     id: menu
     font.pixelSize: 14
     font.weight: 400
     padding: 0
+    spacing: 0
     background: Item {
         MultiEffect {
             anchors.fill: r
@@ -24,7 +26,7 @@ Popup {
         Rectangle {
             id: pointer
             rotation: 45
-            x: menu.pointerX * parent.width - pointer.width * 0.5
+            x: menu.pointerX * parent.width - pointer.width * 0.5 + menu.pointerXOffset
             y: menu.pointerY * parent.height - pointer.height * 0.5
             color: '#343842'
             width: 9
@@ -47,6 +49,8 @@ Popup {
         }
     }
     contentItem: Flickable {
+        ScrollIndicator.vertical: ScrollIndicator {
+        }
         clip: true
         contentHeight: content_item.height
         contentWidth: content_item.implicitWidth
@@ -54,7 +58,7 @@ Popup {
         implicitWidth: content_item.implicitWidth
         ColumnLayout {
             id: content_item
-            spacing: 0
+            spacing: self.spacing
         }
     }
 

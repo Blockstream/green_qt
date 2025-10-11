@@ -6,6 +6,7 @@ ListView {
     ScrollIndicator.vertical: ScrollIndicator {
     }
     clip: true
+    /*
     Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
@@ -28,4 +29,5 @@ ListView {
         }
         opacity: Math.max(0, Math.min((self.contentHeight - (self.contentY + (self.height - self.bottomMargin))) / 120, 1))
     }
+    */
 }

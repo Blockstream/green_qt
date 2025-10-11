@@ -14,7 +14,9 @@ ProgressBar {
     }
     id: self
     background: Rectangle {
-        color: '#00BCFF'
+        border.color: '#262626'
+        border.width: 1
+        color: '#181818'
         implicitHeight: 8
         opacity: 0.8
         radius: 4

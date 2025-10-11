@@ -13,17 +13,17 @@
 #include "task.h"
 #include "transaction.h"
 
-Account::Account(int pointer, Session* session)
-    : QObject(session)
-    , m_session(session)
-    , m_network(session->network())
+Account::Account(Network* network, int pointer, Context* context)
+    : QObject(context)
+    , m_context(context)
+    , m_network(network)
     , m_pointer(pointer)
 {
 }
 
-Context *Account::context() const
+Session* Account::session() const
 {
-    return m_session->context();
+    return m_context->getOrCreateSession(m_network);
 }
 
 void Account::setSynced(bool synced)
@@ -100,12 +100,16 @@ void Account::setHidden(bool hidden)
 Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
 {
     auto hash = data.value("txhash").toString();
+
     auto transaction = m_transactions_by_hash.value(hash);
     if (!transaction) {
         transaction = new Transaction(this);
         m_transactions_by_hash.insert(hash, transaction);
     }
     transaction->updateFromData(data);
+
+    m_context->addTransaction(transaction);
+
     return transaction;
 }
 
@@ -120,6 +124,9 @@ Output* Account::getOrCreateOutput(const QJsonObject& data)
     } else {
         output->updateFromData(data);
     }
+
+    m_context->addCoin(output);
+
     return output;
 }
 
@@ -132,6 +139,9 @@ Address* Account::getOrCreateAddress(const QJsonObject& data)
         m_address_by_hash.insert(hash, address);
     }
     address->updateFromData(data);
+
+    m_context->addAddress(address);
+
     return address;
 }
 
@@ -148,7 +158,7 @@ void Account::timerEvent(QTimerEvent* event)
         if (auto ctx = context()) {
             ctx->dispatcher()->add(new LoadBalanceTask(this));
             if (ctx->isWatchonly() && m_network->isElectrum()) {
-                ctx->dispatcher()->add(new LoadAccountTask(m_pointer, m_session));
+                ctx->dispatcher()->add(new LoadAccountTask(m_pointer, session()));
             }
         }
     }

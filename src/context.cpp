@@ -9,6 +9,9 @@
 #include "session.h"
 #include "sessionmanager.h"
 #include "task.h"
+#include "transaction.h"
+#include "address.h"
+#include "output.h"
 #include "wallet.h"
 
 #include <gdk.h>
@@ -44,8 +47,15 @@ Context::Context(const QString& deployment, bool bip39, QObject* parent)
     , m_deployment(deployment)
     , m_bip39(bip39)
     , m_dispatcher(new TaskDispatcher(this))
+    , m_transaction_model(new QStandardItemModel(this))
+    , m_address_model(new QStandardItemModel(this))
+    , m_coin_model(new QStandardItemModel(this))
 {
     Q_ASSERT(deployment == "mainnet" || deployment == "testnet" || deployment == "development");
+
+    m_transaction_model->setItemRoleNames({{ Qt::UserRole, "transaction" }});
+    m_address_model->setItemRoleNames({{ Qt::UserRole, "address" }});
+    m_coin_model->setItemRoleNames({{ Qt::UserRole, "output" }});
 }
 
 Context::~Context()
@@ -263,8 +273,7 @@ Account* Context::getOrCreateAccount(Network* network, quint32 pointer)
     qDebug() << Q_FUNC_INFO << network->id() << pointer;
     Account* account = m_accounts_by_pointer.value({ network, pointer });
     if (!account) {
-        auto session = getOrCreateSession(network);
-        account = new Account(pointer, session);
+        account = new Account(network, pointer, this);
         m_accounts_by_pointer.insert({ network, pointer }, account);
         m_accounts.append(account);
         emit accountsChanged();
@@ -337,10 +346,50 @@ QString Context::getDisplayUnit(const QString& unit)
     return ComputeDisplayUnit(primarySession()->network(), unit);
 }
 
+void fetchTransactions(TaskGroup* group, Account* account, int page, int size)
+{
+    auto task = new GetTransactionsTask(page * size, size, account);
+
+    QObject::connect(task, &Task::finished, account, [=] {
+        task->deleteLater();
+
+        for (const QJsonValue& value : task->transactions()) {
+            account->getOrCreateTransaction(value.toObject());
+        }
+
+        if (task->transactions().size() == size) {
+            fetchTransactions(group, account, page + 1, size);
+        }
+    });
+
+    group->add(task);
+}
+
+void fetchAddresses(TaskGroup* group, Account* account, int last_pointer)
+{
+    auto task = new GetAddressesTask(last_pointer, account);
+    QObject::connect(task, &Task::finished, account, [=] {
+        task->deleteLater();
+
+        for (QJsonValue data : task->addresses()) {
+            account->getOrCreateAddress(data.toObject());
+        }
+
+        if (task->hasMore()) {
+            fetchAddresses(group, account, task->lastPointer());
+        }
+    });
+
+    group->add(task);
+}
+
 void Context::loadNetwork(TaskGroup *group, Network *network)
 {
     auto session = getOrCreateSession(network);
-    if (!session->m_ready) return;
+    if (!session->m_ready) {
+        Q_UNREACHABLE();
+        return;
+    }
     if (isWatchonly() && session->network()->isLiquid()) {
         group->add(new LoadAssetsTask(false, session));
     }
@@ -364,6 +413,9 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
                 });
 
                 group->add(get_unspent_outputs);
+
+                fetchTransactions(group, account, 0, 30);
+                fetchAddresses(group, account, 0);
             }
         });
         connect(load_accounts, &Task::failed, this, [=](auto error) {
@@ -447,6 +499,43 @@ void Context::refreshAccounts()
     connect(group, &TaskGroup::finished, group, &QObject::deleteLater);
 }
 
+void Context::addTransaction(Transaction* transaction)
+{
+    if (m_transaction_item.contains(transaction)) return;
+
+    auto timestamp = QDateTime::fromMSecsSinceEpoch(transaction->data().value("created_at_ts").toInteger() / 1000);
+
+    auto item = new QStandardItem;
+    item->setData(QVariant::fromValue(transaction), Qt::UserRole);
+    item->setData(QVariant::fromValue(timestamp), Qt::UserRole + 1);
+    m_transaction_item.insert(transaction, item);
+    m_transaction_model->appendRow(item);
+}
+
+void Context::addAddress(Address* address)
+{
+    if (m_address_item.contains(address)) return;
+
+    auto item = new QStandardItem;
+    item->setData(QVariant::fromValue(address), Qt::UserRole);
+    item->setData(address->address(), Qt::UserRole + 1);
+    m_address_item.insert(address, item);
+    m_address_model->appendRow(item);
+}
+
+void Context::addCoin(Output* coin)
+{
+    if (m_coin_item.contains(coin)) return;
+
+    // TODO: output should have pointer to the transaction
+    // TODO: then use transaction timestamp of the coin as sort role
+
+    auto item = new QStandardItem;
+    item->setData(QVariant::fromValue(coin), Qt::UserRole);
+    m_coin_item.insert(coin, item);
+    m_coin_model->appendRow(item);
+}
+
 QQmlListProperty<Account> Context::accounts()
 {
     return { this, &m_accounts };
@@ -455,4 +544,294 @@ QQmlListProperty<Account> Context::accounts()
 QQmlListProperty<Session> Context::sessions()
 {
     return { this, &m_sessions_list };
+}
+
+ContextModel::ContextModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
+{
+    sort(0, Qt::DescendingOrder);
+}
+
+void ContextModel::setContext(Context* context)
+{
+    if (m_context == context) return;
+    if (m_context) {
+        setSourceModel(nullptr);
+    }
+    m_context = context;
+    if (m_context) {
+        update(context);
+    }
+    emit contextChanged();
+}
+
+QQmlListProperty<Account> ContextModel::filterAccounts()
+{
+    return { this, &m_filter_accounts };
+}
+
+QQmlListProperty<Asset> ContextModel::filterAssets()
+{
+    return { this, &m_filter_assets };
+}
+
+void ContextModel::setFilterText(const QString& filter_text)
+{
+    if (m_filter_text == filter_text) return;
+    m_filter_text = filter_text;
+    emit filterTextChanged();
+    invalidate();
+}
+
+void ContextModel::clearFilters()
+{
+    m_filter_accounts.clear();
+    emit filterAccountsChanged();
+    m_filter_assets.clear();
+    emit filterAssetsChanged();
+    m_filter_text.clear();
+    emit filterTextChanged();
+    invalidate();
+}
+
+void ContextModel::setFilterAccount(Account* account)
+{
+    m_filter_accounts.clear();
+    m_filter_accounts.append(account);
+    emit filterAccountsChanged();
+    invalidate();
+}
+
+void ContextModel::setFilterAsset(Asset* asset)
+{
+    m_filter_assets.clear();
+    m_filter_assets.append(asset);
+    emit filterAssetsChanged();
+    invalidate();
+}
+
+void ContextModel::updateFilterAccounts(Account* account, bool filter)
+{
+    if (filter) {
+        if (m_filter_accounts.contains(account)) return;
+        m_filter_accounts.append(account);
+    } else {
+        if (!m_filter_accounts.contains(account)) return;
+        m_filter_accounts.removeOne(account);
+    }
+    emit filterAccountsChanged();
+    invalidate();
+}
+
+void ContextModel::updateFilterAssets(Asset* asset, bool filter)
+{
+    if (filter) {
+        if (m_filter_assets.contains(asset)) return;
+        m_filter_assets.append(asset);
+    } else {
+        if (!m_filter_assets.contains(asset)) return;
+        m_filter_assets.removeOne(asset);
+    }
+    emit filterAssetsChanged();
+    invalidate();
+}
+
+TransactionModel::TransactionModel(QObject* parent)
+    : ContextModel(parent)
+{
+    setSortRole(Qt::UserRole + 1);
+}
+
+bool TransactionModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    auto transaction = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Transaction*>();
+
+    if (!filterAccountsAcceptsTransaction(transaction)) return false;
+    if (!filterAssetsAcceptsTransaction(transaction)) return false;
+    if (!filterTextAcceptsTransaction(transaction)) return false;
+
+    return ContextModel::filterAcceptsRow(source_row, source_parent);
+}
+
+bool TransactionModel::filterAccountsAcceptsTransaction(Transaction* transaction) const
+{
+    if (m_filter_accounts.isEmpty()) return true;
+
+    for (auto account : m_filter_accounts) {
+        if (transaction->account() == account) return true;
+    }
+
+    return false;
+}
+
+bool TransactionModel::filterAssetsAcceptsTransaction(Transaction* transaction) const
+{
+    if (m_filter_assets.isEmpty()) return true;
+
+    for (auto asset : m_filter_assets) {
+        for (auto amount : transaction->m_amounts) {
+            if (amount->asset() == asset) return true;
+        }
+    }
+
+    return false;
+}
+
+bool TransactionModel::filterTextAcceptsTransaction(Transaction* transaction) const
+{
+    if (m_filter_text.isEmpty()) {
+        return true;
+    }
+    if (transaction->hash().contains(m_filter_text)) {
+        return true;
+    }
+    if (!transaction->memo().isEmpty() && transaction->memo().contains(m_filter_text)) {
+        return true;
+    }
+    for (const auto output : transaction->data().value("outputs").toArray()) {
+        if (output.toObject().value("address").toString().contains(m_filter_text)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void TransactionModel::update(Context* context)
+{
+    setSourceModel(context->transactionModel());
+    connect(context, &Context::transactionUpdated, this, [=] {
+        sort(0, Qt::DescendingOrder);
+    });
+}
+
+AddressModel::AddressModel(QObject* parent)
+    : ContextModel(parent)
+{
+    setSortRole(Qt::UserRole + 1);
+}
+
+bool AddressModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    auto address = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Address*>();
+
+    if (!filterAccountsAcceptsAddress(address)) return false;
+    if (!filterTextAcceptsAddress(address)) return false;
+    if (!filterTypesAcceptsAddress(address)) return false;
+    if (!filterHasTransactionAcceptsAddress(address)) return false;
+
+    return ContextModel::filterAcceptsRow(source_row, source_parent);
+}
+
+bool AddressModel::filterAccountsAcceptsAddress(Address* address) const
+{
+    if (m_filter_accounts.isEmpty()) return true;
+
+    for (auto account : m_filter_accounts) {
+        if (address->account() == account) return true;
+    }
+
+    return false;
+}
+
+bool AddressModel::filterTextAcceptsAddress(Address* address) const
+{
+    if (m_filter_text.isEmpty()) {
+        return true;
+    }
+    if (address->address().contains(m_filter_text)) {
+        return true;
+    }
+    return false;
+}
+
+
+bool AddressModel::filterTypesAcceptsAddress(Address* address) const
+{
+    if (m_filter_types.isEmpty()) {
+        return true;
+    }
+    if (m_filter_types.contains(address->type())) {
+        return true;
+    }
+    return false;
+}
+
+bool AddressModel::filterHasTransactionAcceptsAddress(Address* address) const
+{
+    if (!m_filter_has_transactions) {
+        return true;
+    }
+    return address->data().value("tx_count").toInt() > 0;
+}
+
+void AddressModel::update(Context* context)
+{
+    setSourceModel(context->addressModel());
+    connect(context, &Context::addressUpdated, this, [=] {
+        sort(0, Qt::DescendingOrder);
+    });
+}
+
+void AddressModel::clearFilters()
+{
+    m_filter_types.clear();
+    emit filterTypesChanged();
+    m_filter_has_transactions = false;
+    emit filterHasTransactionsChanged();
+    ContextModel::clearFilters();
+}
+
+void AddressModel::updateFilterTypes(const QString& type, bool filter)
+{
+    if (filter) {
+        if (m_filter_types.contains(type)) return;
+        m_filter_types.append(type);
+    } else {
+        if (!m_filter_types.contains(type)) return;
+        m_filter_types.removeOne(type);
+    }
+    emit filterTypesChanged();
+    invalidate();
+}
+
+void AddressModel::updateFilterHasTransactions(bool filter)
+{
+    if (m_filter_has_transactions == filter) return;
+    m_filter_has_transactions = filter;
+    emit filterHasTransactionsChanged();
+    invalidate();
+}
+
+CoinModel::CoinModel(QObject* parent)
+    : ContextModel(parent)
+{
+    setSortRole(Qt::UserRole + 1);
+}
+
+bool CoinModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    auto coin = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Output*>();
+
+    if (!filterTextAcceptsCoin(coin)) return false;
+
+    return ContextModel::filterAcceptsRow(source_row, source_parent);
+}
+
+void CoinModel::update(Context* context)
+{
+    setSourceModel(context->coinModel());
+    connect(context, &Context::coinUpdated, this, [=] {
+        sort(0, Qt::DescendingOrder);
+    });
+}
+
+bool CoinModel::filterTextAcceptsCoin(Output* coin) const
+{
+    if (m_filter_text.isEmpty()) {
+        return true;
+    }
+    if (coin->address().contains(m_filter_text)) {
+        return true;
+    }
+    return false;
 }

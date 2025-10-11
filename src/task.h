@@ -763,6 +763,7 @@ public:
     GetAddressesTask(int last_pointer, Account* account);
     QJsonArray addresses() const;
     int lastPointer() const;
+    bool hasMore() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:

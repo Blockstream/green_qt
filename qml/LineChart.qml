@@ -4,8 +4,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
 
-Page {
-    required property url iconSource
+    Page {
+    property url iconSource: 'qrc:/svg/btc.svg'
 
     id: root
     implicitWidth: 300
@@ -22,6 +22,8 @@ Page {
         triggeredOnStart: true
         onTriggered: priceSource.refresh()
     }
+
+    title: qsTr('Bitcoin Price')
 
     property color fillColor: Qt.rgba(0.0, 0.737, 1.0, 0.2) // top gradient color
     property bool loading: root.pairCount === 0
@@ -174,16 +176,20 @@ Page {
         return d + ` L ${chartArea.plotWidth} ${chartArea.height} L 0 ${chartArea.height} Z`
     }
 
+    padding: 24
     background: Rectangle {
         radius: 4
-        color: '#161921'
+        color: '#181818'
         border.width: 1
-        border.color: '#1F222A'
+        border.color: '#262626'
     }
 
     header: Pane {
         background: null
-        padding: 12
+        leftPadding: 24
+        rightPadding: 24
+        bottomPadding: 8
+        topPadding: 24
         contentItem: RowLayout {
             spacing: 8
             Image {
@@ -366,6 +372,7 @@ Page {
 
         // Chart paths
         Shape {
+            id: xxx
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
@@ -388,6 +395,7 @@ Page {
             }
 
             ShapePath {
+                id: price_shape_path
                 strokeColor: '#00BCFF'
                 strokeWidth: 1.5
                 fillColor: "transparent"
@@ -400,7 +408,10 @@ Page {
 
     footer: Pane {
         visible: root.showRangeButtons && !root.loading
-        padding: 12
+        leftPadding: 24
+        rightPadding: 24
+        bottomPadding: 24
+        topPadding: 8
         background: null
         contentItem: RowLayout {
             spacing: 0

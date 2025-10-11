@@ -70,14 +70,12 @@ Page {
         }
         delegate: TransactionDelegate {
             width: ListView.view.width
-            account: self.account
             context: self.account.context
             onTransactionClicked: (transaction) => self.transactionClicked(transaction)
         }
     }
 
     RowLayout {
-        parent: toolbarItem
         visible: self.visible
         spacing: 10
         LinkButton {

@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QObject>
 #include <QQmlEngine>
+#include <QStandardItemModel>
 
 Q_MOC_INCLUDE("network.h")
 Q_MOC_INCLUDE("device.h")
@@ -109,6 +110,9 @@ signals:
     void notificationsChanged();
     void notificationTriggered(Notification* notification);
     void xpubHashIdChanged();
+    void transactionUpdated();
+    void coinUpdated();
+    void addressUpdated();
 
 private:
     const QString m_deployment;
@@ -135,6 +139,120 @@ public:
     TaskDispatcher* const m_dispatcher;
 
     QJsonObject m_hw_device;
+
+    QMap<Transaction*, QStandardItem*> m_transaction_item;
+    QStandardItemModel* const m_transaction_model;
+    void addTransaction(Transaction* transaction);
+    QStandardItemModel* transactionModel() const { return m_transaction_model; }
+
+    QMap<Address*, QStandardItem*> m_address_item;
+    QStandardItemModel* const m_address_model;
+    void addAddress(Address* address);
+    QStandardItemModel* addressModel() const { return m_address_model; }
+
+    QMap<Output*, QStandardItem*> m_coin_item;
+    QStandardItemModel* const m_coin_model;
+    void addCoin(Output* coin);
+    QStandardItemModel* coinModel() const { return m_coin_model; }
+};
+
+
+#include <QSortFilterProxyModel>
+
+class ContextModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+    Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
+    Q_PROPERTY(QQmlListProperty<Account> filterAccounts READ filterAccounts NOTIFY filterAccountsChanged)
+    Q_PROPERTY(QQmlListProperty<Asset> filterAssets READ filterAssets NOTIFY filterAssetsChanged)
+    Q_PROPERTY(QString filterText READ filterText WRITE setFilterText NOTIFY filterTextChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    ContextModel(QObject* parent = nullptr);
+    Context* context() const { return m_context; }
+    void setContext(Context* context);
+    QQmlListProperty<Account> filterAccounts();
+    QQmlListProperty<Asset> filterAssets();
+    QString filterText() const { return m_filter_text; }
+    void setFilterText(const QString& filter_text);
+signals:
+    void contextChanged();
+    void filterAccountsChanged();
+    void filterAssetsChanged();
+    void filterTextChanged();
+public slots:
+    virtual void clearFilters();
+    void setFilterAccount(Account* account);
+    void setFilterAsset(Asset* asset);
+    void updateFilterAccounts(Account* account, bool filter);
+    void updateFilterAssets(Asset* asset, bool filter);
+protected:
+    virtual void update(Context* context) = 0;
+protected:
+    QList<Account*> m_filter_accounts;
+    QList<Asset*> m_filter_assets;
+    QString m_filter_text;
+private:
+    Context* m_context{nullptr};
+};
+
+class TransactionModel : public ContextModel
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    TransactionModel(QObject* parent = nullptr);
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    void update(Context* context) override;
+private:
+    bool filterAccountsAcceptsTransaction(Transaction* transaction) const;
+    bool filterAssetsAcceptsTransaction(Transaction* transaction) const;
+    bool filterTextAcceptsTransaction(Transaction* transaction) const;
+};
+
+class AddressModel : public ContextModel
+{
+    Q_OBJECT
+    Q_PROPERTY(QStringList filterTypes READ filterTypes NOTIFY filterTypesChanged)
+    Q_PROPERTY(bool filterHasTransactions READ filterHasTransactions NOTIFY filterHasTransactionsChanged)
+    QML_ELEMENT
+public:
+    AddressModel(QObject* parent = nullptr);
+    QStringList filterTypes() const { return m_filter_types; }
+    bool filterHasTransactions() const { return m_filter_has_transactions; }
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    void update(Context* context) override;
+public slots:
+    void clearFilters() override;
+    void updateFilterTypes(const QString& type, bool filter);
+    void updateFilterHasTransactions(bool has_transactions);
+signals:
+    void filterTypesChanged();
+    void filterHasTransactionsChanged();
+private:
+    bool filterAccountsAcceptsAddress(Address* address) const;
+    bool filterTextAcceptsAddress(Address* address) const;
+    bool filterTypesAcceptsAddress(Address* address) const;
+    bool filterHasTransactionAcceptsAddress(Address* address) const;
+private:
+    QStringList m_filter_types;
+    bool m_filter_has_transactions{false};
+};
+
+class CoinModel : public ContextModel
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    CoinModel(QObject* parent = nullptr);
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    void update(Context* context) override;
+private:
+    bool filterTextAcceptsCoin(Output* address) const;
 };
 
 #endif // GREEN_CONTEXT_H

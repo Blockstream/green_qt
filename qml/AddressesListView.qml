@@ -51,7 +51,6 @@ Page {
             filter: search_field.text
         }
         delegate: AddressDelegate {
-            width: ListView.view.width
             onAddressClicked: (address) => self.addressClicked(address)
         }
     }
@@ -63,7 +62,6 @@ Page {
     }
 
     RowLayout {
-        parent: toolbarItem
         visible: self.visible
         spacing: 10
         LinkButton {

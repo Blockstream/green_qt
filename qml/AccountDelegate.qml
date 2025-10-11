@@ -12,6 +12,10 @@ ItemDelegate {
     signal accountArchived(Account account)
     required property Account account
     required property int index
+    Controller {
+        id: controller
+        context: account.context
+    }
     onClicked: delegate.accountClicked(delegate.account)
     id: delegate
     focusPolicy: Qt.ClickFocus
@@ -19,14 +23,13 @@ ItemDelegate {
         color: UtilJS.networkColor(delegate.account.network)
         clip: true
         radius: 5
-        Image {
-            opacity: delegate.account.network.liquid ? 0.2 : 0.1
-            source: delegate.account.network.liquid ? 'qrc:/svg2/watermark_liquid.svg' : 'qrc:/svg2/watermark_bitcoin.svg'
-            anchors.right: parent.right
-            anchors.top: parent.top
-        }
+        // Image {
+        //     opacity: delegate.account.network.liquid ? 0.2 : 0.1
+        //     source: delegate.account.network.liquid ? 'qrc:/svg2/watermark_liquid.svg' : 'qrc:/svg2/watermark_bitcoin.svg'
+        //     anchors.right: parent.right
+        //     anchors.top: parent.top
+        // }
     }
-    highlighted: delegate.ListView.view.currentIndex === delegate.index
     leftPadding: constants.p2
     rightPadding: constants.p2
     topPadding: constants.p1
@@ -39,17 +42,17 @@ ItemDelegate {
             velocity: 1
         }
     }
-    width: ListView.view.width
+    width: ListView.view?.width ?? 0
     contentItem: ColumnLayout {
         spacing: 0
         RowLayout {
             Layout.bottomMargin: 6
-            Image {
-                fillMode: Image.PreserveAspectFit
-                Layout.preferredWidth: 16
-                Layout.preferredHeight: 16
-                source: delegate.account.network.electrum ? 'qrc:/svg2/singlesig.svg' : 'qrc:/svg2/multisig.svg'
-            }
+            // Image {
+            //     fillMode: Image.PreserveAspectFit
+            //     Layout.preferredWidth: 16
+            //     Layout.preferredHeight: 16
+            //     source: delegate.account.network.electrum ? 'qrc:/svg2/singlesig.svg' : 'qrc:/svg2/multisig.svg'
+            // }
             Label {
                 font.pixelSize: 10
                 font.weight: 400
@@ -113,7 +116,7 @@ ItemDelegate {
             rightPadding: 0
             text: UtilJS.accountName(account)
             enabled: {
-                if (!delegate.ListView.isCurrentItem) return false
+                // if (!delegate.ListView.isCurrentItem) return false
                 if (delegate.account.hidden) return false
                 if (delegate.account.context.watchonly) return false
                 if (delegate.account.session.config.twofactor_reset?.is_active ?? false) return false
@@ -150,7 +153,7 @@ ItemDelegate {
                 }
                 Item {
                     Layout.fillWidth: true
-                    Layout.topMargin: 64
+                    Layout.topMargin: 32
                     implicitHeight: card_footer.height
                     RowLayout {
                         id: card_footer
@@ -210,6 +213,7 @@ ItemDelegate {
                                 pointerX: 0
                                 pointerY: 0.5
                                 enabled: !delegate.account.context.watchonly
+                                spacing: 0
                                 GMenu.Item {
                                     text: qsTrId('id_rename')
                                     icon.source: 'qrc:/svg/wallet-rename.svg'

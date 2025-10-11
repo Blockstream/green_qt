@@ -29,7 +29,7 @@ MainPage {
         wallet_view.createObject(stack_layout, { wallet })
         stack_layout.currentIndex = stack_layout.children.length - 1
         side_bar.currentWalletView = stack_layout.itemAt(stack_layout.currentIndex)
-        side_bar.currentView = SideBar.View.Wallets
+        side_bar.currentView = SideBar.View.Wallet
     }
     function openDevice(device, options) {
         if (stack_layout.currentItem?.device) {
@@ -75,7 +75,7 @@ MainPage {
         console.log('create view for device', device)
         wallet_view.createObject(stack_layout, { device })
         stack_layout.currentIndex = stack_layout.children.length - 1
-        side_bar.currentView = SideBar.View.Wallets
+        side_bar.currentView = SideBar.View.Wallet
     }
     function openWallets() {
         if (wallets_drawer.visible) {
@@ -104,21 +104,21 @@ MainPage {
                 wallets_drawer.open()
             } else {
                 stack_layout.currentIndex = current_index
-                side_bar.currentView = SideBar.View.Wallets
+                side_bar.currentView = SideBar.View.Wallet
             }
             return
         }
 
         if (WalletManager.wallets.length === 1 && current_index >= 0) {
             stack_layout.currentIndex = current_index
-            side_bar.currentView = SideBar.View.Wallets
+            side_bar.currentView = SideBar.View.Wallet
             return
         }
 
         const wallet = WalletManager.wallets[0] ?? null
         wallet_view.createObject(stack_layout, { wallet })
         stack_layout.currentIndex = stack_layout.children.length - 1
-        side_bar.currentView = SideBar.View.Wallets
+        side_bar.currentView = SideBar.View.Wallet
     }
     function closeWallet(wallet) {
         stack_layout.currentIndex = 0
@@ -170,6 +170,7 @@ MainPage {
     id: self
     leftPadding: side_bar.width
     rightPadding: 0
+    bottomPadding: 0
     title: stack_layout.currentItem?.title ?? ''
     contentItem: Page {
         background: null
@@ -192,7 +193,7 @@ MainPage {
             }
         }
         footer: ColumnLayout {
-            spacing: 10
+            spacing: 0
             TorFooter {
                 Layout.fillWidth: true
             }

@@ -131,16 +131,21 @@ void Transaction::updateFromData(const QJsonObject& data)
     const auto network = m_account->network();
     if (network->isLiquid()) {
         const auto policy_asset = network->policyAsset();
-        const qint64 fee = m_data.value("fee").toInteger();
+        qint64 fee = m_data.value("fee").toInteger();
         for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
             qint64 amount = i.value().toInteger();
             Asset* asset = context()->getOrCreateAsset(i.key());
-            if (asset->id() == policy_asset && amount < 0) amount += fee;
-            if (amount != 0) m_amounts.append(new TransactionAmount(this, asset, amount));
+            if ((asset->id() == policy_asset) && (amount < 0) && (fee > 0)) {
+                amount += fee;
+                fee = 0;
+            }
+            if (amount != 0) {
+                m_amounts.append(new TransactionAmount(this, asset, amount));
+            }
         }
     } else {
         qint64 amount = satoshi.value("btc").toInteger();
-        m_amounts.append(new TransactionAmount(this, amount));
+        m_amounts.append(new TransactionAmount(this, context()->getOrCreateAsset("btc"), amount));
     }
 
     emit amountsChanged();

@@ -905,6 +905,7 @@ void LoadAssetsTask::update()
         if (m_refresh) {
             const auto params = Json::fromObject({{ "assets", true }, { "icons", true }});
             const auto rc = GA_refresh_assets(m_session->m_session, params.get());
+            qDebug() << Q_FUNC_INFO << "REFRESH" << rc;
             if (rc != GA_OK) return false;
         }
 
@@ -913,6 +914,7 @@ void LoadAssetsTask::update()
         {
             const auto params = Json::fromObject({{ "category", "all" }});
             const auto err = GA_get_assets(m_session->m_session, params.get(), &output);
+            qDebug() << Q_FUNC_INFO << "GET" << err;
             if (err != GA_OK) return false;
         }
 
@@ -1455,6 +1457,11 @@ QJsonArray GetAddressesTask::addresses() const
 int GetAddressesTask::lastPointer() const
 {
     return result().value("result").toObject().value("last_pointer").toInt(-1);
+}
+
+bool GetAddressesTask::hasMore() const
+{
+    return result().value("result").toObject().contains("last_pointer");
 }
 
 
