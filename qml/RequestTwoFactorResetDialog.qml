@@ -47,7 +47,7 @@ WalletDialog {
             rightItem: CloseButton {
                 onClicked: self.reject()
             }
-            title: qsTrId('id_request_twofactor_reset')
+            title: 'Request Two-Factor Reset'
             contentItem: ColumnLayout {
                 spacing: constants.s1
                 VSpacer {

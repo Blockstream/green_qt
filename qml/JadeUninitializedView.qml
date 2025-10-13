@@ -57,7 +57,7 @@ VFlickable {
                 Layout.topMargin: 10
                 busy: !(controller.monitor?.idle ?? true) || self.device.status === JadeDevice.StatusHandleClientMessage
                 enabled: (controller.monitor?.idle ?? true) && self.device.status !== JadeDevice.StatusHandleClientMessage
-                text: qsTrId('id_setup_jade')
+                text: 'Set up Jade'
                 onClicked: self.setup()
             }
         }
@@ -70,7 +70,7 @@ VFlickable {
                 Layout.topMargin: 20
                 busy: !(controller.monitor?.idle ?? true) || self.device.status === JadeDevice.StatusHandleClientMessage
                 enabled: (controller.monitor?.idle ?? true) && self.device.status !== JadeDevice.StatusHandleClientMessage
-                text: qsTrId('id_setup_jade')
+                text: 'Set up Jade'
                 onClicked: self.setup()
             }
         }
@@ -128,7 +128,7 @@ VFlickable {
                     font.weight: 600
                     font.capitalization: Font.AllUppercase
                     horizontalAlignment: Label.AlignHCenter
-                    text: qsTrId('id_setup_your_jade')
+                    text: 'Set up your Jade'
                     wrapMode: Label.WordWrap
                 }
                 Label {
@@ -148,7 +148,7 @@ VFlickable {
                     font.pixelSize: 12
                     font.weight: 400
                     horizontalAlignment: Label.AlignHCenter
-                    text: qsTrId('id_enter_and_confirm_a_unique_pin')
+                    text: 'Enter and confirm a unique PIN that you will enter to unlock Jade.'
                     wrapMode: Label.WordWrap
                 }
             }

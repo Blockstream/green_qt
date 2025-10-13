@@ -47,8 +47,8 @@ Pane {
             }
             StepPane {
                 step: 3
-                title: qsTrId('id_connect_using_usb_or_bluetooth')
-                text: qsTrId('id_choose_a_usb_or_bluetooth')
+                title: 'Connect using USB'
+                text: 'Choose a USB connection on Jade after verifying your recovery phrase'
             }
         }
         PageIndicator {

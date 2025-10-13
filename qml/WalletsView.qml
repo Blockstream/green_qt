@@ -39,7 +39,7 @@ MainPage {
             HSpacer {
             }
             RegularButton {
-                text: qsTrId('id_setup_a_new_wallet')
+                text: 'Set up a New Wallet'
                 font.pixelSize: 14
                 font.weight: 600
             }

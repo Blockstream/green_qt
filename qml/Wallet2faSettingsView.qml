@@ -200,7 +200,7 @@ Page {
             }
 
             SettingsBox {
-                title: qsTrId('id_twofactor_authentication_expiry')
+                title: 'Two-Factor Authentication Expiry'
                 visible: !view.session.network.liquid
                 contentItem: AbstractButton {
                     id: button3
@@ -245,7 +245,7 @@ Page {
             }
 
             SettingsBox {
-                title: qsTrId('id_request_twofactor_reset')
+                title: 'Request Two-Factor Reset'
                 contentItem: AbstractButton {
                     id: button2
                     leftPadding: 20
@@ -320,7 +320,7 @@ Page {
                         onFinished: success_badge.raise('id_recovery_transaction_request')
                     }
                     id: box
-                    title: qsTrId('id_recovery_transactions')
+                    title: 'Recovery Transactions'
                     contentItem: ColumnLayout {
                         AbstractButton {
                             Layout.fillWidth: true

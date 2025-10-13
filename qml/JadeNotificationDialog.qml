@@ -71,7 +71,7 @@ Dialog {
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 325
-            text: qsTrId('id_setup_jade')
+            text: 'Set up Jade'
             onClicked: self.setupClicked(self.device)
         }
         LinkButton {

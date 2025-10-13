@@ -81,7 +81,7 @@ AbstractDrawer {
             LinkButton {
                 Layout.alignment: Qt.AlignCenter
                 Layout.margins: 16
-                text: qsTrId('id_setup_a_new_wallet')
+                text: 'Set up a New Wallet'
                 onClicked: self.walletClicked(null)
             }
         }

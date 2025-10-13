@@ -12,7 +12,7 @@ WalletDialog {
     onClosed: self.destroy()
 
     id: self
-    title: qsTrId('id_twofactor_authentication_expiry')
+    title: 'Two-Factor Authentication Expiry'
     clip: true
     header: null
     width: 500

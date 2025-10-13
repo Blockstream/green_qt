@@ -28,7 +28,7 @@ ColumnLayout {
             spacing: 10
             Label {
                 Layout.fillWidth: true
-                text: qsTrId('id_the_recovery_phrase_can_be_used') + ' ' + qsTrId('id_blockstream_does_not_have')
+                text: 'Anyone with access to this recovery phrase can claim your funds at any point. Keep it safe, keep it private.' + ' ' + 'Blockstream does not have access to your recovery phrase and cannot help you if you lose it.'
                 wrapMode: Text.WordWrap
             }
             MnemonicView {
