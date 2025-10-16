@@ -227,7 +227,7 @@ Page {
                         text: root.formatPercent(root.percentChange)
                         font.pixelSize: 14
                         font.weight: 600
-                        color: root.percentChange >= 0 ? "#00D084" : "#FF4D4F"
+                        color: root.percentChange >= 0 ? "#00C60D" : "#FF0000"
                         Layout.minimumWidth: 50
                     }
                     Image {
