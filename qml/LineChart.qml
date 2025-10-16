@@ -80,9 +80,12 @@ Page {
         return Number(p[1])
     }
     readonly property real lastPrice: {
-        const n = root.pairCount
+        const dailySeries = priceSource.pricesDay
+        if (!dailySeries || dailySeries.length === 0) return NaN
+        const isFlat = !(dailySeries[0] instanceof Array)
+        const n = isFlat ? Math.floor(dailySeries.length / 2) : dailySeries.length
         if (n <= 0) return NaN
-        const p = root.pairAt(n - 1)
+        const p = isFlat ? [dailySeries[(n - 1) * 2], dailySeries[(n - 1) * 2 + 1]] : dailySeries[n - 1]
         return Number(p[1])
     }
     readonly property real percentChange: {
