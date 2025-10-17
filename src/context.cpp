@@ -383,6 +383,60 @@ void fetchAddresses(TaskGroup* group, Account* account, int last_pointer)
     group->add(task);
 }
 
+void Context::addTestNotification(const QString& message)
+{
+    auto network = primaryNetwork();
+    if (!network) {
+        qDebug() << "No primary network available for test notification";
+        return;
+    }
+    
+    auto notification = new SystemNotification(message, network, this);
+    addNotification(notification);
+    qDebug() << "Test notification added:" << message;
+}
+
+void Context::addTestSystemNotification(const QString& message)
+{
+    addTestNotification(message);
+}
+
+void Context::addTestOutageNotification()
+{
+    auto network = primaryNetwork();
+    if (!network) return;
+    auto outage = new OutageNotification(this);
+    outage->add(network);
+    addNotification(outage);
+}
+
+void Context::addTestTwoFactorResetNotification()
+{
+    auto network = primaryNetwork();
+    if (!network) return;
+    auto reset = new TwoFactorResetNotification(network, this);
+    addNotification(reset);
+}
+
+void Context::addTestTwoFactorExpiredNotification()
+{
+    auto expired = new TwoFactorExpiredNotification(this);
+    addNotification(expired);
+}
+
+void Context::addTestWarningNotification()
+{
+    auto network = primaryNetwork();
+    if (!network) return;
+    auto warning = new WarningNotification(
+        QStringLiteral("Backup your wallet"),
+        QStringLiteral("This is a sample alert-banner description."),
+        network,
+        this
+    );
+    addNotification(warning);
+}
+
 void Context::loadNetwork(TaskGroup *group, Network *network)
 {
     auto session = getOrCreateSession(network);

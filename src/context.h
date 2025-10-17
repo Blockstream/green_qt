@@ -88,6 +88,12 @@ public:
 
     Q_INVOKABLE Network* primaryNetwork();
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
+    Q_INVOKABLE void addTestNotification(const QString& message = "This is a test notification for development purposes. You can safely dismiss this message.");
+    Q_INVOKABLE void addTestSystemNotification(const QString& message = "This is a test notification for development purposes. You can safely dismiss this message.");
+    Q_INVOKABLE void addTestOutageNotification();
+    Q_INVOKABLE void addTestTwoFactorResetNotification();
+    Q_INVOKABLE void addTestTwoFactorExpiredNotification();
+    Q_INVOKABLE void addTestWarningNotification();
 
     void loadNetwork(TaskGroup* group, Network* network);
     void loginNetwork(TaskGroup* group, Network* network);

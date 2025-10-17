@@ -189,17 +189,17 @@ MainPage {
                 }
             }
         }
-        
+
         NotificationToast {
             parent: Overlay.overlay
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.rightMargin: 20
-            anchors.bottomMargin: 20 
+            anchors.bottomMargin: 20
             width: Math.min(400, parent.width * 0.4)
             notifications: UtilJS.flatten(stack_layout.currentItem?.notifications, update_controller.notification).filter(notification => !notification.dismissed)
         }
-        
+
         footer: ColumnLayout {
             spacing: 0
             TorFooter {
@@ -251,6 +251,43 @@ MainPage {
         onPreferencesClicked: preferences_action.trigger()
         onWalletsClicked: openWallets()
         onCrashClicked: self.crashClicked()
+        onSimulateNotificationClicked: (type) => {
+            let context = stack_layout.currentItem?.wallet?.context
+
+            if (!context && WalletManager.wallets.length > 0) {
+                const wallet = WalletManager.wallets[0]
+                if (wallet && wallet.context) {
+                    context = wallet.context
+                }
+            }
+
+            if (!context) {
+                console.log('No context available for notification simulation')
+                return
+            }
+
+            console.log('Simulating notification of type:', type)
+
+            switch (type) {
+                case 'system':
+                    context.addTestNotification('This is a test system notification')
+                    break
+                case 'outage':
+                    context.addTestOutageNotification()
+                    break
+                case '2fa_reset':
+                    context.addTestTwoFactorResetNotification()
+                    break
+                case '2fa_expired':
+                    context.addTestTwoFactorExpiredNotification()
+                    break
+                case 'warning':
+                    context.addTestWarningNotification()
+                    break
+                default:
+                    console.log('Unknown notification type:', type)
+            }
+        }
     }
 
 

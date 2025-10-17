@@ -14,6 +14,7 @@ Pane {
     signal preferencesClicked
     signal walletsClicked
     signal crashClicked
+    signal simulateNotificationClicked(string type)
 
     property WalletView currentWalletView
     property OverviewPage currentOverviewPage: currentWalletView?.overviewPage ?? null
@@ -99,8 +100,37 @@ Pane {
         SideButton {
             visible: Qt.application.arguments.indexOf('--debug') > 0
             icon.source: 'qrc:/svg2/bug.svg'
-            text: 'Crash'
-            onClicked: self.crashClicked()
+            text: 'Test'
+            onClicked: menu.open()
+            Menu {
+                id: menu
+                y: parent.height
+                x: self.width
+                MenuItem {
+                    text: 'Crash'
+                    onTriggered: self.crashClicked()
+                }
+                MenuItem {
+                    text: 'System notification'
+                    onTriggered: self.simulateNotificationClicked('system')
+                }
+                MenuItem {
+                    text: 'Outage notification'
+                    onTriggered: self.simulateNotificationClicked('outage')
+                }
+                MenuItem {
+                    text: '2FA reset notification'
+                    onTriggered: self.simulateNotificationClicked('2fa_reset')
+                }
+                MenuItem {
+                    text: '2FA expired notification'
+                    onTriggered: self.simulateNotificationClicked('2fa_expired')
+                }
+                MenuItem {
+                    text: 'Warning notification'
+                    onTriggered: self.simulateNotificationClicked('warning')
+                }
+            }
         }
         SideButton {
             icon.source: 'qrc:/svg/menu-wallet.svg'
