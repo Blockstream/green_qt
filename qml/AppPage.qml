@@ -174,9 +174,6 @@ MainPage {
     title: stack_layout.currentItem?.title ?? ''
     contentItem: Page {
         background: null
-        header: AppBanner {
-            notifications: UtilJS.flatten(stack_layout.currentItem?.notifications, update_controller.notification).filter(notification => !notification.dismissed)
-        }
         contentItem: GStackLayout {
             id: stack_layout
             currentIndex: 0
@@ -192,6 +189,17 @@ MainPage {
                 }
             }
         }
+        
+        NotificationToast {
+            parent: Overlay.overlay
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.rightMargin: 20
+            anchors.bottomMargin: 20 
+            width: Math.min(400, parent.width * 0.4)
+            notifications: UtilJS.flatten(stack_layout.currentItem?.notifications, update_controller.notification).filter(notification => !notification.dismissed)
+        }
+        
         footer: ColumnLayout {
             spacing: 0
             TorFooter {

@@ -152,6 +152,7 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg2/eject-simple-thin.svg
         assets/svg2/expand.svg
         assets/svg2/expired_2fa.svg
+        assets/svg2/expired_2fa_white.svg
         assets/svg2/eye.svg
         assets/svg2/eye_closed.svg
         assets/svg2/flask.svg

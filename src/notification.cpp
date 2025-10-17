@@ -256,3 +256,11 @@ void OutageNotification::remove(Network* network)
 {
     m_networks.removeOne(network);
 }
+
+WarningNotification::WarningNotification(const QString& title, const QString& message, Network* network, Context* context)
+    : NetworkNotification{network, context}
+    , m_title{title}
+    , m_message{message}
+{
+    setDismissable(true);
+}

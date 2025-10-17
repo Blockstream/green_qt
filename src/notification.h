@@ -177,4 +177,20 @@ private:
     QSet<Output*> m_outputs;
 };
 
+class WarningNotification : public NetworkNotification
+{
+    Q_OBJECT
+    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QString message READ message CONSTANT)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    explicit WarningNotification(const QString& title, const QString& message, Network* network, Context* context);
+    QString title() const { return m_title; }
+    QString message() const { return m_message; }
+private:
+    QString const m_title;
+    QString const m_message;
+};
+
 #endif // GREEN_NOTIFICATION_H

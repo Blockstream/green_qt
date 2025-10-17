@@ -213,6 +213,7 @@ SET(QML_FILES
     qml/SelectFeePage.qml
     qml/AssetDetailsPage.qml
     qml/AppBanner.qml
+    qml/NotificationToast.qml
     qml/ConnectLedgerPage.qml
     qml/LedgerPage.qml
     qml/LedgerDeviceDelegate.qml
