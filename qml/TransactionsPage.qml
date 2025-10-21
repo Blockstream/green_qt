@@ -16,8 +16,9 @@ Page {
     readonly property ContextModel currentModel: (stack_layout.children[stack_layout.currentIndex] as ListPage).model
     function showTransactions(filters) {
         stack_layout.currentIndex = 0
-        if (filters.account) transaction_model.setFilterAccount(filters.account)
-        if (filters.asset) transaction_model.setFilterAsset(filters.asset)
+        transaction_model.clearFilters()
+        if (filters?.account) transaction_model.setFilterAccount(filters.account)
+        if (filters?.asset) transaction_model.setFilterAsset(filters.asset)
     }
     function toggleAccounts() {
         if (accounts_container.width < 1) {

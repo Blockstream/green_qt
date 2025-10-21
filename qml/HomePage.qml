@@ -12,6 +12,7 @@ import "util.js" as UtilJS
 Page {
     signal assetClicked(Asset asset)
     signal transactionClicked(Transaction transaction)
+    signal transactionsClicked()
     required property Context context
     id: self
     background: null
@@ -61,7 +62,8 @@ Page {
                     LinkButton {
                         Layout.alignment: Qt.AlignCenter
                         font.pixelSize: 16
-                        text: 'See all'
+                        text: qsTrId('id_show_all')
+                        onClicked: self.transactionsClicked()
                     }
                 }
                 Item {

@@ -327,6 +327,10 @@ Page {
             context: self.context
             onAssetClicked: (asset) => asset_drawer.createObject(self, { context: self.context, asset }).open()
             onTransactionClicked: (transaction) => transaction_details_drawer.createObject(self, { context: self.context, transaction }).open()
+            onTransactionsClicked: {
+                self.showView(OverviewPage.Transactions)
+                transactions_page.showTransactions()
+            }
         }
         TransactionsPage {
             id: transactions_page
