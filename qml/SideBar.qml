@@ -171,7 +171,7 @@ Pane {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 16
-                    source: 'qrc:/svg/blockstream'
+                    source: 'qrc:/svg/blockstream.svg'
                 }
             }
         }
