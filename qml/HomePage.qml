@@ -64,10 +64,17 @@ Page {
                         font.pixelSize: 14
                         text: qsTrId('id_show_all')
                         onClicked: self.transactionsClicked()
+                        visible: transaction_list_view.count > 0
                     }
                 }
                 Item {
                     Layout.minimumHeight: 8
+                }
+                Label {
+                    color: '#929292'
+                    font.pixelSize: 14
+                    text: 'You don\'t have any transactions yet.'
+                    visible: transaction_list_view.count === 0
                 }
             }
             footer: Item {

@@ -46,6 +46,28 @@ Pane {
     background: null
     contentItem: ColumnLayout {
         spacing: 8
+        ColumnLayout {
+            spacing: 4
+            visible: self.assets.length === 0
+            Label {
+                Layout.fillWidth: true
+                color: '#929292'
+                font.pixelSize: 14
+                text: 'You don\'t have any assets yet.'
+            }
+            RowLayout {
+                spacing: 0
+                LinkButton {
+                    text: 'Fund your wallet'
+                }
+                Label {
+                    color: '#929292'
+                    font.pixelSize: 14
+                    font.weight: 400
+                    text: ' now.'
+                }
+            }
+        }
         Repeater {
             model: self.assets
             delegate: AssetButton {
