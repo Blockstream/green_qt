@@ -287,10 +287,13 @@ Page {
     Component {
         id: asset_drawer
         AssetDrawer {
-            id: drawer
-            onAccountClicked: (account) => {
+            onAccountClicked: (asset, account) => {
                 self.showView(OverviewPage.Transactions)
-                transactions_page.showTransactions({ account, asset: drawer.asset })
+                transactions_page.showTransactions({ account, asset })
+            }
+            onTransactionsClicked: (asset) => {
+                self.showView(OverviewPage.Transactions)
+                transactions_page.showTransactions({ asset })
             }
         }
     }

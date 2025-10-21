@@ -8,13 +8,13 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal accountClicked(Account account)
+    signal transactionsClicked()
     required property Context context
     required property Asset asset
     property Account account
     property Action closeAction
     readonly property string ticker: {
         if (!self.asset) return
-        // if (self.asset.id === '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d') return 'LBTC'
         return self.asset.data.ticker ?? ''
     }
 
@@ -61,6 +61,11 @@ StackViewPage {
                 text: self.asset.data.entity?.domain ?? ''
                 opacity: 0.6
                 visible: self.asset.data.entity ?? false
+            }
+            LinkButton {
+                Layout.alignment: Qt.AlignCenter
+                text: 'View asset transactions'
+                onClicked: self.transactionsClicked()
             }
             Rectangle {
                 Layout.bottomMargin: 20

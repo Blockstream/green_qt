@@ -7,20 +7,23 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 WalletDrawer {
-    signal accountClicked(Account account)
+    signal accountClicked(Asset asset, Account account)
+    signal transactionsClicked(Asset asset)
     required property Asset asset
-    property Account account
     id: self
     contentItem: AssetDetailsPage {
         context: self.context
         asset: self.asset
-        account: self.account
         closeAction: Action {
             onTriggered: self.close()
         }
         onAccountClicked: (account) => {
             self.close()
-            self.accountClicked(account)
+            self.accountClicked(self.asset, ccount)
+        }
+        onTransactionsClicked: {
+            self.close()
+            self.transactionsClicked(self.asset)
         }
     }
 }

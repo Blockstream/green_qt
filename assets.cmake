@@ -93,7 +93,6 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg/testnet-liquid.svg
         assets/svg/localtest-liquid.svg
         assets/svg/torV2.svg
-        assets/svg/transactions.svg
         assets/svg/trezor.svg
         assets/svg/twofactor.svg
         assets/svg/tx-check.svg
