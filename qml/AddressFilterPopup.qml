@@ -16,22 +16,48 @@ FilterPopup {
             self.model.updateFilterHasTransactions(!self.model.filterHasTransactions)
         }
     }
-    Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredHeight: 1
-        Layout.topMargin: 2
-        Layout.bottomMargin: 2
-        Layout.leftMargin: 8
-        Layout.rightMargin: 8
-        color: '#FFF'
-        radius: 8
-        opacity: 0.2
-        visible: true
+    FilterPopup.Separator {
+    }
+    FilterPopup.SectionLabel {
+        text: qsTrId('id_singlesig')
+    }
+    TypeOptionButton {
+        type: 'p2pkh'
+    }
+    TypeOptionButton {
+        type: 'p2sh-p2wpkh'
+    }
+    TypeOptionButton {
+        type: 'p2wpkh'
+    }
+    TypeOptionButton {
+        type: 'p2tr'
+    }
+    FilterPopup.SectionLabel {
+        text: qsTrId('id_multisig')
+    }
+    TypeOptionButton {
+        type: 'csv'
+    }
+    TypeOptionButton {
+        type: 'p2sh'
+    }
+    TypeOptionButton {
+        type: 'p2wsh'
+    }
+
+    component TypeOptionButton: OptionButton {
+        required property string type
+        id: button
+        text: button.type.toUpperCase()
+        checked: self.model.filterTypes.indexOf(button.type) >= 0
+        onClicked: self.model.updateFilterTypes(button.type, self.model.filterTypes.indexOf(button.type) < 0)
     }
 
     component OptionButton: AbstractButton {
-        checkable: true
+        Layout.fillWidth: true
         id: button
+        checkable: true
         leftPadding: 12
         rightPadding: 12
         topPadding: 8

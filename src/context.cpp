@@ -645,6 +645,10 @@ void ContextModel::clearFilters()
     emit filterAssetsChanged();
     m_filter_text.clear();
     emit filterTextChanged();
+    m_filter_types.clear();
+    emit filterTypesChanged();
+    m_filter_has_transactions = false;
+    emit filterHasTransactionsChanged();
     invalidate();
 }
 
@@ -689,6 +693,28 @@ void ContextModel::updateFilterAssets(Asset* asset, bool filter)
     emit filterAssetsChanged();
     invalidate();
 }
+
+void ContextModel::updateFilterTypes(const QString& type, bool filter)
+{
+    if (filter) {
+        if (m_filter_types.contains(type)) return;
+        m_filter_types.append(type);
+    } else {
+        if (!m_filter_types.contains(type)) return;
+        m_filter_types.removeOne(type);
+    }
+    emit filterTypesChanged();
+    invalidate();
+}
+
+void ContextModel::updateFilterHasTransactions(bool filter)
+{
+    if (m_filter_has_transactions == filter) return;
+    m_filter_has_transactions = filter;
+    emit filterHasTransactionsChanged();
+    invalidate();
+}
+
 
 TransactionModel::TransactionModel(QObject* parent)
     : ContextModel(parent)
@@ -824,36 +850,6 @@ void AddressModel::update(Context* context)
     connect(context, &Context::addressUpdated, this, [=] {
         sort(0, Qt::DescendingOrder);
     });
-}
-
-void AddressModel::clearFilters()
-{
-    m_filter_types.clear();
-    emit filterTypesChanged();
-    m_filter_has_transactions = false;
-    emit filterHasTransactionsChanged();
-    ContextModel::clearFilters();
-}
-
-void AddressModel::updateFilterTypes(const QString& type, bool filter)
-{
-    if (filter) {
-        if (m_filter_types.contains(type)) return;
-        m_filter_types.append(type);
-    } else {
-        if (!m_filter_types.contains(type)) return;
-        m_filter_types.removeOne(type);
-    }
-    emit filterTypesChanged();
-    invalidate();
-}
-
-void AddressModel::updateFilterHasTransactions(bool filter)
-{
-    if (m_filter_has_transactions == filter) return;
-    m_filter_has_transactions = filter;
-    emit filterHasTransactionsChanged();
-    invalidate();
 }
 
 CoinModel::CoinModel(QObject* parent)

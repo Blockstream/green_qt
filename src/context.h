@@ -171,6 +171,8 @@ class ContextModel : public QSortFilterProxyModel
     Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     Q_PROPERTY(QQmlListProperty<Account> filterAccounts READ filterAccounts NOTIFY filterAccountsChanged)
     Q_PROPERTY(QQmlListProperty<Asset> filterAssets READ filterAssets NOTIFY filterAssetsChanged)
+    Q_PROPERTY(QStringList filterTypes READ filterTypes NOTIFY filterTypesChanged)
+    Q_PROPERTY(bool filterHasTransactions READ filterHasTransactions NOTIFY filterHasTransactionsChanged)
     Q_PROPERTY(QString filterText READ filterText WRITE setFilterText NOTIFY filterTextChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
@@ -180,24 +182,32 @@ public:
     void setContext(Context* context);
     QQmlListProperty<Account> filterAccounts();
     QQmlListProperty<Asset> filterAssets();
+    QStringList filterTypes() const { return m_filter_types; }
+    bool filterHasTransactions() const { return m_filter_has_transactions; }
     QString filterText() const { return m_filter_text; }
     void setFilterText(const QString& filter_text);
 signals:
     void contextChanged();
     void filterAccountsChanged();
     void filterAssetsChanged();
+    void filterTypesChanged();
+    void filterHasTransactionsChanged();
     void filterTextChanged();
 public slots:
-    virtual void clearFilters();
+    void clearFilters();
     void setFilterAccount(Account* account);
     void setFilterAsset(Asset* asset);
     void updateFilterAccounts(Account* account, bool filter);
     void updateFilterAssets(Asset* asset, bool filter);
+    void updateFilterTypes(const QString& type, bool filter);
+    void updateFilterHasTransactions(bool has_transactions);
 protected:
     virtual void update(Context* context) = 0;
 protected:
     QList<Account*> m_filter_accounts;
     QList<Asset*> m_filter_assets;
+    QStringList m_filter_types;
+    bool m_filter_has_transactions{false};
     QString m_filter_text;
 private:
     Context* m_context{nullptr};
@@ -221,31 +231,17 @@ private:
 class AddressModel : public ContextModel
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList filterTypes READ filterTypes NOTIFY filterTypesChanged)
-    Q_PROPERTY(bool filterHasTransactions READ filterHasTransactions NOTIFY filterHasTransactionsChanged)
     QML_ELEMENT
 public:
     AddressModel(QObject* parent = nullptr);
-    QStringList filterTypes() const { return m_filter_types; }
-    bool filterHasTransactions() const { return m_filter_has_transactions; }
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     void update(Context* context) override;
-public slots:
-    void clearFilters() override;
-    void updateFilterTypes(const QString& type, bool filter);
-    void updateFilterHasTransactions(bool has_transactions);
-signals:
-    void filterTypesChanged();
-    void filterHasTransactionsChanged();
 private:
     bool filterAccountsAcceptsAddress(Address* address) const;
     bool filterTextAcceptsAddress(Address* address) const;
     bool filterTypesAcceptsAddress(Address* address) const;
     bool filterHasTransactionAcceptsAddress(Address* address) const;
-private:
-    QStringList m_filter_types;
-    bool m_filter_has_transactions{false};
 };
 
 class CoinModel : public ContextModel

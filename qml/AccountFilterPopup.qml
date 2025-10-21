@@ -29,17 +29,7 @@ FilterPopup {
             opacity: 1
         }
     }
-    Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredHeight: 1
-        Layout.topMargin: 2
-        Layout.bottomMargin: 2
-        Layout.leftMargin: 8
-        Layout.rightMargin: 8
-        color: '#FFF'
-        radius: 8
-        opacity: 0.2
-        visible: self.filterAccounts.length > 0 && self.accounts.length > 0
+    FilterPopup.Separator {
     }
     Repeater {
         model: self.accounts

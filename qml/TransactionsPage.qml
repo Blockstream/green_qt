@@ -326,12 +326,24 @@ Page {
         spacing: 12
         header: TTextField {
             id: search_field
-            leftPadding: 15 + filters_layout.width + 15
+            leftPadding: 15 + left_layout.width + 15
+            rightPadding: 15 + right_layout.width + 15
             RowLayout {
-                id: filters_layout
+                id: left_layout
                 anchors.leftMargin: 15
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
+                spacing: 8
+                Image {
+                    Layout.leftMargin: 12
+                    source: 'qrc:/svg2/search.svg'
+                }
+            }
+            RowLayout {
+                id: right_layout
+                anchors.rightMargin: 15
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
                 spacing: 8
                 Repeater {
                     model: list_page.model.filterAccounts
@@ -359,9 +371,51 @@ Page {
                         asset: modelData
                     }
                 }
-                Image {
-                    Layout.leftMargin: 12
-                    source: 'qrc:/svg2/search.svg'
+                Label {
+                    leftPadding: 8
+                    rightPadding: 8
+                    bottomPadding: 4
+                    topPadding: 4
+                    background: Rectangle {
+                        radius: 4
+                        color: '#FFF'
+                        opacity: 0.2
+                    }
+                    font.weight: 600
+                    text: 'Has transactions'
+                    visible: list_page.model.filterHasTransactions
+                }
+                Repeater {
+                    model: list_page.model.filterTypes
+                    Label {
+                        leftPadding: 8
+                        rightPadding: 8
+                        bottomPadding: 4
+                        topPadding: 4
+                        background: Rectangle {
+                            radius: 4
+                            color: '#FFF'
+                            opacity: 0.2
+                        }
+                        font.weight: 600
+                        text: modelData.toUpperCase()
+                    }
+                }
+                CircleButton {
+                    focusPolicy: Qt.NoFocus
+                    icon.source: 'qrc:/svg2/x-circle.svg'
+                    visible: {
+                        if (list_page.model.filterText.length > 0) return true
+                        if (list_page.model.filterAccounts.length > 0) return true
+                        if (list_page.model.filterAssets.length > 0) return true
+                        if (list_page.model.filterTypes.length > 0) return true
+                        if (list_page.model.filterHasTransactions) return true
+                        return false
+                    }
+                    onClicked: {
+                        list_page.model.clearFilters()
+                        search_field.clear()
+                    }
                 }
             }
             Label {
@@ -372,18 +426,6 @@ Page {
                 anchors.leftMargin: search_field.leftPadding
                 anchors.baseline: parent.baseline
             }
-            CircleButton {
-                focusPolicy: Qt.NoFocus
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: 15
-                icon.source: 'qrc:/svg2/x-circle.svg'
-                visible: list_page.model.filterText.length > 0 || list_page.model.filterAccounts.length > 0 || list_page.model.filterAssets.length > 0
-                onClicked: {
-                    list_page.model.clearFilters()
-                    search_field.clear()
-                }
-            }
             onTextEdited: list_page.model.filterText = search_field.text
         }
         contentItem: TListView {
@@ -393,78 +435,6 @@ Page {
                 height: 24
             }
             delegate: list_page.delegate
-        }
-    }
-
-    component FooDelegate: ItemDelegate {
-        required property Transaction transaction
-        id: delegate
-        leftPadding: 24
-        rightPadding: 24
-        topPadding: 12
-        bottomPadding: 12
-        width: ListView.view.width
-        background: Rectangle {
-            border.width: 1
-            border.color: '#262626'
-            radius: 4
-            color: '#181818'
-        }
-        contentItem: RowLayout {
-            spacing: 8
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: `qrc:/svg2/tx-${delegate.transaction.data.type}.svg`
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                color: '#FAFAFA'
-                font.pixelSize: 16
-                font.weight: 600
-                text: delegate.transaction.data.type
-            }
-
-            ColumnLayout {
-                Layout.fillWidth: false
-                Layout.fillHeight: false
-                Layout.alignment: Qt.AlignCenter
-                spacing: 1
-                Label {
-                    color: '#FFF'
-                    font.pixelSize: 14
-                    font.weight: 600
-                    text: 'TODO' // txType(tx)
-                }
-                Label {
-                    color: '#929292'
-                    text: UtilJS.formatTransactionTimestamp(delegate.transaction.data)
-                    font.pixelSize: 12
-                    font.weight: 400
-                    font.capitalization: Font.AllUppercase
-                    opacity: 0.6
-                }
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: 0
-                Layout.fillWidth: true
-                color: '#929292'
-                font.pixelSize: 12
-                font.weight: 400
-                text: {
-                    const lines = delegate.transaction.memo.trim().split('\n')
-                    return lines[0] + (lines.length > 1 ? '...' : '')
-                }
-                wrapMode: Label.Wrap
-            }
-            // TransactionStatusBadge {
-            //     transaction: self.transaction
-            //     confirmations: self.confirmations
-            // }
-            HSpacer {}
-            Label {
-                text: delegate.transaction.account.name
-            }
         }
     }
 }
