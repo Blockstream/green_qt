@@ -243,6 +243,8 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg3/Ledger.svg
         assets/svg3/Notifications.svg
         assets/svg3/Trade.svg
+        assets/svg3/questions.svg
+        assets/svg3/key.svg
 
         assets/svg/blockstream.svg
         assets/svg/menu-home.svg

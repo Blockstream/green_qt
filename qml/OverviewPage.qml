@@ -321,9 +321,8 @@ Page {
             onTransactionClicked: (transaction) => transaction_details_drawer.createObject(self, { context: self.context, transaction }).open()
             onAddressClicked: (address) => address_details_drawer.createObject(self, { context: self.context, address }).open()
         }
-        Page {
-            background: null
-            contentItem: null
+        SecurityPage {
+            context: self.context
         }
         Page {
             background: null

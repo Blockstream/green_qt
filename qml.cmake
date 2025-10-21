@@ -265,6 +265,7 @@ SET(QML_FILES
     qml/AssetsView.qml
     qml/HomePage.qml
     qml/TransactionsPage.qml
+    qml/SecurityPage.qml
     qml/FilterPopup.qml
     qml/AccountFilterPopup.qml
     qml/AssetFilterPopup.qml
