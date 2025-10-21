@@ -21,11 +21,13 @@ MainPage {
     leftPadding: 40
     rightPadding: 40
     bottomPadding: 40
-    topPadding: 40
-    spacing: 36
+    topPadding: 0
     header: Pane {
         background: null
-        padding: 40
+        leftPadding: 40
+        rightPadding: 40
+        topPadding: 40
+        bottomPadding: 40
         contentItem: RowLayout {
             Label {
                 color: '#FFF'
@@ -52,9 +54,7 @@ MainPage {
         contentWidth: flickable.width
         ColumnLayout {
             id: layout
-            width: 400
-            x: (flickable.width - 400) / 2
-            y: Math.max(0, (flickable.height - layout.height) / 2)
+            width: flickable.width
             Label {
                 font.pixelSize: 14
                 font.weight: 600
