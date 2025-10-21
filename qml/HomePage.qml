@@ -104,6 +104,7 @@ Page {
                 selectedIndex: 0
                 showRangeButtons: true
                 verticalGridLinesCount: 5
+                context: self.context
             }
             Repeater {
                 id: promos_repeater

@@ -6,6 +6,7 @@ import QtQuick.Shapes
 
     Page {
     property url iconSource: 'qrc:/svg/btc.svg'
+    property Context context
 
     id: root
     implicitWidth: 300
@@ -13,6 +14,44 @@ import QtQuick.Shapes
 
     ChartPriceService {
         id: priceSource
+        currency: root.userCurrency
+        onCurrencyChanged: {
+            refresh()
+        }
+    }
+
+    Convert {
+        id: priceConvert
+        context: root.context
+        input: ({ btc: '1' })
+        unit: root.context ? root.context.primarySession.unit : 'btc'
+    }
+
+    readonly property string userCurrency: {
+        if (!context || !context.primarySession) return 'usd'
+        const session = context.primarySession
+        const settings = session.settings
+        if (settings && settings.pricing && settings.pricing.currency) {
+            return settings.pricing.currency.toLowerCase()
+        }
+        return 'usd'
+    }
+
+    onUserCurrencyChanged: {
+        currencyChanging = true
+    }
+
+    onContextChanged: {
+        if (context) {
+            priceSource.refresh()
+        }
+    }
+
+    Connections {
+        target: priceSource
+        function onPricesChanged() {
+            currencyChanging = false
+        }
     }
 
     Timer {
@@ -25,8 +64,9 @@ import QtQuick.Shapes
 
     title: qsTr('Bitcoin Price')
 
-    property color fillColor: Qt.rgba(0.0, 0.737, 1.0, 0.2) // top gradient color
-    property bool loading: root.pairCount === 0
+    property color fillColor: Qt.rgba(0.0, 0.737, 1.0, 0.2) 
+    property bool loading: root.pairCount === 0 || root.currencyChanging
+    property bool currencyChanging: false
     property int selectedIndex: 0
     property bool showRangeButtons: true
     property int horizontalGridLinesCount: 6
@@ -73,6 +113,9 @@ import QtQuick.Shapes
         return []
     }
 
+    Component.onCompleted: chartArea.startReveal()
+    onSelectedIndexChanged: chartArea.startReveal()
+
     readonly property bool isFlatSeries: { const s = root.seriesRef; return s && s.length > 0 && !(s[0] instanceof Array) }
     readonly property var pairCount: { const s = root.seriesRef; return s ? (root.isFlatSeries ? Math.floor(s.length / 2) : s.length) : 0 }
     function pairAt(i) { const s = root.seriesRef; return root.isFlatSeries ? [s[i * 2], s[i * 2 + 1]] : s[i] }
@@ -95,15 +138,16 @@ import QtQuick.Shapes
         return (isFinite(a) && isFinite(b) && a !== 0) ? ((b - a) / a) * 100.0 : 0
     }
     function formatPercent(p) { return (p >= 0 ? '+' : '') + Number(p).toFixed(2) + '%'; }
-    function formatCurrency(v, currency = 'USD') {
+    function formatCurrency(v, currency = null) {
         if (!isFinite(v)) return '--'
+        const userCurr = currency || root.userCurrency.toUpperCase()
         const abs = Math.abs(Number(v))
         const intPart = Math.trunc(abs)
         const fracPart = Math.round((abs - intPart) * 100)
         const intStr = String(intPart).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
         const fracStr = (fracPart < 10 ? '0' : '') + String(fracPart)
         const sign = v < 0 ? '-' : ''
-        return `${sign}${intStr},${fracStr} ${currency}`
+        return `${sign}${intStr},${fracStr} ${userCurr}`
     }
     function formatCompact(v) {
         if (!isFinite(v)) return '--'
@@ -135,6 +179,19 @@ import QtQuick.Shapes
             return locale.monthName(dateObj.getMonth(), Locale.ShortFormat) + ' ' + dateObj.getFullYear()
         }
         return dateObj.toLocaleDateString()
+    }
+    function formatDate(timestamp) {
+        if (!isFinite(timestamp)) return ''
+        const milliseconds = _coerceMillis(timestamp)
+        const dateObj = new Date(milliseconds)
+        const locale = Qt.locale()
+        return _pad2(dateObj.getDate()) + ' ' + locale.monthName(dateObj.getMonth(), Locale.ShortFormat) + ' ' + dateObj.getFullYear()
+    }
+    function formatTime(timestamp) {
+        if (!isFinite(timestamp)) return ''
+        const milliseconds = _coerceMillis(timestamp)
+        const dateObj = new Date(milliseconds)
+        return _pad2(dateObj.getHours()) + ':' + _pad2(dateObj.getMinutes())
     }
     readonly property var scaledPoints: {
         const arr = []
@@ -174,6 +231,22 @@ import QtQuick.Shapes
         const d = root.buildSmoothPath
         if (!d) return ''
         return d + ` L ${chartArea.plotWidth} ${chartArea.height} L 0 ${chartArea.height} Z`
+    }
+
+    function nearestIndexForPlotX(plotX) {
+        const pts = root.scaledPoints
+        const n = pts.length
+        if (!n) return -1
+        let bestIndex = 0
+        let bestDist = Math.abs(pts[0].x - plotX)
+        for (let i = 1; i < n; i++) {
+            const d = Math.abs(pts[i].x - plotX)
+            if (d < bestDist) {
+                bestDist = d
+                bestIndex = i
+            }
+        }
+        return bestIndex
     }
 
     padding: 24
@@ -248,7 +321,7 @@ import QtQuick.Shapes
                 }
                 Label {
                     // Last price
-                    text: root.formatCurrency(root.lastPrice, 'USD')
+                    text: priceConvert.fiat.available ? priceConvert.fiat.label : '--'
                     font.pixelSize: 14
                     font.weight: 600
                     color: "#ffffff"
@@ -264,6 +337,23 @@ import QtQuick.Shapes
         id: chartArea
         property int axisWidth: root.width < 250 ? 0 : 48
         readonly property int plotWidth: width - axisWidth
+        property real revealProgress: 0.0
+
+        function startReveal() {
+            revealProgress = 0.0
+            revealAnim.stop()
+            revealAnim.start()
+        }
+
+        NumberAnimation {
+            id: revealAnim
+            target: chartArea
+            property: "revealProgress"
+            from: 0.0
+            to: 1.0
+            duration: 700
+            easing.type: Easing.InOutCubic
+        }
 
         BusyIndicator {
             id: initial_spinner
@@ -370,38 +460,135 @@ import QtQuick.Shapes
             }
         }
 
-        // Chart paths
-        Shape {
-            id: xxx
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.leftMargin: chartArea.axisWidth
-            antialiasing: true
-            layer.enabled: true
-            layer.samples: 4
+        // Chart paths with reveal clip
+        Item {
+            id: chartPlot
+            x: chartArea.axisWidth
+            y: 0
+            width: Math.max(0, chartArea.plotWidth * chartArea.revealProgress)
+            height: chartArea.height
+            clip: true
             z: 1
 
-            ShapePath {
-                strokeWidth: 0
-                fillGradient: LinearGradient {
-                    x1: 0; y1: 0
-                    x2: 0; y2: chartArea.height
-                    GradientStop { position: 0.0; color: root.fillColor }
-                    GradientStop { position: 1.0; color: Qt.rgba(0.0, 0.737, 1.0, 0.0) }
+            Shape {
+                anchors.fill: parent
+                antialiasing: true
+                layer.enabled: true
+                layer.samples: 4
+
+                ShapePath {
+                    strokeWidth: 0
+                    fillGradient: LinearGradient {
+                        x1: 0; y1: 0
+                        x2: 0; y2: chartArea.height
+                        GradientStop { position: 0.0; color: root.fillColor }
+                        GradientStop { position: 1.0; color: Qt.rgba(0.0, 0.737, 1.0, 0.0) }
+                    }
+                    PathSvg { path: buildAreaPath }
                 }
-                PathSvg { path: buildAreaPath }
+
+                ShapePath {
+                    id: price_shape_path
+                    strokeColor: '#00BCFF'
+                    strokeWidth: 1.5
+                    fillColor: "transparent"
+                    joinStyle: ShapePath.RoundJoin
+                    capStyle: ShapePath.RoundCap
+                    PathSvg { path: root.buildSmoothPath }
+                }
+            }
+        }
+
+        Item {
+            id: hoverLayer
+            anchors.fill: parent
+            z: 3
+            visible: !root.loading
+
+            HoverHandler { id: hover; acceptedDevices: PointerDevice.Mouse }
+            DragHandler { id: drag; target: null; acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchScreen }
+
+            readonly property bool active: hover.hovered || drag.active
+            readonly property real rawX: hover.hovered ? hover.point.position.x : (drag.active ? drag.point.position.x : 0)
+            readonly property real plotX: Math.min(chartArea.plotWidth, Math.max(0, rawX - chartArea.axisWidth))
+            readonly property int idx: active ? root.nearestIndexForPlotX(plotX) : -1
+            readonly property var pt: (idx >= 0 && idx < root.scaledPoints.length) ? root.scaledPoints[idx] : null
+            readonly property var pointData: (idx >= 0 && idx < root.pairCount) ? root.pairAt(idx) : null
+
+            Rectangle {
+                visible: hoverLayer.active
+                x: chartArea.axisWidth + hoverLayer.plotX - width / 2
+                y: 0
+                width: 1
+                height: chartArea.height
+                color: "#4DFFFFFF"
             }
 
-            ShapePath {
-                id: price_shape_path
-                strokeColor: '#00BCFF'
-                strokeWidth: 1.5
-                fillColor: "transparent"
-                joinStyle: ShapePath.RoundJoin
-                capStyle: ShapePath.RoundCap
-                PathSvg { path: root.buildSmoothPath }
+            Rectangle {
+                visible: hoverLayer.active && hoverLayer.pt !== null
+                width: 8
+                height: 8
+                radius: 4
+                x: hoverLayer.pt !== null ? chartArea.axisWidth + hoverLayer.pt.x - width / 2 : 0
+                y: hoverLayer.pt !== null ? hoverLayer.pt.y - height / 2 : 0
+                color: '#00BCFF'
+                border.width: 2
+                border.color: '#181818'
+            }
+
+            Rectangle {
+                visible: hoverLayer.active && hoverLayer.pt !== null
+                color: "#222222"
+                radius: 4
+                border.width: 1
+                border.color: "#333333"
+                anchors.horizontalCenter: undefined
+                x: {
+                    if (hoverLayer.pt === null) return 0
+                    const tooltipX = chartArea.axisWidth + hoverLayer.pt.x + 8
+                    const rightEdge = chartArea.width - width
+                    if (tooltipX > rightEdge) {
+                        return Math.max(0, chartArea.axisWidth + hoverLayer.pt.x - width - 8)
+                    }
+                    return Math.min(rightEdge, tooltipX)
+                }
+                y: {
+                    if (hoverLayer.pt === null) return 0
+                    const tooltipY = hoverLayer.pt.y - height - 8
+                    if (tooltipY < 0) {
+                        return Math.min(chartArea.height - height, hoverLayer.pt.y + 8)
+                    }
+                    return Math.max(0, tooltipY)
+                }
+                property int _pad: 10
+                width: tipContent.implicitWidth + _pad * 2
+                height: tipContent.implicitHeight + _pad * 2
+
+                ColumnLayout {
+                    id: tipContent
+                    x: parent._pad
+                    y: parent._pad
+                    spacing: 4
+                    RowLayout {
+                        spacing: 8
+                        Label {
+                            text: hoverLayer.pointData ? root.formatDate(hoverLayer.pointData[0]) : ''
+                            color: '#A0A0A0'
+                            font.pixelSize: 11
+                        }
+                        Label {
+                            text: hoverLayer.pointData ? root.formatTime(hoverLayer.pointData[0]) : ''
+                            color: '#A0A0A0'
+                            font.pixelSize: 11
+                        }
+                    }
+                    Label {
+                        text: hoverLayer.pointData ? root.formatCurrency(Number(hoverLayer.pointData[1])) : ''
+                        color: '#FFFFFF'
+                        font.pixelSize: 12
+                        font.weight: 600
+                    }
+                }
             }
         }
     }
@@ -428,7 +615,7 @@ import QtQuick.Shapes
                 readonly property real totalOptimalWidth: 5 * optimalButtonWidth
                 readonly property real availableWidth: parent.width - 24
                 readonly property bool needsResize: availableWidth < totalOptimalWidth
-                readonly property real buttonWidth: needsResize ? Math.max(minButtonWidth, availableWidth / 5) : optimalButtonWidth
+                readonly property real buttonWidth: needsResize ? Math.max(minButtonWidth, Math.max(0, availableWidth) / 5) : optimalButtonWidth
                 
                 Repeater {
                     model: [
