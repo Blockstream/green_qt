@@ -334,9 +334,8 @@ Page {
                 anchors.leftMargin: 15
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                spacing: 8
+                spacing: 12
                 Image {
-                    Layout.leftMargin: 12
                     source: 'qrc:/svg2/search.svg'
                 }
             }
@@ -345,7 +344,7 @@ Page {
                 anchors.rightMargin: 15
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                spacing: 8
+                spacing: 12
                 Repeater {
                     model: list_page.model.filterAccounts
                     Label {

@@ -57,7 +57,7 @@ Page {
                         elide: Label.ElideRight
                         font.pixelSize: 18
                         font.weight: 600
-                        text: qsTrId('id_transactions')
+                        text: qsTrId('id_latest_transactions')
                     }
                     LinkButton {
                         Layout.alignment: Qt.AlignCenter
@@ -70,8 +70,11 @@ Page {
                     Layout.minimumHeight: 8
                 }
             }
-            model: TransactionModel {
-                context: self.context
+            model: LimitModel {
+                limit: 10
+                source: TransactionModel {
+                    context: self.context
+                }
             }
             delegate: TransactionDelegate2 {
                 id: delegate
