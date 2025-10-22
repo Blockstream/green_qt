@@ -611,16 +611,16 @@ import QtQuick.Shapes
             }
             RowLayout {
                 id: buttonContainer
-                spacing: 0
+                spacing: 4
                 Layout.alignment: Qt.AlignHCenter
 
                 // Calculate if buttons need to be resized
                 readonly property real optimalButtonWidth: 42
                 readonly property real minButtonWidth: 28
-                readonly property real totalOptimalWidth: 5 * optimalButtonWidth
+                readonly property real totalOptimalWidth: 5 * optimalButtonWidth + 4 * 4 // 5 buttons + 4 gaps
                 readonly property real availableWidth: parent.width - 24
                 readonly property bool needsResize: availableWidth < totalOptimalWidth
-                readonly property real buttonWidth: needsResize ? Math.max(minButtonWidth, Math.max(0, availableWidth) / 5) : optimalButtonWidth
+                readonly property real buttonWidth: needsResize ? Math.max(minButtonWidth, Math.max(0, availableWidth - 4 * 4) / 5) : optimalButtonWidth
                 
                 Repeater {
                     model: [
@@ -655,7 +655,8 @@ import QtQuick.Shapes
         topPadding: 4
         bottomPadding: 4
         
-        implicitWidth: needsResize ? buttonWidth : undefined
+        width: needsResize ? buttonWidth : implicitWidth
+        implicitWidth: needsResize ? buttonWidth : 42
         
         background: Rectangle {
             radius: button.background.height / 2
