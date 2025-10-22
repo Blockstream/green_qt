@@ -19,7 +19,7 @@ WalletDrawer {
         }
         onAccountClicked: (account) => {
             self.close()
-            self.accountClicked(self.asset, ccount)
+            self.accountClicked(self.asset, account)
         }
         onTransactionsClicked: {
             self.close()

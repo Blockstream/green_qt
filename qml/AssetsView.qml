@@ -70,7 +70,6 @@ Pane {
         }
         onClicked: self.assetClicked(button.asset)
         id: button
-        enabled: button.asset.hasData
         leftPadding: 24
         rightPadding: 24
         topPadding: 12
@@ -119,7 +118,6 @@ Pane {
                 Layout.alignment: Qt.AlignCenter
                 Layout.leftMargin: 10
                 source: 'qrc:/svg2/right.svg'
-                opacity: button.enabled ? 1 : 0
             }
         }
     }

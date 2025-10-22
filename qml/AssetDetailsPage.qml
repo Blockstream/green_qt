@@ -24,6 +24,7 @@ StackViewPage {
         spacing: 20
         ShareButton {
             url: self.asset.url
+            visible: self.asset.hasData
         }
         CloseButton {
             action: self.closeAction
@@ -73,9 +74,12 @@ StackViewPage {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
                 color: '#313131'
+                visible: details_grid.visible
             }
             GridLayout {
+                id: details_grid
                 columns: 2
+                visible: self.asset.id !== 'btc'
                 Label {
                     Layout.minimumWidth: 100
                     color: '#929292'
