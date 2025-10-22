@@ -37,20 +37,23 @@ Loader {
     Component {
         id: layout_0
         Page {
-            padding: 16
+            bottomPadding: 12
+            leftPadding: 24
+            rightPadding: 24
+            topPadding: 12
             background: Rectangle {
-                color: '#161921'
+                radius: 4
+                color: '#181818'
                 border.width: 1
-                border.color: Qt.rgba(1, 1, 1, 0.04)
-                radius: 8
+                border.color: '#262626'
             }
             footer: ColumnLayout {
                 PrimaryButton {
                     Layout.fillWidth: true
                     Layout.margins: 0
-                    Layout.leftMargin: 16
-                    Layout.rightMargin: 16
-                    Layout.bottomMargin: 16
+                    Layout.leftMargin: 24
+                    Layout.rightMargin: 24
+                    Layout.bottomMargin: 12
                     text: self.promo.data.cta_small
                     onClicked: self.clicked()
                 }
@@ -106,14 +109,14 @@ Loader {
         id: layout_1
         Pane {
             bottomPadding: 16
-            leftPadding: 16
-            rightPadding: 16
+            leftPadding: 24
+            rightPadding: 24
             topPadding: 0
             background: Rectangle {
-                color: '#161921'
+                radius: 4
+                color: '#181818'
                 border.width: 1
-                border.color: Qt.rgba(1, 1, 1, 0.04)
-                radius: 8
+                border.color: '#262626'
             }
             contentItem: ColumnLayout {
                 spacing: 10
@@ -167,10 +170,13 @@ Loader {
     Component {
         id: layout_2
         Page {
-            padding: 16
+            bottomPadding: 12
+            leftPadding: 24
+            rightPadding: 24
+            topPadding: 12
             background: Rectangle {
-                color: '#161921'
-                radius: 8
+                radius: 4
+                color: '#181818'
                 Image {
                     id: image
                     anchors.fill: parent
@@ -181,16 +187,16 @@ Loader {
                 }
                 Rectangle {
                     anchors.fill: parent
-                    border.width: 1
-                    border.color: Qt.rgba(1, 1, 1, 0.04)
+                    radius: 4
                     color: 'transparent'
-                    radius: 8
+                    border.width: 1
+                    border.color: '#262626'
                 }
             }
             footer: ColumnLayout {
                 PrimaryButton {
                     Layout.fillWidth: true
-                    Layout.margins: 16
+                    Layout.margins: 24
                     text: self.promo.data.cta_small
                     onClicked: self.clicked()
                 }
@@ -212,6 +218,8 @@ Loader {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
+                    Layout.leftMargin: 24
+                    Layout.rightMargin: 24
                     id: title_label
                     font.pixelSize: 24
                     font.weight: 700
@@ -223,6 +231,8 @@ Loader {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
+                    Layout.leftMargin: 24
+                    Layout.rightMargin: 24
                     id: text_label
                     font.pixelSize: 12
                     font.weight: 400

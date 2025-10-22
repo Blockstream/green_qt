@@ -25,8 +25,8 @@ Page {
             implicitHeight: split_view.height
         }
         TListView {
-            SplitView.fillWidth: true
-            SplitView.minimumWidth: 400
+            SplitView.minimumWidth: 300
+            SplitView.preferredWidth: 500
             id: transaction_list_view
             contentY: 0
             spacing: 8
@@ -39,7 +39,7 @@ Page {
                     Layout.preferredWidth: 0
                     Layout.bottomMargin: 8
                     elide: Label.ElideRight
-                    font.pixelSize: 18
+                    font.pixelSize: 14
                     font.weight: 600
                     text: qsTrId('id_assets')
                 }
@@ -55,13 +55,13 @@ Page {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
                         elide: Label.ElideRight
-                        font.pixelSize: 18
+                        font.pixelSize: 14
                         font.weight: 600
                         text: qsTrId('id_latest_transactions')
                     }
                     LinkButton {
                         Layout.alignment: Qt.AlignCenter
-                        font.pixelSize: 16
+                        font.pixelSize: 14
                         text: qsTrId('id_show_all')
                         onClicked: self.transactionsClicked()
                     }
@@ -70,6 +70,10 @@ Page {
                     Layout.minimumHeight: 8
                 }
             }
+            footer: Item {
+                implicitHeight: 12
+            }
+
             model: LimitModel {
                 limit: 10
                 source: TransactionModel {
@@ -83,16 +87,15 @@ Page {
         }
         VFlickable {
             SplitView.fillWidth: true
-            SplitView.preferredWidth: 500
             SplitView.minimumWidth: 300
-            SplitView.maximumWidth: 600
             alignment: Qt.AlignTop
             Label {
+                Layout.alignment: Qt.AlignTop
                 Layout.bottomMargin: 8
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 elide: Label.ElideRight
-                font.pixelSize: 18
+                font.pixelSize: 14
                 font.weight: 600
                 text: 'Bitcoin Price'
             }
@@ -100,7 +103,7 @@ Page {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 300
-                Layout.maximumHeight: 300
+                Layout.maximumHeight: 400
                 selectedIndex: 0
                 showRangeButtons: true
                 verticalGridLinesCount: 5
@@ -122,7 +125,6 @@ Page {
                     required property Promo modelData
                     Layout.fillWidth: true
                     Layout.minimumHeight: 250
-                    Layout.maximumHeight: 250
                     Layout.topMargin: 32
                     id: card
                     promo: card.modelData
@@ -140,6 +142,9 @@ Page {
                         }
                     }
                 }
+            }
+            VSpacer {
+                Layout.minimumHeight: 12
             }
         }
     }
