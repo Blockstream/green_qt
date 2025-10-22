@@ -5,8 +5,9 @@
 
 static PromoManager* g_promo_manager{nullptr};
 
-Promo::Promo(const QString& id, QObject* parent)
-    : QObject(parent)
+Promo::Promo(const QString& id, PromoManager* manager)
+    : QObject(manager)
+    , m_manager(manager)
     , m_id(id)
 {
     m_dismissed = Settings::instance()->promosDismissed().contains(m_id);
@@ -16,8 +17,8 @@ Promo::Promo(const QString& id, QObject* parent)
 Promo::~Promo()
 {
     if (m_dismissed) {
-        for (const auto resource : m_resources.values()) {
-            resource->purge();
+        for (auto it = m_resources.cbegin(), end = m_resources.cend(); it != end; ++it) {
+            it.value()->purge();
         }
     }
 }
@@ -95,12 +96,6 @@ PromoManager::~PromoManager()
     g_promo_manager = nullptr;
 }
 
-PromoManager *PromoManager::instance()
-{
-    Q_ASSERT(g_promo_manager);
-    return g_promo_manager;
-}
-
 QQmlListProperty<Promo> PromoManager::promos()
 {
     return { this, &m_promos };
@@ -138,8 +133,9 @@ void PromoManager::createOrUpdatePromo(const QJsonObject& data)
     promo->setData(data);
 }
 
-PromoResource::PromoResource(QObject* parent)
-    : QObject(parent)
+PromoResource::PromoResource(Promo* promo)
+    : QObject(promo)
+    , m_promo(promo)
 {
 }
 
@@ -157,40 +153,48 @@ void PromoResource::download(const QString& source)
 
     if (m_reply) return;
 
+    downloadNow();
+}
+
+void PromoResource::downloadNow()
+{
     QDir dir(GetDataDir("promos"));
 
-    const auto url = QUrl(source);
+    const auto url = QUrl(m_source);
     const auto suffix = QFileInfo(url.path()).suffix();
-    const auto hash = Sha256(source);
+    const auto hash = Sha256(m_source);
     const auto name = hash + "." + suffix;
     const auto path = dir.absoluteFilePath(name);
 
     if (QFileInfo::exists(path)) {
         setPath(QUrl::fromLocalFile(path).toString());
-    } else {
-        QNetworkRequest req{source};
-        auto engine = qmlEngine(PromoManager::instance());
-        if (!engine) {
-            qDebug() << Q_FUNC_INFO << "engine not set";
-            return;
-        }
-        auto net = engine->networkAccessManager();
-        if (!net) {
-            qDebug() << Q_FUNC_INFO << "network access manager not set";
-            return;
-        }
-        m_reply = net->get(req);
-        connect(m_reply, &QNetworkReply::finished, this, [=] {
-            QFile file(path);
-            if (file.open(QIODevice::WriteOnly)) {
-                file.write(m_reply->readAll());
-                file.close();
-            }
-            setPath(QUrl::fromLocalFile(path).toString());
-            m_reply->deleteLater();
-            m_reply = nullptr;
-        });
+        return;
     }
+
+    QNetworkRequest req{m_source};
+    auto engine = qmlEngine(promo()->manager());
+    if (!engine) {
+        qDebug() << Q_FUNC_INFO << "engine not set";
+        QTimer::singleShot(1000, this, &PromoResource::downloadNow);
+        return;
+    }
+    auto net = engine->networkAccessManager();
+    if (!net) {
+        qDebug() << Q_FUNC_INFO << "network access manager not set";
+        QTimer::singleShot(1000, this, &PromoResource::downloadNow);
+        return;
+    }
+    m_reply = net->get(req);
+    connect(m_reply, &QNetworkReply::finished, this, [=] {
+        QFile file(path);
+        if (file.open(QIODevice::WriteOnly)) {
+            file.write(m_reply->readAll());
+            file.close();
+        }
+        setPath(QUrl::fromLocalFile(path).toString());
+        m_reply->deleteLater();
+        m_reply = nullptr;
+    });
 }
 
 void PromoResource::purge()

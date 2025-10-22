@@ -8,6 +8,10 @@
 #include <QQmlEngine>
 #include <QNetworkReply>
 
+class Promo;
+class PromoManager;
+class PromoResource;
+
 class PromoResource : public QObject
 {
     Q_OBJECT
@@ -15,15 +19,18 @@ class PromoResource : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    PromoResource(QObject* parent = nullptr);
+    PromoResource(Promo* promo);
+    Promo* promo() const { return m_promo; }
     QString path() const { return m_path; }
     void setPath(const QString& path);
     void download(const QString& source);
+    void downloadNow();
     void purge();
     bool ready() const;
 signals:
     void pathChanged();
 private:
+    Promo* const m_promo;
     QString m_source;
     QString m_path;
     QNetworkReply* m_reply{nullptr};
@@ -39,9 +46,9 @@ class Promo : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    explicit Promo(const QString& id, QObject* parent);
+    explicit Promo(const QString& id, PromoManager* manager);
     virtual ~Promo();
-
+    PromoManager* manager() const { return m_manager; }
     QString id() const { return m_id; }
     bool ready() const;
     QJsonObject data() const { return m_data; }
@@ -55,6 +62,7 @@ signals:
     void dataChanged();
     void dismissedChanged();
 protected:
+    PromoManager* const m_manager;
     const QString m_id;
     QJsonObject m_data;
     bool m_dismissed{false};
@@ -65,10 +73,11 @@ class PromoManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<Promo> promos READ promos NOTIFY changed)
+    QML_ELEMENT
+    QML_SINGLETON
 public:
     explicit PromoManager();
     virtual ~PromoManager();
-    static PromoManager* instance();
     QQmlListProperty<Promo> promos();
 signals:
     void changed();

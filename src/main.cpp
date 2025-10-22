@@ -36,7 +36,6 @@
 #include "ga.h"
 #include "httpmanager.h"
 #include "networkmanager.h"
-#include "promo.h"
 #include "sessionmanager.h"
 #include "green_settings.h"
 #include "util.h"
@@ -412,7 +411,6 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     HttpManager http_manager;
     Analytics analytics;
     AssetManager asset_manager;
-    PromoManager promo_manager;
 
     qInfo() << "Register singletons";
     qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
@@ -424,7 +422,6 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
     qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
     qmlRegisterSingletonInstance<AssetManager>("Blockstream.Green.Core", 0, 1, "AssetManager", AssetManager::instance());
-    qmlRegisterSingletonInstance<PromoManager>("Blockstream.Green.Core", 0, 1, "PromoManager", PromoManager::instance());
 
     if (g_args.isSet("testnet")) {
         const auto value = g_args.value("testnet");

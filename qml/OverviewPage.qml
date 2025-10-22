@@ -246,11 +246,6 @@ Page {
         }
     }
     Component {
-        id: promo_drawer
-        PromoDrawer {
-        }
-    }
-    Component {
         id: receive_drawer
         ReceiveDrawer {
         }
@@ -310,17 +305,6 @@ Page {
         }
     }
 
-    // Component {
-    //     id: account_view_component
-    //     AccountView {
-    //         view: wallet_header.view
-    //         onTransactionClicked: (transaction) => transaction_details_drawer.createObject(self, { context: self.context, transaction }).open()
-    //         onAddressClicked: (address) => address_details_drawer.createObject(self, { context: self.context, address }).open()
-    //         onAssetClicked: (account, asset) => asset_drawer.createObject(self, { context: self.context, account, asset }).open()
-    //         onUpdateUnspentsClicked: (account, unspents, status) => update_unspents_drawer.createObject(self, { context: self.context, account, unspents, status }).open()
-    //     }
-    // }
-
     contentItem: StackLayout {
         currentIndex: self.view
         HomePage {
@@ -346,89 +330,7 @@ Page {
             background: null
             contentItem: null
         }
-
-        //         footer: Flickable {
-        //             id: flickable
-        //             clip: true
-        //             contentWidth: flickable.width
-        //             contentHeight: layout.height
-        //             implicitHeight: {
-        //                 let first_height = 0
-        //                 for (let i = 0; i < layout.children.length; i++) {
-        //                     const child = layout.children[i]
-        //                     if (child instanceof Repeater) continue
-        //                     if (!child.visible) continue
-        //                     first_height = child.height + 10
-        //                     break;
-        //                 }
-        //                 return Math.max(side_view.height - accounts_list.contentHeight, first_height)
-        //             }
-        //             ColumnLayout {
-        //                 id: layout
-        //                 spacing: 0
-        //                 width: flickable.width
-        //                 Repeater {
-        //                     id: promos_repeater
-        //                     model: {
-        //                         return [...PromoManager.promos]
-        //                             .filter(_ => !Settings.useTor)
-        //                             .filter(promo => !promo.dismissed)
-        //                             .filter(promo => promo.ready)
-        //                             .filter(promo => UtilJS.filterPromo(WalletManager.wallets, promo))
-        //                             .filter(promo => promo.data.is_visible)
-        //                             .filter(promo => promo.data.screens.indexOf('WalletOverview') >= 0)
-        //                             .slice(0, 1)
-        //                     }
-        //                     delegate: PromoCard {
-        //                         required property Promo modelData
-        //                         Layout.fillWidth: true
-        //                         Layout.topMargin: 10
-        //                         id: delegate
-        //                         promo: delegate.modelData
-        //                         screen: 'WalletOverview'
-        //                         onClicked: {
-        //                             const context = self.context
-        //                             const promo = delegate.promo
-        //                             const screen = 'WalletOverview'
-        //                             if (delegate.promo.data.is_small) {
-        //                                 Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
-        //                                 Qt.openUrlExternally(delegate.promo.data.link)
-        //                             } else {
-        //                                 Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
-        //                                 promo_drawer.createObject(self, { context, promo, screen }).open()
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //                 JadeGenuineHintPane {
-        //                 }
-        //             }
-        //         }
-        //     }
     }
-
-    // component HintPane: AbstractButton {
-    //     Layout.fillWidth: true
-    //     Layout.topMargin: 10
-    //     id: hint
-    //     padding: 20
-    //     background: Rectangle {
-    //         border.width: 1
-    //         border.color: '#1F222A'
-    //         color: Qt.lighter('#161921', hint.hovered ? 1.2 : 1)
-    //         radius: 4
-    //         Image {
-    //             anchors.right: parent.right
-    //             anchors.top: parent.top
-    //             anchors.margins: 10
-    //             source: 'qrc:/svg2/share.svg'
-    //             visible: hint.hovered
-    //         }
-    //     }
-    //     HoverHandler {
-    //         cursorShape: Qt.PointingHandCursor
-    //     }
-    // }
 
     Component {
         id: genuine_check_dialog

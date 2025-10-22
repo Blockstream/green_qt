@@ -99,12 +99,53 @@ Page {
             LineChart {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.minimumHeight: 400
+                Layout.minimumHeight: 300
+                Layout.maximumHeight: 300
                 selectedIndex: 0
                 showRangeButtons: true
                 verticalGridLinesCount: 5
             }
+            Repeater {
+                id: promos_repeater
+                model: {
+                    return [...PromoManager.promos]
+                        .filter(_ => !Settings.useTor)
+                        .filter(promo => !promo.dismissed)
+                        .filter(promo => promo.ready)
+                        .filter(promo => UtilJS.filterPromo(WalletManager.wallets, promo))
+                        .filter(promo => promo.data.is_visible)
+                        .filter(promo => promo.data.screens.indexOf('HomeTab') >= 0)
+                        .slice(0, 1)
+                }
+                delegate: PromoCard {
+                    required property Promo modelData
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: 250
+                    Layout.maximumHeight: 250
+                    Layout.topMargin: 32
+                    id: card
+                    promo: card.modelData
+                    screen: 'WalletOverview'
+                    onClicked: {
+                        const context = self.context
+                        const promo = card.promo
+                        const screen = 'WalletOverview'
+                        if (card.promo.data.is_small) {
+                            Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
+                            Qt.openUrlExternally(card.promo.data.link)
+                        } else {
+                            Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
+                            promo_drawer.createObject(self, { context, promo, screen }).open()
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+    Component {
+        id: promo_drawer
+        PromoDrawer {
         }
     }
 
