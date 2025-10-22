@@ -15,9 +15,6 @@ import QtQuick.Shapes
     ChartPriceService {
         id: priceSource
         currency: root.userCurrency
-        onCurrencyChanged: {
-            refresh()
-        }
     }
 
     Convert {
@@ -190,7 +187,14 @@ import QtQuick.Shapes
     function formatTime(timestamp) {
         if (!isFinite(timestamp)) return ''
         const milliseconds = _coerceMillis(timestamp)
-        const dateObj = new Date(milliseconds)
+        const dateObj = new Date(milliseconds)        
+        // Only round to hour for weekly (1) and monthly (2) charts
+        if (root.selectedIndex === 1 || root.selectedIndex === 2) {
+            const roundedDate = new Date(milliseconds)
+            roundedDate.setMinutes(0, 0, 0)
+            return _pad2(roundedDate.getHours()) + ':00'
+        }
+        // Keep original precision for daily chart (0)
         return _pad2(dateObj.getHours()) + ':' + _pad2(dateObj.getMinutes())
     }
     readonly property var scaledPoints: {
@@ -577,6 +581,7 @@ import QtQuick.Shapes
                             font.pixelSize: 11
                         }
                         Label {
+                            visible: root.selectedIndex < 3
                             text: hoverLayer.pointData ? root.formatTime(hoverLayer.pointData[0]) : ''
                             color: '#A0A0A0'
                             font.pixelSize: 11

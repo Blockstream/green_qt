@@ -26,6 +26,7 @@ void ChartPriceService::setCurrency(const QString& c)
     if (m_currency == c) return;
     m_currency = c;
     emit currencyChanged();
+    refresh();
 }
 
 void ChartPriceService::refresh()
