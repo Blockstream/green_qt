@@ -4,13 +4,11 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
 
-    Page {
+Page {
     property url iconSource: 'qrc:/svg/btc.svg'
     property Context context
 
     id: root
-    implicitWidth: 300
-    implicitHeight: 160
 
     ChartPriceService {
         id: priceSource
@@ -207,7 +205,7 @@ import QtQuick.Shapes
             const sx = (p[0] - bounds.xMin) / dx
             const sy = (p[1] - bounds.yMin) / dy
             const px = sx * chartArea.plotWidth
-            const py = (1.0 - sy) * chartArea.height
+            const py = (1.0 - sy) * chartArea.plotHeight
             arr.push({ x: px, y: py })
         }
         return arr
@@ -234,7 +232,7 @@ import QtQuick.Shapes
     readonly property string buildAreaPath: {
         const d = root.buildSmoothPath
         if (!d) return ''
-        return d + ` L ${chartArea.plotWidth} ${chartArea.height} L 0 ${chartArea.height} Z`
+        return d + ` L ${chartArea.plotWidth} ${chartArea.plotHeight} L 0 ${chartArea.plotHeight} Z`
     }
 
     function nearestIndexForPlotX(plotX) {
@@ -253,7 +251,11 @@ import QtQuick.Shapes
         return bestIndex
     }
 
-    padding: 24
+    leftPadding: 24
+    rightPadding: 24
+    topPadding: 0
+    bottomPadding: 0
+    spacing: 8
     background: Rectangle {
         radius: 4
         color: '#181818'
@@ -265,20 +267,17 @@ import QtQuick.Shapes
         background: null
         leftPadding: 24
         rightPadding: 24
-        bottomPadding: 8
-        topPadding: 24
+        bottomPadding: 0
+        topPadding: 12
         contentItem: RowLayout {
             spacing: 8
             Image {
-                visible: root.iconSource !== ""
+                Layout.preferredHeight: 24
+                Layout.preferredWidth: 24
+                visible: root.iconSource !== ''
                 source: root.iconSource
-                sourceSize.width: 28
-                sourceSize.height: 28
-                width: 28
-                height: 28
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
-                Layout.minimumWidth: 28
             }
             Label {
                 visible: parent.width > 220
@@ -288,7 +287,7 @@ import QtQuick.Shapes
                 text: root.title
                 font.pixelSize: 18
                 font.weight: 600
-                color: "#ffffff"
+                color: '#FFF'
                 opacity: 0.95
                 elide: Text.ElideRight
             }
@@ -310,7 +309,7 @@ import QtQuick.Shapes
                         text: root.formatPercent(root.percentChange)
                         font.pixelSize: 14
                         font.weight: 600
-                        color: root.percentChange >= 0 ? "#00C60D" : "#FF0000"
+                        color: root.percentChange >= 0 ? '#00C60D' : '#FF0000'
                         Layout.minimumWidth: 50
                     }
                     Image {
@@ -328,7 +327,7 @@ import QtQuick.Shapes
                     text: priceConvert.fiat.available ? priceConvert.fiat.label : '--'
                     font.pixelSize: 14
                     font.weight: 600
-                    color: "#ffffff"
+                    color: '#ffffff'
                     opacity: 1.0
                     Layout.alignment: Qt.AlignRight
                     elide: Text.ElideRight
@@ -340,23 +339,23 @@ import QtQuick.Shapes
     contentItem: Item {
         id: chartArea
         property int axisWidth: root.width < 250 ? 0 : 48
-        readonly property int plotWidth: width - axisWidth
-        property real revealProgress: 0.0
+        property int axisHeight: 20
+        readonly property int plotWidth: chartArea.width - chartArea.axisWidth
+        readonly property int plotHeight: chartArea.height - chartArea.axisHeight
+        property real revealProgress: 0
 
         function startReveal() {
-            revealProgress = 0.0
-            revealAnim.stop()
-            revealAnim.start()
+            reveal_anim.stop()
+            chartArea.revealProgress = 0
+            reveal_anim.start()
         }
 
-        NumberAnimation {
-            id: revealAnim
-            target: chartArea
-            property: "revealProgress"
-            from: 0.0
-            to: 1.0
-            duration: 700
-            easing.type: Easing.InOutCubic
+        NumberAnimation on revealProgress {
+            id: reveal_anim
+            from: 0
+            to: 1
+            duration: 1000
+            easing.type: Easing.OutCubic
         }
 
         BusyIndicator {
@@ -369,7 +368,6 @@ import QtQuick.Shapes
             anchors.leftMargin: chartArea.axisWidth + (chartArea.plotWidth - width) / 2
         }
 
-        //Horizontal Grid lines and labels
         Repeater {
             model: root.loading ? 0 : root.horizontalGridLinesCount
             delegate: Item {
@@ -378,7 +376,7 @@ import QtQuick.Shapes
                 height: 1
                 readonly property real _pad: 0.05
                 readonly property real _t: _pad + (index / (root.horizontalGridLinesCount - 1)) * (1 - 2 * _pad)
-                y: _t * chartArea.height
+                y: _t * chartArea.plotHeight
                 z: 0
                 Rectangle {
                     x: chartArea.axisWidth
@@ -410,7 +408,6 @@ import QtQuick.Shapes
             }
         }
 
-        // Vertical grid lines and date labels
         Item {
             anchors.fill: parent
             visible: !root.loading
@@ -420,7 +417,7 @@ import QtQuick.Shapes
                 delegate: Item {
                     required property int index
                     width: 1
-                    height: chartArea.height
+                    height: chartArea.plotHeight
                     readonly property real _pad: 0.05
                     readonly property real _t: _pad + (index / (root.dynamicVerticalGridLinesCount - 1)) * (1 - 2 * _pad)
                     x: chartArea.axisWidth + _t * chartArea.plotWidth
@@ -452,7 +449,7 @@ import QtQuick.Shapes
                     readonly property real _xVal: Number(root.bounds.xMin) + _t * (Number(root.bounds.xMax) - Number(root.bounds.xMin))
                     Label {
                         x: _xPix - width / 2
-                        y: chartArea.height + 4
+                        y: chartArea.plotHeight + 4
                         text: root.formatDateTick(_xVal)
                         color: '#A0A0A0'
                         font.pixelSize: 12
@@ -464,13 +461,12 @@ import QtQuick.Shapes
             }
         }
 
-        // Chart paths with reveal clip
         Item {
             id: chartPlot
             x: chartArea.axisWidth
             y: 0
             width: Math.max(0, chartArea.plotWidth * chartArea.revealProgress)
-            height: chartArea.height
+            height: chartArea.plotHeight
             clip: true
             z: 1
 
@@ -484,7 +480,7 @@ import QtQuick.Shapes
                     strokeWidth: 0
                     fillGradient: LinearGradient {
                         x1: 0; y1: 0
-                        x2: 0; y2: chartArea.height
+                        x2: 0; y2: chartArea.plotHeight
                         GradientStop { position: 0.0; color: root.fillColor }
                         GradientStop { position: 1.0; color: Qt.rgba(0.0, 0.737, 1.0, 0.0) }
                     }
@@ -495,7 +491,7 @@ import QtQuick.Shapes
                     id: price_shape_path
                     strokeColor: '#00BCFF'
                     strokeWidth: 1.5
-                    fillColor: "transparent"
+                    fillColor: 'transparent'
                     joinStyle: ShapePath.RoundJoin
                     capStyle: ShapePath.RoundCap
                     PathSvg { path: root.buildSmoothPath }
@@ -524,8 +520,8 @@ import QtQuick.Shapes
                 x: chartArea.axisWidth + hoverLayer.plotX - width / 2
                 y: 0
                 width: 1
-                height: chartArea.height
-                color: "#4DFFFFFF"
+                height: chartArea.plotHeight
+                color: '#4DFFFFFF'
             }
 
             Rectangle {
@@ -542,10 +538,10 @@ import QtQuick.Shapes
 
             Rectangle {
                 visible: hoverLayer.active && hoverLayer.pt !== null
-                color: "#222222"
+                color: '#222222'
                 radius: 4
                 border.width: 1
-                border.color: "#333333"
+                border.color: '#333333'
                 anchors.horizontalCenter: undefined
                 x: {
                     if (hoverLayer.pt === null) return 0
@@ -560,7 +556,7 @@ import QtQuick.Shapes
                     if (hoverLayer.pt === null) return 0
                     const tooltipY = hoverLayer.pt.y - height - 8
                     if (tooltipY < 0) {
-                        return Math.min(chartArea.height - height, hoverLayer.pt.y + 8)
+                        return Math.min(chartArea.plotHeight - height, hoverLayer.pt.y + 8)
                     }
                     return Math.max(0, tooltipY)
                 }
@@ -599,12 +595,12 @@ import QtQuick.Shapes
     }
 
     footer: Pane {
+        background: null
         visible: root.showRangeButtons && !root.loading
         leftPadding: 24
         rightPadding: 24
-        bottomPadding: 24
-        topPadding: 8
-        background: null
+        bottomPadding: 12
+        topPadding: 0
         contentItem: RowLayout {
             spacing: 0
             HSpacer {
@@ -614,7 +610,6 @@ import QtQuick.Shapes
                 spacing: 4
                 Layout.alignment: Qt.AlignHCenter
 
-                // Calculate if buttons need to be resized
                 readonly property real optimalButtonWidth: 42
                 readonly property real minButtonWidth: 28
                 readonly property real totalOptimalWidth: 5 * optimalButtonWidth + 4 * 4 // 5 buttons + 4 gaps
