@@ -64,7 +64,6 @@ void ChartPriceService::onReplyFinished()
     const auto arr_day = json.value("prices_day").toArray();
     const auto arr_month = json.value("prices_month").toArray();
     const auto arr_full = json.value("prices_full").toArray();
-    qDebug() << Q_FUNC_INFO << "day:" << arr_day.size() << "month:" << arr_month.size() << "full:" << arr_full.size();
 
     m_prices_day = flatten(arr_day);
     m_prices_month = flatten(arr_month);
@@ -90,9 +89,6 @@ void ChartPriceService::onReplyFinished()
     m_prices_week = filterSince(m_prices_month, nowMs - weekMs);
     m_prices_year = filterSince(m_prices_full, nowMs - yearMs);
     m_prices_five_years = filterSince(m_prices_full, nowMs - fiveYearsMs);
-    if (m_prices_day.size() >= 2) {
-        qDebug() << Q_FUNC_INFO << "day first/last:" << m_prices_day.first() << m_prices_day.last();
-    }
     emit pricesChanged();
 }
 

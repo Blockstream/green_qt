@@ -32,20 +32,9 @@ Page {
         return 'usd'
     }
 
-    onUserCurrencyChanged: {
-        currencyChanging = true
-    }
-
     onContextChanged: {
         if (context) {
             priceSource.refresh()
-        }
-    }
-
-    Connections {
-        target: priceSource
-        function onPricesChanged() {
-            currencyChanging = false
         }
     }
 
@@ -60,8 +49,7 @@ Page {
     title: qsTr('Bitcoin Price')
 
     property color fillColor: Qt.rgba(0.0, 0.737, 1.0, 0.2) 
-    property bool loading: root.pairCount === 0 || root.currencyChanging
-    property bool currencyChanging: false
+    property bool loading: root.pairCount === 0
     property int selectedIndex: 0
     property bool showRangeButtons: true
     property int horizontalGridLinesCount: 6
@@ -377,14 +365,12 @@ Page {
                 readonly property real _pad: 0.05
                 readonly property real _t: _pad + (index / (root.horizontalGridLinesCount - 1)) * (1 - 2 * _pad)
                 y: _t * chartArea.plotHeight
-                z: 0
                 Rectangle {
                     x: chartArea.axisWidth
                     width: chartArea.plotWidth
                     height: 1
                     color: '#3D3D3D'
                     opacity: 0.5
-                    z: 0
                 }
                 Label {
                     visible: root.width >= 250
@@ -394,7 +380,6 @@ Page {
                     horizontalAlignment: Text.AlignRight
                     color: '#A0A0A0'
                     font.pixelSize: 12
-                    z: 2
                     elide: Text.ElideRight
                     rightPadding: 4
                     text: {
@@ -409,66 +394,12 @@ Page {
         }
 
         Item {
-            anchors.fill: parent
-            visible: !root.loading
-            z: 2
-            Repeater {
-                model: root.dynamicVerticalGridLinesCount
-                delegate: Item {
-                    required property int index
-                    width: 1
-                    height: chartArea.plotHeight
-                    readonly property real _pad: 0.05
-                    readonly property real _t: _pad + (index / (root.dynamicVerticalGridLinesCount - 1)) * (1 - 2 * _pad)
-                    x: chartArea.axisWidth + _t * chartArea.plotWidth
-                    y: 0
-                    z: 0
-                    Repeater {
-                        model: Math.floor(parent.height / 8)
-                        delegate: Rectangle {
-                            width: 1
-                            height: 4
-                            x: -0.5
-                            y: index * 8
-                            color: '#3D3D3D'
-                            opacity: 0.5
-                            z: 0
-                        }
-                    }
-                }
-            }
-
-            Repeater {
-                model: root.dynamicVerticalGridLinesCount
-                delegate: Item {
-                    required property int index
-                    width: 1; height: 1
-                    readonly property real _pad: 0.05
-                    readonly property real _t: _pad + (index / (root.dynamicVerticalGridLinesCount - 1)) * (1 - 2 * _pad)
-                    readonly property real _xPix: chartArea.axisWidth + _t * chartArea.plotWidth
-                    readonly property real _xVal: Number(root.bounds.xMin) + _t * (Number(root.bounds.xMax) - Number(root.bounds.xMin))
-                    Label {
-                        x: _xPix - width / 2
-                        y: chartArea.plotHeight + 4
-                        text: root.formatDateTick(_xVal)
-                        color: '#A0A0A0'
-                        font.pixelSize: 12
-                        horizontalAlignment: Text.AlignHCenter
-                        elide: Text.ElideRight
-                        width: Math.min(80, chartArea.plotWidth / root.dynamicVerticalGridLinesCount)
-                    }
-                }
-            }
-        }
-
-        Item {
             id: chartPlot
             x: chartArea.axisWidth
             y: 0
             width: Math.max(0, chartArea.plotWidth * chartArea.revealProgress)
             height: chartArea.plotHeight
             clip: true
-            z: 1
 
             Shape {
                 anchors.fill: parent
@@ -499,17 +430,66 @@ Page {
             }
         }
 
+
+        Item {
+            anchors.fill: parent
+            visible: !root.loading
+            Repeater {
+                model: root.dynamicVerticalGridLinesCount
+                delegate: Item {
+                    required property int index
+                    width: 1
+                    height: chartArea.plotHeight
+                    readonly property real _pad: 0.05
+                    readonly property real _t: _pad + (index / (root.dynamicVerticalGridLinesCount - 1)) * (1 - 2 * _pad)
+                    x: chartArea.axisWidth + _t * chartArea.plotWidth
+                    y: 0
+                    Repeater {
+                        model: Math.floor(parent.height / 8)
+                        delegate: Rectangle {
+                            width: 1
+                            height: 4
+                            x: -0.5
+                            y: index * 8
+                            color: '#3D3D3D'
+                            opacity: 0.5
+                        }
+                    }
+                }
+            }
+
+            Repeater {
+                model: root.dynamicVerticalGridLinesCount
+                delegate: Item {
+                    required property int index
+                    width: 1; height: 1
+                    readonly property real _pad: 0.05
+                    readonly property real _t: _pad + (index / (root.dynamicVerticalGridLinesCount - 1)) * (1 - 2 * _pad)
+                    readonly property real _xPix: chartArea.axisWidth + _t * chartArea.plotWidth
+                    readonly property real _xVal: Number(root.bounds.xMin) + _t * (Number(root.bounds.xMax) - Number(root.bounds.xMin))
+                    Label {
+                        x: _xPix - width / 2
+                        y: chartArea.plotHeight + 4
+                        text: root.formatDateTick(_xVal)
+                        color: '#A0A0A0'
+                        font.pixelSize: 12
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                        width: Math.min(80, chartArea.plotWidth / root.dynamicVerticalGridLinesCount)
+                    }
+                }
+            }
+        }
+
         Item {
             id: hoverLayer
             anchors.fill: parent
-            z: 3
             visible: !root.loading
-
-            HoverHandler { id: hover; acceptedDevices: PointerDevice.Mouse }
-            DragHandler { id: drag; target: null; acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchScreen }
-
-            readonly property bool active: hover.hovered || drag.active
-            readonly property real rawX: hover.hovered ? hover.point.position.x : (drag.active ? drag.point.position.x : 0)
+            HoverHandler {
+                id: hover
+            }
+            readonly property bool active: hover.hovered
+            readonly property real rawX: hover.hovered ? hover.point.position.x : 0
             readonly property real plotX: Math.min(chartArea.plotWidth, Math.max(0, rawX - chartArea.axisWidth))
             readonly property int idx: active ? root.nearestIndexForPlotX(plotX) : -1
             readonly property var pt: (idx >= 0 && idx < root.scaledPoints.length) ? root.scaledPoints[idx] : null
