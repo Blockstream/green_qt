@@ -390,7 +390,7 @@ void Context::addTestNotification(const QString& message)
         qDebug() << "No primary network available for test notification";
         return;
     }
-    
+
     auto notification = new SystemNotification(message, network, this);
     addNotification(notification);
     qDebug() << "Test notification added:" << message;
@@ -428,12 +428,9 @@ void Context::addTestWarningNotification()
 {
     auto network = primaryNetwork();
     if (!network) return;
-    auto warning = new WarningNotification(
-        QStringLiteral("Backup your wallet"),
-        QStringLiteral("This is a sample alert-banner description."),
-        network,
-        this
-    );
+    const auto title = QStringLiteral("Backup your wallet");
+    const auto message = QStringLiteral("This is a sample alert-banner description.");
+    const auto warning = new WarningNotification(title, message, network, this);
     addNotification(warning);
 }
 
