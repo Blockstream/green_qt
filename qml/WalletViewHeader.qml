@@ -11,7 +11,6 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 MainPageHeader {
-    signal assetsClicked()
     signal settingsClicked()
     signal archivedAccountsClicked()
     signal statusClicked()
@@ -297,7 +296,6 @@ MainPageHeader {
         HPane {
             contentItem: CardBar {
                 context: self.context
-                onAssetsClicked: self.assetsClicked()
                 onJadeDetailsClicked: self.jadeDetailsClicked()
                 onPromoClicked: (promo) => self.promoClicked(promo)
             }

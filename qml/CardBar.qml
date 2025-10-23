@@ -9,7 +9,6 @@ import "util.js" as UtilJS
 
 Pane {
     signal jadeDetailsClicked()
-    signal assetsClicked()
     signal promoClicked(Promo promo)
     required property Context context
     id: self
@@ -37,29 +36,6 @@ Pane {
                 TotalBalanceCard {
                     context: self.context
                 }
-                /*
-                Separator {
-                    visible: assets_card.visible
-                }
-                AssetsCard {
-                    id: assets_card
-                    context: self.context
-                    header.enabled: false
-                    background: Rectangle {
-                        color: '#FFF'
-                        opacity: 0.04
-                        visible: hover_handler.hovered
-                    }
-                    HoverHandler {
-                        id: hover_handler
-                        parent: assets_card
-                    }
-                    TapHandler {
-                        parent: assets_card
-                        onTapped: self.assetsClicked()
-                    }
-                }
-                */
                 Separator {
                     visible: jade_card.visible
                 }

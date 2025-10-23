@@ -201,7 +201,6 @@ Page {
     }
 
     header: WalletViewHeader {
-        onAssetsClicked: open_assets_drawer_action.trigger()
         onJadeDetailsClicked: self.jadeDetailsClicked()
         onSettingsClicked: settings_dialog.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
