@@ -208,3 +208,105 @@ void Controller::setAccountHidden(Account* account, bool hidden)
     });
     dispatcher()->add(task);
 }
+
+#include "network.h"
+
+AddressValidationController::AddressValidationController(QObject* parent)
+    : Controller(parent)
+{
+    auto monitor = new TaskGroupMonitor(this);
+    connect(monitor, &TaskGroupMonitor::allFinishedOrFailed, this, &AddressValidationController::update);
+    setMonitor(monitor);
+}
+
+void AddressValidationController::setInput(const QString& input)
+{
+    if (m_input == input) return;
+    m_input = input;
+    emit inputChanged();
+
+    m_results = {};
+
+    const auto session = m_context->primarySession();
+
+    auto group = new TaskGroup(this);
+    for (const auto network : NetworkManager::instance()->networks()) {
+        if (network->deployment() == m_context->deployment()) {
+            auto addressee = QJsonObject{{ "address", m_input }, { "satoshi", 0 }};
+            if (network->isLiquid()) {
+                addressee.insert("asset_id", network->policyAsset());
+            }
+            auto details = QJsonObject{{ "addressees", QJsonArray{addressee}}, { "network", network->id() }};
+            const auto task = new ValidateTask(details, session);
+            connect(task, &ValidateTask::finished, this, [=] {
+                task->deleteLater();
+                m_results.append(task->result());
+            });
+            group->add(task);
+        }
+    }
+    monitor()->add(group);
+    dispatcher()->add(group);
+}
+
+QQmlListProperty<Network> AddressValidationController::networks()
+{
+    return { this, &m_networks };
+}
+
+void AddressValidationController::update()
+{
+    m_networks.clear();
+    m_address.clear();
+    m_amount.clear();
+    m_bip21.clear();
+    m_asset = nullptr;
+    m_errors.clear();
+
+    QSet<QString> errors;
+
+    for (auto result : m_results) {
+        if (result.toObject().value("status").toString() != "done") continue;
+
+        if (!result.toObject().value("result").toObject().value("is_valid").toBool()) {
+            for (const auto error : result.toObject().value("result").toObject().value("errors").toArray()) {
+                errors.insert(error.toString());
+            }
+            continue;
+        }
+
+        const auto network = NetworkManager::instance()->network(result.toObject().value("result").toObject().value("network").toString());
+        m_networks.append(network);
+
+        const auto addressees = result.toObject().value("result").toObject().value("addressees").toArray();
+        if (addressees.empty()) continue;
+
+        const auto address = addressees.first().toObject();
+
+        m_address = address.value("address").toString();
+
+        if (network->isLiquid()) {
+            const auto asset_id = address.value("asset_id").toString();
+            if (!asset_id.isEmpty()) m_asset = context()->getOrCreateAsset(asset_id);
+        } else {
+            m_asset = m_context->getOrCreateAsset("btc");
+        }
+
+        const auto bip21 = address.value("bip21-params");
+        if (bip21.isObject()) m_bip21 = bip21.toObject().toVariantMap();
+
+        const auto satoshi = address.value("satoshi").toString();
+        const auto btc = address.value("btc").toString();
+        if (!satoshi.isEmpty()) {
+            m_amount.insert("satoshi", satoshi);
+        } else if (!btc.isEmpty()) {
+            m_amount.insert(m_asset ? "text" : "btc", btc);
+        }
+    }
+
+    if (m_networks.isEmpty()) {
+        m_errors = errors.values();
+    }
+
+    emit updated();
+}

@@ -133,7 +133,6 @@ SET(QML_FILES
     qml/AssetField.qml
     qml/AssetSelector.qml
     qml/SearchField.qml
-    qml/AssetsDrawer.qml
     qml/DrawerTitle.qml
     qml/FieldTitle.qml
     qml/CreateAccountPage.qml
@@ -270,6 +269,11 @@ SET(QML_FILES
     qml/AccountFilterPopup.qml
     qml/AssetFilterPopup.qml
     qml/AddressFilterPopup.qml
+    qml/SelectAccountPage.qml
+    qml/SendDetailsPage.qml
+    qml/AccountSelectorPage.qml
+    qml/AssetSelectorPage.qml
+    qml/AccountAssetPage.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -9,7 +9,8 @@ import "util.js" as UtilJS
 StackViewPage {
     signal selected(account: Account, asset: Asset)
     required property Context context
-    property var networks
+    required property Account account
+    required property Asset asset
     id: self
     title: qsTrId('Choose Asset')
     contentItem: ColumnLayout {
@@ -37,7 +38,6 @@ StackViewPage {
                 const search = search_field.text.trim().toLowerCase()
                 for (let i = 0; i < self.context.accounts.length; i++) {
                     const account = self.context.accounts[i]
-                    if (self.networks && self.networks.indexOf(account.network) < 0) continue
                     for (const [id, satoshi] of Object.entries(account.json.satoshi)) {
                         if (satoshi === 0) continue
                         const asset = AssetManager.assetWithId(deployment, id)
@@ -249,3 +249,4 @@ StackViewPage {
         }
     }
 }
+

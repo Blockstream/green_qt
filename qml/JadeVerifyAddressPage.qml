@@ -45,6 +45,7 @@ StackViewPage {
     contentItem: ColumnLayout {
         VSpacer {
         }
+
         AddressLabel {
             Layout.fillWidth: true
             Layout.preferredWidth: 0

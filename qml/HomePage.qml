@@ -25,6 +25,7 @@ Page {
             implicitHeight: split_view.height
         }
         TListView {
+            Component.onCompleted: transaction_list_view.SplitView.preferredWidth = self.width / 2
             SplitView.minimumWidth: 300
             SplitView.preferredWidth: 500
             id: transaction_list_view

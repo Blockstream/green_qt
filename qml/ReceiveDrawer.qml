@@ -5,21 +5,27 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 WalletDrawer {
-    required property Account account
-    required property Asset asset
-
-    onClosed: self.destroy()
-
     id: self
     preferredContentWidth: stack_view.currentItem.implicitWidth
     minimumContentWidth: 400
     contentItem: GStackView {
         id: stack_view
-        initialItem: ReceivePage {
-            account: self.account
-            asset: self.asset
+        initialItem: ReceiveAccountAssetSelector {
             context: self.context
-            onClosed: self.close()
+            title: qsTrId('id_receive')
+            rightItem: CloseButton {
+                onClicked: self.close()
+            }
+            onSelected: (account, asset) => {
+                stack_view.replace(null, receive_page, { account, asset }, StackView.PushTransition)
+            }
+        }
+    }
+    Component {
+        id: receive_page
+        ReceivePage {
+            context: self.context
+            onCloseClicked: self.close()
         }
     }
 }

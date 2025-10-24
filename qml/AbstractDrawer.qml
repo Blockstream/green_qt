@@ -43,10 +43,9 @@ Drawer {
     }
 
     background: Rectangle {
-        color: Qt.alpha('#13161D', 0.95)
+        color: Qt.alpha('#232323', 0.95)
         Rectangle {
-            color: '#FFF'
-            opacity: 0.1
+            color: '#383838'
             width: 1
             height: parent.height
             x: self.edge === Qt.RightEdge ? 0 : parent.width - 1

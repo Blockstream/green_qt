@@ -11,6 +11,7 @@ AbstractButton {
     property bool readonly: false
 
     id: self
+    enabled: !self.readonly
     padding: 20
     background: Item {
         Rectangle {
@@ -24,8 +25,10 @@ AbstractButton {
         Rectangle {
             anchors.fill: parent
             anchors.margins: !self.readonly && self.visualFocus ? 4 : 0
-            color: Qt.lighter('#222226', !self.readonly && self.hovered ? 1.2 : 1)
+            color: Qt.lighter('#181818', !self.readonly && self.hovered ? 1.2 : 1)
             radius: !self.readonly && self.visualFocus ? 1 : 5
+            border.color: '#262626'
+            border.width: self.visualFocus ? 0 : 1
         }
     }
     contentItem: RowLayout {
@@ -41,6 +44,7 @@ AbstractButton {
             Layout.fillHeight: false
             spacing: 0
             Label {
+                color: '#FAFAFA'
                 font.pixelSize: 16
                 font.weight: 600
                 text: self.asset?.name ?? self.account?.network?.displayName ?? '-'
@@ -49,6 +53,7 @@ AbstractButton {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 Layout.topMargin: 4
+                color: '#FAFAFA'
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 12
                 font.weight: 500
@@ -57,6 +62,7 @@ AbstractButton {
                 wrapMode: Label.Wrap
             }
             Label {
+                color: '#FAFAFA'
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 11
                 font.weight: 400

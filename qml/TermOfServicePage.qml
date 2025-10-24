@@ -7,7 +7,6 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal start()
-    signal closeClicked()
 
     id: self
     padding: 60

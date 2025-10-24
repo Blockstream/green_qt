@@ -162,18 +162,6 @@ StackViewPage {
     }
 
     Component {
-        id: account_asset_selector
-        SendAccountAssetSelector {
-            onSelected: (account, asset) => {
-                self.StackView.view.pop()
-                controller.account = account
-                controller.asset = asset
-                controller.coins = []
-            }
-        }
-    }
-
-    Component {
         id: redeposit_confirm_page
         RedepositConfirmPage {
             onClosed: self.closed()

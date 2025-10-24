@@ -8,7 +8,6 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal finished(Context context)
-    signal closeClicked()
     required property Context context
     property string pin
 

@@ -63,11 +63,12 @@ Page {
     }
 
     function openSendDrawer(url = '') {
-        const context = self.context
-        const account = null
-        const network = null
-        const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
-        const drawer = send_drawer.createObject(self, { context, account, asset, url })
+        const drawer = send_drawer.createObject(self, { url })
+        drawer.open()
+    }
+
+    function openReceiveDrawer() {
+        const drawer = receive_drawer.createObject(self)
         drawer.open()
     }
 
@@ -191,16 +192,8 @@ Page {
     title: self.wallet.name
     spacing: 0
 
-    Action {
-        id: open_assets_drawer_action
-        onTriggered: {
-            const drawer = assets_drawer.createObject(self, { context: self.context })
-            drawer.open()
-        }
-        shortcut: 'Ctrl+A'
-    }
-
     header: WalletViewHeader {
+        onSendClicked: self.openSendDrawer()
         onJadeDetailsClicked: self.jadeDetailsClicked()
         onSettingsClicked: settings_dialog.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
@@ -247,6 +240,7 @@ Page {
     Component {
         id: receive_drawer
         ReceiveDrawer {
+            context: self.context
         }
     }
 
@@ -265,16 +259,7 @@ Page {
     Component {
         id: send_drawer
         SendDrawer {
-        }
-    }
-
-    Component {
-        id: assets_drawer
-        AssetsDrawer {
-            onAccountClicked: (account) => {
-                self.showView(OverviewPage.Transactions)
-                transactions_page.showTransactions({ account })
-            }
+            context: self.context
         }
     }
 
@@ -284,10 +269,6 @@ Page {
             onAccountClicked: (asset, account) => {
                 self.showView(OverviewPage.Transactions)
                 transactions_page.showTransactions({ account, asset })
-            }
-            onTransactionsClicked: (asset) => {
-                self.showView(OverviewPage.Transactions)
-                transactions_page.showTransactions({ asset })
             }
         }
     }

@@ -41,6 +41,7 @@ Label {
     font.weight: 400
     horizontalAlignment: Text.AlignHCenter
     elide: Label.ElideMiddle
+    leftPadding: collapsible.width
     rightPadding: collapsible.width
     text: {
         const text = self.address instanceof Address ? self.address.address : self.address ?? ''

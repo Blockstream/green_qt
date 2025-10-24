@@ -1,0 +1,135 @@
+import Blockstream.Green
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import "util.js" as UtilJS
+
+StackViewPage {
+    signal sendClicked()
+    signal receiveClicked()
+    signal transactionClicked(Transaction transaction)
+    required property Context context
+    required property Asset asset
+    required property Account account
+
+    id: self
+    title: UtilJS.accountName(self.account)
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
+    }
+    footer: null
+    contentItem: TListView {
+        id: list_view
+        spacing: 8
+        header: ColumnLayout {
+            width: list_view.width
+            spacing: 0
+            AssetIcon {
+                Layout.alignment: Qt.AlignCenter
+                Layout.bottomMargin: 10
+                asset: self.asset
+                size: 48
+            }
+            Convert {
+                id: convert
+                account: self.account
+                asset: self.asset
+                input: ({ satoshi: self.account.json.satoshi[self.asset.id] })
+                unit: self.account.session.unit
+            }
+            Label {
+                Layout.topMargin: 12
+                Layout.alignment: Qt.AlignCenter
+                color: '#FAFAFA'
+                font.pixelSize: 24
+                font.weight: 500
+                text: convert.output.label
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                color: '#A0A0A0'
+                font.pixelSize: 14
+                font.weight: 400
+                text: convert.fiat.label
+                visible: convert.fiat.available
+            }
+            RowLayout {
+                Layout.topMargin: 32
+                Layout.bottomMargin: 32
+                spacing: 8
+                ActionButton {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    icon.source: 'qrc:/svg/send-white.svg'
+                    text: qsTrId('id_send')
+                    onClicked: self.sendClicked()
+                }
+                ActionButton {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    icon.source: 'qrc:/svg/receive-white.svg'
+                    text: qsTrId('id_receive')
+                    onClicked: self.receiveClicked()
+                }
+            }
+            Label {
+                Layout.topMargin: 16
+                Layout.bottomMargin: 12
+                color: '#A0A0A0'
+                font.pixelSize: 16
+                font.weight: 400
+                text: qsTrId('id_transactions')
+            }
+        }
+        model: TransactionModel {
+            id: model
+            context: self.context
+            Component.onCompleted: {
+                model.updateFilterAccounts(self.account, true)
+                model.updateFilterAssets(self.asset, true)
+            }
+        }
+        delegate: HomePage.TransactionDelegate2 {
+            id: delegate
+            onClicked: self.transactionClicked(delegate.transaction)
+        }
+        footer: Item {
+            implicitHeight: 20
+        }
+    }
+    VFlickable {
+        alignment: Qt.AlignTop
+
+        VSpacer {
+        }
+    }
+
+    component ActionButton: AbstractButton {
+        id: button
+        padding: 20
+        background: Rectangle {
+            color: Qt.lighter('#181818', button.hovered ? 1.1 : 1)
+            border.color: Qt.lighter('#262626', button.hovered ? 1.1 : 1)
+            border.width: 1
+            radius: 4
+        }
+        contentItem: ColumnLayout {
+            spacing: 10
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                id: image
+                source: button.icon.source
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.pixelSize: 14
+                font.weight: 400
+                color: '#FAFAFA'
+                opacity: button.enabled ? 1.0 : 0.6
+                text: button.text
+            }
+        }
+    }
+}

@@ -58,7 +58,7 @@ Popup {
         implicitWidth: content_item.implicitWidth
         ColumnLayout {
             id: content_item
-            spacing: self.spacing
+            spacing: self.spacing ?? 0
         }
     }
 

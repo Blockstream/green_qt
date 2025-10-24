@@ -9,10 +9,10 @@ TTextField {
     signal cleared
     property bool fiat: false
     property bool dynamic: true
-    required property string unit
+    required property Session session
+    property string unit: self.session?.unit ?? ''
     readonly property var units: ['BTC', 'sats', 'mBTC', '\u00B5BTC']
     required property Convert convert
-
     function setUnit(unit) {
         self.fiat = false
         self.unit = unit
@@ -49,10 +49,11 @@ TTextField {
         self.cleared()
     }
 
-    Component.onCompleted: {
+    text: {
         const text = self.fiat ? self.convert.fiat.amount : self.convert.output.amount
         self.text = self.readOnly ? text : text.replace(/\s+/g, '')
     }
+
 
     onReadOnlyChanged: {
         if (!self.readOnly) {
@@ -94,12 +95,12 @@ TTextField {
     id: self
     topPadding: 22
     bottomPadding: self.convert.fiat.available ? 32 : 22
-    leftPadding: 60
-    rightPadding: 15 + 7 + unit_label.width
+    leftPadding: Math.max(60, 15 + 7 + unit_label.width)
+    rightPadding: Math.max(60, 15 + 7 + unit_label.width)
     validator: AmountValidator {
     }
     horizontalAlignment: TextInput.AlignHCenter
-    font.pixelSize: 30
+    font.pixelSize: 24
     font.weight: 500
     CircleButton {
         focusPolicy: Qt.NoFocus
@@ -156,7 +157,7 @@ TTextField {
             GMenu.Item {
                 enabled: self.convert.fiat.available
                 hideIcon: true
-                text: self.convert.account.session.settings.pricing.currency
+                text: self.session?.settings.pricing.currency ?? ''
                 onClicked: {
                     unit_menu.close()
                     self.setFiat()
@@ -166,7 +167,7 @@ TTextField {
                 model: self.units
                 delegate: GMenu.Item {
                     hideIcon: true
-                    text: (self.convert.account.network.liquid ? 'L' : '') + modelData
+                    text: (self.session?.network.liquid ? 'L' : '') + modelData
                     onClicked: {
                         unit_menu.close()
                         self.setUnit(modelData)

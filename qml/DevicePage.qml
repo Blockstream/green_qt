@@ -7,7 +7,6 @@ import QtQuick.Layouts
 StackViewPage {
     signal deviceSelected(Device device)
     signal removeClicked()
-    signal closeClicked()
     required property Wallet wallet
     property bool login: true
     function update() {

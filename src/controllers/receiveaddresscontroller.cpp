@@ -26,11 +26,14 @@ Account *ReceiveAddressController::account() const
     return m_account;
 }
 
-void ReceiveAddressController::setAccount(Account *account)
+void ReceiveAddressController::setAccount(Account* account)
 {
     if (m_account == account) return;
     m_account = account;
     emit accountChanged();
+    if (account) {
+        setContext(account->context());
+    }
     m_convert->setAccount(m_account);
     generate();
 }
@@ -84,6 +87,8 @@ void ReceiveAddressController::setGenerating(bool generating)
 
 void ReceiveAddressController::generate()
 {
+    if (!m_context) return;
+
     if (!m_account) return; // || m_account->context()->isLocked()) return;
 
     if (m_generating) return;

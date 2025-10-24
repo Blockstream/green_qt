@@ -47,7 +47,44 @@ signals:
 protected:
     Context* m_context{nullptr};
     TaskGroupMonitor* m_monitor{nullptr};
-    QVariantMap m_errors;
+};
+
+class Asset;
+class AddressValidationController : public Controller
+{
+    Q_OBJECT
+    Q_PROPERTY(QString input READ input WRITE setInput NOTIFY inputChanged)
+    Q_PROPERTY(QQmlListProperty<Network> networks READ networks NOTIFY updated)
+    Q_PROPERTY(QString address READ address NOTIFY updated)
+    Q_PROPERTY(QVariantMap amount READ amount NOTIFY updated)
+    Q_PROPERTY(QVariantMap bip21 READ bip21 NOTIFY updated)
+    Q_PROPERTY(Asset* asset READ asset NOTIFY updated)
+    Q_PROPERTY(QStringList errors READ errors NOTIFY updated)
+    QML_ELEMENT
+public:
+    AddressValidationController(QObject* parent = nullptr);
+    QString input() const { return m_input; }
+    void setInput(const QString& input);
+    QQmlListProperty<Network> networks();
+    QString address() const { return m_address; }
+    QVariantMap amount() const { return m_amount; }
+    QVariantMap bip21() const { return m_bip21; }
+    Asset* asset() const { return m_asset; }
+    QStringList errors() const { return m_errors; }
+signals:
+    void inputChanged();
+    void updated();
+private:
+    void update();
+private:
+    QString m_input;
+    QJsonArray m_results;
+    QList<Network*> m_networks;
+    QString m_address;
+    QVariantMap m_amount;
+    QVariantMap m_bip21;
+    Asset* m_asset{nullptr};
+    QStringList m_errors;
 };
 
 #endif // GREEN_CONTROLLER_H

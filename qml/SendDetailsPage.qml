@@ -8,12 +8,14 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal closed()
     required property Context context
     required property Account account
-    property bool readonly
-    property Asset asset
+    required property string address
+    required property string input
+    required property var amount
+    required property Asset asset
     property url url
-    property Transaction transaction
     property var available: {
         if (controller.coins.length > 0) {
             let satoshi = 0
@@ -25,7 +27,6 @@ StackViewPage {
             return { satoshi: String(controller.account.json.satoshi[controller.asset?.key ?? 'btc']) }
         }
     }
-    readonly property bool bumpRedeposit: controller.previousTransaction?.type === Transaction.Redeposit
     function pushSelectCoinsPage() {
         self.StackView.view.push(select_coins_page, {
             account: controller.account,
@@ -39,15 +40,8 @@ StackViewPage {
             account: controller.account,
             unit: amount_field.unit,
             size: controller.transaction?.transaction_vsize ?? 0,
-            previousTransaction: controller.previousTransaction
         })
     }
-    Component.onCompleted: {
-        if (self.url) {
-            controller.recipient.address = self.url
-        }
-    }
-
     FeeEstimates {
         id: estimates
         session: controller.account.session
@@ -57,8 +51,9 @@ StackViewPage {
         context: self.context
         account: self.account
         asset: self.asset
-        previousTransaction: self.transaction
         recipient.convert.unit: controller.account.session.unit
+        recipient.convert.input: self.amount
+        recipient.address: self.address
     }
     AnalyticsView {
         name: 'Send'
@@ -68,11 +63,11 @@ StackViewPage {
     id: self
     title: qsTrId('id_send')
     rightItem: CloseButton {
-        onClicked: self.closeClicked()
+        onClicked: self.closed()
     }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
-        spacing: 5
+        spacing: 10
         AlertView {
             Layout.bottomMargin: 15
             alert: AnalyticsAlert {
@@ -89,7 +84,7 @@ StackViewPage {
             id: account_asset_field
             account: controller.account
             asset: controller.asset
-            readonly: self.readonly || !!self.transaction
+            readonly: true
             onClicked: {
                 if (!account_asset_field.readonly) {
                     self.StackView.view.push(account_asset_selector, {
@@ -159,17 +154,22 @@ StackViewPage {
         }
         FieldTitle {
             text: qsTrId('id_address')
-            visible: !self.bumpRedeposit
         }
-        AddressField {
+        AddressLabel {
             Layout.bottomMargin: 15
             Layout.fillWidth: true
-            id: address_field
-            text: controller.recipient.address
-            onTextEdited: controller.recipient.address = address_field.text
-            onCleared: controller.recipient.address = ''
-            onCodeScanned: (code) => controller.recipient.address = code
-            focus: true
+            address: controller.recipient.address
+            topPadding: 14
+            bottomPadding: 13
+            leftPadding: 15
+            background: Rectangle {
+                color: '#181818'
+                radius: 5
+            }
+        }
+        ErrorPane {
+            Layout.topMargin: -30
+            Layout.bottomMargin: 15
             error: {
                 if (controller.recipient.address === '') return
                 const error = controller.transaction?.error
@@ -177,24 +177,16 @@ StackViewPage {
                 if (error === 'id_nonconfidential_addresses_not') return error
                 if (error === 'id_assets_cannot_be_used_on_bitcoin') return error
             }
-            readOnly: !!self.transaction
-            visible: !self.bumpRedeposit
-        }
-        ErrorPane {
-            Layout.topMargin: -30
-            Layout.bottomMargin: 15
-            error: address_field.error
-            visible: !self.bumpRedeposit
         }
         FieldTitle {
             text: qsTrId('id_amount')
-            visible: !self.bumpRedeposit
         }
         AmountField {
             Layout.bottomMargin: 15
             Layout.fillWidth: true
             id: amount_field
-            readOnly: !!controller.previousTransaction
+            focus: !self.amount
+            readOnly: false
             convert: controller.recipient.convert
             session: controller.account.session
             error: {
@@ -211,7 +203,6 @@ StackViewPage {
                     return error
                 }
             }
-            visible: !self.bumpRedeposit
             onCleared: controller.recipient.greedy = false
             onTextEdited: controller.recipient.greedy = false
         }
@@ -219,7 +210,6 @@ StackViewPage {
             Layout.topMargin: -30
             Layout.bottomMargin: 15
             error: amount_field.text.length > 0 || controller.recipient.greedy ? amount_field.error : null
-            visible: !self.bumpRedeposit
         }
         Convert {
             id: available_convert
@@ -231,7 +221,6 @@ StackViewPage {
         RowLayout {
             Layout.bottomMargin: 15
             spacing: 10
-            visible: !controller.previousTransaction
             Label {
                 Layout.fillWidth: true
                 font.features: { 'calt': 0, 'zero': 1 }
@@ -255,12 +244,6 @@ StackViewPage {
     }
     footerItem: ColumnLayout {
         Convert {
-            id: previous_fee_convert
-            account: controller.account
-            input: ({ satoshi: String(controller.previousTransaction?.data?.fee ?? 0) })
-            unit: controller.account.session.unit
-        }
-        Convert {
             id: fee_convert
             account: controller.account
             input: ({ satoshi: String(controller.transaction.fee ?? 0) })
@@ -271,35 +254,6 @@ StackViewPage {
                 const error = controller.transaction?.error
                 if (error === 'id_invalid_replacement_fee_rate') return error
                 if (error === 'Insufficient funds for fees') return error
-            }
-        }
-        RowLayout {
-            visible: !!controller.previousTransaction
-            Label {
-                font.pixelSize: 14
-                font.weight: 500
-                text: qsTrId('id_previous_fee')
-            }
-            HSpacer {
-            }
-            Label {
-                font.features: { 'calt': 0, 'zero': 1 }
-                font.pixelSize: 14
-                font.weight: 500
-                text: previous_fee_convert.output.label
-            }
-        }
-        RowLayout {
-            Layout.bottomMargin: 20
-            visible: !!controller.previousTransaction
-            HSpacer {
-            }
-            Label {
-                font.features: { 'calt': 0, 'zero': 1 }
-                color: '#6F6F6F'
-                font.pixelSize: 12
-                font.weight: 400
-                text: '~ ' + previous_fee_convert.fiat.label
             }
         }
         RowLayout {
@@ -363,6 +317,7 @@ StackViewPage {
             Layout.fillWidth: true
             enabled: controller.monitor.idle && (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
             busy: !controller.monitor.idle
+            focus: self.amount
             text: qsTrId('id_next')
             onClicked: {
                 self.StackView.view.push(send_confirm_page, {
@@ -373,8 +328,7 @@ StackViewPage {
                     transaction: controller.transaction,
                     fiat: amount_field.fiat,
                     unit: amount_field.unit,
-                    address_input: address_field.address_input,
-                    bumpRedeposit: self.bumpRedeposit,
+                    address_input: self.input,
                 })
             }
         }

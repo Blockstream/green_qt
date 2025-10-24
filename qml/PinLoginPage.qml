@@ -11,7 +11,6 @@ StackViewPage {
     signal loginFinished(Context context)
     signal restoreClicked()
     signal removeClicked()
-    signal closeClicked()
     required property Wallet wallet
     readonly property bool connecting: {
         const session = controller.context?.sessions[0]

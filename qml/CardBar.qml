@@ -8,6 +8,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 Pane {
+    signal sendClicked()
     signal jadeDetailsClicked()
     signal promoClicked(Promo promo)
     required property Context context
@@ -69,8 +70,8 @@ Pane {
                 text: qsTrId('id_send')
                 action: Action {
                     // enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
-                    // shortcut: 'Ctrl+S'
-                    // onTriggered: openSendDrawer()
+                    shortcut: 'Ctrl+S'
+                    onTriggered: openSendDrawer()
                 }
             }
             PrimaryButton {
@@ -79,8 +80,8 @@ Pane {
                 text: qsTrId('id_receive')
                 action: Action {
                     // enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
-                    // shortcut: 'Ctrl+R'
-                    // onTriggered: {
+                    shortcut: 'Ctrl+R'
+                    onTriggered: openReceiveDrawer()
                     //     const context = self.context
                     //     const account = self.currentAccount
                     //     const network = account.network

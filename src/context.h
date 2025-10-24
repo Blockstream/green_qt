@@ -111,6 +111,7 @@ signals:
     void watchonlyChanged();
     void sessionsChanged();
     void autoLogout();
+    void logout();
     void notificationAdded(Notification* notification);
     void notificationRemoved(Notification* notification);
     void notificationsChanged();

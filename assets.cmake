@@ -497,6 +497,9 @@ qt_add_resources(${APP_TARGET} "images"
         assets/flags/ZA-flag.svg
         assets/flags/ZM-flag.svg
         assets/flags/ZW-flag.svg
+
+        assets/svg/send-white.svg
+        assets/svg/receive-white.svg
 )
 
 qt_add_resources(${APP_TARGET} "fonts"

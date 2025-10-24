@@ -7,7 +7,6 @@ import QtQuick.Layouts
 StackViewPage {
     signal mnemonicEntered(Wallet wallet, var mnemonic, string password)
     signal removeClicked()
-    signal closeClicked()
     property Wallet wallet
     id: self
     footer: null

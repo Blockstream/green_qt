@@ -110,7 +110,7 @@ StackViewPage {
             AmountField {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
-                unit: self.unit
+                session: self.account.session
                 fiat: self.fiat
                 convert: self.recipient.convert
                 readOnly: true

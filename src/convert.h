@@ -70,7 +70,7 @@ private:
     QString m_unit;
     QVariantMap m_input;
     QJsonObject m_result;
-    int m_timer_id{-1};    
+    int m_timer_id{-1};
     bool m_debug{false};
 };
 

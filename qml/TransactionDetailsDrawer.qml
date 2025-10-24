@@ -9,7 +9,7 @@ WalletDrawer {
     contentItem: GStackView {
         initialItem: TransactionView {
             transaction: self.transaction
-            onClosed: self.close()
+            onCloseClicked: self.close()
         }
     }
 }

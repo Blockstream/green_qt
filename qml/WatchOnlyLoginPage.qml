@@ -10,7 +10,6 @@ import "util.js" as UtilJS
 StackViewPage {
     signal loginFinished(Context context)
     signal removeClicked()
-    signal closeClicked()
     required property Wallet wallet
     StackView.onActivating: {
         password_field.clear()

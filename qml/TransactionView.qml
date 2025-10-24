@@ -9,7 +9,6 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal closed()
     required property Transaction transaction
     readonly property Context context: self.transaction.account.context
     property bool note: self.transaction.memo !== ''
@@ -57,10 +56,11 @@ StackViewPage {
     rightItem: RowLayout {
         spacing: 20
         ShareButton {
+            url: ''
             onClicked: self.transaction.openInExplorer()
         }
         CloseButton {
-            onClicked: self.closed()
+            onClicked: self.closeClicked()
         }
     }
     contentItem: Flickable {
@@ -518,12 +518,12 @@ StackViewPage {
         property string badge
         Layout.fillWidth: true
         id: button
-        leftPadding: 2
-        rightPadding: 2
-        topPadding: 12
-        bottomPadding: 12
+        leftPadding: 4
+        rightPadding: 4
+        topPadding: 8
+        bottomPadding: 8
         background: Rectangle {
-            color: Qt.alpha('#FFF', button.hovered ? 0.05 : 0)
+            color: Qt.alpha('#FFF', button.enabled && button.hovered ? 0.05 : 0)
             LineSeparator {
                 width: parent.width
             }
@@ -533,6 +533,7 @@ StackViewPage {
             }
         }
         contentItem: RowLayout {
+            opacity: button.enabled ? 1 : 0.5
             Image {
                 source: button.icon.source
             }
@@ -582,10 +583,10 @@ StackViewPage {
             rightItem: RowLayout {
                 spacing: 20
                 ShareButton {
-                    url: self.transaction.url
+                    url: self.transaction.url ?? ''
                 }
                 CloseButton {
-                    onClicked: self.closed()
+                    onClicked: self.closeClicked()
                 }
             }
             contentItem: Flickable {
@@ -656,7 +657,7 @@ StackViewPage {
             account: self.transaction.account
             asset: self.context.getOrCreateAsset(network.policyAsset)
             transaction: self.transaction
-            onClosed: self.closed()
+            onCloseClicked: self.closeClicked()
         }
     }
 }

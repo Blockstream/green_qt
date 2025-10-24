@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 Page {
+    signal closeClicked()
     default property alias contentItemData: flickable.contentItemData
     property alias leftItem: left_pane.contentItem
     property alias centerItem: center_pane.contentItem

@@ -10,8 +10,7 @@ StackViewPage {
     signal loginFinished(Context context)
     signal firmwareUpdated()
     signal skip(Device device)
-    signal closeClicked()
-    signal detailsClicked()
+     signal detailsClicked()
     required property JadeDevice device
     required property bool login
     readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0

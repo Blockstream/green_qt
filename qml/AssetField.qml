@@ -6,7 +6,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 AbstractButton {
-    required property Asset asset
+    property Asset asset
     property bool anyLiquid: false
     property bool anyAMP: false
     property bool editable: true
@@ -14,11 +14,11 @@ AbstractButton {
     id: self
     leftPadding: 20
     rightPadding: 20
-    topPadding: 10
-    bottomPadding: 10
+    topPadding: 20
+    bottomPadding: 20
     activeFocusOnTab: self.editable
     background: Rectangle {
-        color: Qt.lighter('#222226', self.enabled && self.editable && self.hovered ? 1.2 : 1)
+        color: Qt.lighter('#181818', self.enabled && self.editable && self.hovered ? 1.2 : 1)
         radius: 5
         Rectangle {
             border.width: 2

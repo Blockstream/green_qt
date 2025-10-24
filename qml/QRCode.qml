@@ -66,15 +66,15 @@ Item {
     component Clip: Item {
         anchors.margins: -12
         clip: true
-        height: 60
+        height: 32
         visible: self.corners
-        width: 60
+        width: 32
     }
 
     component Border: Rectangle {
-        width: 120
-        height: 120
-        border.width: 6
+        width: 64
+        height: 64
+        border.width: 4
         border.color: '#00BCFF'
         color: 'transparent'
         radius: self.radius + 12

@@ -55,6 +55,7 @@ FilterPopup {
         }
     }
     FilterPopup.Separator {
+        visible: self.filterAssets.length > 0 && self.assets.length > 0
     }
     Repeater {
         model: self.assets

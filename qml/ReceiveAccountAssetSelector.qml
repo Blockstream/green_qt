@@ -9,8 +9,6 @@ import "util.js" as UtilJS
 StackViewPage {
     signal selected(account: Account, asset: Asset)
     required property Context context
-    required property Account account
-    required property Asset asset
     property bool anyLiquid: false
     property bool anyAMP: false
     readonly property bool supportsLiquid: {
@@ -22,12 +20,12 @@ StackViewPage {
     }
     id: self
     title: qsTrId('id_select_asset')
+    footer: null
     contentItem: ColumnLayout {
         spacing: 5
         SearchField {
             Layout.fillWidth: true
             id: search_field
-            visible: false
         }
         TListView {
             id: list_view
@@ -37,7 +35,7 @@ StackViewPage {
             model: AssetsModel {
                 filter: search_field.text.trim()
                 context: self.context
-                minWeight: 1
+                minWeight: search_field.text.trim().length > 0 ? 0 : 1
             }
             spacing: 4
             footer: ColumnLayout {

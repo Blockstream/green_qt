@@ -131,7 +131,7 @@ WalletDialog {
                     Layout.bottomMargin: 15
                     id: amount_field
                     dynamic: false
-                    unit: self.session.unit
+                    session: self.session
                     convert: Convert {
                         context: self.session.context
                         account: self.session.context.getOrCreateAccount(self.session.network, 0)
