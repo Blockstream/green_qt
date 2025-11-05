@@ -262,6 +262,24 @@ void LoginController::login(TaskGroup* group, LoginTask* login_task)
     group->add(get_credentials);
 }
 
+
+static void fetchAddresses(Context* context, Account* account, int last_pointer)
+{
+    auto task = new GetAddressesTask(last_pointer, account);
+    QObject::connect(task, &Task::finished, account, [=] {
+        task->deleteLater();
+
+        for (QJsonValue data : task->addresses()) {
+            account->getOrCreateAddress(data.toObject());
+        }
+
+        if (task->hasMore()) {
+            fetchAddresses(context, account, task->lastPointer());
+        }
+    });
+    context->dispatcher()->add(task);
+}
+
 LoadController::LoadController(QObject* parent)
     : Controller(parent)
 {
@@ -287,6 +305,10 @@ LoadController::LoadController(QObject* parent)
                 if (session->network()->isLiquid()) {
                     dispatcher()->add(new LoadAssetsTask(true, session));
                 }
+            }
+
+            for (auto account : m_context->getAccounts()) {
+                fetchAddresses(m_context, account, 0);
             }
         });
     });

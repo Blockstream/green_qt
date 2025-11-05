@@ -365,24 +365,6 @@ void fetchTransactions(TaskGroup* group, Account* account, int page, int size)
     group->add(task);
 }
 
-void fetchAddresses(TaskGroup* group, Account* account, int last_pointer)
-{
-    auto task = new GetAddressesTask(last_pointer, account);
-    QObject::connect(task, &Task::finished, account, [=] {
-        task->deleteLater();
-
-        for (QJsonValue data : task->addresses()) {
-            account->getOrCreateAddress(data.toObject());
-        }
-
-        if (task->hasMore()) {
-            fetchAddresses(group, account, task->lastPointer());
-        }
-    });
-
-    group->add(task);
-}
-
 void Context::addTestNotification(const QString& message)
 {
     auto network = primaryNetwork();
@@ -466,7 +448,6 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
                 group->add(get_unspent_outputs);
 
                 fetchTransactions(group, account, 0, 30);
-                fetchAddresses(group, account, 0);
             }
         });
         connect(load_accounts, &Task::failed, this, [=](auto error) {
