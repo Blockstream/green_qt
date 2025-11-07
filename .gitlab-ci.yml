@@ -20,7 +20,7 @@ sast:
   before_script:
     - if [[ "$IGNORE_SECURITY" == "true" ]]; then exit 0; fi
   tags:
-    - k8s-docker
+    - k8s
 
 
 .depends:
