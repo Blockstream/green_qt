@@ -3,6 +3,7 @@
 #include "asset.h"
 #include "context.h"
 #include "device.h"
+#include "green_settings.h"
 #include "json.h"
 #include "network.h"
 #include "networkmanager.h"
@@ -426,6 +427,38 @@ void Context::addTestUpdateNotification()
 {
     auto update = new UpdateNotification("2.0.0", this);
     addNotification(update);
+}
+
+void Context::checkAndAddBackupWarningNotification()
+{
+    if (!m_wallet || !qobject_cast<PinData*>(m_wallet->login())) {
+        return;
+    }
+    
+    auto settings = Settings::instance();
+    QJsonObject event;
+    event["walletId"] = m_xpub_hash_id;
+    event["result"] = "completed";
+    event["type"] = "wallet_backup";
+    
+    if (settings->isEventRegistered(event)) {
+        return; 
+    }
+    
+    for (auto notification : m_notifications) {
+        if (auto warning = qobject_cast<WarningNotification*>(notification)) {
+            if (warning->title() == "Backup your wallet" && warning->message() == "Write down your recovery phrase and store it safely.") {
+                return; 
+            }
+        }
+    }
+    
+    auto network = primaryNetwork();
+    if (!network) return;
+    const auto title = QStringLiteral("Backup your wallet");
+    const auto message = QStringLiteral("Write down your recovery phrase and store it safely.");
+    const auto warning = new WarningNotification(title, message, network, this);
+    addNotification(warning);
 }
 
 void Context::loadNetwork(TaskGroup *group, Network *network)

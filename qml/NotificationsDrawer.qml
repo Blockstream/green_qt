@@ -108,6 +108,8 @@ AbstractDrawer {
                     return system_notification
                 } else if (delegate.notification instanceof OutageNotification) {
                     return outage_notification
+                } else if (delegate.notification instanceof WarningNotification) {
+                    return warning_notification
                 } else if (delegate.notification instanceof TwoFactorResetNotification) {
                     return two_factor_reset_notification
                 } else if (delegate.notification instanceof TwoFactorExpiredNotification) {
@@ -210,6 +212,12 @@ AbstractDrawer {
     }
 
     Component {
+        id: warning_notification
+        WarningNotificationView {
+        }
+    }
+
+    Component {
         id: two_factor_reset_notification
         TwoFactorResetNotificationView {
         }
@@ -252,6 +260,58 @@ AbstractDrawer {
                         context: self.context,
                         notification: view.notification,
                     })
+                }
+            }
+        }
+    }
+
+    component WarningNotificationView: NotificationItem {
+        id: warningView
+        contentItem: ColumnLayout {
+            spacing: 12
+            RowLayout {
+                spacing: 12
+                Image {
+                    Layout.preferredWidth: 32
+                    Layout.preferredHeight: 32
+                    source: 'qrc:/svg2/warning-light.svg'
+                }
+                ColumnLayout {
+                    spacing: 4
+                    Label {
+                        Layout.fillWidth: true
+                        color: '#FFFFFF'
+                        font.pixelSize: 16
+                        font.weight: 600
+                        text: warningView.notification.title
+                        wrapMode: Label.WordWrap
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        color: '#FFFFFF'
+                        font.pixelSize: 14
+                        opacity: 0.8
+                        text: warningView.notification.message
+                        wrapMode: Label.WordWrap
+                    }
+                }
+            }
+            RowLayout {
+                Layout.alignment: Qt.AlignRight
+                spacing: 10
+                PrimaryButton {
+                    text: 'Backup now'
+                    borderColor: '#FFFFFF'
+                    fillColor: '#FFFFFF'
+                    textColor: '#000000'
+                    onClicked: warningView.notification.trigger()
+                }
+                PrimaryButton {
+                    text: 'Remind me later'
+                    borderColor: '#FFFFFF'
+                    fillColor: 'transparent'
+                    textColor: '#FFFFFF'
+                    onClicked: warningView.notification.dismiss()
                 }
             }
         }

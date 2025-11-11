@@ -42,6 +42,7 @@ MainPage {
                 text: 'Set up a New Wallet'
                 font.pixelSize: 14
                 font.weight: 600
+                onClicked: self.createWallet()
             }
         }
     }

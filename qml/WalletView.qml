@@ -133,7 +133,10 @@ MainPage {
     Component {
         id: add_wallet_page
         AddWalletPage {
-            onNewWallet: stack_view.push(mnemonic_warnings_page)
+            onNewWallet: {
+                const mnemonic = WalletManager.generateMnemonic(12)
+                stack_view.push(register_page, { mnemonic })
+            }
             onRestoreWallet: stack_view.push(restore_wallet_page)
         }
     }
@@ -219,6 +222,7 @@ MainPage {
         id: restore_check_page
         RestoreCheckPage {
             onRestoreFinished: (context) => {
+                Settings.registerEvent({ walletId: context.xpubHashId, result: 'completed', type: 'wallet_backup' })
                 self.wallet = context.wallet
                 stack_view.push(setup_pin_page, { context })
             }

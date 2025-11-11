@@ -22,6 +22,20 @@ Pane {
     property int currentView: SideBar.Wallets
     property real maximumWidth: 250
     readonly property real position: (width - self.implicitWidth) / (self.maximumWidth - self.implicitWidth)
+    property bool backupCompleted: true
+
+    function updateBackupCompleted() {
+        const context = self.currentOverviewPage?.context
+        if (!context) {
+            self.backupCompleted = true
+            return
+        }
+        self.backupCompleted = Settings.isEventRegistered({
+            walletId: context.xpubHashId,
+            result: 'completed',
+            type: 'wallet_backup'
+        })
+    }
     Behavior on width {
         enabled: !drag_handler.active
         SmoothedAnimation {
@@ -71,6 +85,23 @@ Pane {
         }
     }
 
+    Component.onCompleted: self.updateBackupCompleted()
+    onCurrentOverviewPageChanged: self.updateBackupCompleted()
+
+    Connections {
+        target: Settings
+        function onRegisteredEventsCountChanged() {
+            self.updateBackupCompleted()
+        }
+    }
+
+    Connections {
+        target: self.currentOverviewPage
+        function onContextChanged() {
+            self.updateBackupCompleted()
+        }
+    }
+
     contentItem: ColumnLayout {
         spacing: 0
         Logo {
@@ -89,6 +120,7 @@ Pane {
             icon.source: 'qrc:/svg/menu-security.svg'
             text: qsTrId('id_security')
             view: OverviewPage.Security
+            warningDot: !self.backupCompleted
         }
         WalletSideButton {
             icon.source: 'qrc:/svg/menu-settings.svg'
@@ -183,6 +215,7 @@ Pane {
 
     component SideButton: AbstractButton {
         property bool isCurrent: false
+        property bool warningDot: false
         Layout.bottomMargin: 10
         Layout.fillWidth: true
         id: button
@@ -243,6 +276,18 @@ Pane {
                 opacity: self.position
                 text: button.text
                 wrapMode: Label.NoWrap
+            }
+            Item {
+                Layout.alignment: Qt.AlignVCenter
+                Rectangle {
+                    visible: button.warningDot
+                    anchors.centerIn: parent
+                    width: 10
+                    height: 10
+                    radius: 5
+                    color: '#FF0000'
+                    opacity: self.position
+                }
             }
         }
     }

@@ -22,6 +22,7 @@ Dialog {
     clip: true
     closePolicy: Popup.NoAutoClose
     modal: true
+    parent: Overlay.overlay
     anchors.centerIn: parent
     topPadding: 40
     bottomPadding: 40

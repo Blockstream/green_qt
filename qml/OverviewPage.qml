@@ -38,6 +38,11 @@ Page {
         function onNotificationTriggered(notification) {
             if (notification instanceof SystemNotification) {
                 notifications_drawer.open()
+            } else if (notification instanceof WarningNotification && notification.title === 'Backup your wallet') {
+                self.showView(OverviewPage.Security)
+                Qt.callLater(() => {
+                    security_page.openBackup()
+                })
             } else {
                 notification_drawer.createObject(self, { notification }).open()
             }
@@ -181,6 +186,7 @@ Page {
     StackView.onActivated: {
         self.forceActiveFocus()
         Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(Settings, self.context))
+        self.context.checkAndAddBackupWarningNotification()
     }
 
     id: self
@@ -285,6 +291,29 @@ Page {
         }
     }
 
+    Component {
+        id: backup_page
+        BackupPage {
+            context: self.context
+            onBackupCompleted: {
+                for (let i = 0; i < self.context.notifications.length; i++) {
+                    const notification = self.context.notifications[i]
+                    if (notification instanceof WarningNotification && notification.title === 'Backup your wallet') {
+                        self.context.removeNotification(notification)
+                        break
+                    }
+                }
+            }
+            onClosed: {
+                self.showView(OverviewPage.Security)
+                const stackView = self.StackView.view
+                if (stackView) {
+                    stackView.pop()
+                }
+            }
+        }
+    }
+
     contentItem: StackLayout {
         currentIndex: self.view
         HomePage {
@@ -303,7 +332,14 @@ Page {
             onAddressClicked: (address) => address_details_drawer.createObject(self, { context: self.context, address }).open()
         }
         SecurityPage {
+            id: security_page
             context: self.context
+            onOpenBackup: {
+                const stackView = self.StackView.view
+                if (stackView) {
+                    stackView.push(backup_page, { context: self.context })
+                }
+            }
         }
         Page {
             background: null

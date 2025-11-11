@@ -86,7 +86,7 @@ public:
     QList<Notification*> getNotifications() const { return m_notifications; }
     QQmlListProperty<Notification> notifications();
     void addNotification(Notification* notification);
-    void removeNotification(Notification* notification);
+    Q_INVOKABLE void removeNotification(Notification* notification);
 
     Q_INVOKABLE Network* primaryNetwork();
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
@@ -97,6 +97,7 @@ public:
     Q_INVOKABLE void addTestTwoFactorExpiredNotification();
     Q_INVOKABLE void addTestWarningNotification();
     Q_INVOKABLE void addTestUpdateNotification();
+    Q_INVOKABLE void checkAndAddBackupWarningNotification();
 
     void loadNetwork(TaskGroup* group, Network* network);
     void loginNetwork(TaskGroup* group, Network* network);

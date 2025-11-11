@@ -120,6 +120,7 @@ SET(QML_FILES
     qml/CreateAccountDrawer.qml
     qml/ReceiveDrawer.qml
     qml/SendDrawer.qml
+    qml/BackupPage.qml
     qml/BackButton.qml
     qml/SendAccountAssetSelector.qml
     qml/AccountAssetField.qml

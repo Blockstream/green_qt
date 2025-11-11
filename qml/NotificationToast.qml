@@ -247,7 +247,7 @@ ColumnLayout {
                     color: toast.textColor
                     font.pixelSize: 14
                     font.weight: 700
-                    text: 'Backup your wallet'
+                    text: toast.notification.title
                     wrapMode: Label.NoWrap
                     elide: Label.ElideRight
                 }
@@ -256,7 +256,7 @@ ColumnLayout {
                     color: toast.textColor
                     font.pixelSize: 13
                     font.weight: 400
-                    text: 'This is a sample alert-banner description.'
+                    text: toast.notification.message
                     wrapMode: Label.WordWrap
                 }
                 RowLayout {
