@@ -23,7 +23,6 @@ gsutil -h "Cache-Control: no-store" cp ${CHANNEL}.json gs://${GCLOUD_BUCKET}/des
 
 gsutil cp SHA256SUMS.asc gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
 gsutil cp Blockstream-x86_64.AppImage gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp Blockstream-linux-x86_64.tar.gz gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
 gsutil cp Blockstream-universal.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
 gsutil cp Blockstream-arm64.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
 gsutil cp Blockstream-x86_64.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/

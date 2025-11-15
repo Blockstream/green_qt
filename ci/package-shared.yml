@@ -29,3 +29,31 @@ package-shared:build:
     - macos-x86_64-shared:staple
     - macos-universal-shared:staple
     - windows-x86_64-shared:sign-installer
+
+.publish-shared:
+  tags:
+    - ga
+  stage: package
+  when: manual
+  needs:
+    - package-shared:build
+  image: glregistry.blockstream.io/blockstream/p/gcloud-docker:tf0.15.4
+  script:
+    - cd dist
+    - ../tools/publish.sh
+
+package-shared:publish-rc:
+  extends:
+    - .publish-shared
+  variables:
+    CHANNEL: rc
+
+package-shared:publish-latest:
+  extends:
+    - .publish-shared
+  variables:
+    CHANNEL: latest
+  only:
+    - tags
+  except:
+    - branches
