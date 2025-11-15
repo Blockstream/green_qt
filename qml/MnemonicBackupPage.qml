@@ -7,6 +7,7 @@ import QtQuick.Layouts
 StackViewPage {
     signal selected(var mnemonic)
     property int size: 12
+    property int columns: self.size / 6
 
     id: self
     footer: null
@@ -46,7 +47,7 @@ StackViewPage {
         background: null
         contentItem: MnemonicView {
             id: mnemonic_view
-            columns: self.size / 6
+            columns: self.columns
             mnemonic: WalletManager.generateMnemonic(self.size)
         }
     }

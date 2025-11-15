@@ -40,6 +40,7 @@ StackViewPage {
     Component {
         id: mnemonic_backup_page
         MnemonicBackupPage {
+            columns: 2
             onSelected: (mnemonic) => self.StackView.view.push(mnemonic_check_page, { mnemonic })
         }
     }
