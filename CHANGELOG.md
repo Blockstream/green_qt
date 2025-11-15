@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.29] - 2025-11-17
+### Added:
+- Branding images in windows installer
+
+### Changed:
+- Updated GDK to 0.76.0
+- Dynamically link Qt
+- Supported Jade firmware version
+- Use stylized address in send confirmation page
+- Remove SPV transaction status
+- Several build system Improvements
+
+### Fixed:
+- Fix and improve transaction speedup flow
+- Fix pay BIP21 flow
+- Layout when creating a 2of3 account with a new mnemonic
+- Improved application teardown
+
 ## [2.0.28] - 2025-08-06
 ### Changed:
 - Update GDK to 0.75.2
