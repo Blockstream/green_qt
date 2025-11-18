@@ -928,8 +928,10 @@ void LoadAssetsTask::update()
                 if (!context) return;
                 auto asset = context->getOrCreateAsset(asset_id);
                 asset->setNetworkKey(m_session->network()->key());
-                asset->setData(Json::toObject((GA_json*) &data));
-                if (!icon.isNull()) asset->setIcon(QString("data:image/png;base64,") + icon.toString());
+                asset->setData(data);
+                if (!icon.isNull() && !icon.toString().isEmpty()) {
+                    asset->setIcon(QString("data:image/png;base64,") + icon.toString());
+                }
             }, Qt::QueuedConnection);
         }
         GA_destroy_json((GA_json*) output);
