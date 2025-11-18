@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-project(blockstream VERSION 2.0.29 LANGUAGES CXX)
+project(blockstream VERSION 2.0.30 LANGUAGES CXX)
 
 option(GREEN_WAYLAND "Include Wayland support" OFF)
 option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)
