@@ -68,6 +68,7 @@ public:
 
 class GetMasterBlindingKeyActivity : public Activity
 {
+    Q_OBJECT
 public:
     GetMasterBlindingKeyActivity(QObject* parent) : Activity(parent) {}
     virtual QByteArray masterBlindingKey() const = 0;
