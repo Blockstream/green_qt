@@ -30,6 +30,7 @@ FilterPopup {
         }
     }
     FilterPopup.Separator {
+        visible: self.filterAccounts.length > 0 && self.accounts.length > 0
     }
     Repeater {
         model: self.accounts
