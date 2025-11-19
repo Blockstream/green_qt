@@ -24,6 +24,7 @@ StackViewPage {
         id: list_view
         spacing: 8
         header: ColumnLayout {
+            onHeightChanged: list_view.contentY = -(list_view.headerItem?.height ?? 0)
             width: list_view.width
             spacing: 0
             AssetIcon {
