@@ -40,6 +40,8 @@ public:
     QString deployment() const { return m_deployment; }
     bool bip39() const { return m_bip39; }
 
+    void setSkipLoadAccounts(bool skip_load_accounts);
+
     TaskGroup* cleanAccounts();
 
     Wallet* wallet() const { return m_wallet; }
@@ -124,6 +126,7 @@ signals:
 private:
     const QString m_deployment;
     const bool m_bip39;
+    bool m_skip_load_accounts{false};
     Wallet* m_wallet{nullptr};
     Device* m_device{nullptr};
     bool m_remember{true};

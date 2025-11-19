@@ -30,6 +30,8 @@ void SignupController::signup(const QString& deployment)
         setContext(new Context(deployment, false, this));
     }
 
+    m_context->setSkipLoadAccounts(true);
+
     auto session = m_context->primarySession();
     auto connect_session = new ConnectTask(session);
     auto register_user = new RegisterUserTask(credentials, {}, session);

@@ -66,6 +66,11 @@ Context::~Context()
     }
 }
 
+void Context::setSkipLoadAccounts(bool skip_load_accounts)
+{
+    m_skip_load_accounts = skip_load_accounts;
+}
+
 TaskGroup* Context::cleanAccounts()
 {
     auto group = new TaskGroup(this);
@@ -147,7 +152,7 @@ Session* Context::getOrCreateSession(Network* network)
             auto event_type = event.value("event_type").toString();
             if (event_type == "new") {
                 auto account = getOrCreateAccount(session->network(), pointer);
-            } else if (event_type == "synced") {
+            } else if (event_type == "synced" && !m_skip_load_accounts) {
                 auto account = getOrCreateAccount(session->network(), pointer);
                 if (!account->synced()) {
                     account->setSynced(true);
@@ -429,6 +434,11 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
     group->add(new GetWatchOnlyDetailsTask(session));
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
+
+    if (m_skip_load_accounts) {
+        return;
+    }
+
     if (!isWatchonly() || !network->isElectrum()) {
         auto load_accounts = new LoadAccountsTask(false, session);
         connect(load_accounts, &Task::finished, this, [=] {
