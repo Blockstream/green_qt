@@ -272,6 +272,8 @@ else()
     set(QML_FILES_2 ${QML_FILES})
 endif()
 
+qt_policy(SET QTP0004 NEW)
+
 qt_add_qml_module(${APP_TARGET}
     URI Blockstream.Green
     VERSION 1.0
@@ -279,6 +281,7 @@ qt_add_qml_module(${APP_TARGET}
     DEPENDENCIES QtQuick
     SOURCES src/networkmanager.cpp
     QML_FILES ${QML_FILES_2}
+    RESOURCE_PREFIX /
     #ENABLE_TYPE_COMPILER
     NO_CACHEGEN
     NO_LINT
