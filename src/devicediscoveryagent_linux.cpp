@@ -2,6 +2,8 @@
 
 #ifdef Q_OS_LINUX
 
+#include <cstdio>
+
 #include <fcntl.h>
 #include <linux/hid.h>
 #include <linux/hidraw.h>

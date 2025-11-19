@@ -8,8 +8,8 @@
 #ifdef Q_OS_MACOS
 #include <sys/sysctl.h>
 #include <sys/types.h>
-#include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>
+#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 #ifdef Q_OS_WIN

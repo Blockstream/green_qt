@@ -1,7 +1,7 @@
 #include "deviceactivities.h"
 
-#include <QQueue>
 #include <QDataStream>
+#include <QQueue>
 
 #include "device.h"
 #include "network.h"

@@ -3,6 +3,8 @@
 #include "resolver.h"
 #include "util.h"
 
+#include <cstdio>
+
 #include <wally_wrapper.h>
 
 namespace {

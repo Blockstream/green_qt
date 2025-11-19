@@ -13,6 +13,8 @@
 
 #include <gdk.h>
 
+#include <algorithm>
+
 namespace {
 void UpdateAsset(GA_session* session, Asset* asset)
 {

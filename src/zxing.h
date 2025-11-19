@@ -3,10 +3,10 @@
 
 #include <QFutureWatcher>
 #include <QObject>
-#include <QQuickImageProvider>
-#include <QVideoSink>
-#include <QVideoFrame>
 #include <QQmlEngine>
+#include <QQuickImageProvider>
+#include <QVideoFrame>
+#include <QVideoSink>
 
 class ZXingDetector : public QObject
 {

@@ -4,8 +4,8 @@
 #include <QUrl>
 
 #include <ZXing/BitMatrix.h>
-#include <ZXing/ReadBarcode.h>
 #include <ZXing/MultiFormatWriter.h>
+#include <ZXing/ReadBarcode.h>
 
 ZXingDetector::ZXingDetector(QObject *parent)
     : QObject(parent)

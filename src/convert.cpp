@@ -13,6 +13,7 @@
 #include <QDebug>
 #include <QtConcurrentRun>
 
+#include <string>
 
 static QString to_c(const QLocale& locale, QString number)
 {

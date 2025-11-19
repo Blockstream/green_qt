@@ -71,6 +71,13 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #include <windows.h>
 #endif
 
+#include <cstdio>
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include <hidapi/hidapi.h>
 
 #ifndef _WIN32
