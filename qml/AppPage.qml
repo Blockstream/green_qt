@@ -28,7 +28,6 @@ MainPage {
         }
         wallet_view.createObject(stack_layout, { wallet })
         stack_layout.currentIndex = stack_layout.children.length - 1
-        side_bar.currentWalletView = stack_layout.itemAt(stack_layout.currentIndex)
         side_bar.currentView = SideBar.View.Wallet
     }
     function openDevice(device, options) {
@@ -243,6 +242,7 @@ MainPage {
         parent: Overlay.overlay
         z: 1
         x: -side_bar.implicitWidth
+        currentWalletView: stack_layout.itemAt(stack_layout.currentIndex) ?? null
         Behavior on x {
             SmoothedAnimation {
                 velocity: 200
