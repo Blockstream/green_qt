@@ -288,7 +288,7 @@ Collapsible {
                     color: '#000'
                     font.pixelSize: 14
                     font.weight: 600
-                    text: qsTrId('There is a newer version of Green Desktop available')
+                    text: qsTrId('There is a newer version of Blockstream App available')
                     wrapMode: Label.WordWrap
                 }
                 PrimaryButton {
@@ -299,7 +299,7 @@ Collapsible {
                     font.pixelSize: 14
                     text: qsTrId('Download %1').arg(notification.version)
                     textColor: '#1C1C1C'
-                    onClicked: Qt.openUrlExternally('https://blockstream.com/green/')
+                    onClicked: Qt.openUrlExternally('https://blockstream.com/app/')
                 }
                 CloseButton {
                     Layout.alignment: Qt.AlignCenter
