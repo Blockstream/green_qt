@@ -242,7 +242,10 @@ MainPage {
         parent: Overlay.overlay
         z: 1
         x: -side_bar.implicitWidth
-        currentWalletView: stack_layout.itemAt(stack_layout.currentIndex) ?? null
+        currentWalletView: {
+            const view = stack_layout.itemAt(stack_layout.currentIndex)
+            return view instanceof WalletView ? view : null
+        }
         Behavior on x {
             SmoothedAnimation {
                 velocity: 200
@@ -329,7 +332,7 @@ MainPage {
         id: preferences_dialog
         PreferencesView {
             onClosed: {
-                side_bar.currentView = SideBar.View.Wallets
+                side_bar.currentView = side_bar.currentWalletView ? SideBar.View.Wallet : SideBar.View.Wallets
                 destroy()
             }
         }
