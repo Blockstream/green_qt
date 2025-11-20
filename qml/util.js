@@ -43,8 +43,8 @@ function iconFor(target) {
     return 'qrc:/svg/generic_icon_30p.svg'
 }
 
-function formatTransactionTimestamp(tx) {
-    return new Date(tx.created_at_ts / 1000).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
+function formatTransactionTimestamp(transaction) {
+    return new Date(transaction.data.created_at_ts / 1000).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
 }
 
 function accountName(account) {
@@ -167,6 +167,33 @@ function getUnblindingData(tx) {
                amountblinder: o.amountblinder,
             })),
     }
+}
+
+function transactionTypeLabel(transaction) {
+    if (transaction.data.type === 'incoming') {
+        if (transaction.data.outputs.length > 0) {
+            for (const output of transaction.data.outputs) {
+                if (output.is_relevant) {
+                    return qsTrId('id_received')
+                }
+            }
+        } else {
+            return qsTrId('id_received')
+        }
+    }
+    if (transaction.data.type === 'outgoing') {
+        return qsTrId('id_sent')
+    }
+    if (transaction.data.type === 'redeposit') {
+        return qsTrId('id_redeposited')
+    }
+    if (transaction.data.type === 'mixed') {
+        return qsTrId('id_swap')
+    }
+    if (transaction.data.type === 'not unblindable') {
+        return 'Not unblindable'
+    }
+    return transaction.data.type
 }
 
 function twoFactorMethodLabel(method)

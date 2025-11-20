@@ -14,7 +14,6 @@ ItemDelegate {
     required property Transaction transaction
     property Account account: transaction.account
 
-    property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
 
     onClicked: self.transactionClicked(transaction)
@@ -46,32 +45,6 @@ ItemDelegate {
     }
     spacing: 0
 
-    function txType(tx) {
-        if (transaction.type === Transaction.Incoming) {
-            if (tx.outputs.length > 0) {
-                for (const o of tx.outputs) {
-                    if (o.is_relevant) {
-                        return qsTrId('id_received')
-                    }
-                }
-            } else {
-                return qsTrId('id_received')
-            }
-        }
-        if (transaction.type === Transaction.Outgoing) {
-            return qsTrId('id_sent')
-        }
-        if (transaction.type === Transaction.Redeposit) {
-            return qsTrId('id_redeposited')
-        }
-        if (transaction.type === Transaction.Mixed) {
-            return qsTrId('id_swap')
-        }
-        if (transaction.type === Transaction.NotUnblindable) {
-            return 'Not unblindable'
-        }
-        return JSON.stringify(tx, null, '\t')
-    }
     contentItem: RowLayout {
         spacing: 20
         Image {
@@ -83,12 +56,12 @@ ItemDelegate {
             color: '#FFF'
             font.pixelSize: 14
             font.weight: 600
-            text: txType(tx)
+            text: UtilJS.transactionTypeLabel(self.transaction)
         }
         Label {
             Layout.minimumWidth: self.width / 5
             color: '#929292'
-            text: UtilJS.formatTransactionTimestamp(tx)
+            text: UtilJS.formatTransactionTimestamp(self.transaction)
             font.pixelSize: 12
             font.weight: 400
             font.capitalization: Font.AllUppercase

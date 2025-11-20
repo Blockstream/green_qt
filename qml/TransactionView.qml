@@ -136,7 +136,7 @@ StackViewPage {
                 font.pixelSize: 14
                 font.weight: 400
                 color: '#929292'
-                text: UtilJS.formatTransactionTimestamp(self.transaction.data)
+                text: UtilJS.formatTransactionTimestamp(self.transaction)
             }
             Label {
                 Layout.alignment: Qt.AlignCenter

@@ -192,29 +192,18 @@ Page {
                     color: '#FFF'
                     font.pixelSize: 16
                     font.weight: 600
-                    text: delegate.transaction.data.type
+                    text: UtilJS.transactionTypeLabel(delegate.transaction)
                 }
                 Label {
                     color: '#929292'
-                    text: UtilJS.formatTransactionTimestamp(delegate.transaction.data)
+                    text: UtilJS.formatTransactionTimestamp(delegate.transaction)
                     font.pixelSize: 16
                     font.weight: 400
                     font.capitalization: Font.AllUppercase
                     opacity: 0.6
                 }
             }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: 0
-                Layout.fillWidth: true
-                color: '#929292'
-                font.pixelSize: 12
-                font.weight: 400
-                text: {
-                    const lines = delegate.transaction.memo.trim().split('\n')
-                    return lines[0] + (lines.length > 1 ? '...' : '')
-                }
-                wrapMode: Label.Wrap
+            HSpacer {
             }
             ColumnLayout {
                 Layout.fillWidth: false
@@ -264,7 +253,7 @@ Page {
                 Label {
                     Layout.alignment: Qt.AlignRight
                     color: delegate.transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
-                    font.pixelSize: 14
+                    font.pixelSize: 16
                     font.weight: 600
                     text: UtilJS.incognito(Settings.incognito, convert.output.label)
                     visible: Number(convert.result.satoshi ?? '0') !== 0
@@ -272,7 +261,7 @@ Page {
                 Label {
                     Layout.alignment: Qt.AlignRight
                     color: '#929292'
-                    font.pixelSize: 12
+                    font.pixelSize: 14
                     font.weight: 400
                     text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
                     visible: Number(convert.result.satoshi ?? '0') !== 0
