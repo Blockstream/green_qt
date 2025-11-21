@@ -11,11 +11,64 @@ StackViewPage {
     required property Context context
     required property Asset asset
     property Account account
+    property bool showAllAccounts: true
+    property bool sortByBalance: false
     readonly property string ticker: {
         if (!self.asset) return
         return self.asset.data.ticker ?? ''
     }
+    readonly property var accounts: {
+        const relevant = []
+        const other = []
+        for (let i = 0; i < self.context.accounts.length; i++) {
+            const account = self.context.accounts[i]
+            if (account.hidden) continue
+            if (account.network.liquid && self.asset.key === 'btc') continue
+            if (!account.network.liquid && self.asset.key !== 'btc') continue
+            const satoshi = account.json.satoshi[self.asset.id]
+            if (self.showAllAccounts || satoshi) {
+                relevant.push({ account, satoshi: String(satoshi) })
+            } else {
+                other.push({ account, satoshi: String(satoshi) })
+            }
+        }
+        const index = (account) => {
+            const is_liquid = account.network.liquid
+            const is_bitcoin = !is_liquid
+            const is_singlesig = account.network.electrum
+            const is_multisig = !is_singlesig
+            const is_lightning = false
+            const is_amp = is_liquid && account.type === "2of2_no_recovery"
 
+            if (is_bitcoin && is_singlesig) return 0
+            if (is_bitcoin && is_multisig) return 1
+            if (is_lightning) return 2
+            if (is_liquid && is_singlesig) return 3
+            if (is_liquid && is_multisig && !is_amp) return 4
+            if (is_liquid && is_multisig && is_amp) return 5
+            return 6
+        }
+        const weight = (account) => {
+            const offset = account.network.mainnet ? 0 : 10
+            return offset + index(account)
+        }
+        relevant.sort((a, b) => {
+            if (self.sortByBalance) {
+                const as = Number(a.satoshi)
+                const bs = Number(b.satoshi)
+                if (as > bs) return -1
+                if (as < bs) return 1
+            }
+            const wa = weight(a.account)
+            const wb = weight(b.account)
+            if (wa < wb) return -1
+            if (wa > wb) return 1
+            if (a.account.pointer < b.account.pointer) return -1
+            if (a.account.pointer > b.account.pointer) return 1
+            return 0
+        })
+        return { relevant, other }
+    }
     id: self
     title: qsTrId('id_asset_details')
     rightItem: RowLayout {
@@ -59,36 +112,32 @@ StackViewPage {
             text: qsTrId('id_accounts')
         }
         Repeater {
-            model: {
-                const accounts = []
-                for (let i = 0; i < self.context.accounts.length; i++) {
-                    const account =  self.context.accounts[i]
-                    const satoshi = account.json.satoshi[self.asset.id]
-                    if (satoshi) {
-                        accounts.push({ account, satoshi: String(satoshi) })
-                    }
-                }
-                return accounts.sort((a, b) => {
-                    const as = Number(a.satoshi)
-                    const bs = Number(b.satoshi)
-                    if (as > bs) return -1
-                    if (as < bs) return 1
-                    return a.account.name.localeCompare(b.account.name)
-                })
-            }
+            model: self.accounts.relevant
             delegate: AccountButton {
-                required property var modelData
-                id: button
-                account: button.modelData.account
-                satoshi: button.modelData.satoshi
             }
         }
-        Rectangle {
-            Layout.bottomMargin: 20
-            Layout.topMargin: 20
+        LinkButton {
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTrId('id_show_all')
+            visible: collapsible.visible && collapsible.collapsed
+            onClicked: collapsible.open()
+        }
+        Collapsible {
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: '#313131'
+            id: collapsible
+            collapsed: self.accounts.relevant.length > 0
+            visible: self.accounts.other.length > 0
+            ColumnLayout {
+                spacing: 5
+                width: collapsible.width
+                Repeater {
+                    model: self.accounts.other
+                    delegate: AccountButton {
+                    }
+                }
+            }
+        }
+        Separator {
             visible: details_grid.visible
         }
         GridLayout {
@@ -143,20 +192,25 @@ StackViewPage {
                 wrapMode: Label.Wrap
             }
         }
-        Rectangle {
-            Layout.bottomMargin: 20
-            Layout.topMargin: 20
-            Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: '#313131'
+        Separator {
+            visible: details_grid.visible
         }
         VSpacer {
         }
     }
 
+    component Separator: Rectangle {
+        Layout.bottomMargin: 20
+        Layout.topMargin: 20
+        Layout.fillWidth: true
+        Layout.preferredHeight: 1
+        color: '#313131'
+    }
+
     component AccountButton: AbstractButton {
-        required property Account account
-        required property string satoshi
+        required property var modelData
+        readonly property Account account: button.modelData.account
+        readonly property string satoshi: button.modelData.satoshi
         Convert {
             id: convert
             account: button.account

@@ -9,20 +9,10 @@ import "util.js" as UtilJS
 WalletDrawer {
     signal accountClicked(Asset asset, Account account)
     required property Asset asset
-    readonly property Account defaultAccount: {
-        const accounts = []
-        for (let i = 0; i < self.context.accounts.length; i++) {
-            const account = self.context.accounts[i]
-            if (account.hidden) continue
-            const satoshi = account.json.satoshi[self.asset.id]
-            if (satoshi) accounts.push(account)
-        }
-        return accounts.length === 1 ? accounts[0] : null
-    }
     id: self
     contentItem: GStackView {
         id: stack_view
-        initialItem: self.defaultAccount ? account_asset_page : asset_details_page
+        initialItem: asset_details_page
     }
 
     Component {
@@ -41,7 +31,6 @@ WalletDrawer {
         id: account_asset_page
         AccountAssetPage {
             id: page
-            account: self.defaultAccount
             asset: self.asset
             context: self.context
             onCloseClicked: self.close()

@@ -14,11 +14,16 @@ Pane {
         const context = self.context
         if (!context) return []
         const assets = new Map
+        for (let i = 0; i < self.context.sessions.length; i++) {
+            const session = self.context.sessions[i]
+            const asset = context.getOrCreateAsset(session.network.policyAsset)
+            assets.set(asset, { asset, satoshi: 0 })
+        }
         for (let i = 0; i < context.accounts.length; i++) {
             const account = context.accounts[i]
+            if (account.hidden) continue
             for (let asset_id in account.json.satoshi) {
                 const satoshi = account.json.satoshi[asset_id]
-                if (satoshi === 0) continue
                 const asset = context.getOrCreateAsset(asset_id)
                 let sum = assets.get(asset)
                 if (sum) {
