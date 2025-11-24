@@ -8,7 +8,7 @@ package-shared:build:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
-    - $CI_PROJECT_DIR/dist
+    - $CI_PROJECT_DIR/package.tar.gz
     when: on_success
   script:
     - cd $CI_PROJECT_DIR
@@ -23,6 +23,8 @@ package-shared:build:
     - cd dist
     - /opt/process_release
     - cat SHA256SUMS.asc
+    - cd ..
+    - tar czf package.tar.gz dist
   needs:
     - linux-x86_64-shared:build-appimage
     - macos-arm64-shared:staple
@@ -39,6 +41,7 @@ package-shared:build:
     - package-shared:build
   image: glregistry.blockstream.io/blockstream/p/gcloud-docker:tf0.15.4
   script:
+    - tar zxvf package.tar.gz
     - cd dist
     - ../tools/publish.sh
 
