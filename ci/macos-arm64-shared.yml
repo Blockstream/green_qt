@@ -55,7 +55,6 @@ macos-arm64-shared:staple:
     expire_in: 1 week
     when: always
     paths:
-      - macos-arm64-shared/Blockstream.app
       - macos-arm64-shared/Blockstream.dmg
   needs:
     - macos-arm64-shared:build
@@ -64,4 +63,4 @@ macos-arm64-shared:staple:
     - tools/macos-staple.sh Blockstream.app
     - tools/packdmg.sh Blockstream.app
     - tools/macos-staple.sh Blockstream.dmg
-    - mv Blockstream.app Blockstream.dmg macos-arm64-shared/
+    - mv Blockstream.dmg macos-arm64-shared/
