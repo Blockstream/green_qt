@@ -44,9 +44,6 @@ ColumnLayout {
             const newestNotification = self.notifications[self.notifications.length - 1]
             if (!self.animatedSet.has(newestNotification) && newestNotification._animatedIn !== true) {
                 newestNotification._isNew = true
-                if (newestNotification._dismissAt === undefined) {
-                    newestNotification._dismissAt = Date.now() + 5000 + Math.floor(Math.random() * 1200)
-                }
                 self.animatedSet.add(newestNotification)
             }
         }
@@ -168,17 +165,6 @@ ColumnLayout {
                 return
             }
 
-            if (toast.notification._dismissAt === undefined) {
-                toast.notification._dismissAt = Date.now() + 5000 + Math.floor(Math.random() * 1200)
-            }
-
-            if (toast.notification._dismissAt <= Date.now()) {
-                toast.opacity = 0
-                toast.height = 0
-                Qt.callLater(() => toast.notification.dismiss())
-                return
-            }
-
             const isNew = toast.notification._isNew === true && toast.notification._animatedIn !== true
             if (isNew) {
                 toast.isAnimatingIn = true
@@ -195,21 +181,6 @@ ColumnLayout {
                 toast.hasAnimatedIn = true
             }
 
-            const remaining = Math.max(0, toast.notification._dismissAt - Date.now())
-            dismissTimer.interval = remaining
-            dismissTimer.start()
-        }
-        
-        Timer {
-            id: dismissTimer
-            repeat: false
-            interval: 5000
-            running: false
-            onTriggered: {
-                if (!toast.notification.dismissed && !toast.isAnimatingOut && !toast.isDismissed) {
-                    toast.slideOutAndDismiss()
-                }
-            }
         }
 
         Timer {
