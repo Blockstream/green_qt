@@ -36,6 +36,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
+Source: "vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Icons]
@@ -59,6 +60,13 @@ Type: filesandordirs; Name: "{pf}\{#AppPublisher}\{#PreviousAppName}"
 [Messages]
 WelcomeLabel1=Before we start
 WelcomeLabel2=To access your existing wallets, please use the new Blockstream app. The installer will replace the old Blockstream Green app, but rest assured, all your wallets are safe and will be fully accessible in the new application.
+
+[Run]
+Filename: "{tmp}\vc_redist.x64.exe"; \
+    Parameters: "/install /quiet /norestart"; \
+    Flags: waituntilterminated; \
+    Check: NeedVCRedist64; \
+    StatusMsg: "Installing Microsoft Visual C++ 2015–2022 Runtime...";
 
 [Code]
 const
@@ -94,4 +102,18 @@ begin
       Result := PostMessage(winHwnd,WM_CLOSE,0,0);
   except
   end;
+end;
+
+function NeedVCRedist64(): Boolean;
+var
+  Installed: Cardinal;
+begin
+  if RegQueryDWordValue(HKLM,
+    'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64',
+    'Installed', Installed) then
+  begin
+    Result := (Installed <> 1);
+  end
+  else
+    Result := True;
 end;
