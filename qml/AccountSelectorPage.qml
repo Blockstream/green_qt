@@ -10,11 +10,24 @@ StackViewPage {
     signal accountClicked(account: Account)
     required property Context context
     required property Asset asset
+    required property string message
+    property bool showAllAccounts: false
     id: self
     title: qsTrId('id_select_account')
     contentItem: VFlickable {
         alignment: Qt.AlignTop
         spacing: 5
+        Label {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: 0
+            Layout.margins: 24
+            horizontalAlignment: Label.AlignHCenter
+            color: '#A0A0A0'
+            text: self.message
+            visible: self.message?.length > 0
+            wrapMode: Label.Wrap
+        }
         Pane {
             Layout.fillWidth: true
             padding: 10
@@ -46,9 +59,13 @@ StackViewPage {
                 const accounts = []
                 for (let i = 0; i < self.context.accounts.length; i++) {
                     const account = self.context.accounts[i]
+                    if (account.network.liquid && self.asset.key === 'btc') continue
+                    if (!account.network.liquid && self.asset.key !== 'btc') continue
                     if (account.hidden) continue
-                    const satoshi = String(account.json.satoshi[self.asset.id])
-                    if (satoshi > 0) accounts.push({ account, satoshi })
+                    const satoshi = account.json.satoshi[self.asset.id] ?? '0'
+                    if (self.showAllAccounts || satoshi > 0) {
+                        accounts.push({ account, satoshi })
+                    }
                 }
                 return accounts
             }

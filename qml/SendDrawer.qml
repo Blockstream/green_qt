@@ -214,6 +214,7 @@ WalletDrawer {
             required property string input
             id: page
             context: self.context
+            message: ''
             onAccountClicked: (account) => {
                 stack_view.push(send_details_page, {
                     account,
