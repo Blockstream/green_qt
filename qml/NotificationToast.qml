@@ -621,43 +621,57 @@ ColumnLayout {
 
     component UpdateToast: Toast {
         id: toast
-        borderColor: '#222226'
-        backgroundColor: '#0A0A0C'
+        borderColor: '#7E2A0D'
+        backgroundColor: '#432004'
         textColor: '#FFFFFF'
         
         contentItem: RowLayout {
             spacing: 8
             Layout.alignment: Qt.AlignCenter
             Image {
+                Layout.alignment: Qt.AlignTop
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 24
-                source: 'qrc:/svg2/download_black.svg'
+                source: 'qrc:/svg2/warning-light.svg'
             }
-            Label {
+            ColumnLayout {
                 Layout.fillWidth: true
-                color: toast.textColor
-                font.pixelSize: 13
-                font.weight: 500
-                text: 'A new version is available. Please update to continue using the app.'
-                wrapMode: Label.WordWrap
-            }
-            PrimaryButton {
-                Layout.alignment: Qt.AlignCenter
-                borderColor: '#FFFFFF'
-                fillColor: '#FFFFFF'
-                textColor: '#000000'
-                font.pixelSize: 12
-                font.weight: 600
-                text: 'Update'
-                padding: 6
-                leftPadding: 10
-                rightPadding: 10
-                topPadding: 6
-                bottomPadding: 6
-                onClicked: toast.notification.trigger()
+                spacing: 2
+                Label {
+                    Layout.fillWidth: true
+                    color: toast.textColor
+                    font.pixelSize: 14
+                    font.weight: 700
+                    text: 'Update Available'
+                    wrapMode: Label.NoWrap
+                    elide: Label.ElideRight
+                }
+                Label {
+                    Layout.fillWidth: true
+                    color: toast.textColor
+                    font.pixelSize: 13
+                    font.weight: 400
+                    text: 'A new version is available. Please update to continue using the app.'
+                    wrapMode: Label.WordWrap
+                }
+                PrimaryButton {
+                        borderColor: '#FFFFFF'
+                        fillColor: '#FFFFFF'
+                        textColor: '#000000'
+                        font.pixelSize: 12
+                        font.weight: 600
+                        text: 'Update'
+                        padding: 6
+                        leftPadding: 10
+                        rightPadding: 10
+                        topPadding: 6
+                        bottomPadding: 6
+                        Layout.topMargin: 6
+                        onClicked: toast.notification.trigger()
+                    }
             }
             CloseButton {
-                Layout.alignment: Qt.AlignCenter
+                Layout.alignment: Qt.AlignTop
                 onClicked: toast.slideOutAndDismiss()
             }
         }

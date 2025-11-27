@@ -130,6 +130,10 @@ Pane {
                     text: 'Warning notification'
                     onTriggered: self.simulateNotificationClicked('warning')
                 }
+                MenuItem {
+                    text: 'Update notification'
+                    onTriggered: self.simulateNotificationClicked('update')
+                }
             }
         }
         SideButton {

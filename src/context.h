@@ -96,6 +96,7 @@ public:
     Q_INVOKABLE void addTestTwoFactorResetNotification();
     Q_INVOKABLE void addTestTwoFactorExpiredNotification();
     Q_INVOKABLE void addTestWarningNotification();
+    Q_INVOKABLE void addTestUpdateNotification();
 
     void loadNetwork(TaskGroup* group, Network* network);
     void loginNetwork(TaskGroup* group, Network* network);

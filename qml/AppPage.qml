@@ -287,6 +287,9 @@ MainPage {
                 case 'warning':
                     context.addTestWarningNotification()
                     break
+                case 'update':
+                    context.addTestUpdateNotification()
+                    break
                 default:
                     console.log('Unknown notification type:', type)
             }

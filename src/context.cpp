@@ -1,4 +1,5 @@
 #include "account.h"
+#include "appupdatecontroller.h"
 #include "asset.h"
 #include "context.h"
 #include "device.h"
@@ -419,6 +420,12 @@ void Context::addTestWarningNotification()
     const auto message = QStringLiteral("This is a sample alert-banner description.");
     const auto warning = new WarningNotification(title, message, network, this);
     addNotification(warning);
+}
+
+void Context::addTestUpdateNotification()
+{
+    auto update = new UpdateNotification("2.0.0", this);
+    addNotification(update);
 }
 
 void Context::loadNetwork(TaskGroup *group, Network *network)
