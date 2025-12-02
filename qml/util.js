@@ -234,6 +234,31 @@ function csvLabel(blocks) {
     return csvTimeLabel(blocks) + ' (' + blocks + ' ' + qsTrId('id_blocks') + ')'
 }
 
+/// Generates a pair of initials from a provider name
+function getProviderInitials(name) {
+    if (!name || name.length === 0) return '--'
+    const components = name.split(' ')
+    if (components.length > 1) {
+        const first = components[0].substring(0, 1)
+        const second = components[1].substring(0, 1)
+        return (first + second).toUpperCase()
+    } else {
+        return name.substring(0, 2).toUpperCase()
+    }
+}
+
+/// Creates a deterministic color based on a provider name
+function colorFromProviderName(name) {
+    if (!name || name.length === 0) return '#4FD1FF'
+    let hash = 0
+    for (let i = 0; i < name.length; i++) {
+        hash = ((hash << 5) - hash) + name.charCodeAt(i)
+        hash = hash | 0
+    }
+    const hue = Math.abs(hash % 360) / 360.0
+    return Qt.hsla(hue, 0.75, 0.55, 1.0)
+}
+
 function formatFeeRate(fee_rate, network) {
     if (network && network.liquid) {
         return Math.round(fee_rate / 10) / 100 + ' sat/vbyte'

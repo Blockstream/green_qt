@@ -60,83 +60,79 @@ StackViewPage {
         }
     }
 
-    contentItem: Flickable {
-        clip: true
-        contentHeight: layout.height
-        ScrollIndicator.vertical: ScrollIndicator {
+    contentItem: VFlickable {
+        alignment: Qt.AlignTop
+        spacing: 5
+        FieldTitle {
+            text: qsTrId('id_asset')
         }
-        ColumnLayout {
-            id: layout
-            width: self.contentItem.width
-            FieldTitle {
-                text: qsTrId('id_asset')
-            }
-            AssetField {
-                Layout.fillWidth: true
-                id: asset_field
-                asset: self.asset
-                anyLiquid: self.anyLiquid
-                anyAMP: self.anyAMP
-                editable: self.editableAsset
-                onClicked: {
-                    if (self.editableAsset) {
-                        self.StackView.view.push(asset_selector, {
-                            context: self.context,
-                            asset: asset_field.asset,
-                        })
-                    }
+        AssetField {
+            Layout.fillWidth: true
+            id: asset_field
+            asset: self.asset
+            anyLiquid: self.anyLiquid
+            anyAMP: self.anyAMP
+            editable: self.editableAsset
+            onClicked: {
+                if (self.editableAsset) {
+                    self.StackView.view.push(asset_selector, {
+                        context: self.context,
+                        asset: asset_field.asset,
+                    })
                 }
             }
-            FieldTitle {
-                Layout.topMargin: 15
-                text: 'Security Policy'
-            }
-            SinglesigButton {
-                type: 'p2wpkh'
-                tag: qsTrId('id_native_segwit')
-                title: qsTrId('id_standard')
-                description: qsTrId('id_cheaper_singlesig_option')
-                visible: self.asset && !self.asset.amp || self.anyLiquid
-            }
-            LightningButton {
-            }
-            SinglesigButton {
-                type: 'p2sh-p2wpkh'
-                tag: qsTrId('id_legacy_segwit')
-                title: qsTrId('id_legacy_segwit')
-                description: qsTrId('id_simple_portable_standard')
-                visible: !self.anyAMP && !self.asset?.amp && self.advanced
-            }
-            MultisigButton {
-                type: '2of2'
-                tag: qsTrId('id_2of2')
-                title: qsTrId('id_2fa_protected')
-                description: qsTrId('id_quick_setup_2fa_account_ideal')
-                visible: self.asset && !self.asset.amp || self.anyLiquid
-            }
-            MultisigButton {
-                id: multisig_2of3_button
-                type: '2of3'
-                tag: qsTrId('id_2of3')
-                title: qsTrId('id_2of3_with_2fa')
-                description: qsTrId('id_permanent_2fa_account_ideal_for')
-                visible: !self.anyAMP && (self.anyLiquid || self.advanced && self.asset?.networkKey !== 'liquid' && self.asset?.networkKey !== 'testnet-liquid') && !self.asset?.amp
-                action: Action {
-                    onTriggered: {
-                        self.StackView.view.push(select_recovery_key_page, {
-                            network: multisig_2of3_button.network,
-                            type: multisig_2of3_button.type,
-                        })
-                    }
+        }
+        FieldTitle {
+            Layout.topMargin: 15
+            text: 'Security Policy'
+        }
+        SinglesigButton {
+            type: 'p2wpkh'
+            tag: qsTrId('id_native_segwit')
+            title: qsTrId('id_standard')
+            description: qsTrId('id_cheaper_singlesig_option')
+            visible: self.asset && !self.asset.amp || self.anyLiquid
+        }
+        LightningButton {
+        }
+        SinglesigButton {
+            type: 'p2sh-p2wpkh'
+            tag: qsTrId('id_legacy_segwit')
+            title: qsTrId('id_legacy_segwit')
+            description: qsTrId('id_simple_portable_standard')
+            visible: !self.anyAMP && !self.asset?.amp && self.advanced
+        }
+        MultisigButton {
+            type: '2of2'
+            tag: qsTrId('id_2of2')
+            title: qsTrId('id_2fa_protected')
+            description: qsTrId('id_quick_setup_2fa_account_ideal')
+            visible: self.asset && !self.asset.amp || self.anyLiquid
+        }
+        MultisigButton {
+            id: multisig_2of3_button
+            type: '2of3'
+            tag: qsTrId('id_2of3')
+            title: qsTrId('id_2of3_with_2fa')
+            description: qsTrId('id_permanent_2fa_account_ideal_for')
+            visible: !self.anyAMP && (self.anyLiquid || self.advanced && self.asset?.networkKey !== 'liquid' && self.asset?.networkKey !== 'testnet-liquid') && !self.asset?.amp
+            action: Action {
+                onTriggered: {
+                    self.StackView.view.push(select_recovery_key_page, {
+                        network: multisig_2of3_button.network,
+                        type: multisig_2of3_button.type,
+                    })
                 }
             }
-            MultisigButton {
-                type: '2of2_no_recovery'
-                tag: qsTrId('id_amp')
-                title: qsTrId('id_amp')
-                description: qsTrId('id_account_for_special_assets')
-                visible: self.anyLiquid || self.anyAMP || self.asset?.amp || self.advanced && self.asset?.networkKey === 'liquid'
-            }
+        }
+        MultisigButton {
+            type: '2of2_no_recovery'
+            tag: qsTrId('id_amp')
+            title: qsTrId('id_amp')
+            description: qsTrId('id_account_for_special_assets')
+            visible: self.anyLiquid || self.anyAMP || self.asset?.amp || self.advanced && self.asset?.networkKey === 'liquid'
+        }
+        VSpacer {
         }
     }
     footer: Pane {
@@ -243,8 +239,8 @@ StackViewPage {
                 }
                 LinkButton {
                     Layout.alignment: Qt.AlignCenter
-                    text: 'https://blockstream.com/green'
-                    onClicked: Qt.openUrlExternally('https://blockstream.com/green')
+                    text: 'https://blockstream.com/app'
+                    onClicked: Qt.openUrlExternally('https://blockstream.com/app')
                 }
                 VSpacer {
                 }

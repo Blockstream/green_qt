@@ -43,8 +43,8 @@ AbstractButton {
         }
         Label {
             Layout.fillWidth: true
-            font.pixelSize: 14
-            font.weight: 500
+            font.pixelSize: 16
+            font.weight: 600
             text: {
                 if (self.anyLiquid) return 'Receive any Liquid Asset'
                 if (self.anyAMP) return 'Receive any AMP Asset'

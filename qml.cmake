@@ -109,6 +109,7 @@ SET(QML_FILES
     qml/MainPageHeader.qml
     qml/LedgerSignTransactionView.qml
     qml/AssetIcon.qml
+    qml/ProviderIcon.qml
     qml/AuthHandlerTaskView.qml
     qml/GetCredentialsView.qml
     qml/TaskDispatcherInspector.qml
@@ -143,6 +144,11 @@ SET(QML_FILES
     qml/PriceCard.qml
     qml/FeeRateCard.qml
     qml/CardBar.qml
+    qml/BuyDrawer.qml
+    qml/BuyPage.qml
+    qml/BuyWebViewPage.qml
+    qml/CountrySelectorPage.qml
+    qml/QuotesListPage.qml
     qml/LineChart.qml
     qml/StackViewPage.qml
     qml/SelectRecoveryKeyPage.qml

@@ -17,9 +17,13 @@ AbstractButton {
     icon.source: self.network.electrum ? 'qrc:/svg2/singlesig.svg' : 'qrc:/svg2/multisig.svg'
     text: self.network.electrum ? 'singlesig' : 'multisig'
     padding: 20
-    background: Rectangle {
-        color: Qt.lighter('#222226', self.enabled && self.hovered ? 1.1 : 1)
-        radius: 5
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: self.visualFocus ? 4 : 0
+            color: Qt.lighter('#181818', self.enabled && self.hovered ? 1.1 : 1)
+            radius: self.visualFocus ? 1 : 5
+        }
         Image {
             anchors.top: parent.top
             anchors.right: parent.right
@@ -30,9 +34,8 @@ AbstractButton {
             border.width: 2
             border.color: '#00BCFF'
             color: 'transparent'
-            radius: 9
+            radius: 5
             anchors.fill: parent
-            anchors.margins: -4
             visible: self.visualFocus
         }
     }

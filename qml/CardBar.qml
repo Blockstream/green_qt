@@ -65,7 +65,18 @@ Pane {
             Layout.alignment: Qt.AlignCenter
             spacing: 5
             PrimaryButton {
-                Layout.minimumWidth: 150
+                Layout.minimumWidth: 100
+                icon.source: 'qrc:/svg/coin.svg'
+                text: 'Buy Bitcoin'
+                action: Action {
+                    onTriggered: {
+                        const drawer = buy_bitcoin_drawer_component.createObject(self, { context: self.context })
+                        drawer.open()
+                    }
+                }
+            }
+            PrimaryButton {
+                Layout.minimumWidth: 100
                 icon.source: 'qrc:/svg/send.svg'
                 text: qsTrId('id_send')
                 action: Action {
@@ -75,7 +86,7 @@ Pane {
                 }
             }
             PrimaryButton {
-                Layout.minimumWidth: 150
+                Layout.minimumWidth: 100
                 icon.source: 'qrc:/svg/receive.svg'
                 text: qsTrId('id_receive')
                 action: Action {
@@ -91,6 +102,11 @@ Pane {
                     // }
                 }
             }
+        }
+    }
+    Component {
+        id: buy_bitcoin_drawer_component
+        BuyDrawer {
         }
     }
     // Image {

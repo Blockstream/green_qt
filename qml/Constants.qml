@@ -41,8 +41,4 @@ QtObject {
     property int s1: 12
     property int s2: 24
     property int s3: 36
-
-    // urls
-    property string supportUrl: "https://docs.blockstream.com/green/support.html"
-    property string downloadUrl: "https://blockstream.com/green/"
 }

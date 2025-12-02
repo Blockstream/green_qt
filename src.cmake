@@ -97,6 +97,7 @@ SET(TARGET_SOURCES
         src/requestsupportcontroller.h src/requestsupportcontroller.cpp
         src/breakpad.cpp
         src/chartpriceservice.h src/chartpriceservice.cpp
+        src/buybitcoinquoteservice.h src/buybitcoinquoteservice.cpp
 )
 
 if (WIN32)

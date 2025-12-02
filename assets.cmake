@@ -100,6 +100,7 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg/warning.svg
         assets/svg/warning_black.svg
         assets/svg/x.svg
+        assets/svg/coin.svg
 
         assets/png/jade_0.png
         assets/png/jade_1.png
@@ -252,6 +253,7 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg3/Warning-yellow.svg
         assets/svg3/Graphic-card.svg
         assets/svg3/Stamp.svg
+        assets/svg3/arrow-line-up-right.svg
 
         assets/svg/blockstream.svg
         assets/svg/menu-home.svg
