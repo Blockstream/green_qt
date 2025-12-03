@@ -33,4 +33,3 @@ macos-universal-shared:staple:
     - tools/packdmg.sh Blockstream.app
     - tools/macos-staple.sh Blockstream.dmg
     - mv Blockstream.app Blockstream.dmg macos-universal-shared/
-  when: on_success
