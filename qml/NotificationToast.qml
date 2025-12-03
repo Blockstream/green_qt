@@ -651,24 +651,27 @@ ColumnLayout {
                     color: toast.textColor
                     font.pixelSize: 13
                     font.weight: 400
-                    text: 'A new version is available. Please update to continue using the app.'
+                    text: toast.notification.version
+                          ? 'Version %1 is available. Please update to continue using the app.'
+                                .arg(toast.notification.version)
+                          : 'A new version is available. Please update to continue using the app.'
                     wrapMode: Label.WordWrap
                 }
                 PrimaryButton {
-                        borderColor: '#FFFFFF'
-                        fillColor: '#FFFFFF'
-                        textColor: '#000000'
-                        font.pixelSize: 12
-                        font.weight: 600
-                        text: 'Update'
-                        padding: 6
-                        leftPadding: 10
-                        rightPadding: 10
-                        topPadding: 6
-                        bottomPadding: 6
-                        Layout.topMargin: 6
-                        onClicked: toast.notification.trigger()
-                    }
+                    Layout.topMargin: 6
+                    borderColor: '#FFFFFF'
+                    fillColor: '#FFFFFF'
+                    textColor: '#000000'
+                    font.pixelSize: 12
+                    font.weight: 600
+                    text: 'Update'
+                    padding: 6
+                    leftPadding: 10
+                    rightPadding: 10
+                    topPadding: 6
+                    bottomPadding: 6
+                    onClicked: Qt.openUrlExternally('https://blockstream.com/app/')
+                }
             }
             CloseButton {
                 Layout.alignment: Qt.AlignTop
