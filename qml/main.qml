@@ -84,26 +84,33 @@ ApplicationWindow {
         }
     }
 
-    property bool splashDone: false
-    function pushAppPage() {
-        if (!consent_dialog.visible && window.splashDone) {
-            app_page.active = true
-        }
-    }
-
     Loader {
         id: app_page
         active: false
         visible: false
         asynchronous: true
         onLoaded: stack_view.replace(null, app_page.item, StackView.PushTransition)
-        sourceComponent: AppPage {
-            StackView.onActivated: controller.reportCrashes()
-            StackView.onDeactivated: app_page.active = false
-            onCrashClicked: controller.triggerCrash()
+        source: "AppPage.qml"
+    }
+
+    Connections {
+        enabled: app_page.status === Loader.Ready
+        target: app_page.item ?? null
+        function onCrashClicked() {
+            controller.triggerCrash()
         }
     }
 
+    Connections {
+        enabled: app_page.status === Loader.Ready
+        target: app_page.item?.StackView ?? null
+        function onActivated() {
+            controller.reportCrashes()
+        }
+        function onDeactivated() {
+            app_page.active = false
+        }
+    }
 
     Component {
         id: analytics_consent_page
