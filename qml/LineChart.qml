@@ -412,8 +412,11 @@ Page {
                     fillGradient: LinearGradient {
                         x1: 0; y1: 0
                         x2: 0; y2: chartArea.plotHeight
-                        GradientStop { position: 0.0; color: root.fillColor }
-                        GradientStop { position: 1.0; color: Qt.rgba(0.0, 0.737, 1.0, 0.0) }
+                        GradientStop { position: 0.0; color: Qt.rgba(0.0, 0.75, 1.0, 0.35) }
+                        GradientStop { position: 0.15; color: Qt.rgba(0.0, 0.65, 0.95, 0.25) }
+                        GradientStop { position: 0.4; color: Qt.rgba(0.0, 0.55, 0.9, 0.12) }
+                        GradientStop { position: 0.7; color: Qt.rgba(0.0, 0.45, 0.85, 0.04) }
+                        GradientStop { position: 1.0; color: Qt.rgba(0.0, 0.4, 0.8, 0.0) }
                     }
                     PathSvg { path: buildAreaPath }
                 }
@@ -495,25 +498,74 @@ Page {
             readonly property var pt: (idx >= 0 && idx < root.scaledPoints.length) ? root.scaledPoints[idx] : null
             readonly property var pointData: (idx >= 0 && idx < root.pairCount) ? root.pairAt(idx) : null
 
-            Rectangle {
-                visible: hoverLayer.active
-                x: chartArea.axisWidth + hoverLayer.plotX - width / 2
+            Item {
+                visible: hoverLayer.active && hoverLayer.pt !== null
+                x: chartArea.axisWidth + hoverLayer.plotX - 0.5
                 y: 0
-                width: 1
+                width: 0
                 height: chartArea.plotHeight
-                color: '#4DFFFFFF'
+                Rectangle {
+                    width: 1
+                    height: hoverLayer.pt?.y ?? 0
+                    y: 0
+                    gradient: Gradient {
+                        GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.0) }
+                        GradientStop { position: 0.5; color: Qt.rgba(1, 1, 1, 0.15) }
+                        GradientStop { position: 1.0; color: Qt.rgba(1, 1, 1, 0.5) }
+                    }
+                }
+                Rectangle {
+                    width: 1
+                    height: hoverLayer.pt ? (chartArea.plotHeight - hoverLayer.pt.y) : 0
+                    y: hoverLayer.pt?.y ?? 0
+                    gradient: Gradient {
+                        GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.5) }
+                        GradientStop { position: 0.5; color: Qt.rgba(1, 1, 1, 0.15) }
+                        GradientStop { position: 1.0; color: Qt.rgba(1, 1, 1, 0.0) }
+                    }
+                }
             }
 
-            Rectangle {
+            Item {
                 visible: hoverLayer.active && hoverLayer.pt !== null
-                width: 8
-                height: 8
-                radius: 4
-                x: hoverLayer.pt !== null ? chartArea.axisWidth + hoverLayer.pt.x - width / 2 : 0
-                y: hoverLayer.pt !== null ? hoverLayer.pt.y - height / 2 : 0
-                color: '#00BCFF'
-                border.width: 2
-                border.color: '#181818'
+                x: chartArea.axisWidth + (hoverLayer.pt?.x ?? 0)
+                y: hoverLayer.pt?.y ?? 0
+                width: 0
+                height: 0
+
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: 20
+                    height: 20
+                    radius: 10
+                    color: 'transparent'
+                    border.width: 1.5
+                    border.color: '#00BCFF'
+                    opacity: 0
+
+                    SequentialAnimation on opacity {
+                        running: hoverLayer.active && hoverLayer.pt !== null
+                        loops: Animation.Infinite
+                        NumberAnimation { from: 0.8; to: 0; duration: 1000; easing.type: Easing.OutQuad }
+                        PauseAnimation { duration: 200 }
+                    }
+
+                    SequentialAnimation on scale {
+                        running: hoverLayer.active && hoverLayer.pt !== null
+                        loops: Animation.Infinite
+                        NumberAnimation { from: 0.5; to: 1.5; duration: 1000; easing.type: Easing.OutQuad }
+                        PauseAnimation { duration: 200 }
+                    }
+                }
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: 8
+                    height: 8
+                    radius: 4
+                    color: '#00BCFF'
+                    border.width: 2
+                    border.color: '#181818'
+                }
             }
 
             Rectangle {
