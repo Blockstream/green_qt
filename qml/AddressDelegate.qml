@@ -83,7 +83,8 @@ ItemDelegate {
             Layout.minimumWidth: 150
             Label {
                 Layout.alignment: Qt.AlignRight
-                font.pixelSize: 10
+                font.capitalization: Font.AllUppercase
+                font.pixelSize: 12
                 font.weight: 700
                 topPadding: 2
                 bottomPadding: 2

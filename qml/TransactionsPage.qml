@@ -115,6 +115,13 @@ Page {
                             model: coin_model
                         }
                     }
+                    FilterButton {
+                        text: qsTrId('id_asset')
+                        popup: AssetFilterPopup {
+                            context: self.context
+                            model: coin_model
+                        }
+                    }
                     LinkButton {
                         text: qsTrId('id_export')
                     }

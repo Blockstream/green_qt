@@ -40,29 +40,48 @@ ItemDelegate {
             Layout.alignment: Qt.AlignCenter
             asset: output.asset
         }
-        ColumnLayout {
-            Flow {
-                Layout.fillWidth: true
-                spacing: 10
-                Repeater {
-                    model: self.tags
-                    delegate: Tag2 {
-                        text: modelData.name
-                        color: modelData.color ?? 'white'
-                    }
-                }
-            }
+        RowLayout {
+            Layout.fillWidth: false
+            Layout.maximumWidth: self.width / 7
+            Layout.minimumWidth: self.width / 7
+            Layout.preferredWidth: 0
             Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 12
-                font.weight: 400
-                color: '#929292'
-                text: self.output.data.txhash + ':' + self.output.data.pt_idx
-                wrapMode: Label.Wrap
+                Layout.maximumWidth: parent.width
+                elide: Label.ElideRight
+                leftPadding: 8
+                rightPadding: 8
+                bottomPadding: 4
+                topPadding: 4
+                background: Rectangle {
+                    radius: 4
+                    color: UtilJS.networkColor(self.output.account.network)
+                }
+                font.weight: 600
+                text: UtilJS.accountName(self.output.account)
+            }
+            HSpacer {
+            }
+        }
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            font.pixelSize: 14
+            font.weight: 400
+            color: '#929292'
+            elide: Label.ElideMiddle
+            text: self.output.data.txhash + ':' + self.output.data.pt_idx
+        }
+        Repeater {
+            model: self.tags
+            delegate: Tag2 {
+                text: modelData.name
+                color: modelData.color ?? 'white'
             }
         }
         ColumnLayout {
+            Layout.maximumWidth: self.width / 6
+            Layout.minimumWidth: self.width / 6
+            Layout.fillWidth: false
             Convert {
                 id: convert
                 account: self.output.account
@@ -72,8 +91,7 @@ ItemDelegate {
             }
             Label {
                 Layout.alignment: Qt.AlignRight
-                font.family: 'Roboto Mono'
-                font.features: { 'calt': 0, 'zero': 1 }
+                color: '#00BCFF'
                 font.pixelSize: 14
                 font.weight: 600
                 text: UtilJS.incognito(Settings.incognito, convert.output.label)
@@ -81,10 +99,8 @@ ItemDelegate {
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: '#929292'
-                font.family: 'Roboto Mono'
-                font.features: { 'calt': 0, 'zero': 1 }
-                font.pixelSize: 14
-                font.weight: 600
+                font.pixelSize: 12
+                font.weight: 400
                 text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
                 visible: convert.fiat.available
             }
@@ -104,12 +120,16 @@ ItemDelegate {
 
     component Tag2: Tag {
         background: Rectangle {
-            color: Qt.alpha('#FFF', 0.4)
-            border.width: 1
-            border.color: Qt.alpha('#FFF', 0.6)
-            radius: height / 2
+            radius:  2
+            color: '#68727D'
         }
-        color: 'white'
         font.capitalization: Font.AllUppercase
+        font.pixelSize: 12
+        font.weight: 700
+        topPadding: 2
+        bottomPadding: 2
+        leftPadding: 6
+        rightPadding: 6
+        text: localizedLabel(self.address.type)
     }
 }

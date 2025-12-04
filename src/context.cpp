@@ -890,6 +890,8 @@ bool CoinModel::filterAcceptsRow(int source_row, const QModelIndex& source_paren
 {
     auto coin = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Output*>();
 
+    if (!filterAccountsAcceptsCoin(coin)) return false;
+    if (!filterAssetsAcceptsCoin(coin)) return false;
     if (!filterTextAcceptsCoin(coin)) return false;
 
     return ContextModel::filterAcceptsRow(source_row, source_parent);
@@ -901,6 +903,30 @@ void CoinModel::update(Context* context)
     connect(context, &Context::coinUpdated, this, [=] {
         sort(0, Qt::DescendingOrder);
     });
+}
+
+bool CoinModel::filterAccountsAcceptsCoin(Output* coin) const
+{
+    if (m_filter_accounts.isEmpty()) return true;
+
+    for (auto account : m_filter_accounts) {
+        if (coin->account() == account) return true;
+    }
+
+    return false;
+}
+
+bool CoinModel::filterAssetsAcceptsCoin(Output* coin) const
+{
+    if (m_filter_assets.isEmpty()) return true;
+
+    for (auto asset : m_filter_assets) {
+        if (coin->asset() == asset) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool CoinModel::filterTextAcceptsCoin(Output* coin) const

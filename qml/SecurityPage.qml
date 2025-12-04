@@ -13,7 +13,7 @@ Page {
     property bool backupCompleted: Settings.isEventRegistered({ walletId: self.context.xpubHashId, result: 'completed', type: 'wallet_backup' })
     readonly property JadeDevice jadeDevice: self.context?.device instanceof JadeDevice ? self.context.device : null
     
-    readonly property bool deviceReady: (self.jadeDevice?.connected && 'BOARD_TYPE' in self.jadeDevice?.versionInfo)
+    readonly property bool deviceReady: (self.jadeDevice?.connected && 'BOARD_TYPE' in self.jadeDevice?.versionInfo) ?? false
     
     Component.onCompleted: {
         if (self.jadeDevice) {

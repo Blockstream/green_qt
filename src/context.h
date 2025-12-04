@@ -260,7 +260,9 @@ protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     void update(Context* context) override;
 private:
-    bool filterTextAcceptsCoin(Output* address) const;
+    bool filterAccountsAcceptsCoin(Output* coin) const;
+    bool filterAssetsAcceptsCoin(Output* coin) const;
+    bool filterTextAcceptsCoin(Output* coin) const;
 };
 
 class LimitModel : public QSortFilterProxyModel

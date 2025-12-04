@@ -116,7 +116,7 @@ ItemDelegate {
             rightPadding: 0
             text: UtilJS.accountName(account)
             enabled: {
-                // if (!delegate.ListView.isCurrentItem) return false
+                if (delegate.highlighted) return false
                 if (delegate.account.hidden) return false
                 if (delegate.account.context.watchonly) return false
                 if (delegate.account.session.config.twofactor_reset?.is_active ?? false) return false
