@@ -162,9 +162,8 @@ AbstractDrawer {
                     }
                 }
             }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/right.svg'
+            RightArrowIndicator {
+                active: button.hovered
             }
         }
     }
@@ -196,9 +195,8 @@ AbstractDrawer {
                 Layout.alignment: Qt.AlignCenter
                 source: button.device.vendor === Device.Blockstream ? 'qrc:/svg2/jade-logo.svg' : 'qrc:/svg2/ledger-logo.svg'
             }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/right.svg'
+            RightArrowIndicator {
+                active: button.hovered
             }
         }
     }

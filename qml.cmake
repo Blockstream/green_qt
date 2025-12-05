@@ -281,6 +281,7 @@ SET(QML_FILES
     qml/AccountSelectorPage.qml
     qml/AssetSelectorPage.qml
     qml/AccountAssetPage.qml
+    qml/RightArrowIndicator.qml
 )
 
 if (GREEN_NO_RESOURCES)

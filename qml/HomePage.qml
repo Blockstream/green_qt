@@ -267,10 +267,8 @@ Page {
                     visible: Number(convert.result.satoshi ?? '0') !== 0
                 }
             }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                Layout.leftMargin: 10
-                source: 'qrc:/svg2/right.svg'
+            RightArrowIndicator {
+                active: delegate.hovered
             }
         }
     }

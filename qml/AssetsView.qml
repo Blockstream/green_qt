@@ -143,10 +143,8 @@ Pane {
                     visible: convert.fiat.available
                 }
             }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                Layout.leftMargin: 10
-                source: 'qrc:/svg2/right.svg'
+            RightArrowIndicator {
+                active: button.hovered
             }
         }
     }

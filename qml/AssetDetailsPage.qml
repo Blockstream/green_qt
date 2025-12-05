@@ -268,10 +268,8 @@ StackViewPage {
                     visible: convert.fiat.available
                 }
             }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/right.svg'
-                opacity: button.enabled ? 1 : 0
+            RightArrowIndicator {
+                active: button.hovered
             }
         }
     }
