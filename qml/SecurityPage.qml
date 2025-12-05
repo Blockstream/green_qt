@@ -10,7 +10,7 @@ Page {
     id: self
     background: null
     
-    property bool backupCompleted: Settings.isEventRegistered({ walletId: self.context.xpubHashId, result: 'completed', type: 'wallet_backup' })
+    property bool backupCompleted: !Settings.isEventRegistered({ walletId: self.context.xpubHashId, status: 'pending', type: 'wallet_backup' })
     readonly property JadeDevice jadeDevice: self.context?.device instanceof JadeDevice ? self.context.device : null
     
     readonly property bool deviceReady: (self.jadeDevice?.connected && 'BOARD_TYPE' in self.jadeDevice?.versionInfo) ?? false
@@ -91,7 +91,7 @@ Page {
     Connections {
         target: Settings
         function onRegisteredEventsCountChanged() {
-            self.backupCompleted = Settings.isEventRegistered({ walletId: self.context.xpubHashId, result: 'completed', type: 'wallet_backup' })
+            self.backupCompleted = !Settings.isEventRegistered({ walletId: self.context.xpubHashId, status: 'pending', type: 'wallet_backup' })
         }
     }
 

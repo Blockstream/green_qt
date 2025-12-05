@@ -30,9 +30,9 @@ Pane {
             self.backupCompleted = true
             return
         }
-        self.backupCompleted = Settings.isEventRegistered({
+        self.backupCompleted = !Settings.isEventRegistered({
             walletId: context.xpubHashId,
-            result: 'completed',
+            status: 'pending',
             type: 'wallet_backup'
         })
     }

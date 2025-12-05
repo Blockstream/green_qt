@@ -436,12 +436,13 @@ void Context::checkAndAddBackupWarningNotification()
     }
     
     auto settings = Settings::instance();
-    QJsonObject event;
-    event["walletId"] = m_xpub_hash_id;
-    event["result"] = "completed";
-    event["type"] = "wallet_backup";
+    const auto event = QJsonObject{
+        { "walletId", m_xpub_hash_id },
+        { "status", "pending" },
+        { "type", "wallet_backup" }
+    };
     
-    if (settings->isEventRegistered(event)) {
+    if (!settings->isEventRegistered(event)) {
         return; 
     }
     

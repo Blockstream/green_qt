@@ -23,6 +23,7 @@ StackViewPage {
         mnemonic: self.mnemonic
         onRegisterFinished: (context) => {
             Settings.acceptTermsOfService()
+            Settings.registerEvent({ walletId: context.xpubHashId, status: 'pending', type: 'wallet_backup' })
             self.registerFinished(context)
         }
     }

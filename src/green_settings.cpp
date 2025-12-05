@@ -187,6 +187,16 @@ void Settings::registerEvent(const QJsonObject& event)
     }
 }
 
+void Settings::unregisterEvent(const QJsonObject& event)
+{
+    const auto id = Sha256(event);
+    if (m_registered_events.contains(id)) {
+        m_registered_events.removeOne(id);
+        saveLater();
+        emit registeredEventsCountChanged();
+    }
+}
+
 void Settings::toggleRememberDevices()
 {
     setRememberDevices(!m_remember_devices);

@@ -92,6 +92,7 @@ public:
     QStringList promosDismissed() const { return m_promos_dismissed; }
     Q_INVOKABLE bool isEventRegistered(const QJsonObject& event);
     Q_INVOKABLE void registerEvent(const QJsonObject& event);
+    Q_INVOKABLE void unregisterEvent(const QJsonObject& event);
     int registeredEventsCount() const { return m_registered_events.size(); }
 public slots:
     void updateRecentWallet(const QString& id);

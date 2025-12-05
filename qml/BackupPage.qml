@@ -172,7 +172,7 @@ Page {
 
             onCompletedChanged: {
                 if (backup_check_page_instance.completed) {
-                    Settings.registerEvent({ walletId: backup_check_page_instance.context.xpubHashId, result: 'completed', type: 'wallet_backup' })
+                    Settings.unregisterEvent({ walletId: backup_check_page_instance.context.xpubHashId, status: 'pending', type: 'wallet_backup' })
                     const sv = backup_check_page_instance.StackView.view
                     if (sv) {
                         sv.push(backup_complete_page)

@@ -222,7 +222,6 @@ MainPage {
         id: restore_check_page
         RestoreCheckPage {
             onRestoreFinished: (context) => {
-                Settings.registerEvent({ walletId: context.xpubHashId, result: 'completed', type: 'wallet_backup' })
                 self.wallet = context.wallet
                 stack_view.push(setup_pin_page, { context })
             }
