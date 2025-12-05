@@ -78,9 +78,12 @@ Pane {
             delegate: AssetButton {
                 required property var modelData
                 Layout.fillWidth: true
+                Layout.maximumHeight: 60
+                Layout.minimumHeight: 60
                 id: delegate
                 asset: delegate.modelData.asset
                 satoshi: delegate.modelData.satoshi
+                onClicked: self.assetClicked(delegate.asset)
             }
         }
     }
@@ -95,7 +98,6 @@ Pane {
             input: ({ satoshi: button.satoshi })
             unit: self.context.primarySession.unit
         }
-        onClicked: self.assetClicked(button.asset)
         id: button
         leftPadding: 24
         rightPadding: 24
