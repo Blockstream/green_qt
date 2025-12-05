@@ -14,7 +14,10 @@ Rectangle {
     color: iconColor
     
     Label {
-        anchors.centerIn: parent
+        anchors.fill: parent
+        topPadding: 1
+        horizontalAlignment: Label.AlignHCenter
+        verticalAlignment: Label.AlignVCenter
         color: '#FFFFFF'
         font.pixelSize: Math.max(8, provider_icon.width * 0.5)
         font.weight: 600

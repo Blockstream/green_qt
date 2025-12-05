@@ -86,6 +86,7 @@ StackViewPage {
         SearchField {
             Layout.fillWidth: true
             id: search_field
+            focus: true
             onTextChanged: page.filterCountries(text)
         }
         TListView {

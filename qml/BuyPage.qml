@@ -51,13 +51,13 @@ StackViewPage {
         padding: 8
         leftPadding: 12
         rightPadding: 12
-        topPadding: 6
-        bottomPadding: 6
+        topPadding: 8
+        bottomPadding: 8
         background: Rectangle {
-            color: '#222226'
+            color: Qt.lighter('#181818', parent.hovered ? 1.2 : 1)
             radius: 4
             border.width: 1
-            border.color: '#313131'
+            border.color: '#262626'
         }
         contentItem: RowLayout {
             spacing: 6
@@ -84,11 +84,12 @@ StackViewPage {
         alignment: Qt.AlignTop
         Label {
             Layout.topMargin: 8
+            Layout.bottomMargin: 8
             Layout.leftMargin: 2
             color: '#A0A0A0'
             font.pixelSize: 14
             font.weight: 500
-            text: 'Amount'
+            text: qsTrId('id_amount')
         }
         TextField {
             id: amount_input
@@ -178,7 +179,8 @@ StackViewPage {
         }
         RowLayout {
             Layout.fillWidth: true
-            spacing: 8
+            Layout.topMargin: 12
+            spacing: 12
             Repeater {
                 model: self.defaultAmounts
                 delegate: AbstractButton {
@@ -191,7 +193,7 @@ StackViewPage {
                     topPadding: 10
                     bottomPadding: 10
                     background: Rectangle {
-                        color: parent.selected ? '#062F4A' : '#181818'
+                        color: parent.selected ? '#062F4A' : Qt.lighter('#181818', parent.hovered ? 1.2 : 1)
                         radius: 5
                         border.width: 1
                         border.color: parent.selected ? '#4FD1FF' : '#262626'
@@ -211,7 +213,24 @@ StackViewPage {
             }
         }
         Label {
-            Layout.topMargin: 12
+            Layout.topMargin: 24
+            Layout.bottomMargin: 8
+            Layout.leftMargin: 2
+            color: '#A0A0A0'
+            font.pixelSize: 14
+            font.weight: 500
+            text: qsTrId('id_account')
+        }
+        AccountAssetField {
+            Layout.fillWidth: true
+            account: self.account
+            asset: self.context.getOrCreateAsset('btc')
+            readonly: false
+            onClicked: self.StackView.view.push(null, account_selector_page)
+        }
+        Label {
+            Layout.topMargin: 24
+            Layout.bottomMargin: 8
             Layout.leftMargin: 2
             color: '#A0A0A0'
             font.pixelSize: 14
@@ -225,7 +244,7 @@ StackViewPage {
             Layout.preferredHeight: 50
             visible: (BuyBitcoinQuoteService.selectedServiceProvider.length > 0 || BuyBitcoinQuoteService.bestServiceProvider.length > 0) && (BuyBitcoinQuoteService.selectedDestinationAmount > 0 || BuyBitcoinQuoteService.bestDestinationAmount > 0)
             background: Rectangle {
-                color: parent.pressed ? '#1a1a1a' : '#181818'
+                color: Qt.lighter('#181818', parent.hovered ? 1.2 : 1)
                 radius: 5
                 border.width: 1
                 border.color: '#262626'
@@ -268,57 +287,6 @@ StackViewPage {
                     quotes: quotes,
                     quoteService: BuyBitcoinQuoteService
                 })
-            }
-        }
-        AccountAssetField {
-            Layout.fillWidth: true
-            account: self.account
-            asset: self.context.getOrCreateAsset('btc')
-            readonly: false
-            onClicked: self.StackView.view.push(null, account_selector_page)
-        }
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: 8
-            Layout.leftMargin: 4
-            Label {
-                Layout.alignment: Qt.AlignVCenter
-                color: '#A0A0A0'
-                font.pixelSize: 14
-                text: 'Account'
-
-            }
-            HSpacer { }
-            AbstractButton {
-                id: account_selector_button
-                Layout.preferredWidth: 170
-                Layout.preferredHeight: 50
-                contentItem: RowLayout {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 10
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignVCenter
-                        color: '#FFFFFF'
-                        font.pixelSize: 14
-                        font.weight: 500
-                        text: self.account ? UtilJS.accountName(self.account) : 'Select Account'
-                        elide: Label.ElideRight
-                    }
-                    Image {
-                        Layout.preferredWidth: 12
-                        Layout.preferredHeight: 12
-                        Layout.alignment: Qt.AlignVCenter
-                        fillMode: Image.PreserveAspectFit
-                        source: 'qrc:/svg2/arrow_right.svg'
-                        opacity: 0.6
-                    }
-                }
             }
         }
         ReceiveAddressController {
