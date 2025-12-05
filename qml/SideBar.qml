@@ -108,22 +108,26 @@ Pane {
         }
         WalletSideButton {
             icon.source: 'qrc:/svg/menu-home.svg'
+            shortcut: 'Ctrl+1'
             text: qsTrId('id_home')
             view: OverviewPage.Home
         }
         WalletSideButton {
             icon.source: 'qrc:/svg/menu-transactions.svg'
+            shortcut: 'Ctrl+2'
             text: qsTrId('id_transactions')
             view: OverviewPage.Transactions
         }
         WalletSideButton {
             icon.source: 'qrc:/svg/menu-security.svg'
+            shortcut: 'Ctrl+3'
             text: qsTrId('id_security')
             view: OverviewPage.Security
             warningDot: !self.backupCompleted
         }
         WalletSideButton {
             icon.source: 'qrc:/svg/menu-settings.svg'
+            shortcut: 'Ctrl+4'
             text: qsTrId('id_settings')
             view: OverviewPage.Settings
         }
@@ -169,15 +173,21 @@ Pane {
             }
         }
         SideButton {
+            action: Action {
+                shortcut: 'Ctrl+0'
+                onTriggered: self.walletsClicked()
+            }
             icon.source: 'qrc:/svg/menu-wallet.svg'
             isCurrent: self.currentView === SideBar.View.Wallets
-            onClicked: self.walletsClicked()
             text: qsTrId('id_wallets')
         }
         SideButton {
+            action: Action {
+                shortcut: 'Ctrl+,'
+                onTriggered: self.preferencesClicked()
+            }
             icon.source: 'qrc:/svg2/gear.svg'
             isCurrent: self.currentView === SideBar.View.Preferences
-            onClicked: self.preferencesClicked()
             text: qsTrId('id_app_settings')
         }
     }
@@ -294,9 +304,14 @@ Pane {
 
     component WalletSideButton: SideButton {
         required property int view
+        required property string shortcut
         id: button
         isCurrent: self.currentOverviewPage?.view === button.view
         visible: !!self.currentOverviewPage
-        onClicked: self.currentView === SideBar.Wallet && self.currentOverviewPage.showView(button.view)
+        action: Action {
+            id: action
+            shortcut: button.shortcut
+            onTriggered: self.currentView === SideBar.Wallet && self.currentOverviewPage.showView(button.view)
+        }
     }
 }
