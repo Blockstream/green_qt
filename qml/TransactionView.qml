@@ -334,13 +334,13 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#FFF'
+                    elide: Label.ElideMiddle
                     font.family: 'Roboto Mono'
                     font.features: { 'calt': 0, 'zero': 1 }
                     font.pixelSize: 14
                     font.weight: 400
                     text: self.transaction.data.txhash
                     onCopyClicked: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
-                    wrapMode: Label.WrapAnywhere
                 }
             }
             LineSeparator {
