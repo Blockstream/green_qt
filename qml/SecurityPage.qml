@@ -521,7 +521,7 @@ Page {
                 }
             }
             Label {
-                text: 'Learn more'
+                text: qsTrId('id_learn_more')
                 font.pixelSize: 20
                 font.weight: 600
                 color: '#FFFFFF'
@@ -532,54 +532,33 @@ Page {
                 spacing: 24
                 InfoCard {
                     iconSource: 'qrc:/svg3/questions.svg'
-                    title: 'FAQ'
+                    title: 'FAQs'
                     description: 'Quick answers to common questions'
                     linkButtons: [
                         Component {
                             LinkButton {
-                                text: 'Why is my transaction slow?'
+                                text: 'What is a recovery phrase?'
                                 font.pixelSize: 14
+                                onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900001392563-What-is-a-recovery-phrase')
                             }
                         },
                         Component {
                             LinkButton {
-                                text: 'Why do I have to pay transaction fees?'
+                                text: 'How does the Blockstream app generate my recovery phrase?'
                                 font.pixelSize: 14
+                                onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/47242018755993-How-does-the-Blockstream-app-generate-my-recovery-phrase')
                             }
                         },
                         Component {
                             LinkButton {
-                                text: 'Why does my receive address change?'
+                                text: 'How is my software wallet security different than Jade\'s?'
                                 font.pixelSize: 14
+                                onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/52243836841369-How-is-my-software-wallet-security-different-than-Jade-s')
                             }
                         }
                     ]
                 }
-
-                InfoCard {
-                    iconSource: 'qrc:/svg3/key.svg'
-                    title: 'Key Terms'
-                    description: 'Important concepts for understanding your wallet'
-                    linkButtons: [
-                        Component {
-                            LinkButton {
-                                text: 'Recovery phrase'
-                                font.pixelSize: 14
-                            }
-                        },
-                        Component {
-                            LinkButton {
-                                text: 'Software vs Hardware wallet'
-                                font.pixelSize: 14
-                            }
-                        },
-                        Component {
-                            LinkButton {
-                                text: 'Network types'
-                                font.pixelSize: 14
-                            }
-                        }
-                    ]
+                HSpacer {
                 }
             }
             VSpacer {
