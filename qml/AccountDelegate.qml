@@ -90,6 +90,7 @@ ItemDelegate {
                     }
                     AssetIcon {
                         asset: modelData
+                        border: 1
                         size: 24
                         Rectangle {
                             anchors.fill: parent

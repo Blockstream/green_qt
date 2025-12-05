@@ -8,7 +8,7 @@ import "util.js" as UtilJS
 Image {
     property Asset asset
     property real size: 32
-    property real border: 1
+    property real border: 0
     property color borderColor: '#FFF'
     id: self
     source: UtilJS.iconFor(asset)

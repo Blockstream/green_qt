@@ -111,12 +111,11 @@ StackViewPage {
                 padding: 10
                 contentItem: RowLayout {
                     spacing: 10
-                    Image {
+                    AssetIcon {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.maximumWidth: 32
-                        Layout.maximumHeight: 32
-                        source: delegate.icon.source
+                        asset: delegate.asset
                         opacity: delegate.enabled ? 1 : 0.6
+                        size: 32
                     }
                     Label {
                         Layout.fillWidth: true
