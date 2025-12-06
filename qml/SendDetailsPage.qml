@@ -69,7 +69,6 @@ StackViewPage {
         alignment: Qt.AlignTop
         spacing: 10
         AlertView {
-            Layout.bottomMargin: 15
             alert: AnalyticsAlert {
                 screen: 'Send'
                 network: controller.account.network.id
@@ -98,7 +97,6 @@ StackViewPage {
             visible: controller.coins.length > 0
         }
         AbstractButton {
-            Layout.bottomMargin: 15
             Layout.fillWidth: true
             padding: 20
             visible: controller.coins.length > 0

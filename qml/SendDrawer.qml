@@ -67,6 +67,7 @@ WalletDrawer {
             alignment: Qt.AlignTop
             spacing: 5
             FieldTitle {
+                Layout.topMargin: 0
                 text: qsTrId('id_send_to')
             }
             GTextArea {
@@ -150,7 +151,6 @@ WalletDrawer {
                     visible: !controller.networks[0]?.liquid || !!controller.bip21?.assetid
                 }
                 FieldTitle {
-                    Layout.topMargin: 10
                     text: (controller.networks[0]?.displayName ?? '') + ' ' + qsTrId('id_address')
                 }
                 AddressLabel {
@@ -164,7 +164,6 @@ WalletDrawer {
                     }
                 }
                 FieldTitle {
-                    Layout.topMargin: 10
                     text: qsTrId('id_amount')
                     visible: amount_field.visible
                 }

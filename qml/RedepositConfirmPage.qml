@@ -78,7 +78,6 @@ StackViewPage {
                 readonly: true
             }
             FieldTitle {
-                Layout.topMargin: 15
                 text: qsTrId('id_your_redeposit_address')
             }
             Repeater {
@@ -144,7 +143,6 @@ StackViewPage {
                 }
             }
             FieldTitle {
-                Layout.topMargin: 15
                 text: qsTrId('id_note')
                 visible: self.note
             }

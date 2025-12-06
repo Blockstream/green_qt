@@ -19,6 +19,7 @@ StackViewPage {
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }
+    bottomPadding: 0
     footer: null
     contentItem: TListView {
         id: list_view
@@ -75,12 +76,8 @@ StackViewPage {
                     onClicked: self.receiveClicked()
                 }
             }
-            Label {
-                Layout.topMargin: 16
+            FieldTitle {
                 Layout.bottomMargin: 12
-                color: '#A0A0A0'
-                font.pixelSize: 16
-                font.weight: 400
                 text: qsTrId('id_transactions')
             }
         }
@@ -97,13 +94,7 @@ StackViewPage {
             onClicked: self.transactionClicked(delegate.transaction)
         }
         footer: Item {
-            implicitHeight: 20
-        }
-    }
-    VFlickable {
-        alignment: Qt.AlignTop
-
-        VSpacer {
+            implicitHeight: 0
         }
     }
 

@@ -72,7 +72,6 @@ StackViewPage {
             id: layout
             width: flickable.width
             AlertView {
-                Layout.bottomMargin: 15
                 alert: AnalyticsAlert {
                     screen: 'SendConfirm'
                     network: self.account.network.id
@@ -82,7 +81,6 @@ StackViewPage {
                 text: qsTrId('id_account__asset')
             }
             AccountAssetField {
-                Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 account: self.account
                 asset: self.asset
@@ -93,7 +91,6 @@ StackViewPage {
                 visible: !self.bumpRedeposit
             }
             AddressLabel {
-                Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 address: self.recipient.address
                 background: Rectangle {

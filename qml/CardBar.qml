@@ -64,43 +64,32 @@ Pane {
         RowLayout {
             Layout.alignment: Qt.AlignCenter
             spacing: 5
-            PrimaryButton {
-                Layout.minimumWidth: 100
+            TransactButton {
                 icon.source: 'qrc:/svg/coin.svg'
-                text: 'Buy Bitcoin'
+                text: 'Buy'
                 action: Action {
+                    shortcut: 'Ctrl+B'
                     onTriggered: {
                         const drawer = buy_bitcoin_drawer_component.createObject(self, { context: self.context })
                         drawer.open()
                     }
                 }
             }
-            PrimaryButton {
-                Layout.minimumWidth: 100
+            TransactButton {
                 icon.source: 'qrc:/svg/send.svg'
                 text: qsTrId('id_send')
-                action: Action {
-                    // enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
-                    shortcut: 'Ctrl+S'
-                    onTriggered: openSendDrawer()
-                }
+                action.shortcut: 'Ctrl+S'
+                action.onTriggered: openSendDrawer()
+                // TODO move to send page
+                // self.checkDeviceMatches() && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
             }
-            PrimaryButton {
-                Layout.minimumWidth: 100
+            TransactButton {
                 icon.source: 'qrc:/svg/receive.svg'
                 text: qsTrId('id_receive')
-                action: Action {
-                    // enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
-                    shortcut: 'Ctrl+R'
-                    onTriggered: openReceiveDrawer()
-                    //     const context = self.context
-                    //     const account = self.currentAccount
-                    //     const network = account.network
-                    //     const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
-                    //     const drawer = receive_drawer.createObject(self, { context, account, asset })
-                    //     drawer.open()
-                    // }
-                }
+                action.shortcut: 'Ctrl+R'
+                action.onTriggered: openReceiveDrawer()
+                // TODO move to receive page
+                // self.checkDeviceMatches() && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
             }
         }
     }
@@ -130,6 +119,14 @@ Pane {
     //         onTapped: flickable.flick(-2000, 0)
     //     }
     // }
+    component TransactButton: PrimaryButton {
+        Layout.minimumWidth: 150
+        action: Action {
+            enabled: UtilJS.effectiveVisible(self)
+        }
+        leftPadding: 8
+        rightPadding: 8
+    }
 
     component Separator: Rectangle {
         Layout.minimumWidth: 1

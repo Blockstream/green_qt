@@ -93,7 +93,6 @@ StackViewPage {
     }
     FieldTitle {
         Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 20
         visible: controller.mnemonicSize === 27
         text: qsTrId('id_please_provide_your_passphrase')
     }

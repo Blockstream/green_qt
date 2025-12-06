@@ -67,6 +67,7 @@ StackViewPage {
         alignment: Qt.AlignTop
         spacing: 5
         FieldTitle {
+            Layout.topMargin: 0
             text: qsTrId('id_account__asset')
         }
         AbstractButton {
@@ -103,7 +104,6 @@ StackViewPage {
             onClicked: self.StackView.view.push(account_asset_selector)
         }
         FieldTitle {
-            Layout.topMargin: 15
             text: qsTrId('id_account_address')
         }
         Pane {
@@ -178,7 +178,6 @@ StackViewPage {
             }
         }
         FieldTitle {
-            Layout.topMargin: 15
             text: qsTrId('id_request_amount')
             visible: amount_field.visible
         }

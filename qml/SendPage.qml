@@ -74,17 +74,17 @@ StackViewPage {
         alignment: Qt.AlignTop
         spacing: 5
         AlertView {
-            Layout.bottomMargin: 15
+            Layout.bottomMargin: 10
             alert: AnalyticsAlert {
                 screen: 'Send'
                 network: controller.account.network.id
             }
         }
         FieldTitle {
+            Layout.topMargin: 0
             text: qsTrId('id_account__asset')
         }
         AccountAssetField {
-            Layout.bottomMargin: 15
             Layout.fillWidth: true
             id: account_asset_field
             account: controller.account
@@ -103,7 +103,6 @@ StackViewPage {
             visible: controller.coins.length > 0
         }
         AbstractButton {
-            Layout.bottomMargin: 15
             Layout.fillWidth: true
             padding: 20
             visible: controller.coins.length > 0
@@ -162,7 +161,6 @@ StackViewPage {
             visible: !self.bumpRedeposit
         }
         AddressField {
-            Layout.bottomMargin: 15
             Layout.fillWidth: true
             id: address_field
             text: controller.recipient.address
@@ -181,7 +179,7 @@ StackViewPage {
             visible: !self.bumpRedeposit
         }
         ErrorPane {
-            Layout.topMargin: -30
+            Layout.topMargin: -15
             Layout.bottomMargin: 15
             error: address_field.error
             visible: !self.bumpRedeposit
@@ -191,7 +189,6 @@ StackViewPage {
             visible: !self.bumpRedeposit
         }
         AmountField {
-            Layout.bottomMargin: 15
             Layout.fillWidth: true
             id: amount_field
             readOnly: !!controller.previousTransaction
@@ -216,7 +213,7 @@ StackViewPage {
             onTextEdited: controller.recipient.greedy = false
         }
         ErrorPane {
-            Layout.topMargin: -30
+            Layout.topMargin: -15
             Layout.bottomMargin: 15
             error: amount_field.text.length > 0 || controller.recipient.greedy ? amount_field.error : null
             visible: !self.bumpRedeposit
@@ -229,7 +226,6 @@ StackViewPage {
             unit: controller.recipient.convert.unit
         }
         RowLayout {
-            Layout.bottomMargin: 15
             spacing: 10
             visible: !controller.previousTransaction
             Label {

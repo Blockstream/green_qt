@@ -83,7 +83,6 @@ StackViewPage {
             }
         }
         FieldTitle {
-            Layout.topMargin: 15
             text: 'Security Policy'
         }
         SinglesigButton {

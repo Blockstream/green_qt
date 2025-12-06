@@ -63,455 +63,449 @@ StackViewPage {
             onClicked: self.closeClicked()
         }
     }
-    contentItem: Flickable {
-        ScrollIndicator.vertical: ScrollIndicator {
-        }
-        id: flickable
-        clip: true
-        contentWidth: flickable.width
-        contentHeight: layout.height
-        ColumnLayout {
-            id: layout
-            spacing: 10
-            width: flickable.width
-            Item {
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: 96
-                Layout.preferredHeight: 96
-                Rectangle {
-                    anchors.centerIn: parent
-                    height: 72
-                    width: 72
-                    radius: 36
-                    color: self.tx_color
-                    ProgressIndicator {
-                        indeterminate: self.confirmations === 0
-                        current: self.confirmations <= (self.network.liquid ? 2 : 6) ? self.confirmations : 0
-                        max: self.network.liquid ? 2 : 6
-                        anchors.fill: parent
-                        anchors.margins: -1
+    contentItem: VFlickable {
+        alignment: Qt.AlignTop
+        spacing: 10
+        Item {
+            Layout.alignment: Qt.AlignCenter
+            Layout.preferredWidth: 96
+            Layout.preferredHeight: 96
+            Rectangle {
+                anchors.centerIn: parent
+                height: 72
+                width: 72
+                radius: 36
+                color: self.tx_color
+                ProgressIndicator {
+                    indeterminate: self.confirmations === 0
+                    current: self.confirmations <= (self.network.liquid ? 2 : 6) ? self.confirmations : 0
+                    max: self.network.liquid ? 2 : 6
+                    anchors.fill: parent
+                    anchors.margins: -1
+                }
+            }
+            Image {
+                anchors.centerIn: parent
+                source: `qrc:/svg2/tx-${transaction.data.type}.svg`
+                width: 32
+                height: 32
+            }
+            RowLayout {
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                visible: self.transaction.type !== Transaction.Mixed
+                Repeater {
+                    model: self.amounts
+                    delegate: AssetIcon {
+                        asset: modelData.asset
+                        border: 2
+                        borderColor: '#000'
                     }
                 }
-                Image {
-                    anchors.centerIn: parent
-                    source: `qrc:/svg2/tx-${transaction.data.type}.svg`
-                    width: 32
-                    height: 32
+            }
+        }
+        TransactionStatusBadge {
+            Layout.alignment: Qt.AlignCenter
+            confirmations: self.confirmations
+            transaction: self.transaction
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 24
+            font.weight: 600
+            text: {
+                const parts = []
+                if (self.transaction.type === Transaction.Mixed) {
+                    parts.push('Swap')
+                } else {
+                    parts.push('Transaction')
                 }
-                RowLayout {
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                    visible: self.transaction.type !== Transaction.Mixed
-                    Repeater {
-                        model: self.amounts
-                        delegate: AssetIcon {
-                            asset: modelData.asset
-                            border: 2
-                            borderColor: '#000'
+                return parts.join(' ')
+            }
+        }
+        TLabel {
+            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 14
+            font.weight: 400
+            color: '#929292'
+            text: UtilJS.formatTransactionTimestamp(self.transaction)
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            topPadding: 3
+            bottomPadding: 3
+            leftPadding: 8
+            rightPadding: 8
+            color: '#FFF'
+            font.pixelSize: 14
+            font.weight: 700
+            text: {
+                switch (self.transaction.type) {
+                    case Transaction.Incoming: return qsTrId('id_received')
+                    case Transaction.Outgoing: return qsTrId('id_sent')
+                    case Transaction.Redeposit: return qsTrId('id_redeposited')
+                    case Transaction.Mixed: return qsTrId('id_swap')
+                }
+            }
+            background: Rectangle {
+                color: self.tx_color
+                radius: height / 2
+            }
+        }
+        Repeater {
+            model: self.amounts
+            delegate: Pane {
+                required property var modelData
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: self.transaction.type === Transaction.Mixed
+                id: amount_pane
+                background: null
+                padding: 0
+                Convert {
+                    id: convert
+                    account: self.transaction.account
+                    asset: amount_pane.modelData.asset
+                    input: ({ satoshi: String(amount_pane.modelData.satoshi) })
+                    unit: self.transaction.account.session.unit
+                }
+                contentItem: RowLayout {
+                    AssetIcon {
+                        asset: amount_pane.modelData.asset
+                        visible: self.transaction.type === Transaction.Mixed
+                    }
+                    HSpacer {
+                        visible: self.transaction.type === Transaction.Mixed
+                    }
+                    ColumnLayout {
+                        spacing: 4
+                        TLabel {
+                            Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
+                            Layout.fillWidth: false
+                            copyText: convert.output.label
+                            font.family: 'Roboto Mono'
+                            font.features: { 'calt': 0, 'zero': 1 }
+                            font.pixelSize: 24
+                            font.weight: 500
+                            text: UtilJS.incognito(Settings.incognito, convert.output.label)
+                        }
+                        TLabel {
+                            Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
+                            font.family: 'Roboto Mono'
+                            font.features: { 'calt': 0, 'zero': 1 }
+                            font.pixelSize: 14
+                            font.weight: 400
+                            opacity: 0.6
+                            text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
+                            visible: convert.fiat.available
                         }
                     }
                 }
             }
-            TransactionStatusBadge {
-                Layout.alignment: Qt.AlignCenter
-                confirmations: self.confirmations
-                transaction: self.transaction
-            }
+        }
+        LineSeparator {
+            Layout.bottomMargin: 10
+            Layout.topMargin: 10
+        }
+        GridLayout {
+            rowSpacing: 10
+            columnSpacing: 20
+            columns: 2
             Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 24
-                font.weight: 600
-                text: {
-                    const parts = []
-                    if (self.transaction.type === Transaction.Mixed) {
-                        parts.push('Swap')
-                    } else {
-                        parts.push('Transaction')
-                    }
-                    return parts.join(' ')
-                }
-            }
-            TLabel {
-                Layout.alignment: Qt.AlignCenter
+                Layout.minimumWidth: 100
+                color: '#929292'
                 font.pixelSize: 14
                 font.weight: 400
-                color: '#929292'
-                text: UtilJS.formatTransactionTimestamp(self.transaction)
+                text: qsTrId('id_network_fee')
+            }
+            Convert {
+                id: fee_convert
+                account: self.transaction.account
+                input: ({ satoshi: self.transaction.data.fee })
+                unit: self.transaction.account.session.unit
+            }
+            RowLayout {
+                TLabel {
+                    topPadding: 4
+                    bottomPadding: 4
+                    color: '#FFF'
+                    font.family: 'Roboto Mono'
+                    font.features: { 'calt': 0, 'zero': 1 }
+                    font.pixelSize: 14
+                    font.weight: 400
+                    text: UtilJS.incognito(Settings.incognito, fee_convert.output.label)
+                }
+                TLabel {
+                    topPadding: 4
+                    bottomPadding: 4
+                    color: '#FFF'
+                    font.family: 'Roboto Mono'
+                    font.features: { 'calt': 0, 'zero': 1 }
+                    font.pixelSize: 14
+                    font.weight: 400
+                    opacity: 0.6
+                    text: UtilJS.incognito(Settings.incognito, '~ ' + fee_convert.fiat.label)
+                }
+                HSpacer {
+                }
             }
             Label {
-                Layout.alignment: Qt.AlignCenter
-                topPadding: 3
-                bottomPadding: 3
-                leftPadding: 8
-                rightPadding: 8
-                color: '#FFF'
+                color: '#929292'
                 font.pixelSize: 14
-                font.weight: 700
-                text: {
-                    switch (self.transaction.type) {
-                        case Transaction.Incoming: return qsTrId('id_received')
-                        case Transaction.Outgoing: return qsTrId('id_sent')
-                        case Transaction.Redeposit: return qsTrId('id_redeposited')
-                        case Transaction.Mixed: return qsTrId('id_swap')
-                    }
+                font.weight: 400
+                text: qsTrId('id_fee_rate')
+            }
+            RowLayout {
+                TLabel {
+                    topPadding: 4
+                    bottomPadding: 4
+                    color: '#FFF'
+                    font.family: 'Roboto Mono'
+                    font.features: { 'calt': 0, 'zero': 1 }
+                    font.pixelSize: 14
+                    font.weight: 400
+                    text: UtilJS.formatFeeRate(self.transaction.data.fee_rate, self.transaction.account.network)
                 }
-                background: Rectangle {
-                    color: self.tx_color
-                    radius: height / 2
+                HSpacer {
                 }
             }
-            Repeater {
-                model: self.amounts
-                delegate: Pane {
-                    required property var modelData
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: self.transaction.type === Transaction.Mixed
-                    id: amount_pane
-                    background: null
-                    padding: 0
-                    Convert {
-                        id: convert
-                        account: self.transaction.account
-                        asset: amount_pane.modelData.asset
-                        input: ({ satoshi: String(amount_pane.modelData.satoshi) })
-                        unit: self.transaction.account.session.unit
+            Label {
+                Layout.alignment: Qt.AlignTop
+                color: '#929292'
+                font.pixelSize: 14
+                font.weight: 400
+                text: {
+                    if (!self.network.liquid && self.transaction.type === Transaction.Outgoing) {
+                        return qsTrId('id_sent_to')
                     }
-                    contentItem: RowLayout {
-                        AssetIcon {
-                            asset: amount_pane.modelData.asset
-                            visible: self.transaction.type === Transaction.Mixed
+                    if (!self.network.liquid && self.transaction.type === Transaction.Incoming) {
+                        return qsTrId('id_received_on')
+                    }
+                    return ''
+                }
+                visible: address_label_repeater.count > 0
+            }
+            ColumnLayout {
+                visible: address_label_repeater.count > 0
+                Repeater {
+                    id: address_label_repeater
+                    model: {
+                        const account = self.transaction.account
+                        if (!self.network.liquid && self.transaction.type === Transaction.Outgoing) {
+                            return self.transaction.data.outputs
+                                .filter(output => !output.is_relevant)
+                                .map(output => account.getOrCreateAddress(output))
                         }
-                        HSpacer {
-                            visible: self.transaction.type === Transaction.Mixed
+                        if (!self.network.liquid && self.transaction.type === Transaction.Incoming) {
+                            return self.transaction.data.outputs
+                                .filter(output => output.is_relevant)
+                                .map(output => account.getOrCreateAddress(output))
                         }
-                        ColumnLayout {
+                        return []
+                    }
+                    delegate: AddressLabel {
+                        required property var modelData
+                        Layout.fillWidth: true
+                        id: delegate
+                        address: delegate.modelData
+                        copyEnabled: true
+                        elide: AddressLabel.ElideNone
+                        font.pixelSize: 14
+                        font.weight: 400
+                        horizontalAlignment: Text.AlignLeft
+                    }
+                }
+            }
+            Label {
+                Layout.alignment: Qt.AlignTop
+                color: '#929292'
+                font.pixelSize: 14
+                font.weight: 400
+                text: qsTrId('id_transaction_id')
+            }
+            TLabel {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                color: '#FFF'
+                elide: Label.ElideMiddle
+                font.family: 'Roboto Mono'
+                font.features: { 'calt': 0, 'zero': 1 }
+                font.pixelSize: 14
+                font.weight: 400
+                text: self.transaction.data.txhash
+                onCopyClicked: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
+            }
+        }
+        LineSeparator {
+            Layout.bottomMargin: 10
+            Layout.topMargin: 10
+            visible: self.transaction.type === Transaction.Outgoing
+        }
+        GridLayout {
+            rowSpacing: 10
+            columnSpacing: 20
+            columns: 2
+            visible: self.transaction.type === Transaction.Outgoing
+            Label {
+                Layout.alignment: Qt.AlignTop
+                Layout.minimumWidth: 100
+                color: '#929292'
+                font.pixelSize: 14
+                font.weight: 400
+                text: qsTrId('id_total_spent')
+            }
+            ColumnLayout {
+                Repeater {
+                    model: self.totals
+                    delegate: Pane {
+                        required property var modelData
+                        Layout.fillWidth: true
+                        id: total_pane
+                        background: null
+                        padding: 0
+                        Convert {
+                            id: total_convert
+                            account: self.transaction.account
+                            asset: total_pane.modelData.asset
+                            input: ({ satoshi: String(total_pane.modelData.satoshi) })
+                            unit: self.transaction.account.session.unit
+                        }
+                        contentItem: ColumnLayout {
                             spacing: 4
                             TLabel {
-                                Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
+                                Layout.alignment: Qt.AlignRight
                                 Layout.fillWidth: false
-                                copyText: convert.output.label
+                                copyText: total_convert.output.label
                                 font.family: 'Roboto Mono'
                                 font.features: { 'calt': 0, 'zero': 1 }
-                                font.pixelSize: 24
-                                font.weight: 500
-                                text: UtilJS.incognito(Settings.incognito, convert.output.label)
+                                font.pixelSize: 14
+                                font.weight: 400
+                                text: UtilJS.incognito(Settings.incognito, total_convert.output.label)
                             }
                             TLabel {
-                                Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
+                                Layout.alignment: Qt.AlignRight
                                 font.family: 'Roboto Mono'
                                 font.features: { 'calt': 0, 'zero': 1 }
                                 font.pixelSize: 14
                                 font.weight: 400
                                 opacity: 0.6
-                                text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
-                                visible: convert.fiat.available
+                                text: UtilJS.incognito(Settings.incognito, total_convert.fiat.label)
+                                visible: total_convert.fiat.available
                             }
                         }
                     }
                 }
             }
-            LineSeparator {
-                Layout.bottomMargin: 10
-                Layout.topMargin: 10
-            }
-            GridLayout {
-                rowSpacing: 10
-                columnSpacing: 20
-                columns: 2
-                Label {
-                    Layout.minimumWidth: 100
-                    color: '#929292'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: qsTrId('id_network_fee')
-                }
-                Convert {
-                    id: fee_convert
-                    account: self.transaction.account
-                    input: ({ satoshi: self.transaction.data.fee })
-                    unit: self.transaction.account.session.unit
-                }
-                RowLayout {
-                    TLabel {
-                        topPadding: 4
-                        bottomPadding: 4
-                        color: '#FFF'
-                        font.family: 'Roboto Mono'
-                        font.features: { 'calt': 0, 'zero': 1 }
-                        font.pixelSize: 14
-                        font.weight: 400
-                        text: UtilJS.incognito(Settings.incognito, fee_convert.output.label)
-                    }
-                    TLabel {
-                        topPadding: 4
-                        bottomPadding: 4
-                        color: '#FFF'
-                        font.family: 'Roboto Mono'
-                        font.features: { 'calt': 0, 'zero': 1 }
-                        font.pixelSize: 14
-                        font.weight: 400
-                        opacity: 0.6
-                        text: UtilJS.incognito(Settings.incognito, '~ ' + fee_convert.fiat.label)
-                    }
-                    HSpacer {
-                    }
-                }
-                Label {
-                    color: '#929292'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: qsTrId('id_fee_rate')
-                }
-                RowLayout {
-                    TLabel {
-                        topPadding: 4
-                        bottomPadding: 4
-                        color: '#FFF'
-                        font.family: 'Roboto Mono'
-                        font.features: { 'calt': 0, 'zero': 1 }
-                        font.pixelSize: 14
-                        font.weight: 400
-                        text: UtilJS.formatFeeRate(self.transaction.data.fee_rate, self.transaction.account.network)
-                    }
-                    HSpacer {
-                    }
-                }
-                Label {
-                    Layout.alignment: Qt.AlignTop
-                    color: '#929292'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: {
-                        if (!self.network.liquid && self.transaction.type === Transaction.Outgoing) {
-                            return qsTrId('id_sent_to')
-                        }
-                        if (!self.network.liquid && self.transaction.type === Transaction.Incoming) {
-                            return qsTrId('id_received_on')
-                        }
-                        return ''
-                    }
-                    visible: address_label_repeater.count > 0
-                }
-                ColumnLayout {
-                    visible: address_label_repeater.count > 0
-                    Repeater {
-                        id: address_label_repeater
-                        model: {
-                            const account = self.transaction.account
-                            if (!self.network.liquid && self.transaction.type === Transaction.Outgoing) {
-                                return self.transaction.data.outputs
-                                    .filter(output => !output.is_relevant)
-                                    .map(output => account.getOrCreateAddress(output))
-                            }
-                            if (!self.network.liquid && self.transaction.type === Transaction.Incoming) {
-                                return self.transaction.data.outputs
-                                    .filter(output => output.is_relevant)
-                                    .map(output => account.getOrCreateAddress(output))
-                            }
-                            return []
-                        }
-                        delegate: AddressLabel {
-                            required property var modelData
-                            Layout.fillWidth: true
-                            id: delegate
-                            address: delegate.modelData
-                            copyEnabled: true
-                            elide: AddressLabel.ElideNone
-                            font.pixelSize: 14
-                            font.weight: 400
-                            horizontalAlignment: Text.AlignLeft
-                        }
-                    }
-                }
-                Label {
-                    Layout.alignment: Qt.AlignTop
-                    color: '#929292'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: qsTrId('id_transaction_id')
-                }
-                TLabel {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    color: '#FFF'
-                    elide: Label.ElideMiddle
-                    font.family: 'Roboto Mono'
-                    font.features: { 'calt': 0, 'zero': 1 }
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: self.transaction.data.txhash
-                    onCopyClicked: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
-                }
-            }
-            LineSeparator {
-                Layout.bottomMargin: 10
-                Layout.topMargin: 10
-                visible: self.transaction.type === Transaction.Outgoing
-            }
-            GridLayout {
-                rowSpacing: 10
-                columnSpacing: 20
-                columns: 2
-                visible: self.transaction.type === Transaction.Outgoing
-                Label {
-                    Layout.alignment: Qt.AlignTop
-                    Layout.minimumWidth: 100
-                    color: '#929292'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: qsTrId('id_total_spent')
-                }
-                ColumnLayout {
-                    Repeater {
-                        model: self.totals
-                        delegate: Pane {
-                            required property var modelData
-                            Layout.fillWidth: true
-                            id: total_pane
-                            background: null
-                            padding: 0
-                            Convert {
-                                id: total_convert
-                                account: self.transaction.account
-                                asset: total_pane.modelData.asset
-                                input: ({ satoshi: String(total_pane.modelData.satoshi) })
-                                unit: self.transaction.account.session.unit
-                            }
-                            contentItem: ColumnLayout {
-                                spacing: 4
-                                TLabel {
-                                    Layout.alignment: Qt.AlignRight
-                                    Layout.fillWidth: false
-                                    copyText: total_convert.output.label
-                                    font.family: 'Roboto Mono'
-                                    font.features: { 'calt': 0, 'zero': 1 }
-                                    font.pixelSize: 14
-                                    font.weight: 400
-                                    text: UtilJS.incognito(Settings.incognito, total_convert.output.label)
-                                }
-                                TLabel {
-                                    Layout.alignment: Qt.AlignRight
-                                    font.family: 'Roboto Mono'
-                                    font.features: { 'calt': 0, 'zero': 1 }
-                                    font.pixelSize: 14
-                                    font.weight: 400
-                                    opacity: 0.6
-                                    text: UtilJS.incognito(Settings.incognito, total_convert.fiat.label)
-                                    visible: total_convert.fiat.available
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            Collapsible {
-                Layout.fillWidth: true
-                id: note_collapsible
-                animationVelocity: 300
-                collapsed: !self.note
-                contentWidth: note_collapsible.width
-                contentHeight: note_layout.height
-                ColumnLayout {
-                    id: note_layout
-                    width: note_collapsible.width
-                    LineSeparator {
-                        Layout.bottomMargin: 10
-                        Layout.topMargin: 10
-                    }
-                    FieldTitle {
-                        text: qsTrId('id_note')
-                    }
-                    TextArea {
-                        Layout.fillWidth: true
-                        id: note_text_area
-                        enabled: !self.context.watchonly
-                        topPadding: 20
-                        bottomPadding: 20
-                        leftPadding: 20
-                        rightPadding: 20
-                        text: self.transaction.memo
-                        wrapMode: TextArea.Wrap
-                        background: Rectangle {
-                            color: Qt.lighter('#222226', note_text_area.hovered ? 1.2 : 1)
-                            radius: 5
-                        }
-                        onEditingFinished: {
-                            if (!self.context.watchonly) {
-                               self.transaction.updateMemo(note_text_area.text)
-                            }
-                        }
-                    }
-                }
-            }
-            ColumnLayout {
-                Layout.topMargin: 20
-                spacing: -1
-                ActionButton {
-                    icon.source: 'qrc:/svg2/gauge-green.svg'
-                    text: 'Speed up Transaction'
-                    badge: qsTrId('id_increase_fee')
-                    visible: !self.network.liquid && (self.transaction?.data?.can_rbf ?? false)
-                    onClicked: self.StackView.view.push(rbf_page)
-                }
-                ActionButton {
-                    icon.source: 'qrc:/svg2/pencil-simple-line-green.svg'
-                    text: qsTrId('id_add_note')
-                    visible: !self.note
-                    onClicked: {
-                        self.note = true
-                        note_text_area.forceActiveFocus()
-                    }
-                }
-                CopyActionButton {
-                    text: qsTrId('id_copy_unblinded_link')
-                    visible: self.network.liquid
-                    onClicked: {
-                        Clipboard.copy(self.transaction.unblindedLink())
-                        Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
-                    }
-
-                }
-                CopyActionButton {
-                    text: qsTrId('id_copy_unblinding_data')
-                    visible: self.network.liquid
-                    onClicked: {
-                        const data = JSON.stringify(UtilJS.getUnblindingData(self.transaction.data), null, '  ')
-                        Clipboard.copy(data)
-                    }
-                }
-                ActionButton {
-                    icon.source: 'qrc:/svg2/dots-three-green.svg'
-                    text: qsTrId('id_show_details')
-                    onClicked: self.StackView.view.push(details_page)
-                }
-            }
-/*
-            // TODO Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
-            ColumnLayout {
-                spacing: constants.p0
-                visible: !wallet.watchOnly
-                SectionLabel {
-                    text: qsTrId('id_my_notes')
-                }
-                EditableLabel {
-                    id: memo_edit
-                    leftPadding: constants.p0
-                    rightPadding: constants.p0
-                    Layout.fillWidth: true
-                    // placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
-                    text: transaction.memo
-                    selectByMouse: true
-                    wrapMode: TextEdit.Wrap
-                    onEditingFinished: transaction.updateMemo(memo_edit.text)
-                    onTextChanged: {
-                        if (text.length > 1024) {
-                            memo_edit.text = text.slice(0, 1024);
-                        }
-                    }
-                }
-            }
-            */
         }
+        Collapsible {
+            Layout.fillWidth: true
+            id: note_collapsible
+            animationVelocity: 300
+            collapsed: !self.note
+            contentWidth: note_collapsible.width
+            contentHeight: note_layout.height
+            ColumnLayout {
+                id: note_layout
+                width: note_collapsible.width
+                LineSeparator {
+                    Layout.bottomMargin: 10
+                    Layout.topMargin: 10
+                }
+                FieldTitle {
+                    text: qsTrId('id_note')
+                }
+                TextArea {
+                    Layout.fillWidth: true
+                    id: note_text_area
+                    enabled: !self.context.watchonly
+                    topPadding: 20
+                    bottomPadding: 20
+                    leftPadding: 20
+                    rightPadding: 20
+                    text: self.transaction.memo
+                    wrapMode: TextArea.Wrap
+                    background: Rectangle {
+                        color: Qt.lighter('#222226', note_text_area.hovered ? 1.2 : 1)
+                        radius: 5
+                    }
+                    onEditingFinished: {
+                        if (!self.context.watchonly) {
+                           self.transaction.updateMemo(note_text_area.text)
+                        }
+                    }
+                }
+            }
+        }
+        VSpacer {
+        }
+        ColumnLayout {
+            Layout.topMargin: 20
+            Layout.fillHeight: false
+            spacing: -1
+            ActionButton {
+                icon.source: 'qrc:/svg2/gauge-green.svg'
+                text: 'Speed up Transaction'
+                badge: qsTrId('id_increase_fee')
+                visible: !self.network.liquid && (self.transaction?.data?.can_rbf ?? false)
+                onClicked: self.StackView.view.push(rbf_page)
+            }
+            ActionButton {
+                icon.source: 'qrc:/svg2/pencil-simple-line-green.svg'
+                text: qsTrId('id_add_note')
+                visible: !self.note
+                onClicked: {
+                    self.note = true
+                    note_text_area.forceActiveFocus()
+                }
+            }
+            CopyActionButton {
+                text: qsTrId('id_copy_unblinded_link')
+                visible: self.network.liquid
+                onClicked: {
+                    Clipboard.copy(self.transaction.unblindedLink())
+                    Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
+                }
+
+            }
+            CopyActionButton {
+                text: qsTrId('id_copy_unblinding_data')
+                visible: self.network.liquid
+                onClicked: {
+                    const data = JSON.stringify(UtilJS.getUnblindingData(self.transaction.data), null, '  ')
+                    Clipboard.copy(data)
+                }
+            }
+            ActionButton {
+                icon.source: 'qrc:/svg2/dots-three-green.svg'
+                text: qsTrId('id_show_details')
+                onClicked: self.StackView.view.push(details_page)
+            }
+        }
+/*
+        // TODO Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
+        ColumnLayout {
+            spacing: constants.p0
+            visible: !wallet.watchOnly
+            SectionLabel {
+                text: qsTrId('id_my_notes')
+            }
+            EditableLabel {
+                id: memo_edit
+                leftPadding: constants.p0
+                rightPadding: constants.p0
+                Layout.fillWidth: true
+                // placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
+                text: transaction.memo
+                selectByMouse: true
+                wrapMode: TextEdit.Wrap
+                onEditingFinished: transaction.updateMemo(memo_edit.text)
+                onTextChanged: {
+                    if (text.length > 1024) {
+                        memo_edit.text = text.slice(0, 1024);
+                    }
+                }
+            }
+        }
+        */
     }
 
     component ActionButton: AbstractButton {

@@ -105,10 +105,7 @@ StackViewPage {
             opacity: 0.6
             visible: self.asset.data.entity ?? false
         }
-        Label {
-            color: '#A0A0A0'
-            font.pixelSize: 16
-            font.weight: 400
+        FieldTitle {
             text: qsTrId('id_accounts')
         }
         Repeater {

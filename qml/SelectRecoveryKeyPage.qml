@@ -128,7 +128,6 @@ StackViewPage {
                     wrapMode: Label.WordWrap
                 }
                 FieldTitle {
-                    Layout.topMargin: 20
                     text: qsTrId('id_xpub')
                 }
                 XPubField {

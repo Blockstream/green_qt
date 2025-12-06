@@ -124,7 +124,6 @@ WalletDialog {
                     wrapMode: Label.Wrap
                 }
                 FieldTitle {
-                    Layout.topMargin: 15
                     text: qsTrId('id_amount')
                 }
                 AmountField {

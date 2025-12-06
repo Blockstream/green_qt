@@ -21,7 +21,6 @@ StackViewPage {
             id: search_field
         }
         FieldTitle {
-            Layout.topMargin: 25
             text: {
                 if (search_field.text.trim().length === 0) return 'Other Assets'
                 if (list_view.count === 0) return 'No search results'

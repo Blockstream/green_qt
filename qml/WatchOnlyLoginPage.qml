@@ -87,7 +87,6 @@ StackViewPage {
         ColumnLayout {
             visible: !self.wallet.login.network.electrum
             FieldTitle {
-                Layout.topMargin: 20
                 text: qsTrId('id_username')
             }
             UsernameField {
@@ -97,7 +96,6 @@ StackViewPage {
                 readOnly: true
             }
             FieldTitle {
-                Layout.topMargin: 10
                 text: qsTrId('id_password')
             }
             PasswordField {

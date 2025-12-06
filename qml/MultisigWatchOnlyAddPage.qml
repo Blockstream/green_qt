@@ -77,7 +77,6 @@ StackViewPage {
             wrapMode: Label.Wrap
         }
         FieldTitle {
-            Layout.topMargin: 20
             text: qsTrId('id_username')
         }
         UsernameField {
@@ -89,7 +88,6 @@ StackViewPage {
             onTextEdited: error_badge.clear()
         }
         FieldTitle {
-            Layout.topMargin: 10
             text: qsTrId('id_password')
         }
         PasswordField {

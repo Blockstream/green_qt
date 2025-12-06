@@ -82,18 +82,14 @@ StackViewPage {
     }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
-        Label {
-            Layout.topMargin: 8
-            Layout.bottomMargin: 8
-            Layout.leftMargin: 2
-            color: '#A0A0A0'
-            font.pixelSize: 14
-            font.weight: 500
+        spacing: 5
+        FieldTitle {
+            Layout.topMargin: 0
             text: qsTrId('id_amount')
         }
-        TextField {
-            id: amount_input
+        TTextField {
             Layout.fillWidth: true
+            id: amount_input
             focus: true
             Component.onCompleted: amount_input.forceActiveFocus()
             inputMethodHints: Qt.ImhFormattedNumbersOnly
@@ -105,12 +101,6 @@ StackViewPage {
             bottomPadding: (BuyBitcoinQuoteService.bestDestinationAmount > 0 || BuyBitcoinQuoteService.loading) ? 26 : 16
             leftPadding: 28 + clear_button.width
             rightPadding: 28 + currency_label.width
-            background: Rectangle {
-                color: '#181818'
-                radius: 5
-                border.width: 1
-                border.color: '#262626'
-            }
             CircleButton {
                 id: clear_button
                 focusPolicy: Qt.NoFocus
@@ -121,7 +111,6 @@ StackViewPage {
                 anchors.leftMargin: 24
                 visible: amount_input.text.length > 0
                 icon.source: 'qrc:/svg2/x-circle.svg'
-                opacity: 0.6
                 onClicked: {
                     amount_input.text = ''
                     BuyBitcoinQuoteService.clearQuote()
@@ -212,13 +201,7 @@ StackViewPage {
                 }
             }
         }
-        Label {
-            Layout.topMargin: 24
-            Layout.bottomMargin: 8
-            Layout.leftMargin: 2
-            color: '#A0A0A0'
-            font.pixelSize: 14
-            font.weight: 500
+        FieldTitle {
             text: qsTrId('id_account')
         }
         AccountAssetField {
@@ -228,36 +211,24 @@ StackViewPage {
             readonly: false
             onClicked: self.StackView.view.push(null, account_selector_page)
         }
-        Label {
-            Layout.topMargin: 24
-            Layout.bottomMargin: 8
-            Layout.leftMargin: 2
-            color: '#A0A0A0'
-            font.pixelSize: 14
-            font.weight: 500
-            visible: BuyBitcoinQuoteService.bestServiceProvider.length > 0 && BuyBitcoinQuoteService.bestDestinationAmount > 0
+        FieldTitle {
             text: 'Exchange'
+            visible: BuyBitcoinQuoteService.bestServiceProvider.length > 0 && BuyBitcoinQuoteService.bestDestinationAmount > 0
         }
         AbstractButton {
             Layout.fillWidth: true
             Layout.leftMargin: 2
-            Layout.preferredHeight: 50
-            visible: (BuyBitcoinQuoteService.selectedServiceProvider.length > 0 || BuyBitcoinQuoteService.bestServiceProvider.length > 0) && (BuyBitcoinQuoteService.selectedDestinationAmount > 0 || BuyBitcoinQuoteService.bestDestinationAmount > 0)
+            id: exchange_button
+            visible: (BuyBitcoinQuoteService.selectedServiceProvider.length > 0 || BuyBitcoinQuoteService.bestServiceProvider.length > 0)
+                  && (BuyBitcoinQuoteService.selectedDestinationAmount > 0 || BuyBitcoinQuoteService.bestDestinationAmount > 0)
             background: Rectangle {
                 color: Qt.lighter('#181818', parent.hovered ? 1.2 : 1)
                 radius: 5
                 border.width: 1
                 border.color: '#262626'
             }
-            RowLayout {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.leftMargin: 12
-                anchors.rightMargin: 12
-                anchors.topMargin: 10
-                anchors.bottomMargin: 10
+            padding: 20
+            contentItem: RowLayout {
                 spacing: 10
                 ProviderIcon {
                     Layout.preferredWidth: 20
@@ -272,13 +243,8 @@ StackViewPage {
                     font.weight: 500
                     text: BuyBitcoinQuoteService.selectedServiceProvider || BuyBitcoinQuoteService.bestServiceProvider
                 }
-                Image {
-                    Layout.preferredWidth: 12
-                    Layout.preferredHeight: 12
-                    Layout.alignment: Qt.AlignVCenter
-                    fillMode: Image.PreserveAspectFit
-                    source: 'qrc:/svg2/arrow_right.svg'
-                    opacity: 0.6
+                RightArrowIndicator {
+                    active: exchange_button.hovered
                 }
             }
             onClicked: {
