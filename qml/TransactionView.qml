@@ -408,12 +408,11 @@ StackViewPage {
                 width: note_collapsible.width
                 LineSeparator {
                     Layout.bottomMargin: 10
-                    Layout.topMargin: 10
                 }
                 FieldTitle {
                     text: qsTrId('id_note')
                 }
-                TextArea {
+                GTextArea {
                     Layout.fillWidth: true
                     id: note_text_area
                     enabled: !self.context.watchonly
@@ -423,10 +422,6 @@ StackViewPage {
                     rightPadding: 20
                     text: self.transaction.memo
                     wrapMode: TextArea.Wrap
-                    background: Rectangle {
-                        color: Qt.lighter('#222226', note_text_area.hovered ? 1.2 : 1)
-                        radius: 5
-                    }
                     onEditingFinished: {
                         if (!self.context.watchonly) {
                            self.transaction.updateMemo(note_text_area.text)
@@ -583,26 +578,15 @@ StackViewPage {
                     onClicked: self.closeClicked()
                 }
             }
-            contentItem: Flickable {
-                ScrollIndicator.vertical: ScrollIndicator {
-                }
-                id: flickable
-                clip: true
-                contentWidth: flickable.width
-                contentHeight: layout.height
-                ColumnLayout {
-                    id: layout
-                    spacing: 10
-                    width: flickable.width
-                    TextArea {
-                        Layout.preferredWidth: 0
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: raw_text_area.contentHeight
-                        id: raw_text_area
-                        font.pixelSize: 8
-                        text: JSON.stringify(self.transaction.data, null, '  ')
-                        wrapMode: Label.Wrap
-                    }
+            contentItem: VFlickable {
+                GTextArea {
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: raw_text_area.contentHeight
+                    id: raw_text_area
+                    font.pixelSize: 8
+                    text: JSON.stringify(self.transaction.data, null, '  ')
+                    wrapMode: Label.Wrap
                 }
             }
         }

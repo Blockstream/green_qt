@@ -126,20 +126,12 @@ StackViewPage {
                 text: qsTrId('id_note')
                 visible: self.note
             }
-            TextArea {
+            GTextArea {
                 Layout.fillWidth: true
                 id: note_text_area
-                topPadding: 20
-                bottomPadding: 20
-                leftPadding: 20
-                rightPadding: 20
                 text: self.transaction.previous_transaction?.memo ?? ''
                 visible: self.note
                 wrapMode: TextArea.Wrap
-                background: Rectangle {
-                    color: Qt.lighter('#222226', note_text_area.hovered ? 1.2 : 1)
-                    radius: 5
-                }
             }
         }
     }

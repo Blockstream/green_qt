@@ -195,7 +195,7 @@ StackViewPage {
     }
 
 
-    component KeysField: TextArea {
+    component KeysField: GTextArea {
         Layout.minimumHeight: Math.max(150, options_layout.height) + text_area.topPadding + text_area.bottomPadding
         id: text_area
         topPadding: 14
@@ -205,30 +205,6 @@ StackViewPage {
         font.pixelSize: 14
         font.weight: 500
         wrapMode: TextEdit.Wrap
-        background: Rectangle {
-            color: Qt.lighter('#222226', text_area.hovered ? 1.2 : 1)
-            radius: 5
-            Rectangle {
-                border.width: 2
-                border.color: '#00BCFF'
-                color: 'transparent'
-                radius: 9
-                anchors.fill: parent
-                anchors.margins: -4
-                z: -1
-                opacity: {
-                    if (self.activeFocus) {
-                        switch (self.focusReason) {
-                        case Qt.TabFocusReason:
-                        case Qt.BacktabFocusReason:
-                        case Qt.ShortcutFocusReason:
-                            return 1
-                        }
-                    }
-                    return 0
-                }
-            }
-        }
         Column {
             id: options_layout
             anchors.verticalCenter: parent.verticalCenter

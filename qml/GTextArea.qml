@@ -16,9 +16,10 @@ TextArea {
         return false
     }
     id: self
-    topPadding: 14
-    bottomPadding: 13
-    leftPadding: 15
+    topPadding: 20
+    bottomPadding: 20
+    leftPadding: 20
+    rightPadding: 20
     background: Item {
         anchors.fill: parent
         Rectangle {
