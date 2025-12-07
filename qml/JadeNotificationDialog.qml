@@ -41,7 +41,7 @@ Dialog {
     rightPadding: 60
     visible: self.device.connected
     background: Rectangle {
-        color: '#13161D'
+        color: '#181818'
         radius: 10
         border.width: 1
         border.color: Qt.alpha('#FFFFFF', 0.07)

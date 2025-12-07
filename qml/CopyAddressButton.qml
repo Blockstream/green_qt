@@ -21,7 +21,7 @@ AbstractButton {
         Rectangle {
             anchors.fill: parent
             anchors.margins: self.visualFocus ? 4 : 0
-            color: Qt.alpha(Qt.darker('#13161D'), 0.6)
+            color: Qt.alpha(Qt.darker('#181818'), 0.6)
             radius: self.visualFocus ? 4 : 8
         }
     }
