@@ -21,59 +21,50 @@ AbstractDrawer {
                 onClicked: self.close()
             }
         }
-        contentItem: Flickable {
-            id: flickable
-            clip: true
-            contentHeight: layout.implicitHeight
-            contentWidth: flickable.width
-            ScrollIndicator.vertical: ScrollIndicator {
+        contentItem: VFlickable {
+            alignment: Qt.AlignTop
+            spacing: 10
+            Label {
+                font.pixelSize: 14
+                font.weight: 600
+                opacity: 0.4
+                text: qsTrId('id_digital_wallets')
             }
-            ColumnLayout {
-                id: layout
-                spacing: 10
-                width: flickable.width
-                Label {
-                    font.pixelSize: 14
-                    font.weight: 600
-                    opacity: 0.4
-                    text: qsTrId('id_digital_wallets')
+            Hint {
+                text: 'Your wallets with keys persisted on the Green app will appear here.'
+                visible: sww_repeater.count === 0
+            }
+            Repeater {
+                id: sww_repeater
+                model: WalletListModel {
+                    deviceDetails: WalletListModel.No
                 }
-                Hint {
-                    text: 'Your wallets with keys persisted on the Green app will appear here.'
-                    visible: sww_repeater.count === 0
+                delegate: WalletButton {
+                    id: wallet_button
+                    onClicked: self.walletClicked(wallet_button.wallet)
                 }
-                Repeater {
-                    id: sww_repeater
-                    model: WalletListModel {
-                        deviceDetails: WalletListModel.No
-                    }
-                    delegate: WalletButton {
-                        id: wallet_button
-                        onClicked: self.walletClicked(wallet_button.wallet)
-                    }
+            }
+            Label {
+                Layout.topMargin: 20
+                font.pixelSize: 14
+                font.weight: 600
+                opacity: 0.4
+                text: qsTrId('id_hardware_devices')
+            }
+            Hint {
+                text: 'Your wallets with keys persisted on a hardware device will appear here.'
+                visible: hww_repeater.count === 0
+            }
+            Repeater {
+                id: hww_repeater
+                model: WalletListModel {
+                    deviceDetails: WalletListModel.Yes
+                    watchOnly: WalletListModel.No
+                    pinData: WalletListModel.No
                 }
-                Label {
-                    Layout.topMargin: 20
-                    font.pixelSize: 14
-                    font.weight: 600
-                    opacity: 0.4
-                    text: qsTrId('id_hardware_devices')
-                }
-                Hint {
-                    text: 'Your wallets with keys persisted on a hardware device will appear here.'
-                    visible: hww_repeater.count === 0
-                }
-                Repeater {
-                    id: hww_repeater
-                    model: WalletListModel {
-                        deviceDetails: WalletListModel.Yes
-                        watchOnly: WalletListModel.No
-                        pinData: WalletListModel.No
-                    }
-                    delegate: WalletButton {
-                        id: wallet_button
-                        onClicked: self.walletClicked(wallet_button.wallet)
-                    }
+                delegate: WalletButton {
+                    id: wallet_button
+                    onClicked: self.walletClicked(wallet_button.wallet)
                 }
             }
         }
