@@ -246,7 +246,7 @@ Page {
                     input: {
                         const network = delegate.transaction.account.network
                         const satoshi = delegate.transaction.data.satoshi
-                        return { satoshi: String(satoshi[network.policyAsset] ?? 0) }
+                        return { satoshi: String(satoshi?.[network.policyAsset] ?? 0) }
                     }
                     unit: delegate.transaction.account.session.unit
                 }
