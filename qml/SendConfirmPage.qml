@@ -60,78 +60,74 @@ StackViewPage {
     rightItem: CloseButton {
         onClicked: self.closeCliked()
     }
-    contentItem: Flickable {
-        ScrollIndicator.vertical: ScrollIndicator {
+    contentItem: VFlickable {
+        alignment: Qt.AlignTop
+        spacing: 5
+        AlertView {
+            Layout.bottomMargin: 15
+            alert: AnalyticsAlert {
+                screen: 'SendConfirm'
+                network: self.account.network.id
+            }
         }
-        id: flickable
-        clip: true
-        contentWidth: flickable.width
-        contentHeight: layout.height
-        ColumnLayout {
-            id: layout
-            width: flickable.width
-            AlertView {
-                alert: AnalyticsAlert {
-                    screen: 'SendConfirm'
-                    network: self.account.network.id
-                }
+        FieldTitle {
+            Layout.topMargin: 0
+            text: qsTrId('id_account__asset')
+        }
+        AccountAssetField {
+            Layout.fillWidth: true
+            account: self.account
+            asset: self.asset
+            readonly: true
+        }
+        FieldTitle {
+            text: qsTrId('id_address')
+            visible: !self.bumpRedeposit
+        }
+        AddressLabel {
+            Layout.fillWidth: true
+            address: self.recipient.address
+            background: Rectangle {
+                color: '#181818'
+                radius: 5
             }
-            FieldTitle {
-                text: qsTrId('id_account__asset')
+            padding: 20
+            visible: !self.bumpRedeposit
+        }
+        FieldTitle {
+            text: qsTrId('id_amount')
+            visible: !self.bumpRedeposit
+        }
+        AmountField {
+            Layout.fillWidth: true
+            session: self.account.session
+            fiat: self.fiat
+            convert: self.recipient.convert
+            readOnly: true
+            visible: !self.bumpRedeposit
+        }
+        LinkButton {
+            Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 15
+            text: qsTrId('id_add_note')
+            visible: !self.note
+            onClicked: {
+                self.note = true
+                note_text_area.forceActiveFocus()
             }
-            AccountAssetField {
-                Layout.fillWidth: true
-                account: self.account
-                asset: self.asset
-                readonly: true
-            }
-            FieldTitle {
-                text: qsTrId('id_address')
-                visible: !self.bumpRedeposit
-            }
-            AddressLabel {
-                Layout.fillWidth: true
-                address: self.recipient.address
-                background: Rectangle {
-                    color: '#181818'
-                    radius: 5
-                }
-                padding: 20
-                visible: !self.bumpRedeposit
-            }
-            FieldTitle {
-                text: qsTrId('id_amount')
-                visible: !self.bumpRedeposit
-            }
-            AmountField {
-                Layout.bottomMargin: 15
-                Layout.fillWidth: true
-                session: self.account.session
-                fiat: self.fiat
-                convert: self.recipient.convert
-                readOnly: true
-                visible: !self.bumpRedeposit
-            }
-            LinkButton {
-                Layout.alignment: Qt.AlignCenter
-                text: qsTrId('id_add_note')
-                visible: !self.note
-                onClicked: {
-                    self.note = true
-                    note_text_area.forceActiveFocus()
-                }
-            }
-            FieldTitle {
-                text: qsTrId('id_note')
-                visible: self.note
-            }
-            GTextArea {
-                Layout.fillWidth: true
-                id: note_text_area
-                text: self.transaction.previous_transaction?.memo ?? ''
-                visible: self.note
-                wrapMode: TextArea.Wrap
-            }
+        }
+        FieldTitle {
+            text: qsTrId('id_note')
+            visible: self.note
+        }
+        GTextArea {
+            Layout.fillWidth: true
+            id: note_text_area
+            text: self.transaction.previous_transaction?.memo ?? ''
+            visible: self.note
+            wrapMode: TextArea.Wrap
+        }
+        VSpacer {
         }
     }
     footer: ColumnLayout {
@@ -157,6 +153,9 @@ StackViewPage {
                 return { satoshi: String(total) }
             }
             unit: self.account.session.unit
+        }
+        Item {
+            Layout.minimumHeight: 10
         }
         RowLayout {
             Layout.fillWidth: true
