@@ -49,11 +49,12 @@ TTextField {
         self.cleared()
     }
 
-    text: {
-        const text = self.fiat ? self.convert.fiat.amount : self.convert.output.amount
-        self.text = self.readOnly ? text : text.replace(/\s+/g, '')
+    Component.onCompleted: {
+        if (Object.keys(self.convert.input).length > 0) {
+            const text = self.fiat ? self.convert.fiat.amount : self.convert.output.amount
+            self.text = self.readOnly ? text : text.replace(/\s+/g, '')
+        }
     }
-
 
     onReadOnlyChanged: {
         if (!self.readOnly) {
