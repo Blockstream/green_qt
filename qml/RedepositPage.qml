@@ -8,7 +8,6 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal closed()
     required property Context context
     required property Account account
 
@@ -45,7 +44,7 @@ StackViewPage {
     id: self
     title: qsTrId('id_redeposit')
     rightItem: CloseButton {
-        onClicked: self.closed()
+        onClicked: self.closeClicked()
     }
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
@@ -164,7 +163,7 @@ StackViewPage {
     Component {
         id: redeposit_confirm_page
         RedepositConfirmPage {
-            onClosed: self.closed()
+            onCloseClicked: self.closeClicked()
         }
     }
 

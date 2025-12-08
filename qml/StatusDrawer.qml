@@ -29,11 +29,10 @@ AbstractDrawer {
     onClosed: stack_view.pop(stack_view.initialItem)
 
     component StatusPage: StackViewPage {
-        signal closed
         id: page
         title: qsTrId('id_status')
         rightItem: CloseButton {
-            onClicked: self.close()
+            onClicked: self.closeClicked()
         }
         contentItem: ColumnLayout {
             spacing: 8

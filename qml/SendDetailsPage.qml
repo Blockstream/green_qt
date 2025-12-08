@@ -8,7 +8,6 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal closed()
     required property Context context
     required property Account account
     required property string address
@@ -63,7 +62,7 @@ StackViewPage {
     id: self
     title: qsTrId('id_send')
     rightItem: CloseButton {
-        onClicked: self.closed()
+        onClicked: self.closeClicked()
     }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
@@ -349,7 +348,7 @@ StackViewPage {
     Component {
         id: send_confirm_page
         SendConfirmPage {
-            onClosed: self.closed()
+            onCloseClicked: self.closeClicked()
         }
     }
 

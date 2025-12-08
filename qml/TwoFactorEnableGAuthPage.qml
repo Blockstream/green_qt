@@ -8,11 +8,10 @@ import "analytics.js" as AnalyticsJS
 
 StackViewPage {
     signal next(string data)
-    signal closed()
     required property Session session
     id: self
     rightItem: CloseButton {
-        onClicked: self.closed()
+        onClicked: self.closeClicked()
     }
     contentItem: ColumnLayout {
         spacing: 10

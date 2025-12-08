@@ -393,7 +393,7 @@ StackViewPage {
     Component {
         id: send_confirm_page
         SendConfirmPage {
-            onClosed: self.closed()
+            onCloseClicked: self.closeClicked()
         }
     }
 

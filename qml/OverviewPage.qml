@@ -154,7 +154,7 @@ Page {
                 rightItem: CloseButton {
                     onClicked: drawer.close()
                 }
-                onClosed: drawer.close()
+                onCloseClicked: drawer.close()
             }
         }
     }

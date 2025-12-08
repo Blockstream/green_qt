@@ -338,10 +338,10 @@ QtObject {
         onSigned: self.target.pop()
     }
     property Component jade_sign_transaction_view: JadeSignTransactionView {
-        onClosed: self.closed()
+        onCloseClicked: self.closed()
     }
     property Component jade_sign_liquid_transaction_view: JadeSignLiquidTransactionView {
-        onClosed: self.closed()
+        onCloseClicked: self.closed()
     }
     property Component jade_get_master_blinding_key_dialog: JadeGetMasterBlindingKeyView {
     }

@@ -433,7 +433,7 @@ AbstractDrawer {
     Component {
         id: two_factor_expired_page
         TwoFactorExpiredSelectAccountPage {
-            onClosed: self.close()
+            onCloseClicked: self.close()
         }
     }
 }

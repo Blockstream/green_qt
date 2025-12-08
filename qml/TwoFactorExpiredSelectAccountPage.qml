@@ -7,7 +7,6 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal closed()
     required property Context context
     required property TwoFactorExpiredNotification notification
     id: self
@@ -135,7 +134,7 @@ StackViewPage {
         id: redeposit_page
         RedepositPage {
             context: self.context
-            onClosed: self.closed()
+            onCloseClicked: self.closeClicked()
         }
     }
 
@@ -143,7 +142,7 @@ StackViewPage {
         id: redeposit_liquid_page
         RedepositLiquidPage {
             context: self.context
-            onClosed: self.closed()
+            onCloseClicked: self.closeClicked()
         }
     }
 }

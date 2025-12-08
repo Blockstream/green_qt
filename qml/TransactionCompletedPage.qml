@@ -5,11 +5,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    signal closed()
     required property Transaction transaction
     id: self
+    leftItem: Item {
+    }
     rightItem: CloseButton {
-        onClicked: self.closed()
+        onClicked: self.closeClicked()
     }
     contentItem: ColumnLayout {
         spacing: 10

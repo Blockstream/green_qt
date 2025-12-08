@@ -15,12 +15,11 @@ WalletDrawer {
             account: self.account
             unspents: self.unspents
             status: self.status
-            onClosed: self.close()
+            onCloseClicked: self.close()
         }
     }
 
     component UpdateUnspentsPage: StackViewPage {
-        signal closed()
         required property Context context
         required property Account account
         required property var unspents
@@ -31,18 +30,16 @@ WalletDrawer {
             title: self.title
             monitor: controller.monitor
             target: self.StackView.view
-            onClosed: self.closed()
+            onClosed: self.closeClicked()
         }
         SessionController {
             id: controller
             context: self.context
             session: self.account.session
-            onFinished: {
-                self.closed()
-            }
+            onFinished: self.closeClicked()
         }
         rightItem: CloseButton {
-            onClicked: self.closed()
+            onClicked: self.closeClicked()
         }
         footerItem: PrimaryButton {
             text: qsTrId('id_continue')

@@ -8,7 +8,6 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal closed()
     required property Context context
     required property Account account
     required property Asset asset
@@ -24,7 +23,7 @@ StackViewPage {
         title: self.title
         monitor: controller.monitor
         target: self.StackView.view
-        onClosed: self.closed()
+        onClosed: self.closeClicked()
     }
     SignTransactionController {
         id: controller
@@ -59,7 +58,7 @@ StackViewPage {
     id: self
     title: qsTrId('id_confirm_transaction')
     rightItem: CloseButton {
-        onClicked: self.closed()
+        onClicked: self.closeCliked()
     }
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
@@ -94,7 +93,7 @@ StackViewPage {
                 Layout.fillWidth: true
                 address: self.recipient.address
                 background: Rectangle {
-                    color: '#222226'
+                    color: '#181818'
                     radius: 5
                 }
                 padding: 20
@@ -280,9 +279,7 @@ StackViewPage {
     Component {
         id: transaction_completed_page
         TransactionCompletedPage {
-            leftItem: Item {
-            }
-            onClosed: self.closed()
+            onCloseClicked: self.closeClicked()
         }
     }
 }

@@ -248,7 +248,7 @@ WalletDrawer {
         id: send_details_page
         SendDetailsPage {
             context: self.context
-            onClosed: self.close()
+            onCloseClicked: self.close()
         }
     }
 }

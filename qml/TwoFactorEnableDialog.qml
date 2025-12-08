@@ -83,7 +83,7 @@ WalletDialog {
             session: self.session
             method: self.method
             onNext: data => controller.enable(data)
-            onClosed: self.close()
+            onCloseClicked: self.close()
         }
     }
 
@@ -95,7 +95,7 @@ WalletDialog {
             session: self.session
             method: self.method
             onNext: data => controller.enable(data)
-            onClosed: self.close()
+            onCloseClicked: self.close()
         }
     }
 
@@ -106,7 +106,7 @@ WalletDialog {
             title: self.title
             session: self.session
             onNext: data => controller.enable(data)
-            onClosed: self.close()
+            onCloseClicked: self.close()
         }
     }
 

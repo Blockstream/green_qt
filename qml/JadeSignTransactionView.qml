@@ -8,7 +8,6 @@ import "analytics.js" as AnalyticsJS
 import "jade.js" as JadeJS
 
 StackViewPage {
-    signal closed()
     required property SignTransactionResolver resolver
     readonly property Wallet wallet: self.resolver.session.context.wallet
     Connections {
@@ -19,7 +18,7 @@ StackViewPage {
     }
     id: self
     rightItem: CloseButton {
-        onClicked: self.closed()
+        onClicked: self.closeClicked()
     }
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {

@@ -9,13 +9,12 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal next(string data)
-    signal closed()
     required property Session session
     required property string method
     readonly property Wallet wallet: session.context.wallet
     id: self
     rightItem: CloseButton {
-        onClicked: self.closed()
+        onClicked: self.closeClicked()
     }
     contentItem: ColumnLayout {
         spacing: 10
