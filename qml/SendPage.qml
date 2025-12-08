@@ -74,7 +74,7 @@ StackViewPage {
         alignment: Qt.AlignTop
         spacing: 5
         AlertView {
-            Layout.bottomMargin: 10
+            Layout.bottomMargin: 15
             alert: AnalyticsAlert {
                 screen: 'Send'
                 network: controller.account.network.id
@@ -250,6 +250,7 @@ StackViewPage {
         }
     }
     footerItem: ColumnLayout {
+        spacing: 5
         Convert {
             id: previous_fee_convert
             account: controller.account
@@ -261,6 +262,9 @@ StackViewPage {
             account: controller.account
             input: ({ satoshi: String(controller.transaction.fee ?? 0) })
             unit: controller.account.session.unit
+        }
+        Item {
+            Layout.minimumHeight: 5
         }
         ErrorPane {
             error: {

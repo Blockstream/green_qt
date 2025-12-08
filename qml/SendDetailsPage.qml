@@ -66,18 +66,19 @@ StackViewPage {
     }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
-        spacing: 10
+        spacing: 5
         AlertView {
+            Layout.bottomMargin: 20
             alert: AnalyticsAlert {
                 screen: 'Send'
                 network: controller.account.network.id
             }
         }
         FieldTitle {
+            Layout.topMargin: 0
             text: qsTrId('id_account__asset')
         }
         AccountAssetField {
-            Layout.bottomMargin: 15
             Layout.fillWidth: true
             id: account_asset_field
             account: controller.account
@@ -153,7 +154,6 @@ StackViewPage {
             text: qsTrId('id_address')
         }
         AddressLabel {
-            Layout.bottomMargin: 15
             Layout.fillWidth: true
             address: controller.recipient.address
             topPadding: 14
@@ -165,8 +165,7 @@ StackViewPage {
             }
         }
         ErrorPane {
-            Layout.topMargin: -30
-            Layout.bottomMargin: 15
+            Layout.topMargin: -15
             error: {
                 if (controller.recipient.address === '') return
                 const error = controller.transaction?.error
@@ -179,7 +178,6 @@ StackViewPage {
             text: qsTrId('id_amount')
         }
         AmountField {
-            Layout.bottomMargin: 15
             Layout.fillWidth: true
             id: amount_field
             focus: !self.amount
@@ -204,7 +202,7 @@ StackViewPage {
             onTextEdited: controller.recipient.greedy = false
         }
         ErrorPane {
-            Layout.topMargin: -30
+            Layout.topMargin: -15
             Layout.bottomMargin: 15
             error: amount_field.text.length > 0 || controller.recipient.greedy ? amount_field.error : null
         }
@@ -216,7 +214,6 @@ StackViewPage {
             unit: controller.recipient.convert.unit
         }
         RowLayout {
-            Layout.bottomMargin: 15
             spacing: 10
             Label {
                 Layout.fillWidth: true
@@ -240,11 +237,15 @@ StackViewPage {
         }
     }
     footerItem: ColumnLayout {
+        spacing: 5
         Convert {
             id: fee_convert
             account: controller.account
             input: ({ satoshi: String(controller.transaction.fee ?? 0) })
             unit: controller.account.session.unit
+        }
+        Item {
+            Layout.minimumHeight: 5
         }
         ErrorPane {
             error: {

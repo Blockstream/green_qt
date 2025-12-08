@@ -58,13 +58,13 @@ StackViewPage {
     id: self
     title: qsTrId('id_confirm_transaction')
     rightItem: CloseButton {
-        onClicked: self.closeCliked()
+        onClicked: self.closeClicked()
     }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
         spacing: 5
         AlertView {
-            Layout.bottomMargin: 15
+            Layout.bottomMargin: 20
             alert: AnalyticsAlert {
                 screen: 'SendConfirm'
                 network: self.account.network.id
@@ -130,8 +130,8 @@ StackViewPage {
         VSpacer {
         }
     }
-    footer: ColumnLayout {
-        spacing: 10
+    footerItem: ColumnLayout {
+        spacing: 5
         Convert {
             id: previous_fee_convert
             account: self.account
@@ -155,7 +155,7 @@ StackViewPage {
             unit: self.account.session.unit
         }
         Item {
-            Layout.minimumHeight: 10
+            Layout.minimumHeight: 5
         }
         RowLayout {
             Layout.fillWidth: true
