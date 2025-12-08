@@ -40,7 +40,8 @@ WalletDrawer {
                 stack_view.push(asset_selector_page, {
                     address: controller.address,
                     amount: controller.amount,
-                    input: page.address_input
+                    input: page.address_input,
+                    networks: controller.networks
                 })
             } else {
                 stack_view.push(account_selector_page, {

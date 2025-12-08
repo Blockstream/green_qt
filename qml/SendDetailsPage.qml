@@ -326,6 +326,7 @@ StackViewPage {
                     fiat: amount_field.fiat,
                     unit: amount_field.unit,
                     address_input: self.input,
+                    bumpRedeposit: false,
                 })
             }
         }
