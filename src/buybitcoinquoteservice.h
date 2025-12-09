@@ -6,6 +6,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 #include <QJsonValue>
+#include <QStringList>
 #include <QtQml>
 
 class BuyBitcoinQuoteService : public QObject
@@ -22,6 +23,7 @@ class BuyBitcoinQuoteService : public QObject
     Q_PROPERTY(bool widgetLoading READ widgetLoading NOTIFY widgetLoadingChanged)
     Q_PROPERTY(QString widgetError READ widgetError NOTIFY widgetErrorChanged)
     Q_PROPERTY(QString widgetUrl READ widgetUrl NOTIFY widgetUrlChanged)
+    Q_PROPERTY(QStringList recentlyUsedProviders READ recentlyUsedProviders NOTIFY recentlyUsedProvidersChanged)
     QML_ELEMENT
     QML_SINGLETON
 public:
@@ -38,11 +40,12 @@ public:
     bool widgetLoading() const { return m_widget_loading; }
     QString widgetError() const { return m_widget_error; }
     QString widgetUrl() const { return m_widget_url; }
+    QStringList recentlyUsedProviders() const { return m_recently_used_providers; }
 
-    Q_INVOKABLE void fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress);
+    Q_INVOKABLE void fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, const QString& walletHashedId = QString());
     Q_INVOKABLE void clearQuote();
     Q_INVOKABLE void setSelectedQuote(const QVariantMap& quote);
-    Q_INVOKABLE void createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode = false);
+    Q_INVOKABLE void createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode = false, const QString& walletHashedId = QString());
     Q_INVOKABLE QJsonValue getBuyDefaultValues() const;
 
 signals:
@@ -54,13 +57,16 @@ signals:
     void widgetErrorChanged();
     void widgetUrlChanged();
     void buyDefaultValuesChanged();
+    void recentlyUsedProvidersChanged();
 
 private slots:
     void updateBuyDefaultValues();
     void onReplyFinished();
     void onWidgetReplyFinished();
+    void onTransactionsReplyFinished();
 
 private:
+    void sortQuotes();
     double m_best_destination_amount{0.0};
     QString m_best_service_provider;
     QVariantList m_all_quotes;
@@ -73,6 +79,14 @@ private:
     QString m_widget_url;
     QNetworkReply* m_widget_reply{nullptr};
     QJsonValue m_buy_default_values;
+    QNetworkReply* m_transactions_reply{nullptr};
+    QString m_pending_wallet_hashed_id;
+    QString m_pending_country_code;
+    double m_pending_source_amount{0.0};
+    QString m_pending_source_currency_code;
+    QString m_pending_wallet_address;
+    QString m_preferred_provider;
+    QStringList m_recently_used_providers;
 };
 
 #endif // GREEN_BUYBITCOINQUOTESERVICE_H

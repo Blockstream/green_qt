@@ -296,7 +296,8 @@ StackViewPage {
                 if (amountText.length === 0 || amount <= 0 || !currency || !address || !self.countryCode) {
                     BuyBitcoinQuoteService.clearQuote()
                 } else {
-                    BuyBitcoinQuoteService.fetchQuote(self.countryCode, amount, currency, address)
+                    const walletHashedId = self.context?.xpubHashId ?? ''
+                    BuyBitcoinQuoteService.fetchQuote(self.countryCode, amount, currency, address, walletHashedId)
                 }
             }
         }
@@ -339,7 +340,8 @@ StackViewPage {
                 const address = receive_address_controller.address?.address ?? ''
 
                 if (serviceProvider && amount > 0 && currency && address && self.countryCode) {
-                    BuyBitcoinQuoteService.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, false)
+                    const walletHashedId = self.context?.xpubHashId ?? ''
+                    BuyBitcoinQuoteService.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, false, walletHashedId)
                 }
             }
         }
@@ -363,7 +365,8 @@ StackViewPage {
                 const address = receive_address_controller.address?.address ?? ''
 
                 if (serviceProvider && amount > 0 && currency && address && self.countryCode) {
-                    BuyBitcoinQuoteService.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, true)
+                    const walletHashedId = self.context?.xpubHashId ?? ''
+                    BuyBitcoinQuoteService.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, true, walletHashedId)
                 }
             }
         }

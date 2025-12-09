@@ -33,7 +33,12 @@ StackViewPage {
                 id: quote_delegate
                 width: ListView.view.width
                 height: 60
-                property bool isFirst: index === 0
+                property bool isBestPrice: {
+                    if (!modelData || !quotes_page.quoteService) return false
+                    const provider = modelData.serviceProvider || ''
+                    const bestProvider = quotes_page.quoteService.bestServiceProvider || ''
+                    return provider === bestProvider
+                }
                 property bool isSelected: {
                     if (!modelData || !quotes_page.quoteService.selectedQuote) return false
                     const selected = quotes_page.quoteService.selectedQuote
@@ -49,7 +54,7 @@ StackViewPage {
                 }
                 Rectangle {
                     id: best_price_badge
-                    visible: quote_delegate.isFirst
+                    visible: quote_delegate.isBestPrice
                     anchors.right: parent.right
                     anchors.rightMargin: 8
                     anchors.top: parent.top
@@ -79,13 +84,30 @@ StackViewPage {
                         Layout.alignment: Qt.AlignVCenter
                         providerName: modelData ? (modelData.serviceProvider || '') : ''
                     }
-                    Label {
+                    ColumnLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter
-                        color: '#FFFFFF'
-                        font.pixelSize: 14
-                        font.weight: 500
-                        text: modelData ? (modelData.serviceProvider || '') : ''
+                        spacing: 2
+                        Label {
+                            Layout.fillWidth: true
+                            color: '#FFFFFF'
+                            font.pixelSize: 14
+                            font.weight: 500
+                            text: modelData ? (modelData.serviceProvider || '') : ''
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            visible: {
+                                if (!modelData || !quotes_page.quoteService) return false
+                                const provider = modelData.serviceProvider || ''
+                                const recentlyUsed = quotes_page.quoteService.recentlyUsedProviders || []
+                                return recentlyUsed.includes(provider)
+                            }
+                            color: '#A0A0A0'
+                            font.pixelSize: 11
+                            font.weight: 400
+                            text: 'Recently used'
+                        }
                     }
                     ColumnLayout {
                         Layout.fillWidth: true

@@ -5,11 +5,14 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QDateTime>
+#include <QSet>
 #include <algorithm>
 
 #include <countly/countly.hpp>
@@ -35,6 +38,14 @@ void BuyBitcoinQuoteService::clearQuote()
         m_reply = nullptr;
     }
 
+    // Cancel any pending transactions request
+    if (m_transactions_reply) {
+        disconnect(m_transactions_reply, &QNetworkReply::finished, this, &BuyBitcoinQuoteService::onTransactionsReplyFinished);
+        m_transactions_reply->abort();
+        m_transactions_reply->deleteLater();
+        m_transactions_reply = nullptr;
+    }
+
     // Reset state
     bool hasState = m_best_destination_amount != 0.0 || m_loading || !m_error.isEmpty() || !m_best_service_provider.isEmpty() || !m_all_quotes.isEmpty() || !m_selected_quote.isEmpty();
     if (hasState) {
@@ -44,6 +55,11 @@ void BuyBitcoinQuoteService::clearQuote()
         m_selected_quote.clear();
         m_loading = false;
         m_error = QString();
+        m_preferred_provider = QString();
+        if (!m_recently_used_providers.isEmpty()) {
+            m_recently_used_providers.clear();
+            emit recentlyUsedProvidersChanged();
+        }
         emit quoteChanged();
         emit selectedQuoteChanged();
         emit loadingChanged();
@@ -69,7 +85,7 @@ QString BuyBitcoinQuoteService::selectedServiceProvider() const
     return m_selected_quote.value("serviceProvider").toString();
 }
 
-void BuyBitcoinQuoteService::fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress)
+void BuyBitcoinQuoteService::fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, const QString& walletHashedId)
 {
     // Cancel any pending request
     if (m_reply) {
@@ -79,11 +95,63 @@ void BuyBitcoinQuoteService::fetchQuote(const QString& countryCode, double sourc
         m_reply = nullptr;
     }
 
+    // Cancel any pending transactions request
+    if (m_transactions_reply) {
+        disconnect(m_transactions_reply, &QNetworkReply::finished, this, &BuyBitcoinQuoteService::onTransactionsReplyFinished);
+        m_transactions_reply->abort();
+        m_transactions_reply->deleteLater();
+        m_transactions_reply = nullptr;
+    }
+
     // Validate input
     if (sourceAmount <= 0 || sourceCurrencyCode.isEmpty() || walletAddress.isEmpty()) {
         m_best_destination_amount = 0.0;
         m_error = QString();
         emit quoteChanged();
+        return;
+    }
+
+    // If wallet_hashed_id is provided, fetch transactions first to pre-select provider
+    if (!walletHashedId.isEmpty()) {
+        m_pending_wallet_hashed_id = walletHashedId;
+        m_pending_country_code = countryCode;
+        m_pending_source_amount = sourceAmount;
+        m_pending_source_currency_code = sourceCurrencyCode;
+        m_pending_wallet_address = walletAddress;
+
+        // Set loading state
+        m_loading = true;
+        m_error = QString();
+        emit loadingChanged();
+        emit errorChanged();
+
+        // Fetch transactions
+        auto engine = qmlEngine(this);
+        if (!engine) {
+            m_loading = false;
+            m_error = "QML engine not available";
+            emit loadingChanged();
+            emit errorChanged();
+            return;
+        }
+
+        auto net = engine->networkAccessManager();
+        if (!net) {
+            m_loading = false;
+            m_error = "Network access manager not available";
+            emit loadingChanged();
+            emit errorChanged();
+            return;
+        }
+
+        QUrl url("https://ramps.blockstream.com/payments/transactions");
+        QUrlQuery query;
+        query.addQueryItem("externalCustomerIds", walletHashedId);
+        url.setQuery(query);
+
+        QNetworkRequest req(url);
+        m_transactions_reply = net->get(req);
+        connect(m_transactions_reply, &QNetworkReply::finished, this, &BuyBitcoinQuoteService::onTransactionsReplyFinished);
         return;
     }
 
@@ -275,20 +343,37 @@ void BuyBitcoinQuoteService::onReplyFinished()
         }
     }
 
-    // Sort quotes by destinationAmount (descending)
-    std::sort(allQuotes.begin(), allQuotes.end(), [](const QVariant& a, const QVariant& b) {
-        const double amountA = a.toMap().value("destinationAmount").toDouble();
-        const double amountB = b.toMap().value("destinationAmount").toDouble();
-        return amountA > amountB; // Descending order
-    });
-
     m_all_quotes = allQuotes;
+    
+    // Sort quotes: recently used providers first, then non-recently used
+    // Both groups sorted by destinationAmount (descending)
+    sortQuotes();
     m_best_destination_amount = bestAmount;
     m_best_service_provider = bestProvider;
     
     // Update selected quote: keep previous provider if still available,
     // otherwise fall back to the best quote
-    if (!m_selected_quote.isEmpty()) {
+    // If we have a preferred provider from transactions, try to use it first
+    if (!m_preferred_provider.isEmpty()) {
+        bool found = false;
+        for (const auto& v : allQuotes) {
+            const auto q = v.toMap();
+            if (q.value("serviceProvider").toString() == m_preferred_provider) {
+                m_selected_quote = q;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            // Preferred provider not available, use cheapest (best quote)
+            if (!bestQuote.isEmpty()) {
+                m_selected_quote = bestQuote;
+            } else {
+                m_selected_quote.clear();
+            }
+        }
+        m_preferred_provider = QString();
+    } else if (!m_selected_quote.isEmpty()) {
         const QString prevProvider = m_selected_quote.value("serviceProvider").toString();
         bool kept = false;
         if (!prevProvider.isEmpty()) {
@@ -324,7 +409,7 @@ void BuyBitcoinQuoteService::onReplyFinished()
     emit selectedQuoteChanged();
 }
 
-void BuyBitcoinQuoteService::createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode)
+void BuyBitcoinQuoteService::createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode, const QString& walletHashedId)
 {
     // Cancel any pending widget request
     if (m_widget_reply) {
@@ -368,6 +453,11 @@ void BuyBitcoinQuoteService::createWidgetSession(const QString& serviceProvider,
     QJsonObject requestData;
     requestData["sessionData"] = sessionData;
     requestData["sessionType"] = "BUY";
+    
+    // Add externalCustomerIds if wallet_hashed_id is provided
+    if (!walletHashedId.isEmpty()) {
+        requestData["externalCustomerIds"] = walletHashedId;
+    }
 
     QJsonDocument doc(requestData);
     QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
@@ -544,5 +634,118 @@ void BuyBitcoinQuoteService::updateBuyDefaultValues()
         m_buy_default_values = newValue;
         emit buyDefaultValuesChanged();
     }
+}
+
+void BuyBitcoinQuoteService::onTransactionsReplyFinished()
+{
+    auto reply = qobject_cast<QNetworkReply*>(sender());
+    if (!reply) return;
+
+    // Disconnect and clear the reply reference before processing
+    disconnect(reply, &QNetworkReply::finished, this, &BuyBitcoinQuoteService::onTransactionsReplyFinished);
+    m_transactions_reply = nullptr;
+
+    QByteArray data = reply->readAll();
+    QNetworkReply::NetworkError error = reply->error();
+    QString errorString = reply->errorString();
+
+    reply->deleteLater();
+
+    QString preferredProvider;
+    QStringList recentlyUsedProviders;
+    
+    QJsonParseError parseError;
+    QJsonObject json;
+    
+    if (!data.isEmpty() && error == QNetworkReply::NoError) {
+        json = QJsonDocument::fromJson(data, &parseError).object();
+        
+        if (parseError.error == QJsonParseError::NoError) {
+            // Find the most recent SETTLED transaction and collect all SETTLED providers
+            const auto transactionsArray = json.value("transactions").toArray();
+            QDateTime mostRecentDate;
+            QString mostRecentProvider;
+            QSet<QString> providersSet;
+            
+            for (const auto& transactionValue : transactionsArray) {
+                const auto transaction = transactionValue.toObject();
+                const QString status = transaction.value("status").toString();
+                
+                if (status == "SETTLED") {
+                    const QString provider = transaction.value("serviceProvider").toString();
+                    if (!provider.isEmpty()) {
+                        providersSet.insert(provider);
+                    }
+                    
+                    const QString createdAt = transaction.value("createdAt").toString();
+                    QDateTime transactionDate = QDateTime::fromString(createdAt, Qt::ISODate);
+                    
+                    if (transactionDate.isValid() && (mostRecentDate.isNull() || transactionDate > mostRecentDate)) {
+                        mostRecentDate = transactionDate;
+                        mostRecentProvider = provider;
+                    }
+                }
+            }
+            
+            preferredProvider = mostRecentProvider;
+            recentlyUsedProviders = QStringList(providersSet.begin(), providersSet.end());
+        }
+    }
+    
+    // Store preferred provider (will be used when quotes are fetched)
+    m_preferred_provider = preferredProvider;
+    
+    // Update recently used providers list
+    if (m_recently_used_providers != recentlyUsedProviders) {
+        m_recently_used_providers = recentlyUsedProviders;
+        emit recentlyUsedProvidersChanged();
+        
+        // Re-sort quotes if they're already loaded
+        if (!m_all_quotes.isEmpty()) {
+            sortQuotes();
+            emit quoteChanged();
+        }
+    }
+    
+    // Now fetch the quotes with the stored parameters
+    fetchQuote(m_pending_country_code, m_pending_source_amount, m_pending_source_currency_code, m_pending_wallet_address, QString());
+}
+
+void BuyBitcoinQuoteService::sortQuotes()
+{
+    if (m_all_quotes.isEmpty()) {
+        return;
+    }
+    
+    // Separate quotes into recently used and not recently used
+    QVariantList recentlyUsedQuotes;
+    QVariantList notRecentlyUsedQuotes;
+    
+    for (const auto& quoteVariant : m_all_quotes) {
+        const QVariantMap quote = quoteVariant.toMap();
+        const QString provider = quote.value("serviceProvider").toString();
+        
+        if (m_recently_used_providers.contains(provider)) {
+            recentlyUsedQuotes.append(quoteVariant);
+        } else {
+            notRecentlyUsedQuotes.append(quoteVariant);
+        }
+    }
+    
+    // Sort recently used quotes by destinationAmount (descending)
+    std::sort(recentlyUsedQuotes.begin(), recentlyUsedQuotes.end(), [](const QVariant& a, const QVariant& b) {
+        const double amountA = a.toMap().value("destinationAmount").toDouble();
+        const double amountB = b.toMap().value("destinationAmount").toDouble();
+        return amountA > amountB;
+    });
+    
+    // Sort not recently used quotes by destinationAmount (descending)
+    std::sort(notRecentlyUsedQuotes.begin(), notRecentlyUsedQuotes.end(), [](const QVariant& a, const QVariant& b) {
+        const double amountA = a.toMap().value("destinationAmount").toDouble();
+        const double amountB = b.toMap().value("destinationAmount").toDouble();
+        return amountA > amountB;
+    });
+    
+    m_all_quotes = recentlyUsedQuotes + notRecentlyUsedQuotes;
 }
 
