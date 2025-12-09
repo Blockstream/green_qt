@@ -37,13 +37,13 @@ StackViewPage {
                 context: self.context
                 minWeight: search_field.text.trim().length > 0 ? 0 : 1
             }
-            spacing: 4
+            spacing: 5
             footer: ColumnLayout {
                 width: list_view.width
                 spacing: 0
                 SelectorDelegate {
                     Layout.fillWidth: true
-                    Layout.topMargin: 4
+                    Layout.topMargin: 5
                     amp: false
                     enabled: self.supportsLiquid
                     index: -1
@@ -58,7 +58,7 @@ StackViewPage {
                 }
                 SelectorDelegate {
                     Layout.fillWidth: true
-                    Layout.topMargin: 4
+                    Layout.topMargin: 5
                     amp: true
                     enabled: self.supportsLiquid
                     index: -1
@@ -99,9 +99,9 @@ StackViewPage {
         highlighted: delegate.ListView.isCurrentItem
         background: Rectangle {
             radius: 4
-            color: Qt.lighter('#2F2F35', !delegate.highlighted && delegate.enabled && delegate.hovered ? 1.2 : 1)
-            border.width: delegate.highlighted ? 2 : 0
-            border.color: '#00BCFF'
+            color: Qt.lighter('#181818', !delegate.highlighted && delegate.enabled && delegate.hovered ? 1.2 : 1)
+            border.width: delegate.highlighted ? 2 : 1
+            border.color: delegate.highlighted ? '#00BCFF' : '#262626'
         }
         contentItem: ColumnLayout {
             spacing: 0
@@ -111,11 +111,17 @@ StackViewPage {
                 padding: 10
                 contentItem: RowLayout {
                     spacing: 10
-                    AssetIcon {
+                    Image {
                         Layout.alignment: Qt.AlignCenter
-                        asset: delegate.asset
+                        property real size: 32
+                        source: delegate.icon.source
+                        Layout.preferredHeight: size
+                        Layout.preferredWidth: size
+                        height: size
+                        width: size
+                        fillMode: Image.PreserveAspectFit
+                        mipmap: true
                         opacity: delegate.enabled ? 1 : 0.6
-                        size: 32
                     }
                     Label {
                         Layout.fillWidth: true

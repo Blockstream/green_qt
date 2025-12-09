@@ -221,7 +221,7 @@ StackViewPage {
         enabled: button.account != self.account
         padding: 20
         background: Rectangle {
-            color: Qt.lighter('#181818', button.account == self.account ? 1.4 : button.hovered ? 1.1 : 1)
+            color: Qt.lighter('#181818', button.account === self.account ? 1.4 : button.hovered ? 1.1 : 1)
             radius: 5
             border.color: '#262626'
             border.width: 1
