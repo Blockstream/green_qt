@@ -20,6 +20,7 @@ Dialog {
     anchors.centerIn: parent
     parent: Overlay.overlay
     spacing: 0
+    z: 2
     header: DialogHeader {
         Image {
             Layout.maximumWidth: 24
