@@ -35,7 +35,7 @@ TTextField {
             activeFocusOnTab: false
             enabled: scanner_popup.available && !scanner_popup.visible
             icon.source: 'qrc:/svg2/qrcode.svg'
-            onClicked: scanner_popup.open()
+            onClicked: scanner_popup.requestPermissionAndOpen()
         }
         CircleButton {
             activeFocusOnTab: false

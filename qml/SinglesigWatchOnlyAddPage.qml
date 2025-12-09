@@ -225,7 +225,7 @@ StackViewPage {
                 enabled: scanner_popup.available && !scanner_popup.visible
                 icon.source: 'qrc:/svg2/qrcode.svg'
                 visible: text_area.text.length === 0
-                onClicked: scanner_popup.open()
+                onClicked: scanner_popup.requestPermissionAndOpen()
                 ScannerPopup {
                     id: scanner_popup
                     onCodeScanned: (code) => {

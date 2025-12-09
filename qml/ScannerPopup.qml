@@ -11,9 +11,17 @@ Popup {
     signal bcurScanned(var result)
     property bool scanned: false
     readonly property bool available: window.hasVideoInput && permission.status !== Qt.Denied
+    function requestPermissionAndOpen() {
+        if (permission.status === Qt.Granted) {
+            self.open()
+        } else if (permission.status === Qt.Undetermined) {
+            permission.request()
+        }
+    }
+
     CameraPermission {
         id: permission
-        onStatusChanged: self.start()
+        onStatusChanged: self.requestPermissionAndOpen()
     }
     onOpened: self.scanned = false
     id: self

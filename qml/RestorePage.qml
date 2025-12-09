@@ -140,7 +140,7 @@ StackViewPage {
                 icon.source: 'qrc:/svg2/qrcode.svg'
                 onClicked: {
                     scanner_button.forceActiveFocus()
-                    scanner_popup.open()
+                    scanner_popup.requestPermissionAndOpen()
                 }
                 ScannerPopup {
                     id: scanner_popup

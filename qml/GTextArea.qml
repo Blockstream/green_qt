@@ -21,7 +21,6 @@ TextArea {
     leftPadding: 20
     rightPadding: 20
     background: Item {
-        anchors.fill: parent
         Rectangle {
             anchors.fill: parent
             border.width: 2
