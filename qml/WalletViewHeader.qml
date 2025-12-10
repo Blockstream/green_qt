@@ -12,7 +12,6 @@ import "util.js" as UtilJS
 
 MainPageHeader {
     signal sendClicked()
-    signal settingsClicked()
     signal archivedAccountsClicked()
     signal statusClicked()
     signal notificationsClicked()
@@ -65,16 +64,6 @@ MainPageHeader {
             onClicked: {
                 menu.close()
                 name_field_loader.item.forceActiveFocus()
-            }
-        }
-        GMenu.Separator {
-        }
-        GMenu.Item {
-            text: qsTrId('id_settings')
-            icon.source: 'qrc:/svg/wallet-settings.svg'
-            onClicked: {
-                menu.close()
-                self.settingsClicked()
             }
         }
         GMenu.Separator {

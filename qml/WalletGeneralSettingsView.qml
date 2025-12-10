@@ -202,6 +202,33 @@ Pane {
             }
 
             SettingsBox {
+                title: qsTrId('id_auto_logout_timeout')
+                visible: !self.context.device
+                contentItem: ColumnLayout {
+                    Label {
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        text: qsTrId('id_set_a_timeout_to_logout_after')
+                        wrapMode: Label.WordWrap
+                    }
+                    GComboBox {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignRight
+                        model: [1, 2, 5, 10, 60]
+                        width: 150
+                        delegate: ItemDelegate {
+                            background: null
+                            width: parent.width
+                            text: qsTrId('id_1d_minutes').arg(modelData)
+                        }
+                        displayText: qsTrId('id_1d_minutes').arg(currentText)
+                        onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
+                        currentIndex: model.indexOf(self.session.settings.altimeout)
+                    }
+                }
+            }
+
+            SettingsBox {
                 readonly property string supportId: {
                     return self.context.accounts
                         .filter(account => account.pointer === 0 && !account.network.electrum)

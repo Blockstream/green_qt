@@ -10,7 +10,6 @@ SET(QML_FILES
     qml/analytics.js
     qml/jade.js
     qml/util.js
-    qml/WalletSecuritySettingsView.qml
     qml/GCard.qml
     qml/TwoFactorEnableDialog.qml
     qml/DebugRectangle.qml
@@ -68,7 +67,7 @@ SET(QML_FILES
     qml/GPane.qml
     qml/main.qml
     qml/DialogHeader.qml
-    qml/WalletSettingsDialog.qml
+    qml/SettingsPage.qml
     qml/TransactionListView.qml
     qml/CancelTwoFactorResetDialog.qml
     qml/GTextArea.qml
@@ -101,7 +100,6 @@ SET(QML_FILES
     qml/AddressDelegate.qml
     qml/Constants.qml
     qml/SettingsBox.qml
-    qml/WalletRecoverySettingsView.qml
     qml/CoinDelegate.qml
     qml/MainPage.qml
     qml/OverviewPage.qml

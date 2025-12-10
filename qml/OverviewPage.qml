@@ -201,7 +201,6 @@ Page {
     header: WalletViewHeader {
         onSendClicked: self.openSendDrawer()
         onJadeDetailsClicked: self.jadeDetailsClicked()
-        onSettingsClicked: settings_dialog.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
         onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
         onStatusClicked: status_drawer.open()
@@ -231,11 +230,6 @@ Page {
     NotificationsDrawer {
         id: notifications_drawer
         context: self.context
-    }
-    Component {
-        id: settings_dialog
-        WalletSettingsDialog {
-        }
     }
     Component {
         id: create_account_drawer
@@ -341,9 +335,9 @@ Page {
                 }
             }
         }
-        Page {
-            background: null
-            contentItem: null
+        SettingsPage {
+            id: settings_page
+            context: self.context
         }
     }
 
