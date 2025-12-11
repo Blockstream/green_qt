@@ -18,103 +18,94 @@ Pane {
     id: self
     background: null
     padding: 0
-    contentItem: Flickable {
-        ScrollIndicator.vertical: ScrollIndicator {
+    contentItem: VFlickable {
+        alignment: Qt.AlignTop
+        spacing: 16
+        SettingsBox {
+            title: qsTrId('id_multisig') + ' ' + qsTrId('id_login')
+            visible: multisig_repeater.count > 0
+            contentItem: ColumnLayout {
+                spacing: 8
+                Repeater {
+                    id: multisig_repeater
+                    model: self.context.sessions.filter(session => !self.context.watchonly && !session.network.electrum)
+                    delegate: AbstractButton {
+                        required property var modelData
+                        readonly property Session session: modelData
+                        Layout.fillWidth: true
+                        id: button
+                        // TODO enabled: !wallet.locked
+                        leftPadding: 20
+                        rightPadding: 20
+                        topPadding: 15
+                        bottomPadding: 15
+                        background: Rectangle {
+                            radius: 5
+                            color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
+                        }
+                        contentItem: RowLayout {
+                            spacing: 20
+                            ColumnLayout {
+                                Label {
+                                    font.pixelSize: 14
+                                    font.weight: 600
+                                    text: button.session.network.displayName
+                                }
+                                Label {
+                                    Layout.fillWidth: true
+                                    font.pixelSize: 11
+                                    font.weight: 400
+                                    opacity: 0.6
+                                    text: {
+                                        if (button.session.username === '') return qsTrId('id_watchonly_disabled')
+                                        return button.session.username
+                                    }
+                                }
+                            }
+                            Image {
+                                Layout.alignment: Qt.AlignCenter
+                                source: 'qrc:/svg2/edit.svg'
+                            }
+                        }
+                        onClicked: {
+                            const dialog = watchonly_dialog.createObject(self, {
+                                context: self.context,
+                                session: button.session,
+                            })
+                            dialog.open()
+                        }
+                    }
+                }
+            }
         }
-        id: flickable
-        clip: true
-        contentWidth: flickable.width
-        contentHeight: layout.height
-        ColumnLayout {
-            id: layout
-            spacing: 16
-            width: flickable.width
-            SettingsBox {
-                title: qsTrId('id_multisig') + ' ' + qsTrId('id_login')
-                visible: multisig_repeater.count > 0
-                contentItem: ColumnLayout {
-                    spacing: 8
-                    Repeater {
-                        id: multisig_repeater
-                        model: self.context.sessions.filter(session => !self.context.watchonly && !session.network.electrum)
-                        delegate: AbstractButton {
-                            required property var modelData
-                            readonly property Session session: modelData
-                            Layout.fillWidth: true
-                            id: button
-                            // TODO enabled: !wallet.locked
-                            leftPadding: 20
-                            rightPadding: 20
-                            topPadding: 15
-                            bottomPadding: 15
-                            background: Rectangle {
-                                radius: 5
-                                color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
-                            }
-                            contentItem: RowLayout {
-                                spacing: 20
-                                ColumnLayout {
-                                    Label {
-                                        font.pixelSize: 14
-                                        font.weight: 600
-                                        text: button.session.network.displayName
-                                    }
-                                    Label {
-                                        Layout.fillWidth: true
-                                        font.pixelSize: 11
-                                        font.weight: 400
-                                        opacity: 0.6
-                                        text: {
-                                            if (button.session.username === '') return qsTrId('id_watchonly_disabled')
-                                            return button.session.username
-                                        }
-                                    }
-                                }
-                                Image {
-                                    Layout.alignment: Qt.AlignCenter
-                                    source: 'qrc:/svg2/edit.svg'
-                                }
-                            }
-                            onClicked: {
-                                const dialog = watchonly_dialog.createObject(self, {
-                                    context: self.context,
-                                    session: button.session,
-                                })
-                                dialog.open()
-                            }
-                        }
+        SettingsBox {
+            title: qsTrId('id_singlesig') + ' ' + qsTrId('id_extended_public_keys')
+            visible: singlesig_xpubs_repeater.count > 0
+            contentItem: ColumnLayout {
+                spacing: 8
+                Repeater {
+                    id: singlesig_xpubs_repeater
+                    model: self.context.accounts.filter(account => !account.hidden && account.json.slip132_extended_pubkey)
+                    delegate: SinglesigAccountPane {
+                        required property var modelData
+                        account: modelData
+                        text: modelData.json.slip132_extended_pubkey
                     }
                 }
             }
-            SettingsBox {
-                title: qsTrId('id_singlesig') + ' ' + qsTrId('id_extended_public_keys')
-                visible: singlesig_xpubs_repeater.count > 0
-                contentItem: ColumnLayout {
-                    spacing: 8
-                    Repeater {
-                        id: singlesig_xpubs_repeater
-                        model: self.context.accounts.filter(account => !account.hidden && account.json.slip132_extended_pubkey)
-                        delegate: SinglesigAccountPane {
-                            required property var modelData
-                            account: modelData
-                            text: modelData.json.slip132_extended_pubkey
-                        }
-                    }
-                }
-            }
-            SettingsBox {
-                title: qsTrId('id_singlesig') + ' ' + qsTrId('id_output_descriptors')
-                visible: singlesig_descriptors_repeater.count > 0
-                contentItem: ColumnLayout {
-                    spacing: 8
-                    Repeater {
-                        id: singlesig_descriptors_repeater
-                        model: self.context.accounts.filter(account => !account.hidden && account.json.core_descriptors)
-                        delegate: SinglesigAccountPane {
-                            required property var modelData
-                            account: modelData
-                            text: modelData.json.core_descriptors.join('\n')
-                        }
+        }
+        SettingsBox {
+            title: qsTrId('id_singlesig') + ' ' + qsTrId('id_output_descriptors')
+            visible: singlesig_descriptors_repeater.count > 0
+            contentItem: ColumnLayout {
+                spacing: 8
+                Repeater {
+                    id: singlesig_descriptors_repeater
+                    model: self.context.accounts.filter(account => !account.hidden && account.json.core_descriptors)
+                    delegate: SinglesigAccountPane {
+                        required property var modelData
+                        account: modelData
+                        text: modelData.json.core_descriptors.join('\n')
                     }
                 }
             }
