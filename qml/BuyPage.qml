@@ -12,15 +12,17 @@ StackViewPage {
     required property Context context
     required property Account account
     property bool pendingVerify: false
-    property string countryCode: 'US'
+    property string countryCode: {
+        const locale = Qt.locale()
+        const [, code] = locale.name.split('_')
+        return code ? code.toUpperCase() : (locale.country ? locale.country : 'US')
+    }
     readonly property string currencyCode: {
         const currency = self.context?.primarySession?.settings?.pricing?.currency ?? 'USD'
         return currency.toLowerCase()
     }
-    property int remoteConfigVersion: 0
     readonly property var defaultAmounts: {
-        const _ = self.remoteConfigVersion
-        const config = BuyBitcoinQuoteService.getBuyDefaultValues()
+        const config = service.buyDefaultValues
         if (!config || typeof config !== 'object' || Array.isArray(config)) {
             return ['100', '200', '400']
         }
@@ -40,10 +42,15 @@ StackViewPage {
         }
         return ['100', '200', '400']
     }
-    Component.onCompleted: {
-        const locale = Qt.locale()
-        const parts = locale.name.split('_')
-        self.countryCode = parts.length > 1 ? parts[1].toUpperCase() : (locale.country ? locale.country : 'US')
+    BuyBitcoinQuoteService {
+        id: service
+        onWidgetUrlChanged: {
+            if (service.widgetUrl.length > 0) {
+                self.StackView.view.push(webview_page, {
+                    widgetUrl: service.widgetUrl
+                })
+            }
+        }
     }
     id: self
     title: 'Buy Bitcoin'
@@ -71,8 +78,8 @@ StackViewPage {
             horizontalAlignment: TextInput.AlignHCenter
             font.pixelSize: 28
             font.weight: 600
-            topPadding: (BuyBitcoinQuoteService.bestDestinationAmount > 0 || BuyBitcoinQuoteService.loading) ? 8 : 16
-            bottomPadding: (BuyBitcoinQuoteService.bestDestinationAmount > 0 || BuyBitcoinQuoteService.loading) ? 26 : 16
+            topPadding: (service.bestDestinationAmount > 0 || service.loading) ? 8 : 16
+            bottomPadding: (service.bestDestinationAmount > 0 || service.loading) ? 26 : 16
             leftPadding: 28 + clear_button.width
             rightPadding: 28 + currency_label.width
             CircleButton {
@@ -87,7 +94,7 @@ StackViewPage {
                 icon.source: 'qrc:/svg2/x-circle.svg'
                 onClicked: {
                     amount_input.text = ''
-                    BuyBitcoinQuoteService.clearQuote()
+                    service.clearQuote()
                     amount_input.forceActiveFocus()
                 }
             }
@@ -111,12 +118,12 @@ StackViewPage {
                 font.pixelSize: 12
                 font.weight: 500
                 opacity: 0.7
-                visible: (BuyBitcoinQuoteService.selectedDestinationAmount > 0 || BuyBitcoinQuoteService.bestDestinationAmount > 0) || BuyBitcoinQuoteService.loading
+                visible: (service.selectedDestinationAmount > 0 || service.bestDestinationAmount > 0) || service.loading
                 text: {
-                    if (BuyBitcoinQuoteService.loading) {
+                    if (service.loading) {
                         return 'Fetching best rate...'
                     }
-                    const btcAmount = BuyBitcoinQuoteService.selectedDestinationAmount || BuyBitcoinQuoteService.bestDestinationAmount
+                    const btcAmount = service.selectedDestinationAmount || service.bestDestinationAmount
                     if (btcAmount > 0) {
                         let formatted = btcAmount.toFixed(8)
                         formatted = formatted.replace(/\.?0+$/, '')
@@ -135,8 +142,8 @@ StackViewPage {
             color: '#FF6B6B'
             font.pixelSize: 12
             font.weight: 500
-            visible: BuyBitcoinQuoteService.error.length > 0 && !BuyBitcoinQuoteService.loading
-            text: BuyBitcoinQuoteService.error
+            visible: service.error.length > 0 && !service.loading
+            text: service.error
             wrapMode: Label.Wrap
             Layout.fillWidth: true
         }
@@ -187,14 +194,13 @@ StackViewPage {
         }
         FieldTitle {
             text: 'Exchange'
-            visible: BuyBitcoinQuoteService.bestServiceProvider.length > 0 && BuyBitcoinQuoteService.bestDestinationAmount > 0
+            visible: service.bestServiceProvider.length > 0 && service.bestDestinationAmount > 0
         }
         AbstractButton {
             Layout.fillWidth: true
-            Layout.leftMargin: 2
             id: exchange_button
-            visible: (BuyBitcoinQuoteService.selectedServiceProvider.length > 0 || BuyBitcoinQuoteService.bestServiceProvider.length > 0)
-                  && (BuyBitcoinQuoteService.selectedDestinationAmount > 0 || BuyBitcoinQuoteService.bestDestinationAmount > 0)
+            visible: (service.selectedServiceProvider.length > 0 || service.bestServiceProvider.length > 0)
+                  && (service.selectedDestinationAmount > 0 || service.bestDestinationAmount > 0)
             background: Rectangle {
                 color: Qt.lighter('#181818', parent.hovered ? 1.2 : 1)
                 radius: 5
@@ -207,7 +213,7 @@ StackViewPage {
                 ProviderIcon {
                     Layout.preferredWidth: 20
                     Layout.preferredHeight: 20
-                    providerName: BuyBitcoinQuoteService.selectedServiceProvider || BuyBitcoinQuoteService.bestServiceProvider
+                    providerName: service.selectedServiceProvider || service.bestServiceProvider
                 }
                 Label {
                     Layout.fillWidth: true
@@ -215,17 +221,17 @@ StackViewPage {
                     color: '#FFFFFF'
                     font.pixelSize: 14
                     font.weight: 500
-                    text: BuyBitcoinQuoteService.selectedServiceProvider || BuyBitcoinQuoteService.bestServiceProvider
+                    text: service.selectedServiceProvider || service.bestServiceProvider
                 }
                 RightArrowIndicator {
                     active: exchange_button.hovered
                 }
             }
             onClicked: {
-                const quotes = BuyBitcoinQuoteService.allQuotes
+                const quotes = service.allQuotes
                 self.StackView.view.push(quotes_list_page, {
                     quotes: quotes,
-                    quoteService: BuyBitcoinQuoteService
+                    quoteService: service
                 })
             }
         }
@@ -248,16 +254,6 @@ StackViewPage {
                 quote_fetch_timer.restart()
             }
         }
-        Connections {
-            target: BuyBitcoinQuoteService
-            function onWidgetUrlChanged() {
-                if (BuyBitcoinQuoteService.widgetUrl.length > 0) {
-                    self.StackView.view.push(webview_page, {
-                        widgetUrl: BuyBitcoinQuoteService.widgetUrl
-                    })
-                }
-            }
-        }
         Timer {
             id: quote_fetch_timer
             interval: 500
@@ -268,18 +264,11 @@ StackViewPage {
                 const address = receive_address_controller.address?.address ?? ''
 
                 if (amountText.length === 0 || amount <= 0 || !currency || !address || !self.countryCode) {
-                    BuyBitcoinQuoteService.clearQuote()
+                    service.clearQuote()
                 } else {
                     const walletHashedId = self.context?.xpubHashId ?? ''
-                    BuyBitcoinQuoteService.fetchQuote(self.countryCode, amount, currency, address, walletHashedId)
+                    service.fetchQuote(self.countryCode, amount, currency, address, walletHashedId)
                 }
-            }
-        }
-        Connections {
-            target: BuyBitcoinQuoteService
-            function onBuyDefaultValuesChanged() {
-                // Increment version to trigger defaultAmounts recalculation
-                self.remoteConfigVersion++
             }
         }
         VSpacer {
@@ -290,24 +279,25 @@ StackViewPage {
             color: '#FF6B6B'
             font.pixelSize: 12
             font.weight: 500
-            visible: BuyBitcoinQuoteService.widgetError.length > 0 && !BuyBitcoinQuoteService.widgetLoading
-            text: BuyBitcoinQuoteService.widgetError
+            visible: service.widgetError.length > 0 && !service.widgetLoading
+            text: service.widgetError
             wrapMode: Label.Wrap
             Layout.fillWidth: true
         }
         PrimaryButton {
             Layout.fillWidth: true
+            busy: service.loading
             icon.source: 'qrc:/svg3/arrow-line-up-right.svg'
-            text: BuyBitcoinQuoteService.widgetLoading ? 'Loading...' : 'Buy Bitcoin'
+            text: service.widgetLoading ? 'Loading...' : 'Buy Bitcoin'
             enabled: amount_input.text.length > 0 &&
                      parseFloat(amount_input.text) > 0 &&
-                     BuyBitcoinQuoteService.error.length === 0 &&
-                     !BuyBitcoinQuoteService.loading &&
-                     (BuyBitcoinQuoteService.selectedServiceProvider.length > 0 || BuyBitcoinQuoteService.bestServiceProvider.length > 0) &&
-                     !BuyBitcoinQuoteService.widgetLoading &&
+                     service.error.length === 0 &&
+                     !service.loading &&
+                     (service.selectedServiceProvider.length > 0 || service.bestServiceProvider.length > 0) &&
+                     !service.widgetLoading &&
                      receive_address_controller.address
             onClicked: {
-                const serviceProvider = BuyBitcoinQuoteService.selectedServiceProvider || BuyBitcoinQuoteService.bestServiceProvider
+                const serviceProvider = service.selectedServiceProvider || service.bestServiceProvider
                 const amountText = amount_input.text.trim()
                 const amount = parseFloat(amountText)
                 const currency = self.context?.primarySession?.settings?.pricing?.currency ?? 'USD'
@@ -315,24 +305,24 @@ StackViewPage {
 
                 if (serviceProvider && amount > 0 && currency && address && self.countryCode) {
                     const walletHashedId = self.context?.xpubHashId ?? ''
-                    BuyBitcoinQuoteService.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, false, walletHashedId)
+                    service.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, false, walletHashedId)
                 }
             }
         }
         PrimaryButton {
             Layout.fillWidth: true
             icon.source: 'qrc:/svg3/arrow-line-up-right.svg'
-            text: BuyBitcoinQuoteService.widgetLoading ? 'Loading...' : 'Buy Bitcoin (sandbox)'
+            text: service.widgetLoading ? 'Loading...' : 'Buy Bitcoin (sandbox)'
             visible: Qt.application.arguments.indexOf('--debug') > 0
             enabled: amount_input.text.length > 0 &&
                      parseFloat(amount_input.text) > 0 &&
-                     BuyBitcoinQuoteService.error.length === 0 &&
-                     !BuyBitcoinQuoteService.loading &&
-                     (BuyBitcoinQuoteService.selectedServiceProvider.length > 0 || BuyBitcoinQuoteService.bestServiceProvider.length > 0) &&
-                     !BuyBitcoinQuoteService.widgetLoading &&
+                     service.error.length === 0 &&
+                     !service.loading &&
+                     (service.selectedServiceProvider.length > 0 || service.bestServiceProvider.length > 0) &&
+                     !service.widgetLoading &&
                      receive_address_controller.address
             onClicked: {
-                const serviceProvider = BuyBitcoinQuoteService.selectedServiceProvider || BuyBitcoinQuoteService.bestServiceProvider
+                const serviceProvider = service.selectedServiceProvider || service.bestServiceProvider
                 const amountText = amount_input.text.trim()
                 const amount = parseFloat(amountText)
                 const currency = self.context?.primarySession?.settings?.pricing?.currency ?? 'USD'
@@ -340,7 +330,7 @@ StackViewPage {
 
                 if (serviceProvider && amount > 0 && currency && address && self.countryCode) {
                     const walletHashedId = self.context?.xpubHashId ?? ''
-                    BuyBitcoinQuoteService.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, true, walletHashedId)
+                    service.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, true, walletHashedId)
                 }
             }
         }

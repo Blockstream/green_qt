@@ -24,8 +24,8 @@ class BuyBitcoinQuoteService : public QObject
     Q_PROPERTY(QString widgetError READ widgetError NOTIFY widgetErrorChanged)
     Q_PROPERTY(QString widgetUrl READ widgetUrl NOTIFY widgetUrlChanged)
     Q_PROPERTY(QStringList recentlyUsedProviders READ recentlyUsedProviders NOTIFY recentlyUsedProvidersChanged)
+    Q_PROPERTY(QJsonValue buyDefaultValues READ buyDefaultValues NOTIFY buyDefaultValuesChanged)
     QML_ELEMENT
-    QML_SINGLETON
 public:
     explicit BuyBitcoinQuoteService(QObject* parent = nullptr);
 
@@ -41,12 +41,12 @@ public:
     QString widgetError() const { return m_widget_error; }
     QString widgetUrl() const { return m_widget_url; }
     QStringList recentlyUsedProviders() const { return m_recently_used_providers; }
+    QJsonValue buyDefaultValues() const;
 
     Q_INVOKABLE void fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, const QString& walletHashedId = QString());
     Q_INVOKABLE void clearQuote();
     Q_INVOKABLE void setSelectedQuote(const QVariantMap& quote);
     Q_INVOKABLE void createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode = false, const QString& walletHashedId = QString());
-    Q_INVOKABLE QJsonValue getBuyDefaultValues() const;
 
 signals:
     void quoteChanged();

@@ -598,7 +598,7 @@ void BuyBitcoinQuoteService::onWidgetReplyFinished()
     emit widgetErrorChanged();
 }
 
-QJsonValue BuyBitcoinQuoteService::getBuyDefaultValues() const
+QJsonValue BuyBitcoinQuoteService::buyDefaultValues() const
 {
     return m_buy_default_values;
 }
