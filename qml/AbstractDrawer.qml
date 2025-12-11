@@ -43,7 +43,7 @@ Drawer {
     }
 
     background: Rectangle {
-        color: Qt.alpha('#232323', 0.95)
+        color: Qt.alpha('#232323', 0.90)
         Rectangle {
             color: '#383838'
             width: 1

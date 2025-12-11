@@ -9,8 +9,7 @@ AbstractButton {
     required property string title
     required property string description
     property bool beta: false
-    property color tagColor: Qt.alpha('#FFF', 0.4)
-
+    property color tagColor: Qt.alpha('#FFFFFF', 0.4)
 
     Layout.fillWidth: true
     id: self
@@ -45,47 +44,9 @@ AbstractButton {
             Layout.fillWidth: true
             spacing: 8
             RowLayout {
-                spacing: 4
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    color: '#FFF'
-                    font.pixelSize: 10
-                    font.capitalization: Font.AllUppercase
-                    font.weight: 400
-                    topPadding: 4
-                    bottomPadding: 4
-                    leftPadding: 8
-                    rightPadding: 8
-                    text: self.text
-                    background: Rectangle {
-                        radius: height / 2
-                        color: '#FFF'
-                        opacity: 0.4
-                    }
-                }
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    color: '#FFF'
-                    font.pixelSize: 10
-                    font.capitalization: Font.AllUppercase
-                    font.weight: 400
-                    topPadding: 4
-                    bottomPadding: 4
-                    leftPadding: 8
-                    rightPadding: 8
-                    text: self.tag
-                    background: Rectangle {
-                        radius: height / 2
-                        color: self.tagColor
-                    }
-                }
-                HSpacer {
-                }
-            }
-            RowLayout {
                 spacing: 8
                 Label {
-                    color: '#FFF'
+                    color: '#FFFFFF'
                     font.pixelSize: 16
                     font.weight: 600
                     text: self.title
@@ -99,18 +60,55 @@ AbstractButton {
             }
             Label {
                 Layout.fillWidth: true
-                color: '#FFF'
+                Layout.preferredWidth: 0
+                color: '#FFFFFF'
                 font.pixelSize: 12
                 font.weight: 400
-                opacity: 0.6
+                opacity: 0.8
                 text: self.description
                 wrapMode: Label.WordWrap
             }
+            RowLayout {
+                spacing: 6
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    color: '#181818'
+                    font.pixelSize: 10
+                    font.capitalization: Font.AllUppercase
+                    font.weight: 500
+                    topPadding: 3
+                    bottomPadding: 3
+                    leftPadding: 8
+                    rightPadding: 8
+                    text: self.text
+                    background: Rectangle {
+                        radius: height / 2
+                        color: '#FFFFFF'
+                        opacity: 0.4
+                    }
+                }
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    color: '#181818'
+                    font.pixelSize: 10
+                    font.capitalization: Font.AllUppercase
+                    font.weight: 500
+                    topPadding: 3
+                    bottomPadding: 3
+                    leftPadding: 8
+                    rightPadding: 8
+                    text: self.tag
+                    background: Rectangle {
+                        radius: height / 2
+                        color: self.tagColor
+                    }
+                }
+                HSpacer {
+                }
+            }
         }
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            visible: self.enabled
-            source: 'qrc:/svg2/next_arrow.svg'
+        RightArrowIndicator {
+            active: self.hovered
         }
     }
 }

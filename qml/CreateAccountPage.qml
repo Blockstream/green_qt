@@ -64,6 +64,7 @@ StackViewPage {
         alignment: Qt.AlignTop
         spacing: 5
         FieldTitle {
+            Layout.topMargin: 0
             text: qsTrId('id_asset')
         }
         AssetField {
@@ -134,21 +135,15 @@ StackViewPage {
         VSpacer {
         }
     }
-    footer: Pane {
-        background: null
-        padding: 0
-        topPadding: 20
-        bottomPadding: 20
-        contentItem: RowLayout {
-            HSpacer {
-            }
-            LinkButton {
-                text: self.advanced ? qsTrId('id_hide_advanced_options') : qsTrId('id_show_advanced_options')
-                onClicked: self.advanced = !self.advanced
-                visible: !self.anyAMP && !self.asset?.amp
-            }
-            HSpacer {
-            }
+    footerItem: RowLayout {
+        HSpacer {
+        }
+        LinkButton {
+            text: self.advanced ? qsTrId('id_hide_advanced_options') : qsTrId('id_show_advanced_options')
+            onClicked: self.advanced = !self.advanced
+            visible: !self.anyAMP && !self.asset?.amp
+        }
+        HSpacer {
         }
     }
 
@@ -233,7 +228,7 @@ StackViewPage {
                     font.pixelSize: 14
                     font.weight: 400
                     horizontalAlignment: Qt.AlignCenter
-                    text: `This feature is coming soon on desktop, but it's already available on Green mobile now!`
+                    text: `This feature is coming soon on desktop, but it's already available on Blockstream mobile now!`
                     wrapMode: Label.WordWrap
                 }
                 LinkButton {

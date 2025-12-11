@@ -76,7 +76,7 @@ StackViewPage {
         topPadding: 10
         bottomPadding: 10
         background: Rectangle {
-            color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
+            color: Qt.lighter('#181818', button.hovered ? 1.2 : 1)
             radius: 5
             Rectangle {
                 anchors.fill: parent
@@ -132,28 +132,8 @@ StackViewPage {
         bottomPadding: 10
         highlighted: ListView.isCurrentItem
         background: Rectangle {
-            color: Qt.lighter('#222226', delegate.hovered ? 1.2 : 1)
+            color: Qt.lighter('#181818', delegate.hovered ? 1.2 : 1)
             radius: 5
-            Rectangle {
-                anchors.fill: parent
-                anchors.margins: -4
-                border.width: 2
-                border.color: '#00BCFF'
-                color: 'transparent'
-                radius: 9
-                visible: {
-                    if (delegate.activeFocus) {
-                        switch (delegate.focusReason) {
-                        case Qt.TabFocusReason:
-                        case Qt.BacktabFocusReason:
-                        case Qt.ShortcutFocusReason:
-                            return true
-                        }
-                    }
-                    return false
-                }
-                z: -1
-            }
             Rectangle {
                 anchors.fill: parent
                 border.width: 2
