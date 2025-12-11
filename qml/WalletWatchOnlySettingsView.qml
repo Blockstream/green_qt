@@ -126,16 +126,11 @@ Pane {
         WalletDialog {
             required property Session session
             id: self
-            clip: true
             header: null
+            footer: null
             enabled: controller.monitor.idle
             width: 450
-            height: 550
-            Overlay.modal: Rectangle {
-                anchors.fill: parent
-                color: 'black'
-                opacity: 0.6
-            }
+            height: 500
             WatchOnlyController {
                 id: controller
                 session: self.session
@@ -150,17 +145,17 @@ Pane {
                 contentItem: ColumnLayout {
                     spacing: 10
                     FieldTitle {
+                        Layout.topMargin: 0
                         text: qsTrId('id_network')
                     }
                     Pane {
-                        Layout.bottomMargin: 15
                         Layout.fillWidth: true
                         padding: 15
                         bottomPadding: 15
                         leftPadding: 20
                         rightPadding: 20
                         background: Rectangle {
-                            color: '#222226'
+                            color: '#181818'
                             radius: 5
                         }
                         contentItem: RowLayout {
@@ -184,7 +179,6 @@ Pane {
                         text: qsTrId('id_username')
                     }
                     TTextField {
-                        Layout.bottomMargin: 15
                         Layout.fillWidth: true
                         id: username_field
                         text: self.session.username
@@ -199,7 +193,6 @@ Pane {
                         text: qsTrId('id_password')
                     }
                     TTextField {
-                        Layout.bottomMargin: 15
                         Layout.fillWidth: true
                         id: password_field
                         echoMode: TextField.Password
@@ -213,9 +206,9 @@ Pane {
                     Label {
                         Layout.alignment: Qt.AlignCenter
                         font.pixelSize: 12
-                        color: '#FFF'
+                        color: '#FFFFFF'
                         opacity: 0.6
-                        text: qsTrId('Username and password should have 8 characters or more')
+                        text: qsTrId('id_at_least_8_characters_required')
                     }
                     VSpacer {
                     }
@@ -233,38 +226,36 @@ Pane {
                     VSpacer {
                     }
                 }
-                footer: Pane {
-                    background: null
-                    padding: 20
-                    contentItem: RowLayout {
-                        spacing: 10
-                        RegularButton {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            enabled: self.session.username.length > 0
-                            implicitWidth: 0
-                            text: qsTrId('id_delete')
-                            onClicked: {
-                                error_badge.clear()
-                                ok_badge.clear()
-                                username_field.clear()
-                                password_field.clear()
-                                controller.clear()
-                            }
+                footerItem: RowLayout {
+                    spacing: 10
+                    RegularButton {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        enabled: self.session.username.length > 0
+                        implicitWidth: 0
+                        text: qsTrId('id_delete')
+                        onClicked: {
+                            error_badge.clear()
+                            ok_badge.clear()
+                            username_field.clear()
+                            password_field.clear()
+                            controller.clear()
                         }
-                        PrimaryButton {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: true
-                            implicitWidth: 0
-                            text: qsTrId('id_update')
-                            enabled: username_field.acceptableInput && password_field.acceptableInput
-                            onClicked: {
-                                ok_badge.clear()
-                                error_badge.clear()
-                                controller.update(username_field.text, password_field.text)
-                            }
-                            busy: !controller.monitor.idle
+                    }
+                    PrimaryButton {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        implicitWidth: 0
+                        text: qsTrId('id_update')
+                        enabled: username_field.acceptableInput && password_field.acceptableInput
+                        onClicked: {
+                            ok_badge.clear()
+                            error_badge.clear()
+                            controller.update(username_field.text, password_field.text)
                         }
+                        busy: !controller.monitor.idle
                     }
                 }
             }

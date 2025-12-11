@@ -62,8 +62,8 @@ Dialog {
 
     background: Rectangle {
         radius: 10
-        color: '#181818'
-        border.width: 0.5
-        border.color: Qt.lighter('#181818')
+        color: Qt.alpha('#232323', 0.95)
+        border.width: 1
+        border.color: '#383838'
     }
 }
