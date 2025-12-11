@@ -280,6 +280,7 @@ SET(QML_FILES
     qml/AssetSelectorPage.qml
     qml/AccountAssetPage.qml
     qml/RightArrowIndicator.qml
+    qml/PushButton.qml
 )
 
 if (GREEN_NO_RESOURCES)
