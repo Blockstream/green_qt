@@ -47,34 +47,8 @@ StackViewPage {
     }
     id: self
     title: 'Buy Bitcoin'
-    leftItem: AbstractButton {
-        padding: 8
-        leftPadding: 12
-        rightPadding: 12
-        topPadding: 8
-        bottomPadding: 8
-        background: Rectangle {
-            color: Qt.lighter('#181818', parent.hovered ? 1.2 : 1)
-            radius: 4
-            border.width: 1
-            border.color: '#262626'
-        }
-        contentItem: RowLayout {
-            spacing: 6
-             Image {
-                 id: flag_image
-                 Layout.preferredWidth: 16
-                 Layout.preferredHeight: 12
-                 fillMode: Image.PreserveAspectFit
-                 source: 'qrc:/flags/' + self.countryCode + '-flag.svg'
-             }
-            Image {
-                Layout.preferredWidth: 16
-                Layout.preferredHeight: 16
-                source: 'qrc:/svg2/caret-down-white.svg'
-                opacity: 0.6
-            }
-        }
+    leftItem: CountryButton {
+        code: self.countryCode
         onClicked: self.StackView.view.push(null, country_selector_page, { selectedCountryCode: self.countryCode })
     }
     rightItem: CloseButton {
@@ -428,6 +402,34 @@ StackViewPage {
         BuyWebViewPage {
             onCloseClicked: self.closeClicked()
             onShowTransactions: self.showTransactions()
+        }
+    }
+    component CountryButton: PushButton {
+        required property string code
+        id: button
+        padding: 8
+        leftPadding: 12
+        rightPadding: 12
+        topPadding: 8
+        bottomPadding: 8
+        fillColor: '#181818'
+        borderColor: '#262626'
+        textColor: '#FFFFFF'
+        contentItem: RowLayout {
+            spacing: 6
+             Image {
+                 id: flag_image
+                 Layout.preferredWidth: 16
+                 Layout.preferredHeight: 12
+                 fillMode: Image.PreserveAspectFit
+                 source: 'qrc:/flags/' + button.code + '-flag.svg'
+             }
+            Image {
+                Layout.preferredWidth: 16
+                Layout.preferredHeight: 16
+                source: 'qrc:/svg2/caret-down-white.svg'
+                opacity: 0.6
+            }
         }
     }
 }
