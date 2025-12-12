@@ -25,6 +25,7 @@ WalletDialog {
                 delegate: AccountDelegate {
                     id: delegate
                     onClicked: list_view.currentIndex = delegate.index
+                    highlighted: list_view.currentIndex === delegate.index
                 }
             }
         }
