@@ -70,6 +70,8 @@ void BuyBitcoinQuoteService::setSelectedQuote(const QVariantMap& quote)
     if (m_selected_quote != quote) {
         m_selected_quote = quote;
         emit selectedQuoteChanged();
+        m_widget_error.clear();
+        emit widgetErrorChanged();
     }
 }
 
@@ -524,22 +526,27 @@ void BuyBitcoinQuoteService::onWidgetReplyFinished()
 
     qDebug() << "Widget API response - Status:" << statusCode << "Error:" << error << "Data:" << data;
 
-    // Check for network error
-    if (error != QNetworkReply::NoError) {
-        m_widget_error = errorString;
+    // Check for HTTP error status codes
+    if (statusCode >= 400) {
+        QString errorMsg;
+        if (statusCode == 500) {
+            errorMsg = "Service provider error. Please try again with a different one.";
+        } else {
+            errorMsg = json.value("message").toString();
+            if (errorMsg.isEmpty()) {
+                errorMsg = QString("HTTP Error %1").arg(statusCode);
+            }
+        }
+        m_widget_error = errorMsg;
         m_widget_url = QString();
         emit widgetErrorChanged();
         emit widgetUrlChanged();
         return;
     }
 
-    // Check for HTTP error status codes
-    if (statusCode >= 400) {
-        QString errorMsg = json.value("message").toString();
-        if (errorMsg.isEmpty()) {
-            errorMsg = QString("HTTP Error %1").arg(statusCode);
-        }
-        m_widget_error = errorMsg;
+    // Check for network error (only if no HTTP error status code was set)
+    if (error != QNetworkReply::NoError) {
+        m_widget_error = errorString;
         m_widget_url = QString();
         emit widgetErrorChanged();
         emit widgetUrlChanged();

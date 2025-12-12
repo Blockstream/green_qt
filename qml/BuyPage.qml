@@ -82,6 +82,7 @@ StackViewPage {
             bottomPadding: (service.bestDestinationAmount > 0 || service.loading) ? 26 : 16
             leftPadding: 28 + clear_button.width
             rightPadding: 28 + currency_label.width
+            error: service.error.length > 0 && !service.loading
             CircleButton {
                 id: clear_button
                 focusPolicy: Qt.NoFocus
@@ -136,16 +137,10 @@ StackViewPage {
                 quote_fetch_timer.restart()
             }
         }
-        Label {
-            Layout.topMargin: 4
-            Layout.leftMargin: 2
-            color: '#FF6B6B'
-            font.pixelSize: 12
-            font.weight: 500
-            visible: service.error.length > 0 && !service.loading
-            text: service.error
-            wrapMode: Label.Wrap
-            Layout.fillWidth: true
+        ErrorPane {
+            Layout.topMargin: -15
+            Layout.bottomMargin: 15
+            error: service.error.length > 0 && !service.loading ? service.error : null
         }
         RowLayout {
             Layout.fillWidth: true
@@ -194,7 +189,8 @@ StackViewPage {
         }
         FieldTitle {
             text: 'Exchange'
-            visible: service.bestServiceProvider.length > 0 && service.bestDestinationAmount > 0
+            visible: (service.selectedServiceProvider.length > 0 || service.bestServiceProvider.length > 0)
+                  && (service.selectedDestinationAmount > 0 || service.bestDestinationAmount > 0)
         }
         AbstractButton {
             Layout.fillWidth: true
@@ -205,7 +201,7 @@ StackViewPage {
                 color: Qt.lighter('#181818', parent.hovered ? 1.2 : 1)
                 radius: 5
                 border.width: 1
-                border.color: '#262626'
+                border.color: (service.widgetError.length > 0 && !service.widgetLoading) ? '#C91D36' : '#262626'
             }
             padding: 20
             contentItem: RowLayout {
@@ -234,6 +230,11 @@ StackViewPage {
                     quoteService: service
                 })
             }
+        }
+        ErrorPane {
+            Layout.topMargin: -15
+            Layout.bottomMargin: 15
+            error: service.widgetError.length > 0 && !service.widgetLoading ? service.widgetError : null
         }
         ReceiveAddressController {
             id: receive_address_controller
@@ -273,17 +274,6 @@ StackViewPage {
         }
         VSpacer {
         }
-        Label {
-            Layout.topMargin: 4
-            Layout.leftMargin: 2
-            color: '#FF6B6B'
-            font.pixelSize: 12
-            font.weight: 500
-            visible: service.widgetError.length > 0 && !service.widgetLoading
-            text: service.widgetError
-            wrapMode: Label.Wrap
-            Layout.fillWidth: true
-        }
         PrimaryButton {
             Layout.fillWidth: true
             busy: service.loading
@@ -309,6 +299,8 @@ StackViewPage {
                 }
             }
         }
+    }
+    footerItem: ColumnLayout {
         PrimaryButton {
             Layout.fillWidth: true
             icon.source: 'qrc:/svg3/arrow-line-up-right.svg'
@@ -394,6 +386,7 @@ StackViewPage {
             onShowTransactions: self.showTransactions()
         }
     }
+
     component CountryButton: PushButton {
         required property string code
         id: button
