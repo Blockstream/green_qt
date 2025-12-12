@@ -105,25 +105,12 @@ function networkLabel (network) {
 }
 
 function networkColor (network) {
-    if (network.mainnet) {
-        if (network.liquid) {
-            return '#46BEAE'
-        } else {
-            return '#FF8E00'
-        }
-    } else if (network.localtest) {
-        if (network.liquid) {
-            return '#46BEAE'
-        } else {
-            return '#FF8E00'
-        }
-    } else {
-        if (network.liquid) {
-            return '#8C8C8C'
-        } else {
-            return '#8C8C8C'
-        }
+    const c = Qt.color(network.liquid ? '#46BEAE' : '#FF8E00')
+    if (!network.mainnet) {
+        c.hsvValue *= 0.5
+        c.hsvSaturation *= 0.1
     }
+    return c
 }
 
 function incognito(enabled, value, size = 5) {
