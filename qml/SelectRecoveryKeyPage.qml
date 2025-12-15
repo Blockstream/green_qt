@@ -135,7 +135,7 @@ StackViewPage {
                     id: xpub_field
                     network: self.network
                 }
-                SendPage.ErrorPane {
+                ErrorPane {
                     Layout.topMargin: -15
                     Layout.bottomMargin: 15
                     error: {

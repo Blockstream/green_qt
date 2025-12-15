@@ -186,42 +186,4 @@ StackViewPage {
             }
         }
     }
-
-    component ErrorPane: Collapsible {
-        required property var error
-        Layout.fillWidth: true
-        id: error_pane
-        animationVelocity: 300
-        contentWidth: error_pane.width
-        contentHeight: pane.height
-        collapsed: !error_pane.error
-        z: -1
-        Pane {
-            id: pane
-            leftPadding: 10
-            rightPadding: 10
-            bottomPadding: 15
-            topPadding: error_pane.Layout.topMargin !== 0 ? 25 : 15
-            width: error_pane.width
-            background: Rectangle {
-                color: '#3B080F'
-                radius: 5
-            }
-            contentItem: RowLayout {
-                spacing: 10
-                Image {
-                    source: 'qrc:/svg2/info_red.svg'
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    font.pixelSize: 12
-                    font.weight: 600
-                    color: '#C91D36'
-                    text: qsTrId(error_pane.error ?? '')
-                    wrapMode: Label.Wrap
-                }
-            }
-        }
-    }
 }

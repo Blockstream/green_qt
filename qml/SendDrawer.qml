@@ -129,7 +129,7 @@ WalletDrawer {
                     address_field.previousText = address_field.text
                 }
             }
-            RedepositPage.ErrorPane {
+            ErrorPane {
                 Layout.topMargin: -20
                 Layout.bottomMargin: 15
                 error: address_field.error
