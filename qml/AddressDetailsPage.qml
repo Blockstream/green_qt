@@ -7,7 +7,6 @@ import QtQuick.Layouts
 StackViewPage {
     required property Context context
     required property Address address
-    property Action closeAction
     id: self
     title: qsTrId('id_address')
     rightItem: RowLayout {
@@ -16,8 +15,7 @@ StackViewPage {
             url: self.address.url
         }
         CloseButton {
-            action: self.closeAction
-            visible: self.closeAction || false
+            onClicked: self.closeClicked()
         }
     }
     footerItem: ColumnLayout {
@@ -41,32 +39,25 @@ StackViewPage {
             Layout.fillWidth: true
             padding: 20
             background: Rectangle {
+                border.color: '#262626'
+                border.width: 1
+                color: '#181818'
                 radius: 5
-                color: '#222226'
             }
             contentItem: ColumnLayout {
                 id: qrcode_layout
                 spacing: 10
                 QRCode {
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.fillWidth: true
-                    Layout.minimumHeight: qrcode_layout.width
-                    Layout.preferredWidth: 200
                     id: qrcode
                     text: self.address.address
                     implicitHeight: 200
                     implicitWidth: 200
                     radius: 4
                 }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    font.features: { 'calt': 0, 'zero': 1 }
-                    font.pixelSize: 12
-                    font.weight: 500
-                    horizontalAlignment: Label.AlignHCenter
-                    text: self.address.address
-                    wrapMode: Label.WrapAnywhere
+                AddressLabel {
+                    Layout.alignment: Qt.AlignHCenter
+                    address: self.address
                 }
                 CopyAddressButton {
                     Layout.alignment: Qt.AlignCenter
@@ -74,6 +65,9 @@ StackViewPage {
                     text: qsTrId('id_copy_address')
                 }
             }
+        }
+        FieldTitle {
+            text: qsTrId('id_details')
         }
         RowLayout {
             SectionLabel {
@@ -120,6 +114,7 @@ StackViewPage {
     Component {
         id: sign_message_drawer
         SignMessagePage {
+            onCloseClicked: self.closeClicked()
         }
     }
 }

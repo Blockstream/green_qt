@@ -12,9 +12,7 @@ WalletDrawer {
         initialItem: AddressDetailsPage {
             context: self.context
             address: self.address
-            closeAction: Action {
-                onTriggered: self.close()
-            }
+            onCloseClicked: self.close()
         }
     }
 }

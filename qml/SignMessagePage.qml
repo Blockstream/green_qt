@@ -7,32 +7,43 @@ import QtQuick.Layouts
 StackViewPage {
     required property Context context
     required property Address address
-    id: self
-    title: qsTrId('id_authenticate_address')
     SignMessageController {
         id: controller
         context: self.context
         address: self.address
         message: text_area.text
-        onCleared: stack_view.pop(null)
-        onRejected: stack_view.pop(null)
-        onAccepted: (signature) => stack_view.push(signature_view, { signature })
+        onAccepted: (signature) => self.StackView.view.push(signature_page, { signature })
     }
     TaskPageFactory {
         monitor: controller.monitor
-        target: stack_view
+        target: self.StackView.view
     }
-    contentItem: ColumnLayout {
-        spacing: 20
-        Label {
+    id: self
+    title: qsTrId('id_authenticate_address')
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
+    }
+    contentItem: VFlickable {
+        alignment: Qt.AlignTop
+        spacing: 5
+        FieldTitle {
+            Layout.topMargin: 0
+            text: qsTrId('id_address')
+        }
+        Pane {
             Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            text: self.address.data.address
-            font.pixelSize: 14
-            font.weight: 400
-            horizontalAlignment: Label.AlignHCenter
-            opacity: 0.4
-            wrapMode: Label.Wrap
+            background: Rectangle {
+                border.color: '#262626'
+                border.width: 1
+                color: '#181818'
+                radius: 5
+            }
+            contentItem: AddressLabel {
+                address: self.address
+            }
+        }
+        FieldTitle {
+            text: qsTrId('id_message')
         }
         GTextArea {
             id: text_area
@@ -53,30 +64,34 @@ StackViewPage {
                 }
             }
         }
-        GStackView {
+        VSpacer {
+        }
+    }
+    footerItem: RowLayout {
+        PrimaryButton {
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            id: stack_view
-            initialItem: ColumnLayout {
-                VSpacer {
-                }
-                PrimaryButton {
-                    Layout.fillWidth: true
-                    enabled: controller.valid && (controller.monitor?.idle ?? true)
-                    text: qsTrId('id_sign_message')
-                    onClicked: controller.sign()
-                }
-            }
+            enabled: controller.valid && (controller.monitor?.idle ?? true)
+            busy: !(controller.monitor?.idle ?? true)
+            text: qsTrId('id_sign_message')
+            onClicked: controller.sign()
         }
     }
 
     Component {
-        id: signature_view
-        ColumnLayout {
-            required property string signature
-            id: view
-            VSpacer {
-            }
+        id: signature_page
+        SignaturePage {
+            onCloseClicked: self.closeClicked()
+        }
+    }
+
+    component SignaturePage: StackViewPage {
+        required property string signature
+        id: page
+        rightItem: CloseButton {
+            onClicked: page.closeClicked()
+        }
+        contentItem: VFlickable {
+            spacing: 20
             CompletedImage {
                 Layout.alignment: Qt.AlignHCenter
             }
@@ -92,7 +107,7 @@ StackViewPage {
             Label {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                text: view.signature
+                text: page.signature
                 font.pixelSize: 12
                 font.weight: 500
                 horizontalAlignment: Label.AlignHCenter
@@ -100,10 +115,8 @@ StackViewPage {
             }
             CopyAddressButton {
                 Layout.alignment: Qt.AlignCenter
-                content: view.signature
+                content: page.signature
                 text: qsTrId('id_copy_to_clipboard')
-            }
-            VSpacer {
             }
         }
     }

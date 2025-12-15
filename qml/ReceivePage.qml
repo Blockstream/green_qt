@@ -259,24 +259,26 @@ StackViewPage {
             required property Account account
             id: page
             title: qsTrId('id_addresses')
-            contentItem: ColumnLayout {
-                spacing: 20
-                SearchField {
-                    Layout.fillWidth: true
-                    id: search_field
+            rightItem: CloseButton {
+                onClicked: self.closeClicked()
+            }
+            contentItem: TListView {
+                id: list_view
+                spacing: 5
+                header: ColumnLayout {
+                    width: list_view.width
+                    SearchField {
+                        Layout.fillWidth: true
+                        Layout.bottomMargin: 5
+                        id: search_field
+                    }
                 }
-                TListView {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    id: list_view
-                    spacing: 5
-                    model: AddressListModel {
-                        filter: search_field.text
-                        account: page.account
-                    }
-                    delegate: AddressDelegate2 {
-                        width: list_view.width
-                    }
+                model: AddressListModel {
+                    filter: search_field.text
+                    account: page.account
+                }
+                delegate: AddressDelegate2 {
+                    width: list_view.width
                 }
             }
         }
@@ -354,6 +356,7 @@ StackViewPage {
     Component {
         id: address_details_page
         AddressDetailsPage {
+            onCloseClicked: self.closeClicked()
         }
     }
 }
