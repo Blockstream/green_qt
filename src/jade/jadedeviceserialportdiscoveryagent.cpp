@@ -1,13 +1,13 @@
+#include "devicemanager.h"
+#include "jadeapi.h"
+#include "jadedevice.h"
 #include "jadedeviceserialportdiscoveryagent.h"
+
+#include <QtConcurrentRun>
 
 #include <QGuiApplication>
 #include <QSerialPortInfo>
 #include <QTimer>
-#include <QtConcurrentRun>
-
-#include "devicemanager.h"
-#include "jadeapi.h"
-#include "jadedevice.h"
 
 #include <libserialport.h>
 

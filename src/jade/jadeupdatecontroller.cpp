@@ -5,8 +5,8 @@
 #include "jadeapi.h"
 #include "jadedevice.h"
 #include "json.h"
-#include "session.h"
 #include "progress.h"
+#include "session.h"
 
 #include <QCryptographicHash>
 #include <QFile>

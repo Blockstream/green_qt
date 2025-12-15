@@ -2,8 +2,8 @@
 #define GREEN_OUTPUT_H
 
 #include <QJsonObject>
-#include <QQmlEngine>
 #include <QObject>
+#include <QQmlEngine>
 
 class Account;
 class Asset;

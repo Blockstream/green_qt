@@ -1,4 +1,5 @@
 #include "account.h"
+#include "address.h"
 #include "appupdatecontroller.h"
 #include "asset.h"
 #include "context.h"
@@ -8,12 +9,11 @@
 #include "network.h"
 #include "networkmanager.h"
 #include "notification.h"
+#include "output.h"
 #include "session.h"
 #include "sessionmanager.h"
 #include "task.h"
 #include "transaction.h"
-#include "address.h"
-#include "output.h"
 #include "wallet.h"
 
 #include <gdk.h>

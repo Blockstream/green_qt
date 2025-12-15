@@ -1,8 +1,8 @@
 #ifndef GREEN_CREATETRANSACTIONCONTROLLER_H
 #define GREEN_CREATETRANSACTIONCONTROLLER_H
 
-#include "green.h"
 #include "controller.h"
+#include "green.h"
 
 class Convert;
 class Recipient : public QObject

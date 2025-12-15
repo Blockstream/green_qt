@@ -1,8 +1,8 @@
 #ifndef GREEN_WATCHONLYLOGINCONTROLLER_H
 #define GREEN_WATCHONLYLOGINCONTROLLER_H
 
-#include "green.h"
 #include "controller.h"
+#include "green.h"
 #include "task.h"
 
 #include <QQmlEngine>

@@ -6,8 +6,8 @@
 #include "context.h"
 #include "networkmanager.h"
 #include "notification.h"
-#include "task.h"
 #include "session.h"
+#include "task.h"
 #include "wallet.h"
 #include "walletmanager.h"
 

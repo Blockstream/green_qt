@@ -1,18 +1,16 @@
 #include "buybitcoinquoteservice.h"
 
-#include <QQmlEngine>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrl>
-#include <QUrlQuery>
+#include <QDebug>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QQmlEngine>
 #include <QRegularExpression>
-#include <QDebug>
-#include <QDateTime>
-#include <QSet>
+#include <QUrl>
+
 #include <algorithm>
 
 #include <countly/countly.hpp>

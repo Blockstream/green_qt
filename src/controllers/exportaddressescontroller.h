@@ -1,8 +1,8 @@
 #ifndef GREEN_EXPORTADDRESSESCONTROLLER_H
 #define GREEN_EXPORTADDRESSESCONTROLLER_H
 
-#include "green.h"
 #include "controller.h"
+#include "green.h"
 
 #include <QObject>
 #include <QtQml>

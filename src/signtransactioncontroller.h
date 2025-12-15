@@ -1,8 +1,8 @@
 #ifndef GREEN_SIGNTRANSACTIONCONTROLLER_H
 #define GREEN_SIGNTRANSACTIONCONTROLLER_H
 
-#include "green.h"
 #include "controller.h"
+#include "green.h"
 
 class SignTransactionController : public Controller
 {

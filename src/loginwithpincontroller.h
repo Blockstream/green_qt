@@ -1,8 +1,8 @@
 #ifndef GREEN_LOGINWITHPINCONTROLLER_H
 #define GREEN_LOGINWITHPINCONTROLLER_H
 
-#include "green.h"
 #include "controller.h"
+#include "green.h"
 
 #include <QObject>
 #include <QQmlEngine>

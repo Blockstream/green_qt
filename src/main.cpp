@@ -1,3 +1,6 @@
+#include <QtPlugin>
+#include <QtWebEngineQuick>
+
 #include <QApplication>
 #include <QCameraDevice>
 #include <QCommandLineParser>
@@ -10,37 +13,35 @@
 #include <QQmlNetworkAccessManagerFactory>
 #include <QQuickStyle>
 #include <QQuickWindow>
+#include <QSettings>
+#include <QSGRendererInterface>
 #include <QStandardPaths>
 #include <QStyleHints>
-#include <QtPlugin>
-#include <QtWebEngineQuick>
-#include <QSGRendererInterface>
-#include <QSettings>
 #include <QTemporaryDir>
 #include <QTranslator>
 #include <QUrl>
 #include <QWindow>
 
-#include "config.h"
+#include "analytics.h"
 #include "application.h"
 #include "applicationcontroller.h"
-#include "analytics.h"
-#include "controllers/sessioncontroller.h"
-#include "controllers/watchonlycontroller.h"
-#include "controllers/twofactorcontroller.h"
-#include "controllers/signmessagecontroller.h"
-#include "controllers/bcurcontroller.h"
-#include "zxing.h"
 #include "asset.h"
 #include "clipboard.h"
+#include "config.h"
+#include "controllers/bcurcontroller.h"
+#include "controllers/sessioncontroller.h"
+#include "controllers/signmessagecontroller.h"
+#include "controllers/twofactorcontroller.h"
+#include "controllers/watchonlycontroller.h"
 #include "devicemanager.h"
 #include "ga.h"
+#include "green_settings.h"
 #include "httpmanager.h"
 #include "networkmanager.h"
 #include "sessionmanager.h"
-#include "green_settings.h"
 #include "util.h"
 #include "walletmanager.h"
+#include "zxing.h"
 
 #include <KDSingleApplication>
 
@@ -89,9 +90,9 @@ QCommandLineParser g_args;
 
 #ifdef ENABLE_SENTRY
 #include <crash_report_database.h>
-#include <settings.h>
 #include <crashpad_client.h>
 #include <handler/handler_main.h>
+#include <settings.h>
 #endif
 
 static QString GraphicsAPIToString(QSGRendererInterface::GraphicsApi api) {

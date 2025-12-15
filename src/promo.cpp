@@ -1,6 +1,6 @@
 #include "analytics.h"
-#include "promo.h"
 #include "green_settings.h"
+#include "promo.h"
 #include "util.h"
 
 static PromoManager* g_promo_manager{nullptr};

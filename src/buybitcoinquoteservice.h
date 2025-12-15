@@ -1,13 +1,14 @@
 #ifndef GREEN_BUYBITCOINQUOTESERVICE_H
 #define GREEN_BUYBITCOINQUOTESERVICE_H
 
-#include <QObject>
+#include <QtQml>
+
+#include <QJsonValue>
 #include <QNetworkReply>
+#include <QObject>
+#include <QStringList>
 #include <QVariantList>
 #include <QVariantMap>
-#include <QJsonValue>
-#include <QStringList>
-#include <QtQml>
 
 class BuyBitcoinQuoteService : public QObject
 {
@@ -90,4 +91,3 @@ private:
 };
 
 #endif // GREEN_BUYBITCOINQUOTESERVICE_H
-

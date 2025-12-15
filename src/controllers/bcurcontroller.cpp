@@ -1,7 +1,6 @@
 #include "bcurcontroller.h"
-
-#include "task.h"
 #include "context.h"
+#include "task.h"
 
 BCURController::BCURController(QObject* parent)
     : Controller(parent)

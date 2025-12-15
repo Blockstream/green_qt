@@ -1,6 +1,6 @@
 #include "analytics.h"
-#include "httprequestactivity.h"
 #include "httpmanager.h"
+#include "httprequestactivity.h"
 #include "requestsupportcontroller.h"
 #include "util.h"
 

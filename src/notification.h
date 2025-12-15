@@ -1,8 +1,8 @@
 #ifndef GREEN_NOTIFICATION_H
 #define GREEN_NOTIFICATION_H
 
-#include "green.h"
 #include "controller.h"
+#include "green.h"
 
 #include <QObject>
 #include <QSortFilterProxyModel>

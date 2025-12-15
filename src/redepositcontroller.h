@@ -1,8 +1,8 @@
 #ifndef GREEN_REDEPOSITCONTROLLER_H
 #define GREEN_REDEPOSITCONTROLLER_H
 
-#include "green.h"
 #include "createtransactioncontroller.h"
+#include "green.h"
 
 class RedepositController : public Controller
 {

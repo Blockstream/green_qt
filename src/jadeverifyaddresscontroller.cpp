@@ -1,18 +1,14 @@
 #include "account.h"
 #include "address.h"
 #include "context.h"
+#include "jadeapi.h"
 #include "jadedevice.h"
 #include "jadeverifyaddresscontroller.h"
 #include "network.h"
-
+#include "util.h"
 
 #include <gdk.h>
 #include <wally_wrapper.h>
-#include "jadedevice.h"
-#include "jadeapi.h"
-#include "util.h"
-
-
 
 JadeVerifyAddressController::JadeVerifyAddressController(QObject* parent)
     : Controller(parent)

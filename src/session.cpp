@@ -7,9 +7,9 @@
 #include <QtConcurrentRun>
 
 #include "context.h"
+#include "green_settings.h"
 #include "json.h"
 #include "network.h"
-#include "green_settings.h"
 #include "task.h"
 
 namespace  {

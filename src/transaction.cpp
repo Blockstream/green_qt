@@ -150,7 +150,6 @@ void Transaction::updateFromData(const QJsonObject& data)
 
     emit amountsChanged();
     qDeleteAll(amounts);
-
 }
 
 void Transaction::openInExplorer() const

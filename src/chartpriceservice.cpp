@@ -1,15 +1,15 @@
 #include "chartpriceservice.h"
 
-#include <QQmlEngine>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrl>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
 #include <QDateTime>
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QQmlEngine>
+#include <QUrl>
 
 ChartPriceService::ChartPriceService(QObject* parent)
     : QObject(parent)
@@ -91,5 +91,3 @@ void ChartPriceService::onReplyFinished()
     m_prices_five_years = filterSince(m_prices_full, nowMs - fiveYearsMs);
     emit pricesChanged();
 }
-
-

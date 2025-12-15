@@ -21,11 +21,11 @@
 #include <gdk.h>
 
 #include "config.h"
+#include "green_settings.h"
 #include "json.h"
 #include "networkmanager.h"
 #include "session.h"
 #include "sessionmanager.h"
-#include "green_settings.h"
 #include "task.h"
 #include "util.h"
 #include "walletmanager.h"

@@ -1,9 +1,9 @@
 #include "context.h"
 #include "networkmanager.h"
 #include "signupcontroller.h"
+#include "task.h"
 #include "wallet.h"
 #include "walletmanager.h"
-#include "task.h"
 
 SignupController::SignupController(QObject *parent)
     : Controller(parent)

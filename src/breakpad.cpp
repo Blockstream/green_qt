@@ -10,12 +10,12 @@
 
 #ifdef ENABLE_SENTRY
 
-#include <google_breakpad/processor/call_stack.h>
 #include <google_breakpad/processor/basic_source_line_resolver.h>
-#include <google_breakpad/processor/stack_frame.h>
+#include <google_breakpad/processor/call_stack.h>
 #include <google_breakpad/processor/minidump.h>
 #include <google_breakpad/processor/minidump_processor.h>
 #include <google_breakpad/processor/process_state.h>
+#include <google_breakpad/processor/stack_frame.h>
 #include <processor/simple_symbol_supplier.h>
 #include <processor/stackwalk_common.h>
 

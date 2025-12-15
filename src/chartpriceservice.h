@@ -1,10 +1,11 @@
 #ifndef GREEN_CHARTPRICESERVICE_H
 #define GREEN_CHARTPRICESERVICE_H
 
+#include <QtQml>
+
+#include <QNetworkReply>
 #include <QObject>
 #include <QVariant>
-#include <QNetworkReply>
-#include <QtQml>
 
 class ChartPriceService : public QObject
 {

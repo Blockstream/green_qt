@@ -1,8 +1,8 @@
 #include "exportaddressescontroller.h"
 #include "account.h"
 #include "context.h"
-#include "task.h"
 #include "session.h"
+#include "task.h"
 #include "wallet.h"
 
 #include <QFileDialog>

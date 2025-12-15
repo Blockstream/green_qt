@@ -1,10 +1,9 @@
-#include "sessioncontroller.h"
-
-#include "task.h"
-#include "session.h"
 #include "account.h"
-#include "notification.h"
 #include "context.h"
+#include "notification.h"
+#include "session.h"
+#include "sessioncontroller.h"
+#include "task.h"
 
 SessionController::SessionController(QObject* parent)
     : Controller(parent)

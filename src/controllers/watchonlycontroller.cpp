@@ -1,9 +1,8 @@
-#include "watchonlycontroller.h"
-
-#include "task.h"
-#include "wallet.h"
 #include "context.h"
 #include "session.h"
+#include "task.h"
+#include "wallet.h"
+#include "watchonlycontroller.h"
 
 WatchOnlyController::WatchOnlyController(QObject* parent)
     : SessionController(parent)

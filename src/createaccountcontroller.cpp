@@ -1,17 +1,16 @@
-#include "asset.h"
 #include "account.h"
-#include "createaccountcontroller.h"
-
-#include <gdk.h>
-#include <wally_wrapper.h>
-
+#include "asset.h"
 #include "context.h"
+#include "createaccountcontroller.h"
 #include "ga.h"
 #include "json.h"
 #include "network.h"
 #include "session.h"
 #include "task.h"
 #include "wallet.h"
+
+#include <gdk.h>
+#include <wally_wrapper.h>
 
 namespace {
 

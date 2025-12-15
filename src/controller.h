@@ -1,8 +1,8 @@
 #ifndef GREEN_CONTROLLER_H
 #define GREEN_CONTROLLER_H
 
-#include "green.h"
 #include "controllers/abstractcontroller.h"
+#include "green.h"
 
 #include <QQmlEngine>
 

@@ -2,8 +2,8 @@
 #define GREEN_NETWORKMANAGER_H
 
 #include <QObject>
-#include <QQmlListProperty>
 #include <QQmlEngine>
+#include <QQmlListProperty>
 
 class Network;
 
