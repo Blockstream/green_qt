@@ -18,8 +18,6 @@ Page {
     id: self
     background: null
     padding: 0
-    leftPadding: 20
-    rightPadding: 20
     opacity: {
         if (!self.flickable) return 1
         if ((self.x - self.flickable.contentX) < 0) return 0.5
@@ -32,8 +30,8 @@ Page {
         background: null
         topPadding: 16
         bottomPadding: 2
-        leftPadding: 20
-        rightPadding: 20
+        leftPadding: 0
+        rightPadding: 0
     }
     footer: Item {
         implicitHeight: 16

@@ -131,6 +131,8 @@ Pane {
     component Separator: Rectangle {
         Layout.minimumWidth: 1
         Layout.maximumWidth: 1
+        Layout.leftMargin: 20
+        Layout.rightMargin: 20
         Layout.fillHeight: true
         color: '#FFF'
         opacity: 0.04
