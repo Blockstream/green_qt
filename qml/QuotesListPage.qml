@@ -36,8 +36,7 @@ StackViewPage {
         }
         property bool isSelected: {
             const selected = self.quoteService.selectedQuote
-            return delegate.quote.serviceProvider === selected.serviceProvider &&
-                Math.abs((delegate.quote.destinationAmount || 0) - (selected.destinationAmount || 0)) < 0.00000001
+            return delegate.quote.serviceProvider === selected.serviceProvider
         }
         Layout.fillWidth: true
         id: delegate
@@ -105,8 +104,6 @@ StackViewPage {
                 }
             }
             ColumnLayout {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 spacing: 4
                 Label {
                     Layout.fillWidth: true
