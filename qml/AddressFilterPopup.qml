@@ -9,6 +9,7 @@ FilterPopup {
     required property Context context
     required property AddressModel model
     id: self
+    maximumHeight: Number.POSITIVE_INFINITY
     OptionButton {
         text: 'Has transactions'
         checked: self.model.filterHasTransactions
@@ -17,9 +18,6 @@ FilterPopup {
         }
     }
     FilterPopup.Separator {
-    }
-    FilterPopup.SectionLabel {
-        text: qsTrId('id_singlesig')
     }
     TypeOptionButton {
         type: 'p2pkh'
@@ -32,9 +30,6 @@ FilterPopup {
     }
     TypeOptionButton {
         type: 'p2tr'
-    }
-    FilterPopup.SectionLabel {
-        text: qsTrId('id_multisig')
     }
     TypeOptionButton {
         type: 'csv'
@@ -60,8 +55,8 @@ FilterPopup {
         checkable: true
         leftPadding: 12
         rightPadding: 12
-        topPadding: 8
-        bottomPadding: 8
+        topPadding: 4
+        bottomPadding: 4
         background: Rectangle {
             color: '#FFF'
             radius: 8
@@ -73,8 +68,8 @@ FilterPopup {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
-                font.pixelSize: 16
-                font.weight: 600
+                font.pixelSize: 14
+                font.weight: 400
                 text: button.text
                 elide: Label.ElideMiddle
             }

@@ -7,6 +7,7 @@ Popup {
     property real pointerX: 0.5
     property real pointerXOffset: 0
     property real pointerY: 0
+    property real maximumHeight: 300
     default property alias contentItemData: content_item.data
     id: menu
     font.pixelSize: 14
@@ -54,7 +55,7 @@ Popup {
         clip: true
         contentHeight: content_item.height
         contentWidth: content_item.implicitWidth
-        implicitHeight: Math.min(content_item.implicitHeight, 300)
+        implicitHeight: Math.min(content_item.implicitHeight, menu.maximumHeight)
         implicitWidth: content_item.implicitWidth
         ColumnLayout {
             id: content_item

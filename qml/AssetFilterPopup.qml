@@ -77,11 +77,9 @@ FilterPopup {
         id: button
         leftPadding: 12
         rightPadding: 12
-        topPadding: 8
-        bottomPadding: 8
+        topPadding: 4
+        bottomPadding: 4
         background: Rectangle {
-            //border.color: button.checked ? 'red' : '#262626'
-            //border.width: 1
             color: '#FFF'
             radius: 8
             opacity: 0.2
@@ -97,8 +95,8 @@ FilterPopup {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 color: button.asset.name ? '#FFF' : '#929292'
-                font.pixelSize: 16
-                font.weight: 600
+                font.pixelSize: 14
+                font.weight: 400
                 text: button.asset.name || button.asset.id
                 elide: Label.ElideMiddle
             }
