@@ -4,10 +4,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "util.js" as UtilJS
-
 Pane {
     required property Context context
+
     readonly property Wallet wallet: self.context.wallet
     readonly property Session session: self.context.primarySession
 
@@ -27,12 +26,13 @@ Pane {
         }
         return result
     }
+
     function updateCurrency(currency) {
         if (currency === self.session.settings.pricing.currency) return
         const exchange = self.session.settings.pricing.exchange
         const pricing = { currency, exchange }
         if (self.per_currency[currency].indexOf(self.session.settings.pricing.exchange) < 0) {
-            pricing.exchange = self.per_currency[currentText][0]
+            pricing.exchange = self.per_currency[currency][0]
         }
         controller.changeSettings({ pricing })
     }
@@ -45,236 +45,380 @@ Pane {
     id: self
     background: null
     padding: 0
-    contentItem: Flickable {
-        ScrollIndicator.vertical: ScrollIndicator {
+
+    contentItem: VFlickable {
+        alignment: Qt.AlignTop
+        spacing: 24
+
+        // Bitcoin Denomination
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 20
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_bitcoin_denomination')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_show_bitcoin_amounts_in')
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
+                }
+            }
+
+            // Right: Control
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                implicitHeight: denomination_combo.height
+                GComboBox {
+                    id: denomination_combo
+                    anchors.right: parent.right
+                    width: Math.min(200, parent.width)
+                    property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
+                    enabled: !self.wallet.locked
+                    model: units.map(unit => ({
+                        text: self.context.getDisplayUnit(unit),
+                        value: unit
+                    }))
+                    textRole: 'text'
+                    valueRole: 'value'
+                    currentIndex: units.indexOf(self.session.settings.unit)
+                    onCurrentValueChanged: {
+                        if (currentValue === '') return
+                        if (currentValue === self.session.settings.unit) return
+                        controller.changeSettings({ unit: currentValue })
+                    }
+                }
+            }
         }
-        id: flickable
-        clip: true
-        contentWidth: flickable.width
-        contentHeight: layout.height
-        ColumnLayout {
-            id: layout
-            spacing: 16
-            width: flickable.width
-            SettingsBox {
-                title: qsTrId('id_bitcoin_denomination')
-                enabled: !wallet.locked
-                contentItem: RowLayout {
-                    spacing: 10
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: contentWidth
-                        text: qsTrId('id_show_bitcoin_amounts_in')
-                    }
-                    GComboBox {
-                        property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
-                        model: units.map(unit => ({
-                            text: self.context.getDisplayUnit(unit),
-                            value: unit
-                        }))
-                        textRole: 'text'
-                        valueRole: 'value'
-                        currentIndex: units.indexOf(self.session.settings.unit)
-                        onCurrentValueChanged: {
-                            if (currentValue === '') return
-                            if (currentValue === self.session.settings.unit) return
-                            controller.changeSettings({ unit: currentValue })
-                        }
-                    }
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+        }
+
+        // Currency
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 20
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_currency')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_select_a_fiat_currency_and')
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
                 }
             }
 
-            SettingsBox {
-                title: qsTrId('id_currency')
-                enabled: !wallet.locked
-                contentItem: ColumnLayout {
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTrId('id_select_a_fiat_currency_and')
-                        wrapMode: Text.WordWrap
+            // Right: Controls
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 8
+
+                GComboBox {
+                    id: currency_combo
+                    Layout.alignment: Qt.AlignRight
+                    width: Math.min(200, parent.width)
+                    enabled: !self.wallet.locked
+                    model: Object.keys(self.per_currency).sort()
+                    currentIndex: model.indexOf(self.session.settings.pricing?.currency ?? '')
+                    onCurrentTextChanged: {
+                        if (!focus) return
+                        const currency = currentText
+                        if (currency === '') return
+                        self.updateCurrency(currency)
                     }
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: contentWidth
-                        text: qsTrId('id_reference_exchange_rate')
-                    }
-                    RowLayout {
-                        spacing: 10
-                        GComboBox {
-                            id: currency_combo
-                            Layout.fillWidth: true
-                            width: 200
-                            model: Object.keys(self.per_currency).sort()
-                            currentIndex: model.indexOf(self.session.settings.pricing?.currency ?? '')
-                            onCurrentTextChanged: {
-                                if (!focus) return
-                                const currency = currentText
-                                if (currency === '') return
-                                self.updateCurrency(currency)
-                            }
-                            popup.contentItem.implicitHeight: 300
-                        }
-                        HSpacer {
-                        }
-                        GComboBox {
-                            id: exchange_combo
-                            Layout.fillWidth: true
-                            width: 200
-                            model: currency_combo.currentText ? per_currency[currency_combo.currentText].sort() : []
-                            currentIndex: self.session.settings.pricing ? Math.max(0, model.indexOf(self.session.settings.pricing.exchange)) : 0
-                            onCurrentTextChanged: {
-                                if (!focus) return
-                                const exchange = currentText
-                                if (exchange === '') return
-                                if (exchange === self.session.settings.pricing.exchange) return
-                                const currency = self.session.settings.pricing.currency
-                                const pricing = { currency, exchange }
-                                controller.changeSettings({ pricing })
-                            }
-                            Layout.minimumWidth: 150
-                        }
+                    popup.contentItem.implicitHeight: 300
+                }
+                GComboBox {
+                    id: exchange_combo
+                    Layout.alignment: Qt.AlignRight
+                    width: Math.min(200, parent.width)
+                    enabled: !self.wallet.locked
+                    model: currency_combo.currentText ? self.per_currency[currency_combo.currentText].sort() : []
+                    currentIndex: self.session.settings.pricing ? Math.max(0, model.indexOf(self.session.settings.pricing.exchange)) : 0
+                    onCurrentTextChanged: {
+                        if (!focus) return
+                        const exchange = currentText
+                        if (exchange === '') return
+                        if (exchange === self.session.settings.pricing.exchange) return
+                        const currency = self.session.settings.pricing.currency
+                        const pricing = { currency, exchange }
+                        controller.changeSettings({ pricing })
                     }
                 }
             }
+        }
 
-            SettingsBox {
-                title: qsTrId('id_notifications')
-                contentItem: ColumnLayout {
-                    spacing: 8
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTrId('id_receive_email_notifications_for')
-                    }
-                    Repeater {
-                        model: self.context.sessions.filter(session => !session.network.electrum)
-                        delegate: AbstractButton {
-                            required property var modelData
-                            readonly property Session session: modelData
-                            Layout.fillWidth: true
-                            id: button
-                            leftPadding: 20
-                            rightPadding: 20
-                            topPadding: 15
-                            bottomPadding: 15
-                            enabled: !button.session.locked && (button.session.config.email?.confirmed ?? false)
-                            background: Rectangle {
-                                radius: 5
-                                color: Qt.lighter('#222226', button.enabled && button.hovered ? 1.2 : 1)
-                            }
-                            contentItem: RowLayout {
-                                spacing: 20
-                                ColumnLayout {
-                                    Layout.fillWidth: false
-                                    Label {
-                                        font.pixelSize: 14
-                                        font.weight: 600
-                                        text: button.session.network.displayName
-                                    }
-                                    Label {
-                                        font.pixelSize: 11
-                                        font.weight: 400
-                                        opacity: 0.6
-                                        text: button.session.config.email?.confirmed ?? false ? button.session.config.email.data : qsTrId('id_enable_2fa') + ' ' + qsTrId('id_email')
-                                    }
-                                }
-                                HSpacer {
-                                }
-                                GSwitch {
-                                    checked: button.session.settings?.notifications?.email_outgoing ?? false
-                                    enabled: false
-                                    opacity: 1
-                                    visible: button.session.config.email?.confirmed ?? false
-                                }
-                            }
-                            onClicked: {
-                                const checked = button.session.settings?.notifications?.email_outgoing
-                                controller.changeSessionSettings(button.session, {
-                                    notifications: {
-                                        email_incoming: !checked,
-                                        email_login: !checked,
-                                        email_outgoing: !checked
-                                    }
-                                });
-                            }
-                        }
-                    }
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+        }
+
+        // Auto-logout timeout
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 20
+            visible: !self.context.device
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_auto_logout_timeout')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_set_a_timeout_to_logout_after')
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
                 }
             }
 
-            SettingsBox {
-                title: qsTrId('id_auto_logout_timeout')
-                visible: !self.context.device
-                contentItem: ColumnLayout {
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-                        text: qsTrId('id_set_a_timeout_to_logout_after')
-                        wrapMode: Label.WordWrap
+            // Right: Control
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                implicitHeight: timeout_combo.height
+                GComboBox {
+                    id: timeout_combo
+                    anchors.right: parent.right
+                    width: Math.min(200, parent.width)
+                    model: [1, 2, 5, 10, 60]
+                    delegate: ItemDelegate {
+                        background: null
+                        width: parent.width
+                        text: qsTrId('id_1d_minutes').arg(modelData)
                     }
-                    GComboBox {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignRight
-                        model: [1, 2, 5, 10, 60]
-                        width: 150
-                        delegate: ItemDelegate {
-                            background: null
-                            width: parent.width
-                            text: qsTrId('id_1d_minutes').arg(modelData)
-                        }
-                        displayText: qsTrId('id_1d_minutes').arg(currentText)
-                        onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
-                        currentIndex: model.indexOf(self.session.settings.altimeout)
-                    }
+                    displayText: qsTrId('id_1d_minutes').arg(currentText)
+                    onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
+                    currentIndex: model.indexOf(self.session.settings.altimeout)
+                }
+            }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+            visible: !self.context.device
+        }
+
+        // Notifications
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 20
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_notifications')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_receive_email_notifications_for')
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
                 }
             }
 
-            SettingsBox {
-                readonly property string supportId: {
-                    return self.context.accounts
-                        .filter(account => account.pointer === 0 && !account.network.electrum)
-                        .map(account => `${account.network.data.bip21_prefix}:${account.json.receiving_id}`)
-                        .join(',')
-                }
-                id: support_box
-                title: qsTrId('id_support')
-                visible: support_box.supportId !== ''
-                contentItem: ColumnLayout {
-                    AbstractButton {
+            // Right: Controls
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 8
+
+                Repeater {
+                    model: self.context.sessions.filter(session => !session.network.electrum)
+                    delegate: AbstractButton {
+                        required property var modelData
+                        readonly property Session session: modelData
                         Layout.fillWidth: true
-                        id: button
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 15
-                        bottomPadding: 15
+                        id: notification_button
+                        leftPadding: 16
+                        rightPadding: 16
+                        topPadding: 12
+                        bottomPadding: 12
+                        enabled: !notification_button.session.locked && (notification_button.session.config.email?.confirmed ?? false)
                         background: Rectangle {
                             radius: 5
-                            color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
+                            color: Qt.lighter('#262626', notification_button.enabled && notification_button.hovered ? 1.2 : 1)
                         }
                         contentItem: RowLayout {
-                            spacing: 20
-                            Label {
+                            spacing: 12
+                            ColumnLayout {
                                 Layout.fillWidth: true
-                                Layout.preferredWidth: 0
-                                font.pixelSize: 14
-                                font.weight: 600
-                                text: qsTrId('id_copy_support_id')
+                                spacing: 2
+                                Label {
+                                    Layout.fillWidth: true
+                                    font.pixelSize: 13
+                                    font.weight: 600
+                                    text: notification_button.session.network.displayName
+                                }
+                                Label {
+                                    font.pixelSize: 11
+                                    color: '#6F6F6F'
+                                    text: notification_button.session.config.email?.confirmed ?? false ? notification_button.session.config.email.data : qsTrId('id_enable_2fa') + ' ' + qsTrId('id_email')
+                                }
                             }
-                            Image {
-                                source: timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
+                            GSwitch {
+                                checked: notification_button.session.settings?.notifications?.email_outgoing ?? false
+                                enabled: false
+                                opacity: 1
+                                visible: notification_button.session.config.email?.confirmed ?? false
                             }
                         }
                         onClicked: {
-                            Clipboard.copy(support_box.supportId)
-                            timer.restart()
+                            const checked = notification_button.session.settings?.notifications?.email_outgoing
+                            controller.changeSessionSettings(notification_button.session, {
+                                notifications: {
+                                    email_incoming: !checked,
+                                    email_login: !checked,
+                                    email_outgoing: !checked
+                                }
+                            })
                         }
-                        Timer {
-                            id: timer
-                            repeat: false
-                            interval: 1000
+                        HoverHandler {
+                            cursorShape: notification_button.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
                         }
                     }
                 }
             }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+            visible: support_box.visible
+        }
+
+        // Support
+        RowLayout {
+            id: support_box
+            Layout.fillWidth: true
+            spacing: 20
+            visible: supportId !== ''
+
+            readonly property string supportId: {
+                return self.context.accounts
+                    .filter(account => account.pointer === 0 && !account.network.electrum)
+                    .map(account => `${account.network.data.bip21_prefix}:${account.json.receiving_id}`)
+                    .join(',')
+            }
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_support')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+            }
+
+            // Right: Control
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                implicitHeight: support_button.height
+                AbstractButton {
+                    id: support_button
+                    anchors.right: parent.right
+                    width: Math.min(200, parent.width)
+                    leftPadding: 16
+                    rightPadding: 16
+                    topPadding: 12
+                    bottomPadding: 12
+                    background: Rectangle {
+                        radius: 5
+                        color: Qt.lighter('#262626', support_button.hovered ? 1.2 : 1)
+                    }
+                    contentItem: RowLayout {
+                        spacing: 12
+                        Label {
+                            Layout.fillWidth: true
+                            font.pixelSize: 13
+                            font.weight: 600
+                            text: qsTrId('id_copy_support_id')
+                        }
+                        Image {
+                            source: support_timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
+                        }
+                    }
+                    onClicked: {
+                        Clipboard.copy(support_box.supportId)
+                        support_timer.restart()
+                    }
+                    Timer {
+                        id: support_timer
+                        repeat: false
+                        interval: 1000
+                    }
+                    HoverHandler {
+                        cursorShape: Qt.PointingHandCursor
+                    }
+                }
+            }
+        }
+
+        VSpacer {
         }
     }
 }

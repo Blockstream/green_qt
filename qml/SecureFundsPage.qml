@@ -68,7 +68,7 @@ StackViewPage {
         bottomPadding: 20
         rightPadding: 20
         background: Rectangle {
-            color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
+            color: Qt.lighter('#262626', button.hovered ? 1.2 : 1)
             radius: 4
             Image {
                 anchors.right: parent.right

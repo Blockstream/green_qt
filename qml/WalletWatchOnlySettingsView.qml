@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 
 Pane {
     required property Context context
+
     readonly property Wallet wallet: self.context.wallet
 
     Controller {
@@ -18,14 +19,46 @@ Pane {
     id: self
     background: null
     padding: 0
+
     contentItem: VFlickable {
         alignment: Qt.AlignTop
-        spacing: 16
-        SettingsBox {
-            title: qsTrId('id_multisig') + ' ' + qsTrId('id_login')
+        spacing: 24
+
+        // Multisig Login
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 20
             visible: multisig_repeater.count > 0
-            contentItem: ColumnLayout {
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_multisig') + ' ' + qsTrId('id_login')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_set_up_watchonly_credentials')
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
+                }
+            }
+
+            // Right: Controls
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
                 spacing: 8
+
                 Repeater {
                     id: multisig_repeater
                     model: self.context.sessions.filter(session => !self.context.watchonly && !session.network.electrum)
@@ -33,32 +66,31 @@ Pane {
                         required property var modelData
                         readonly property Session session: modelData
                         Layout.fillWidth: true
-                        id: button
-                        // TODO enabled: !wallet.locked
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 15
-                        bottomPadding: 15
+                        id: multisig_button
+                        leftPadding: 16
+                        rightPadding: 16
+                        topPadding: 12
+                        bottomPadding: 12
                         background: Rectangle {
                             radius: 5
-                            color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
+                            color: Qt.lighter('#262626', multisig_button.hovered ? 1.2 : 1)
                         }
                         contentItem: RowLayout {
-                            spacing: 20
+                            spacing: 12
                             ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 2
                                 Label {
-                                    font.pixelSize: 14
+                                    font.pixelSize: 13
                                     font.weight: 600
-                                    text: button.session.network.displayName
+                                    text: multisig_button.session.network.displayName
                                 }
                                 Label {
-                                    Layout.fillWidth: true
                                     font.pixelSize: 11
-                                    font.weight: 400
-                                    opacity: 0.6
+                                    color: '#6F6F6F'
                                     text: {
-                                        if (button.session.username === '') return qsTrId('id_watchonly_disabled')
-                                        return button.session.username
+                                        if (multisig_button.session.username === '') return qsTrId('id_watchonly_disabled')
+                                        return multisig_button.session.username
                                     }
                                 }
                             }
@@ -70,19 +102,60 @@ Pane {
                         onClicked: {
                             const dialog = watchonly_dialog.createObject(self, {
                                 context: self.context,
-                                session: button.session,
+                                session: multisig_button.session,
                             })
                             dialog.open()
+                        }
+                        HoverHandler {
+                            cursorShape: Qt.PointingHandCursor
                         }
                     }
                 }
             }
         }
-        SettingsBox {
-            title: qsTrId('id_singlesig') + ' ' + qsTrId('id_extended_public_keys')
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+            visible: multisig_repeater.count > 0 && singlesig_xpubs_repeater.count > 0
+        }
+
+        // Singlesig Extended Public Keys
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 20
             visible: singlesig_xpubs_repeater.count > 0
-            contentItem: ColumnLayout {
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_singlesig') + ' ' + qsTrId('id_extended_public_keys')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_export_your_extended_public')
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
+                }
+            }
+
+            // Right: Controls
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
                 spacing: 8
+
                 Repeater {
                     id: singlesig_xpubs_repeater
                     model: self.context.accounts.filter(account => !account.hidden && account.json.slip132_extended_pubkey)
@@ -94,11 +167,49 @@ Pane {
                 }
             }
         }
-        SettingsBox {
-            title: qsTrId('id_singlesig') + ' ' + qsTrId('id_output_descriptors')
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+            visible: singlesig_xpubs_repeater.count > 0 && singlesig_descriptors_repeater.count > 0
+        }
+
+        // Singlesig Output Descriptors
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 20
             visible: singlesig_descriptors_repeater.count > 0
-            contentItem: ColumnLayout {
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_singlesig') + ' ' + qsTrId('id_output_descriptors')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_export_your_output_descriptors')
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
+                }
+            }
+
+            // Right: Controls
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
                 spacing: 8
+
                 Repeater {
                     id: singlesig_descriptors_repeater
                     model: self.context.accounts.filter(account => !account.hidden && account.json.core_descriptors)
@@ -110,28 +221,31 @@ Pane {
                 }
             }
         }
+
+        VSpacer {
+        }
     }
 
     Component {
         id: watchonly_dialog
         WalletDialog {
             required property Session session
-            id: self
+            id: dialog
             header: null
             footer: null
-            enabled: controller.monitor.idle
+            enabled: watch_only_controller.monitor.idle
             width: 450
             height: 500
             WatchOnlyController {
-                id: controller
-                session: self.session
+                id: watch_only_controller
+                session: dialog.session
                 onFailed: error => error_badge.error = error
                 onFinished: ok_badge.error = 'Watch-only credentials updated successfully'
             }
             contentItem: StackViewPage {
                 title: qsTrId('id_set_up_watchonly')
                 rightItem: CloseButton {
-                    onClicked: self.close()
+                    onClicked: dialog.close()
                 }
                 contentItem: ColumnLayout {
                     spacing: 10
@@ -155,14 +269,14 @@ Pane {
                                 Layout.alignment: Qt.AlignCenter
                                 Layout.preferredHeight: 24
                                 Layout.preferredWidth: 24
-                                source: UtilJS.iconFor(self.session.network)
+                                source: UtilJS.iconFor(dialog.session.network)
                             }
                             Label {
                                 Layout.fillWidth: true
                                 color: '#FFF'
                                 font.pixelSize: 14
                                 font.weight: 600
-                                text: self.session.network.displayName
+                                text: dialog.session.network.displayName
                             }
                         }
                     }
@@ -172,7 +286,7 @@ Pane {
                     TTextField {
                         Layout.fillWidth: true
                         id: username_field
-                        text: self.session.username
+                        text: dialog.session.username
                         validator: FieldValidator {
                         }
                         onTextEdited: {
@@ -223,7 +337,7 @@ Pane {
                         Layout.alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
-                        enabled: self.session.username.length > 0
+                        enabled: dialog.session.username.length > 0
                         implicitWidth: 0
                         text: qsTrId('id_delete')
                         onClicked: {
@@ -231,7 +345,7 @@ Pane {
                             ok_badge.clear()
                             username_field.clear()
                             password_field.clear()
-                            controller.clear()
+                            watch_only_controller.clear()
                         }
                     }
                     PrimaryButton {
@@ -244,9 +358,9 @@ Pane {
                         onClicked: {
                             ok_badge.clear()
                             error_badge.clear()
-                            controller.update(username_field.text, password_field.text)
+                            watch_only_controller.update(username_field.text, password_field.text)
                         }
-                        busy: !controller.monitor.idle
+                        busy: !watch_only_controller.monitor.idle
                     }
                 }
             }
@@ -262,32 +376,31 @@ Pane {
         required property string text
         Layout.fillWidth: true
         id: pane
-        leftPadding: 20
-        rightPadding: 20
-        topPadding: 15
-        bottomPadding: 15
+        leftPadding: 16
+        rightPadding: 16
+        topPadding: 12
+        bottomPadding: 12
         background: Rectangle {
             radius: 5
-            color: '#222226'
+            color: '#262626'
         }
         contentItem: RowLayout {
             spacing: 10
             ColumnLayout {
-                Layout.alignment: Qt.AlignCenter
-                Layout.fillHeight: false
-                spacing: 10
+                Layout.fillWidth: true
+                spacing: 6
                 RowLayout {
-                    spacing: 10
+                    spacing: 8
                     Image {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredHeight: 24
-                        Layout.preferredWidth: 24
+                        Layout.preferredHeight: 20
+                        Layout.preferredWidth: 20
                         source: UtilJS.iconFor(pane.account.network)
                     }
                     Label {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
-                        font.pixelSize: 14
+                        font.pixelSize: 13
                         font.weight: 600
                         text: UtilJS.accountName(pane.account)
                         wrapMode: Label.Wrap
@@ -297,21 +410,20 @@ Pane {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     font.pixelSize: 11
-                    font.weight: 400
-                    opacity: 0.6
+                    color: '#6F6F6F'
                     text: pane.text
                     wrapMode: Label.WrapAnywhere
                 }
             }
             CircleButton {
                 Layout.alignment: Qt.AlignCenter
-                icon.source: timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
+                icon.source: copy_timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
                 onClicked: {
                     Clipboard.copy(pane.text)
-                    timer.restart()
+                    copy_timer.restart()
                 }
                 Timer {
-                    id: timer
+                    id: copy_timer
                     repeat: false
                     interval: 1000
                 }

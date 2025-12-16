@@ -164,7 +164,7 @@ StackViewPage {
         checkable: true
         padding: 20
         background: Rectangle {
-            color: Qt.lighter('#222226', control.down ? 1.5 : control.enabled && control.hovered ? 1.2 : 1)
+            color: Qt.lighter('#262626', control.down ? 1.5 : control.enabled && control.hovered ? 1.2 : 1)
             radius: 5
             border.width: control.checked ? 2 : 0
             border.color: '#00BCFF'

@@ -111,7 +111,7 @@ StackViewPage {
                 topPadding: 10
                 visible: controller.passphrase !== ''
                 background: Rectangle {
-                    color: '#222226'
+                    color: '#262626'
                     radius: 5
                 }
                 contentItem: RowLayout {

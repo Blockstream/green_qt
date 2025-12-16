@@ -70,7 +70,7 @@ Pane {
         focus: false
         background: Rectangle {
             radius: 4
-            color: '#222226'
+            color: '#262626'
         }
         padding: 20
         contentItem: ColumnLayout {

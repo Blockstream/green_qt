@@ -92,7 +92,7 @@ Page {
                             bottomPadding: 10
                             background: Rectangle {
                                 radius: 5
-                                color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
+                                color: Qt.lighter('#262626', button.hovered ? 1.2 : 1)
                             }
                             contentItem: RowLayout {
                                 ColumnLayout {
@@ -143,7 +143,7 @@ Page {
                     bottomPadding: 15
                     background: Rectangle {
                         radius: 5
-                        color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
+                        color: Qt.lighter('#262626', button.hovered ? 1.2 : 1)
                     }
                     contentItem: RowLayout {
                         ColumnLayout {
@@ -210,7 +210,7 @@ Page {
                     bottomPadding: 15
                     background: Rectangle {
                         radius: 5
-                        color: Qt.lighter('#222226', button3.hovered ? 1.2 : 1)
+                        color: Qt.lighter('#262626', button3.hovered ? 1.2 : 1)
                     }
                     contentItem: RowLayout {
                         ColumnLayout {
@@ -261,7 +261,7 @@ Page {
                     }
                     background: Rectangle {
                         radius: 5
-                        color: Qt.lighter('#222226', button2.enabled && button2.hovered ? 1.2 : 1)
+                        color: Qt.lighter('#262626', button2.enabled && button2.hovered ? 1.2 : 1)
                     }
                     contentItem: RowLayout {
                         ColumnLayout {
@@ -331,7 +331,7 @@ Page {
                             bottomPadding: 15
                             background: Rectangle {
                                 radius: 5
-                                color: Qt.lighter('#222226', button2.enabled && button2.hovered ? 1.2 : 1)
+                                color: Qt.lighter('#262626', button2.enabled && button2.hovered ? 1.2 : 1)
                             }
                             contentItem: RowLayout {
                                 ColumnLayout {

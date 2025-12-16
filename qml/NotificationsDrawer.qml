@@ -122,7 +122,7 @@ AbstractDrawer {
 
     component NotificationItem: Pane {
         property Notification notification: _notification
-        property color backgroundColor: '#222226'
+        property color backgroundColor: '#262626'
         id: item
         topPadding: 18
         leftPadding: 18

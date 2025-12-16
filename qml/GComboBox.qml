@@ -16,7 +16,7 @@ ComboBox {
         Rectangle {
             radius: self.visualFocus ? 4 : 8
             opacity: self.activeFocus ? 1 : (self.enabled ? 0.8 : 0.5)
-            color: Qt.lighter('#222226', self.hovered ? 1.2 : 1)
+            color: Qt.lighter('#262626', self.hovered ? 1.2 : 1)
             anchors.fill: parent
             anchors.margins: self.visualFocus ? 4 : 0
         }

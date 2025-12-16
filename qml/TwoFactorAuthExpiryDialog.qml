@@ -87,7 +87,7 @@ WalletDialog {
         text: UtilJS.csvLabel(option.value)
         background: Rectangle {
             radius: 5
-            color: Qt.lighter('#222226', option.enabled && option.hovered ? 1.2 : 1)
+            color: Qt.lighter('#262626', option.enabled && option.hovered ? 1.2 : 1)
         }
         contentItem: RowLayout {
             spacing: 20

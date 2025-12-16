@@ -159,7 +159,7 @@ QtObject {
                     topPadding: 15
                     bottomPadding: 15
                     background: Rectangle {
-                        color: Qt.lighter('#222226', delegate.hovered ? 1.2 : 1)
+                        color: Qt.lighter('#262626', delegate.hovered ? 1.2 : 1)
                         radius: 5
                     }
                     contentItem: RowLayout {

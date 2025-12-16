@@ -258,7 +258,7 @@ Page {
                                 focus: !parent.collapsed && !parent.match
                                 background: Rectangle {
                                     radius: 5
-                                    color: '#222226'
+                                    color: '#262626'
                                     Label {
                                         anchors.verticalCenter: parent.verticalCenter
                                         anchors.left: parent.left

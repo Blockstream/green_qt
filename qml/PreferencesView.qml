@@ -72,7 +72,7 @@ AbstractDialog {
         bottomPadding: 20
         opacity: button.enabled ? 1 : 0.6
         background: Rectangle {
-            color: Qt.lighter( '#222226', button.enabled && button.hovered ? 1.2 : 1)
+            color: Qt.lighter( '#262626', button.enabled && button.hovered ? 1.2 : 1)
             radius: 5
         }
     }

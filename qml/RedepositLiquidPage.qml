@@ -55,7 +55,7 @@ StackViewPage {
                 Layout.fillWidth: true
                 padding: 20
                 background: Rectangle {
-                    color: '#222226'
+                    color: '#262626'
                     radius: 5
                 }
                 contentItem: RowLayout {
@@ -106,7 +106,7 @@ StackViewPage {
                 padding: 20
                 visible: controller.transaction?.satoshi ?? false
                 background: Rectangle {
-                    color: '#222226'
+                    color: '#262626'
                     radius: 5
                 }
                 contentItem: ColumnLayout {

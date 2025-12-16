@@ -35,7 +35,7 @@ Popup {
         }
         Rectangle {
             id: r
-            color: '#222226'
+            color: '#262626'
             border.color: '#343842'
             border.width: 0.5
             radius: 10
@@ -44,7 +44,7 @@ Popup {
         Rectangle {
             rotation: 45
             anchors.centerIn: pointer
-            color: '#222226'
+            color: '#262626'
             width: 7.5
             height: 7.5
         }

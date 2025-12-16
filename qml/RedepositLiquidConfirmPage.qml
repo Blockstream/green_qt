@@ -74,7 +74,7 @@ StackViewPage {
                 Layout.fillWidth: true
                 padding: 20
                 background: Rectangle {
-                    color: '#222226'
+                    color: '#262626'
                     radius: 5
                 }
                 contentItem: RowLayout {
@@ -128,7 +128,7 @@ StackViewPage {
                     id: delegate
                     padding: 20
                     background: Rectangle {
-                        color: '#222226'
+                        color: '#262626'
                         radius: 5
                     }
                     contentItem: ColumnLayout {

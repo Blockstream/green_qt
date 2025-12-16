@@ -79,7 +79,7 @@ StackViewPage {
         topPadding: 20
         bottomPadding: 20
         background: Rectangle {
-            color: Qt.lighter('#222226', button.enabled && button.hovered ? 1.1 : 1)
+            color: Qt.lighter('#262626', button.enabled && button.hovered ? 1.1 : 1)
             radius: 5
         }
         contentItem: RowLayout {

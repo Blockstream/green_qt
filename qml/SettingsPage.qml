@@ -11,6 +11,7 @@ Page {
     required property Context context
     id: self
     background: null
+    padding: 0
 
     readonly property list<Session> sessions: {
         const ctx = self.context
@@ -37,84 +38,59 @@ Page {
         segmentation: AnalyticsJS.segmentationSession(Settings, self.context)
     }
 
-    component B: Button {
-        id: b
-        required property string name
-        required property int index
-        Layout.fillWidth: true
-        flat: true
-        topPadding: 8
-        bottomPadding: 8
-        leftPadding: 16
-        rightPadding: 16
-        topInset: 0
-        leftInset: 0
-        rightInset: 0
-        bottomInset: 0
-        icon.width: 24
-        icon.height: 24
-        icon.color: 'white'
-        highlighted: stack_layout.currentIndex === index
-        onClicked: {
-            analytics_view.name = name
-            stack_layout.currentIndex = index
-        }
-        background: Item {
-            Rectangle {
-                anchors.fill: parent
-                visible: b.highlighted
-                color: constants.c500
-                radius: 4
+    contentItem: RowLayout {
+        spacing: 0
+        Pane {
+            Layout.fillHeight: true
+            Layout.preferredWidth: 300
+            padding: 0
+            topPadding: 20
+            bottomPadding: 20
+            leftPadding: 0
+            rightPadding: 0
+            background: Item {
+                Rectangle {
+                    width: 1
+                    anchors.right: parent.right
+                    height: parent.height
+                    color: '#262626'
+                }
             }
-            Rectangle {
-                anchors.fill: parent
-                visible: b.enabled && b.hovered
-                color: constants.c300
-                radius: 4
-            }
-        }
-        contentItem: Label {
-            text: b.text
-            Layout.fillWidth: true
-            rightPadding: 12
-            font.styleName: 'Regular'
-        }
-    }
-
-    contentItem: Pane {
-        anchors.fill: parent
-        padding: 20
-        background: null
-        RowLayout {
-            anchors.fill: parent
-            spacing: 20
-            ColumnLayout {
-                id: side_bar
-                Layout.fillWidth: false
-                spacing: 10
-                B {
+            contentItem: ColumnLayout {
+                spacing: 4
+                CategoryButton {
                     name: 'WalletSettingsGeneral'
                     index: 0
                     text: qsTrId('id_general')
+                    icon.source: 'qrc:/svg2/gear.svg'
                 }
-                B {
+                CategoryButton {
                     name: 'WalletSettingsWatchOnly'
                     index: 1
                     text: qsTrId('id_watchonly')
+                    icon.source: 'qrc:/svg2/eye.svg'
                     visible: !self.context.watchonly
                 }
-                B {
+                CategoryButton {
                     name: 'WalletSettings2FA'
                     index: 2
                     text: qsTrId('id_twofactor_authentication')
+                    icon.source: 'qrc:/svg2/lock-simple-thin.svg'
                     enabled: !self.context.watchonly
                 }
-                VSpacer { }
+                VSpacer {
+                }
             }
-            StackLayout {
+        }
+        Pane {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            padding: 20
+            leftPadding: 120
+            rightPadding: 120
+            background: null
+            contentItem: StackLayout {
                 id: stack_layout
-                Layout.fillWidth: true
-                Layout.fillHeight: true
                 clip: true
                 WalletGeneralSettingsView {
                     context: self.context
@@ -127,6 +103,70 @@ Page {
                     sessions: self.sessions
                 }
             }
+        }
+    }
+
+    component CategoryButton: AbstractButton {
+        required property string name
+        required property int index
+        readonly property bool isCurrent: stack_layout.currentIndex === button.index
+        Layout.fillWidth: true
+        id: button
+        leftPadding: 16
+        rightPadding: 16
+        topPadding: 12
+        bottomPadding: 12
+        icon.width: 20
+        icon.height: 20
+
+        onClicked: {
+            analytics_view.name = name
+            stack_layout.currentIndex = index
+        }
+
+        background: Item {
+            Rectangle {
+                anchors.fill: parent
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+                radius: 8
+                color: 'white'
+                opacity: button.hovered && !button.isCurrent ? 0.1 : 0
+                Behavior on opacity {
+                    SmoothedAnimation {
+                        velocity: 2
+                    }
+                }
+            }
+            Rectangle {
+                anchors.fill: parent
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+                color: 'transparent'
+                radius: 8
+                border.width: 2
+                border.color: '#00BCFF'
+                visible: button.visualFocus
+            }
+            Rectangle {
+                color: '#00BCFF'
+                visible: button.visualFocus || button.isCurrent
+                anchors.right: parent.right
+                width: 2
+                height: parent.height
+            }
+        }
+        contentItem: Label {
+            color: button.isCurrent ? '#FFFFFF' : '#A0A0A0'
+            font.pixelSize: 14
+            font.weight: 600
+            opacity: button.enabled ? 1 : 0.4
+            text: button.text
+            wrapMode: Label.NoWrap
+            elide: Label.ElideRight
+        }
+        HoverHandler {
+            cursorShape: Qt.PointingHandCursor
         }
     }
 }

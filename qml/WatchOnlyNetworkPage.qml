@@ -60,7 +60,7 @@ StackViewPage {
         icon.source: UtilJS.iconFor(option.network)
         text: option.network.displayName
         background: Rectangle {
-            color: Qt.lighter('#222226', option.hovered ? 1.2 : 1)
+            color: Qt.lighter('#262626', option.hovered ? 1.2 : 1)
             radius: 5
             Rectangle {
                 border.width: 2

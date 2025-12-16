@@ -117,7 +117,7 @@ VFlickable {
                 radius: 4
                 border.width: 2
                 border.color: '#00BCFF'
-                color: '#222226'
+                color: '#262626'
             }
             contentItem: ColumnLayout {
                 Label {

@@ -77,7 +77,7 @@ WalletDrawer {
                         Layout.fillWidth: true
                         output: modelData
                         background: Rectangle {
-                            color: '#222226'
+                            color: '#262626'
                             radius: 5
                         }
                     }

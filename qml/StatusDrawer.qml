@@ -46,7 +46,7 @@ AbstractDrawer {
                 bottomPadding: 20
                 visible: self.context.primarySession.useTor
                 background: Rectangle {
-                    color: '#222226'
+                    color: '#262626'
                     radius: 5
                 }
                 contentItem: RowLayout {
@@ -73,7 +73,7 @@ AbstractDrawer {
                 bottomPadding: 20
                 visible: self.context.primarySession.useProxy
                 background: Rectangle {
-                    color: '#222226'
+                    color: '#262626'
                     radius: 5
                 }
                 contentItem: RowLayout {
@@ -127,7 +127,7 @@ AbstractDrawer {
         bottomPadding: 20
         opacity: button.enabled ? 1 : 0.6
         background: Rectangle {
-            color: '#222226'
+            color: '#262626'
             radius: 5
         }
         contentItem: RowLayout {

@@ -15,7 +15,7 @@ TextField {
     font.weight: 500
     wrapMode: TextEdit.Wrap
     background: Rectangle {
-        color: Qt.lighter('#222226', self.hovered ? 1.2 : 1)
+        color: Qt.lighter('#262626', self.hovered ? 1.2 : 1)
         radius: 5
         Rectangle {
             border.width: 2

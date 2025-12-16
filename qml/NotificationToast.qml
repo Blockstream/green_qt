@@ -453,7 +453,7 @@ ColumnLayout {
     component TwoFactorResetToast: Toast {
         readonly property Session session: toast.notification.context.getOrCreateSession(toast.notification.network)
         id: toast
-        borderColor: '#222226'
+        borderColor: '#262626'
         backgroundColor: '#0A0A0C'
         textColor: '#FFFFFF'
         
@@ -577,7 +577,7 @@ ColumnLayout {
 
     component AnalyticsAlertToast: Toast {
         id: toast
-        borderColor: '#222226'
+        borderColor: '#262626'
         backgroundColor: '#0A0A0C'
         textColor: '#FFFFFF'
         
