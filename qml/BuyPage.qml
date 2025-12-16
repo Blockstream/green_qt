@@ -144,24 +144,26 @@ StackViewPage {
         }
         RowLayout {
             Layout.fillWidth: true
-            Layout.topMargin: 12
-            spacing: 12
+            Layout.topMargin: 3
+            spacing: 8
             Repeater {
                 model: self.defaultAmounts
                 delegate: AbstractButton {
                     required property string modelData
                     property bool selected: amount_input.text === modelData
+                    id: amount_button
                     Layout.fillWidth: true
+                    Layout.preferredWidth: 0
                     padding: 10
                     leftPadding: 12
                     rightPadding: 12
                     topPadding: 10
                     bottomPadding: 10
                     background: Rectangle {
-                        color: parent.selected ? '#062F4A' : Qt.lighter('#181818', parent.hovered ? 1.2 : 1)
+                        color: amount_button.selected ? '#062F4A' : Qt.lighter('#181818', amount_button.hovered ? 1.2 : 1)
                         radius: 5
-                        border.width: 1
-                        border.color: parent.selected ? '#4FD1FF' : '#262626'
+                        border.width: 2
+                        border.color: amount_button.selected ? '#4FD1FF' : '#262626'
                     }
                     contentItem: Label {
                         horizontalAlignment: Label.AlignHCenter
@@ -377,6 +379,10 @@ StackViewPage {
     Component {
         id: quotes_list_page
         QuotesListPage {
+            onQuoteClicked: (quote) => {
+                service.setSelectedQuote(quote)
+                self.StackView.view.pop()
+            }
         }
     }
     Component {
