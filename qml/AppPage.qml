@@ -176,6 +176,7 @@ MainPage {
         contentItem: GStackLayout {
             id: stack_layout
             currentIndex: 0
+            onCurrentIndexChanged: stack_layout.currentItem.forceActiveFocus()
             WalletsView {
                 enabled: StackLayout.isCurrentItem
                 focus: StackLayout.isCurrentItem
