@@ -252,6 +252,7 @@ ColumnLayout {
                     elide: Label.ElideRight
                 }
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     font.pixelSize: 13
@@ -321,6 +322,7 @@ ColumnLayout {
                 spacing: 6
                 
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     font.pixelSize: 14
@@ -329,13 +331,14 @@ ColumnLayout {
                     wrapMode: Label.Wrap
                 }
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     font.pixelSize: 13
                     font.weight: 400
                     text: toast.notification.message
                     textFormat: Label.MarkdownText
-                    wrapMode: Label.WordWrap
+                    wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                     onLinkActivated: Qt.openUrlExternally(link)
                 }
                 RowLayout {
@@ -348,12 +351,13 @@ ColumnLayout {
                         visible: !toast.notification.accepted
                     }
                     Label {
+                        Layout.preferredWidth: 0
                         Layout.fillWidth: true
                         Layout.rightMargin: 4
                         color: toast.textColor
                         font.pixelSize: 12
                         text: qsTrId('id_i_confirm_i_have_read_and')
-                        wrapMode: Label.Wrap
+                        wrapMode: Label.WordWrap
                         visible: !toast.notification.accepted
                     }
                     PrimaryButton {
@@ -407,6 +411,7 @@ ColumnLayout {
                 spacing: 6
                 
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     font.pixelSize: 13
@@ -477,6 +482,7 @@ ColumnLayout {
                 }
                 
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     font.pixelSize: 13
@@ -486,6 +492,7 @@ ColumnLayout {
                 }
                 
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     opacity: 0.8
@@ -529,6 +536,7 @@ ColumnLayout {
                 spacing: 6
                 
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     font.pixelSize: 13
@@ -584,6 +592,7 @@ ColumnLayout {
                     source: 'qrc:/svg2/warning_black.svg'
                 }
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     font.pixelSize: 14
@@ -599,6 +608,7 @@ ColumnLayout {
             }
             
             Label {
+                Layout.preferredWidth: 0
                 Layout.fillWidth: true
                 color: toast.textColor
                 font.pixelSize: 13
@@ -647,6 +657,7 @@ ColumnLayout {
                     elide: Label.ElideRight
                 }
                 Label {
+                    Layout.preferredWidth: 0
                     Layout.fillWidth: true
                     color: toast.textColor
                     font.pixelSize: 13
