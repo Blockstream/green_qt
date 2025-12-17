@@ -285,10 +285,8 @@ Page {
                             linkButtons: []
                             iconSide: true
                             rightActionHandler: function() {
-                                const dialog = change_pin_dialog.createObject(self, {
-                                    context: self.context,
-                                })
-                                dialog.open()
+                                const drawer = change_pin_drawer.createObject(self)
+                                drawer.open()
                             }
                         }
                     }
@@ -568,8 +566,9 @@ Page {
     }
 
     Component {
-        id: change_pin_dialog
-        ChangePinDialog {
+        id: change_pin_drawer
+        ChangePinDrawer {
+            context: self.context
         }
     }
 

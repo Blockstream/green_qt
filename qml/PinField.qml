@@ -69,21 +69,21 @@ AbstractButton {
         required property int index
         readonly property bool visualFocus: self.activeFocus && digit.index === self.pin.length
         id: digit
-        implicitWidth: 69
-        implicitHeight: 69
+        implicitWidth: 64
+        implicitHeight: 64
         opacity: self.enabled ? 1 : 0.5
         Rectangle {
             anchors.fill: parent
             border.width: 2
             border.color: digit.visualFocus ? '#00BCFF' : '#333'
-            color: 'transparent'
+            color: Qt.alpha('#000000', 0.2)
             radius: 10
         }
-        Label {
+        Rectangle {
+            width: 10
+            height: 10
+            radius: 5
             anchors.centerIn: parent
-            font.pixelSize: 26
-            font.weight: 600
-            text: '*'
             visible: digit.index < self.pin.length
             color: '#00BCFF'
         }

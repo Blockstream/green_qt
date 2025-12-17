@@ -6,20 +6,10 @@ import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
 
-WalletDialog {
+WalletDrawer {
     property string pin
     property bool changed: false
-
-    onClosed: self.destroy()
-
-    id: self
-    title: qsTrId('id_change_pin')
-    header: null
-    Overlay.modal: Rectangle {
-        anchors.fill: parent
-        color: 'black'
-        opacity: 0.6
-    }
+    property string title: qsTrId('id_change_pin')
 
     Controller {
         id: controller
@@ -39,17 +29,24 @@ WalletDialog {
         target: stack_view
     }
 
+    id: self
+    minimumContentWidth: pin_field.width
     contentItem: GStackView {
         id: stack_view
-        implicitWidth: Math.max(400, stack_view.currentItem.implicitWidth)
-        implicitHeight: Math.max(400, stack_view.currentItem.implicitHeight)
         initialItem: StackViewPage {
             title: self.title
             rightItem: CloseButton {
                 onClicked: self.close()
             }
             contentItem: ColumnLayout {
-                VSpacer {
+                spacing: 10
+                Label {
+                    Layout.bottomMargin: 30
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    horizontalAlignment: Label.AlignJustify
+                    text: 'Secure your wallet with a personal 6-digit PIN. It\'s a quick and convenient way to unlock your wallet without using your hardware device every time.'
+                    wrapMode: Label.WordWrap
                 }
                 PinField {
                     Layout.alignment: Qt.AlignCenter
@@ -85,15 +82,12 @@ WalletDialog {
                         pin_field.enabled = true
                     }
                 }
-
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     Layout.bottomMargin: 30
                     id: info_label
-                    font.pixelSize: 12
-                    font.weight: 600
                     horizontalAlignment: Qt.AlignHCenter
-                    text: qsTrId('id_set_a_new_pin')
+                    text: ''
                     wrapMode: Label.WordWrap
                 }
                 PinPadButton {

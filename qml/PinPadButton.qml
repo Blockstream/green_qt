@@ -23,6 +23,7 @@ RegularButton {
     topPadding: 12
     bottomPadding: 12
     rightPadding: 13
+    hoverEnabled: false
     onClicked: collapsible.toggle()
     cyan: true
     focusPolicy: Qt.NoFocus

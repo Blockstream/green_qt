@@ -27,7 +27,7 @@ SET(QML_FILES
     qml/Tag.qml
     qml/AccountDelegate.qml
     qml/DeleteWalletDialog.qml
-    qml/ChangePinDialog.qml
+    qml/ChangePinDrawer.qml
     qml/MnemonicView.qml
     qml/TwoFactorLimitDialog.qml
     qml/JadeSignMessageView.qml
