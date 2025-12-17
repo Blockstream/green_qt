@@ -6,13 +6,8 @@ import QtQuick.Layouts
 
 Page {
     required property Context context
-    signal openBackup()
-    id: self
-    background: null
-    
     property bool backupCompleted: !Settings.isEventRegistered({ walletId: self.context.xpubHashId, status: 'pending', type: 'wallet_backup' })
-    readonly property JadeDevice jadeDevice: self.context?.device instanceof JadeDevice ? self.context.device : null
-    
+    readonly property JadeDevice jadeDevice: self.context?.device instanceof JadeDevice ? self.context.device : null    
     readonly property bool deviceReady: (self.jadeDevice?.connected && 'BOARD_TYPE' in self.jadeDevice?.versionInfo) ?? false
     
     Component.onCompleted: {
@@ -100,10 +95,9 @@ Page {
         required property string title
         required property string description
         required property list<Component> linkButtons
+        required property Action rightAction
         property bool iconSide: false
-        property var rightActionHandler: null
         property bool warningDot: false
-
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredWidth: 0
@@ -122,10 +116,10 @@ Page {
             MouseArea {
                 anchors.fill: parent
                 anchors.margins: -20
-                enabled: !!rightActionHandler
+                enabled: card.rightAction.enabled
                 cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
                 preventStealing: true
-                onClicked: rightActionHandler()
+                onClicked: card.rightAction.trigger()
             }
 
             ColumnLayout {
@@ -145,7 +139,7 @@ Page {
                     }
                     HSpacer {}
                     Item {
-                        visible: !!rightActionHandler
+                        visible: card.rightAction.enabled
                         Layout.alignment: Qt.AlignTop
                         width: 24; height: 24
                         Image {
@@ -211,7 +205,7 @@ Page {
                         }
                         HSpacer {}
                         Item {
-                            visible: !!rightActionHandler
+                            visible: card.rightAction.enabled
                             Layout.alignment: Qt.AlignTop
                             width: 24; height: 24
                             Image {
@@ -245,6 +239,8 @@ Page {
         }
     }
 
+    id: self
+    background: null
     contentItem: VFlickable {
         alignment: Qt.AlignTop
         ColumnLayout {
@@ -284,9 +280,11 @@ Page {
                             description: 'Secure your wallet with a personal 6-digit PIN. It\'s a quick and convenient way to unlock your wallet without using your hardware device every time.'
                             linkButtons: []
                             iconSide: true
-                            rightActionHandler: function() {
-                                const drawer = change_pin_drawer.createObject(self)
-                                drawer.open()
+                            rightAction: Action {
+                                onTriggered: {
+                                    const drawer = change_pin_drawer.createObject(self)
+                                    drawer.open()
+                                }
                             }
                         }
                     }
@@ -330,8 +328,11 @@ Page {
                                 }
                             ]
                             iconSide: true
-                            rightActionHandler: function() {
-                                self.openBackup()
+                            rightAction: Action {
+                                onTriggered: {
+                                    const drawer = backup_drawer.createObject(self)
+                                    drawer.open()
+                                }
                             }
                         }
                     }
@@ -458,13 +459,15 @@ Page {
                             description: 'Verify that your device is authentic and safe to use prior to managing funds.'
                             linkButtons: []
                             iconSide: true
-                            rightActionHandler: function() {
-                                if (self.jadeDevice) {
-                                    const dialog = genuine_check_dialog.createObject(self, {
-                                        device: self.jadeDevice,
-                                        autoCheck: true
-                                    })
-                                    dialog.open()
+                            rightAction: Action {
+                                onTriggered: {
+                                    if (self.jadeDevice) {
+                                        const dialog = genuine_check_dialog.createObject(self, {
+                                            device: self.jadeDevice,
+                                            autoCheck: true
+                                        })
+                                        dialog.open()
+                                    }
                                 }
                             }
                         }
@@ -507,12 +510,15 @@ Page {
                                 }
                             ]
                             iconSide: true
-                            rightActionHandler: self.firmwareUpdateAvailable ? function() {
-                                const dialog = update_firmware_dialog.createObject(self, {
-                                    device: self.jadeDevice
-                                })
-                                dialog.open()
-                            } : null
+                            rightAction: Action {
+                                enabled: self.firmwareUpdateAvailable
+                                onTriggered: {
+                                    const dialog = update_firmware_dialog.createObject(self, {
+                                        device: self.jadeDevice
+                                    })
+                                    dialog.open()
+                                }
+                            }
                         }
                     }
                 }
@@ -532,6 +538,9 @@ Page {
                     title: 'FAQs'
                     description: 'Quick answers to common questions'
                     hoverEnabled: false
+                    rightAction: Action {
+                        enabled: false
+                    }
                     linkButtons: [
                         Component {
                             LinkButton {
@@ -568,6 +577,13 @@ Page {
     Component {
         id: change_pin_drawer
         ChangePinDrawer {
+            context: self.context
+        }
+    }
+
+    Component {
+        id: backup_drawer
+        BackupDrawer {
             context: self.context
         }
     }

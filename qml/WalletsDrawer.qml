@@ -94,7 +94,7 @@ AbstractDrawer {
                 opacity: button.visualFocus ? 1 : 0
             }
             Rectangle {
-                color: Qt.lighter('#222226', button.enabled && button.hovered ? 1.2 : 1)
+                color: Qt.lighter('#262626', button.enabled && button.hovered ? 1.2 : 1)
                 radius: button.visualFocus ? 1 : 5
                 anchors.fill: parent
                 anchors.margins: button.visualFocus ? 4 : 0

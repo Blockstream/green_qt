@@ -10,9 +10,12 @@ Pane {
     Layout.topMargin: 10
     Layout.fillWidth: true
     Layout.maximumWidth: 325
+    id: self
     background: Rectangle {
-        radius: 4
-        color: '#222226'
+        border.width: 1
+        border.color: '#262626'
+        color: '#181818'
+        radius: 5
     }
     leftPadding: 50
     rightPadding: 50

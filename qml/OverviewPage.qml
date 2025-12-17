@@ -285,28 +285,6 @@ Page {
         }
     }
 
-    Component {
-        id: backup_page
-        BackupPage {
-            context: self.context
-            onBackupCompleted: {
-                for (let i = 0; i < self.context.notifications.length; i++) {
-                    const notification = self.context.notifications[i]
-                    if (notification instanceof WarningNotification && notification.title === 'Backup your wallet') {
-                        self.context.removeNotification(notification)
-                        break
-                    }
-                }
-            }
-            onClosed: {
-                self.showView(OverviewPage.Security)
-                const stackView = self.StackView.view
-                if (stackView) {
-                    stackView.pop()
-                }
-            }
-        }
-    }
 
     contentItem: StackLayout {
         currentIndex: self.view
@@ -328,12 +306,6 @@ Page {
         SecurityPage {
             id: security_page
             context: self.context
-            onOpenBackup: {
-                const stackView = self.StackView.view
-                if (stackView) {
-                    stackView.push(backup_page, { context: self.context })
-                }
-            }
         }
         SettingsPage {
             id: settings_page

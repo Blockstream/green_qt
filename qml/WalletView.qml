@@ -165,30 +165,6 @@ MainPage {
     }
 
     Component {
-        id: mnemonic_warnings_page
-        MnemonicWarningsPage {
-            padding: 60
-            onAccepted: stack_view.push(mnemonic_backup_page)
-        }
-    }
-
-    Component {
-        id: mnemonic_backup_page
-        MnemonicBackupPage {
-            padding: 60
-            onSelected: (mnemonic) => stack_view.push(mnemonic_check_page, { mnemonic })
-        }
-    }
-
-    Component {
-        id: mnemonic_check_page
-        MnemonicCheckPage {
-            padding: 60
-            onChecked: (mnemonic) => stack_view.push(register_page, { mnemonic })
-        }
-    }
-
-    Component {
         id: register_page
         RegisterPage {
             onRegisterFinished: (context) => {

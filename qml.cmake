@@ -282,6 +282,7 @@ SET(QML_FILES
     qml/RightArrowIndicator.qml
     qml/PushButton.qml
     qml/ErrorPane.qml
+    qml/BackupDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)

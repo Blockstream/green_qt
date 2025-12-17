@@ -22,6 +22,7 @@ StackViewPage {
         id: controller
         mnemonic: self.mnemonic
         onRegisterFinished: (context) => {
+            Analytics.recordEvent('wallet_new')
             Settings.acceptTermsOfService()
             Settings.registerEvent({ walletId: context.xpubHashId, status: 'pending', type: 'wallet_backup' })
             self.registerFinished(context)

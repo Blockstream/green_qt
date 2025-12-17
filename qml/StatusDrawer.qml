@@ -32,7 +32,7 @@ AbstractDrawer {
         id: page
         title: qsTrId('id_status')
         rightItem: CloseButton {
-            onClicked: self.closeClicked()
+            onClicked: self.close()
         }
         contentItem: ColumnLayout {
             spacing: 8
