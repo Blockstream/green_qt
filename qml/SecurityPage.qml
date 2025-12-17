@@ -107,15 +107,14 @@ Page {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredWidth: 0
+        id: card
         padding: 20
-
         background: Rectangle {
-            color: '#181818'
+            color: Qt.lighter('#181818', card.hovered ? 1.2 : 1)
             border.color: '#262626'
             border.width: 1
-            radius: 4
+            radius: 5
         }
-
         contentItem: Item {
             implicitWidth: iconSide ? horizontalLayout.implicitWidth + 20 : verticalLayout.implicitWidth + 20
             implicitHeight: iconSide ? horizontalLayout.implicitHeight + 20 : verticalLayout.implicitHeight + 20
@@ -534,6 +533,7 @@ Page {
                     iconSource: 'qrc:/svg3/questions.svg'
                     title: 'FAQs'
                     description: 'Quick answers to common questions'
+                    hoverEnabled: false
                     linkButtons: [
                         Component {
                             LinkButton {
