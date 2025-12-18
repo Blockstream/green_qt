@@ -818,6 +818,26 @@ void LoadAccountsTask::handleDone(const QJsonObject& result)
     setStatus(Status::Finished);
 }
 
+SyncAccountsTask::SyncAccountsTask(Session* session)
+    : SessionTask(session)
+{
+}
+
+void SyncAccountsTask::update()
+{
+    if (m_status == Status::Ready) {
+        setStatus(Status::Active);
+    }
+
+    if (m_status == Status::Active) {
+        for (auto account : m_session->context()->getAccounts()) {
+            if (account->session() != m_session) continue;
+            if (!account->synced()) return;
+        }
+        setStatus(Status::Finished);
+    }
+}
+
 LoadBalanceTask::LoadBalanceTask(Account* account)
     : AuthHandlerTask(account->session())
     , m_account(account)

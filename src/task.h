@@ -444,6 +444,17 @@ private:
     QList<Account*> m_accounts;
 };
 
+class SyncAccountsTask : public SessionTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    SyncAccountsTask(Session* session);
+private:
+    void update() override;
+};
+
 class LoadBalanceTask : public AuthHandlerTask
 {
     Q_OBJECT
