@@ -158,7 +158,7 @@ function getUnblindingData(tx) {
 
 function transactionTypeLabel(transaction) {
     if (transaction.data.type === 'incoming') {
-        if (transaction.data.outputs.length > 0) {
+        if ((transaction.data.outputs?.length ?? 0) > 0) {
             for (const output of transaction.data.outputs) {
                 if (output.is_relevant) {
                     return qsTrId('id_received')
