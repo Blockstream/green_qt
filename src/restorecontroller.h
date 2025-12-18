@@ -43,14 +43,4 @@ private:
     QList<Account*> m_accounts;
 };
 
-class RestoreCheckTask : public Task
-{
-    Q_OBJECT
-public:
-    RestoreCheckTask(RestoreController* controller);
-    void update() override;
-private:
-    RestoreController* const m_controller;
-};
-
 #endif // GREEN_RESTORECONTROLLER_H

@@ -129,29 +129,3 @@ TaskGroup* RestoreController::check(Network* network)
 
     return group;
 }
-
-RestoreCheckTask::RestoreCheckTask(RestoreController* controller)
-    : Task(controller)
-    , m_controller(controller)
-{
-}
-
-void RestoreCheckTask::update()
-{
-    if (status() != Status::Ready) return;
-
-    const auto context = m_controller->context();
-//    const auto wallet_hash_id = context->m_wallet_hash_id;
-//    if (wallet_hash_id.isEmpty()) return;
-
-    setStatus(Status::Active);
-
-    Q_UNREACHABLE();
-//    const auto wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, false);
-
-//    m_controller->setWallet(wallet);
-//    m_controller->setValid(!wallet || !wallet->hasPinData());
-//    context->setWallet(wallet);
-
-    setStatus(Status::Finished);
-}
