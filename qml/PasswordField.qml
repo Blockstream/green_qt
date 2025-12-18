@@ -9,7 +9,7 @@ TextField {
     leftPadding: 15
     rightPadding: 64
     background: Rectangle {
-        color: '#262626'
+        color: '#181818'
         radius: 5
         Rectangle {
             border.width: 2
