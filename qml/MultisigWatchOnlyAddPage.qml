@@ -101,6 +101,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 10
             id: remember_checkbox
+            checked: true
             text: qsTrId('id_remember_me')
             leftPadding: 12
             rightPadding: 12
