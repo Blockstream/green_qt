@@ -45,19 +45,9 @@ ItemDelegate {
             Layout.maximumWidth: self.width / 7
             Layout.minimumWidth: self.width / 7
             Layout.preferredWidth: 0
-            Label {
+            AccountLabel {
                 Layout.maximumWidth: parent.width
-                elide: Label.ElideRight
-                leftPadding: 8
-                rightPadding: 8
-                bottomPadding: 4
-                topPadding: 4
-                background: Rectangle {
-                    radius: 4
-                    color: UtilJS.networkColor(self.output.account.network)
-                }
-                font.weight: 600
-                text: UtilJS.accountName(self.output.account)
+                account: self.output.account
             }
             HSpacer {
             }

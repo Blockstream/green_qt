@@ -38,6 +38,16 @@ ItemDelegate {
     }
     contentItem: RowLayout {
         spacing: 20
+        RowLayout {
+            Layout.fillWidth: false
+            Layout.maximumWidth: self.width / 7
+            Layout.minimumWidth: self.width / 7
+            Layout.preferredWidth: 0
+            AccountLabel {
+                Layout.maximumWidth: parent.width
+                account: self.address.account
+            }
+        }
         ColumnLayout {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: false
@@ -48,7 +58,7 @@ ItemDelegate {
                 padding: 8
                 topPadding: 2
                 bottomPadding: 2
-                text: self.address.data.tx_count
+                text: self.address.data?.tx_count ?? '0'
                 font.pixelSize: 16
                 font.weight: 600
             }
@@ -81,20 +91,9 @@ ItemDelegate {
             Layout.fillWidth: false
             Layout.fillHeight: false
             Layout.minimumWidth: 150
-            Label {
+            AddressTypeLabel {
                 Layout.alignment: Qt.AlignRight
-                font.capitalization: Font.AllUppercase
-                font.pixelSize: 12
-                font.weight: 700
-                topPadding: 2
-                bottomPadding: 2
-                leftPadding: 6
-                rightPadding: 6
-                text: localizedLabel(self.address.type)
-                background: Rectangle {
-                    radius:  2
-                    color: '#68727D'
-                }
+                address: self.address
             }
         }
     }

@@ -12,8 +12,6 @@ ItemDelegate {
     signal transactionClicked(Transaction transaction)
     required property Context context
     required property Transaction transaction
-    property Account account: transaction.account
-
     property int confirmations: transactionConfirmations(transaction)
 
     onClicked: self.transactionClicked(transaction)
@@ -46,26 +44,33 @@ ItemDelegate {
     spacing: 0
 
     contentItem: RowLayout {
-        spacing: 20
+        spacing: 10
         Image {
             Layout.alignment: Qt.AlignCenter
             source: `qrc:/svg2/tx-${transaction.data.type}.svg`
         }
         Label {
-            Layout.minimumWidth: self.width / 5
+            Layout.fillWidth: true
+            Layout.maximumWidth: 130
             color: '#FFF'
             font.pixelSize: 14
             font.weight: 600
             text: UtilJS.transactionTypeLabel(self.transaction)
         }
         Label {
-            Layout.minimumWidth: self.width / 5
+            Layout.fillWidth: true
+            Layout.maximumWidth: 130
             color: '#929292'
             text: UtilJS.formatTransactionTimestamp(self.transaction)
-            font.pixelSize: 12
+            font.pixelSize: 14
             font.weight: 400
             font.capitalization: Font.AllUppercase
             opacity: 0.6
+        }
+        AccountLabel {
+            Layout.fillWidth: true
+            Layout.maximumWidth: 150
+            account: self.transaction.account
         }
         Label {
             Layout.alignment: Qt.AlignCenter
@@ -84,61 +89,50 @@ ItemDelegate {
             transaction: self.transaction
             confirmations: self.confirmations
         }
-        Repeater {
-            id: assets_repeater
-            model: self.transaction.amounts
-            delegate: AssetIcon {
-                asset: modelData.asset
-            }
-        }
-        Label {
-            Layout.alignment: Qt.AlignRight
-            color: '#929292'
-            font.pixelSize: 12
-            font.weight: 400
-            text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
-            visible: Number(convert.result.satoshi ?? '0') !== 0
-        }
+        // Repeater {
+        //     id: assets_repeater
+        //     model: self.transaction.amounts
+        //     delegate: AssetIcon {
+        //         asset: modelData.asset
+        //     }
+        // }
         ColumnLayout {
-            Layout.fillWidth: false
-            Layout.minimumWidth: self.width / 5
+            Layout.fillWidth: true
+            Layout.maximumWidth: 150
             spacing: 1
             Repeater {
-                model: self.transaction.amounts
-                delegate: Label {
+                model: Object.entries(self.transaction.data.satoshi)
+                delegate: ColumnLayout {
+                    required property var modelData
+                    readonly property Asset asset: self.context.getOrCreateAsset(delegate.modelData[0])
+                    readonly property var amount: delegate.modelData[1]
                     Convert {
                         id: convert
-                        account: self.account
-                        asset: modelData.asset
-                        input: ({ satoshi: modelData.amount })
+                        account: self.transaction.account
+                        asset: delegate.asset
+                        input: ({ satoshi: delegate.amount })
+                        unit: self.transaction.account.session.unit
                     }
                     Layout.alignment: Qt.AlignRight
-                    color: transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
-                    font.pixelSize: 14
-                    font.weight: 600
-                    text: UtilJS.incognito(Settings.incognito, convert.output.label)
+                    id: delegate
+                    Label {
+                        Layout.alignment: Qt.AlignRight
+                        color: transaction.data.type === 'incoming' ? '#00BCFF' : '#FFFFFF'
+                        font.pixelSize: 14
+                        font.weight: 600
+                        text: UtilJS.incognito(Settings.incognito, convert.output.label)
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignRight
+                        color: '#929292'
+                        font.pixelSize: 12
+                        font.weight: 400
+                        text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
+                        visible: convert.fiat.available
+                    }
+                    visible: delegate.asset.id !== self.transaction.account.network.policyAsset || (delegate.amount + self.transaction.data.fee) !== 0
                 }
             }
-
-            Convert {
-                id: convert
-                account: self.account
-                input: {
-                    const network = transaction.account.network
-                    const satoshi = transaction.data.satoshi
-                    return { satoshi: String((satoshi[network.policyAsset] ?? 0) - transaction.data.fee) }
-                }
-                unit: self.account.session.unit
-            }
-            /*
-            Label {
-                Layout.alignment: Qt.AlignRight
-                color: transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
-                font.pixelSize: 14
-                font.weight: 600
-                text: UtilJS.incognito(Settings.incognito, convert.output.label)
-                visible: Number(convert.result.satoshi ?? '0') !== 0
-            }*/
         }
     }
 }

@@ -136,7 +136,7 @@ StackViewPage {
             bottomPadding: 3
             leftPadding: 8
             rightPadding: 8
-            color: '#FFF'
+            color: '#000000'
             font.pixelSize: 14
             font.weight: 700
             text: {
@@ -210,6 +210,15 @@ StackViewPage {
             rowSpacing: 10
             columnSpacing: 20
             columns: 2
+            Label {
+                color: '#929292'
+                font.pixelSize: 14
+                font.weight: 400
+                text: qsTrId('id_account')
+            }
+            AccountLabel {
+                account: self.transaction.account
+            }
             Label {
                 Layout.minimumWidth: 100
                 color: '#929292'

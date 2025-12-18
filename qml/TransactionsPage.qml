@@ -324,7 +324,6 @@ Page {
                         color: Qt.lighter('#181818', delegate.enabled && delegate.hovered ? 1.2 : 1)
                         radius: 8
                     }
-                    // onClicked: self.addressClicked(delegate.address)
                 }
             }
         }

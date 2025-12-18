@@ -205,6 +205,12 @@ Page {
             }
             HSpacer {
             }
+            Image {
+                source: 'qrc:/ffffff/24/note'
+                visible: delegate.transaction.memo.length > 0
+            }
+            HSpacer {
+            }
             ColumnLayout {
                 Layout.fillWidth: false
                 Layout.minimumWidth: delegate.width / 5

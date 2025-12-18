@@ -284,6 +284,8 @@ SET(QML_FILES
     qml/BackupDrawer.qml
     qml/NotificationDrawer.qml
     qml/BackupPage.qml
+    qml/AccountLabel.qml
+    qml/AddressTypeLabel.qml
 )
 
 if (GREEN_NO_RESOURCES)

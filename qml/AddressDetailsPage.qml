@@ -70,27 +70,26 @@ StackViewPage {
             text: qsTrId('id_details')
         }
         RowLayout {
-            SectionLabel {
-                Layout.fillWidth: true
-                text: qsTrId('id_address_type')
-            }
             Label {
-                Layout.alignment: Qt.AlignRight
-                font.pixelSize: 10
-                font.weight: 700
-                topPadding: 2
-                bottomPadding: 2
-                leftPadding: 6
-                rightPadding: 6
-                text: localizedLabel(self.address.type)
-                background: Rectangle {
-                    radius:  2
-                    color: '#68727D'
-                }
+                Layout.fillWidth: true
+                text: qsTrId('id_account')
+            }
+            AccountLabel {
+                account: self.address.account
             }
         }
         RowLayout {
-            SectionLabel {
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_address_type')
+            }
+            AddressTypeLabel {
+                Layout.alignment: Qt.AlignRight
+                address: self.address
+            }
+        }
+        RowLayout {
+            Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_tx_count')
             }
