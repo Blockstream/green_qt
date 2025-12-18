@@ -124,6 +124,11 @@ TaskGroup* RestoreController::check(Network* network)
         group->add(sync_accounts);
     }
 
+    if (network->isLiquid()) {
+        auto load_assets = new LoadAssetsTask(true, session);
+        group->add(load_assets);
+    }
+
     dispatcher()->add(group);
 
     connect(group, &TaskGroup::failed, this, [=] {
