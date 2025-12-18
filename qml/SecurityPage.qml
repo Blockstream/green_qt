@@ -501,7 +501,7 @@ Page {
                                         }
                                         Label {
                                             Layout.fillWidth: true
-                                            text: self.firmwareUpdateAvailable ? 'Update to ' + self.latestFirmware.version : 'Latest firmware installed'
+                                            text: self.firmwareUpdateAvailable ? 'Update to ' + self.latestFirmware.version : 'Firmware up to date: version ' + (self.jadeDevice?.version ?? '')
                                             font.pixelSize: 14
                                             font.weight: 600
                                             color: self.firmwareUpdateAvailable ? '#FDC700' : '#A0A0A0'
