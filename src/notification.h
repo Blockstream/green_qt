@@ -193,4 +193,12 @@ private:
     QString const m_message;
 };
 
+class BackupNotification : public ContextNotification {
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    explicit BackupNotification(Context* context);
+};
+
 #endif // GREEN_NOTIFICATION_H

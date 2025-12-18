@@ -185,6 +185,7 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg2/qrcode.svg
         assets/svg2/refresh.svg
         assets/svg2/right.svg
+        assets/svg2/right-black.svg
         assets/svg2/search.svg
         assets/svg2/search_green.svg
         assets/svg2/singlesig.svg
@@ -509,6 +510,8 @@ qt_add_resources(${APP_TARGET} "images"
 
         assets/svg/send-white.svg
         assets/svg/receive-white.svg
+
+        assets/000000/24/list-checks.svg
 )
 
 qt_add_resources(${APP_TARGET} "fonts"

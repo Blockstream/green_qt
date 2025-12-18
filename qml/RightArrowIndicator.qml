@@ -2,6 +2,7 @@ import QtQuick
 
 Collapsible {
     property real leftPadding: 0
+    property bool black: false
     required property bool active
     id: indicator
     collapsed: !indicator.active
@@ -10,7 +11,7 @@ Collapsible {
     verticalCollapse: false
     Image {
         id: image
-        source: 'qrc:/svg2/right.svg'
+        source: indicator.black ? 'qrc:/svg2/right-black.svg' : 'qrc:/svg2/right.svg'
         x: indicator.leftPadding
     }
 }

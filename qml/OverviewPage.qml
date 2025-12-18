@@ -36,16 +36,15 @@ Page {
             self.logout()
         }
         function onNotificationTriggered(notification) {
-            if (notification instanceof SystemNotification) {
-                notifications_drawer.open()
-            } else if (notification instanceof WarningNotification && notification.title === 'Backup your wallet') {
-                self.showView(OverviewPage.Security)
-                Qt.callLater(() => {
-                    security_page.openBackup()
-                })
-            } else {
-                notification_drawer.createObject(self, { notification }).open()
-            }
+            self.showNotification(notification)
+        }
+    }
+
+    function showNotification(notification) {
+        if (notification instanceof SystemNotification) {
+            notifications_drawer.open()
+        } else {
+            notification_drawer.createObject(self, { notification }).open()
         }
     }
 
@@ -117,45 +116,6 @@ Page {
     Component {
         id: notification_drawer
         NotificationDrawer {
-        }
-    }
-
-    component NotificationDrawer: AbstractDrawer {
-        required property Notification notification
-        onClosed: drawer.destroy()
-
-        id: drawer
-        edge: Qt.RightEdge
-        minimumContentWidth: 450
-        contentItem: GStackView {
-            id: stack_view
-            initialItem: {
-                if (drawer.notification instanceof OutageNotification) {
-                    return outage_page
-                } else if (drawer.notification instanceof TwoFactorExpiredNotification) {
-                    return two_factor_expired_page
-                } else {
-                    console.log('unhandled notification trigger', notification)
-                }
-            }
-        }
-        Component {
-            id: outage_page
-            OutagePage {
-                context: self.context
-                onLoadFinished: drawer.close()
-            }
-        }
-        Component {
-            id: two_factor_expired_page
-            TwoFactorExpiredSelectAccountPage {
-                context: self.context
-                notification: drawer.notification
-                rightItem: CloseButton {
-                    onClicked: drawer.close()
-                }
-                onCloseClicked: drawer.close()
-            }
         }
     }
 

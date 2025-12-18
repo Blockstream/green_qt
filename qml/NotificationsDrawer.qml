@@ -114,13 +114,22 @@ AbstractDrawer {
                     return two_factor_reset_notification
                 } else if (delegate.notification instanceof TwoFactorExpiredNotification) {
                     return two_factor_expired_notification
+                } else if (delegate.notification instanceof BackupNotification) {
+                    return backup_notification
                 }
                 return null
             }
         }
     }
 
-    component NotificationItem: Pane {
+    Component {
+        id: backup_page
+        BackupPage {
+            onCompleted: stack_view.pop(null)
+        }
+    }
+
+    component NotificationItem: AbstractButton {
         property Notification notification: _notification
         property color backgroundColor: '#262626'
         id: item
@@ -130,8 +139,47 @@ AbstractDrawer {
         bottomPadding: 18
         background: Rectangle {
             id: r1
-            color: item.backgroundColor
+            color: Qt.lighter(item.backgroundColor, item.hovered ? 1.05 : 1)
             radius: 5
+        }
+    }
+    Component {
+        id: backup_notification
+        NotificationItem {
+            id: item
+            backgroundColor: '#FF746C'
+            contentItem: RowLayout {
+                ColumnLayout {
+                    RowLayout {
+                        Image {
+                            source: 'qrc:/000000/24/list-checks.svg'
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                            color: '#000000'
+                            font.pixelSize: 13
+                            font.weight: 700
+                            text: 'Backup your wallet'
+                            wrapMode: Label.WordWrap
+                        }
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        color: '#000000'
+                        font.pixelSize: 13
+                        font.weight: 400
+                        text: qsTrId('id_write_down_your_recovery_phrase')
+                        wrapMode: Label.WordWrap
+                    }
+                }
+                RightArrowIndicator {
+                    active: true
+                    black: true
+                }
+            }
+            onClicked: stack_view.push(backup_page, { context: item.notification.context })
         }
     }
     Component {

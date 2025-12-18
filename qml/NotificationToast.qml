@@ -31,6 +31,8 @@ ColumnLayout {
                 delegate = system_message_toast
             } else if (notification instanceof AnalyticsAlertNotification) {
                 delegate = analytics_alert_toast
+            } else if (notification instanceof BackupNotification) {
+                delegate = backup_toast
             }
             if (delegate) {
                 items.push({ delegate, notification })
@@ -66,13 +68,23 @@ ColumnLayout {
         }
     }
 
-    // Toast components
     Component {
         id: system_message_toast
         SystemMessageToast {
         }
     }
-    
+
+    Component {
+        id: backup_toast
+        // TODO: switch to a lightweight toast
+        // BackupToast {
+        // }
+        WarningToast {
+            title: 'Backup your wallet'
+            message: 'Write down your recovery phrase and store it safely.'
+        }
+    }
+
     Component {
         id: outage_toast
         OutageToast {
@@ -109,8 +121,7 @@ ColumnLayout {
         }
     }
 
-    // Base toast component
-    component Toast: Pane {
+    component Toast: AbstractButton {
         required property color backgroundColor
         required property color textColor
         property Notification notification: _notification
@@ -222,9 +233,14 @@ ColumnLayout {
             toast.height = 0
             toast.notification.dismiss()
         }
+
+        // TODO: simplify toasts and make the toast fully clickable
+        // onClicked: toast.notification.trigger()
     }
 
     component WarningToast: Toast {
+        property string title: toast.notification.title
+        property string message: toast.notification.message
         id: toast
         borderColor: '#7E2A0D'
         backgroundColor: '#432004'
@@ -247,7 +263,7 @@ ColumnLayout {
                     color: toast.textColor
                     font.pixelSize: 14
                     font.weight: 700
-                    text: toast.notification.title
+                    text: toast.title
                     wrapMode: Label.NoWrap
                     elide: Label.ElideRight
                 }
@@ -257,7 +273,7 @@ ColumnLayout {
                     color: toast.textColor
                     font.pixelSize: 13
                     font.weight: 400
-                    text: toast.notification.message
+                    text: toast.message
                     wrapMode: Label.WordWrap
                 }
                 RowLayout {
@@ -311,7 +327,6 @@ ColumnLayout {
             spacing: 8
             Layout.alignment: Qt.AlignCenter
             Image {
-                Layout.alignment: Qt.AlignTop
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 24
                 source: 'qrc:/svg2/info_white.svg'
@@ -341,6 +356,7 @@ ColumnLayout {
                     wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                     onLinkActivated: Qt.openUrlExternally(link)
                 }
+                /*
                 RowLayout {
                     Layout.topMargin: 4
                     spacing: 4
@@ -381,12 +397,37 @@ ColumnLayout {
                         visible: !toast.notification.accepted
                     }
                 }
+                */
             }
             
             CloseButton {
-                Layout.alignment: Qt.AlignTop
                 onClicked: toast.slideOutAndDismiss()
             }
+        }
+    }
+
+    component BackupToast: Toast {
+        id: toast
+        backgroundColor: '#FF746C'
+        textColor: '#000000'
+        contentItem: RowLayout {
+            Image {
+                source: 'qrc:/000000/24/list-checks.svg'
+            }
+            Label {
+                Layout.fillWidth: true
+                color: toast.textColor
+                font.pixelSize: 13
+                font.weight: 700
+                text: 'Backup your wallet'
+            }
+            CloseButton {
+                black: true
+                onClicked: toast.slideOutAndDismiss()
+            }
+        }
+        HoverHandler {
+            cursorShape: Qt.PointingHandCursor
         }
     }
 

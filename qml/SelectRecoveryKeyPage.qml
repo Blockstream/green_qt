@@ -170,7 +170,7 @@ StackViewPage {
         id: button
         padding: 20
         background: Rectangle {
-            color: '#262626'
+            color: '#181818'
             radius: 5
             Rectangle {
                 border.width: 2
@@ -201,9 +201,8 @@ StackViewPage {
                     wrapMode: Label.WordWrap
                 }
             }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/next_arrow.svg'
+            RightArrowIndicator {
+                active: button.hovered
             }
         }
     }

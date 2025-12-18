@@ -119,7 +119,6 @@ SET(QML_FILES
     qml/CreateAccountDrawer.qml
     qml/ReceiveDrawer.qml
     qml/SendDrawer.qml
-    qml/BackupPage.qml
     qml/BackButton.qml
     qml/SendAccountAssetSelector.qml
     qml/AccountAssetField.qml
@@ -283,6 +282,8 @@ SET(QML_FILES
     qml/PushButton.qml
     qml/ErrorPane.qml
     qml/BackupDrawer.qml
+    qml/NotificationDrawer.qml
+    qml/BackupPage.qml
 )
 
 if (GREEN_NO_RESOURCES)

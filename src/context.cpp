@@ -415,12 +415,8 @@ void Context::addTestTwoFactorExpiredNotification()
 
 void Context::addTestWarningNotification()
 {
-    auto network = primaryNetwork();
-    if (!network) return;
-    const auto title = QStringLiteral("Backup your wallet");
-    const auto message = QStringLiteral("This is a sample alert-banner description.");
-    const auto warning = new WarningNotification(title, message, network, this);
-    addNotification(warning);
+    auto notification = new BackupNotification(this);
+    addNotification(notification);
 }
 
 void Context::addTestUpdateNotification()
@@ -441,25 +437,21 @@ void Context::checkAndAddBackupWarningNotification()
         { "status", "pending" },
         { "type", "wallet_backup" }
     };
+    const bool event_registered = settings->isEventRegistered(event);
     
-    if (!settings->isEventRegistered(event)) {
-        return; 
-    }
-    
+    BackupNotification* backup_notification{nullptr};
     for (auto notification : m_notifications) {
-        if (auto warning = qobject_cast<WarningNotification*>(notification)) {
-            if (warning->title() == "Backup your wallet" && warning->message() == "Write down your recovery phrase and store it safely.") {
-                return; 
-            }
-        }
+        backup_notification = qobject_cast<BackupNotification*>(notification);
+        if (backup_notification) break;
     }
-    
-    auto network = primaryNetwork();
-    if (!network) return;
-    const auto title = QStringLiteral("Backup your wallet");
-    const auto message = QStringLiteral("Write down your recovery phrase and store it safely.");
-    const auto warning = new WarningNotification(title, message, network, this);
-    addNotification(warning);
+
+    if (event_registered && !backup_notification) {
+        addNotification(new BackupNotification(this));
+    }
+
+    if (!event_registered && backup_notification) {
+        removeNotification(backup_notification);
+    }
 }
 
 void Context::loadNetwork(TaskGroup *group, Network *network)

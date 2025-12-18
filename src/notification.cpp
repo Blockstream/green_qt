@@ -264,3 +264,8 @@ WarningNotification::WarningNotification(const QString& title, const QString& me
 {
     setDismissable(true);
 }
+
+BackupNotification::BackupNotification(Context *context)
+    : ContextNotification(context)
+{
+}
