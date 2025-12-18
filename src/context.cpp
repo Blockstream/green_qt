@@ -770,9 +770,7 @@ bool TransactionModel::filterAssetsAcceptsTransaction(Transaction* transaction) 
     if (m_filter_assets.isEmpty()) return true;
 
     for (auto asset : m_filter_assets) {
-        for (auto amount : transaction->m_amounts) {
-            if (amount->asset() == asset) return true;
-        }
+        if (transaction->hasAsset(asset)) return true;
     }
 
     return false;

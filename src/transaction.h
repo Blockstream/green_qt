@@ -83,6 +83,8 @@ public:
 
     QUrl url() const;
 
+    bool hasAsset(Asset* asset) const;
+
 public slots:
     void openInExplorer() const;
     QString link();
@@ -98,12 +100,13 @@ signals:
 private:
     void setType(Type type);
     void setMemo(const QString& memo);
-public:
+private:
     Account* const m_account;
     Type m_type{Type::Unknown};
-    QList<TransactionAmount*> m_amounts;
     QJsonObject m_data;
     QString m_memo;
+public:
+    QList<TransactionAmount*> m_amounts;
 };
 
 #endif // GREEN_TRANSACTION_H

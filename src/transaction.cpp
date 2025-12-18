@@ -94,6 +94,14 @@ QUrl Transaction::url() const
     return { tx_explorer_url + txhash };
 }
 
+bool Transaction::hasAsset(Asset *asset) const
+{
+    for (auto amount : m_amounts) {
+        if (amount->asset() == asset) return true;
+    }
+    return false;
+}
+
 QJsonObject Transaction::destination() const
 {
     const auto outputs = m_data.value("outputs").toArray();
