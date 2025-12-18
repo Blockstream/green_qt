@@ -58,79 +58,84 @@ Page {
             }
             HSpacer {
             }
-            StackLayout {
-                Layout.alignment: Qt.AlignCenter
+            Label {
+                opacity: 0.7
+                text: 'Filter by'
+            }
+            RowLayout {
                 Layout.fillWidth: false
-                Layout.fillHeight: false
-                currentIndex: stack_layout.currentIndex
-                RowLayout {
-                    HSpacer {
-                    }
-                    FilterButton {
-                        text: qsTrId('id_account')
-                        popup: AccountFilterPopup {
-                            context: self.context
-                            model: transaction_model
-                        }
-                    }
-                    FilterButton {
-                        text: qsTrId('id_asset')
-                        popup: AssetFilterPopup {
-                            context: self.context
-                            model: transaction_model
-                        }
-                    }
-                    LinkButton {
-                        text: qsTrId('id_export')
+                visible: stack_layout.currentIndex === 0
+                FilterButton {
+                    text: qsTrId('id_account')
+                    popup: AccountFilterPopup {
+                        context: self.context
+                        model: transaction_model
                     }
                 }
-                RowLayout {
-                    HSpacer {
-                    }
-                    FilterButton {
-                        text: qsTrId('id_account')
-                        popup: AccountFilterPopup {
-                            context: self.context
-                            model: address_model
-                        }
-                    }
-                    FilterButton {
-                        text: qsTrId('id_address')
-                        popup: AddressFilterPopup {
-                            context: self.context
-                            model: address_model
-                        }
-                    }
-                    LinkButton {
-                        text: qsTrId('id_export')
+                FilterButton {
+                    text: qsTrId('id_asset')
+                    popup: AssetFilterPopup {
+                        context: self.context
+                        model: transaction_model
                     }
                 }
-                RowLayout {
-                    HSpacer {
-                    }
-                    FilterButton {
-                        text: qsTrId('id_account')
-                        popup: AccountFilterPopup {
-                            context: self.context
-                            model: coin_model
-                        }
-                    }
-                    FilterButton {
-                        text: qsTrId('id_asset')
-                        popup: AssetFilterPopup {
-                            context: self.context
-                            model: coin_model
-                        }
-                    }
-                    LinkButton {
-                        text: qsTrId('id_export')
+                VSeparator {
+                }
+                LinkButton {
+                    text: qsTrId('id_export')
+                }
+            }
+            RowLayout {
+                Layout.fillWidth: false
+                visible: stack_layout.currentIndex === 1
+                FilterButton {
+                    text: qsTrId('id_account')
+                    popup: AccountFilterPopup {
+                        context: self.context
+                        model: address_model
                     }
                 }
-                Label {
-                    text: 'filter coins'
+                FilterButton {
+                    text: qsTrId('id_address')
+                    popup: AddressFilterPopup {
+                        context: self.context
+                        model: address_model
+                    }
+                }
+                VSeparator {
+                }
+                LinkButton {
+                    text: qsTrId('id_export')
+                }
+            }
+            RowLayout {
+                Layout.fillWidth: false
+                visible: stack_layout.currentIndex === 2
+                FilterButton {
+                    text: qsTrId('id_account')
+                    popup: AccountFilterPopup {
+                        context: self.context
+                        model: coin_model
+                    }
+                }
+                FilterButton {
+                    text: qsTrId('id_asset')
+                    popup: AssetFilterPopup {
+                        context: self.context
+                        model: coin_model
+                    }
                 }
             }
         }
+    }
+
+    component VSeparator: Rectangle {
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        color: '#FFFFFF'
+        implicitHeight: 14
+        implicitWidth: 1
+        opacity: 0.7
     }
 
     component FilterButton: AbstractButton {
@@ -142,7 +147,7 @@ Page {
         topPadding: 8
         bottomPadding: 8
         background: Rectangle {
-            color: '#FFF'
+            color: '#FFFFFF'
             radius: 4
             opacity: 0.2
             visible: button.hovered || button.popupItem
