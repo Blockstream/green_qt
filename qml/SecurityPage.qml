@@ -446,8 +446,9 @@ Page {
                 RowLayout {
                     spacing: 24
                     ColumnLayout {
-                        spacing: 8
                         Layout.preferredWidth: 1
+                        spacing: 8
+                        visible: self.context.wallet.login?.device?.board === 'JADE_V2'
                         Label {
                             text: "Jade’s Authenticity"
                             color: "#A0A0A0"
@@ -622,6 +623,7 @@ Page {
     Component {
         id: update_firmware_dialog
         JadeUpdateDialog2 {
+            context: self.context
             device: self.jadeDevice
         }
     }
