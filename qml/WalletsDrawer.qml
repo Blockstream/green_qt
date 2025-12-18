@@ -67,6 +67,8 @@ AbstractDrawer {
                     onClicked: self.walletClicked(wallet_button.wallet)
                 }
             }
+            VSpacer {
+            }
         }
         footer: RowLayout {
             LinkButton {
