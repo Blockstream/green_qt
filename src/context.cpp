@@ -20,6 +20,15 @@
 
 #include <algorithm>
 
+#include <QDateTime>
+#include <QDesktopServices>
+#include <QFile>
+#include <QFileDialog>
+#include <QStandardPaths>
+#include <QTextStream>
+#include <QTimer>
+#include <QUrl>
+
 namespace {
 void UpdateAsset(GA_session* session, Asset* asset)
 {
@@ -736,11 +745,125 @@ void ContextModel::updateFilterHasTransactions(bool filter)
     invalidate();
 }
 
+void ContextModel::exportToFile()
+{
+}
 
 TransactionModel::TransactionModel(QObject* parent)
     : ContextModel(parent)
 {
     setSortRole(Qt::UserRole + 1);
+}
+
+void TransactionModel::exportToFile()
+{
+    auto datetime = QDateTime::currentDateTime();
+
+    const QString suggestion =
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() +
+        context()->wallet()->name() + " - transactions - " +
+        datetime.toString("yyyyMMddhhmmss") + ".csv";
+
+    auto dialog = new QFileDialog(nullptr, "Save As", suggestion);
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->setFileMode(QFileDialog::AnyFile);
+    dialog->selectFile(suggestion);
+    connect(dialog, &QFileDialog::fileSelected, this, [=](const QString& filename) {
+        if (filename.isEmpty()) return;
+
+        const auto wallet = context()->wallet();
+        const auto session = context()->primarySession();
+        const auto settings = session->settings();
+        const auto display_unit = session->displayUnit();
+        const auto pricing = settings.value("pricing").toObject();
+        const auto currency = session->network()->isMainnet() ? pricing.value("currency").toString() : "FIAT";
+        const auto exchange = pricing.value("exchange").toString();
+        const auto unit = session->unit().toLower().replace("µbtc", "ubtc");
+
+        QString fee_field = QString("fee (%1)").arg(display_unit);
+        QString fiat_field = QString("fiat (%1 %2 %3)").arg(currency, exchange, datetime.toString(Qt::ISODate));
+        QStringList fields = QStringList{"time", "network", "account", "description", "amount", "unit", fee_field, fiat_field, "txhash", "memo"};
+        QStringList lines;
+        QString separator{","};
+
+        lines.append(fields.join(separator));
+
+        const auto row_count = rowCount();
+        for (int row = 0; row < row_count; ++row) {
+            const auto transaction = index(row, 0).data(Qt::UserRole).value<Transaction*>();
+            const auto network = transaction->account()->network();
+            const auto data = transaction->data();
+            const auto block_height = data.value("block_height").toInt();
+
+            if (block_height == 0) continue;
+            for (auto amount : transaction->m_amounts) {
+                const auto asset = amount->asset();
+                QStringList values;
+                for (auto field : fields) {
+                    if (field == "network") {
+                        values.append(network->displayName());
+                    } else if (field == "account") {
+                        values.append(transaction->account()->name());
+                    } else if (field == "time") {
+                        const auto created_at_ts = data.value("created_at_ts").toDouble();
+                        const auto created_at = QDateTime::fromMSecsSinceEpoch(created_at_ts / 1000);
+                        values.append(created_at.toString(Qt::ISODate));
+                    } else if (field == "description") {
+                        values.append(data.value("type").toString());
+                    } else if (field == "amount") {
+                        const double satoshi = amount->amount();
+                        if (asset && asset->id() != network->policyAsset()) {
+                            const auto precision = asset->data().value("precision").toInt(0);
+                            const auto value = static_cast<double>(satoshi) / qPow(10, precision);
+                            values.append(QString::number(value, 'f', precision));
+                        } else {
+                            const auto converted = wallet->convert({{ "satoshi", satoshi }});
+                            values.append(converted.value(unit).toString());
+                        }
+                    } else if (field == "unit") {
+                        if (asset && asset->id() != network->policyAsset()) {
+                            values.append(asset->data().value("ticker").toString());
+                        } else {
+                            values.append(display_unit);
+                        }
+                    } else if (field == fee_field) {
+                        if (data.value("type").toString() == "outgoing") {
+                            const double fee = data.value("fee").toInt();
+                            const auto converted = wallet->convert({{ "satoshi", fee }});
+                            values.append(converted.value(unit).toString());
+                        } else {
+                            values.append("");
+                        }
+                    } else if (field == fiat_field) {
+                        if (asset && asset->id() != network->policyAsset()) {
+                            values.append("");
+                        } else {
+                            values.append(wallet->convert({{ "satoshi", amount->amount() }}).value("fiat").toString());
+                        }
+                    } else if (field == "txhash") {
+                        values.append(data.value("txhash").toString());
+                    } else if (field == "memo") {
+                        values.append(data.value("memo").toString().replace("\n", " ").replace(",", "-"));
+                    } else {
+                        Q_UNREACHABLE();
+                    }
+                }
+                lines.append(values.join(separator));
+            }
+        }
+
+        QFile file(filename);
+        bool result = file.open(QFile::WriteOnly);
+        Q_ASSERT(result);
+
+        QTextStream stream(&file);
+        stream << lines.join("\n");
+
+        QFileInfo info(file);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(info.absoluteFilePath()));
+    });
+    connect(this, &QObject::destroyed, dialog, &QFileDialog::deleteLater);
+    dialog->open();
 }
 
 bool TransactionModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const

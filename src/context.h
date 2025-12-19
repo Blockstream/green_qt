@@ -207,6 +207,7 @@ public slots:
     void updateFilterAssets(Asset* asset, bool filter);
     void updateFilterTypes(const QString& type, bool filter);
     void updateFilterHasTransactions(bool has_transactions);
+    virtual void exportToFile();
 protected:
     virtual void update(Context* context) = 0;
 protected:
@@ -225,6 +226,7 @@ class TransactionModel : public ContextModel
     QML_ELEMENT
 public:
     TransactionModel(QObject* parent = nullptr);
+    void exportToFile() override;
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     void update(Context* context) override;

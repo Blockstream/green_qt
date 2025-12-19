@@ -82,7 +82,9 @@ Page {
                 VSeparator {
                 }
                 LinkButton {
+                    enabled: !transaction_list_page.empty
                     text: qsTrId('id_export')
+                    onClicked: transaction_model.exportToFile()
                 }
             }
             RowLayout {
@@ -261,6 +263,7 @@ Page {
             id: stack_layout
             currentIndex: 0
             ListPage {
+                id: transaction_list_page
                 emptyText: `You don't have any transactions yet.`
                 model: TransactionModel {
                     id: transaction_model
@@ -336,6 +339,7 @@ Page {
         required property ContextModel model
         required property Component delegate
         required property string emptyText
+        readonly property bool empty: list_view.count === 0
         id: list_page
         background: null
         padding: 0
@@ -452,11 +456,11 @@ Page {
             }
             delegate: list_page.delegate
             Label {
-                anchors.centerIn:list_view
+                anchors.centerIn: list_view
                 color: '#929292'
                 font.pixelSize: 14
                 text: list_page.emptyText
-                visible: list_view.count === 0
+                visible: list_page.empty
             }
         }
     }
