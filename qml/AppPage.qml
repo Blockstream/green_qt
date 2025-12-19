@@ -22,7 +22,7 @@ MainPage {
             const child = stack_layout.children[i]
             if (child instanceof WalletView && child.wallet === wallet) { // && !child.device) {
                 stack_layout.currentIndex = i;
-                side_bar.currentView = stack_layout.itemAt(i)
+                side_bar.currentWalletView = stack_layout.itemAt(i)
                 return
             }
         }
