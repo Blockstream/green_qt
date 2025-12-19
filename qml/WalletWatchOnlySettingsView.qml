@@ -100,11 +100,10 @@ Pane {
                             }
                         }
                         onClicked: {
-                            const dialog = watchonly_dialog.createObject(self, {
-                                context: self.context,
-                                session: multisig_button.session,
+                            const drawer = setup_watchonly_drawer.createObject(self, {
+                                session: multisig_button.session
                             })
-                            dialog.open()
+                            drawer.open()
                         }
                         HoverHandler {
                             cursorShape: Qt.PointingHandCursor
@@ -221,154 +220,15 @@ Pane {
                 }
             }
         }
-
         VSpacer {
         }
     }
 
     Component {
-        id: watchonly_dialog
-        WalletDialog {
-            required property Session session
-            id: dialog
-            header: null
-            footer: null
-            enabled: watch_only_controller.monitor.idle
-            width: 450
-            height: 500
-            WatchOnlyController {
-                id: watch_only_controller
-                session: dialog.session
-                onFailed: error => error_badge.error = error
-                onFinished: ok_badge.error = 'Watch-only credentials updated successfully'
-            }
-            contentItem: StackViewPage {
-                title: qsTrId('id_set_up_watchonly')
-                rightItem: CloseButton {
-                    onClicked: dialog.close()
-                }
-                contentItem: ColumnLayout {
-                    spacing: 10
-                    FieldTitle {
-                        Layout.topMargin: 0
-                        text: qsTrId('id_network')
-                    }
-                    Pane {
-                        Layout.fillWidth: true
-                        padding: 15
-                        bottomPadding: 15
-                        leftPadding: 20
-                        rightPadding: 20
-                        background: Rectangle {
-                            color: '#181818'
-                            radius: 5
-                        }
-                        contentItem: RowLayout {
-                            spacing: 10
-                            Image {
-                                Layout.alignment: Qt.AlignCenter
-                                Layout.preferredHeight: 24
-                                Layout.preferredWidth: 24
-                                source: UtilJS.iconFor(dialog.session.network)
-                            }
-                            Label {
-                                Layout.fillWidth: true
-                                color: '#FFF'
-                                font.pixelSize: 14
-                                font.weight: 600
-                                text: dialog.session.network.displayName
-                            }
-                        }
-                    }
-                    FieldTitle {
-                        text: qsTrId('id_username')
-                    }
-                    TTextField {
-                        Layout.fillWidth: true
-                        id: username_field
-                        text: dialog.session.username
-                        validator: FieldValidator {
-                        }
-                        onTextEdited: {
-                            error_badge.clear()
-                            ok_badge.clear()
-                        }
-                    }
-                    FieldTitle {
-                        text: qsTrId('id_password')
-                    }
-                    TTextField {
-                        Layout.fillWidth: true
-                        id: password_field
-                        echoMode: TextField.Password
-                        validator: FieldValidator {
-                        }
-                        onTextEdited: {
-                            error_badge.clear()
-                            ok_badge.clear()
-                        }
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
-                        font.pixelSize: 12
-                        color: '#FFFFFF'
-                        opacity: 0.6
-                        text: qsTrId('id_at_least_8_characters_required')
-                    }
-                    VSpacer {
-                    }
-                    FixedErrorBadge {
-                        Layout.alignment: Qt.AlignCenter
-                        id: error_badge
-                        pointer: false
-                    }
-                    FixedErrorBadge {
-                        Layout.alignment: Qt.AlignCenter
-                        id: ok_badge
-                        pointer: false
-                        backgroundColor: '#00BCFF'
-                    }
-                    VSpacer {
-                    }
-                }
-                footerItem: RowLayout {
-                    spacing: 10
-                    RegularButton {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-                        enabled: dialog.session.username.length > 0
-                        implicitWidth: 0
-                        text: qsTrId('id_delete')
-                        onClicked: {
-                            error_badge.clear()
-                            ok_badge.clear()
-                            username_field.clear()
-                            password_field.clear()
-                            watch_only_controller.clear()
-                        }
-                    }
-                    PrimaryButton {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-                        implicitWidth: 0
-                        text: qsTrId('id_update')
-                        enabled: username_field.acceptableInput && password_field.acceptableInput
-                        onClicked: {
-                            ok_badge.clear()
-                            error_badge.clear()
-                            watch_only_controller.update(username_field.text, password_field.text)
-                        }
-                        busy: !watch_only_controller.monitor.idle
-                    }
-                }
-            }
+        id: setup_watchonly_drawer
+        SetupWatchonlyDrawer {
+            context: self.context
         }
-    }
-
-    component FieldValidator: RegularExpressionValidator {
-        regularExpression: /^.{8,}$/
     }
 
     component SinglesigAccountPane: Pane {

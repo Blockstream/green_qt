@@ -285,6 +285,7 @@ SET(QML_FILES
     qml/BackupPage.qml
     qml/AccountLabel.qml
     qml/AddressTypeLabel.qml
+    qml/SetupWatchonlyDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)
