@@ -158,7 +158,7 @@ TTextField {
             GMenu.Item {
                 enabled: self.convert.fiat.available
                 hideIcon: true
-                text: self.session?.settings.pricing.currency ?? ''
+                text: self.session?.settings?.pricing?.currency ?? ''
                 onClicked: {
                     unit_menu.close()
                     self.setFiat()
