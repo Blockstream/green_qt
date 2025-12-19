@@ -261,6 +261,7 @@ Page {
             id: stack_layout
             currentIndex: 0
             ListPage {
+                emptyText: `You don't have any transactions yet.`
                 model: TransactionModel {
                     id: transaction_model
                     context: self.context
@@ -283,6 +284,7 @@ Page {
                 }
             }
             ListPage {
+                emptyText: 'Your wallet addresses will appear here once they are created.'
                 model: AddressModel {
                     id: address_model
                     context: self.context
@@ -303,6 +305,7 @@ Page {
                 }
             }
             ListPage {
+                emptyText: `You don't have any coins yet.`
                 model: CoinModel {
                     id: coin_model
                     context: self.context
@@ -332,6 +335,7 @@ Page {
     component ListPage: Page {
         required property ContextModel model
         required property Component delegate
+        required property string emptyText
         id: list_page
         background: null
         padding: 0
@@ -440,12 +444,20 @@ Page {
             onTextEdited: list_page.model.filterText = search_field.text
         }
         contentItem: TListView {
+            id: list_view
             spacing: 4
             model: list_page.model
             footer: Item {
                 height: 24
             }
             delegate: list_page.delegate
+            Label {
+                anchors.centerIn:list_view
+                color: '#929292'
+                font.pixelSize: 14
+                text: list_page.emptyText
+                visible: list_view.count === 0
+            }
         }
     }
 }

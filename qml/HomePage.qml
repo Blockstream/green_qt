@@ -74,7 +74,7 @@ Page {
                 Label {
                     color: '#929292'
                     font.pixelSize: 14
-                    text: 'You don\'t have any transactions yet.'
+                    text: `You don't have any transactions yet.`
                     visible: transaction_list_view.count === 0
                 }
             }
