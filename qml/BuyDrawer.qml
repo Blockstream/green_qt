@@ -6,9 +6,14 @@ import QtQuick.Layouts
 
 WalletDrawer {
     Component.onCompleted: {
-        for (const account of self.context?.accounts ?? []) {
-            if (account.hidden) continue
-            if (account.network.liquid) continue
+        const accounts = (self.context?.accounts ?? []).filter(account => !account.hidden && !account.network.liquid);
+        for (const account of accounts) {
+            if (account.type === 'p2wpkh') {
+                stack_view.push(null, buy_page, { account })
+                return
+            }
+        }
+        for (const account of accounts) {
             stack_view.push(null, buy_page, { account })
             return
         }
