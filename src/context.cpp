@@ -478,29 +478,29 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
     group->add(new LoadCurrenciesTask(session));
 
     if (m_skip_load_accounts) {
+        createStandardAccount(group, network);
         return;
     }
 
     if (!isWatchonly() || !network->isElectrum()) {
         auto load_accounts = new LoadAccountsTask(false, session);
         connect(load_accounts, &Task::finished, this, [=] {
-            for (auto account : load_accounts->accounts()) {
-                group->add(new LoadBalanceTask(account));
+            if (network->isElectrum()) {
+                bool has_native_segwit = false;
 
-                auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, account);
-
-                connect(get_unspent_outputs, &Task::finished, this, [=] {
-                    for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {
-                        for (const QJsonValue& asset_value : assets_values.toArray()) {
-                            auto output = account->getOrCreateOutput(asset_value.toObject());
-                        }
+                for (auto account : load_accounts->accounts()) {
+                    if (account->type() == "p2wpkh") {
+                        has_native_segwit = true;
+                        break;
                     }
-                });
+                }
 
-                group->add(get_unspent_outputs);
-
-                fetchTransactions(group, account, 0, 30);
+                if (!has_native_segwit) {
+                    createStandardAccount(group, network);
+                }
             }
+
+            loadNetwork2(group, network);
         });
         connect(load_accounts, &Task::failed, this, [=](auto error) {
             // TODO: deal with these errors
@@ -508,6 +508,67 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
         });
         group->add(load_accounts);
     }
+}
+
+void Context::createStandardAccount(TaskGroup *group, Network *network)
+{
+    auto session = getOrCreateSession(network);
+    if (!session->m_ready) {
+        Q_UNREACHABLE();
+        return;
+    }
+
+    const QString name = network->isLiquid() ? "Standard Liquid" : "Standard";
+    auto details = QJsonObject{
+        { "name", name },
+        { "type", "p2wpkh" },
+    };
+
+    auto create_account = new CreateAccountTask(details, session);
+
+    connect(create_account, &Task::finished, this, [=] {
+        auto account = getAccountByPointer(network, create_account->pointer());
+        auto load_account_task = new LoadAccountTask(create_account->pointer(), session);
+        auto load_balance_task = new LoadBalanceTask(account);
+
+        load_account_task->then(load_balance_task);
+
+        group->add(load_account_task);
+        group->add(load_balance_task);
+    });
+
+    group->add(create_account);
+}
+
+void Context::loadNetwork2(TaskGroup *group, Network *network)
+{
+    auto session = getOrCreateSession(network);
+    if (!session->m_ready) {
+        Q_UNREACHABLE();
+        return;
+    }
+
+    auto load_accounts = new LoadAccountsTask(false, session);
+    connect(load_accounts, &Task::finished, this, [=] {
+        for (auto account : load_accounts->accounts()) {
+            group->add(new LoadBalanceTask(account));
+
+            auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, account);
+
+            connect(get_unspent_outputs, &Task::finished, this, [=] {
+                for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {
+                    for (const QJsonValue& asset_value : assets_values.toArray()) {
+                        auto output = account->getOrCreateOutput(asset_value.toObject());
+                    }
+                }
+            });
+
+            group->add(get_unspent_outputs);
+
+            fetchTransactions(group, account, 0, 30);
+        }
+    });
+    group->add(load_accounts);
 }
 
 QJsonObject device_details_from_device(Device* device);
