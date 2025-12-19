@@ -117,7 +117,7 @@ ItemDelegate {
                     id: delegate
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        color: transaction.data.type === 'incoming' ? '#00BCFF' : '#FFFFFF'
+                        color: delegate.amount > 0 ? '#00BCFF' : '#FFFFFF'
                         font.pixelSize: 14
                         font.weight: 600
                         text: UtilJS.incognito(Settings.incognito, convert.output.label)
@@ -130,7 +130,13 @@ ItemDelegate {
                         text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
                         visible: convert.fiat.available
                     }
-                    visible: delegate.asset.id !== self.transaction.account.network.policyAsset || (delegate.amount + self.transaction.data.fee) !== 0
+                    visible: {
+                        if (delegate.amount === 0) return false
+                        if (!self.transaction.account.network.liquid) return true
+                        if (delegate.asset.id !== self.transaction.account.network.policyAsset) return true
+                        if (self.transaction.data.type === 'redeposit') return true
+                        return (delegate.amount + self.transaction.data.fee) !== 0
+                    }
                 }
             }
         }
