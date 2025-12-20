@@ -67,7 +67,6 @@ SET(QML_FILES
     qml/GPane.qml
     qml/main.qml
     qml/DialogHeader.qml
-    qml/SettingsPage.qml
     qml/TransactionListView.qml
     qml/CancelTwoFactorResetDialog.qml
     qml/GTextArea.qml
