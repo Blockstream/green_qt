@@ -289,6 +289,7 @@ Page {
                 }
             }
             ListPage {
+                id: address_list_page
                 emptyText: 'Your wallet addresses will appear here once they are created.'
                 model: AddressModel {
                     id: address_model
