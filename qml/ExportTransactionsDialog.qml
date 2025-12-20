@@ -55,7 +55,7 @@ WalletDialog {
                 CompletedImage {
                     Layout.alignment: Qt.AlignCenter
                 }
-                PreferencesView.FileButton {
+                PreferencesDialog.FileButton {
                     Layout.alignment: Qt.AlignCenter
                     text: page.name
                     url: page.url

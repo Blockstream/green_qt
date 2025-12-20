@@ -48,7 +48,7 @@ SET(QML_FILES
     qml/MnemonicPage.qml
     qml/PersistentLoader.qml
     qml/AnimLoader.qml
-    qml/PreferencesView.qml
+    qml/PreferencesDialog.qml
     qml/AssetDrawer.qml
     qml/AddressesListView.qml
     qml/AssetListView.qml

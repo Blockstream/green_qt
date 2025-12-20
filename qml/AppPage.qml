@@ -334,7 +334,7 @@ MainPage {
 
     Component {
         id: preferences_dialog
-        PreferencesView {
+        PreferencesDialog {
             onClosed: {
                 side_bar.currentView = side_bar.currentWalletView ? SideBar.View.Wallet : SideBar.View.Wallets
                 destroy()

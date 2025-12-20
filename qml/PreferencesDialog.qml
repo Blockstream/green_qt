@@ -5,12 +5,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractDialog {
-    id: self
 
     AnalyticsView {
         name: 'AppSettings'
         active: true
     }
+    id: self
     clip: true
     width: 500
     height: 650
@@ -72,7 +72,7 @@ AbstractDialog {
         bottomPadding: 20
         opacity: button.enabled ? 1 : 0.6
         background: Rectangle {
-            color: Qt.lighter( '#262626', button.enabled && button.hovered ? 1.2 : 1)
+            color: Qt.lighter('#181818', button.enabled && button.hovered ? 1.2 : 1)
             radius: 5
         }
     }
@@ -274,6 +274,7 @@ AbstractDialog {
                     text: qsTrId('Proxy')
                 }
                 SwitchButton {
+                    Layout.bottomMargin: 25
                     icon.source: 'qrc:/svg/proxyV2.svg'
                     text: qsTrId('id_connect_through_a_proxy')
                     checked: Settings.useProxy

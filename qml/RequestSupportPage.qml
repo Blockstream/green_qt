@@ -26,57 +26,51 @@ StackViewPage {
         if (self.type === 'feedback') return 'Feedback'
         return qsTrId('id_support')
     }
-    contentItem: Flickable {
-        ScrollIndicator.vertical: ScrollIndicator {
-            active: flickable.contentHeight > flickable.height
+    contentItem: VFlickable {
+        spacing: 5
+        alignment: Qt.AlignTop
+        Label {
+            Layout.bottomMargin: 10
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            horizontalAlignment: Label.AlignHCenter
+            text: 'Please be as detailed as possible when describing the issue'
+            visible: type !== 'feedback'
+            wrapMode: Label.Wrap
         }
-        id: flickable
-        clip: true
-        contentWidth: flickable.width
-        contentHeight: layout.height
-        ColumnLayout {
-            id: layout
-            width: flickable.width
-            Label {
-                Layout.bottomMargin: 10
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                horizontalAlignment: Label.AlignHCenter
-                text: 'Please be as detailed as possible when describing the issue'
-                visible: type !== 'feedback'
-                wrapMode: Label.Wrap
+        FieldTitle {
+            Layout.topMargin: 0
+            text: qsTrId('id_email')
+        }
+        TTextField {
+            Layout.bottomMargin: 10
+            Layout.fillWidth: true
+            id: email_field
+            focus: true
+            validator: RegularExpressionValidator {
+                regularExpression: /^(?:(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*)|(?:".+"))@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/
             }
-            FieldTitle {
-                text: qsTrId('id_email')
-            }
-            TTextField {
-                Layout.bottomMargin: 10
-                Layout.fillWidth: true
-                id: email_field
-                focus: true
-                validator: RegularExpressionValidator {
-                    regularExpression: /^(?:(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*)|(?:".+"))@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/
-                }
-                onTextChanged: error_badge.clear()
-            }
-            FieldTitle {
-                text: qsTrId('id_description')
-            }
-            GTextArea {
-                Layout.bottomMargin: 10
-                Layout.fillWidth: true
-                Layout.minimumHeight: 200
-                id: description_field
-                onTextChanged: error_badge.clear()
-            }
-            Label {
-                Layout.alignment: Qt.AlignRight
-                color: '#FFF'
-                font.pixelSize: 12
-                font.weight: 400
-                opacity: 0.6
-                text: `${description_field.length}/1000`
-            }
+            onTextChanged: error_badge.clear()
+        }
+        FieldTitle {
+            text: qsTrId('id_description')
+        }
+        GTextArea {
+            Layout.bottomMargin: 10
+            Layout.fillWidth: true
+            Layout.minimumHeight: 200
+            id: description_field
+            onTextChanged: error_badge.clear()
+        }
+        Label {
+            Layout.alignment: Qt.AlignRight
+            color: '#FFF'
+            font.pixelSize: 12
+            font.weight: 400
+            opacity: 0.6
+            text: `${description_field.length}/1000`
+        }
+        VSpacer {
         }
     }
     footerItem: ColumnLayout {
