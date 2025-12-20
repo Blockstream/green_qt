@@ -242,6 +242,7 @@ class AddressModel : public ContextModel
     QML_ELEMENT
 public:
     AddressModel(QObject* parent = nullptr);
+    void exportToFile() override;
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     void update(Context* context) override;

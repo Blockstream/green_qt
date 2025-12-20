@@ -932,6 +932,53 @@ AddressModel::AddressModel(QObject* parent)
     setSortRole(Qt::UserRole + 1);
 }
 
+void AddressModel::exportToFile()
+{
+    auto datetime = QDateTime::currentDateTime();
+
+    const QString suggestion =
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() +
+        context()->wallet()->name() + " - addresses - " +
+        datetime.toString("yyyyMMddhhmmss") + ".csv";
+
+    auto dialog = new QFileDialog(nullptr, "Save As", suggestion);
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->setFileMode(QFileDialog::AnyFile);
+    dialog->selectFile(suggestion);
+    connect(dialog, &QFileDialog::fileSelected, this, [=](const QString& filename) {
+        if (filename.isEmpty()) return;
+
+        QStringList fields = QStringList{"network", "account", "address", "tx_count"};
+        QStringList lines;
+        QString separator{","};
+
+        lines.append(fields.join(separator));
+
+        const auto row_count = rowCount();
+        for (int row = 0; row < row_count; ++row) {
+            const auto address = index(row, 0).data(Qt::UserRole).value<Address*>();
+            QStringList values;
+            values.append(address->account()->network()->displayName());
+            values.append(address->account()->name());
+            values.append(address->address());
+            values.append(QString::number(address->data().value("tx_count").toInt()));
+            lines.append(values.join(separator));
+        }
+
+        QFile file(filename);
+        bool result = file.open(QFile::WriteOnly);
+        Q_ASSERT(result);
+
+        QTextStream stream(&file);
+        stream << lines.join("\n");
+
+        QFileInfo info(file);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(info.absoluteFilePath()));
+    });
+    connect(this, &QObject::destroyed, dialog, &QFileDialog::deleteLater);
+    dialog->open();
+}
+
 bool AddressModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     auto address = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Address*>();

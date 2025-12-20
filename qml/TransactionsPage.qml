@@ -107,7 +107,9 @@ Page {
                 VSeparator {
                 }
                 LinkButton {
+                    enabled: !address_list_page.empty
                     text: qsTrId('id_export')
+                    onClicked: address_model.exportToFile()
                 }
             }
             RowLayout {
