@@ -10,6 +10,7 @@
 #include "networkmanager.h"
 #include "notification.h"
 #include "output.h"
+#include "payment.h"
 #include "session.h"
 #include "sessionmanager.h"
 #include "task.h"
@@ -61,12 +62,14 @@ Context::Context(const QString& deployment, bool bip39, QObject* parent)
     , m_transaction_model(new QStandardItemModel(this))
     , m_address_model(new QStandardItemModel(this))
     , m_coin_model(new QStandardItemModel(this))
+    , m_payment_model(new QStandardItemModel(this))
 {
     Q_ASSERT(deployment == "mainnet" || deployment == "testnet" || deployment == "development");
 
     m_transaction_model->setItemRoleNames({{ Qt::UserRole, "transaction" }});
     m_address_model->setItemRoleNames({{ Qt::UserRole, "address" }});
     m_coin_model->setItemRoleNames({{ Qt::UserRole, "output" }});
+    m_payment_model->setItemRoleNames({{ Qt::UserRole, "payment" }});
 }
 
 Context::~Context()
@@ -310,6 +313,29 @@ Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
 Account* Context::getAccountByPointer(Network* network, int pointer) const
 {
     return m_accounts_by_pointer.value({ network, pointer });
+}
+
+Payment* Context::getOrCreatePayment(const QString &id)
+{
+    auto payment = m_payments.value(id);
+    if (!payment) {
+        payment = new Payment(this);
+        m_payments.insert(id, payment);
+        auto item = new QStandardItem;
+        item->setData(QVariant::fromValue(payment), Qt::UserRole);
+        item->setData(payment->updatedAt(), Qt::UserRole + 1);
+
+        connect(payment, &Payment::dataChanged, this, [=] {
+            emit paymentUpdated();
+        });
+        connect(payment, &Payment::updatedAtChanged, this, [=] {
+            item->setData(payment->updatedAt(), Qt::UserRole + 1);
+        });
+
+        m_payment_item.insert(payment, item);
+        m_payment_model->appendRow(item);
+    }
+    return payment;
 }
 
 void Context::setXPubHashId(const QString& xpub_hash_id)
@@ -740,6 +766,8 @@ void ContextModel::clearFilters()
     emit filterTextChanged();
     m_filter_types.clear();
     emit filterTypesChanged();
+    m_filter_statuses.clear();
+    emit filterStatusesChanged();
     m_filter_has_transactions = false;
     emit filterHasTransactionsChanged();
     invalidate();
@@ -797,6 +825,19 @@ void ContextModel::updateFilterTypes(const QString& type, bool filter)
         m_filter_types.removeOne(type);
     }
     emit filterTypesChanged();
+    invalidate();
+}
+
+void ContextModel::updateFilterStatuses(const QString& status, bool filter)
+{
+    if (filter) {
+        if (m_filter_statuses.contains(status)) return;
+        m_filter_statuses.append(status);
+    } else {
+        if (!m_filter_statuses.contains(status)) return;
+        m_filter_statuses.removeOne(status);
+    }
+    emit filterStatusesChanged();
     invalidate();
 }
 
@@ -1187,7 +1228,38 @@ void LimitModel::setLimit(int limit)
     invalidate();
 }
 
-bool LimitModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool LimitModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     return m_limit >= 0 && source_row < m_limit;
+}
+
+PaymentModel::PaymentModel(QObject* parent)
+    : ContextModel(parent)
+{
+    setSortRole(Qt::UserRole + 1);
+}
+
+void PaymentModel::update(Context* context)
+{
+    setSourceModel(context->paymentModel());
+}
+
+bool PaymentModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    auto payment = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Payment*>();
+
+    if (!filterStatusesAcceptsPayment(payment)) return false;
+
+    return ContextModel::filterAcceptsRow(source_row, source_parent);
+}
+
+bool PaymentModel::filterStatusesAcceptsPayment(Payment* payment) const
+{
+    if (m_filter_statuses.isEmpty()) {
+        return true;
+    }
+    if (m_filter_statuses.contains(payment->status())) {
+        return true;
+    }
+    return false;
 }

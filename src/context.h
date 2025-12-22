@@ -78,6 +78,8 @@ public:
     Account* getOrCreateAccount(Network* network, const QJsonObject& data);
     Account* getAccountByPointer(Network* network, int pointer) const;
 
+    Payment* getOrCreatePayment(const QString& id);
+
     TaskDispatcher* dispatcher() const { return m_dispatcher; }
 
     QString xpubHashId() const { return m_xpub_hash_id; }
@@ -126,6 +128,7 @@ signals:
     void transactionUpdated();
     void coinUpdated();
     void addressUpdated();
+    void paymentUpdated();
 
 private:
     const QString m_deployment;
@@ -169,6 +172,11 @@ public:
     QStandardItemModel* const m_coin_model;
     void addCoin(Output* coin);
     QStandardItemModel* coinModel() const { return m_coin_model; }
+
+    QMap<QString, Payment*> m_payments;
+    QMap<Payment*, QStandardItem*> m_payment_item;
+    QStandardItemModel* const m_payment_model;
+    QStandardItemModel* paymentModel() const { return m_payment_model; }
 };
 
 
@@ -181,6 +189,7 @@ class ContextModel : public QSortFilterProxyModel
     Q_PROPERTY(QQmlListProperty<Account> filterAccounts READ filterAccounts NOTIFY filterAccountsChanged)
     Q_PROPERTY(QQmlListProperty<Asset> filterAssets READ filterAssets NOTIFY filterAssetsChanged)
     Q_PROPERTY(QStringList filterTypes READ filterTypes NOTIFY filterTypesChanged)
+    Q_PROPERTY(QStringList filterStatuses READ filterStatuses NOTIFY filterStatusesChanged)
     Q_PROPERTY(bool filterHasTransactions READ filterHasTransactions NOTIFY filterHasTransactionsChanged)
     Q_PROPERTY(QString filterText READ filterText WRITE setFilterText NOTIFY filterTextChanged)
     QML_ELEMENT
@@ -192,6 +201,7 @@ public:
     QQmlListProperty<Account> filterAccounts();
     QQmlListProperty<Asset> filterAssets();
     QStringList filterTypes() const { return m_filter_types; }
+    QStringList filterStatuses() const { return m_filter_statuses; }
     bool filterHasTransactions() const { return m_filter_has_transactions; }
     QString filterText() const { return m_filter_text; }
     void setFilterText(const QString& filter_text);
@@ -200,6 +210,7 @@ signals:
     void filterAccountsChanged();
     void filterAssetsChanged();
     void filterTypesChanged();
+    void filterStatusesChanged();
     void filterHasTransactionsChanged();
     void filterTextChanged();
 public slots:
@@ -209,6 +220,7 @@ public slots:
     void updateFilterAccounts(Account* account, bool filter);
     void updateFilterAssets(Asset* asset, bool filter);
     void updateFilterTypes(const QString& type, bool filter);
+    void updateFilterStatuses(const QString& status, bool filter);
     void updateFilterHasTransactions(bool has_transactions);
     virtual void exportToFile();
 protected:
@@ -217,6 +229,7 @@ protected:
     QList<Account*> m_filter_accounts;
     QList<Asset*> m_filter_assets;
     QStringList m_filter_types;
+    QStringList m_filter_statuses;
     bool m_filter_has_transactions{false};
     QString m_filter_text;
 private:
@@ -269,6 +282,19 @@ private:
     bool filterAccountsAcceptsCoin(Output* coin) const;
     bool filterAssetsAcceptsCoin(Output* coin) const;
     bool filterTextAcceptsCoin(Output* coin) const;
+};
+
+class PaymentModel : public ContextModel
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    PaymentModel(QObject* parent = nullptr);
+protected:
+    void update(Context* context) override;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+private:
+    bool filterStatusesAcceptsPayment(Payment* payment) const;
 };
 
 class LimitModel : public QSortFilterProxyModel

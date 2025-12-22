@@ -1,17 +1,15 @@
 #ifndef GREEN_TRANSACTION_H
 #define GREEN_TRANSACTION_H
 
+#include "green.h"
+
 #include <QJsonObject>
 #include <QObject>
 #include <QtQml>
 
-class Account;
-class Asset;
-class Transaction;
-class Context;
-
 Q_MOC_INCLUDE("account.h")
 Q_MOC_INCLUDE("asset.h")
+Q_MOC_INCLUDE("payment.h")
 
 class TransactionAmount : public QObject
 {
@@ -49,6 +47,7 @@ class Transaction : public QObject
     Q_PROPERTY(QString memo READ memo NOTIFY memoChanged)
     Q_PROPERTY(QJsonObject destination READ destination NOTIFY dataChanged)
     Q_PROPERTY(QUrl url READ url NOTIFY dataChanged)
+    Q_PROPERTY(Payment payment READ payment NOTIFY paymentChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -85,6 +84,9 @@ public:
 
     bool hasAsset(Asset* asset) const;
 
+    Payment* payment() const { return m_payment; }
+    void setPayment(Payment* payment);
+
 public slots:
     void openInExplorer() const;
     QString link();
@@ -96,6 +98,7 @@ signals:
     void amountsChanged();
     void dataChanged();
     void memoChanged();
+    void paymentChanged();
 
 private:
     void setType(Type type);
@@ -106,6 +109,7 @@ private:
     Type m_type{Type::Unknown};
     QJsonObject m_data;
     QString m_memo;
+    Payment* m_payment{nullptr};
 public:
     QList<TransactionAmount*> m_amounts;
 };

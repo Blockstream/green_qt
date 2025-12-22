@@ -103,6 +103,13 @@ bool Transaction::hasAsset(Asset *asset) const
     return false;
 }
 
+void Transaction::setPayment(Payment* payment)
+{
+    if (m_payment == payment) return;
+    m_payment = payment;
+    emit paymentChanged();
+}
+
 QJsonObject Transaction::destination() const
 {
     const auto outputs = m_data.value("outputs").toArray();

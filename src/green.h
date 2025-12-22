@@ -10,6 +10,7 @@ class Controller;
 class Device;
 class Network;
 class Output;
+class Payment;
 class Resolver;
 class Session;
 class Settings;
