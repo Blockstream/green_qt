@@ -127,10 +127,9 @@ QtObject {
         }
         id: view
         title: self.title
-        contentItem: ColumnLayout {
+        contentItem: VFlickable {
+            alignment: Qt.AlignTop
             spacing: 10
-            VSpacer {
-            }
             MultiImage {
                 Layout.alignment: Qt.AlignCenter
                 foreground: 'qrc:/svg3/Authenticator.svg'
@@ -207,9 +206,8 @@ QtObject {
         }
         id: view
         title: self.title
-        contentItem: ColumnLayout {
-            VSpacer {
-            }
+        contentItem: VFlickable {
+            alignment: Qt.AlignTop
             Image {
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredHeight: 160

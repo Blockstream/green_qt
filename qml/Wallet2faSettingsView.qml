@@ -184,23 +184,21 @@ Page {
                                 }
                             }
                         }
-                        Image {
-                            Layout.alignment: Qt.AlignCenter
-                            source: 'qrc:/svg2/edit.svg'
+                        RightArrowIndicator {
+                            active: true
                         }
                     }
                     onClicked: {
-                        const dialog = set_twofactor_threshold_dialog.createObject(view, {
-                            context: self.context,
+                        const drawer = set_twofactor_threshold_drawer.createObject(view, {
                             session: view.session,
                         })
-                        dialog.open()
+                        drawer.open()
                     }
                 }
             }
 
             SettingsBox {
-                title: 'Two-Factor Authentication Expiry'
+                title: qsTrId('id_twofactor_authentication_expiry')
                 visible: !view.session.network.liquid
                 contentItem: AbstractButton {
                     id: button3
@@ -229,23 +227,19 @@ Page {
                                 font.weight: 500
                             }
                         }
-                        Image {
-                            Layout.alignment: Qt.AlignCenter
-                            source: 'qrc:/svg2/edit.svg'
+                        RightArrowIndicator {
+                            active: button3.hovered
                         }
                     }
                     onClicked: {
-                        const dialog = two_factor_auth_expiry_dialog.createObject(view, {
-                            context: self.context,
-                            session: view.session,
-                        })
-                        dialog.open()
+                        const drawer = two_factor_auth_expiry_drawer.createObject(view, { session: view.session })
+                        drawer.open()
                     }
                 }
             }
 
             SettingsBox {
-                title: 'Request Two-Factor Reset'
+                title: qsTrId('id_request_twofactor_reset')
                 contentItem: AbstractButton {
                     id: button2
                     leftPadding: 20
@@ -290,20 +284,16 @@ Page {
                                 wrapMode: Label.WordWrap
                             }
                         }
-                        Image {
-                            Layout.alignment: Qt.AlignCenter
-                            source: 'qrc:/svg2/arrow_right.svg'
+                        RightArrowIndicator {
+                            active: true
                             opacity: button2.enabled ? 1 : 0.6
                         }
                     }
                     onClicked: {
                         const locked = view.session.config.twofactor_reset?.is_active ?? false
-                        const comp = locked ? cancel_dialog : request_dialog
-                        const dialog = comp.createObject(view, {
-                            context: self.context,
-                            session: view.session,
-                        })
-                        dialog.open()
+                        const comp = locked ? cancel_drawer : request_drawer
+                        const drawer = comp.createObject(view, { session: view.session })
+                        drawer.open()
                     }
                 }
             }
@@ -355,9 +345,8 @@ Page {
                                         wrapMode: Label.WordWrap
                                     }
                                 }
-                                Image {
-                                    Layout.alignment: Qt.AlignCenter
-                                    source: 'qrc:/svg2/arrow_right.svg'
+                                RightArrowIndicator {
+                                    active: true
                                     opacity: button2.enabled ? 1 : 0.6
                                     visible: controller.monitor.idle
                                 }
@@ -393,38 +382,42 @@ Page {
     }
 
     Component {
-        id: cancel_dialog
-        CancelTwoFactorResetDialog {
+        id: cancel_drawer
+        CancelTwoFactorResetDrawer {
+            context: self.context
         }
     }
 
     Component {
-        id: request_dialog
-        RequestTwoFactorResetDialog {
+        id: request_drawer
+        RequestTwoFactorResetDrawer {
+            context: self.context
         }
     }
 
     Component {
         id: enable_dialog
-        TwoFactorEnableDialog {
+        TwoFactorEnableDrawer {
         }
     }
 
     Component {
         id: disable_dialog
-        TwoFactorDisableDialog {
+        TwoFactorDisableDrawer {
         }
     }
 
     Component {
-        id: set_twofactor_threshold_dialog
-        TwoFactorLimitDialog {
+        id: set_twofactor_threshold_drawer
+        TwoFactorLimitDrawer {
+            context: self.context
         }
     }
 
     Component {
-        id: two_factor_auth_expiry_dialog
+        id: two_factor_auth_expiry_drawer
         TwoFactorAuthExpiryDialog {
+            context: self.context
         }
     }
 

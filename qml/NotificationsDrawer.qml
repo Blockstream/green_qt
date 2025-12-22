@@ -125,6 +125,7 @@ AbstractDrawer {
     Component {
         id: backup_page
         BackupPage {
+            onCloseClicked: self.close()
             onCompleted: stack_view.pop(null)
         }
     }

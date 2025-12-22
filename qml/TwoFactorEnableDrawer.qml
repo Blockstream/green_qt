@@ -7,15 +7,12 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
-WalletDialog {
+WalletDrawer {
     required property Session session
     required property string method
 
     id: self
-    title: qsTrId('id_enable') + ' ' + UtilJS.twoFactorMethodLabel(self.method)
-    clip: true
-    header: null
-    onClosed: self.destroy()
+    property string title: qsTrId('id_enable') + ' ' + UtilJS.twoFactorMethodLabel(self.method)
 
     Overlay.modal: Rectangle {
         anchors.fill: parent
@@ -34,7 +31,7 @@ WalletDialog {
         context: self.context
         session: self.session
         method: self.method
-        onFinished: self.accept()
+        onFinished: self.close()
         onFailed: (error) => stack_view.replace(error_page, { error })
     }
 
@@ -56,22 +53,6 @@ WalletDialog {
             default:
                 return generic_page
             }
-        }
-        implicitWidth: {
-            let w = 400
-            for (let i = 0; i < stack_view.depth; i++) {
-                const item = stack_view.get(i, StackView.DontLoad)
-                if (item) w = Math.max(w, item.implicitWidth)
-            }
-            return w
-        }
-        implicitHeight: {
-            let h = 400
-            for (let i = 0; i < stack_view.depth; i++) {
-                const item = stack_view.get(i, StackView.DontLoad)
-                if (item) h = Math.max(h, item.implicitHeight)
-            }
-            return h
         }
     }
 

@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Collapsible {
-    Layout.minimumWidth: 400
+    Layout.minimumWidth: 300
     id: self
     property color backgroundColor: '#69302E'
     property bool pointer: true

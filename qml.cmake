@@ -11,7 +11,7 @@ SET(QML_FILES
     qml/jade.js
     qml/util.js
     qml/GCard.qml
-    qml/TwoFactorEnableDialog.qml
+    qml/TwoFactorEnableDrawer.qml
     qml/DebugRectangle.qml
     qml/WalletGeneralSettingsView.qml
     qml/WalletsView.qml
@@ -29,12 +29,11 @@ SET(QML_FILES
     qml/DeleteWalletDialog.qml
     qml/ChangePinDrawer.qml
     qml/MnemonicView.qml
-    qml/TwoFactorLimitDialog.qml
+    qml/TwoFactorLimitDrawer.qml
     qml/JadeSignMessageView.qml
     qml/MainMenuBar.qml
     qml/GTextField.qml
     qml/NLockTimeDialog.qml
-    qml/MessageDialog.qml
     qml/GSwitch.qml
     qml/VSpacer.qml
     qml/AbstractDialog.qml
@@ -46,7 +45,6 @@ SET(QML_FILES
     qml/DialogFooter.qml
     qml/OutputDelegate.qml
     qml/MnemonicPage.qml
-    qml/PersistentLoader.qml
     qml/AnimLoader.qml
     qml/PreferencesDialog.qml
     qml/AssetDrawer.qml
@@ -65,21 +63,21 @@ SET(QML_FILES
     qml/GPane.qml
     qml/main.qml
     qml/DialogHeader.qml
-    qml/CancelTwoFactorResetDialog.qml
+    qml/CancelTwoFactorResetDrawer.qml
     qml/GTextArea.qml
     qml/Collapsible.qml
     qml/ScannerPopup.qml
     qml/DeviceImage.qml
     qml/DeviceBadge.qml
     qml/SelectCoinsView.qml
-    qml/TwoFactorDisableDialog.qml
+    qml/TwoFactorDisableDrawer.qml
     qml/TransactionDelegate.qml
     qml/AnalyticsConsentPage.qml
     qml/JadeSignTransactionView.qml
     qml/SideBar.qml
     qml/AlertView.qml
     qml/WalletAdvancedSettingsView.qml
-    qml/RequestTwoFactorResetDialog.qml
+    qml/RequestTwoFactorResetDrawer.qml
     qml/EditableLabel.qml
     qml/FixedErrorBadge.qml
     qml/QRCodePopup.qml
@@ -177,7 +175,7 @@ SET(QML_FILES
     qml/JadeUninitializedView.qml
     qml/JadeUnlockView.qml
     qml/JadeFirmwareConfigSelector.qml
-    qml/ArchivedAccountsDialog.qml
+    qml/ArchivedAccountsDrawer.qml
     qml/JadeNotificationDialog.qml
     qml/SendPage.qml
     qml/SendConfirmPage.qml

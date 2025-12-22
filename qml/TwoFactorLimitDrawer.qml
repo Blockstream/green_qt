@@ -4,8 +4,9 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 
-WalletDialog {
+WalletDrawer {
     required property Session session
+    property string title: qsTrId('id_set_twofactor_threshold')
 
     property var currencies: [{
         is_fiat: false,
@@ -22,18 +23,6 @@ WalletDialog {
 
     property string threshold: self.session.config.limits.is_fiat ? self.session.config.limits.fiat : self.session.config.limits[unit]
     property string ticker: self.session.config.limits.is_fiat ? self.session.settings.pricing.currency : unit
-
-    onClosed: self.destroy()
-
-    id: self
-    title: qsTrId('id_set_twofactor_threshold')
-    clip: true
-    header: null
-    Overlay.modal: Rectangle {
-        anchors.fill: parent
-        color: 'black'
-        opacity: 0.6
-    }
 
     TwoFactorController {
         id: controller
@@ -104,10 +93,9 @@ WalletDialog {
         }
     }
 
+    id: self
     contentItem: GStackView {
         id: stack_view
-        implicitWidth: Math.max(500, stack_view.currentItem.implicitWidth)
-        implicitHeight: Math.max(0, stack_view.currentItem.implicitHeight)
         initialItem: StackViewPage {
             StackView.onActivated: controller.monitor.clear()
             title: self.title
@@ -147,20 +135,15 @@ WalletDialog {
                 VSpacer {
                 }
             }
-            footer: Pane {
-                background: null
-                padding: 20
-                contentItem: RowLayout {
-                    spacing: 10
-                    PrimaryButton {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.minimumWidth: 150
-                        busy: !controller.monitor.idle
-                        enabled: controller.monitor.idle
-                        text: qsTrId('id_next')
-                        onClicked: {
-                            controller.changeLimits(amount_field.convert.result.satoshi)
-                        }
+            footerItem: RowLayout {
+                PrimaryButton {
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.minimumWidth: 150
+                    busy: !controller.monitor.idle
+                    enabled: controller.monitor.idle
+                    text: qsTrId('id_next')
+                    onClicked: {
+                        controller.changeLimits(amount_field.convert.result.satoshi)
                     }
                 }
             }

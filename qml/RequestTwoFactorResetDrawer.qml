@@ -7,20 +7,11 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
-WalletDialog {
+WalletDrawer {
     required property Session session
-
-    id: self
-    clip: true
-    header: null
-    onClosed: self.destroy()
-    Overlay.modal: Rectangle {
-        anchors.fill: parent
-        color: 'black'
-        opacity: 0.6
-    }
+    property string title: qsTrId('id_request_twofactor_reset')
     AnalyticsView {
-        active: self.opened
+        active: self.visible
         name: 'WalletSettings2FAReset'
         segmentation: AnalyticsJS.segmentationSession(Settings, controller.context)
     }
@@ -28,7 +19,7 @@ WalletDialog {
         id: controller
         context: self.context
         session: self.session
-        onFinished: self.accept()
+        onFinished: self.close()
         onFailed: (error) => stack_view.replace(error_page, { error })
     }
     TaskPageFactory {
@@ -41,17 +32,16 @@ WalletDialog {
         enabled: email_field.text.trim() !== ''
         onTriggered: controller.requestTwoFactorReset(email_field.text)
     }
+    id: self
     contentItem: GStackView {
         id: stack_view
         initialItem: StackViewPage {
             rightItem: CloseButton {
-                onClicked: self.reject()
+                onClicked: self.close()
             }
-            title: 'Request Two-Factor Reset'
+            title: self.title
             contentItem: ColumnLayout {
                 spacing: constants.s1
-                VSpacer {
-                }
                 Label {
                     text: qsTrId('id_the_new_email_will_be_used_for')
                     wrapMode: Text.Wrap
@@ -74,22 +64,6 @@ WalletDialog {
                 VSpacer {
                 }
             }
-        }
-        implicitWidth: {
-            let w = 400
-            for (let i = 0; i < stack_view.depth; i++) {
-                const item = stack_view.get(i, StackView.DontLoad)
-                if (item) w = Math.max(w, item.implicitWidth)
-            }
-            return w
-        }
-        implicitHeight: {
-            let h = 400
-            for (let i = 0; i < stack_view.depth; i++) {
-                const item = stack_view.get(i, StackView.DontLoad)
-                if (item) h = Math.max(h, item.implicitHeight)
-            }
-            return h
         }
     }
 

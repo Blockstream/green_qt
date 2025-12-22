@@ -81,6 +81,7 @@ Pane {
                                 Layout.fillWidth: true
                                 spacing: 2
                                 Label {
+                                    Layout.fillWidth: true
                                     font.pixelSize: 13
                                     font.weight: 600
                                     text: multisig_button.session.network.displayName
@@ -94,9 +95,8 @@ Pane {
                                     }
                                 }
                             }
-                            Image {
-                                Layout.alignment: Qt.AlignCenter
-                                source: 'qrc:/svg2/edit.svg'
+                            RightArrowIndicator {
+                                active: true
                             }
                         }
                         onClicked: {

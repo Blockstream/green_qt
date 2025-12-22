@@ -7,15 +7,12 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
-WalletDialog {
+WalletDrawer {
     required property Session session
     required property string method
 
     id: self
-    clip: true
-    header: null
-    title: qsTrId('id_disable') + ' ' + UtilJS.twoFactorMethodLabel(self.method)
-    onClosed: self.destroy()
+    property string title: qsTrId('id_disable') + ' ' + UtilJS.twoFactorMethodLabel(self.method)
 
     Overlay.modal: Rectangle {
         anchors.fill: parent
@@ -28,7 +25,7 @@ WalletDialog {
         context: self.context
         session: self.session
         method: self.method
-        onFinished: self.accept()
+        onFinished: self.close()
     }
 
     TaskPageFactory {
@@ -44,22 +41,6 @@ WalletDialog {
 
     contentItem: GStackView {
         id: stack_view
-        implicitWidth: {
-            let w = 500
-            for (let i = 0; i < stack_view.depth; i++) {
-                const item = stack_view.get(i, StackView.DontLoad)
-                if (item) w = Math.max(w, item.implicitWidth)
-            }
-            return w
-        }
-        implicitHeight: {
-            let h = 450
-            for (let i = 0; i < stack_view.depth; i++) {
-                const item = stack_view.get(i, StackView.DontLoad)
-                if (item) h = Math.max(h, item.implicitHeight)
-            }
-            return h
-        }
         initialItem: StackViewPage {
             StackView.onActivated: controller.monitor.clear()
             title: self.title

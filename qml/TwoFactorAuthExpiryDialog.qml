@@ -6,28 +6,16 @@ import QtQuick.Layouts
 
 import "util.js" as UtilJS
 
-WalletDialog {
+WalletDrawer {
+    property string title: qsTrId('id_twofactor_authentication_expiry')
     required property Session session
-
-    onClosed: self.destroy()
-
-    id: self
-    title: 'Two-Factor Authentication Expiry'
-    clip: true
-    header: null
-    width: 500
-    Overlay.modal: Rectangle {
-        anchors.fill: parent
-        color: 'black'
-        opacity: 0.6
-    }
 
     TwoFactorController {
         id: controller
         context: self.context
         session: self.session
         onFailed: (error) => stack_view.replace(null, error_page, { error }, StackView.PushTransition)
-        onFinished: self.accept()
+        onFinished: self.close()
     }
 
     TaskPageFactory {
@@ -46,10 +34,9 @@ WalletDialog {
         }
     }
 
+    id: self
     contentItem: GStackView {
         id: stack_view
-        implicitWidth: Math.max(500, stack_view.currentItem.implicitWidth)
-        implicitHeight: Math.max(0, stack_view.currentItem.implicitHeight)
         initialItem: StackViewPage {
             StackView.onActivated: controller.monitor.clear()
             footer: null
@@ -58,6 +45,7 @@ WalletDialog {
                 onClicked: self.close()
             }
             contentItem: ColumnLayout {
+                enabled: controller.monitor.idle
                 spacing: 10
                 Option {
                     index: 0
@@ -71,6 +59,8 @@ WalletDialog {
                     index: 2
                     description: qsTrId('id_optimal_if_you_rarely_spend')
                 }
+                VSpacer {
+                }
             }
         }
     }
@@ -81,16 +71,18 @@ WalletDialog {
         readonly property int value: self.session.network.data.csv_buckets[option.index]
         Layout.fillWidth: true
         id: option
-        enabled: self.session.settings.csvtime !== option.value
-        opacity: option.enabled ? 1 : 0.6
+        checked: self.session.settings.csvtime === option.value
+        focusPolicy: Qt.StrongFocus
         padding: 20
         text: UtilJS.csvLabel(option.value)
         background: Rectangle {
             radius: 5
-            color: Qt.lighter('#262626', option.enabled && option.hovered ? 1.2 : 1)
+            color: Qt.lighter(option.checked ? '#062F4A' : '#181818', option.hovered ? 1.2 : 1)
+            border.width: option.visualFocus ? 2 : 1
+            border.color: option.visualFocus || option.checked ? '#00BCFF' : '#262626'
         }
         contentItem: RowLayout {
-            spacing: 20
+            spacing: 0
             ColumnLayout {
                 spacing: 10
                 Label {
@@ -111,8 +103,10 @@ WalletDialog {
                 }
             }
             Image {
+                Layout.leftMargin: 10
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/next_arrow.svg'
+                source: 'qrc:/svg2/check.svg'
+                visible: option.checked
             }
         }
         onClicked: controller.setCsvTime(option.value)

@@ -138,11 +138,6 @@ Page {
         filter: 'hidden'
     }
 
-    // Controller {
-    //     id: controller
-    //     context: self.context
-    // }
-
     StackView.onActivated: {
         self.forceActiveFocus()
         Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(Settings, self.context))
@@ -162,7 +157,10 @@ Page {
         onSendClicked: self.openSendDrawer()
         onJadeDetailsClicked: self.jadeDetailsClicked()
         onLogoutClicked: self.logout()
-        onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
+        onArchivedAccountsClicked: {
+            const drawer = archived_accounts_drawer.createObject(self)
+            drawer.open()
+        }
         onStatusClicked: status_drawer.open()
         onNotificationsClicked: notifications_drawer.open()
         onReportBugClicked: {
@@ -240,11 +238,11 @@ Page {
     }
 
     Component {
-        id: archived_accounts_dialog
-        ArchivedAccountsDialog {
+        id: archived_accounts_drawer
+        ArchivedAccountsDrawer {
+            context: self.context
         }
     }
-
 
     contentItem: StackLayout {
         currentIndex: self.view
