@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-01-13
+### Added:
+- Buy Bitcoin flow with provider quotes comparison, country selector, and payment tracking
+- Bitcoin price chart with multiple timeframes (1D, 1W, 1M, 1Y, ALL) and interactive hover
+- Dedicated security tab with FAQ section and Jade features (genuine check, firmware updates)
+- Update notification in notification drawer
+
+### Changed:
+- Overhauled Home/Overview page with unified dashboard, assets view, and recent transactions
+- Overhauled Send and Receive flows with improved account/asset selectors and QR code scanning
+- New resizable sidebar with keyboard shortcuts and streamlined navigation (Home, Transactions, Security, Settings)
+- Improved wallet settings layout with reorganized sections
+- Improved search and filtering for transactions, addresses and coins in Transactions tab
+
+### Fixed:
+- Archived accounts no longer included in total balance
+- Consistent unit and currency display across all accounts
+- Various layout and design inconsistencies
+
 ## [2.0.31] - 2025-11-25
 ### Fixed:
 - Windows build and installer
