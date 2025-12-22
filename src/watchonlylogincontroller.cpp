@@ -171,7 +171,7 @@ void WatchOnlyLoginController::loginExtendedPublicKeys(const QString& input)
 
     auto session = m_context->getOrCreateSession(m_network);
 
-    m_extended_pubkeys = input.split('\n');
+    m_extended_pubkeys = input.split('\n', Qt::SkipEmptyParts);
 
     setValid(true);
     login(new LoginTask(QJsonObject{{ "slip132_extended_pubkeys", QJsonArray::fromStringList(m_extended_pubkeys) }}, QJsonObject{}, session));
@@ -184,7 +184,7 @@ void WatchOnlyLoginController::loginDescriptors(const QString& input)
 
     auto session = m_context->getOrCreateSession(m_network);
 
-    m_core_descriptors = input.split('\n');;
+    m_core_descriptors = input.split('\n', Qt::SkipEmptyParts);
 
     QJsonObject details{{ "core_descriptors", QJsonArray::fromStringList(m_core_descriptors) }};
 
