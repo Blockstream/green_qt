@@ -103,7 +103,7 @@ Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
 
     auto transaction = m_transactions_by_hash.value(hash);
     if (!transaction) {
-        transaction = new Transaction(this);
+        transaction = new Transaction(hash, this);
         m_transactions_by_hash.insert(hash, transaction);
     }
     transaction->updateFromData(data);

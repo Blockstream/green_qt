@@ -648,6 +648,8 @@ void Context::addTransaction(Transaction* transaction)
 {
     if (m_transaction_item.contains(transaction)) return;
 
+    m_transactions.insert(transaction->hash(), transaction);
+
     auto timestamp = QDateTime::fromMSecsSinceEpoch(transaction->data().value("created_at_ts").toInteger() / 1000);
 
     auto item = new QStandardItem;

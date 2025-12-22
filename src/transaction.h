@@ -50,7 +50,7 @@ class Transaction : public QObject
     Q_PROPERTY(QJsonObject destination READ destination NOTIFY dataChanged)
     Q_PROPERTY(QUrl url READ url NOTIFY dataChanged)
     QML_ELEMENT
-    QML_UNCREATABLE("Transaction is instanced by Wallet.")
+    QML_UNCREATABLE("")
 public:
     enum class Type {
         Unknown,
@@ -62,11 +62,11 @@ public:
     };
     Q_ENUM(Type)
 
-    explicit Transaction(Account* account);
+    explicit Transaction(const QString& hash, Account* account);
     virtual ~Transaction();
 
     Type type() const { return m_type; }
-    QString hash() const { return m_data.value("txhash").toString(); }
+    QString hash() const { return m_hash; }
     QString memo() const { return m_memo; }
 
     bool isUnconfirmed() const;
@@ -102,6 +102,7 @@ private:
     void setMemo(const QString& memo);
 private:
     Account* const m_account;
+    QString const m_hash;
     Type m_type{Type::Unknown};
     QJsonObject m_data;
     QString m_memo;

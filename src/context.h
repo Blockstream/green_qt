@@ -155,6 +155,7 @@ public:
     QJsonObject m_hw_device;
 
     QMap<Transaction*, QStandardItem*> m_transaction_item;
+    QMultiMap<QString, Transaction*> m_transactions;
     QStandardItemModel* const m_transaction_model;
     void addTransaction(Transaction* transaction);
     QStandardItemModel* transactionModel() const { return m_transaction_model; }

@@ -52,9 +52,10 @@ QString TransactionAmount::formatAmount(bool include_ticker) const
     }
 }
 
-Transaction::Transaction(Account* account)
+Transaction::Transaction(const QString& hash, Account* account)
     : QObject(account)
     , m_account(account)
+    , m_hash(hash)
 {
 }
 
