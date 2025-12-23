@@ -41,7 +41,6 @@ StackViewPage {
         id: mnemonic_backup_page
         MnemonicBackupPage {
             columns: 2
-            mnemonic: null
             onSelected: (mnemonic) => self.StackView.view.push(mnemonic_check_page, { mnemonic })
         }
     }

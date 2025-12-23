@@ -34,7 +34,7 @@ Dialog {
     rightPadding: 20
     bottomPadding: 20
     background: Rectangle {
-        color: '#181818'
+        color: '#232323'
         radius: 10
         border.width: 1
         border.color: Qt.alpha('#FFFFFF', 0.07)

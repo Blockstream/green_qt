@@ -20,7 +20,7 @@ MnemonicWarningsPage {
         id: mnemonic_backup_page
         MnemonicBackupPage {
             columns: 2
-            mnemonic: self.context.mnemonic
+            context: self.context
             rightItem: CloseButton {
                 onClicked: self.closeClicked()
             }

@@ -255,18 +255,18 @@ MainPageHeader {
         }
         HPane {
             Layout.bottomMargin: 10
-            leftPadding: 84
+            leftPadding: 64
             rightPadding: 16
             padding: 16
             visible: self.context.bip39
             background: Rectangle {
+                radius: 4
+                color: '#181818'
                 border.width: 1
-                border.color: Qt.rgba(1, 1, 1, 0.04)
-                color: '#161921'
-                radius: 8
+                border.color: '#262626'
                 Image {
                     anchors.left: parent.left
-                    anchors.leftMargin: 36
+                    anchors.leftMargin: 16
                     anchors.verticalCenter: parent.verticalCenter
                     source: 'qrc:/svg2/passphrase.svg'
                 }
