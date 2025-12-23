@@ -907,7 +907,8 @@ void TransactionModel::exportToFile()
                     if (field == "network") {
                         values.append(network->displayName());
                     } else if (field == "account") {
-                        values.append(transaction->account()->name());
+                        auto name = transaction->account()->name();
+                        values.append(name.isEmpty() ? qtTrId("id_main_account") : name);
                     } else if (field == "time") {
                         const auto created_at_ts = data.value("created_at_ts").toDouble();
                         const auto created_at = QDateTime::fromMSecsSinceEpoch(created_at_ts / 1000);
@@ -1060,10 +1061,11 @@ void AddressModel::exportToFile()
 
         const auto row_count = rowCount();
         for (int row = 0; row < row_count; ++row) {
-            const auto address = index(row, 0).data(Qt::UserRole).value<Address*>();
+            const auto address = index(row, 0).data(Qt::UserRole).value<Address*>();            
             QStringList values;
             values.append(address->account()->network()->displayName());
-            values.append(address->account()->name());
+            auto name = address->account()->name();
+            values.append(name.isEmpty() ? qtTrId("id_main_account") : name);
             values.append(address->address());
             values.append(QString::number(address->data().value("tx_count").toInt()));
             lines.append(values.join(separator));
