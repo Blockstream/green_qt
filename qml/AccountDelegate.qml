@@ -123,9 +123,9 @@ ItemDelegate {
                 if (delegate.account.session.config.twofactor_reset?.is_active ?? false) return false
                 return true
             }
-            onEdited: (text) => {
+            onEditingFinished: {
                 if (name_field.enabled) {
-                    if (controller.setAccountName(delegate.account, text, activeFocus)) {
+                    if (controller.setAccountName(delegate.account, name_field.text)) {
                         Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(Settings, delegate.account))
                     }
                 }

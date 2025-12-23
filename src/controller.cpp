@@ -165,16 +165,15 @@ void Controller::changePin(const QString& pin)
     });
 }
 
-bool Controller::setAccountName(Account* account, QString name, bool active_focus)
+bool Controller::setAccountName(Account* account, QString name)
 {
     if (!m_context) return false;
 
-    if (!active_focus) name = name.trimmed();
-    if (name.isEmpty() && !active_focus) {
+    name = name.trimmed();
+    if (name.isEmpty()) {
         return false;
     }
     if (account->name() == name) return false;
-    if (active_focus) return false;
 
     auto network = account->network();
     auto session = m_context->getOrCreateSession(network);

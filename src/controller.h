@@ -35,7 +35,7 @@ public slots:
     void disableAllPins();
     void changePin(const QString& pin);
 
-    bool setAccountName(Account* account, QString name, bool active_focus);
+    bool setAccountName(Account* account, QString name);
     void setAccountHidden(Account *account, bool hidden);
 
 signals:

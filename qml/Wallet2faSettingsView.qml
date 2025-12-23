@@ -161,10 +161,10 @@ Page {
                                 context: self.context
                                 account: view.session.context.getOrCreateAccount(view.session.network, 0)
                                 input: {
-                                    if (view.session.config.limits.is_fiat) {
+                                    if (view.session.config.limits?.is_fiat ?? false) {
                                         return { fiat: view.session.config.limits.fiat }
                                     } else {
-                                        return { satoshi: view.session.config.limits.satoshi }
+                                        return { satoshi: view.session.config.limits?.satoshi ?? 0 }
                                     }
                                 }
                                 unit: view.session.unit
