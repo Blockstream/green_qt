@@ -96,7 +96,7 @@ StackViewPage {
             Label {
                 font.pixelSize: 14
                 font.weight: 600
-                text: self.address.data.tx_count
+                text: self.address.data?.tx_count ?? '0'
             }
         }
         Label {

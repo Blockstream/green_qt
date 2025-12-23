@@ -257,28 +257,31 @@ StackViewPage {
         id: addresses_page
         StackViewPage {
             required property Account account
+            Component.onCompleted: address_model.updateFilterAccounts(page.account, true)
             id: page
             title: qsTrId('id_addresses')
             rightItem: CloseButton {
                 onClicked: self.closeClicked()
             }
-            contentItem: TListView {
-                id: list_view
+            contentItem: ColumnLayout {
                 spacing: 5
-                header: ColumnLayout {
-                    width: list_view.width
-                    SearchField {
-                        Layout.fillWidth: true
-                        Layout.bottomMargin: 5
-                        id: search_field
+                SearchField {
+                    Layout.fillWidth: true
+                    id: search_field
+                }
+                TListView {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    id: list_view
+                    spacing: 5
+                    model: AddressModel {
+                        id: address_model
+                        context: self.context
+                        filterText: search_field.text
                     }
-                }
-                model: AddressListModel {
-                    filter: search_field.text
-                    account: page.account
-                }
-                delegate: AddressDelegate2 {
-                    width: list_view.width
+                    delegate: AddressDelegate2 {
+                        width: list_view.width
+                    }
                 }
             }
         }
@@ -287,14 +290,13 @@ StackViewPage {
     component AddressDelegate2: ItemDelegate {
         required property Address address
         id: delegate
-        text: JSON.stringify(delegate.address.data, null, '  ')
         leftPadding: 15
         rightPadding: 15
         bottomPadding: 15
         topPadding: 15
         background: Rectangle {
-            color: '#34373E'
-            radius: 4
+            color: '#181818'
+            radius: 5
         }
         contentItem: RowLayout {
             spacing: 10
@@ -304,14 +306,17 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 12
                 font.weight: 500
-                text: delegate.address.data.address
+                text: delegate.address.address
                 wrapMode: Label.Wrap
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 22
-                font.weight: 400
-                text: delegate.address.data.tx_count
+                font.pixelSize: 12
+                font.weight: 500
+                text: delegate.address.data?.tx_count ?? '0'
+            }
+            RightArrowIndicator {
+                active: delegate.hovered
             }
         }
         onClicked: self.StackView.view.push(address_details_page, { context: self.context, address: delegate.address })
