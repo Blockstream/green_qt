@@ -477,7 +477,7 @@ Page {
                         spacing: 8
                         Layout.preferredWidth: 1
                         Label {
-                            text: "Recovery Method"
+                            text: 'Firmware Upgrade'
                             color: "#A0A0A0"
                             font.pixelSize: 14
                         }
@@ -512,7 +512,6 @@ Page {
                             ]
                             iconSide: true
                             rightAction: Action {
-                                enabled: self.firmwareUpdateAvailable
                                 onTriggered: {
                                     const dialog = update_firmware_dialog.createObject(self, {
                                         device: self.jadeDevice
