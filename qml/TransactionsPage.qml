@@ -130,6 +130,9 @@ Page {
                     }
                 }
             }
+            Item {
+                Layout.minimumWidth: 16
+            }
         }
     }
 
