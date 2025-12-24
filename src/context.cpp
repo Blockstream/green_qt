@@ -315,6 +315,16 @@ Account* Context::getAccountByPointer(Network* network, int pointer) const
     return m_accounts_by_pointer.value({ network, pointer });
 }
 
+QList<Transaction *> Context::getTransaction(const QString &hash) const
+{
+    return m_transaction_map.values(hash);
+}
+
+Address* Context::getAddress(const QString& address) const
+{
+    return m_address_map.value(address);
+}
+
 Payment* Context::getOrCreatePayment(const QString &id)
 {
     auto payment = m_payments.value(id);
@@ -673,6 +683,7 @@ void Context::refreshAccounts()
 void Context::addTransaction(Transaction* transaction)
 {
     if (m_transaction_item.contains(transaction)) return;
+    m_transaction_map.insert(transaction->hash(), transaction);
 
     m_transactions.insert(transaction->hash(), transaction);
 
@@ -688,6 +699,7 @@ void Context::addTransaction(Transaction* transaction)
 void Context::addAddress(Address* address)
 {
     if (m_address_item.contains(address)) return;
+    m_address_map.insert(address->address(), address);
 
     auto item = new QStandardItem;
     item->setData(QVariant::fromValue(address), Qt::UserRole);

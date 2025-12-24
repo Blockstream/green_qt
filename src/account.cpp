@@ -97,6 +97,11 @@ void Account::setHidden(bool hidden)
     emit hiddenChanged();
 }
 
+Transaction* Account::getTransaction(const QString& hash)
+{
+    return m_transactions_by_hash.value(hash);
+}
+
 Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
 {
     auto hash = data.value("txhash").toString();

@@ -65,7 +65,8 @@ public:
     bool isEmpty() const;
     void setBalanceData(const QJsonObject& data);
     void updateBalance();
-    Transaction *getOrCreateTransaction(const QJsonObject &data);
+    Transaction* getTransaction(const QString& hash);
+    Transaction* getOrCreateTransaction(const QJsonObject& data);
     Output *getOrCreateOutput(const QJsonObject &data);
     Q_INVOKABLE Address *getOrCreateAddress(const QJsonObject &data);
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;

@@ -77,7 +77,8 @@ public:
     Q_INVOKABLE Account* getOrCreateAccount(Network* network, quint32 pointer);
     Account* getOrCreateAccount(Network* network, const QJsonObject& data);
     Account* getAccountByPointer(Network* network, int pointer) const;
-
+    QList<Transaction*> getTransaction(const QString& hash) const;
+    Address* getAddress(const QString& address) const;
     Payment* getOrCreatePayment(const QString& id);
 
     TaskDispatcher* dispatcher() const { return m_dispatcher; }
@@ -158,12 +159,14 @@ public:
     QJsonObject m_hw_device;
 
     QMap<Transaction*, QStandardItem*> m_transaction_item;
+    QMultiMap<QString, Transaction*> m_transaction_map;
     QMultiMap<QString, Transaction*> m_transactions;
     QStandardItemModel* const m_transaction_model;
     void addTransaction(Transaction* transaction);
     QStandardItemModel* transactionModel() const { return m_transaction_model; }
 
     QMap<Address*, QStandardItem*> m_address_item;
+    QMap<QString, Address*> m_address_map;
     QStandardItemModel* const m_address_model;
     void addAddress(Address* address);
     QStandardItemModel* addressModel() const { return m_address_model; }
