@@ -335,9 +335,10 @@ Payment* Context::getOrCreatePayment(const QString &id)
         item->setData(QVariant::fromValue(payment), Qt::UserRole);
         item->setData(payment->updatedAt(), Qt::UserRole + 1);
 
-        connect(payment, &Payment::dataChanged, this, [=] {
-            emit paymentUpdated();
-        });
+        connect(payment, &Payment::dataChanged, this, &Context::paymentUpdated);
+        connect(payment, &Payment::addressChanged, this, &Context::paymentUpdated);
+        connect(payment, &Payment::transactionChanged, this, &Context::paymentUpdated);
+
         connect(payment, &Payment::updatedAtChanged, this, [=] {
             item->setData(payment->updatedAt(), Qt::UserRole + 1);
         });
@@ -1256,6 +1257,7 @@ PaymentModel::PaymentModel(QObject* parent)
 void PaymentModel::update(Context* context)
 {
     setSourceModel(context->paymentModel());
+    connect(context, &Context::paymentUpdated, this, &PaymentModel::invalidate);
 }
 
 bool PaymentModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
@@ -1264,7 +1266,12 @@ bool PaymentModel::filterAcceptsRow(int source_row, const QModelIndex& source_pa
 
     if (!filterStatusesAcceptsPayment(payment)) return false;
 
-    return ContextModel::filterAcceptsRow(source_row, source_parent);
+    if (payment->transaction()) return false;
+    if (payment->status() == "PENDING") return true;
+    if (payment->status() == "SETTLING") return true;
+    if (payment->status() == "SETTLED") return true;
+
+    return false;
 }
 
 bool PaymentModel::filterStatusesAcceptsPayment(Payment* payment) const
