@@ -270,6 +270,23 @@ Page {
             ListPage {
                 id: transaction_list_page
                 emptyText: `You don't have any transactions yet.`
+                listHeader: ColumnLayout {
+                    spacing: 4
+                    width: ListView.view.width
+                    Repeater {
+                        id: payments_repeater
+                        model: PaymentModel {
+                            context: self.context
+                        }
+                        delegate: PaymentDelegate {
+                            Layout.fillWidth: true
+                        }
+                    }
+                    Item {
+                        Layout.minimumHeight: 4
+                        visible: payments_repeater.count > 0
+                    }
+                }
                 model: TransactionModel {
                     id: transaction_model
                     context: self.context
@@ -346,6 +363,7 @@ Page {
         required property Component delegate
         required property string emptyText
         readonly property bool empty: list_view.count === 0
+        property alias listHeader: list_view.header
         id: list_page
         background: null
         padding: 0
@@ -467,6 +485,77 @@ Page {
                 font.pixelSize: 14
                 text: list_page.emptyText
                 visible: list_page.empty
+            }
+        }
+    }
+
+    component PaymentDelegate: ItemDelegate {
+        required property Payment payment
+        id: delegate
+        focusPolicy: Qt.ClickFocus
+        leftPadding: 24
+        rightPadding: 24
+        topPadding: 12
+        bottomPadding: 12
+        background: Rectangle {
+            border.color: '#262626'
+            border.width: 1
+            color: Qt.lighter('#181818', delegate.enabled && delegate.hovered ? 1.2 : 1)
+            radius: 8
+        }
+        spacing: 0
+        contentItem: RowLayout {
+            spacing: 10
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: `qrc:/svg2/tx-incoming.svg`
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.maximumWidth: 130
+                color: '#FFF'
+                font.pixelSize: 14
+                font.weight: 600
+                text: qsTrId('id_received')
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.maximumWidth: 130
+                color: '#929292'
+                text: delegate.payment.updatedAt.toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
+                font.pixelSize: 14
+                font.weight: 400
+                font.capitalization: Font.AllUppercase
+                opacity: 0.6
+            }
+            AccountLabel {
+                Layout.fillWidth: true
+                Layout.maximumWidth: 150
+                account: delegate.payment.address.account
+            }
+            HSpacer {
+            }
+            TransactionStatusBadge {
+                confirmations: 0
+                liquid: false
+            }
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.maximumWidth: 150
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    color: '#00BCFF'
+                    font.pixelSize: 14
+                    font.weight: 600
+                    text: UtilJS.incognito(Settings.incognito, `${delegate.payment.data.destinationAmount} ${delegate.payment.data.destinationCurrencyCode}`)
+                }
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    color: '#929292'
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: UtilJS.incognito(Settings.incognito, `${delegate.payment.data.sourceAmount} ${delegate.payment.data.sourceCurrencyCode}`)
+                }
             }
         }
     }

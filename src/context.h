@@ -78,7 +78,7 @@ public:
     Account* getOrCreateAccount(Network* network, const QJsonObject& data);
     Account* getAccountByPointer(Network* network, int pointer) const;
     QList<Transaction*> getTransaction(const QString& hash) const;
-    Address* getAddress(const QString& address) const;
+    Address* getOrCreateAddress(const QString& address);
     Payment* getOrCreatePayment(const QString& id);
 
     TaskDispatcher* dispatcher() const { return m_dispatcher; }
@@ -167,7 +167,6 @@ public:
     QMap<Address*, QStandardItem*> m_address_item;
     QMap<QString, Address*> m_address_map;
     QStandardItemModel* const m_address_model;
-    void addAddress(Address* address);
     QStandardItemModel* addressModel() const { return m_address_model; }
 
     QMap<Output*, QStandardItem*> m_coin_item;

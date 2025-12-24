@@ -68,6 +68,10 @@ ItemDelegate {
                 color: modelData.color ?? 'white'
             }
         }
+        TransactionStatusBadge {
+            confirmations: UtilJS.confirmations(self.output.account.session, self.output.data.block_height)
+            liquid: self.output.account.network.liquid
+        }
         ColumnLayout {
             Layout.maximumWidth: self.width / 6
             Layout.minimumWidth: self.width / 6

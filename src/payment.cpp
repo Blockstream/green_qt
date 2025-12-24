@@ -30,7 +30,7 @@ void Payment::refresh()
         const auto destination_wallet_address = crypto_details.value("destinationWalletAddress").toString();
 
         if (!destination_wallet_address.isEmpty()) {
-            m_address = m_context->getAddress(destination_wallet_address);
+            m_address = m_context->getOrCreateAddress(destination_wallet_address);
             emit addressChanged();
         }
     }

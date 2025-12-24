@@ -87,8 +87,8 @@ ItemDelegate {
             wrapMode: Label.NoWrap
         }
         TransactionStatusBadge {
-            transaction: self.transaction
             confirmations: self.confirmations
+            liquid: self.transaction.account.network.liquid
         }
         TransactionAmounts {
             Layout.fillWidth: true

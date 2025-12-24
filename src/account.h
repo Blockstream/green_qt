@@ -94,7 +94,6 @@ private:
     bool m_hidden{false};
     QMap<QString, Transaction*> m_transactions_by_hash;
     QMap<QPair<QString, int>, Output*> m_outputs_by_hash;
-    QMap<QString, Address*> m_address_by_hash;
     int m_load_balance_timer_id{-1};
     friend class Wallet;
 };

@@ -333,11 +333,6 @@ QList<Transaction *> Context::getTransaction(const QString &hash) const
     return m_transaction_map.values(hash);
 }
 
-Address* Context::getAddress(const QString& address) const
-{
-    return m_address_map.value(address);
-}
-
 Payment* Context::getOrCreatePayment(const QString &id)
 {
     auto payment = m_payments.value(id);
@@ -547,13 +542,27 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
         return;
     }
 
-    if (!isWatchonly() || !network->isElectrum()) {
-        auto load_accounts = new LoadAccountsTask(false, session);
-        connect(load_accounts, &Task::finished, this, [=] {
+    qDebug() << Q_FUNC_INFO << network->id() << network->isElectrum() << isWatchonly();
+
+    // if (network->isElectrum()) {
+    auto load_accounts = new LoadAccountsTask((network->isElectrum() && isWatchonly()) ? false : true, session);
+        auto sync_accounts = new SyncAccountsTask(session);
+        auto load_accounts2 = new LoadAccountsTask(false, session);
+        load_accounts->then(sync_accounts);
+        sync_accounts->then(load_accounts2);
+        group->add(load_accounts);
+        group->add(sync_accounts);
+        group->add(load_accounts2);
+    // }
+
+    // qDebug() << isWatchonly() << network->isElectrum();
+    // if (true) { // !isWatchonly() || !network->isElectrum()) {
+        // auto load_accounts = new LoadAccountsTask(false, session);
+        connect(load_accounts2, &Task::finished, this, [=] {
             if (network->isElectrum()) {
                 bool has_native_segwit = false;
 
-                for (auto account : load_accounts->accounts()) {
+                for (auto account : load_accounts2->accounts()) {
                     if (account->type() == "p2wpkh") {
                         has_native_segwit = true;
                         break;
@@ -567,12 +576,11 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
 
             loadNetwork2(group, network);
         });
-        connect(load_accounts, &Task::failed, this, [=](auto error) {
+        connect(load_accounts2, &Task::failed, this, [=](auto error) {
             // TODO: deal with these errors
             qDebug() << Q_FUNC_INFO << error;
         });
-        group->add(load_accounts);
-    }
+        // group->add(load_accounts);
 }
 
 void Context::createStandardAccount(TaskGroup *group, Network *network)
@@ -685,7 +693,7 @@ void Context::refreshAccounts()
     auto group = new TaskGroup(this);
     group->setName("id_loading_accounts");
     for (auto session : m_sessions_list) {
-        auto load_accounts = new LoadAccountsTask(true, session);
+        auto load_accounts = new LoadAccountsTask(!isWatchonly(), session);
         connect(load_accounts, &Task::finished, this, [=] {
             for (auto account : load_accounts->accounts()) {
                 group->add(new LoadBalanceTask(account));
@@ -716,16 +724,21 @@ void Context::addTransaction(Transaction* transaction)
     item->setData(QVariant::fromValue(timestamp), Qt::UserRole + 1);
 }
 
-void Context::addAddress(Address* address)
+Address* Context::getOrCreateAddress(const QString& value)
 {
-    if (m_address_item.contains(address)) return;
-    m_address_map.insert(address->address(), address);
+    Address* address = m_address_map.value(value);
+    if (address) return address;
+
+    address = new Address(this, value);
+    m_address_map.insert(value, address);
 
     auto item = new QStandardItem;
     item->setData(QVariant::fromValue(address), Qt::UserRole);
-    item->setData(address->address(), Qt::UserRole + 1);
+    item->setData(value, Qt::UserRole + 1);
     m_address_item.insert(address, item);
     m_address_model->appendRow(item);
+
+    return address;
 }
 
 void Context::addCoin(Output* coin)
@@ -1290,9 +1303,7 @@ bool PaymentModel::filterAcceptsRow(int source_row, const QModelIndex& source_pa
     if (!filterStatusesAcceptsPayment(payment)) return false;
 
     if (payment->transaction()) return false;
-    if (payment->status() == "PENDING") return true;
     if (payment->status() == "SETTLING") return true;
-    if (payment->status() == "SETTLED") return true;
 
     return false;
 }

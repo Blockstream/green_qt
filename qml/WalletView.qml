@@ -238,7 +238,7 @@ MainPage {
         SinglesigWatchOnlyAddPage {
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+                stack_view.push(loading_page, { context })
             }
         }
     }

@@ -119,9 +119,12 @@ TaskGroup* RestoreController::check(Network* network)
     if (network->isElectrum()) {
         auto load_accounts = new LoadAccountsTask(true, session);
         auto sync_accounts = new SyncAccountsTask(session);
+        auto load_accounts2 = new LoadAccountsTask(true, session);
         load_accounts->then(sync_accounts);
+        sync_accounts->then(load_accounts2);
         group->add(load_accounts);
         group->add(sync_accounts);
+        group->add(load_accounts2);
     }
 
     if (network->isLiquid()) {

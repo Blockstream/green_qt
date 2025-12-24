@@ -140,6 +140,9 @@ AbstractDrawer {
             }
             ColumnLayout {
                 Label {
+                    text: button.session.walletHashId
+                }
+                Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     text: button.session.network.displayName + ' ' + (button.session.network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig'))

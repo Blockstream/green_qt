@@ -58,6 +58,7 @@ StackViewPage {
 
     BuyBitcoinQuoteService {
         id: service
+        context: self.context
         onWidgetUrlChanged: {
             if (service.widgetUrl.length > 0) {
                 self.StackView.view.push(webview_page, {
@@ -285,8 +286,7 @@ StackViewPage {
                 if (amountText.length === 0 || amount <= 0 || !currency || !address || !self.countryCode) {
                     service.clearQuote()
                 } else {
-                    const walletHashedId = self.context?.xpubHashId ?? ''
-                    service.fetchQuote(self.countryCode, amount, currency, address, walletHashedId)
+                    service.fetchQuote(self.countryCode, amount, currency, address)
                 }
             }
         }
@@ -312,8 +312,7 @@ StackViewPage {
                 const address = receive_address_controller.address?.address ?? ''
 
                 if (serviceProvider && amount > 0 && currency && address && self.countryCode) {
-                    const walletHashedId = self.context?.xpubHashId ?? ''
-                    service.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, false, walletHashedId)
+                    service.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, false)
                 }
             }
         }
@@ -339,8 +338,7 @@ StackViewPage {
                 const address = receive_address_controller.address?.address ?? ''
 
                 if (serviceProvider && amount > 0 && currency && address && self.countryCode) {
-                    const walletHashedId = self.context?.xpubHashId ?? ''
-                    service.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, true, walletHashedId)
+                    service.createWidgetSession(serviceProvider, self.countryCode, amount, currency, address, true)
                 }
             }
         }

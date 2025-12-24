@@ -107,7 +107,7 @@ StackViewPage {
         TransactionStatusBadge {
             Layout.alignment: Qt.AlignCenter
             confirmations: self.confirmations
-            transaction: self.transaction
+            liquid: self.transaction.account.network.liquid
         }
         Label {
             Layout.alignment: Qt.AlignCenter
@@ -139,14 +139,7 @@ StackViewPage {
             color: '#000000'
             font.pixelSize: 14
             font.weight: 700
-            text: {
-                switch (self.transaction.type) {
-                    case Transaction.Incoming: return qsTrId('id_received')
-                    case Transaction.Outgoing: return qsTrId('id_sent')
-                    case Transaction.Redeposit: return qsTrId('id_redeposited')
-                    case Transaction.Mixed: return qsTrId('id_swap')
-                }
-            }
+            text: UtilJS.transactionTypeLabel(self.transaction)
             background: Rectangle {
                 color: self.tx_color
                 radius: height / 2
@@ -439,6 +432,26 @@ StackViewPage {
                 }
             }
         }
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            id: delegate
+            text: {
+                const payment = self.transaction.payment
+                if (!payment) return ''
+                return JSON.stringify({
+                    id: payment.data.id,
+                    updatedAt: payment.data.updatedAt,
+                    status: payment.data.status,
+                    sourceAmount: payment.data.sourceAmount,
+                    sourceCurrency: payment.data.sourceCurrencyCode,
+                    countryCode: payment.data.countryCode,
+                    serviceProvider: payment.data.serviceProvider
+                }, null, 4)
+            }
+            font.pixelSize: 10
+            wrapMode: Label.WordWrap
+        }
         VSpacer {
         }
         ColumnLayout {
@@ -468,7 +481,6 @@ StackViewPage {
                     Clipboard.copy(self.transaction.unblindedLink())
                     Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
                 }
-
             }
             CopyActionButton {
                 text: qsTrId('id_copy_unblinding_data')

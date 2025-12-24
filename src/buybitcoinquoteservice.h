@@ -1,6 +1,8 @@
 #ifndef GREEN_BUYBITCOINQUOTESERVICE_H
 #define GREEN_BUYBITCOINQUOTESERVICE_H
 
+#include "controller.h"
+
 #include <QtQml>
 
 #include <QJsonValue>
@@ -10,7 +12,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 
-class BuyBitcoinQuoteService : public QObject
+class BuyBitcoinQuoteService : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(double bestDestinationAmount READ bestDestinationAmount NOTIFY quoteChanged)
@@ -44,10 +46,10 @@ public:
     QStringList recentlyUsedProviders() const { return m_recently_used_providers; }
     QJsonValue buyDefaultValues() const;
 
-    Q_INVOKABLE void fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, const QString& walletHashedId = QString());
+    Q_INVOKABLE void fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress);
     Q_INVOKABLE void clearQuote();
     Q_INVOKABLE void setSelectedQuote(const QVariantMap& quote);
-    Q_INVOKABLE void createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode = false, const QString& walletHashedId = QString());
+    Q_INVOKABLE void createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode = false);
 
 signals:
     void quoteChanged();
@@ -81,13 +83,22 @@ private:
     QNetworkReply* m_widget_reply{nullptr};
     QJsonValue m_buy_default_values;
     QNetworkReply* m_transactions_reply{nullptr};
-    QString m_pending_wallet_hashed_id;
     QString m_pending_country_code;
     double m_pending_source_amount{0.0};
     QString m_pending_source_currency_code;
     QString m_pending_wallet_address;
     QString m_preferred_provider;
     QStringList m_recently_used_providers;
+};
+
+class PaymentSyncController : public Controller
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    PaymentSyncController(QObject* parent = nullptr);
+private:
+    void sync();
 };
 
 #endif // GREEN_BUYBITCOINQUOTESERVICE_H

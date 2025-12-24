@@ -299,6 +299,7 @@ LoadController::LoadController(QObject* parent)
                 }
             }
             wallet->save();
+
             emit loadFinished();
 
             for (auto session : m_context->getSessions()) {
@@ -326,6 +327,7 @@ static bool compatibleToNetworks(Network* network, const QList<Network*> network
 void LoadController::load()
 {
     const auto networks = m_context->getActiveNetworks();
+    qDebug() << Q_FUNC_INFO << networks.size();
 
     auto group = new TaskGroup(this);
     group->setName("load");
@@ -333,6 +335,8 @@ void LoadController::load()
     for (auto network : networks) {
         loadNetwork(group, network);
     }
+
+    loadPayments(group);
 
     m_monitor->add(group);
     dispatcher()->add(group);
@@ -350,6 +354,7 @@ void LoadController::load()
 
 void LoadController::loadNetwork(TaskGroup* group, Network* network)
 {
+    qDebug() << Q_FUNC_INFO << network->id();
     m_context->loadNetwork(group, network);
 }
 
@@ -360,6 +365,13 @@ void LoadController::loginNetwork(Network* network)
     m_context->loginNetwork(group, network);
     m_monitor->add(group);
     dispatcher()->add(group);
+}
+
+void LoadController::loadPayments(TaskGroup *group)
+{
+    auto engine = qmlEngine(this);
+    auto task = new LoadPaymentsTask(engine->networkAccessManager(), m_context);
+    group->add(task);
 }
 
 PinDataController::PinDataController(QObject* parent)

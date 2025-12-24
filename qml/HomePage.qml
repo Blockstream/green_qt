@@ -71,17 +71,30 @@ Page {
                 Item {
                     Layout.minimumHeight: 8
                 }
+                Repeater {
+                    id: payments_repeater
+                    model: PaymentModel {
+                        context: self.context
+                    }
+                    delegate: PaymentDelegate {
+                        Layout.topMargin: 10
+                        Layout.fillWidth: true
+                    }
+                }
+                Item {
+                    Layout.minimumHeight: 8
+                    visible: payments_repeater.count > 0
+                }
                 Label {
                     color: '#929292'
                     font.pixelSize: 14
                     text: `You don't have any transactions yet.`
-                    visible: transaction_list_view.count === 0
+                    visible: transaction_list_view.count === 0 && payments_repeater.count === 0
                 }
             }
             footer: Item {
                 implicitHeight: 12
             }
-
             model: LimitModel {
                 limit: 10
                 source: TransactionModel {
@@ -160,6 +173,99 @@ Page {
     Component {
         id: promo_drawer
         PromoDrawer {
+        }
+    }
+
+
+    component DebugPaymentDelegate: AbstractButton {
+        required property int index
+        required property Payment payment
+        id: delegate
+        leftPadding: 24
+        rightPadding: 24
+        topPadding: 12
+        bottomPadding: 12
+        background: Rectangle {
+            border.color: '#262626'
+            border.width: 1
+            color: Qt.lighter('#181818', delegate.enabled && delegate.hovered ? 1.2 : 1)
+            radius: 8
+        }
+        contentItem: Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            color: delegate.payment.transaction ? 'green' : 'red'
+            font.pixelSize: 10
+            text: JSON.stringify(delegate.payment.data, null, 4)
+            wrapMode: Label.WordWrap
+        }
+    }
+    component PaymentDelegate: AbstractButton {
+        required property int index
+        required property Payment payment
+        id: delegate
+        leftPadding: 24
+        rightPadding: 24
+        topPadding: 12
+        bottomPadding: 12
+        background: Rectangle {
+            border.color: '#262626'
+            border.width: 1
+            color: Qt.lighter('#181818', delegate.enabled && delegate.hovered ? 1.2 : 1)
+            radius: 8
+        }
+        contentItem: RowLayout {
+            spacing: 8
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: `qrc:/svg2/tx-incoming.svg`
+            }
+            ColumnLayout {
+                Layout.fillWidth: false
+                Layout.fillHeight: false
+                Layout.alignment: Qt.AlignCenter
+                spacing: 0
+                Label {
+                    color: '#FFF'
+                    font.pixelSize: 16
+                    font.weight: 600
+                    text: qsTrId('id_received')
+                }
+                Label {
+                    color: '#929292'
+                    text: delegate.payment.updatedAt.toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
+                    font.pixelSize: 16
+                    font.weight: 400
+                    font.capitalization: Font.AllUppercase
+                    opacity: 0.6
+                }
+            }
+            HSpacer {
+            }
+            TransactionStatusBadge {
+                confirmations: 0
+                liquid: false
+            }
+            ColumnLayout {
+                Layout.alignment: Qt.AlignRight
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    color: '#00BCFF'
+                    font.pixelSize: 14
+                    font.weight: 600
+                    text: UtilJS.incognito(Settings.incognito, `${delegate.payment.data.destinationAmount} ${delegate.payment.data.destinationCurrencyCode}`)
+                }
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    color: '#929292'
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: UtilJS.incognito(Settings.incognito, `${delegate.payment.data.sourceAmount} ${delegate.payment.data.sourceCurrencyCode}`)
+                }
+            }
+            RightArrowIndicator {
+                active: false
+            }
         }
     }
 

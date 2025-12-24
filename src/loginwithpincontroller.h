@@ -53,6 +53,7 @@ signals:
 private:
     void loadNetwork(TaskGroup* group, Network* network);
     void loginNetwork(Network* network);
+    void loadPayments(TaskGroup* group);
 };
 
 class PinDataController : public Controller

@@ -4,9 +4,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Label {
-    required property Transaction transaction
     required property int confirmations
-    readonly property bool liquid: self.transaction.account.network.liquid
+    required property bool liquid
     readonly property bool completed: self.confirmations >= (self.liquid ? 2 : 6)
     readonly property var status: {
         if (self.completed) {

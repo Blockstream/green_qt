@@ -1,4 +1,7 @@
 #include "buybitcoinquoteservice.h"
+#include "context.h"
+#include "analytics.h"
+#include "task.h"
 
 #include <QDebug>
 #include <QJsonArray>
@@ -13,12 +16,8 @@
 
 #include <algorithm>
 
-#include <countly/countly.hpp>
-
-#include "analytics.h"
-
 BuyBitcoinQuoteService::BuyBitcoinQuoteService(QObject* parent)
-    : QObject(parent)
+    : Controller(parent)
 {
     // Connect to Analytics remote config changes to update buy default values
     connect(Analytics::instance(), &Analytics::remoteConfigChanged, this, &BuyBitcoinQuoteService::updateBuyDefaultValues);
@@ -85,8 +84,15 @@ QString BuyBitcoinQuoteService::selectedServiceProvider() const
     return m_selected_quote.value("serviceProvider").toString();
 }
 
-void BuyBitcoinQuoteService::fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, const QString& walletHashedId)
+void BuyBitcoinQuoteService::fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress)
 {
+    if (!m_context) {
+        qDebug() << Q_FUNC_INFO << "context not set";
+        return;
+    }
+
+    const auto walletHashedId = m_context->xpubHashId();
+
     // Cancel any pending request
     if (m_reply) {
         disconnect(m_reply, &QNetworkReply::finished, this, &BuyBitcoinQuoteService::onReplyFinished);
@@ -108,50 +114,6 @@ void BuyBitcoinQuoteService::fetchQuote(const QString& countryCode, double sourc
         m_best_destination_amount = 0.0;
         m_error = QString();
         emit quoteChanged();
-        return;
-    }
-
-    // If wallet_hashed_id is provided, fetch transactions first to pre-select provider
-    if (!walletHashedId.isEmpty()) {
-        m_pending_wallet_hashed_id = walletHashedId;
-        m_pending_country_code = countryCode;
-        m_pending_source_amount = sourceAmount;
-        m_pending_source_currency_code = sourceCurrencyCode;
-        m_pending_wallet_address = walletAddress;
-
-        // Set loading state
-        m_loading = true;
-        m_error = QString();
-        emit loadingChanged();
-        emit errorChanged();
-
-        // Fetch transactions
-        auto engine = qmlEngine(this);
-        if (!engine) {
-            m_loading = false;
-            m_error = "QML engine not available";
-            emit loadingChanged();
-            emit errorChanged();
-            return;
-        }
-
-        auto net = engine->networkAccessManager();
-        if (!net) {
-            m_loading = false;
-            m_error = "Network access manager not available";
-            emit loadingChanged();
-            emit errorChanged();
-            return;
-        }
-
-        QUrl url("https://ramps.blockstream.com/payments/transactions");
-        QUrlQuery query;
-        query.addQueryItem("externalCustomerIds", walletHashedId);
-        url.setQuery(query);
-
-        QNetworkRequest req(url);
-        m_transactions_reply = net->get(req);
-        connect(m_transactions_reply, &QNetworkReply::finished, this, &BuyBitcoinQuoteService::onTransactionsReplyFinished);
         return;
     }
 
@@ -408,8 +370,13 @@ void BuyBitcoinQuoteService::onReplyFinished()
     emit selectedQuoteChanged();
 }
 
-void BuyBitcoinQuoteService::createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode, const QString& walletHashedId)
+void BuyBitcoinQuoteService::createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode)
 {
+    if (!m_context) {
+        qDebug() << Q_FUNC_INFO << "context not set";
+        return;
+    }
+
     // Cancel any pending widget request
     if (m_widget_reply) {
         disconnect(m_widget_reply, &QNetworkReply::finished, this, &BuyBitcoinQuoteService::onWidgetReplyFinished);
@@ -452,12 +419,9 @@ void BuyBitcoinQuoteService::createWidgetSession(const QString& serviceProvider,
     QJsonObject requestData;
     requestData["sessionData"] = sessionData;
     requestData["sessionType"] = "BUY";
-    
-    // Add externalCustomerIds if wallet_hashed_id is provided
-    if (!walletHashedId.isEmpty()) {
-        requestData["externalCustomerIds"] = walletHashedId;
-    }
+    requestData["externalCustomerId"] = m_context->xpubHashId();
 
+    qDebug() << Q_FUNC_INFO << qPrintable(QJsonDocument(requestData).toJson());
     QJsonDocument doc(requestData);
     QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
 
@@ -525,6 +489,7 @@ void BuyBitcoinQuoteService::onWidgetReplyFinished()
 
     qDebug() << "Widget API response - Status:" << statusCode << "Error:" << error << "Data:" << data;
 
+    qDebug() << Q_FUNC_INFO << qPrintable(QJsonDocument(json).toJson());
     // Check for HTTP error status codes
     if (statusCode >= 400) {
         QString errorMsg;
@@ -609,16 +574,10 @@ QJsonValue BuyBitcoinQuoteService::buyDefaultValues() const
 
 void BuyBitcoinQuoteService::updateBuyDefaultValues()
 {
-    auto& countly = cly::Countly::getInstance();
-    const auto value = countly.getRemoteConfigValueString("buy_default_values");
-    const auto doc = QJsonDocument::fromJson(QByteArray::fromStdString(value));
-    QJsonValue newValue;
-    if (doc.isObject()) {
-        newValue = doc.object();
-    } else if (doc.isArray()) {
-        newValue = doc.array();
-    }
-    
+    const QJsonValue newValue = Analytics::instance()->getRemoteConfigValue("buy_default_values");
+
+    qDebug() << Q_FUNC_INFO << newValue;
+
     // Compare JSON strings to detect actual changes
     QByteArray currentJson;
     if (m_buy_default_values.isObject()) {
@@ -662,6 +621,9 @@ void BuyBitcoinQuoteService::onTransactionsReplyFinished()
     QJsonObject json;
     
     if (!data.isEmpty() && error == QNetworkReply::NoError) {
+        qDebug() << Q_FUNC_INFO << qPrintable(QJsonDocument::fromJson(data).toJson());
+        Q_UNREACHABLE();
+
         json = QJsonDocument::fromJson(data, &parseError).object();
         
         if (parseError.error == QJsonParseError::NoError) {
@@ -712,7 +674,7 @@ void BuyBitcoinQuoteService::onTransactionsReplyFinished()
     }
     
     // Now fetch the quotes with the stored parameters
-    fetchQuote(m_pending_country_code, m_pending_source_amount, m_pending_source_currency_code, m_pending_wallet_address, QString());
+    fetchQuote(m_pending_country_code, m_pending_source_amount, m_pending_source_currency_code, m_pending_wallet_address);
 }
 
 void BuyBitcoinQuoteService::sortQuotes()
@@ -729,3 +691,23 @@ void BuyBitcoinQuoteService::sortQuotes()
     });
 }
 
+
+PaymentSyncController::PaymentSyncController(QObject* parent)
+    : Controller(parent)
+{
+    QTimer::singleShot(1, this, &PaymentSyncController::sync);
+}
+
+#include "payment.h"
+void PaymentSyncController::sync()
+{
+    qDebug() << Q_FUNC_INFO;
+    auto task = new LoadPaymentsTask(qmlEngine(this)->networkAccessManager(), context());
+    connect(task, &Task::finished, this, [=] {
+        for (const auto payment : context()->m_payments.values()) {
+            payment->refresh();
+        }
+        QTimer::singleShot(10000, this, &PaymentSyncController::sync);
+    });
+    context()->dispatcher()->add(task);
+}

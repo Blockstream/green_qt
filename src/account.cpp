@@ -147,16 +147,10 @@ Output* Account::getOrCreateOutput(const QJsonObject& data)
 
 Address* Account::getOrCreateAddress(const QJsonObject& data)
 {
-    auto hash = data.value("address").toString();
-    auto address = m_address_by_hash.value(hash);
-    if (!address) {
-        address = new Address(this);
-        m_address_by_hash.insert(hash, address);
-    }
+    auto value = data.value("address").toString();
+    auto address = m_context->getOrCreateAddress(value);
+    address->setAccount(this);
     address->updateFromData(data);
-
-    m_context->addAddress(address);
-
     return address;
 }
 

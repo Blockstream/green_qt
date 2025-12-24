@@ -1,6 +1,8 @@
 #ifndef GREEN_ADDRESS_H
 #define GREEN_ADDRESS_H
 
+#include "green.h"
+
 #include <QJsonObject>
 #include <QObject>
 #include <QtQml>
@@ -10,18 +12,21 @@ class Account;
 class Address : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Account* account READ account CONSTANT)
+    Q_PROPERTY(Context* context READ context CONSTANT)
+    Q_PROPERTY(QString address READ address CONSTANT)
+    Q_PROPERTY(Account* account READ account NOTIFY accountChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     Q_PROPERTY(QString type READ type NOTIFY dataChanged)
-    Q_PROPERTY(QString address READ address NOTIFY dataChanged)
     Q_PROPERTY(int pointer READ pointer NOTIFY dataChanged)
     Q_PROPERTY(bool verified READ verified NOTIFY verifiedChanged)
     Q_PROPERTY(QUrl url READ url NOTIFY dataChanged)
     QML_ELEMENT
-    QML_UNCREATABLE("Address is instanced by Account.")
+    QML_UNCREATABLE("")
 public:
-    explicit Address(Account* account);
+    explicit Address(Context* context, const QString& address);
+    Context* context() const { return m_context; }
     Account* account() const { return m_account; }
+    void setAccount(Account* account);
     QJsonObject data() const { return m_data; }
     QString type() const { return m_type; }
     QString address() const { return m_address; }
@@ -31,13 +36,15 @@ public:
     void setVerified(bool verified);
     QUrl url() const;
 signals:
+    void accountChanged();
     void dataChanged();
     void verifiedChanged();
 public:
-    Account* const m_account;
+    Context* const m_context;
+    const QString m_address;
+    Account* m_account{nullptr};
     QJsonObject m_data;
     QString m_type;
-    QString m_address;
     int m_pointer{0};
     bool m_verified{false};
 };

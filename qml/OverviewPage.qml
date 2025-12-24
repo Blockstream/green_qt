@@ -77,8 +77,7 @@ Page {
     }
 
     function transactionConfirmations(transaction) {
-        if (transaction.data.block_height === 0) return 0;
-        return 1 + transaction.account.session.block.block_height - transaction.data.block_height;
+        return UtilJS.confirmations(transaction.account.session, transaction.data.block_height)
     }
 
     function localizedLabel(label) {
@@ -136,6 +135,10 @@ Page {
         id: archive_list_model
         context: self.context
         filter: 'hidden'
+    }
+
+    PaymentSyncController {
+        context: self.context
     }
 
     StackView.onActivated: {

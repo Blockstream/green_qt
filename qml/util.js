@@ -156,6 +156,11 @@ function getUnblindingData(tx) {
     }
 }
 
+function confirmations(session, block_height) {
+    if (block_height === 0) return 0
+    return 1 + session.block.block_height - block_height
+}
+
 function transactionTypeLabel(transaction) {
     if (transaction.data.type === 'incoming') {
         if ((transaction.data.outputs?.length ?? 0) > 0) {
