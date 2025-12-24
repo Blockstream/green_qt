@@ -47,7 +47,7 @@ class Transaction : public QObject
     Q_PROPERTY(QString memo READ memo NOTIFY memoChanged)
     Q_PROPERTY(QJsonObject destination READ destination NOTIFY dataChanged)
     Q_PROPERTY(QUrl url READ url NOTIFY dataChanged)
-    Q_PROPERTY(Payment payment READ payment NOTIFY paymentChanged)
+    Q_PROPERTY(Payment* payment READ payment NOTIFY paymentChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:

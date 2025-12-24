@@ -891,4 +891,14 @@ private:
     const QJsonObject m_details;
 };
 
+class LoadPaymentsTask : public ContextTask
+{
+public:
+    LoadPaymentsTask(QNetworkAccessManager* net, Context* context);
+    void update() override;
+    void fetch(const QString& key);
+private:
+    QNetworkAccessManager* const m_net;
+};
+
 #endif // GREEN_TASK_H

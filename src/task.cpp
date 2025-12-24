@@ -9,6 +9,7 @@
 #include "json.h"
 #include "network.h"
 #include "output.h"
+#include "payment.h"
 #include "resolver.h"
 #include "session.h"
 #include "sessionmanager.h"
@@ -17,6 +18,7 @@
 #include "wallet.h"
 
 #include <QFileInfo>
+#include <QNetworkAccessManager>
 #include <QString>
 #include <QTimer>
 #include <QTimerEvent>
@@ -1823,4 +1825,62 @@ bool RSAVerifyTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     const auto rc = GA_rsa_verify(session, Json::fromObject(m_details).get(), auth_handler);
     return rc == GA_OK;
+}
+
+LoadPaymentsTask::LoadPaymentsTask(QNetworkAccessManager *net, Context *context)
+    : ContextTask(context)
+    , m_net(net)
+{
+}
+
+void LoadPaymentsTask::update()
+{
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+    fetch({});
+}
+
+void LoadPaymentsTask::fetch(const QString &key) {
+    QUrl url("https://ramps.blockstream.com/payments/transactions");
+    QUrlQuery query;
+    query.addQueryItem("externalCustomerIds", context()->xpubHashId());
+    if (!key.isEmpty()) query.addQueryItem("after", key);
+    url.setQuery(query);
+
+    QNetworkRequest req(url);
+    auto reply = m_net->get(req);
+    connect(reply, &QNetworkReply::finished, this, [=] {
+        reply->deleteLater();
+
+        if (reply->error() == QNetworkReply::NoError) {
+            const auto doc = QJsonDocument::fromJson(reply->readAll());
+
+            if (doc.isObject()) {
+                const auto response = doc.object();
+
+                const auto count = response.value("count").toInt();
+                const auto remaining = response.value("remaining").toInt();
+                const auto total_count = response.value("totalCount").toInt();
+                QString after = key;
+
+                const auto transactions = response.value("transactions").toArray();
+
+                for (const auto value : transactions) {
+                    auto data = value.toObject();
+                    after = data.take("key").toString();
+
+                    const auto id = data.value("id").toString();
+                    auto payment = context()->getOrCreatePayment(id);
+                    payment->update(data);
+                }
+
+                if (remaining > 0) {
+                    fetch(after);
+                    return;
+                }
+            }
+        }
+
+        setStatus(Status::Finished);
+    });
 }
