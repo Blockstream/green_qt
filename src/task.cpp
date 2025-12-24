@@ -781,6 +781,7 @@ bool ShouldRefresh(Session* session)
 {
     // skip non electrum sessions
     if (!session->network()->isElectrum()) return false;
+    if (session->context()->isWatchonly()) return false;
     // check if state directory exists
     QDir dir(GetDataDir("gdk"));
     if (!dir.cd("state")) return true;
