@@ -76,6 +76,7 @@ ItemDelegate {
             Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: 0
             Layout.fillWidth: true
+            elide: Label.ElideRight
             color: '#929292'
             font.pixelSize: 12
             font.weight: 400
@@ -83,7 +84,7 @@ ItemDelegate {
                 const lines = transaction.memo.trim().split('\n')
                 return lines[0] + (lines.length > 1 ? '...' : '')
             }
-            wrapMode: Label.Wrap
+            wrapMode: Label.NoWrap
         }
         TransactionStatusBadge {
             transaction: self.transaction
