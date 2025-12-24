@@ -30,6 +30,23 @@ WalletDrawer {
         }
     }
 
+    function selectAccounts(asset) {
+        const accounts = []
+        for (let i = 0; i < self.context.accounts.length; i++) {
+            const account = self.context.accounts[i]
+            if (account.hidden) continue
+            if (account.network.liquid) {
+                if (asset.key === 'btc') continue
+                if ((account.json.satoshi[asset.id] ?? 0) === 0) continue
+            } else {
+                if (asset.key !== 'btc') continue
+                if (account.json.satoshi.btc ?? 0 === 0) continue
+            }
+            accounts.push(account)
+        }
+        return accounts
+    }
+
     component RecipientPage: StackViewPage {
         property string address_input
         function next() {
@@ -44,12 +61,24 @@ WalletDrawer {
                     networks: controller.networks
                 })
             } else {
-                stack_view.push(account_selector_page, {
-                    address: controller.address,
-                    amount: controller.amount,
-                    asset: controller.asset,
-                    input: page.address_input,
-                })
+                const accounts = self.selectAccounts(controller.asset)
+                if (accounts.length > 1) {
+                    stack_view.push(account_selector_page, {
+                        accounts,
+                        address: controller.address,
+                        amount: controller.amount,
+                        asset: controller.asset,
+                        input: page.address_input,
+                    })
+                } else if (accounts.length === 1) {
+                    stack_view.push(send_details_page, {
+                        account: accounts[0],
+                        address: controller.address,
+                        amount: controller.amount,
+                        input: page.address_input,
+                        asset: controller.asset,
+                    })
+                }
             }
         }
 
@@ -205,12 +234,24 @@ WalletDrawer {
             id: page
             context: self.context
             onAssetClicked: (asset) => {
-                stack_view.push(account_selector_page, {
-                    address: page.address,
-                    amount: page.amount,
-                    asset,
-                    input: page.input,
-                })
+                const accounts = self.selectAccounts(asset)
+                if (accounts.length > 1) {
+                    stack_view.push(account_selector_page, {
+                        accounts,
+                        address: page.address,
+                        amount: page.amount,
+                        asset,
+                        input: page.input,
+                    })
+                } else if (accounts.length === 1) {
+                    stack_view.push(send_details_page, {
+                        account: accounts[0],
+                        address: page.address,
+                        amount: page.amount,
+                        input: page.input,
+                        asset: asset,
+                    })
+                }
             }
         }
     }
@@ -235,24 +276,6 @@ WalletDrawer {
             }
         }
     }
-
-    // Component {
-    //     id: account_asset_selector
-    //     SendAccountAssetSelector {
-    //         required property string address
-    //         required property string input
-    //         id: page
-    //         context: self.context
-    //         onSelected: (account, asset) => {
-    //             stack_view.push(send_details_page, {
-    //                 address: page.address,
-    //                 input: page.input,
-    //                 account,
-    //                 asset,
-    //             })
-    //         }
-    //     }
-    // }
 
     Component {
         id: send_details_page

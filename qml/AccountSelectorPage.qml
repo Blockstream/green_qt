@@ -11,7 +11,7 @@ StackViewPage {
     required property Context context
     required property Asset asset
     required property string message
-    property bool showAllAccounts: false
+    required property list<Account> accounts
     id: self
     title: qsTrId('id_select_account')
     contentItem: VFlickable {
@@ -55,26 +55,12 @@ StackViewPage {
         }
         Repeater {
             id: accounts_repeater
-            model: {
-                const accounts = []
-                for (let i = 0; i < self.context.accounts.length; i++) {
-                    const account = self.context.accounts[i]
-                    if (account.network.liquid && self.asset.key === 'btc') continue
-                    if (!account.network.liquid && self.asset.key !== 'btc') continue
-                    if (account.hidden) continue
-                    const satoshi = account.json.satoshi[self.asset.id] ?? '0'
-                    if (self.showAllAccounts || satoshi > 0) {
-                        accounts.push({ account, satoshi })
-                    }
-                }
-                return accounts
-            }
+            model: self.accounts
             delegate: SelectAccountButton {
                 required property var modelData
                 Layout.fillWidth: true
                 id: button
-                account: button.modelData.account
-                satoshi: button.modelData.satoshi
+                account: button.modelData
                 onClicked: self.accountClicked(button.account)
             }
         }
@@ -84,7 +70,7 @@ StackViewPage {
 
     component SelectAccountButton: AbstractButton {
         required property Account account
-        required property string satoshi
+        readonly property string satoshi: button.account.json.satoshi[self.asset.id] ?? '0'
         id: button
         background: Rectangle {
             border.color: '#262626'

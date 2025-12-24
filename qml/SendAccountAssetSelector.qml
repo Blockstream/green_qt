@@ -36,6 +36,7 @@ StackViewPage {
                 const search = search_field.text.trim().toLowerCase()
                 for (let i = 0; i < self.context.accounts.length; i++) {
                     const account = self.context.accounts[i]
+                    if (account.hidden) continue
                     if (self.networks && self.networks.indexOf(account.network) < 0) continue
                     for (const [id, satoshi] of Object.entries(account.json.satoshi)) {
                         if (satoshi === 0) continue

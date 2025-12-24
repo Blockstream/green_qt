@@ -42,6 +42,20 @@ StackViewPage {
         }
         return ['100', '200', '400']
     }
+    readonly property list<Account> accounts: {
+        const asset = self.context.getOrCreateAsset('btc')
+        const accounts = []
+        for (let i = 0; i < self.context.accounts.length; i++) {
+            const account = self.context.accounts[i]
+            if (account.hidden) continue
+            if (account.network.liquid && asset.key === 'btc') continue
+            if (!account.network.liquid && asset.key !== 'btc') continue
+            const satoshi = account.json.satoshi[asset.id] ?? '0'
+            accounts.push(account)
+        }
+        return accounts
+    }
+
     BuyBitcoinQuoteService {
         id: service
         onWidgetUrlChanged: {
@@ -186,8 +200,10 @@ StackViewPage {
             Layout.fillWidth: true
             account: self.account
             asset: self.context.getOrCreateAsset('btc')
-            readonly: false
-            onClicked: self.StackView.view.push(null, account_selector_page)
+            readonly: self.accounts.length <= 1
+            onClicked: {
+                self.StackView.view.push(null, account_selector_page)
+            }
         }
         FieldTitle {
             text: 'Exchange'
@@ -365,10 +381,10 @@ StackViewPage {
     Component {
         id: account_selector_page
         AccountSelectorPage {
+            accounts: self.accounts
             asset: self.context.getOrCreateAsset('btc')
             context: self.context
             message: 'Select the desired account you want to receive your bitcoin.'
-            showAllAccounts: true
             onAccountClicked: (account) => {
                 self.account = account
                 self.StackView.view.pop()
