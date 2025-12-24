@@ -77,6 +77,7 @@ AbstractDialog {
             PinField {
                 Layout.alignment: Qt.AlignCenter
                 id: pin_field
+                digitSize: 48
                 focus: true
                 onPinEntered: (code) => self.check(code)
             }

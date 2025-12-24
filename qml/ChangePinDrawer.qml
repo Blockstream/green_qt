@@ -51,6 +51,7 @@ WalletDrawer {
                 PinField {
                     Layout.alignment: Qt.AlignCenter
                     id: pin_field
+                    digitSize: 48
                     focus: true
                     onPinEntered: pin => {
                         if (self.pin) {

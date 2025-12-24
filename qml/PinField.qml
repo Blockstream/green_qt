@@ -7,6 +7,8 @@ import QtQuick.Layouts
 AbstractButton {
     signal pinEntered(string pin)
     property string pin: ''
+    property real digitSize: 64
+    property real dotSize: self.digitSize * 10 / 64
     function enable() {
         self.enabled = true
     }
@@ -69,8 +71,8 @@ AbstractButton {
         required property int index
         readonly property bool visualFocus: self.activeFocus && digit.index === self.pin.length
         id: digit
-        implicitWidth: 64
-        implicitHeight: 64
+        implicitWidth: self.digitSize
+        implicitHeight: self.digitSize
         opacity: self.enabled ? 1 : 0.5
         Rectangle {
             anchors.fill: parent
@@ -80,9 +82,9 @@ AbstractButton {
             radius: 10
         }
         Rectangle {
-            width: 10
-            height: 10
-            radius: 5
+            width: self.dotSize
+            height: self.dotSize
+            radius: self.dotSize / 2
             anchors.centerIn: parent
             visible: digit.index < self.pin.length
             color: '#00BCFF'

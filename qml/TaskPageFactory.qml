@@ -277,6 +277,7 @@ QtObject {
                 Layout.topMargin: 36
                 Layout.bottomMargin: 20
                 id: pin_field
+                digitSize: 48
                 focus: true
                 onPinChanged: error_badge.error = undefined
                 onPinEntered: pin => {
