@@ -38,6 +38,7 @@ class Session : public Entity
     Q_PROPERTY(QString unit READ unit NOTIFY unitChanged)
     Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY unitChanged)
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
+    Q_PROPERTY(QString walletHashId READ walletHashId NOTIFY walletHashIdChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 private:
@@ -82,6 +83,9 @@ public:
     AuthHandlerTask* registerUser();
     AuthHandlerTask* login();
 
+    QString walletHashId() const { return m_wallet_hash_id; }
+    void setWalletHashId(const QString& wallet_hash_id);
+
 signals:
     void contextChanged();
     void notificationHandled(const QJsonObject& notification);
@@ -104,6 +108,7 @@ signals:
     void unitChanged();
     void usernameChanged();
     void autoLogoutTriggered();
+    void walletHashIdChanged();
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
