@@ -286,6 +286,7 @@ SET(QML_FILES
     qml/AccountLabel.qml
     qml/AddressTypeLabel.qml
     qml/SetupWatchonlyDrawer.qml
+    qml/TransactionAmounts.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -211,67 +211,11 @@ Page {
             }
             HSpacer {
             }
-            ColumnLayout {
+            TransactionAmounts {
                 Layout.fillWidth: false
                 Layout.minimumWidth: delegate.width / 5
-                spacing: 1
-                Repeater {
-                    model: {
-                        const transaction = delegate.transaction
-                        const account = transaction.account
-                        const context = account.context
-                        const assets = []
-                        if (delegate.transaction.type !== Transaction.Redeposit) {
-                            if (account.network.liquid) {
-                                for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
-                                    if (account.network.policyAsset === id) continue
-                                    const asset = AssetManager.assetWithId(context.deployment, id)
-                                    assets.push({ asset, satoshi: String(satoshi) })
-                                }
-                            }
-                        }
-                        return assets
-                    }
-                    delegate: Label {
-                        Convert {
-                            id: convert
-                            account: delegate.transaction.account
-                            asset: modelData.asset
-                            input: ({ satoshi: modelData.satoshi })
-                        }
-                        Layout.alignment: Qt.AlignRight
-                        color: delegate.transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
-                        font.pixelSize: 14
-                        font.weight: 600
-                        text: UtilJS.incognito(Settings.incognito, convert.output.label)
-                    }
-                }
-                Convert {
-                    id: convert
-                    account: delegate.transaction.account
-                    input: {
-                        const network = delegate.transaction.account.network
-                        const satoshi = delegate.transaction.data.satoshi
-                        return { satoshi: String(satoshi?.[network.policyAsset] ?? 0) }
-                    }
-                    unit: delegate.transaction.account.session.unit
-                }
-                Label {
-                    Layout.alignment: Qt.AlignRight
-                    color: delegate.transaction.data.type === 'incoming' ? '#00BCFF' : '#FFF'
-                    font.pixelSize: 16
-                    font.weight: 600
-                    text: UtilJS.incognito(Settings.incognito, convert.output.label)
-                    visible: Number(convert.result.satoshi ?? '0') !== 0
-                }
-                Label {
-                    Layout.alignment: Qt.AlignRight
-                    color: '#929292'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
-                    visible: Number(convert.result.satoshi ?? '0') !== 0
-                }
+                context: self.context
+                transaction: delegate.transaction
             }
             RightArrowIndicator {
                 active: delegate.hovered
