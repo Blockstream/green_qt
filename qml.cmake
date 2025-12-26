@@ -220,10 +220,8 @@ SET(QML_FILES
     qml/LedgerDeviceDelegate.qml
     qml/TTextField.qml
     qml/ReceiveAccountAssetSelector.qml
-    qml/ExportTransactionsDialog.qml
     qml/CompletedImage.qml
     qml/CanceledImage.qml
-    qml/ExportAddressesDialog.qml
     qml/AddressVerifiedBadge.qml
     qml/NotificationsDrawer.qml
     qml/ErrorPage.qml

@@ -11,38 +11,11 @@ Q_MOC_INCLUDE("account.h")
 Q_MOC_INCLUDE("asset.h")
 Q_MOC_INCLUDE("payment.h")
 
-class TransactionAmount : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(Transaction* transaction READ transaction CONSTANT)
-    Q_PROPERTY(Asset* asset READ asset CONSTANT)
-    Q_PROPERTY(qint64 amount READ amount CONSTANT)
-    QML_ELEMENT
-    QML_UNCREATABLE("TransactionAmount is instanced by Transaction.")
-public:
-    explicit TransactionAmount(Transaction* transaction, qint64 amount);
-    explicit TransactionAmount(Transaction* transaction, Asset* asset, qint64 amount);
-    virtual ~TransactionAmount();
-
-    Transaction* transaction() const { return m_transaction; }
-
-    Asset* asset() const { return m_asset; }
-
-    qint64 amount() const { return m_amount; }
-
-    Q_INVOKABLE QString formatAmount(bool include_ticker = true) const;
-private:
-    Transaction* const m_transaction;
-    Asset* const m_asset;
-    qint64 const m_amount;
-};
-
 class Transaction : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account CONSTANT)
     Q_PROPERTY(Type type READ type NOTIFY typeChanged)
-    Q_PROPERTY(QQmlListProperty<TransactionAmount> amounts READ amounts NOTIFY amountsChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     Q_PROPERTY(QString memo READ memo NOTIFY memoChanged)
     Q_PROPERTY(QJsonObject destination READ destination NOTIFY dataChanged)
@@ -72,8 +45,6 @@ public:
 
     Context* context() const;
     Account* account() const;
-
-    QQmlListProperty<TransactionAmount> amounts();
 
     QJsonObject data() const;
 
@@ -110,8 +81,6 @@ private:
     QJsonObject m_data;
     QString m_memo;
     Payment* m_payment{nullptr};
-public:
-    QList<TransactionAmount*> m_amounts;
 };
 
 #endif // GREEN_TRANSACTION_H

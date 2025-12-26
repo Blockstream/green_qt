@@ -55,27 +55,9 @@ Page {
         }
     }
 
-    Component {
-        id: export_addresses_dialog
-        ExportAddressesDialog {
-        }
-    }
-
     RowLayout {
         visible: self.visible
         spacing: 10
-        LinkButton {
-            font.pixelSize: 16
-            text: qsTrId('Export')
-            enabled: self.account.context && list_view.count > 0
-            onClicked: {
-                const dialog = export_addresses_dialog.createObject(self, {
-                    context: self.account.context,
-                    account: self.account,
-                })
-                dialog.open()
-            }
-        }
         Rectangle {
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: 24

@@ -78,17 +78,6 @@ Page {
     RowLayout {
         visible: self.visible
         spacing: 10
-        LinkButton {
-            font.pixelSize: 16
-            text: qsTrId('Export')
-            enabled: self.account.context && list_view.count > 0
-            onClicked: {
-                const dialog = export_transactions_dialog.createObject(self, {
-                    account: self.account,
-                })
-                dialog.open()
-            }
-        }
         Rectangle {
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: 24
@@ -103,12 +92,6 @@ Page {
                 self.search = true
                 search_field.forceActiveFocus()
             }
-        }
-    }
-
-    Component {
-        id: export_transactions_dialog
-        ExportTransactionsDialog {
         }
     }
 }

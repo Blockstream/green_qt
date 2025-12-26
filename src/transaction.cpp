@@ -24,34 +24,6 @@ Transaction::Type ParseType(const QString& type)
 
 } // namespace
 
-TransactionAmount::TransactionAmount(Transaction *transaction, qint64 amount)
-    : TransactionAmount(transaction, nullptr, amount)
-{
-}
-
-TransactionAmount::TransactionAmount(Transaction* transaction, Asset* asset, qint64 amount)
-    : QObject(transaction)
-    , m_transaction(transaction)
-    , m_asset(asset)
-    , m_amount(amount)
-{
-    Q_ASSERT(m_transaction);
-}
-
-TransactionAmount::~TransactionAmount()
-{
-}
-
-QString TransactionAmount::formatAmount(bool include_ticker) const
-{
-    if (m_asset) {
-        return m_asset->formatAmount(m_amount, include_ticker);
-    } else {
-        const auto wallet = m_transaction->account()->context()->wallet();
-        return wallet->formatAmount(m_amount, include_ticker);
-    }
-}
-
 Transaction::Transaction(const QString& hash, Account* account)
     : QObject(account)
     , m_account(account)
@@ -78,11 +50,6 @@ Account *Transaction::account() const
     return m_account;
 }
 
-QQmlListProperty<TransactionAmount> Transaction::amounts()
-{
-    return { this, &m_amounts };
-}
-
 QJsonObject Transaction::data() const
 {
     return m_data;
@@ -95,12 +62,9 @@ QUrl Transaction::url() const
     return { tx_explorer_url + txhash };
 }
 
-bool Transaction::hasAsset(Asset *asset) const
+bool Transaction::hasAsset(Asset* asset) const
 {
-    for (auto amount : m_amounts) {
-        if (amount->asset() == asset) return true;
-    }
-    return false;
+    return m_data.value("satoshi").toObject().contains(asset->id());
 }
 
 void Transaction::setPayment(Payment* payment)
@@ -136,36 +100,6 @@ void Transaction::updateFromData(const QJsonObject& data)
 
     setType(ParseType(m_data.value("type").toString()));
     setMemo(m_data.value("memo").toString());
-
-    // Amounts are one time set
-    const auto satoshi = m_data.value("satoshi").toObject();
-
-    // FIXME: because redeposits have incorrect satoshi.btc values we compute
-    // amounts again. note that above we early return if m_data doesn't change.
-    auto amounts = m_amounts;
-    m_amounts.clear();
-    const auto network = m_account->network();
-    if (network->isLiquid()) {
-        const auto policy_asset = network->policyAsset();
-        qint64 fee = m_data.value("fee").toInteger();
-        for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
-            qint64 amount = i.value().toInteger();
-            Asset* asset = context()->getOrCreateAsset(i.key());
-            if ((asset->id() == policy_asset) && (amount < 0) && (fee > 0)) {
-                amount += fee;
-                fee = 0;
-            }
-            if (amount != 0) {
-                m_amounts.append(new TransactionAmount(this, asset, amount));
-            }
-        }
-    } else {
-        qint64 amount = satoshi.value("btc").toInteger();
-        m_amounts.append(new TransactionAmount(this, context()->getOrCreateAsset("btc"), amount));
-    }
-
-    emit amountsChanged();
-    qDeleteAll(amounts);
 }
 
 void Transaction::openInExplorer() const

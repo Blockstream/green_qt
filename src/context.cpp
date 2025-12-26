@@ -913,8 +913,9 @@ void TransactionModel::exportToFile()
             const auto block_height = data.value("block_height").toInt();
 
             if (block_height == 0) continue;
-            for (auto amount : transaction->m_amounts) {
-                const auto asset = amount->asset();
+            QJsonObject satoshi = transaction->data().value("satoshi").toObject();
+            for (auto i = satoshi.begin(); i != satoshi.end(); ++i) {
+                const auto asset = context()->getOrCreateAsset(i.key());
                 QStringList values;
                 for (auto field : fields) {
                     if (field == "network") {
@@ -929,10 +930,10 @@ void TransactionModel::exportToFile()
                     } else if (field == "description") {
                         values.append(data.value("type").toString());
                     } else if (field == "amount") {
-                        const double satoshi = amount->amount();
+                        const auto amount = i.value().toInteger();
                         if (asset && asset->id() != network->policyAsset()) {
                             const auto precision = asset->data().value("precision").toInt(0);
-                            const auto value = static_cast<double>(satoshi) / qPow(10, precision);
+                            const auto value = static_cast<double>(amount) / qPow(10, precision);
                             values.append(QString::number(value, 'f', precision));
                         } else {
                             const auto converted = wallet->convert({{ "satoshi", satoshi }});
@@ -956,7 +957,8 @@ void TransactionModel::exportToFile()
                         if (asset && asset->id() != network->policyAsset()) {
                             values.append("");
                         } else {
-                            values.append(wallet->convert({{ "satoshi", amount->amount() }}).value("fiat").toString());
+                            const auto amount = i.value().toInteger();
+                            values.append(wallet->convert({{ "satoshi", amount }}).value("fiat").toString());
                         }
                     } else if (field == "txhash") {
                         values.append(data.value("txhash").toString());
