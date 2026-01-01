@@ -50,7 +50,6 @@ SET(QML_FILES
     qml/AnimLoader.qml
     qml/PreferencesDialog.qml
     qml/AssetDrawer.qml
-    qml/AddressesListView.qml
     qml/AssetListView.qml
     qml/DescriptiveRadioButton.qml
     qml/SettingsPage.qml
@@ -63,11 +62,9 @@ SET(QML_FILES
     qml/WalletViewHeader.qml
     qml/AmountValidator.qml
     qml/DisableAllPinsDialog.qml
-    qml/OutputsListView.qml
     qml/GPane.qml
     qml/main.qml
     qml/DialogHeader.qml
-    qml/TransactionListView.qml
     qml/CancelTwoFactorResetDialog.qml
     qml/GTextArea.qml
     qml/Collapsible.qml
@@ -75,7 +72,6 @@ SET(QML_FILES
     qml/DeviceImage.qml
     qml/DeviceBadge.qml
     qml/SelectCoinsView.qml
-    qml/AccountView.qml
     qml/TwoFactorDisableDialog.qml
     qml/TransactionDelegate.qml
     qml/AnalyticsConsentPage.qml
@@ -84,7 +80,6 @@ SET(QML_FILES
     qml/AlertView.qml
     qml/WalletAdvancedSettingsView.qml
     qml/RequestTwoFactorResetDialog.qml
-    qml/BlinkAnimation.qml
     qml/EditableLabel.qml
     qml/FixedErrorBadge.qml
     qml/QRCodePopup.qml

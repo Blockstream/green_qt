@@ -6,7 +6,6 @@ SET(TARGET_SOURCES
 	src/progress.h src/progress.cpp
 	src/activitymanager.cpp
 	src/address.cpp
-	src/addresslistmodel.cpp
 	src/analytics.cpp
 	src/appupdatecontroller.cpp
 	src/asset.cpp
@@ -57,7 +56,6 @@ SET(TARGET_SOURCES
 	src/signupcontroller.cpp
 	src/signupcontroller.h
 	src/transaction.cpp
-	src/transactionlistmodel.cpp
 	src/util.cpp
 	src/wallet.cpp
 	src/walletlistmodel.cpp
