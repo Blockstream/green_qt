@@ -54,6 +54,9 @@ void UpdateAsset(GA_session* session, Asset* asset)
 }
 }
 
+void fetchCoins(TaskGroup* group, Account* account);
+void fetchTransactions(TaskGroup* group, Account* account, int page, int size);
+
 Context::Context(const QString& deployment, bool bip39, QObject* parent)
     : QObject(parent)
     , m_deployment(deployment)
@@ -148,6 +151,7 @@ Session* Context::getOrCreateSession(Network* network)
             }
         });
         connect(session, &Session::blockEvent, this, [=](const QJsonObject& event) {
+            auto group = new TaskGroup(this);
             for (auto account : m_accounts) {
                 if (account->session() == session) {
                     // FIXME: Until gdk notifies of chain reorgs, resync balance every
@@ -158,8 +162,14 @@ Session* Context::getOrCreateSession(Network* network)
                         account->loadBalance();
                     }
                     emit account->blockEvent(event);
+
+                    if (account->hasUnconfirmedTransactions()) {
+                        fetchTransactions(group, account, 0, 30);
+                        fetchCoins(group, account);
+                    }
                 }
             }
+            dispatcher()->add(group);
         });
         connect(session, &Session::subaccountEvent, this, [=](const QJsonObject& event) {
             uint32_t pointer = event.value("pointer").toInteger();
@@ -180,13 +190,16 @@ Session* Context::getOrCreateSession(Network* network)
                 addNotification(notification);
             }
         });
-        connect(session, &Session::transactionEvent, this, [=](const QJsonObject& transaction) {
-            for (auto pointer : transaction.value("subaccounts").toArray()) {
+        connect(session, &Session::transactionEvent, this, [=](const QJsonObject& event) {
+            auto group = new TaskGroup(this);
+            for (auto pointer : event.value("subaccounts").toArray()) {
                 auto account = getOrCreateAccount(network, quint32(pointer.toInteger()));
-                account->getOrCreateTransaction(transaction);
-                emit account->transactionEvent(transaction);
-                account->loadBalance();
+                fetchTransactions(group, account, 0, 30);
+                fetchCoins(group, account);
+                emit account->transactionEvent(event);
+                connect(group, &TaskGroup::finished, account, &Account::loadBalance);
             }
+            dispatcher()->add(group);
         });
         m_sessions.insert(network, session);
         m_sessions_list.append(session);
@@ -418,6 +431,21 @@ void fetchTransactions(TaskGroup* group, Account* account, int page, int size)
     group->add(task);
 }
 
+void fetchCoins(TaskGroup* group, Account* account)
+{
+    auto task = new GetUnspentOutputsTask(0, true, account);
+
+    QObject::connect(task, &Task::finished, account, [=] {
+        for (const QJsonValue& assets_values : task->unspentOutputs()) {
+            for (const QJsonValue& asset_value : assets_values.toArray()) {
+                auto output = account->getOrCreateOutput(asset_value.toObject());
+            }
+        }
+    });
+
+    group->add(task);
+}
+
 void Context::addTestNotification(const QString& message)
 {
     auto network = primaryNetwork();
@@ -589,19 +617,7 @@ void Context::loadNetwork2(TaskGroup *group, Network *network)
     connect(load_accounts, &Task::finished, this, [=] {
         for (auto account : load_accounts->accounts()) {
             group->add(new LoadBalanceTask(account));
-
-            auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, account);
-
-            connect(get_unspent_outputs, &Task::finished, this, [=] {
-                for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {
-                    for (const QJsonValue& asset_value : assets_values.toArray()) {
-                        auto output = account->getOrCreateOutput(asset_value.toObject());
-                    }
-                }
-            });
-
-            group->add(get_unspent_outputs);
-
+            fetchCoins(group, account);
             fetchTransactions(group, account, 0, 30);
         }
     });
@@ -683,18 +699,21 @@ void Context::refreshAccounts()
 
 void Context::addTransaction(Transaction* transaction)
 {
-    if (m_transaction_item.contains(transaction)) return;
-    m_transaction_map.insert(transaction->hash(), transaction);
+    auto item = m_transaction_item.value(transaction);
 
-    m_transactions.insert(transaction->hash(), transaction);
+    if (!item) {
+        m_transaction_map.insert(transaction->hash(), transaction);
 
-    auto timestamp = QDateTime::fromMSecsSinceEpoch(transaction->data().value("created_at_ts").toInteger() / 1000);
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(transaction), Qt::UserRole);
+        m_transaction_item.insert(transaction, item);
+        m_transaction_model->appendRow(item);
+    }
 
-    auto item = new QStandardItem;
-    item->setData(QVariant::fromValue(transaction), Qt::UserRole);
+    const auto created_at_ts = transaction->data().value("created_at_ts");
+    const auto timestamp = created_at_ts.isNull() ? QDateTime::currentDateTime() : QDateTime::fromMSecsSinceEpoch(created_at_ts.toInteger() / 1000);
+
     item->setData(QVariant::fromValue(timestamp), Qt::UserRole + 1);
-    m_transaction_item.insert(transaction, item);
-    m_transaction_model->appendRow(item);
 }
 
 void Context::addAddress(Address* address)
@@ -989,6 +1008,8 @@ void TransactionModel::exportToFile()
 bool TransactionModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     auto transaction = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Transaction*>();
+
+    if (!transaction->data().contains("satoshi")) return false;
 
     if (!filterAccountsAcceptsTransaction(transaction)) return false;
     if (!filterAssetsAcceptsTransaction(transaction)) return false;

@@ -62,6 +62,7 @@ public:
 
     qint64 balance() const;
 
+    bool hasUnconfirmedTransactions() const;
     bool isEmpty() const;
     void setBalanceData(const QJsonObject& data);
     void updateBalance();

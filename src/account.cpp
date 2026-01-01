@@ -65,6 +65,16 @@ void Account::loadBalance()
     m_load_balance_timer_id = startTimer(500);
 }
 
+bool Account::hasUnconfirmedTransactions() const
+{
+    for (auto i = m_transactions_by_hash.begin(); i != m_transactions_by_hash.end(); i++) {
+        if (i.value()->isUnconfirmed()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 qint64 Account::balance() const
 {
     const QString key = m_network->isLiquid() ? m_network->policyAsset() : "btc";
