@@ -345,8 +345,7 @@ void BuyBitcoinQuoteService::onReplyFinished()
 
     m_all_quotes = allQuotes;
     
-    // Sort quotes: recently used providers first, then non-recently used
-    // Both groups sorted by destinationAmount (descending)
+    // Sort all quotes by destinationAmount (descending)
     sortQuotes();
     m_best_destination_amount = bestAmount;
     m_best_service_provider = bestProvider;
@@ -722,35 +721,11 @@ void BuyBitcoinQuoteService::sortQuotes()
         return;
     }
     
-    // Separate quotes into recently used and not recently used
-    QVariantList recentlyUsedQuotes;
-    QVariantList notRecentlyUsedQuotes;
-    
-    for (const auto& quoteVariant : m_all_quotes) {
-        const QVariantMap quote = quoteVariant.toMap();
-        const QString provider = quote.value("serviceProvider").toString();
-        
-        if (m_recently_used_providers.contains(provider)) {
-            recentlyUsedQuotes.append(quoteVariant);
-        } else {
-            notRecentlyUsedQuotes.append(quoteVariant);
-        }
-    }
-    
-    // Sort recently used quotes by destinationAmount (descending)
-    std::sort(recentlyUsedQuotes.begin(), recentlyUsedQuotes.end(), [](const QVariant& a, const QVariant& b) {
+    // Sort all quotes by destinationAmount (descending)
+    std::sort(m_all_quotes.begin(), m_all_quotes.end(), [](const QVariant& a, const QVariant& b) {
         const double amountA = a.toMap().value("destinationAmount").toDouble();
         const double amountB = b.toMap().value("destinationAmount").toDouble();
         return amountA > amountB;
     });
-    
-    // Sort not recently used quotes by destinationAmount (descending)
-    std::sort(notRecentlyUsedQuotes.begin(), notRecentlyUsedQuotes.end(), [](const QVariant& a, const QVariant& b) {
-        const double amountA = a.toMap().value("destinationAmount").toDouble();
-        const double amountB = b.toMap().value("destinationAmount").toDouble();
-        return amountA > amountB;
-    });
-    
-    m_all_quotes = recentlyUsedQuotes + notRecentlyUsedQuotes;
 }
 
