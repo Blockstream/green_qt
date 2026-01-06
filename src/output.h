@@ -45,6 +45,7 @@ public:
     QString addressType() const { return m_address_type; }
     bool expired() const { return m_expired; }
     void setExpired(bool expired);
+    Transaction* spendingTransaction() const { return m_spending_transaction; }
     void setSpendingTransaction(Transaction* transaction);
 signals:
     void dataChanged();
@@ -58,6 +59,7 @@ signals:
     void canBeLockedChanged();
     void addressTypeChanged();
     void expiredChanged();
+    void spendingTransactionChanged();
 private slots:
     void updateExpired();
     void updateNotifications();

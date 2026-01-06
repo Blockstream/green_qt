@@ -68,7 +68,8 @@ public:
     void updateBalance();
     Transaction* getTransaction(const QString& hash);
     Transaction* getOrCreateTransaction(const QJsonObject& data);
-    Output *getOrCreateOutput(const QJsonObject &data);
+    Output* getOutput(const QJsonObject& data) const;
+    Output* getOrCreateOutput(const QJsonObject &data);
     Q_INVOKABLE Address *getOrCreateAddress(const QJsonObject &data);
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
 protected:

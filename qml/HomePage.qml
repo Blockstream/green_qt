@@ -317,6 +317,10 @@ Page {
             }
             HSpacer {
             }
+            TransactionStatusBadge {
+                confirmations: transactionConfirmations(delegate.transaction)
+                liquid: delegate.transaction.account.network.liquid
+            }
             TransactionAmounts {
                 Layout.fillWidth: false
                 Layout.minimumWidth: delegate.width / 5

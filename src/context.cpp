@@ -743,15 +743,17 @@ Address* Context::getOrCreateAddress(const QString& value)
 
 void Context::addCoin(Output* coin)
 {
-    if (m_coin_item.contains(coin)) return;
+    auto item = m_coin_item.value(coin);
 
-    // TODO: output should have pointer to the transaction
-    // TODO: then use transaction timestamp of the coin as sort role
+    if (!item) {
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(coin), Qt::UserRole);
+        m_coin_item.insert(coin, item);
+        m_coin_model->appendRow(item);
+    }
 
-    auto item = new QStandardItem;
-    item->setData(QVariant::fromValue(coin), Qt::UserRole);
-    m_coin_item.insert(coin, item);
-    m_coin_model->appendRow(item);
+    auto block_height = coin->data().value("block_height").toInt();
+    item->setData(block_height > 0 ? block_height : INT_MAX, Qt::UserRole + 1);
 }
 
 QQmlListProperty<Account> Context::accounts()
@@ -1023,6 +1025,7 @@ bool TransactionModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     auto transaction = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Transaction*>();
 
     if (!transaction->data().contains("satoshi")) return false;
+    if (!transaction->data().contains("type")) return false;
 
     if (!filterAccountsAcceptsTransaction(transaction)) return false;
     if (!filterAssetsAcceptsTransaction(transaction)) return false;
@@ -1205,6 +1208,8 @@ CoinModel::CoinModel(QObject* parent)
 bool CoinModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     auto coin = sourceModel()->index(source_row, 0, source_parent).data(Qt::UserRole).value<Output*>();
+
+    if (coin->spendingTransaction()) return false;
 
     if (!filterAccountsAcceptsCoin(coin)) return false;
     if (!filterAssetsAcceptsCoin(coin)) return false;

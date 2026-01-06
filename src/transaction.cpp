@@ -100,6 +100,15 @@ void Transaction::updateFromData(const QJsonObject& data)
 
     setType(ParseType(m_data.value("type").toString()));
     setMemo(m_data.value("memo").toString());
+
+
+    const auto inputs = m_data.value("inputs").toArray();
+    for (const auto input : inputs) {
+        auto output = m_account->getOrCreateOutput(input.toObject());
+        if (output) {
+            output->setSpendingTransaction(this);
+        }
+    }
 }
 
 void Transaction::openInExplorer() const

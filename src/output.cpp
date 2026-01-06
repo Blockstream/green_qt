@@ -88,6 +88,7 @@ void Output::setSpendingTransaction(Transaction* transaction)
     if (m_spending_transaction == transaction) return;
     m_spending_transaction = transaction;
     updateNotifications();
+    emit m_account->context()->coinUpdated();
 }
 
 void Output::updateNotifications()

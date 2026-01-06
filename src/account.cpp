@@ -128,6 +128,14 @@ Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
     return transaction;
 }
 
+Output* Account::getOutput(const QJsonObject& data) const
+{
+    auto txhash = data.value("txhash").toString();
+    auto pt_idx = data.value("pt_idx").toInt();
+    auto output = m_outputs_by_hash.value(QPair<QString,int>(txhash, pt_idx));
+    return output;
+}
+
 Output* Account::getOrCreateOutput(const QJsonObject& data)
 {
     auto txhash = data.value("txhash").toString();
@@ -138,6 +146,7 @@ Output* Account::getOrCreateOutput(const QJsonObject& data)
         m_outputs_by_hash.insert(QPair<QString,int>(txhash, pt_idx), output);
     } else {
         output->updateFromData(data);
+        emit m_context->coinUpdated();
     }
 
     m_context->addCoin(output);
