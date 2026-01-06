@@ -78,8 +78,9 @@ StackViewPage {
             color: Qt.lighter('#181818', button.enabled && button.hovered ? 1.2 : 1)
             radius: 8
         }
-        padding: 10
+        padding: 20
         contentItem: RowLayout {
+            spacing: 8
             ColumnLayout {
                 Label {
                     Layout.fillWidth: true
@@ -119,11 +120,8 @@ StackViewPage {
                     visible: convert.fiat.available
                 }
             }
-            HSpacer {
-            }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/next_arrow.svg'
+            RightArrowIndicator {
+                active: button.hovered
             }
         }
     }
