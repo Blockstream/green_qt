@@ -85,9 +85,11 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 Layout.topMargin: 40
+                busy: !controller.monitor.idle
                 text: qsTrId('id_import')
                 action: Action {
                     id: login_action
+                    enabled: controller.monitor.idle
                     onTriggered: {
                         onTextEdited: error_badge.clear()
                         if (selector.index === 0) {
