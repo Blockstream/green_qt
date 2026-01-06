@@ -3,6 +3,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 ItemDelegate {
     signal assetClicked(Asset asset)
     property Account account
@@ -66,7 +68,7 @@ ItemDelegate {
                 account: self.account
                 asset: self.asset
                 input: ({ satoshi: String(self.satoshi) })
-                unit: self.account.session.unit
+                unit: UtilJS.unit(self.account)
             }
             Label {
                 Layout.alignment: Qt.AlignRight

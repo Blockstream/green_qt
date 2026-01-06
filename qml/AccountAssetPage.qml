@@ -39,7 +39,7 @@ StackViewPage {
                 account: self.account
                 asset: self.asset
                 input: ({ satoshi: self.account.json.satoshi[self.asset.id] })
-                unit: self.account.session.unit
+                unit: UtilJS.unit(self.context)
             }
             Label {
                 Layout.topMargin: 12

@@ -221,7 +221,7 @@ StackViewPage {
                 account: button.account
                 asset: button.asset
                 input: ({ satoshi: button.satoshi })
-                unit: button.account.session.unit
+                unit: UtilJS.unit(self.context)
             }
             ColumnLayout {
                 Label {

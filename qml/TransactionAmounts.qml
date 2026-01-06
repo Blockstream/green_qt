@@ -22,7 +22,7 @@ ColumnLayout {
                 account: self.transaction.account
                 asset: delegate.asset
                 input: ({ satoshi: delegate.amount })
-                unit: self.transaction.account.session.unit
+                unit: UtilJS.unit(self.context)
             }
             Layout.alignment: Qt.AlignRight
             id: delegate

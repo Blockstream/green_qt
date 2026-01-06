@@ -126,6 +126,12 @@ function incognito(enabled, value, size = 5) {
     }
 }
 
+function unit(target) {
+    if (target instanceof Account) return target.context.primarySession.unit
+    if (target instanceof Context) return target.primarySession.unit
+    if (target instanceof Session) return target.unit
+}
+
 function normalizeUnit(unit) {
     return unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()
 }
