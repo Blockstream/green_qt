@@ -176,7 +176,6 @@ Page {
         }
     }
 
-
     component DebugPaymentDelegate: AbstractButton {
         required property int index
         required property Payment payment
@@ -227,14 +226,14 @@ Page {
                 spacing: 0
                 Label {
                     color: '#FFF'
-                    font.pixelSize: 16
+                    font.pixelSize: 14
                     font.weight: 600
                     text: qsTrId('id_received')
                 }
                 Label {
                     color: '#929292'
                     text: delegate.payment.updatedAt.toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
-                    font.pixelSize: 16
+                    font.pixelSize: 14
                     font.weight: 400
                     font.capitalization: Font.AllUppercase
                     opacity: 0.6
@@ -296,14 +295,14 @@ Page {
                 spacing: 0
                 Label {
                     color: '#FFF'
-                    font.pixelSize: 16
+                    font.pixelSize: 14
                     font.weight: 600
                     text: UtilJS.transactionTypeLabel(delegate.transaction)
                 }
                 Label {
                     color: '#929292'
                     text: UtilJS.formatTransactionTimestamp(delegate.transaction)
-                    font.pixelSize: 16
+                    font.pixelSize: 14
                     font.weight: 400
                     font.capitalization: Font.AllUppercase
                     opacity: 0.6
