@@ -66,7 +66,6 @@ void Convert::setAccount(Account* account)
     invalidate();
     if (m_account) {
         setContext(m_account->context());
-        setSession(m_account->session());
     }
 }
 
@@ -301,7 +300,7 @@ void Convert::update()
 
     using Watcher = QFutureWatcher<QJsonObject>;
     const auto watcher = new Watcher(this);
-    const auto session = m_account ? m_account->session() : m_context->primarySession();
+    const auto session = m_context->primarySession();
     watcher->setFuture(QtConcurrent::run([=] {
         GA_json* output;
         const int rc = GA_convert_amount(session->m_session, Json::fromObject(details).get(), &output);
