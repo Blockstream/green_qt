@@ -17,6 +17,7 @@ StackViewPage {
         const assets = new Map
         for (let i = 0; i < context.accounts.length; i++) {
             const account = context.accounts[i]
+            if (account.hidden) continue
             if (self.networks && self.networks.indexOf(account.network) < 0) continue
             for (let asset_id in account.json.satoshi) {
                 const satoshi = account.json.satoshi[asset_id]
