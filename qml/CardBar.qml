@@ -76,12 +76,13 @@ Pane {
                 }
             }
             TransactButton {
+                enabled: !self.context.watchonly
                 icon.source: 'qrc:/svg/send.svg'
                 text: qsTrId('id_send')
                 action.shortcut: 'Ctrl+S'
                 action.onTriggered: openSendDrawer()
                 // TODO move to send page
-                // self.checkDeviceMatches() && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
+                // self.checkDeviceMatches() && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
             }
             TransactButton {
                 icon.source: 'qrc:/svg/receive.svg'
