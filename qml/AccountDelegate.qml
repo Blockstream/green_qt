@@ -23,12 +23,6 @@ ItemDelegate {
         color: UtilJS.networkColor(delegate.account.network)
         clip: true
         radius: 5
-        // Image {
-        //     opacity: delegate.account.network.liquid ? 0.2 : 0.1
-        //     source: delegate.account.network.liquid ? 'qrc:/svg2/watermark_liquid.svg' : 'qrc:/svg2/watermark_bitcoin.svg'
-        //     anchors.right: parent.right
-        //     anchors.top: parent.top
-        // }
     }
     leftPadding: constants.p2
     rightPadding: constants.p2
@@ -47,12 +41,6 @@ ItemDelegate {
         spacing: 0
         RowLayout {
             Layout.bottomMargin: 6
-            // Image {
-            //     fillMode: Image.PreserveAspectFit
-            //     Layout.preferredWidth: 16
-            //     Layout.preferredHeight: 16
-            //     source: delegate.account.network.electrum ? 'qrc:/svg2/singlesig.svg' : 'qrc:/svg2/multisig.svg'
-            // }
             Label {
                 font.pixelSize: 10
                 font.weight: 400
@@ -117,7 +105,7 @@ ItemDelegate {
             rightPadding: 0
             text: UtilJS.accountName(account)
             enabled: {
-                if (delegate.highlighted) return false
+                if (!delegate.highlighted) return false
                 if (delegate.account.hidden) return false
                 if (delegate.account.context.watchonly) return false
                 if (delegate.account.session.config.twofactor_reset?.is_active ?? false) return false
@@ -220,7 +208,7 @@ ItemDelegate {
                                     icon.source: 'qrc:/svg/wallet-rename.svg'
                                     onClicked: {
                                         account_delegate_menu.close()
-                                        delegate.ListView.view.currentIndex = index
+                                        // delegate.ListView.view.currentIndex = index
                                         name_field.forceActiveFocus()
                                     }
                                 }
