@@ -709,5 +709,6 @@ void PaymentSyncController::sync()
         }
         QTimer::singleShot(10000, this, &PaymentSyncController::sync);
     });
+    connect(task, &Task::finished, context(), &Context::paymentUpdated);
     context()->dispatcher()->add(task);
 }

@@ -343,10 +343,6 @@ Payment* Context::getOrCreatePayment(const QString &id)
         item->setData(QVariant::fromValue(payment), Qt::UserRole);
         item->setData(payment->updatedAt(), Qt::UserRole + 1);
 
-        connect(payment, &Payment::dataChanged, this, &Context::paymentUpdated);
-        connect(payment, &Payment::addressChanged, this, &Context::paymentUpdated);
-        connect(payment, &Payment::transactionChanged, this, &Context::paymentUpdated);
-
         connect(payment, &Payment::updatedAtChanged, this, [=] {
             item->setData(payment->updatedAt(), Qt::UserRole + 1);
         });
