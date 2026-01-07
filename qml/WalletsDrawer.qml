@@ -10,8 +10,9 @@ AbstractDrawer {
 
     id: self
     dim: true
-    modal: false
     edge: Qt.LeftEdge
+    modal: false
+    z: 0
     contentItem: Page {
         spacing: 10
         background: null
