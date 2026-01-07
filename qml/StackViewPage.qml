@@ -52,6 +52,7 @@ Page {
             HSpacer {
             }
             Pane {
+                Layout.maximumWidth: header_layout.width - 2 * Math.max(UtilJS.effectiveWidth(right_pane), UtilJS.effectiveWidth(left_pane)) - 20
                 id: center_pane
                 background: null
                 padding: 0
