@@ -14,6 +14,7 @@ Drawer {
     bottomPadding: 30
     leftPadding: 32 + self.leftMargin
     rightPadding: 32
+    z: 2
 
     contentWidth: Math.max(self.minimumContentWidth, self.preferredContentWidth)
     Behavior on contentWidth {

@@ -101,7 +101,6 @@ Pane {
             self.updateBackupCompleted()
         }
     }
-
     contentItem: ColumnLayout {
         spacing: 0
         Logo {

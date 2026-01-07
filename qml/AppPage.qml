@@ -239,6 +239,17 @@ MainPage {
 
     SideBar {
         id: side_bar
+        enabled: {
+            // disable the sidebar if any other popup is open since the parent is set to the overlay.
+            // this is a workaround to allow mouse events on the sidebar reach the overlay
+            // and therefore the close policy on popups work as expected.
+            for (const item of Overlay.overlay.children) {
+                if (('' + item).startsWith('QQuickPopupItem')) {
+                    return false
+                }
+            }
+            return true
+        }
         height: parent?.height ?? 0
         parent: Overlay.overlay
         z: 1
