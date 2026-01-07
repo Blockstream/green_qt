@@ -134,7 +134,7 @@ WalletHeaderCard {
                 text: self.device?.version ?? ''
             }
             PrimaryButton {
-                text: qsTrId('id_firmware_update')
+                text: qsTrId('id_firmware_upgrade')
                 onClicked: update_firmware_dialog.createObject(self).open()
             }
             VSpacer {

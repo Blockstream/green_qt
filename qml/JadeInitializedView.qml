@@ -31,7 +31,7 @@ VFlickable {
         Layout.alignment: Qt.AlignCenter
         Layout.minimumWidth: 325
         enabled: (self.debug || self.latestFirmware) && self.device.status === JadeDevice.StatusIdle
-        text: qsTrId('id_firmware_update')
+        text: qsTrId('id_firmware_upgrade')
         onClicked: self.updateClicked()
     }
 }

@@ -88,7 +88,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 26
             font.weight: 600
-            text: qsTrId('id_firmware_update')
+            text: qsTrId('id_firmware_upgrade')
             wrapMode: Label.WordWrap
         }
         JadeFirmwareConfigSelector {
