@@ -13,17 +13,17 @@ TextField {
     background: Rectangle {
         color: 'transparent'
         border.width: 1
-        border.color: 'white'
+        border.color: self.activeFocus ? '#00BCFF' : '#FFFFFF'
         radius: 4
         visible: !self.readOnly
         opacity: (self.activeFocus ? 0.4 : 0) + (self.hovered ? 0.1 : 0)
         Behavior on opacity {
             SequentialAnimation {
                 PauseAnimation {
-                    duration: 300
+                    duration: 200
                 }
                 SmoothedAnimation {
-                    velocity: 1
+                    velocity: 2
                 }
             }
         }
