@@ -33,33 +33,29 @@ StackViewPage {
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }
-    footerItem: ColumnLayout {
-        spacing: -1
-        TransactionView.ActionButton {
-            icon.source: 'qrc:/svg2/gauge-green.svg'
+    footerItem: RowLayout {
+        spacing: 20
+        RegularButton {
+            id: more_options_button
+            Layout.fillWidth: true
+            text: qsTrId('id_more_options')
+            onClicked: if (!more_options_menu.visible) more_options_menu.open()
+            MoreOptionsMenu {
+                id: more_options_menu
+                x: (more_options_button.width - more_options_menu.width) / 2
+                y: -more_options_menu.height - 6
+                pointerX: 0.5
+                pointerY: 1
+            }
+        }
+        PrimaryButton {
+            Layout.fillWidth: true
             enabled: !controller.generating && (controller.context.device?.connected ?? false)
             text: qsTrId('id_verify_on_device')
             visible: controller.context.wallet.login.device?.type === 'jade'
             onClicked: {
                 self.StackView.view.push(jade_verify_page, { context: self.context, address: controller.address })
                 Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, controller.account))
-            }
-        }
-        TransactionView.ActionButton {
-            icon.source: 'qrc:/svg2/arrow_square_down.svg'
-            text: qsTrId('id_request_amount')
-            visible: !amount_field.visible
-            onClicked: {
-                amount_field.visible = true
-                amount_field.forceActiveFocus()
-            }
-        }
-        TransactionView.ActionButton {
-            icon.source: 'qrc:/svg2/list_bullets.svg'
-            text: qsTrId('id_list_of_addresses')
-            visible: !self.note
-            onClicked: {
-                self.StackView.view.push(addresses_page, { account: controller.account })
             }
         }
     }
@@ -249,6 +245,28 @@ StackViewPage {
                 controller.account = account
                 controller.asset = asset
                 self.StackView.view.pop(self)
+            }
+        }
+    }
+
+    component MoreOptionsMenu: GMenu {
+        id: menu
+        GMenu.Item {
+            enabled: !amount_field.visible
+            text: qsTrId('id_request_amount')
+            icon.source: 'qrc:/svg2/arrow_square_down.svg'
+            onClicked: {
+                menu.close()
+                amount_field.visible = true
+                amount_field.forceActiveFocus()
+            }
+        }
+        GMenu.Item {
+            text: qsTrId('id_list_of_addresses')
+            icon.source: 'qrc:/svg2/list_bullets.svg'
+            onClicked: {
+                menu.close()
+                self.StackView.view.push(addresses_page, { account: controller.account })
             }
         }
     }
