@@ -214,7 +214,7 @@ Page {
             radius: 8
         }
         contentItem: RowLayout {
-            spacing: 8
+            spacing: 12
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: UtilJS.transactionIcon('incoming', 0)
@@ -233,10 +233,9 @@ Page {
                 Label {
                     color: '#929292'
                     text: delegate.payment.updatedAt.toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     font.weight: 400
                     font.capitalization: Font.AllUppercase
-                    opacity: 0.6
                 }
             }
             HSpacer {
@@ -283,7 +282,7 @@ Page {
             radius: 8
         }
         contentItem: RowLayout {
-            spacing: 8
+            spacing: 12
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: UtilJS.transactionIcon(delegate.transaction.data.type, transactionConfirmations(delegate.transaction))
@@ -292,9 +291,8 @@ Page {
                 Layout.fillWidth: false
                 Layout.fillHeight: false
                 Layout.alignment: Qt.AlignCenter
-                spacing: 0
                 Label {
-                    color: '#FFF'
+                    color: '#FFFFFF'
                     font.pixelSize: 14
                     font.weight: 600
                     text: UtilJS.transactionTypeLabel(delegate.transaction)
@@ -302,16 +300,15 @@ Page {
                 Label {
                     color: '#929292'
                     text: UtilJS.formatTransactionTimestamp(delegate.transaction)
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     font.weight: 400
                     font.capitalization: Font.AllUppercase
-                    opacity: 0.6
                 }
             }
             HSpacer {
             }
             Image {
-                source: 'qrc:/ffffff/24/note.svg'
+                source: 'qrc:/ffffff/16/note.svg'
                 visible: delegate.transaction.memo.length > 0
             }
             TransactionAmounts {
