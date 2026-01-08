@@ -30,7 +30,6 @@ StackViewPage {
             spacing: 0
             AssetIcon {
                 Layout.alignment: Qt.AlignCenter
-                Layout.bottomMargin: 10
                 asset: self.asset
                 size: 48
             }
@@ -58,9 +57,10 @@ StackViewPage {
                 visible: convert.fiat.available
             }
             RowLayout {
-                Layout.topMargin: 32
-                Layout.bottomMargin: 32
+                Layout.bottomMargin: 12
+                Layout.topMargin: 12
                 spacing: 8
+                visible: !self.account.hidden
                 ActionButton {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
@@ -79,6 +79,15 @@ StackViewPage {
             FieldTitle {
                 Layout.bottomMargin: 12
                 text: qsTrId('id_transactions')
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                color: '#929292'
+                font.pixelSize: 14
+                text: `You don't have any transactions yet.`
+                visible: list_view.count === 0
+                wrapMode: Label.Wrap
             }
         }
         model: TransactionModel {
