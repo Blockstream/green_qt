@@ -548,45 +548,37 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << network->id() << network->isElectrum() << isWatchonly();
+    auto load_accounts = new LoadAccountsTask(false, session);
+    auto sync_accounts = new SyncAccountsTask(session);
+    auto load_accounts2 = new LoadAccountsTask(false, session);
+    load_accounts->then(sync_accounts);
+    sync_accounts->then(load_accounts2);
+    group->add(load_accounts);
+    group->add(sync_accounts);
+    group->add(load_accounts2);
 
-    // if (network->isElectrum()) {
-    auto load_accounts = new LoadAccountsTask((network->isElectrum() && isWatchonly()) ? false : true, session);
-        auto sync_accounts = new SyncAccountsTask(session);
-        auto load_accounts2 = new LoadAccountsTask(false, session);
-        load_accounts->then(sync_accounts);
-        sync_accounts->then(load_accounts2);
-        group->add(load_accounts);
-        group->add(sync_accounts);
-        group->add(load_accounts2);
-    // }
+    connect(load_accounts2, &Task::finished, this, [=] {
+        if (network->isElectrum()) {
+            bool has_native_segwit = false;
 
-    // qDebug() << isWatchonly() << network->isElectrum();
-    // if (true) { // !isWatchonly() || !network->isElectrum()) {
-        // auto load_accounts = new LoadAccountsTask(false, session);
-        connect(load_accounts2, &Task::finished, this, [=] {
-            if (network->isElectrum()) {
-                bool has_native_segwit = false;
-
-                for (auto account : load_accounts2->accounts()) {
-                    if (account->type() == "p2wpkh") {
-                        has_native_segwit = true;
-                        break;
-                    }
-                }
-
-                if (!has_native_segwit) {
-                    createStandardAccount(group, network);
+            for (auto account : load_accounts2->accounts()) {
+                if (account->type() == "p2wpkh") {
+                    has_native_segwit = true;
+                    break;
                 }
             }
 
-            loadNetwork2(group, network);
-        });
-        connect(load_accounts2, &Task::failed, this, [=](auto error) {
-            // TODO: deal with these errors
-            qDebug() << Q_FUNC_INFO << error;
-        });
-        // group->add(load_accounts);
+            if (!has_native_segwit) {
+                createStandardAccount(group, network);
+            }
+        }
+
+        loadNetwork2(group, network);
+    });
+    connect(load_accounts2, &Task::failed, this, [=](auto error) {
+        // TODO: deal with these errors
+        qDebug() << Q_FUNC_INFO << error;
+    });
 }
 
 void Context::createStandardAccount(TaskGroup *group, Network *network)
