@@ -512,6 +512,7 @@ qt_add_resources(${APP_TARGET} "images"
         assets/svg/receive-white.svg
 
         assets/000000/24/list-checks.svg
+        assets/a0a0a0/24/faders-horizontal.svg
         assets/ffffff/16/note.svg
         assets/ffffff/24/note.svg
         assets/ffffff/24/hourglass-high.svg

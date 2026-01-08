@@ -185,7 +185,7 @@ Pane {
                 shortcut: 'Ctrl+,'
                 onTriggered: self.preferencesClicked()
             }
-            icon.source: 'qrc:/svg2/gear.svg'
+            icon.source: 'qrc:/a0a0a0/24/faders-horizontal.svg'
             isCurrent: self.currentView === SideBar.View.Preferences
             text: qsTrId('id_app_settings')
         }
