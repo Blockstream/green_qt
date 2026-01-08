@@ -70,7 +70,7 @@ StackViewPage {
         return { relevant, other }
     }
     id: self
-    title: qsTrId('id_asset_details')
+    title: self.asset.name
     rightItem: RowLayout {
         spacing: 20
         ShareButton {
@@ -86,24 +86,31 @@ StackViewPage {
         spacing: 5
         AssetIcon {
             Layout.alignment: Qt.AlignCenter
-            Layout.bottomMargin: 10
             asset: self.asset
             size: 48
         }
+        Convert {
+            id: convert
+            context: self.context
+            asset: self.asset
+            input: ({ satoshi: self.accounts.relevant.reduce((total, { satoshi }) => total + Number(satoshi), 0) })
+            unit: UtilJS.unit(self.context)
+        }
         Label {
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            font.pixelSize: 18
-            font.weight: 600
-            horizontalAlignment: Label.AlignHCenter
-            text: self.asset.name
-            wrapMode: Label.Wrap
+            Layout.topMargin: 12
+            Layout.alignment: Qt.AlignCenter
+            color: '#FAFAFA'
+            font.pixelSize: 24
+            font.weight: 500
+            text: convert.output.label
         }
         Label {
             Layout.alignment: Qt.AlignCenter
-            text: self.asset.data.entity?.domain ?? ''
-            opacity: 0.6
-            visible: self.asset.data.entity ?? false
+            color: '#A0A0A0'
+            font.pixelSize: 14
+            font.weight: 400
+            text: convert.fiat.label
+            visible: convert.fiat.available
         }
         FieldTitle {
             text: qsTrId('id_accounts')
@@ -141,6 +148,25 @@ StackViewPage {
             id: details_grid
             columns: 2
             visible: self.asset.id !== 'btc'
+            Label {
+                Layout.minimumWidth: 100
+                color: '#929292'
+                font.pixelSize: 12
+                font.weight: 400
+                text: qsTrId('id_domain')
+                visible: self.asset.data.entity ?? false
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                color: '#FFF'
+                font.pixelSize: 12
+                font.weight: 400
+                text: self.asset.data.entity?.domain ?? ''
+                visible: self.asset.data.entity ?? false
+                wrapMode: Label.Wrap
+            }
             Label {
                 Layout.minimumWidth: 100
                 color: '#929292'
