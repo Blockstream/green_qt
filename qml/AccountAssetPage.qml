@@ -1,9 +1,11 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
@@ -13,11 +15,68 @@ StackViewPage {
     required property Context context
     required property Asset asset
     required property Account account
-
+    Controller {
+        id: controller
+        context: account.context
+    }
     id: self
     title: UtilJS.accountName(self.account)
-    rightItem: CloseButton {
-        onClicked: self.closeClicked()
+    centerItem: EditableLabel {
+        id: name_field
+        color: '#FFFFFF'
+        readOnly: self.context.watchonly
+        font.pixelSize: 14
+        font.weight: 600
+        text: UtilJS.accountName(self.account)
+        onEditingFinished: {
+            if (name_field.enabled) {
+                if (controller.setAccountName(self.account, name_field.text)) {
+                    Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(Settings, self.account))
+                }
+            }
+            name_field.nextItemInFocusChain().forceActiveFocus()
+        }
+    }
+    rightItem: RowLayout {
+        spacing: 20
+        CircleButton {
+            Layout.alignment: Qt.AlignBottom
+            id: tool_button
+            hoverEnabled: !options_menu.visible
+            icon.source: 'qrc:/svg/3-dots.svg'
+            onClicked: options_menu.visible ? options_menu.close() : options_menu.open()
+            GMenu {
+                id: options_menu
+                x: 1.5 * tool_button.width - options_menu.width
+                y: tool_button.height + 8
+                pointerX: 1
+                pointerXOffset: - tool_button.width
+                pointerY: 0
+                enabled: !self.context.watchonly
+                spacing: 0
+                GMenu.Item {
+                    enabled: !self.context.watchonly
+                    icon.source: 'qrc:/svg/wallet-rename.svg'
+                    text: qsTrId('id_rename')
+                    onClicked: {
+                        options_menu.close()
+                        name_field.forceActiveFocus()
+                    }
+                }
+                GMenu.Item {
+                    icon.source: 'qrc:/svg2/copy.svg'
+                    text: qsTrId('id_copy') + ' ' + qsTrId('id_amp_id')
+                    visible: self.account.type === '2of2_no_recovery'
+                    onClicked: {
+                        options_menu.close()
+                        Clipboard.copy(self.account.json.receiving_id)
+                    }
+                }
+            }
+        }
+        CloseButton {
+            onClicked: self.closeClicked()
+        }
     }
     bottomPadding: 0
     footer: null
