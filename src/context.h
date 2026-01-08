@@ -162,6 +162,7 @@ public:
     QMultiMap<QString, Transaction*> m_transaction_map;
     QStandardItemModel* const m_transaction_model;
     void addTransaction(Transaction* transaction);
+    void removeTransaction(Transaction* transaction);
     QStandardItemModel* transactionModel() const { return m_transaction_model; }
 
     QMap<Address*, QStandardItem*> m_address_item;

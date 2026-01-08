@@ -168,6 +168,30 @@ Transaction *Account::getTransactionByTxHash(const QString &id) const
     return m_transactions_by_hash.value(id);
 }
 
+void Account::beginFetchTransactions()
+{
+    if (!m_dangling_transactions.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << "dangling is not empty";
+    }
+    m_dangling_transactions = m_transactions_by_hash.keys();
+}
+
+void Account::touchTransaction(const QString& hash)
+{
+    m_dangling_transactions.removeOne(hash);
+}
+
+void Account::endFetchTransactions()
+{
+    while (!m_dangling_transactions.isEmpty()) {
+        auto hash = m_dangling_transactions.takeFirst();
+        auto transaction = m_transactions_by_hash.value(hash);
+        if (transaction) {
+            m_context->removeTransaction(transaction);
+        }
+    }
+}
+
 void Account::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == m_load_balance_timer_id) {

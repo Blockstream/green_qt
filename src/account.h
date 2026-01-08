@@ -72,6 +72,9 @@ public:
     Output* getOrCreateOutput(const QJsonObject &data);
     Q_INVOKABLE Address *getOrCreateAddress(const QJsonObject &data);
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
+    void beginFetchTransactions();
+    void touchTransaction(const QString& hash);
+    void endFetchTransactions();
 protected:
     void timerEvent(QTimerEvent* event) override;
 signals:
@@ -97,6 +100,7 @@ private:
     QMap<QPair<QString, int>, Output*> m_outputs_by_hash;
     int m_load_balance_timer_id{-1};
     friend class Wallet;
+    QStringList m_dangling_transactions;
 };
 
 #endif // GREEN_ACCOUNT_H

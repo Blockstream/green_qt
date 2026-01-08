@@ -55,6 +55,7 @@ void UpdateAsset(GA_session* session, Asset* asset)
 }
 
 void fetchCoins(TaskGroup* group, Account* account);
+void fetchTransactions(TaskGroup* group, Account* account);
 void fetchTransactions(TaskGroup* group, Account* account, int page, int size);
 
 Context::Context(const QString& deployment, bool bip39, QObject* parent)
@@ -164,7 +165,7 @@ Session* Context::getOrCreateSession(Network* network)
                     emit account->blockEvent(event);
 
                     if (account->hasUnconfirmedTransactions()) {
-                        fetchTransactions(group, account, 0, 30);
+                        fetchTransactions(group, account);
                         fetchCoins(group, account);
                     }
                 }
@@ -194,7 +195,7 @@ Session* Context::getOrCreateSession(Network* network)
             auto group = new TaskGroup(this);
             for (auto pointer : event.value("subaccounts").toArray()) {
                 auto account = getOrCreateAccount(network, quint32(pointer.toInteger()));
-                fetchTransactions(group, account, 0, 30);
+                fetchTransactions(group, account);
                 fetchCoins(group, account);
                 emit account->transactionEvent(event);
                 connect(group, &TaskGroup::finished, account, &Account::loadBalance);
@@ -403,6 +404,12 @@ QString Context::getDisplayUnit(const QString& unit)
     return ComputeDisplayUnit(primarySession()->network(), unit);
 }
 
+void fetchTransactions(TaskGroup* group, Account* account)
+{
+    account->beginFetchTransactions();
+    fetchTransactions(group, account, 0, 30);
+}
+
 void fetchTransactions(TaskGroup* group, Account* account, int page, int size)
 {
     auto task = new GetTransactionsTask(page * size, size, account);
@@ -411,11 +418,14 @@ void fetchTransactions(TaskGroup* group, Account* account, int page, int size)
         task->deleteLater();
 
         for (const QJsonValue& value : task->transactions()) {
-            account->getOrCreateTransaction(value.toObject());
+            auto transaction = account->getOrCreateTransaction(value.toObject());
+            account->touchTransaction(transaction->hash());
         }
 
         if (task->transactions().size() == size) {
             fetchTransactions(group, account, page + 1, size);
+        } else {
+            account->endFetchTransactions();
         }
     });
 
@@ -622,7 +632,7 @@ void Context::loadNetwork2(TaskGroup *group, Network *network)
         for (auto account : load_accounts->accounts()) {
             group->add(new LoadBalanceTask(account));
             fetchCoins(group, account);
-            fetchTransactions(group, account, 0, 30);
+            fetchTransactions(group, account);
         }
     });
     group->add(load_accounts);
@@ -718,6 +728,15 @@ void Context::addTransaction(Transaction* transaction)
     const auto timestamp = created_at_ts.isNull() ? QDateTime::currentDateTime() : QDateTime::fromMSecsSinceEpoch(created_at_ts.toInteger() / 1000);
 
     item->setData(QVariant::fromValue(timestamp), Qt::UserRole + 1);
+}
+
+void Context::removeTransaction(Transaction* transaction)
+{
+    auto item = m_transaction_item.take(transaction);
+
+    if (item) {
+        m_transaction_model->removeRow(item->row());
+    }
 }
 
 Address* Context::getOrCreateAddress(const QString& value)
