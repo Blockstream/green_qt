@@ -241,6 +241,7 @@ StackViewPage {
         ReceiveAccountAssetSelector {
             id: selector
             context: controller.context
+            onCloseClicked: self.closeClicked()
             onSelected: (account, asset) => {
                 controller.account = account
                 controller.asset = asset

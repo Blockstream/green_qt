@@ -36,12 +36,10 @@ WalletDrawer {
     Component {
         id: create_account_page
         CreateAccountPage {
-            rightItem: CloseButton {
-                onClicked: self.close()
-            }
             asset: self.context.getOrCreateAsset('btc')
             context: self.context
             editableAsset: false
+            onCloseClicked: self.close()
             onCreated: (account) => stack_view.replace(null, buy_page, { account }, StackView.PushTransition )
         }
     }

@@ -57,12 +57,12 @@ Page {
         return true
     }
 
-    function openCreateAccountDrawer({ dismissable = true } = {}) {
+    function openCreateAccountDrawer() {
         if (!self.checkDeviceMatches()) return
         const network = self.context.primaryNetwork()
         const id = network.liquid ? network.policyAsset : 'btc'
         const asset = self.context.getOrCreateAsset(id)
-        const drawer = create_account_drawer.createObject(self, { context: self.context, asset, dismissable })
+        const drawer = create_account_drawer.createObject(self, { asset })
         drawer.open()
     }
 
@@ -195,7 +195,7 @@ Page {
     Component {
         id: create_account_drawer
         CreateAccountDrawer {
-            onCreated: (account) => {}
+            context: self.context
         }
     }
     Component {

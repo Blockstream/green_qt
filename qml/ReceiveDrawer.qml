@@ -13,9 +13,7 @@ WalletDrawer {
         initialItem: ReceiveAccountAssetSelector {
             context: self.context
             title: qsTrId('id_receive')
-            rightItem: CloseButton {
-                onClicked: self.close()
-            }
+            onCloseClicked: self.close()
             onSelected: (account, asset) => {
                 stack_view.replace(null, receive_page, { account, asset }, StackView.PushTransition)
             }

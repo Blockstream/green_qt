@@ -8,32 +8,34 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 WalletDrawer {
-    signal created(Account account)
     required property Asset asset
-    property bool dismissable: true
     id: self
     preferredContentWidth: stack_view.currentItem.implicitWidth
 
-    closePolicy: self.dismissable ? Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
-    interactive: self.dismissable
     contentItem: GStackView {
         id: stack_view
         focus: true
         initialItem: CreateAccountPage {
+            id: page
             context: self.context
             asset: self.asset
             editableAsset: true
-            rightItem: CloseButton {
-                visible: self.dismissable
-                onClicked: self.close()
-            }
+            onCloseClicked: self.close()
             onCreated: (account) => {
-                self.created(account)
-                self.close()
-                if (!self.dismissable) {
-                    Analytics.recordEvent('account_first', AnalyticsJS.segmentationSession(Settings, self.context))
-                }
+                const network = account.network
+                const id = network.liquid ? network.policyAsset : 'btc'
+                const asset = self.context.getOrCreateAsset(id)
+                stack_view.replace(null, account_asset_page, { account, asset }, StackView.PushTransition)
             }
+        }
+    }
+
+    Component {
+        id: account_asset_page
+        AccountAssetPage {
+            id: page
+            context: self.context
+            onCloseClicked: self.close()
         }
     }
 }

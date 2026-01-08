@@ -9,9 +9,6 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal sendClicked()
-    signal receiveClicked()
-    signal transactionClicked(Transaction transaction)
     required property Context context
     required property Asset asset
     required property Account account
@@ -125,14 +122,18 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     icon.source: 'qrc:/svg/send-white.svg'
                     text: qsTrId('id_send')
-                    onClicked: self.sendClicked()
+                    onClicked: {
+                        self.StackView.view.push(send_page)
+                    }
                 }
                 ActionButton {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     icon.source: 'qrc:/svg/receive-white.svg'
                     text: qsTrId('id_receive')
-                    onClicked: self.receiveClicked()
+                    onClicked: {
+                        self.StackView.view.push(receive_page)
+                    }
                 }
             }
             FieldTitle {
@@ -159,7 +160,9 @@ StackViewPage {
         }
         delegate: HomePage.TransactionDelegate2 {
             id: delegate
-            onClicked: self.transactionClicked(delegate.transaction)
+            onClicked: {
+                self.StackView.view.push(transaction_details_page, { transaction: delegate.transaction })
+            }
         }
         footer: Item {
             implicitHeight: 0
@@ -190,6 +193,35 @@ StackViewPage {
                 opacity: button.enabled ? 1.0 : 0.6
                 text: button.text
             }
+        }
+    }
+
+    Component {
+        id: receive_page
+        ReceivePage {
+            context: self.context
+            account: self.account
+            asset: self.asset
+            readonly: true
+            onCloseClicked: self.closeClicked()
+        }
+    }
+
+    Component {
+        id: send_page
+        SendPage {
+            context: self.context
+            account: self.account
+            asset: self.asset
+            readonly: true
+            onCloseClicked: self.closeClicked()
+        }
+    }
+
+    Component {
+        id: transaction_details_page
+        TransactionView {
+            onCloseClicked: self.closeClicked()
         }
     }
 }

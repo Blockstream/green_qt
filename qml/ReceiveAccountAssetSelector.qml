@@ -21,6 +21,9 @@ StackViewPage {
     id: self
     title: qsTrId('id_select_asset')
     footer: null
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
+    }
     contentItem: ColumnLayout {
         spacing: 5
         SearchField {
@@ -355,6 +358,7 @@ StackViewPage {
             id: page
             context: self.context
             editableAsset: false
+            onCloseClicked: self.closeClicked()
             onCreated: (account) => self.selected(account, page.asset)
         }
     }

@@ -8,17 +8,13 @@ import QtQuick.Window
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal created(account: Account)
     required property Context context
     required property Asset asset
     required property bool editableAsset
     property bool advanced: false
     property bool anyLiquid: false
     property bool anyAMP: false
-
-    signal created(account: Account)
-
-    id: self
-    title: qsTrId('id_create_new_account')
 
     component SecurityPolicyButton2: SecurityPolicyButton {
         required property string serverType
@@ -63,6 +59,11 @@ StackViewPage {
         }
     }
 
+    id: self
+    title: qsTrId('id_create_new_account')
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
+    }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
         spacing: 5
