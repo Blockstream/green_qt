@@ -194,6 +194,11 @@ function transactionTypeLabel(transaction) {
     return transaction.data.type
 }
 
+function transactionIcon(type, confirmations)
+{
+    return confirmations > 0 ? `qrc:/svg2/tx-${type}.svg` : 'qrc:/ffffff/24/hourglass-high.svg'
+}
+
 function twoFactorMethodLabel(method)
 {
     const labels = {

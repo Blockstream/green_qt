@@ -217,7 +217,7 @@ Page {
             spacing: 8
             Image {
                 Layout.alignment: Qt.AlignCenter
-                source: `qrc:/svg2/tx-incoming.svg`
+                source: UtilJS.transactionIcon('incoming', 0)
             }
             ColumnLayout {
                 Layout.fillWidth: false
@@ -286,7 +286,7 @@ Page {
             spacing: 8
             Image {
                 Layout.alignment: Qt.AlignCenter
-                source: `qrc:/svg2/tx-${delegate.transaction.data.type}.svg`
+                source: UtilJS.transactionIcon(delegate.transaction.data.type, transactionConfirmations(delegate.transaction))
             }
             ColumnLayout {
                 Layout.fillWidth: false
@@ -311,14 +311,8 @@ Page {
             HSpacer {
             }
             Image {
-                source: 'qrc:/ffffff/24/note'
+                source: 'qrc:/ffffff/24/note.svg'
                 visible: delegate.transaction.memo.length > 0
-            }
-            HSpacer {
-            }
-            TransactionStatusBadge {
-                confirmations: transactionConfirmations(delegate.transaction)
-                liquid: delegate.transaction.account.network.liquid
             }
             TransactionAmounts {
                 Layout.fillWidth: false

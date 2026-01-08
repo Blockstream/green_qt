@@ -513,6 +513,7 @@ qt_add_resources(${APP_TARGET} "images"
 
         assets/000000/24/list-checks.svg
         assets/ffffff/24/note.svg
+        assets/ffffff/24/hourglass-high.svg
 )
 
 qt_add_resources(${APP_TARGET} "fonts"

@@ -47,7 +47,7 @@ ItemDelegate {
         spacing: 10
         Image {
             Layout.alignment: Qt.AlignCenter
-            source: `qrc:/svg2/tx-${transaction.data.type}.svg`
+            source: UtilJS.transactionIcon(self.transaction.data.type, self.confirmations)
         }
         Label {
             Layout.fillWidth: true

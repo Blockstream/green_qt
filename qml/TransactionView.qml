@@ -86,7 +86,7 @@ StackViewPage {
             }
             Image {
                 anchors.centerIn: parent
-                source: `qrc:/svg2/tx-${transaction.data.type}.svg`
+                source: UtilJS.transactionIcon(self.transaction.data.type, self.confirmations)
                 width: 32
                 height: 32
             }
