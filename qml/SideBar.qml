@@ -237,7 +237,7 @@ Pane {
             Rectangle {
                 radius: 8 * self.position
                 color: 'white'
-                opacity: button.hovered ? 0.1 : 0
+                opacity: button.enabled && button.hovered ? 0.1 : 0
                 Behavior on opacity {
                     SmoothedAnimation {
                         velocity: 1

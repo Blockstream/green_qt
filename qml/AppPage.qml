@@ -22,7 +22,6 @@ MainPage {
             const child = stack_layout.children[i]
             if (child instanceof WalletView && child.wallet === wallet) { // && !child.device) {
                 stack_layout.currentIndex = i;
-                side_bar.currentWalletView = stack_layout.itemAt(i)
                 return
             }
         }
@@ -176,7 +175,13 @@ MainPage {
         contentItem: GStackLayout {
             id: stack_layout
             currentIndex: 0
-            onCurrentIndexChanged: stack_layout.currentItem.forceActiveFocus()
+            onCurrentItemChanged: {
+                const item = stack_layout.currentItem
+                if (item instanceof WalletView) {
+                    side_bar.currentWalletView = item as WalletView
+                }
+                item.forceActiveFocus()
+            }
             WalletsView {
                 enabled: StackLayout.isCurrentItem
                 focus: StackLayout.isCurrentItem
