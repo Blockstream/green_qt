@@ -125,12 +125,6 @@ Page {
         // network: self.wallet.network.id
     }
 
-    AccountListModel {
-        id: account_list_model
-        context: self.context
-        filter: '!hidden'
-    }
-
     PaymentSyncController {
         context: self.context
     }

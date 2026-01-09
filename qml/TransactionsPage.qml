@@ -238,14 +238,16 @@ Page {
                 anchors.right: parent.right
                 height: parent.height
                 width: Math.max(parent.width, 250) - 32
-                model: account_list_model
+                model: self.context.accounts.filter(account => !account.hidden)
                 currentIndex: 0
                 spacing: 5
                 footer: Item {
                     height: 24
                 }
                 delegate: AccountDelegate {
+                    required property var modelData
                     id: delegate
+                    account: delegate.modelData
                     highlighted: self.currentModel.filterAccounts.indexOf(delegate.account) >= 0
                     onAccountClicked: account => {
                         if (delegate.highlighted) {
