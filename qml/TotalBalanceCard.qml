@@ -11,18 +11,8 @@ WalletHeaderCard {
     Convert {
         id: convert
         context: self.context
-        input: {
-            const context = self.context
-            let balance = 0
-            if (context) {
-                for (let i = 0; i < context.accounts.length; i++) {
-                    const account = context.accounts[i]
-                    balance += account.balance
-                }
-            }
-            return { satoshi: String(balance) }
-        }
-        unit: self.context.primarySession.unit
+        input: ({ satoshi: String(UtilJS.accounts(self.context).reduce((balance, account) => balance + account.balance, 0)) })
+        unit: UtilJS.unit(self.context)
     }
 
     id: self

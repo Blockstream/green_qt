@@ -87,7 +87,15 @@ function effectiveWidth(item) {
     return item.visible ? item.width : 0
 }
 
+function accounts(context) {
+    if (!context) return []
+
+    return context.accounts.filter(account => !account.hidden)
+}
+
 function archivedAccounts(context) {
+    if (!context) return []
+
     const has_multisig_liquid_amp = context.accounts.filter(account => !account.network.electrum && account.network.liquid && account.type === '2of2_no_recovery').length > 0
     const has_multisig_liquid_except_amp = context.accounts.filter(account => !account.network.electrum && account.network.liquid && account.type !== '2of2_no_recovery' && (account.pointer > 0 || !account.hidden)).length > 0
 

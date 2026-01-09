@@ -12,7 +12,7 @@ FilterPopup {
     property var accounts
     Component.onCompleted: {
         self.filterAccounts = [...self.model.filterAccounts]
-        self.accounts = [...self.context.accounts].filter(account => !account.hidden && self.filterAccounts.indexOf(account) < 0)
+        self.accounts = UtilJS.accounts(self.context).filter(account => self.filterAccounts.indexOf(account) < 0)
     }
     id: self
     height: Math.min(self.implicitHeight, 600)

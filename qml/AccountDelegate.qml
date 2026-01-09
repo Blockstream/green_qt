@@ -224,7 +224,7 @@ ItemDelegate {
                                 GMenu.Item {
                                     text: qsTrId('id_archive')
                                     icon.source: 'qrc:/svg/archived.svg'
-                                    enabled: delegate.account.context.accounts.filter(account => !account.hidden).length > 1
+                                    enabled: UtilJS.accounts(delegate.account.context).length > 1
                                     onClicked: {
                                         account_delegate_menu.close()
                                         controller.setAccountHidden(delegate.account, true)

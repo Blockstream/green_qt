@@ -19,9 +19,7 @@ Pane {
             const asset = context.getOrCreateAsset(session.network.policyAsset)
             assets.set(asset, { asset, satoshi: 0 })
         }
-        for (let i = 0; i < context.accounts.length; i++) {
-            const account = context.accounts[i]
-            if (account.hidden) continue
+        for (const account of UtilJS.accounts(context)) {
             for (let asset_id in account.json.satoshi) {
                 const satoshi = account.json.satoshi[asset_id]
                 const asset = context.getOrCreateAsset(asset_id)
