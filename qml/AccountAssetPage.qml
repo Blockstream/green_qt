@@ -178,6 +178,11 @@ StackViewPage {
         footer: Item {
             implicitHeight: 0
         }
+        MouseArea {
+            anchors.fill: parent
+            enabled: name_field.activeFocus
+            onClicked: list_view.forceActiveFocus()
+        }
     }
 
     component ActionButton: AbstractButton {
