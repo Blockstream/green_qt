@@ -29,6 +29,7 @@ AbstractButton {
             source: 'qrc:/svg2/back.svg'
         }
         Label {
+            color: '#FFFFFF'
             font.pixelSize: 14
             font.weight: 600
             text: self.text
