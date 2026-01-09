@@ -120,6 +120,16 @@ StackViewPage {
                 ActionButton {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
+                    icon.source: 'qrc:/fafafa/20/coin-vertical.svg'
+                    text: 'Buy'
+                    visible: !self.account.network.liquid && self.asset.key === 'btc'
+                    onClicked: {
+                        self.StackView.view.push(buy_page)
+                    }
+                }
+                ActionButton {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
                     icon.source: 'qrc:/svg/send-white.svg'
                     text: qsTrId('id_send')
                     visible: !self.context.watchonly
@@ -194,6 +204,16 @@ StackViewPage {
                 opacity: button.enabled ? 1.0 : 0.6
                 text: button.text
             }
+        }
+    }
+
+    Component {
+        id: buy_page
+        BuyPage {
+            context: self.context
+            account: self.account
+            onCloseClicked: self.close()
+            onShowTransactions: self.close()
         }
     }
 

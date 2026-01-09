@@ -69,12 +69,15 @@ StackViewPage {
     }
     id: self
     title: 'Buy Bitcoin'
-    leftItem: CountryButton {
-        code: self.countryCode
-        onClicked: self.StackView.view.push(null, country_selector_page, { selectedCountryCode: self.countryCode })
-    }
-    rightItem: CloseButton {
-        onClicked: self.closeClicked()
+    rightItem: RowLayout {
+        spacing: 20
+        CountryButton {
+            code: self.countryCode
+            onClicked: self.StackView.view.push(null, country_selector_page, { selectedCountryCode: self.countryCode })
+        }
+        CloseButton {
+            onClicked: self.closeClicked()
+        }
     }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
