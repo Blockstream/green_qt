@@ -255,9 +255,7 @@ Page {
                         }
                     }
                     onAccountArchived: account => {
-                        let i = Math.max(0, account_list_model.indexOf(account) - 1)
-                        if (account_list_model.accountAt(i) === account) i++
-                        self.currentAccount = account_list_model.accountAt(i)
+                        self.currentModel.updateFilterAccounts(delegate.account, false)
                     }
                 }
             }

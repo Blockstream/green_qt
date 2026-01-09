@@ -91,9 +91,9 @@ MainPageHeader {
         GMenu.Separator {
         }
         GMenu.Item {
-            text: qsTrId('id_view_archived_accounts_d').arg(archive_list_model.count)
+            text: qsTrId('id_view_archived_accounts_d').arg(UtilJS.archivedAccounts(self.context).length)
             icon.source: 'qrc:/svg/archived.svg'
-            enabled: archive_list_model.count > 0
+            enabled: UtilJS.archivedAccounts(self.context).length > 0
             onClicked: {
                 menu.close()
                 self.archivedAccountsClicked()

@@ -87,6 +87,17 @@ function effectiveWidth(item) {
     return item.visible ? item.width : 0
 }
 
+function archivedAccounts(context) {
+    const has_multisig_liquid_amp = context.accounts.filter(account => !account.network.electrum && account.network.liquid && account.type === '2of2_no_recovery').length > 0
+    const has_multisig_liquid_except_amp = context.accounts.filter(account => !account.network.electrum && account.network.liquid && account.type !== '2of2_no_recovery' && (account.pointer > 0 || !account.hidden)).length > 0
+
+    return context.accounts.filter(account => {
+        if (!account.hidden) return false
+        if (account.network.liquid && !account.network.electrum && account.pointer === 0 && !has_multisig_liquid_except_amp && has_multisig_liquid_amp) return false
+        return true
+    })
+}
+
 function accountLabel (account) {
     switch (account?.type) {
         case '2of2': return qsTrId('id_2of2')

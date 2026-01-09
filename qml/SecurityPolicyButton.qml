@@ -9,11 +9,10 @@ AbstractButton {
     required property string title
     required property string description
     property bool beta: false
-    property color tagColor: Qt.alpha('#FFFFFF', 0.4)
+    property color tagColor: '#181818'
 
     Layout.fillWidth: true
     id: self
-    icon.source: self.network.electrum ? 'qrc:/svg2/singlesig.svg' : 'qrc:/svg2/multisig.svg'
     text: self.network.electrum ? 'singlesig' : 'multisig'
     padding: 20
     background: Item {
@@ -51,10 +50,6 @@ AbstractButton {
                     font.weight: 600
                     text: self.title
                 }
-                Image {
-                    Layout.alignment: Qt.AlignCenter
-                    source: self.icon.source
-                }
                 HSpacer {
                 }
             }
@@ -72,7 +67,7 @@ AbstractButton {
                 spacing: 6
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    color: '#181818'
+                    color: '#A0A0A0'
                     font.pixelSize: 10
                     font.capitalization: Font.AllUppercase
                     font.weight: 500
@@ -82,14 +77,15 @@ AbstractButton {
                     rightPadding: 8
                     text: self.text
                     background: Rectangle {
+                        color: 'transparent'
+                        border.color: '#A0A0A0'
+                        border.width: 1
                         radius: height / 2
-                        color: '#FFFFFF'
-                        opacity: 0.4
                     }
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    color: '#181818'
+                    color: self.tagColor
                     font.pixelSize: 10
                     font.capitalization: Font.AllUppercase
                     font.weight: 500
@@ -99,8 +95,10 @@ AbstractButton {
                     rightPadding: 8
                     text: self.tag
                     background: Rectangle {
+                        color: 'transparent'
+                        border.color: self.tagColor
+                        border.width: 1
                         radius: height / 2
-                        color: self.tagColor
                     }
                 }
                 HSpacer {

@@ -131,12 +131,6 @@ Page {
         filter: '!hidden'
     }
 
-    AccountListModel {
-        id: archive_list_model
-        context: self.context
-        filter: 'hidden'
-    }
-
     PaymentSyncController {
         context: self.context
     }
