@@ -122,6 +122,7 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     icon.source: 'qrc:/svg/send-white.svg'
                     text: qsTrId('id_send')
+                    visible: !self.context.watchonly
                     onClicked: {
                         self.StackView.view.push(send_page)
                     }
