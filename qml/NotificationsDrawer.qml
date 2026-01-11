@@ -39,7 +39,7 @@ AbstractDrawer {
                 onClicked: self.close()
             }
             contentItem: StackLayout {
-                currentIndex: self.context.notifications.length === 0 ? 0 : 1
+                currentIndex: (self.context.notifications.length === 0 && !update_controller.notification) ? 0 : 1
                 ColumnLayout {
                     spacing: 10
                     VSpacer {
@@ -77,14 +77,26 @@ AbstractDrawer {
                     VSpacer {
                     }
                 }
-                TListView {
-                    id: list_view
-                    clip: true
+                ColumnLayout {
                     spacing: 10
-                    model: NotificationsModel {
-                        source: controller.model
+                    Loader {
+                        Layout.fillWidth: true
+                        active: !!update_controller.notification
+                        visible: !!update_controller.notification
+                        sourceComponent: UpdateNotificationView {
+                            notification: update_controller.notification
+                        }
                     }
-                    delegate: NotificationDelegate {
+                    TListView {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        clip: true
+                        spacing: 10
+                        model: NotificationsModel {
+                            source: controller.model
+                        }
+                        delegate: NotificationDelegate {
+                        }
                     }
                 }
             }
@@ -467,6 +479,55 @@ AbstractDrawer {
                             })
                         }
                     }
+                }
+            }
+        }
+    }
+
+    component UpdateNotificationView: NotificationItem {
+        id: view
+        backgroundColor: '#432004'
+        contentItem: ColumnLayout {
+            spacing: 12
+            RowLayout {
+                spacing: 12
+                Image {
+                    Layout.preferredWidth: 32
+                    Layout.preferredHeight: 32
+                    source: 'qrc:/svg2/warning-light.svg'
+                }
+                ColumnLayout {
+                    spacing: 4
+                    Label {
+                        Layout.fillWidth: true
+                        color: '#FFFFFF'
+                        font.pixelSize: 16
+                        font.weight: 600
+                        text: 'Update Available'
+                        wrapMode: Label.WordWrap
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        color: '#FFFFFF'
+                        font.pixelSize: 14
+                        opacity: 0.8
+                        text: view.notification.version
+                              ? 'Version %1 is available. Please update to continue using the app.'
+                                    .arg(view.notification.version)
+                              : 'A new version is available. Please update to continue using the app.'
+                        wrapMode: Label.WordWrap
+                    }
+                }
+            }
+            RowLayout {
+                Layout.alignment: Qt.AlignRight
+                spacing: 10
+                PrimaryButton {
+                    text: 'Update'
+                    borderColor: '#FFFFFF'
+                    fillColor: '#FFFFFF'
+                    textColor: '#000000'
+                    onClicked: Qt.openUrlExternally('https://blockstream.com/app/')
                 }
             }
         }
