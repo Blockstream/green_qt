@@ -511,10 +511,10 @@ Page {
             Label {
                 Layout.fillWidth: true
                 Layout.maximumWidth: 130
-                color: '#FFF'
+                color: '#FFFFFF'
                 font.pixelSize: 14
                 font.weight: 600
-                text: qsTrId('id_received')
+                text: 'Processing Payment'
             }
             Label {
                 Layout.fillWidth: true

@@ -223,12 +223,11 @@ Page {
                 Layout.fillWidth: false
                 Layout.fillHeight: false
                 Layout.alignment: Qt.AlignCenter
-                spacing: 0
                 Label {
-                    color: '#FFF'
+                    color: '#FFFFFF'
                     font.pixelSize: 14
                     font.weight: 600
-                    text: qsTrId('id_received')
+                    text: 'Processing Payment'
                 }
                 Label {
                     color: '#929292'
