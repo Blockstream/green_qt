@@ -14,6 +14,7 @@ Popup {
     font.weight: 400
     padding: 0
     spacing: 0
+    z: 2
     background: Item {
         MultiEffect {
             anchors.fill: r

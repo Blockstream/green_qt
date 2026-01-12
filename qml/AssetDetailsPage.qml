@@ -69,6 +69,10 @@ StackViewPage {
         })
         return { relevant, other }
     }
+    Controller {
+        id: controller
+        context: self.context
+    }
     id: self
     title: self.asset.name
     rightItem: RowLayout {
@@ -292,8 +296,44 @@ StackViewPage {
                     visible: convert.fiat.available
                 }
             }
-            RightArrowIndicator {
-                active: button.hovered
+            Collapsible {
+                collapsed: !button.hovered && !options_menu.visible
+                contentWidth: layout.width
+                horizontalCollapse: true
+                verticalCollapse: false
+                RowLayout {
+                    id: layout
+                    spacing: 20
+                    CircleButton {
+                        Layout.alignment: Qt.AlignBottom
+                        id: tool_button
+                        hoverEnabled: !options_menu.visible
+                        icon.source: 'qrc:/svg/3-dots.svg'
+                        onClicked: options_menu.visible ? options_menu.close() : options_menu.open()
+                        GMenu {
+                            id: options_menu
+                            x: 1.5 * tool_button.width - options_menu.width
+                            y: tool_button.height + 8
+                            pointerX: 1
+                            pointerXOffset: - tool_button.width
+                            pointerY: 0
+                            enabled: !self.context.watchonly
+                            spacing: 0
+                            GMenu.Item {
+                                enabled: !self.context.watchonly
+                                icon.source: 'qrc:/svg/archive.svg'
+                                text: qsTrId('id_archive_account')
+                                onClicked: {
+                                    options_menu.close()
+                                    controller.setAccountHidden(button.account, true)
+                                }
+                            }
+                        }
+                    }
+                    Image {
+                        source: 'qrc:/svg2/right.svg'
+                    }
+                }
             }
         }
     }
