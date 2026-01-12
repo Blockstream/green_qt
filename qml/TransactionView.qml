@@ -436,6 +436,7 @@ StackViewPage {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
             id: delegate
+            font.pixelSize: 10
             text: {
                 const payment = self.transaction.payment
                 if (!payment) return ''
@@ -449,7 +450,7 @@ StackViewPage {
                     serviceProvider: payment.data.serviceProvider
                 }, null, 4)
             }
-            font.pixelSize: 10
+            visible: Qt.application.arguments.indexOf('--debug') > 0
             wrapMode: Label.WordWrap
         }
         VSpacer {

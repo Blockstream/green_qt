@@ -51,7 +51,7 @@ ItemDelegate {
         }
         Label {
             Layout.fillWidth: true
-            Layout.maximumWidth: 130
+            Layout.maximumWidth: 150
             color: '#FFF'
             font.pixelSize: 14
             font.weight: 600

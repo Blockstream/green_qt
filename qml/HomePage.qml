@@ -239,10 +239,6 @@ Page {
             }
             HSpacer {
             }
-            TransactionStatusBadge {
-                confirmations: 0
-                liquid: false
-            }
             ColumnLayout {
                 Layout.alignment: Qt.AlignRight
                 Label {

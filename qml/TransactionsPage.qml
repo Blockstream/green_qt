@@ -510,7 +510,7 @@ Page {
             }
             Label {
                 Layout.fillWidth: true
-                Layout.maximumWidth: 130
+                Layout.maximumWidth: 150
                 color: '#FFFFFF'
                 font.pixelSize: 14
                 font.weight: 600
@@ -532,10 +532,6 @@ Page {
                 account: delegate.payment.address.account
             }
             HSpacer {
-            }
-            TransactionStatusBadge {
-                confirmations: 0
-                liquid: false
             }
             ColumnLayout {
                 Layout.fillWidth: true
