@@ -130,8 +130,6 @@ SET(QML_FILES
     qml/SecurityPolicyButton.qml
     qml/WalletHeaderCard.qml
     qml/TotalBalanceCard.qml
-    qml/PriceCard.qml
-    qml/FeeRateCard.qml
     qml/CardBar.qml
     qml/BuyDrawer.qml
     qml/BuyPage.qml
