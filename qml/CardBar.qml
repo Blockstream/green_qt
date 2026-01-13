@@ -47,10 +47,10 @@ Pane {
                 }
                 Separator {
                 }
+                /*
                 PriceCard {
                     context: self.context
                 }
-                /*
                 Separator {
                     visible: fee_rate_card.visible
                 }

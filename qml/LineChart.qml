@@ -85,15 +85,41 @@ Page {
         if (yMin === yMax) yMax = yMin + 1
         return { xMin, xMax, yMin, yMax }
     }
+    readonly property var dailyLastPoint: {
+        const dailySeries = priceSource.pricesDay
+        if (!dailySeries || dailySeries.length === 0) return null
+        const isFlat = !(dailySeries[0] instanceof Array)
+        const n = isFlat ? Math.floor(dailySeries.length / 2) : dailySeries.length
+        if (n <= 0) return null
+        return isFlat ? [dailySeries[(n - 1) * 2], dailySeries[(n - 1) * 2 + 1]] : dailySeries[n - 1]
+    }
+    readonly property real lastPrice: {
+        const p = root.dailyLastPoint
+        return p ? Number(p[1]) : NaN
+    }
     readonly property var seriesRef: {
+        let baseSeries
         switch (root.selectedIndex) {
-            case 0: return priceSource.pricesDay
-            case 1: return priceSource.pricesWeek
-            case 2: return priceSource.pricesMonth
-            case 3: return priceSource.pricesYear
-            case 4: return priceSource.pricesFiveYears
+            case 0: baseSeries = priceSource.pricesDay; break
+            case 1: baseSeries = priceSource.pricesWeek; break
+            case 2: baseSeries = priceSource.pricesMonth; break
+            case 3: baseSeries = priceSource.pricesYear; break
+            case 4: baseSeries = priceSource.pricesFiveYears; break
+            default: return []
         }
-        return []
+        if (!baseSeries || baseSeries.length === 0) return baseSeries || []
+        
+        if (root.selectedIndex === 0) return baseSeries
+        
+        const lastPoint = root.dailyLastPoint
+        if (!lastPoint) return baseSeries
+        
+        const isFlat = !(baseSeries[0] instanceof Array)
+        if (isFlat) {
+            return baseSeries.concat([lastPoint[0], lastPoint[1]])
+        } else {
+            return baseSeries.concat([lastPoint])
+        }
     }
 
     Component.onCompleted: chartArea.startReveal()
@@ -105,15 +131,6 @@ Page {
     readonly property real firstPrice: {
         if (root.pairCount <= 0) return NaN
         const p = root.pairAt(0)
-        return Number(p[1])
-    }
-    readonly property real lastPrice: {
-        const dailySeries = priceSource.pricesDay
-        if (!dailySeries || dailySeries.length === 0) return NaN
-        const isFlat = !(dailySeries[0] instanceof Array)
-        const n = isFlat ? Math.floor(dailySeries.length / 2) : dailySeries.length
-        if (n <= 0) return NaN
-        const p = isFlat ? [dailySeries[(n - 1) * 2], dailySeries[(n - 1) * 2 + 1]] : dailySeries[n - 1]
         return Number(p[1])
     }
     readonly property real percentChange: {
@@ -311,8 +328,7 @@ Page {
                     }
                 }
                 Label {
-                    // Last price
-                    text: priceConvert.fiat.available ? priceConvert.fiat.label : '--'
+                    text: isFinite(root.lastPrice) ? root.formatCurrency(root.lastPrice) : '--'
                     font.pixelSize: 14
                     font.weight: 600
                     color: '#ffffff'
