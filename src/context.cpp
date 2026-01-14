@@ -583,6 +583,8 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
 
 void Context::createStandardAccount(TaskGroup *group, Network *network)
 {
+    if (isWatchonly()) return;
+
     auto session = getOrCreateSession(network);
     if (!session->m_ready) {
         Q_UNREACHABLE();
