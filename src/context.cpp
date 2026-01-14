@@ -977,7 +977,7 @@ void TransactionModel::exportToFile()
                             const auto value = static_cast<double>(amount) / qPow(10, precision);
                             values.append(QString::number(value, 'f', precision));
                         } else {
-                            const auto converted = wallet->convert({{ "satoshi", satoshi }});
+                            const auto converted = wallet->convert({{ "satoshi", i.value() }});
                             values.append(converted.value(unit).toString());
                         }
                     } else if (field == "unit") {
