@@ -8,6 +8,7 @@ import QtWebEngine
 StackViewPage {
     signal showTransactions()
     required property string widgetUrl
+    StackView.onActivated: Analytics.recordEvent('buy_initiate')
     id: self
     title: 'Buy Bitcoin'
     footer: null
@@ -35,6 +36,7 @@ StackViewPage {
                 const url = request.url.toString()
                 if (url === "blockstream://redirect/transactions") {
                     request.reject()
+                    Analytics.recordEvent('buy_redirect')
                     self.showTransactions()
                 } else {
                     request.accept()
