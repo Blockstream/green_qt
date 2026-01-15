@@ -19,7 +19,7 @@ StackViewPage {
         contentHeight: layout.height
         ColumnLayout {
             id: layout
-            spacing: 0
+            spacing: 16
             width: flickable.width
             MultiImage {
                 Layout.alignment: Qt.AlignCenter
@@ -37,12 +37,12 @@ StackViewPage {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                Layout.bottomMargin: 8
                 Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                color: '#fff'
-                font.pixelSize: 14
+                Layout.maximumWidth: 300
+                font.pixelSize: 12
                 font.weight: 400
+                horizontalAlignment: Label.AlignJustify
+                opacity: 0.6
                 text: `2FA Protected accounts are 2-of-2 wallets needing the user’s key and Blockstream’s 2FA signature. After a ~1-year timelock, they become 1-of-1, disabling 2FA, to ultimately keep you in control. Redeposit your coins to reactivate 2FA protection.`
                 wrapMode: Label.Wrap
             }

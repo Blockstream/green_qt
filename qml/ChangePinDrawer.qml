@@ -120,11 +120,12 @@ WalletDrawer {
                     Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    Layout.topMargin: 10
+                    Layout.topMargin: 16
                     Layout.bottomMargin: 20
                     horizontalAlignment: Label.AlignHCenter
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     font.weight: 400
+                    opacity: 0.6
                     text: qsTrId('id_you_have_successfully_changed')
                     wrapMode: Label.Wrap
                 }

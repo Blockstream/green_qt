@@ -41,7 +41,7 @@ AbstractDrawer {
             contentItem: StackLayout {
                 currentIndex: (self.context.notifications.length === 0 && !update_controller.notification) ? 0 : 1
                 ColumnLayout {
-                    spacing: 10
+                    spacing: 16
                     VSpacer {
                         Layout.fillWidth: true
                     }

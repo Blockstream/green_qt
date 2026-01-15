@@ -61,9 +61,11 @@ StackViewPage {
         Label {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
+            Layout.topMargin: 16
             font.pixelSize: 12
-            font.weight: 500
+            font.weight: 400
             horizontalAlignment: Label.AlignHCenter
+            opacity: 0.6
             text: qsTrId('id_please_verify_that_this_address')
             wrapMode: Label.WordWrap
         }
