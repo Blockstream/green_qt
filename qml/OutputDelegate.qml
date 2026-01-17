@@ -66,6 +66,7 @@ ItemDelegate {
             delegate: Tag2 {
                 text: modelData.name
                 color: modelData.color ?? 'white'
+                backgroundColor: modelData.backgroundColor
             }
         }
         TransactionStatusBadge {
@@ -103,7 +104,7 @@ ItemDelegate {
     readonly property var tags: {
         const output = self.output
         const tags = []
-        if (output.expired) tags.push({ name: qsTrId('id_2fa_expired'), color: '#69302E' })
+        if (output.expired) tags.push({ name: qsTrId('id_2fa_expired'), color: '#FFFFFF', backgroundColor: '#FF5252' })
         if (output.locked) tags.push({ name: qsTrId('id_locked') })
         if (output.dust) tags.push({ name: qsTrId('id_dust') })
         if (output.account.network.liquid && !output.confidential) tags.push({ name: qsTrId('id_not_confidential') })
@@ -112,9 +113,11 @@ ItemDelegate {
     }
 
     component Tag2: Tag {
+        id: tag2
+        property color backgroundColor: '#68727D'
         background: Rectangle {
             radius:  2
-            color: '#68727D'
+            color: tag2.backgroundColor
         }
         font.capitalization: Font.AllUppercase
         font.pixelSize: 12
