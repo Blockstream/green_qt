@@ -23,6 +23,7 @@ SET(QML_FILES
     qml/GHeader.qml
     qml/Wallet2faSettingsView.qml
     qml/GComboBox.qml
+    qml/GDropdown.qml
     qml/TwoFactorAuthExpiryDialog.qml
     qml/Tag.qml
     qml/AccountDelegate.qml

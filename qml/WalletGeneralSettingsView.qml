@@ -83,10 +83,10 @@ Pane {
                 Layout.preferredWidth: 1
                 Layout.alignment: Qt.AlignTop
                 implicitHeight: denomination_combo.height
-                GComboBox {
+                GDropdown {
                     id: denomination_combo
                     anchors.right: parent.right
-                    width: Math.min(200, parent.width)
+                    width: Math.min(100, parent.width)
                     property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
                     enabled: !self.wallet.locked
                     model: units.map(unit => ({
@@ -95,11 +95,11 @@ Pane {
                     }))
                     textRole: 'text'
                     valueRole: 'value'
-                    currentIndex: units.indexOf(self.session.settings.unit)
-                    onCurrentValueChanged: {
-                        if (currentValue === '') return
-                        if (currentValue === self.session.settings.unit) return
-                        controller.changeSettings({ unit: currentValue })
+                    currentValue: self.session.settings.unit
+                    onValueChanged: (value) => {
+                        if (value === '') return
+                        if (value === self.session.settings.unit) return
+                        controller.changeSettings({ unit: value })
                     }
                 }
             }
@@ -145,31 +145,36 @@ Pane {
                 Layout.alignment: Qt.AlignTop
                 spacing: 8
 
-                GComboBox {
+                GDropdown {
                     id: currency_combo
                     Layout.alignment: Qt.AlignRight
                     width: Math.min(200, parent.width)
                     enabled: !self.wallet.locked
-                    model: Object.keys(self.per_currency).sort()
-                    currentIndex: model.indexOf(self.session.settings.pricing?.currency ?? '')
-                    onCurrentTextChanged: {
-                        if (!focus) return
-                        const currency = currentText
+                    model: Object.keys(self.per_currency).sort().map(currency => ({
+                        text: currency,
+                        value: currency
+                    }))
+                    textRole: 'text'
+                    valueRole: 'value'
+                    currentValue: self.session.settings.pricing?.currency ?? ''
+                    onValueChanged: (currency) => {
                         if (currency === '') return
                         self.updateCurrency(currency)
                     }
-                    popup.contentItem.implicitHeight: 300
                 }
-                GComboBox {
+                GDropdown {
                     id: exchange_combo
                     Layout.alignment: Qt.AlignRight
                     width: Math.min(200, parent.width)
                     enabled: !self.wallet.locked
-                    model: currency_combo.currentText ? self.per_currency[currency_combo.currentText].sort() : []
-                    currentIndex: self.session.settings.pricing ? Math.max(0, model.indexOf(self.session.settings.pricing.exchange)) : 0
-                    onCurrentTextChanged: {
-                        if (!focus) return
-                        const exchange = currentText
+                    model: currency_combo.currentValue ? self.per_currency[currency_combo.currentValue].sort().map(exchange => ({
+                        text: exchange,
+                        value: exchange
+                    })) : []
+                    textRole: 'text'
+                    valueRole: 'value'
+                    currentValue: self.session.settings.pricing?.exchange ?? ''
+                    onValueChanged: (exchange) => {
                         if (exchange === '') return
                         if (exchange === self.session.settings.pricing.exchange) return
                         const currency = self.session.settings.pricing.currency
@@ -220,19 +225,20 @@ Pane {
                 Layout.preferredWidth: 1
                 Layout.alignment: Qt.AlignTop
                 implicitHeight: timeout_combo.height
-                GComboBox {
+                GDropdown {
                     id: timeout_combo
                     anchors.right: parent.right
                     width: Math.min(200, parent.width)
-                    model: [1, 2, 5, 10, 60]
-                    delegate: ItemDelegate {
-                        background: null
-                        width: parent.width
-                        text: qsTrId('id_1d_minutes').arg(modelData)
+                    model: [1, 2, 5, 10, 60].map(minutes => ({
+                        text: qsTrId('id_1d_minutes').arg(minutes),
+                        value: minutes
+                    }))
+                    textRole: 'text'
+                    valueRole: 'value'
+                    currentValue: self.session.settings.altimeout
+                    onValueChanged: (minutes) => {
+                        controller.changeSettings({ altimeout: minutes })
                     }
-                    displayText: qsTrId('id_1d_minutes').arg(currentText)
-                    onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
-                    currentIndex: model.indexOf(self.session.settings.altimeout)
                 }
             }
         }
