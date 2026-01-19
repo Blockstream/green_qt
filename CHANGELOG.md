@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.1] - 2026-01-27
+### Added
+- Add buy events
+
+### Changed:
+- Improved send flow when the wallet does not have liquid assets
+- Better look and feel consistency of some controls
+
+### Fixed:
+- Amounts when exporting transactions to CSV file
+- Load all transactions of a watchonly wallet
+- Exclude archived accounts to compute total wallet balance
+- Crash during application quit
+
 ## [3.0.0] - 2026-01-13
 ### Added:
 - Buy Bitcoin flow with provider quotes comparison, country selector, and payment tracking
