@@ -31,7 +31,7 @@ void BCURController::process(const QString& data)
     }
 
     if (!m_context) {
-        setContext(new Context("mainnet", false, this));
+        setContext(ContextManager::instance()->create("mainnet", false));
     }
 
     if (!m_task) {

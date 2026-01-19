@@ -51,9 +51,6 @@ void Wallet::setContext(Context* context)
     if (m_context == context) return;
     m_context = context;
     emit contextChanged();
-    if (m_context) {
-        m_context->setParent(this);
-    }
 }
 
 QString Wallet::id() const

@@ -181,6 +181,17 @@ public:
     QStandardItemModel* paymentModel() const { return m_payment_model; }
 };
 
+class ContextManager : public QObject
+{
+public:
+    ContextManager();
+    ~ContextManager();
+    static ContextManager* instance();
+    Context* create(const QString& deployment, bool bip39);
+private:
+    QList<Context*> m_contexts;
+};
+
 
 #include <QSortFilterProxyModel>
 

@@ -48,7 +48,7 @@ void LoginController::loginWithPin(const QString& pin)
 
     auto network = pin_data->network();
     if (m_context) m_context->deleteLater();
-    setContext(new Context(m_wallet->deployment(), false, this));
+    setContext(ContextManager::instance()->create(m_wallet->deployment(), false));
 
     auto session = m_context->getOrCreateSession(network);
     auto login_task = new LoginTask(pin, pin_data->data(), session);
@@ -135,7 +135,7 @@ void LoginController::loginWithDevice(Device* device)
             emit loginFailed({});
             return;
         }
-        setContext(new Context(deployment, false, this));
+        setContext(ContextManager::instance()->create(deployment, false));
         m_context->setDevice(device);
     }
 
@@ -232,7 +232,7 @@ void LoginController::login(LoginTask* login_task, const QString& passphrase)
             auto mnemonic = m_context->credentials().value("mnemonic").toString();
             auto network = m_context->primaryNetwork();
             m_context->deleteLater();
-            setContext(new Context(m_wallet->deployment(), true, this));
+            setContext(ContextManager::instance()->create(m_wallet->deployment(), true));
 
             auto session = m_context->getOrCreateSession(network);
 

@@ -127,7 +127,6 @@ void Context::setWallet(Wallet* wallet)
     m_wallet = wallet;
     emit walletChanged();
     if (m_wallet) {
-        setParent(m_wallet);
         if (!m_bip39 && !m_xpub_hash_id.isEmpty()) {
             m_wallet->setXPubHashId(m_xpub_hash_id);
         }
@@ -1331,4 +1330,36 @@ bool PaymentModel::filterStatusesAcceptsPayment(Payment* payment) const
         return true;
     }
     return false;
+}
+
+static ContextManager* g_context_manager{nullptr};
+
+ContextManager::ContextManager()
+    : QObject(nullptr)
+{
+    Q_ASSERT(!g_context_manager);
+    g_context_manager = this;
+}
+
+ContextManager::~ContextManager()
+{
+    qDebug() << Q_FUNC_INFO << "contexts to destroy:" << m_contexts.length();
+    m_contexts.clear();
+    g_context_manager = nullptr;
+}
+
+ContextManager *ContextManager::instance()
+{
+    Q_ASSERT(g_context_manager);
+    return g_context_manager;
+}
+
+Context* ContextManager::create(const QString& deployment, bool bip39)
+{
+    auto context = new Context(deployment, bip39, this);
+    connect(context, &QObject::destroyed, this, [=] {
+        m_contexts.removeOne(context);
+    });
+    m_contexts.append(context);
+    return context;
 }

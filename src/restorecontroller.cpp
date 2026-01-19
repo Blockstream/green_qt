@@ -41,7 +41,7 @@ void RestoreController::restore(const QString& deployment)
         setContext(nullptr);
     }
     Q_ASSERT(!m_wallet || m_wallet->deployment() == deployment);
-    setContext(new Context(deployment, false, this));
+    setContext(ContextManager::instance()->create(deployment, false));
 
     auto monitor = new TaskGroupMonitor(this);
     connect(monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=] {

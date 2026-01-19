@@ -95,7 +95,7 @@ void WatchOnlyLoginController::login()
 
     const auto network = watchonly_data ? watchonly_data->network() : m_network;
 
-    setContext(new Context(network->deployment(), false, this));
+    setContext(ContextManager::instance()->create(network->deployment(), false));
     m_context->setWatchonly(true);
 
     auto session = m_context->getOrCreateSession(network);
@@ -166,7 +166,7 @@ void WatchOnlyLoginController::loginExtendedPublicKeys(const QString& input)
 {
     qDebug() << m_network->id();
 
-    setContext(new Context(m_network->deployment(), false, this));
+    setContext(ContextManager::instance()->create(m_network->deployment(), false));
     m_context->setWatchonly(true);
 
     auto session = m_context->getOrCreateSession(m_network);
@@ -179,7 +179,7 @@ void WatchOnlyLoginController::loginExtendedPublicKeys(const QString& input)
 
 void WatchOnlyLoginController::loginDescriptors(const QString& input)
 {
-    setContext(new Context(m_network->deployment(), false, this));
+    setContext(ContextManager::instance()->create(m_network->deployment(), false));
     m_context->setWatchonly(true);
 
     auto session = m_context->getOrCreateSession(m_network);

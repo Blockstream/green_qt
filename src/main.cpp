@@ -28,6 +28,7 @@
 #include "asset.h"
 #include "clipboard.h"
 #include "config.h"
+#include "context.h"
 #include "controllers/bcurcontroller.h"
 #include "controllers/sessioncontroller.h"
 #include "controllers/signmessagecontroller.h"
@@ -252,6 +253,7 @@ int watchdog_handler(Application& app)
 int ui_handler(Application& app, int argc, char *argv[]) {
     KDSingleApplication kdsa("green_qt");
 
+    ContextManager context_manager;
     SessionManager session_manager;
     WalletManager wallet_manager;
 

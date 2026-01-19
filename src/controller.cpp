@@ -21,12 +21,6 @@ void Controller::setContext(Context* context)
     if (m_context == context) return;
     m_context = context;
     emit contextChanged();
-    if (m_context) {
-        auto wallet = m_context->wallet();
-        if (!wallet || !wallet->context()) {
-            m_context->setParent(this);
-        }
-    }
 }
 
 TaskDispatcher *Controller::dispatcher() const

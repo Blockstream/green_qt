@@ -27,7 +27,7 @@ void SignupController::signup(const QString& deployment)
     auto group = new TaskGroup(this);
 
     if (!m_context) {
-        setContext(new Context(deployment, false, this));
+        setContext(ContextManager::instance()->create(deployment, false));
     }
 
     m_context->setSkipLoadAccounts(true);
