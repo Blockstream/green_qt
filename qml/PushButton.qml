@@ -6,6 +6,7 @@ AbstractButton {
     required property color fillColor
     required property color borderColor
     required property color textColor
+    property real radius: 8
     property real borderWidth: 1
     property bool busy: false
     HoverHandler {
@@ -27,7 +28,7 @@ AbstractButton {
             border.color: '#00BCFF'
             border.width: 2
             color: 'transparent'
-            radius: 8
+            radius: self.radius
             visible: self.visualFocus
         }
         Rectangle {
@@ -36,7 +37,7 @@ AbstractButton {
             color: Qt.lighter(self.fillColor, self.enabled && self.hovered ? 1.1 : 1)
             border.color: Qt.lighter(self.borderColor, self.enabled && self.hovered ? 1.1 : 1)
             border.width: self.borderWidth
-            radius: self.visualFocus ? 4 : 8
+            radius: self.visualFocus ? self.radius - 4 : self.radius
         }
     }
     contentItem: RowLayout {

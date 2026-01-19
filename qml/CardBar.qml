@@ -53,6 +53,7 @@ Pane {
             Layout.alignment: Qt.AlignCenter
             spacing: 5
             TransactButton {
+                enabled: !!UtilJS.accounts(self.context).find(account => !account.network.liquid)
                 icon.source: 'qrc:/svg/coin.svg'
                 text: 'Buy'
                 action: Action {

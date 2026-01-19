@@ -120,9 +120,9 @@ StackViewPage {
                 ActionButton {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
+                    enabled: !self.account.network.liquid && self.asset.key === 'btc'
                     icon.source: 'qrc:/fafafa/20/coin-vertical.svg'
                     text: 'Buy'
-                    visible: !self.account.network.liquid && self.asset.key === 'btc'
                     onClicked: {
                         self.StackView.view.push(buy_page)
                     }
@@ -130,9 +130,9 @@ StackViewPage {
                 ActionButton {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
+                    enabled: !self.context.watchonly
                     icon.source: 'qrc:/svg/send-white.svg'
                     text: qsTrId('id_send')
-                    visible: !self.context.watchonly
                     onClicked: {
                         self.StackView.view.push(send_page)
                     }
@@ -185,15 +185,14 @@ StackViewPage {
         }
     }
 
-    component ActionButton: AbstractButton {
+    component ActionButton: PushButton {
         id: button
-        padding: 20
-        background: Rectangle {
-            color: Qt.lighter('#181818', button.hovered ? 1.1 : 1)
-            border.color: Qt.lighter('#262626', button.hovered ? 1.1 : 1)
-            border.width: 1
-            radius: 4
-        }
+        fillColor: '#181818'
+        borderColor: '#262626'
+        leftPadding: 20
+        rightPadding: 20
+        topPadding: 20
+        bottomPadding: 20
         contentItem: ColumnLayout {
             spacing: 10
             Image {
@@ -206,7 +205,6 @@ StackViewPage {
                 font.pixelSize: 14
                 font.weight: 400
                 color: '#FAFAFA'
-                opacity: button.enabled ? 1.0 : 0.6
                 text: button.text
             }
         }
