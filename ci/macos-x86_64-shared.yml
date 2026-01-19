@@ -10,8 +10,6 @@
   cache:
     key: macos_x86_64_shared_2
     paths: [depends/]
-  before_script:
-    - export PATH="$HOME/qt-install/6.8.3/macos/bin/:$PATH"
   tags:
     - macos-x86_64
 

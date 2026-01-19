@@ -3,6 +3,19 @@
     HOST: "macos"
     MACOSX_DEPLOYMENT_TARGET: 12.0
     SHA256SUM: "shasum -a 256"
+  before_script:
+    - export BREW_PREFIX=$( [[ $(uname -m) == "arm64" ]] && echo "/opt/homebrew" || echo "/usr/local" )
+    - export LLVM_PATH="$BREW_PREFIX/opt/llvm@17"
+    - export PATH="$LLVM_PATH/bin:$PATH"
+    - export CC="$LLVM_PATH/bin/clang"
+    - export CXX="$LLVM_PATH/bin/clang++"
+    - export LDFLAGS="-L$LLVM_PATH/lib"
+    - export CPPFLAGS="-I$LLVM_PATH/include"
+    - export CMAKE_PREFIX_PATH="$LLVM_PATH"
+    - export CMAKE_C_COMPILER="$LLVM_PATH/bin/clang"
+    - export CMAKE_CXX_COMPILER="$LLVM_PATH/bin/clang++"
+    - export PATH="$HOME/qt-install/6.8.3/macos/bin/:$PATH"
+    - export PATH="$HOME/qt-install/6.8.3/macos/bin/:$PATH"
 
 .macos:staple:
   tags:
