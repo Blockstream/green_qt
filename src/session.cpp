@@ -288,7 +288,7 @@ void Session::update()
             m_id = 0;
         }
 
-        GA_reconnect_hint(m_session, Json::fromObject({{ "hint", "disconnect" }}).get());
+        GA_set_notification_handler(m_session, nullptr, nullptr);
         int rc = GA_destroy_session(m_session);
         m_session = nullptr;
         return;
