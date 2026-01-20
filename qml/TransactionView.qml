@@ -51,6 +51,7 @@ StackViewPage {
         segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.transaction.account)
     }
 
+    objectName: "TransactionView"
     id: self
     title: qsTrId('id_transaction_details')
     rightItem: RowLayout {

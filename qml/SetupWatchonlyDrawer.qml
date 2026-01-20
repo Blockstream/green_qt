@@ -15,7 +15,9 @@ WalletDrawer {
         onFinished: ok_badge.error = 'Watch-only credentials updated successfully'
     }
     id: self
+    objectName: "SetupWatchonlyDrawer"
     contentItem: StackViewPage {
+        objectName: "SetupWatchonlyPage"
         enabled: watch_only_controller.monitor.idle
         title: qsTrId('id_set_up_watchonly')
         rightItem: CloseButton {

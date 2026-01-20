@@ -10,6 +10,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 Page {
+    objectName: "TransactionsPage"
     signal transactionClicked(Transaction transaction)
     signal addressClicked(Address transaction)
     required property Context context

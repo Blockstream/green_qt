@@ -7,6 +7,7 @@ ControllerDialog {
     required property Session session
 
     id: self
+    objectName: "NLockTimeDialog"
     title: qsTrId('id_set_timelock')
     controller: Controller {
         id: controller

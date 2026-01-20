@@ -10,6 +10,7 @@ StackViewPage {
     signal newWallet()
     signal restoreWallet()
     StackView.onActivated: Analytics.recordEvent('wallet_add')
+    objectName: "AddWalletPage"
     id: self
     footer: null
     padding: 60

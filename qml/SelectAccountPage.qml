@@ -11,6 +11,7 @@ StackViewPage {
     required property Context context
     required property Account account
     required property Asset asset
+    objectName: "SelectAccountPage"
     id: self
     title: qsTrId('Choose Asset')
     contentItem: ColumnLayout {

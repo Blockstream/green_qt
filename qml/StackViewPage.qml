@@ -11,6 +11,7 @@ Page {
     property alias centerItem: center_pane.contentItem
     property alias rightItem: right_pane.contentItem
     property alias footerItem: footer_pane.contentItem
+    objectName: "StackViewPage"
     StackView.onActivated: self.forceActiveFocus()
     id: self
     background: null

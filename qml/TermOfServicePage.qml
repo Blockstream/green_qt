@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 StackViewPage {
     signal start()
 
+    objectName: "TermOfServicePage"
     id: self
     padding: 60
     leftItem: BackButton {

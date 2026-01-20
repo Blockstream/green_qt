@@ -17,6 +17,7 @@ StackViewPage {
             stack_view.pop()
         }
     }
+    objectName: "DevicePage"
     DeviceListModel {
         id: devices_model
         onRowCountChanged: self.update()

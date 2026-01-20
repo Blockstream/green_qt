@@ -9,6 +9,7 @@ WalletDrawer {
     required property var unspents
     required property string status
     id: self
+    objectName: "UpdateUnspentsDrawer"
     contentItem: GStackView {
         initialItem: UpdateUnspentsPage {
             context: self.context
@@ -24,6 +25,7 @@ WalletDrawer {
         required property Account account
         required property var unspents
         required property string status
+        objectName: "UpdateUnspentsPage"
         id: self
         title: self.status === 'default' ? qsTrId('id_unlocking_coins') : qsTrId('id_locking_coins')
         TaskPageFactory {

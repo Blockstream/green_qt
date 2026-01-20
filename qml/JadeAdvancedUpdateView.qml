@@ -12,6 +12,7 @@ StackViewPage {
     required property JadeDevice device
     required property bool showSkip
     readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
+    objectName: "JadeAdvancedUpdateView"
     id: self
     padding: 0
     background: Item {

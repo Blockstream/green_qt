@@ -24,6 +24,7 @@ WalletDrawer {
     }
 
     id: self
+    objectName: "AssetDrawer"
     contentItem: GStackView {
         id: stack_view
         focus: true

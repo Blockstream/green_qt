@@ -10,6 +10,7 @@ StackViewPage {
     signal useDevice()
     signal watchOnlyWallet()
 
+    objectName: "SecureFundsPage"
     id: self
     footer: null
     padding: 60

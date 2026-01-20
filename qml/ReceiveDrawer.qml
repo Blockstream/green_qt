@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 WalletDrawer {
     id: self
+    objectName: "ReceiveDrawer"
     preferredContentWidth: stack_view.currentItem.implicitWidth
     minimumContentWidth: 400
     contentItem: GStackView {

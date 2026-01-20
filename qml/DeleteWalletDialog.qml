@@ -5,6 +5,7 @@ import QtQuick.Layouts
 
 ControllerDialog {
     id: self
+    objectName: "DeleteWalletDialog"
     title: qsTrId('id_delete_wallet')
     controller: Controller {
         id: controller

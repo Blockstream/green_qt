@@ -8,6 +8,7 @@ StackViewPage {
     signal loadFinished(Context context)
     required property Context context
     StackView.onActivated: controller.load()
+    objectName: "LoadingPage"
     id: self
     padding: 60
     title: self.context.wallet.name

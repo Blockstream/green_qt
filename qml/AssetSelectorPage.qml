@@ -44,6 +44,7 @@ StackViewPage {
             return a.asset.name.localeCompare(b.asset.name)
         })
     }
+    objectName: "AssetSelectorPage"
     id: self
     padding: 0
     background: null

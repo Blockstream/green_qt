@@ -13,6 +13,7 @@ StackViewPage {
     required property Context context
     property bool readonly: false
 
+    objectName: "ReceivePage"
     ReceiveAddressController {
         id: controller
         context: self.context

@@ -12,6 +12,7 @@ StackViewPage {
     required property Asset asset
     required property string message
     required property list<Account> accounts
+    objectName: "AccountSelectorPage"
     id: self
     title: qsTrId('id_select_account')
     contentItem: VFlickable {

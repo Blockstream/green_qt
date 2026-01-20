@@ -12,6 +12,7 @@ WalletDrawer {
     required property string method
 
     id: self
+    objectName: "TwoFactorEnableDrawer"
     property string title: qsTrId('id_enable') + ' ' + UtilJS.twoFactorMethodLabel(self.method)
 
     Overlay.modal: Rectangle {

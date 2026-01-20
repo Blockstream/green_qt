@@ -35,9 +35,11 @@ WalletDrawer {
     }
 
     id: self
+    objectName: "TwoFactorAuthExpiryDialog"
     contentItem: GStackView {
         id: stack_view
         initialItem: StackViewPage {
+            objectName: "TwoFactorAuthExpiryPage"
             StackView.onActivated: controller.monitor.clear()
             footer: null
             title: self.title

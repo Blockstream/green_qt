@@ -67,6 +67,7 @@ StackViewPage {
             }
         }
     }
+    objectName: "BuyPage"
     id: self
     title: 'Buy Bitcoin'
     rightItem: RowLayout {

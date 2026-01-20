@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 
 WalletDialog {
     id: self
+    objectName: "ControllerDialog"
 
     default property alias contentItemData: stack_layout.data
     required property Controller controller

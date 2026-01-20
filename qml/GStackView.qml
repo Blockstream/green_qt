@@ -5,6 +5,7 @@ StackView {
     property real duration: 200
     property real offset: 50
     property int easing: Easing.OutCubic
+    objectName: "GStackView"
     id: self
     pushEnter: Transition {
         SequentialAnimation {

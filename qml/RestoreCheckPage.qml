@@ -29,6 +29,7 @@ StackViewPage {
             controller.restore('mainnet')
         }
     }
+    objectName: "RestoreCheckPage"
     id: self
     title: self.wallet?.name ?? ''
     leftItem: Item {

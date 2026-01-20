@@ -7,6 +7,7 @@ import QtQuick.Layouts
 StackViewPage {
     signal singlesigWallet
     signal multisigWallet
+    objectName: "WatchOnlyWalletPage"
     id: self
     footer: null
     padding: 60

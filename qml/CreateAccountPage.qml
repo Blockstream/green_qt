@@ -55,6 +55,7 @@ StackViewPage {
         }
     }
 
+    objectName: "CreateAccountPage"
     id: self
     title: qsTrId('id_create_new_account')
     rightItem: CloseButton {

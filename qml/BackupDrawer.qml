@@ -9,6 +9,7 @@ import "util.js" as UtilJS
 
 WalletDrawer {
     id: self
+    objectName: "BackupDrawer"
     contentItem: GStackView {
         id: stack_view
         initialItem: BackupPage {

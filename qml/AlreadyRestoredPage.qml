@@ -8,6 +8,7 @@ StackViewPage {
     signal cancel
     required property Wallet wallet
 
+    objectName: "AlreadyRestoredPage"
     id: self
     footer: null
     padding: 60

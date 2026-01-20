@@ -9,6 +9,7 @@ import "util.js" as UtilJS
 
 Page {
     required property Context context
+    objectName: "SettingsPage"
     id: self
     background: null
     padding: 0

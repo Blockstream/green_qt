@@ -35,6 +35,7 @@ AbstractDialog {
         self.destroy()
     }
     id: self
+    objectName: "RemoveWalletDialog"
     header: null
     contentItem: StackViewPage {
         focus: true

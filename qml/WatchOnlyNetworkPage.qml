@@ -9,6 +9,7 @@ import "util.js" as UtilJS
 StackViewPage {
     signal networkSelected(Network network)
     required property bool electrum
+    objectName: "WatchOnlyNetworkPage"
     id: self
     footer: null
     padding: 60

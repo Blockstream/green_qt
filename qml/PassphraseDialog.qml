@@ -27,6 +27,7 @@ Dialog {
         source: ApplicationWindow.contentItem
     }
     id: self
+    objectName: "PassphraseDialog"
     anchors.centerIn: parent
     closePolicy: Dialog.NoAutoClose
     leftPadding: 20

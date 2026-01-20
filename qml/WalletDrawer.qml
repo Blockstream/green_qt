@@ -5,6 +5,7 @@ AbstractDrawer {
     required property Context context
 
     onClosed: self.destroy()
+    objectName: "WalletDrawer"
 
     Connections {
         target: self.context

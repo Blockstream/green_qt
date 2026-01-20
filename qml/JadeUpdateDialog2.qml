@@ -6,6 +6,7 @@ import QtQuick.Layouts
 WalletDialog {
     required property JadeDevice device
     id: self
+    objectName: "JadeUpdateDialog2"
     clip: true
     width: 650
     height: 700

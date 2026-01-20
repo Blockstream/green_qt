@@ -27,6 +27,7 @@ AbstractDrawer {
         target: stack_view
     }
 
+    objectName: "NotificationsDrawer"
     id: self
     edge: Qt.RightEdge
     minimumContentWidth: 450

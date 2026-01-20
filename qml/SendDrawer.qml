@@ -11,6 +11,7 @@ WalletDrawer {
     property Asset asset
     property url url
     id: self
+    objectName: "SendDrawer"
     closePolicy: AbstractDrawer.CloseOnEscape
     minimumContentWidth: 450
     contentItem: GStackView {

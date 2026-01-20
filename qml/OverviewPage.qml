@@ -10,6 +10,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 Page {
+    objectName: "OverviewPage"
     enum View {
         Home,
         Transactions,

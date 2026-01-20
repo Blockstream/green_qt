@@ -19,6 +19,7 @@ Dialog {
     }
     onClosed: self.destroy()
     id: self
+    objectName: "JadeGenuineCheckDialog"
     clip: true
     closePolicy: Popup.NoAutoClose
     modal: true

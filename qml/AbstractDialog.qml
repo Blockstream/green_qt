@@ -8,6 +8,7 @@ Dialog {
     property bool showRejectButton: true
     property bool enableRejectButton: true
     id: self
+    objectName: "AbstractDialog"
     focus: true
     modal: true
     padding: 24

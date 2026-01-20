@@ -12,6 +12,7 @@ MainPage {
     signal openWallet(Wallet wallet)
     signal openDevice(Device device)
     signal createWallet
+    objectName: "WalletsView"
     readonly property int count: sww_repeater.count + hww_repeater.count
     readonly property var notifications: UtilJS.flatten(home_alert.notification)
     AnalyticsAlert {

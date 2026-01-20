@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 StackViewPage {
     required property Transaction transaction
+    objectName: "TransactionCompletedPage"
     id: self
     leftItem: Item {
     }

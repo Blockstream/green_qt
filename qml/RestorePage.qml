@@ -8,6 +8,7 @@ StackViewPage {
     signal mnemonicEntered(Wallet wallet, var mnemonic, string password)
     signal removeClicked()
     property Wallet wallet
+    objectName: "RestorePage"
     id: self
     footer: null
     padding: 60

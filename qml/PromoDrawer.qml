@@ -14,6 +14,7 @@ AbstractDrawer {
     required property string screen
     onClosed: self.destroy()
     id: self
+    objectName: "PromoDrawer"
     edge: Qt.RightEdge
     background: Loader {
         sourceComponent: bg1

@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 
 WalletDrawer {
     id: self
+    objectName: "ArchivedAccountsDrawer"
     contentItem: GStackView {
         initialItem: StackViewPage {
             title: qsTrId('id_archived_accounts')

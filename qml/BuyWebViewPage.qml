@@ -9,6 +9,7 @@ StackViewPage {
     signal showTransactions()
     required property string widgetUrl
     StackView.onActivated: Analytics.recordEvent('buy_initiate')
+    objectName: "BuyWebViewPage"
     id: self
     title: 'Buy Bitcoin'
     footer: null

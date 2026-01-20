@@ -17,6 +17,7 @@ StackViewPage {
         if (!session) return false
         return !session.connected
     }
+    objectName: "PinLoginPage"
     StackView.onDeactivated: {
         pin_field.clear()
     }

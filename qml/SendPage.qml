@@ -52,6 +52,7 @@ StackViewPage {
         id: estimates
         session: controller.account.session
     }
+    objectName: "SendPage"
     CreateTransactionController {
         id: controller
         context: self.context

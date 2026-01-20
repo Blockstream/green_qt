@@ -20,6 +20,7 @@ Dialog {
     }
     onClosed: self.destroy()
     id: self
+    objectName: "JadeHttpRequestDialog"
     clip: true
     closePolicy: Popup.NoAutoClose
     modal: true

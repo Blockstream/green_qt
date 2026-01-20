@@ -12,6 +12,7 @@ WalletDrawer {
     required property string method
 
     id: self
+    objectName: "TwoFactorDisableDrawer"
     property string title: qsTrId('id_disable') + ' ' + UtilJS.twoFactorMethodLabel(self.method)
 
     Overlay.modal: Rectangle {
@@ -42,6 +43,7 @@ WalletDrawer {
     contentItem: GStackView {
         id: stack_view
         initialItem: StackViewPage {
+            objectName: "TwoFactorDisablePage"
             StackView.onActivated: controller.monitor.clear()
             title: self.title
             rightItem: CloseButton {
