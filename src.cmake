@@ -38,7 +38,6 @@ SET(TARGET_SOURCES
 	src/httpmanager.cpp
 	src/httprequestactivity.cpp
 	src/json.cpp
-	src/loader2.cpp
 	src/loginwithpincontroller.cpp
 	src/main.cpp
 	src/network.cpp

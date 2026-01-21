@@ -44,7 +44,6 @@ SET(QML_FILES
     qml/RemoveWalletDialog.qml
     qml/DialogFooter.qml
     qml/OutputDelegate.qml
-    qml/MnemonicPage.qml
     qml/AnimLoader.qml
     qml/PreferencesDialog.qml
     qml/AssetDrawer.qml
