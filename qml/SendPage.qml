@@ -52,12 +52,12 @@ StackViewPage {
         id: estimates
         session: controller.account.session
     }
-    objectName: "SendPage"
     CreateTransactionController {
         id: controller
         context: self.context
         account: self.account
         asset: self.asset
+        feeRate: estimates.fees[3]
         previousTransaction: self.transaction
         recipient.convert.unit: controller.account.session.unit
     }
@@ -67,6 +67,7 @@ StackViewPage {
         segmentation: AnalyticsJS.segmentationSubAccount(Settings, controller.account)
     }
     id: self
+    objectName: 'SendPage'
     title: qsTrId('id_send')
     rightItem: CloseButton {
         onClicked: self.closeClicked()
@@ -325,18 +326,7 @@ StackViewPage {
                 font.features: { 'calt': 0, 'zero': 1 }
                 font.pixelSize: 14
                 font.weight: 400
-                text: {
-                    if (controller.feeRate < estimates.fees[24]) {
-                        return qsTrId('id_custom')
-                    }
-                    if (controller.feeRate < estimates.fees[12]) {
-                        return qsTrId('id_4_hours')
-                    }
-                    if (controller.feeRate < estimates.fees[3]) {
-                        return qsTrId('id_2_hours')
-                    }
-                    return qsTrId('id_1030_minutes')
-                }
+                text: UtilJS.confirmationTime(controller.feeRate, estimates.fees)
                 visible: !controller.account.network.liquid
             }
             LinkButton {

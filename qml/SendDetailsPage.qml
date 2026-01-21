@@ -50,6 +50,7 @@ StackViewPage {
         context: self.context
         account: self.account
         asset: self.asset
+        feeRate: estimates.fees[3]
         recipient.convert.unit: controller.account.session.unit
         recipient.convert.input: self.amount
         recipient.address: self.address
@@ -60,6 +61,7 @@ StackViewPage {
         segmentation: AnalyticsJS.segmentationSubAccount(Settings, controller.account)
     }
     id: self
+    objectName: 'SendPage'
     title: qsTrId('id_send')
     rightItem: CloseButton {
         onClicked: self.closeClicked()
@@ -156,9 +158,7 @@ StackViewPage {
         AddressLabel {
             Layout.fillWidth: true
             address: controller.recipient.address
-            topPadding: 14
-            bottomPadding: 13
-            leftPadding: 15
+            padding: 20
             background: Rectangle {
                 color: '#181818'
                 radius: 5
@@ -276,18 +276,7 @@ StackViewPage {
                 font.features: { 'calt': 0, 'zero': 1 }
                 font.pixelSize: 14
                 font.weight: 400
-                text: {
-                    if (controller.feeRate < estimates.fees[24]) {
-                        return qsTrId('id_custom')
-                    }
-                    if (controller.feeRate < estimates.fees[12]) {
-                        return qsTrId('id_4_hours')
-                    }
-                    if (controller.feeRate < estimates.fees[3]) {
-                        return qsTrId('id_2_hours')
-                    }
-                    return qsTrId('id_1030_minutes')
-                }
+                text: UtilJS.confirmationTime(controller.feeRate, estimates.fees)
                 visible: !controller.account.network.liquid
             }
             LinkButton {

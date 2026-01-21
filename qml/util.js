@@ -289,6 +289,20 @@ function formatFeeRate(fee_rate, network) {
     }
 }
 
+function confirmationTime(rate, estimates) {
+    if (estimates?.length !== 25) return '-'
+    if (estimates[24] < estimates[12] && rate < estimates[24]) {
+        return qsTrId('id_custom')
+    }
+    if (estimates[12] < estimates[3] && rate < estimates[12]) {
+        return qsTrId('id_4_hours')
+    }
+    if (rate < estimates[3]) {
+        return qsTrId('id_2_hours')
+    }
+    return qsTrId('id_1030_minutes')
+}
+
 function filterPromo(wallets, promo) {
     const target = promo?.data?.target
     if (!target) return true

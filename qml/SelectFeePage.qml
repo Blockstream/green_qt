@@ -31,11 +31,13 @@ StackViewPage {
             name: qsTrId('id_medium')
             rate: estimates.fees[12]
             time: qsTrId('id_2_hours')
+            enabled: estimates.fees[12] > estimates.fees[3]
         }
         FeeRateButton {
             name: qsTrId('id_slow')
             rate: estimates.fees[24]
             time: qsTrId('id_4_hours')
+            enabled: estimates.fees[24] > estimates.fees[12]
         }
         LinkButton {
             Layout.alignment: Qt.AlignCenter
@@ -77,6 +79,9 @@ StackViewPage {
                                 text: qsTrId('id_custom')
                                 font.pixelSize: 16
                                 font.weight: 600
+                            }
+                            TimeLabel {
+                                text: UtilJS.confirmationTime(slider.value, estimates.fees)
                             }
                             HSpacer {
                             }
@@ -136,7 +141,7 @@ StackViewPage {
         visible: button.rate >= self.minimumFeeRate
         onClicked: self.feeRateSelected(button.rate)
         background: Rectangle {
-            color: Qt.lighter('#2F2F35', button.hovered ? 1.1 : 1)
+            color: Qt.lighter('#2F2F35', button.hovered && button.enabled ? 1.1 : 1)
             radius: 5
         }
         contentItem: RowLayout {
@@ -150,21 +155,8 @@ StackViewPage {
                         font.pixelSize: 16
                         font.weight: 600
                     }
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
+                    TimeLabel {
                         text: button.time
-                        font.pixelSize: 12
-                        font.weight: 400
-                        leftPadding: 8
-                        rightPadding: 8
-                        topPadding: 2
-                        bottomPadding: 2
-                        background: Rectangle {
-                            radius: height / 2
-                            border.width: 1
-                            border.color: Qt.alpha('#FFF', 0.2)
-                            color: Qt.alpha('#5B5B5B', 0.2)
-                        }
                     }
                     HSpacer {
                     }
@@ -202,8 +194,24 @@ StackViewPage {
             Image {
                 Layout.alignment: Qt.AlignCenter
                 visible: self.enabled
+                opacity: button.enabled ? 1 : 0.4
                 source: 'qrc:/svg2/next_arrow.svg'
             }
+        }
+    }
+    component TimeLabel: Label {
+        Layout.alignment: Qt.AlignCenter
+        font.pixelSize: 12
+        font.weight: 400
+        leftPadding: 8
+        rightPadding: 8
+        topPadding: 2
+        bottomPadding: 2
+        background: Rectangle {
+            radius: height / 2
+            border.width: 1
+            border.color: Qt.alpha('#FFF', 0.2)
+            color: Qt.alpha('#5B5B5B', 0.2)
         }
     }
 }
