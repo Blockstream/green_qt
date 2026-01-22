@@ -11,39 +11,7 @@ StackViewPage {
 
     required property Context context
     required property var networks
-    readonly property var assets: {
-        const context = self.context
-        if (!context) return []
-        const assets = new Map
-        for (let i = 0; i < context.accounts.length; i++) {
-            const account = context.accounts[i]
-            if (account.hidden) continue
-            if (self.networks && self.networks.indexOf(account.network) < 0) continue
-            for (let asset_id in account.json.satoshi) {
-                const satoshi = account.json.satoshi[asset_id]
-                if (satoshi === 0) continue
-                const asset = context.getOrCreateAsset(asset_id)
-                let sum = assets.get(asset)
-                if (sum) {
-                    sum.satoshi += satoshi
-                } else {
-                    sum = { satoshi, asset }
-                    assets.set(asset, sum)
-                }
-            }
-        }
-        return [...assets.values()].sort((a, b) => {
-            if (a.asset.weight > b.asset.weight) return -1
-            if (b.asset.weight > a.asset.weight) return 1
-            if (b.asset.weight === 0) {
-                if (a.asset.icon && !b.asset.icon) return -1
-                if (!a.asset.icon && b.asset.icon) return 1
-                if (Object.keys(a.asset.data).length > 0 && Object.keys(b.asset.data).length === 0) return -1
-                if (Object.keys(a.asset.data).length === 0 && Object.keys(b.asset.data).length > 0) return 1
-            }
-            return a.asset.name.localeCompare(b.asset.name)
-        })
-    }
+    required property list<Asset> assets
     objectName: "AssetSelectorPage"
     id: self
     padding: 0

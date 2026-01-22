@@ -37,23 +37,96 @@ WalletDrawer {
 
     component RecipientPage: StackViewPage {
         property string address_input
-        property var accounts
-        function next() {
-            page.accounts = undefined
+        property list<Account> accounts
+        property list<Asset> assets
+        property bool nextEnabled: false
+        property var error
+        function update() {
+            const network = controller.networks[0]
 
+            page.accounts = (() => {
+                if (!network) {
+                    return []
+                }
+                if (network.liquid && !controller.bip21.assetid) {
+                    return self.context.accounts.filter(account => !account.hidden && account.network.liquid)
+                }
+                return self.selectAccounts(controller.asset)
+            })()
+
+            page.assets = (() => {
+                const assets = new Map
+                for (const account of page.accounts) {
+                    if (controller.networks && controller.networks.indexOf(account.network) < 0) continue
+                    for (let asset_id in account.json.satoshi) {
+                        const satoshi = account.json.satoshi[asset_id]
+                        if (satoshi === 0) continue
+                        const asset = context.getOrCreateAsset(asset_id)
+                        let sum = assets.get(asset)
+                        if (sum) {
+                            sum.satoshi += satoshi
+                        } else {
+                            sum = { satoshi, asset }
+                            assets.set(asset, sum)
+                        }
+                    }
+                }
+                return [...assets.values()].sort((a, b) => {
+                    if (a.asset.weight > b.asset.weight) return -1
+                    if (b.asset.weight > a.asset.weight) return 1
+                    if (b.asset.weight === 0) {
+                        if (a.asset.icon && !b.asset.icon) return -1
+                        if (!a.asset.icon && b.asset.icon) return 1
+                        if (Object.keys(a.asset.data).length > 0 && Object.keys(b.asset.data).length === 0) return -1
+                        if (Object.keys(a.asset.data).length === 0 && Object.keys(b.asset.data).length > 0) return 1
+                    }
+                    return a.asset.name.localeCompare(b.asset.name)
+                })
+            })()
+
+            page.error = (() => {
+                if (address_field.text.trim().length === 0) {
+                    return null
+                }
+                if (controller.errors.length > 0) {
+                    return controller.errors[0]
+                }
+                if (page.accounts?.length === 0) {
+                    return 'id_no_available_accounts'
+                }
+                if (network.liquid && !controller.bip21.assetid && page.assets.length === 0) {
+                    return 'id_no_available_accounts'
+                }
+                return null
+            })()
+
+            page.nextEnabled = (() => {
+                if ((page.accounts?.length ?? 0) === 0) {
+                    return false
+                }
+                if (!network) {
+                    return false
+                }
+                if (network.liquid && !controller.bip21.assetid) {
+                    return page.assets.length > 0
+                }
+                return true
+            })()
+        }
+
+        function next() {
             const network = controller.networks[0]
             if (!network) return
 
-            if (network.liquid && !controller.bip21.assetid) {
-                page.accounts = self.context.accounts.filter(account => !account.hidden && account.network.liquid)
+            if (network.liquid && !controller.bip21.assetid && page.assets.length > 0) {
                 stack_view.push(asset_selector_page, {
                     address: controller.address,
                     amount: controller.amount,
+                    assets: page.assets,
                     input: page.address_input,
                     networks: controller.networks
                 })
             } else {
-                page.accounts = self.selectAccounts(controller.asset)
                 if (page.accounts.length > 1) {
                     stack_view.push(account_selector_page, {
                         accounts: page.accounts,
@@ -80,7 +153,7 @@ WalletDrawer {
             onClicked: page.closeClicked()
         }
         footerItem: PrimaryButton {
-            enabled: page.accounts?.length > 0
+            enabled: page.nextEnabled
             text: qsTrId('id_next')
             onClicked: page.next()
         }
@@ -100,12 +173,7 @@ WalletDrawer {
                 focus: true
                 rightPadding: 15
                 bottomPadding: 50
-                error: {
-                    if (address_field.text.trim().length === 0) return null
-                    if (controller.errors.length > 0) controller.errors[0]
-                    if (page.accounts?.length === 0) return 'id_no_available_accounts'
-                    return null
-                }
+                error: page.error
                 RowLayout {
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
@@ -161,8 +229,8 @@ WalletDrawer {
                 input: address_field.text.trim()
                 onAssetChanged: asset_field.asset = controller.asset
                 onUpdated: {
+                    page.update()
                     if (page.address_input === 'type') return
-
                     page.next()
                 }
             }
