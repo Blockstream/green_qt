@@ -258,7 +258,7 @@ Page {
                 }
                 Label {
                     textFormat: Text.RichText
-                    text: 'Your <a href="#" style="text-decoration: none; color: #00BCFF">Software Wallet</a> keeps your bitcoin secured by private keys stored on your computer or mobile device. Only you control them. Protect your wallet and recovery phrase with these key practices:'
+                    text: 'Your Software Wallet keeps your bitcoin secured by private keys stored on your computer or mobile device. Only you control them. Protect your wallet and recovery phrase with these key practices:'
                     font.pixelSize: 14
                     color: '#A0A0A0'
                     wrapMode: Label.Wrap
@@ -437,12 +437,23 @@ Page {
                     color: '#FFFFFF'
                 }
                 Label {
+                    id: hardware_wallet_label
                     textFormat: Text.RichText
                     text: 'Your <a href="#" style="text-decoration: none; color: #00BCFF">Hardware Wallet</a> keeps your bitcoin safe by securing keys on a dedicated device, never on your computer or phone. Only you control them. Protect your wallet and recovery phrase with these key practices:'
                     font.pixelSize: 14
                     color: '#A0A0A0'
                     wrapMode: Label.Wrap
                     Layout.fillWidth: true
+                    onLinkActivated: {
+                        if (self.jadeDevice) {
+                            const drawer = jade_details_drawer.createObject(self)
+                            drawer.open()
+                        }
+                    }
+                    HoverHandler {
+                        enabled: hardware_wallet_label.hoveredLink
+                        cursorShape: Qt.PointingHandCursor
+                    }
                 }
                 RowLayout {
                     spacing: 24
@@ -624,6 +635,13 @@ Page {
         id: update_firmware_dialog
         JadeUpdateDialog2 {
             context: self.context
+            device: self.jadeDevice
+        }
+    }
+
+    Component {
+        id: jade_details_drawer
+        JadeDetailsDrawer {
             device: self.jadeDevice
         }
     }
