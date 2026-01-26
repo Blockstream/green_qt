@@ -49,7 +49,8 @@ AbstractButton {
         spacing: 4
         opacity: 0.7
         Label {
-            Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignRight
             text: self.getDisplayText()
         }
         Image {

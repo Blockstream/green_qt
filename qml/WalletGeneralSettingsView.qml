@@ -86,7 +86,7 @@ Pane {
                 GDropdown {
                     id: denomination_combo
                     anchors.right: parent.right
-                    width: Math.min(100, parent.width)
+                    width: Math.min(80, parent.width)
                     property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
                     enabled: !self.wallet.locked
                     model: units.map(unit => ({
@@ -228,7 +228,7 @@ Pane {
                 GDropdown {
                     id: timeout_combo
                     anchors.right: parent.right
-                    width: Math.min(200, parent.width)
+                    width: Math.min(120, parent.width)
                     model: [1, 2, 5, 10, 60].map(minutes => ({
                         text: qsTrId('id_1d_minutes').arg(minutes),
                         value: minutes

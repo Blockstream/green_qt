@@ -98,11 +98,13 @@ Page {
                                 ColumnLayout {
                                     Label {
                                         Layout.fillWidth: true
+                                        font.pixelSize: 14
+                                        font.weight: 600
                                         text: UtilJS.twoFactorMethodLabel(button.method)
                                     }
                                     Label {
                                         color: constants.c100
-                                        font.pixelSize: 10
+                                        font.pixelSize: 14
                                         font.weight: 400
                                         text: {
                                             if (!view.session.config[button.method].enabled) return qsTrId('id_disabled')
