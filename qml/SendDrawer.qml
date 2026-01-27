@@ -38,7 +38,7 @@ WalletDrawer {
     component RecipientPage: StackViewPage {
         property string address_input
         property list<Account> accounts
-        property list<Asset> assets
+        property var assets
         property bool nextEnabled: false
         property var error
         function update() {
@@ -115,6 +115,8 @@ WalletDrawer {
         }
 
         function next() {
+            if (!page.nextEnabled) return
+
             const network = controller.networks[0]
             if (!network) return
 

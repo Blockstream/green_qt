@@ -11,7 +11,7 @@ StackViewPage {
 
     required property Context context
     required property var networks
-    required property list<Asset> assets
+    required property var assets
     objectName: "AssetSelectorPage"
     id: self
     padding: 0
