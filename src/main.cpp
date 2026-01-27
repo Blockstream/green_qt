@@ -253,9 +253,9 @@ int watchdog_handler(Application& app)
 int ui_handler(Application& app, int argc, char *argv[]) {
     KDSingleApplication kdsa("green_qt");
 
-    ContextManager context_manager;
-    SessionManager session_manager;
     WalletManager wallet_manager;
+    SessionManager session_manager;
+    ContextManager context_manager;
 
     if (g_args.positionalArguments().size() > 0) {
         const auto uri = g_args.positionalArguments().first();
