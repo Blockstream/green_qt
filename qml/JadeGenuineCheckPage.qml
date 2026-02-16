@@ -59,7 +59,7 @@ StackViewPage {
             font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
-            text: 'Genuine Check is mandatory for first time Jade connection. This way we make sure that you have a safe Jade.'
+            text: 'Genuine Check is required for first-time Jade connections. This verifies that your Jade was manufactured by Blockstream and is safe to use.'
             wrapMode: Label.WordWrap
         }
         VSpacer {

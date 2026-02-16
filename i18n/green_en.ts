@@ -131,7 +131,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
+        <translation>A 2of3 account requires two out of three signatures to spend funds. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your funds independently at any point in time.</translation>
     </message>
     <message>
         <source>id_a_fully_airgapped_workflow_no</source>
@@ -155,7 +155,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
-        <translation>A newer version of Blockstream Green is now available</translation>
+        <translation>A newer version of the Blockstream app is now available</translation>
     </message>
     <message>
         <source>id_a_powerful_hardware_wallet_for</source>
@@ -403,7 +403,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_allow_collection</source>
-        <translation>Allow collection</translation>
+        <translation>Allow Collection</translation>
     </message>
     <message>
         <source>id_allow_data_collection</source>
@@ -649,11 +649,11 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
-        <translation>Backup the recovery mnemonic and recovery xpub to recover funds from your 2of3 account.</translation>
+        <translation>Back up the recovery phrase and recovery xpub to recover funds from your 2of3 account.</translation>
     </message>
     <message>
         <source>id_backup_your_mnemonic_before</source>
-        <translation>Backup your mnemonic before removing the wallet from this device.</translation>
+        <translation>Back up your recovery phrase before removing the wallet from this device.</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -761,15 +761,15 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_blockstream_green_needs_access</source>
-        <translation>Blockstream Green needs access to Bluetooth in order to connect to hardware wallets. Location data is not used or kept by Blockstream.</translation>
+        <translation>The Blockstream app needs access to Bluetooth in order to connect to hardware wallets. Location data is not used or kept by Blockstream.</translation>
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green supports both Bitcoin and the Liquid Network.</translation>
+        <translation>The Blockstream app supports both Bitcoin and the Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
-        <translation>Blockstream Green:
+        <translation>The Blockstream App:
 Simple and Secure</translation>
     </message>
     <message>
@@ -842,7 +842,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_change_speed</source>
-        <translation>Change speed</translation>
+        <translation>Change Speed</translation>
     </message>
     <message>
         <source>id_changing_reference_exchange</source>
@@ -898,7 +898,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_a_name_for_your_new</source>
-        <translation>Choose a name for your new Blockstream Green wallet.</translation>
+        <translation>Choose a name for your new Blockstream app wallet.</translation>
     </message>
     <message>
         <source>id_choose_a_name_for_your_wallet</source>
@@ -1098,7 +1098,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_confirm_transaction</source>
-        <translation>Confirm transaction</translation>
+        <translation>Confirm Transaction</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
@@ -1182,11 +1182,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connect_your_jade_to_use_it</source>
-        <translation>Connect your Jade to use it with Green</translation>
+        <translation>Connect your Jade to use it with the Blockstream app</translation>
     </message>
     <message>
         <source>id_connect_your_ledger_to_use_it</source>
-        <translation>Connect your Ledger to use it in Green</translation>
+        <translation>Connect your Ledger to use it in the Blockstream app</translation>
     </message>
     <message>
         <source>id_connected_to_jade</source>
@@ -1506,7 +1506,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_delete_permanently_your_wallet</source>
-        <translation>Delete permanently your wallet from the Blockstream Green database. You will never be able to log in to it thereafter.</translation>
+        <translation>Delete permanently your wallet from the Blockstream app database. You will never be able to log in to it thereafter.</translation>
     </message>
     <message>
         <source>id_delete_s_twofactor</source>
@@ -1518,7 +1518,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_deleting_your_pin_will_remove</source>
-        <translation>Deleting your PIN will remove wallet access permanently unless you have your mnemonic available. Press &quot;OK&quot; to continue.</translation>
+        <translation>Deleting your PIN will remove wallet access permanently unless you have your recovery phrase available. Press &quot;OK&quot; to continue.</translation>
     </message>
     <message>
         <source>id_denomination</source>
@@ -1576,7 +1576,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_disable_pin_access</source>
-        <translation>Disable PIN access</translation>
+        <translation>Disable PIN Access</translation>
     </message>
     <message>
         <source>id_disable_pin_access_for_this</source>
@@ -1636,7 +1636,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_dont_collect_data</source>
-        <translation>Don&apos;t collect data</translation>
+        <translation>Don&apos;t Collect Data</translation>
     </message>
     <message>
         <source>id_dont_have_a_jade</source>
@@ -1924,11 +1924,11 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_enter_your_s_wallet_mnemonic</source>
-        <translation>Enter your %1 wallet mnemonic</translation>
+        <translation>Enter your %1 wallet recovery phrase</translation>
     </message>
     <message>
         <source>id_enter_your_wallet_mnemonic</source>
-        <translation>Enter your wallet mnemonic</translation>
+        <translation>Enter your wallet recovery phrase</translation>
     </message>
     <message>
         <source>id_enter_your_xpub</source>
@@ -2037,7 +2037,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_export_lightning_key_to_green</source>
-        <translation>Export Lightning Key to Green</translation>
+        <translation>Export Lightning Key to the Blockstream App</translation>
     </message>
     <message>
         <source>id_export_transactions_to_csv_file</source>
@@ -2295,43 +2295,43 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
-        <translation>Green is a non-custodial wallet</translation>
+        <translation>The Blockstream app is a self-custodial wallet</translation>
     </message>
     <message>
         <source>id_green_logo</source>
-        <translation>Green Logo</translation>
+        <translation>Blockstream App Logo</translation>
     </message>
     <message>
         <source>id_green_mnemonic_qr_code</source>
-        <translation>Green Mnemonic QR Code</translation>
+        <translation>Blockstream App Recovery Phrase QR Code</translation>
     </message>
     <message>
         <source>id_green_needs_the_master_blinding</source>
-        <translation>Green needs the master blinding key from Jade</translation>
+        <translation>The Blockstream app needs the master blinding key from Jade</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_for</source>
-        <translation>Green only supports one PIN for each network. New wallets will require a mnemonic every time you log in.</translation>
+        <translation>The Blockstream app only supports one PIN for each network. New wallets will require a recovery phrase every time you log in.</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_per</source>
-        <translation>Green only supports one PIN per network. To set a PIN for this wallet, disable the PIN on your original wallet first.</translation>
+        <translation>The Blockstream app only supports one PIN per network. To set a PIN for this wallet, disable the PIN on your original wallet first.</translation>
     </message>
     <message>
         <source>id_green_uses_biometric</source>
-        <translation>Green uses biometric authentication to allow easy access to the wallet</translation>
+        <translation>The Blockstream app uses biometric authentication to allow easy access to the wallet</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_for</source>
-        <translation>Green uses Bluetooth for communication with hardware wallets</translation>
+        <translation>The Blockstream app uses Bluetooth for communication with hardware wallets</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_to_connect</source>
-        <translation>Green uses Bluetooth to connect to hardware wallets</translation>
+        <translation>The Blockstream app uses Bluetooth to connect to hardware wallets</translation>
     </message>
     <message>
         <source>id_green_uses_multisig_with_one</source>
-        <translation>Green uses multisig with one signature generated by your device, and one by Blockstream&apos;s servers. Setting up your Two-Factor Authentication enables an extra layer of security for the server-side signature.</translation>
+        <translation>The Blockstream app uses multisig with one signature generated by your device, and one by Blockstream&apos;s servers. Setting up your Two-Factor Authentication enables an extra layer of security for the server-side signature.</translation>
     </message>
     <message>
         <source>id_hardware_devices</source>
@@ -2367,7 +2367,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_help_green_improve</source>
-        <translation>Help Green Improve</translation>
+        <translation>Help the Blockstream App Improve</translation>
     </message>
     <message>
         <source>id_helpblockstreamcom</source>
@@ -2387,7 +2387,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_hide_advanced_options</source>
-        <translation>Hide advanced options</translation>
+        <translation>Hide Advanced Options</translation>
     </message>
     <message>
         <source>id_hide_amounts</source>
@@ -2471,7 +2471,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_i_secured_the_mnemonic_and_i</source>
-        <translation>I secured the mnemonic and I have read the ToS</translation>
+        <translation>I secured the recovery phrase and I have read the ToS</translation>
     </message>
     <message>
         <source>id_i_typed_all_my_recovery_phrase</source>
@@ -2495,7 +2495,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>If you agree, Green will collect limited usage data to optimize the user experience. No sensitive user or wallet info is collected.</translation>
+        <translation>If you agree, the Blockstream app will collect limited usage data to optimize the user experience. No sensitive user or wallet info is collected.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -2531,15 +2531,15 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_import_a_multisig_shield_wallet</source>
-        <translation>Import a Multisig Shield wallet created on Blockstream Green.</translation>
+        <translation>Import a Multisig Shield wallet created on the Blockstream app.</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_on</source>
-        <translation>Import a wallet created on Blockstream Green.</translation>
+        <translation>Import a wallet created on the Blockstream app.</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_with</source>
-        <translation>Import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>Import a wallet created with other apps. This option only works with singlesig wallets using BIP39 recovery phrases, and following the BIP44, BIP49, or BIP84 derivations.</translation>
     </message>
     <message>
         <source>id_import_from_file</source>
@@ -2663,15 +2663,15 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
-        <translation>Invalid mnemonic</translation>
+        <translation>Invalid recovery phrase</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_continue</source>
-        <translation>Invalid mnemonic. Continue typing or ask for help</translation>
+        <translation>Invalid recovery phrase. Continue typing or ask for help</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_must_be_24_or</source>
-        <translation>Invalid mnemonic (must be 24 or 27 words)</translation>
+        <translation>Invalid recovery phrase (must be 24 or 27 words)</translation>
     </message>
     <message>
         <source>id_invalid_network_configuration</source>
@@ -2699,7 +2699,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_dont_have_any</source>
-        <translation>Invalid PIN, you don&apos;t have any attempts left. Please log in using your mnemonic.</translation>
+        <translation>Invalid PIN, you don&apos;t have any attempts left. Please log in using your recovery phrase.</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_have_1d</source>
@@ -2759,7 +2759,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_is_a_noncustodial</source>
-        <translation>is a non-custodial</translation>
+        <translation>is a self-custodial</translation>
     </message>
     <message>
         <source>id_issuer</source>
@@ -2803,7 +2803,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_jade_will_securely_create_and</source>
-        <translation>Jade will securely create and transfer a new key to your Green app. Jade will not be needed to authorize lightning transactions, because Green will use this new key for your lightning transactions.
+        <translation>Jade will securely create and transfer a new key to the Blockstream app. Jade will not be needed to authorize lightning transactions, because the Blockstream app will use this new key for your lightning transactions.
 
 Don&apos;t worry about any new backups, your existing recovery phrase backup will be sufficient to restore both your funds onchain and on lightning.</translation>
     </message>
@@ -3057,7 +3057,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_log_in_using_mnemonic</source>
-        <translation>Log in using mnemonic</translation>
+        <translation>Log in using recovery phrase</translation>
     </message>
     <message>
         <source>id_log_in_via_watchonly_to_receive</source>
@@ -3145,7 +3145,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_make_sure_you_made_a_proper</source>
-        <translation>Make sure you made a proper backup of your wallet mnemonic.</translation>
+        <translation>Make sure you made a proper backup of your wallet recovery phrase.</translation>
     </message>
     <message>
         <source>id_malleated</source>
@@ -3165,7 +3165,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_manual_coin_selection</source>
-        <translation>Manual coin selection</translation>
+        <translation>Manual Coin Selection</translation>
     </message>
     <message>
         <source>id_manual_restore</source>
@@ -3221,7 +3221,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_migrating_to_blockstream_green</source>
-        <translation>Migrating to Blockstream Green? Have an existing Blockstream Green wallet you&apos;d like to import? Let&apos;s go!</translation>
+        <translation>Migrating to the Blockstream app? Have an existing Blockstream app wallet you&apos;d like to import? Let&apos;s go!</translation>
     </message>
     <message>
         <source>id_minimum</source>
@@ -3237,11 +3237,11 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_mnemonic</source>
-        <translation>Mnemonic</translation>
+        <translation>Recovery Phrase</translation>
     </message>
     <message>
         <source>id_mnemonic_not_available</source>
-        <translation>Mnemonic not available</translation>
+        <translation>Recovery phrase not available</translation>
     </message>
     <message>
         <source>id_model</source>
@@ -3538,7 +3538,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_not_now</source>
-        <translation>Not now</translation>
+        <translation>Not Now</translation>
     </message>
     <message>
         <source>id_not_on_longest_chain</source>
@@ -3822,7 +3822,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_please_contribute_if_you_find</source>
-        <translation>Please contribute if you find Blockstream Green useful</translation>
+        <translation>Please contribute if you find the Blockstream app useful</translation>
     </message>
     <message>
         <source>id_please_disable_biometric</source>
@@ -3874,7 +3874,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_please_secure_your_mnemonic_and</source>
-        <translation>Please secure your mnemonic and confirm you agree to the Terms of Service</translation>
+        <translation>Please secure your recovery phrase and confirm you agree to the Terms of Service</translation>
     </message>
     <message>
         <source>id_please_select_the_checkbox</source>
@@ -3982,7 +3982,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_qr_mode_allows_you_to</source>
-        <translation>QR Mode allows you to communicate with Green using Jade&apos;s camera and QR codes (instead of USB or Bluetooth).</translation>
+        <translation>QR Mode allows you to communicate with the Blockstream app using Jade&apos;s camera and QR codes (instead of USB or Bluetooth).</translation>
     </message>
     <message>
         <source>id_qr_pin_unlock</source>
@@ -4098,7 +4098,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
-        <translation>Recovery mnemonic</translation>
+        <translation>Recovery phrase</translation>
     </message>
     <message>
         <source>id_recovery_phrase</source>
@@ -4146,7 +4146,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Redeem your deposited funds without Blockstream Green signature after a pre-defined period of time.</translation>
+        <translation>Redeem your deposited funds without the Blockstream app signature after a pre-defined period of time.</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4302,11 +4302,11 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_restore_a_blockstream_green</source>
-        <translation>Restore a Blockstream Green wallet using your 24 words mnemonic backup. You can find it in the settings of any Blockstream Green app.</translation>
+        <translation>Restore a Blockstream app wallet using your 24-word recovery phrase. You can find it in the settings of any Blockstream app.</translation>
     </message>
     <message>
         <source>id_restore_a_singlesig_wallet</source>
-        <translation>Restore a Singlesig wallet created on Blockstream Green, or import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>Restore a Singlesig wallet created on the Blockstream app, or import a wallet created with other apps. This option only works with singlesig wallets using BIP39 recovery phrases, and following the BIP44, BIP49, or BIP84 derivations.</translation>
     </message>
     <message>
         <source>id_restore_a_wallet</source>
@@ -4314,7 +4314,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Restore Green Wallet</translation>
+        <translation>Restore Blockstream App Wallet</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>
@@ -4326,7 +4326,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_restore_with_recovery_phrase</source>
-        <translation>Restore with recovery phrase</translation>
+        <translation>Restore with Recovery Phrase</translation>
     </message>
     <message>
         <source>id_restoring_your_wallet</source>
@@ -4408,7 +4408,7 @@ Keep the app online.</translation>
     </message>
     <message>
         <source>id_save_your_mnemonic</source>
-        <translation>Save your mnemonic</translation>
+        <translation>Save your recovery phrase</translation>
     </message>
     <message>
         <source>id_scan_a_proposal</source>
@@ -4584,7 +4584,7 @@ Keep the app online.</translation>
     </message>
     <message>
         <source>id_send_all</source>
-        <translation>Send all</translation>
+        <translation>Send All</translation>
     </message>
     <message>
         <source>id_send_all_funds</source>
@@ -4686,7 +4686,7 @@ This address can be used only once</translation>
     </message>
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
-        <translation>Set up a passcode for your iOS device to set a PIN for Blockstream Green</translation>
+        <translation>Set up a passcode for your iOS device to set a PIN for the Blockstream app</translation>
     </message>
     <message>
         <source>id_set_up_a_screen_lock_for_your</source>
@@ -4698,7 +4698,7 @@ This address can be used only once</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
-        <translation>Set up credentials to access in watch-only mode to receive coins without putting your private keys at risk. Access from any device using a Blockstream Green app</translation>
+        <translation>Set up credentials to access in watch-only mode to receive funds without putting your private keys at risk. Access from any device using the Blockstream app</translation>
     </message>
     <message>
         <source>id_set_up_pgp_key_for</source>
@@ -4806,11 +4806,11 @@ This address can be used only once</translation>
     </message>
     <message>
         <source>id_show_advanced_options</source>
-        <translation>Show advanced options</translation>
+        <translation>Show Advanced Options</translation>
     </message>
     <message>
         <source>id_show_all</source>
-        <translation>Show all</translation>
+        <translation>Show All</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
@@ -4846,7 +4846,7 @@ This address can be used only once</translation>
     </message>
     <message>
         <source>id_show_qr_code</source>
-        <translation>Show QR code</translation>
+        <translation>Show QR Code</translation>
     </message>
     <message>
         <source>id_show_recovery_phrase</source>
@@ -4854,7 +4854,7 @@ This address can be used only once</translation>
     </message>
     <message>
         <source>id_sign_message</source>
-        <translation>Sign message</translation>
+        <translation>Sign Message</translation>
     </message>
     <message>
         <source>id_sign_transaction</source>
@@ -4894,7 +4894,7 @@ This address can be used only once</translation>
     </message>
     <message>
         <source>id_simplified_payment_verification</source>
-        <translation>Simplified Payment Verification verifies your transactions and balance using the Bitcoin network, outside of Green&apos;s servers. Enabling adds bandwidth and processing requirements</translation>
+        <translation>Simplified Payment Verification verifies your transactions and balance using the Bitcoin network, outside of the Blockstream app&apos;s servers. Enabling adds bandwidth and processing requirements</translation>
     </message>
     <message>
         <source>id_singlesig</source>
@@ -4948,7 +4948,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_some_accounts_cannot_be_logged</source>
-        <translation>Some accounts cannot be logged into due to network issues. Please update the Green app and try again later.</translation>
+        <translation>Some accounts cannot be logged into due to network issues. Please update the Blockstream app and try again later.</translation>
     </message>
     <message>
         <source>id_some_coins_in_your_wallet</source>
@@ -5120,9 +5120,9 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_syou_need_ton1_reset_greens</source>
         <translation>%1.You need to:
-1. Reset Green&apos;s Face/TouchID login,
+1. Reset the Blockstream app&apos;s Face/TouchID login,
 2. Log in with PIN,
-3. Re-activate Face/TouchID from Green Settings.</translation>
+3. Re-activate Face/TouchID from the Blockstream app Settings.</translation>
     </message>
     <message>
         <source>id_system_location</source>
@@ -5186,7 +5186,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
-        <translation>Thank you for downloading Green! Please leave us a review when you get a chance</translation>
+        <translation>Thank you for downloading the Blockstream app! Please leave us a review when you get a chance</translation>
     </message>
     <message>
         <source>id_thank_you_for_your_feedback</source>
@@ -5242,7 +5242,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
-        <translation>The network selected on the Green app is different from the one selected on the hardware wallet. Select the same network on both devices.</translation>
+        <translation>The network selected on the Blockstream app is different from the one selected on the hardware wallet. Select the same network on both devices.</translation>
     </message>
     <message>
         <source>id_the_new_email_will_be_used_for</source>
@@ -5298,7 +5298,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_there_is_already_a_pin_set_for</source>
-        <translation>There is already a PIN set for a %1 wallet. Proceeding will not allow setting a PIN and login will require the 24 words mnemonic. You can disable PIN from settings or with 3 failed attempts.</translation>
+        <translation>There is already a PIN set for a %1 wallet. Proceeding will not allow setting a PIN and login will require the 24-word recovery phrase. You can disable PIN from settings or with 3 failed attempts.</translation>
     </message>
     <message>
         <source>id_there_is_already_a_swap_in</source>
@@ -5316,7 +5316,7 @@ Do you want to create a new one?</translation>
     </message>
     <message>
         <source>id_these_settings_apply_for_every</source>
-        <translation>These settings apply for every wallet you use on Blockstream Green.</translation>
+        <translation>These settings apply for every wallet you use on the Blockstream app.</translation>
     </message>
     <message>
         <source>id_this_amount_is_below_the</source>
@@ -5373,7 +5373,7 @@ Thanks for your patience!</translation>
     </message>
     <message>
         <source>id_tip_you_can_use_the</source>
-        <translation>Tip: You can use the xPub/yPub/zPub to view your watch-only wallet in Green, or you may import it to another platform. Each account in your wallet has a separate xPub/yPub/zPub.</translation>
+        <translation>Tip: You can use the xPub/yPub/zPub to view your watch-only wallet in the Blockstream app, or you may import it to another platform. Each account in your wallet has a separate xPub/yPub/zPub.</translation>
     </message>
     <message>
         <source>id_to</source>
@@ -5569,7 +5569,7 @@ Thanks for your patience!</translation>
     </message>
     <message>
         <source>id_unable_to_contact_the_green</source>
-        <translation>Unable to contact the Green service. Please check your network connection and wait to be reconnected.</translation>
+        <translation>Unable to contact the Blockstream app service. Please check your network connection and wait to be reconnected.</translation>
     </message>
     <message>
         <source>id_unarchive</source>
@@ -5613,7 +5613,7 @@ Thanks for your patience!</translation>
     </message>
     <message>
         <source>id_unlock_green</source>
-        <translation>Unlock Green</translation>
+        <translation>Unlock the Blockstream App</translation>
     </message>
     <message>
         <source>id_unlock_jade_before_signing_the</source>
@@ -5927,7 +5927,7 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     </message>
     <message>
         <source>id_watchonly_mode_can_be_activated</source>
-        <translation>Watch-only mode can be activated from settings after logging in with your PIN, mnemonic, or hardware wallet.</translation>
+        <translation>Watch-only mode can be activated from settings after logging in with your PIN, recovery phrase, or hardware wallet.</translation>
     </message>
     <message>
         <source>id_watchonly_mode_cannot_be</source>
@@ -6045,7 +6045,7 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     </message>
     <message>
         <source>id_wrong_choice_check_your</source>
-        <translation>Wrong choice. Check your mnemonic and try again.</translation>
+        <translation>Wrong choice. Check your recovery phrase and try again.</translation>
     </message>
     <message>
         <source>id_xpub</source>
@@ -6141,7 +6141,7 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     </message>
     <message>
         <source>id_you_have_no_coins_to_send</source>
-        <translation>You have no coins to send. Generate an address to receive some bitcoins.</translation>
+        <translation>You have no funds to send. Generate an address to receive some bitcoins.</translation>
     </message>
     <message>
         <source>id_you_have_received_s</source>
@@ -6153,7 +6153,7 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     </message>
     <message>
         <source>id_you_have_successfully_sent_a</source>
-        <translation>You have successfully sent a transaction. Please give us your feedback to improve Green.</translation>
+        <translation>You have successfully sent a transaction. Please give us your feedback to improve the Blockstream app.</translation>
     </message>
     <message>
         <source>id_you_have_to_authenticate_to</source>
@@ -6177,7 +6177,7 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     </message>
     <message>
         <source>id_you_must_save_this_mnemonic_now</source>
-        <translation>You MUST save this mnemonic NOW</translation>
+        <translation>You MUST save this recovery phrase NOW</translation>
     </message>
     <message>
         <source>id_you_need_a_liquid_account_in</source>
@@ -6201,11 +6201,11 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
-        <translation>You will need to re-enter your mnemonic to login again if you do not set up a PIN. Press &quot;OK&quot; to continue.</translation>
+        <translation>You will need to re-enter your recovery phrase to login again if you do not set up a PIN. Press &quot;OK&quot; to continue.</translation>
     </message>
     <message>
         <source>id_you_will_see_your_coins_here</source>
-        <translation>You will see your coins here</translation>
+        <translation>You will see your funds here</translation>
     </message>
     <message>
         <source>id_you_will_stop_receiving_push</source>
@@ -6225,11 +6225,11 @@ WARNING: This recovery phrase does not restore all your other bitcoin or liquid 
     </message>
     <message>
         <source>id_youll_see_your_coins_here_when</source>
-        <translation>You&apos;ll see your coins here when you receive funds</translation>
+        <translation>You&apos;ll see your funds here when you receive them</translation>
     </message>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
-        <translation>Your 2FA expires, so that if you lose access to your 2FA method, or the Blockstream Green service becomes unavailable, you can always recover your bitcoin using this open source tool</translation>
+        <translation>Your 2FA expires, so that if you lose access to your 2FA method, or the Blockstream app service becomes unavailable, you can always recover your bitcoin using this open source tool</translation>
     </message>
     <message>
         <source>id_your_bitcoin_and_liquid_assets</source>
@@ -6277,7 +6277,7 @@ For that you will need to:
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>
-        <translation>Your Green wallet is now ready to use.</translation>
+        <translation>Your Blockstream app wallet is now ready to use.</translation>
     </message>
     <message>
         <source>id_your_ios_device_might_not_be</source>
@@ -6285,7 +6285,7 @@ For that you will need to:
     </message>
     <message>
         <source>id_your_keys_secure_your_coins_on</source>
-        <translation>Your keys secure your coins on the blockchain</translation>
+        <translation>Your keys secure your funds on the blockchain</translation>
     </message>
     <message>
         <source>id_your_keys_will_be_secured_on_a</source>
@@ -6305,7 +6305,7 @@ For that you will need to:
     </message>
     <message>
         <source>id_your_pin_or_your_mnemonic_will</source>
-        <translation>Your PIN or your mnemonic will be required to access the wallet.</translation>
+        <translation>Your PIN or your recovery phrase will be required to access the wallet.</translation>
     </message>
     <message>
         <source>id_your_redeposit_address</source>
@@ -6343,7 +6343,7 @@ Do you want to continue?</translation>
     </message>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
-        <translation>Your wallet backup is made of 24 words, also known as your mnemonic. Make sure you have a backup and keep it safe. Anyone who finds it can steal your money. You can use it to restore your Blockstream Green wallet on another device in case yours is lost, damaged or stolen.</translation>
+        <translation>Your wallet backup is made of 24 words, also known as your recovery phrase. Make sure you have a backup and keep it safe. Anyone who finds it can steal your money. You can use it to restore your Blockstream app wallet on another device in case yours is lost, damaged or stolen.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_for_a</source>

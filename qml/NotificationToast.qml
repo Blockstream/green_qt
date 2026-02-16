@@ -80,7 +80,7 @@ ColumnLayout {
         // BackupToast {
         // }
         WarningToast {
-            title: 'Backup your wallet'
+            title: 'Back Up Your Wallet'
             message: 'Write down your recovery phrase and store it safely.'
         }
     }
@@ -286,7 +286,7 @@ ColumnLayout {
                         textColor: '#000000'
                         font.pixelSize: 12
                         font.weight: 600
-                        text: 'Backup now'
+                        text: 'Back Up Now'
                         padding: 6
                         leftPadding: 10
                         rightPadding: 10
@@ -300,7 +300,7 @@ ColumnLayout {
                         textColor: '#FFFFFF'
                         font.pixelSize: 12
                         font.weight: 600
-                        text: 'Remind me later'
+                        text: 'Remind Me Later'
                         padding: 6
                         leftPadding: 10
                         rightPadding: 10
@@ -470,7 +470,7 @@ ColumnLayout {
                         fillColor: '#FFFFFF'
                         font.pixelSize: 12
                         font.weight: 600
-                        text: 'Try again'
+                        text: 'Try Again'
                         textColor: '#000000'
                         padding: 6
                         leftPadding: 10
@@ -582,7 +582,7 @@ ColumnLayout {
                     color: toast.textColor
                     font.pixelSize: 13
                     font.weight: 700
-                    text: 'Some coins are no longer 2FA protected (%1 accounts)'.arg(toast.notification.accounts.length)
+                    text: 'Some funds are no longer 2FA protected (%1 accounts)'.arg(toast.notification.accounts.length)
                     wrapMode: Label.WordWrap
                 }
                 

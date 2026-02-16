@@ -431,7 +431,7 @@ AbstractDialog {
                 VSpacer {
                 }
                 SubButton {
-                    text: 'Give us your feedback'
+                    text: 'Give Us Your Feedback'
                     onClicked: {
                         page.StackView.view.push(request_support_page, {
                             type: 'feedback',

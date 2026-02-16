@@ -47,7 +47,7 @@ Pane {
             }
             StepPane {
                 step: 3
-                title: 'Connect using USB'
+                title: 'Connect Using USB'
                 text: 'Choose a USB connection on Jade after verifying your recovery phrase'
             }
         }

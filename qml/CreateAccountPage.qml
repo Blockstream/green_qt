@@ -275,7 +275,7 @@ StackViewPage {
                     font.pixelSize: 14
                     font.weight: 400
                     horizontalAlignment: Qt.AlignCenter
-                    text: `This feature is coming soon on desktop, but it's already available on Blockstream mobile now!`
+                    text: `This feature is coming soon on desktop, but it's already available on the Blockstream app for mobile.`
                     wrapMode: Label.WordWrap
                 }
                 LinkButton {

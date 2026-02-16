@@ -48,7 +48,7 @@ AbstractDrawer {
                                 const board_type = self.device.versionInfo.BOARD_TYPE
                                 return board_type === 'JADE_V2'
                             }
-                            text: 'Genuine check'
+                            text: 'Genuine Check'
                         }
                         Label {
                             Layout.fillWidth: true
@@ -105,7 +105,7 @@ AbstractDrawer {
                         Label {
                             Layout.fillWidth: true
                             horizontalAlignment: Label.AlignRight
-                            text: self.device.versionInfo.JADE_CONFIG ? 'YES' : 'NO'
+                            text: self.device.versionInfo.JADE_CONFIG ? 'Yes' : 'No'
                         }
                         Separator {
                         }

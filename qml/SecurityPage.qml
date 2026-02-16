@@ -362,7 +362,7 @@ Page {
                                 ColumnLayout {
                                     spacing: 8
                                     Label {
-                                        text: 'Upgrade Your Security with Jade.'
+                                        text: 'Upgrade Your Security with Jade'
                                         font.pixelSize: 20
                                         font.weight: 600
                                         color: '#FFFFFF'
@@ -469,7 +469,7 @@ Page {
                         InfoCard {
                             iconSource: 'qrc:/svg3/Stamp.svg'
                             title: 'Genuine Check'
-                            description: 'Verify that your device is authentic and safe to use prior to managing funds.'
+                            description: 'Verify that your device is authentic and safe to use before managing funds.'
                             linkButtons: []
                             iconSide: true
                             rightAction: Action {
@@ -496,7 +496,7 @@ Page {
                         InfoCard {
                             iconSource: 'qrc:/svg3/Graphic-card.svg'
                             title: 'Firmware Upgrade'
-                            description: 'Update your Jade Firmware for the latest features, improvements, and protection for your assets.'
+                            description: 'Update your Jade firmware for the latest features, improvements, and protection for your assets.'
                             linkButtons: [
                                 Component {
                                     RowLayout {

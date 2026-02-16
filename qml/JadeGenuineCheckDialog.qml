@@ -237,7 +237,7 @@ Dialog {
                 font.pixelSize: 14
                 font.weight: 400
                 horizontalAlignment: Label.AlignHCenter
-                text: 'We could successfully verify your jade, enjoy the best Blockstream can offer you with your brand new jade.'
+                text: 'We successfully verified your Jade. Enjoy the best Blockstream can offer with your brand new Jade.'
                 wrapMode: Label.WordWrap
             }
             PrimaryButton {

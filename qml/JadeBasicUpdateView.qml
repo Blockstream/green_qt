@@ -92,7 +92,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 14
             font.weight: 400
-            text: qsTr('Keep your Jade secure, upgrade to firmware version <b>%1</b> now!').arg(self.firmware.version)
+            text: qsTr('Keep your Jade secure, upgrade to firmware version <b>%1</b> now.').arg(self.firmware.version)
             textFormat: Label.StyledText
         }
         PrimaryButton {

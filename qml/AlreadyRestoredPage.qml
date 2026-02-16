@@ -33,7 +33,7 @@ StackViewPage {
         Layout.alignment: Qt.AlignCenter
         Layout.minimumWidth: 325
         Layout.topMargin: 80
-        text: 'Switch to wallet'
+        text: 'Switch to Wallet'
         onClicked: self.openWallet(self.wallet)
     }
     RegularButton {

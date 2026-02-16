@@ -7,5 +7,5 @@ import QtQuick.Layouts
 LoadingPage {
     id: page
     padding: 0
-    title: 'Partial service outage'
+    title: 'Partial Service Outage'
 }

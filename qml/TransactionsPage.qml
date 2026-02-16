@@ -332,7 +332,7 @@ Page {
                 }
             }
             ListPage {
-                emptyText: `You don't have any coins yet.`
+                emptyText: `You don't have any funds yet.`
                 model: CoinModel {
                     id: coin_model
                     context: self.context

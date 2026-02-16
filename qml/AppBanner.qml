@@ -137,7 +137,7 @@ Collapsible {
                 fillColor: '#FFFFFF'
                 font.pixelSize: 12
                 font.weight: 500
-                text: 'Try again'
+                text: 'Try Again'
                 textColor: '#1C1C1C'
                 onClicked: banner.notification.trigger()
             }
@@ -159,7 +159,7 @@ Collapsible {
                 color: '#070B0E'
                 font.pixelSize: 13
                 font.weight: 700
-                text: 'Some coins are no longer 2FA protected (%1 accounts)'.arg(banner.notification.accounts.length)
+                text: 'Some funds are no longer 2FA protected (%1 accounts)'.arg(banner.notification.accounts.length)
                 wrapMode: Label.WordWrap
             }
             PrimaryButton {

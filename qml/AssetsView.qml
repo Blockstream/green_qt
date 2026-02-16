@@ -61,7 +61,7 @@ Pane {
             RowLayout {
                 spacing: 0
                 LinkButton {
-                    text: 'Fund your wallet'
+                    text: 'Fund Your Wallet'
                 }
                 Label {
                     color: '#929292'

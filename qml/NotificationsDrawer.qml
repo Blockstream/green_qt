@@ -315,7 +315,7 @@ AbstractDrawer {
                 fillColor: '#FFFFFF'
                 font.pixelSize: 12
                 font.weight: 500
-                text: 'Try again'
+                text: 'Try Again'
                 textColor: '#1C1C1C'
                 onClicked: {
                     stack_view.push(outage_page, {
@@ -362,14 +362,14 @@ AbstractDrawer {
                 Layout.alignment: Qt.AlignRight
                 spacing: 10
                 PrimaryButton {
-                    text: 'Backup now'
+                    text: 'Back Up Now'
                     borderColor: '#FFFFFF'
                     fillColor: '#FFFFFF'
                     textColor: '#000000'
                     onClicked: warningView.notification.trigger()
                 }
                 PrimaryButton {
-                    text: 'Remind me later'
+                    text: 'Remind Me Later'
                     borderColor: '#FFFFFF'
                     fillColor: 'transparent'
                     textColor: '#FFFFFF'

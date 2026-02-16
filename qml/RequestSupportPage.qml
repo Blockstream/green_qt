@@ -23,7 +23,7 @@ StackViewPage {
     objectName: "RequestSupportPage"
     id: self
     title: {
-        if (self.type === 'incident') return 'Contact us'
+        if (self.type === 'incident') return 'Contact Us'
         if (self.type === 'feedback') return 'Feedback'
         return qsTrId('id_support')
     }

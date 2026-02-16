@@ -57,7 +57,7 @@ VFlickable {
                 Layout.topMargin: 10
                 busy: !(controller.monitor?.idle ?? true) || self.device.status === JadeDevice.StatusHandleClientMessage
                 enabled: (controller.monitor?.idle ?? true) && self.device.status !== JadeDevice.StatusHandleClientMessage
-                text: 'Set up Jade'
+                text: 'Set Up Jade'
                 onClicked: self.setup()
             }
         }
@@ -70,7 +70,7 @@ VFlickable {
                 Layout.topMargin: 20
                 busy: !(controller.monitor?.idle ?? true) || self.device.status === JadeDevice.StatusHandleClientMessage
                 enabled: (controller.monitor?.idle ?? true) && self.device.status !== JadeDevice.StatusHandleClientMessage
-                text: 'Set up Jade'
+                text: 'Set Up Jade'
                 onClicked: self.setup()
             }
         }
