@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QCameraDevice>
 #include <QCommandLineParser>
+#include <QFileInfo>
 #include <QFontDatabase>
 #include <QIcon>
 #include <QMediaDevices>
@@ -480,10 +481,18 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     QDirIterator it(":/i18n", QDirIterator::Subdirectories);
     QMap<QString, QVariant> languages;
     while (it.hasNext()) {
-        const auto language = it.next().mid(13).chopped(3);
-        QLocale locale(language);
+        const QString resource_path = it.next();
+        if (!resource_path.endsWith(".qm")) continue;
+
+        const QString base_name = QFileInfo(resource_path).baseName(); // e.g. green_en
+        if (!base_name.startsWith("green_")) continue;
+
+        const QString language_code = base_name.sliced(QString("green_").size());
+        if (language_code.isEmpty()) continue;
+
+        QLocale locale(language_code);
         const auto name = locale.nativeTerritoryName() + " - " + locale.nativeLanguageName();
-        languages.insert(name, QVariantMap({{ "name", name }, { "language", language }}));
+        languages.insert(name, QVariantMap({{ "name", name }, { "language", language_code }}));
     }
     engine.rootContext()->setContextProperty("env", GREEN_ENV);
     engine.rootContext()->setContextProperty("languages", languages.values());
