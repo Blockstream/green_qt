@@ -223,7 +223,7 @@ int watchdog_handler(Application& app)
     const auto start_ui = [&app](QStringList args, int attempts = 1) {
         for (int i = 0; i < attempts; i++) {
             QFile file(GetLogFilename());
-            file.open(QFile::WriteOnly | QFile::Append);
+            (void)file.open(QFile::WriteOnly | QFile::Append);
             file.write("---------");
             file.flush();
             QProcess process;

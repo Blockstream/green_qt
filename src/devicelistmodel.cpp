@@ -24,17 +24,19 @@ DeviceListModel::DeviceListModel(QObject* parent)
 void DeviceListModel::setVendor(Device::Vendor vendor)
 {
     if (m_vendor == vendor) return;
+    beginFilterChange();
     m_vendor = vendor;
     emit vendorChanged(m_vendor);
-    invalidateFilter();
+    endFilterChange();
 }
 
 void DeviceListModel::setType(Device::Type type)
 {
     if (m_type == type) return;
+    beginFilterChange();
     m_type = type;
     emit typeChanged(m_type);
-    invalidateFilter();
+    endFilterChange();
 }
 
 void DeviceListModel::addDevice(Device* device)

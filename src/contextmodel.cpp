@@ -476,7 +476,8 @@ void CoinModel::update(Context* context)
 {
     setSourceModel(context->coinModel());
     connect(context, &Context::coinUpdated, this, [=, this] {
-        invalidateFilter();
+        beginFilterChange();
+        endFilterChange();
         sort(0, Qt::DescendingOrder);
     });
 }

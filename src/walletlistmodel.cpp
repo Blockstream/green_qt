@@ -34,7 +34,10 @@ void WalletListModel::update()
             item = new QStandardItem;
             item->setData(QVariant::fromValue(wallet), Qt::UserRole);
             m_source_model.appendRow(item);
-            connect(wallet, &Wallet::contextChanged, this, [this] { invalidateFilter(); });
+            connect(wallet, &Wallet::contextChanged, this, [this] {
+                beginFilterChange();
+                endFilterChange();
+            });
         }
         m_items.insert(wallet, item);
     }
@@ -69,23 +72,26 @@ bool WalletListModel::lessThan(const QModelIndex& source_left, const QModelIndex
 void WalletListModel::setWatchOnly(WalletListModel::Filter watch_only)
 {
     if (m_watch_only == watch_only) return;
+    beginFilterChange();
     m_watch_only = watch_only;
     emit watchOnlyChanged(m_watch_only);
-    invalidateFilter();
+    endFilterChange();
 }
 
 void WalletListModel::setFilterPinData(Filter filter_pin_data)
 {
     if (m_filter_pin_data == filter_pin_data) return;
+    beginFilterChange();
     m_filter_pin_data = filter_pin_data;
     emit filterPinDataChanged();
-    invalidateFilter();
+    endFilterChange();
 }
 
 void WalletListModel::setFilterDeviceDetails(Filter filter_device_details)
 {
     if (m_filter_device_details == filter_device_details) return;
+    beginFilterChange();
     m_filter_device_details = filter_device_details;
     emit filterDeviceDetailsChanged();
-    invalidateFilter();
+    endFilterChange();
 }

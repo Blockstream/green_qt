@@ -232,13 +232,13 @@ QStringList WalletManager::generateMnemonic(int size)
 void WalletManager::printBackupTemplate()
 {
     QFile src(":/pdf/recovery-phrase-backup-template-12-words.pdf");
-    src.open(QFile::ReadOnly);
+    (void)src.open(QFile::ReadOnly);
     auto data = src.readAll();
 
     QTemporaryFile file;
     file.setAutoRemove(false);
     file.setFileTemplate(QDir::tempPath() + "/recovery-phrase-backup-template-12-words-XXXXXX.pdf");
-    file.open();
+    (void)file.open();
     file.write(data);
     file.close();
 

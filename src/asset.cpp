@@ -201,25 +201,28 @@ AssetsModel::AssetsModel(QObject* parent)
 void AssetsModel::setFilter(const QString& filter)
 {
     if (m_filter == filter) return;
+    beginFilterChange();
     m_filter = filter;
     emit filterChanged();
-    invalidateRowsFilter();
+    endFilterChange(Direction::Rows);
 }
 
 void AssetsModel::setContext(Context* context)
 {
     if (m_context == context) return;
+    beginFilterChange();
     m_context = context;
     emit contextChanged();
-    invalidateRowsFilter();
+    endFilterChange(Direction::Rows);
 }
 
 void AssetsModel::setMinWeight(int min_weight)
 {
     if (m_min_weight == min_weight) return;
+    beginFilterChange();
     m_min_weight = min_weight;
     emit minWeightChanged();
-    invalidateRowsFilter();
+    endFilterChange(Direction::Rows);
 }
 
 bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const

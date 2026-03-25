@@ -18,9 +18,9 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
 - **Bash 4+**: Required for GDK build scripts. macOS ships with Bash 3.2; install via `brew install bash`. Check version with `bash --version`.
 - **C/C++ compiler**: Apple clang from Xcode (default on macOS).
 - **Build tools**: `brew install cmake ninja python git pkg-config`
-- **Qt 6.8**: installed via the Qt online installer (see below).
+- **Qt 6.11**: installed via the Qt online installer (see below).
 
-The build uses a local dependency prefix under `depends/` plus a **Qt 6.8** installation.
+The build uses a local dependency prefix under `depends/` plus a **Qt 6.11** installation.
 
 ### Clone the repository
 
@@ -57,10 +57,10 @@ Pick the target architecture:
   export gdk_ROOT="$PREFIX/lib/x86_64-apple-darwin/gdk"
   ```
 
-### Install Qt 6.8 (Qt online installer)
+### Install Qt 6.11 (Qt online installer)
 
 1. Download the Qt online installer from `https://www.qt.io/download-qt-installer`.
-2. Install **Qt 6.8.x** for macOS (arm64 or x86_64 to match your machine), including at least:
+2. Install **Qt 6.11.x** for macOS (arm64 or x86_64 to match your machine), including at least:
    - Qt Quick / Qt Quick Controls 2
    - Qt Widgets / Qt Quick Widgets
    - Qt XML / Qt Core5Compat
@@ -72,18 +72,18 @@ Pick the target architecture:
 3. Note the install prefix; for example:
 
    ```bash
-   export QT_ROOT="$HOME/Qt/6.8.3/macos"
+   export QT_ROOT="$HOME/Qt/6.11.0/macos"
    ```
 
 #### macOS 26 (Sequoia) notes
 
-- **Qt version on macOS 26**: Building with Qt **6.8.3** on macOS 26 can fail with a link error:
+- **Qt version on macOS 26**: Building with Qt **6.11.0** on macOS 26 can fail with a link error:
 
   ```text
   ld: framework 'AGL' not found
   ```
 
-  Upgrading Qt to **6.10.2** (or newer in the 6.10 series) resolves this issue.
+  Upgrading Qt to **6.11.0** (or newer in the 6.11 series) resolves this issue.
 
 Ensure Qt is on `PATH` and in `CMAKE_PREFIX_PATH`:
 

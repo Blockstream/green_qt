@@ -32,7 +32,7 @@ GDK must be built on Linux with MinGW; the same applies to libserialport for the
 | Option                            | Console to use                                         | Notes                                                         |
 | --------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------- |
 | **WSL2** (recommended on Windows) | Ubuntu app or `wsl` in PowerShell, then a bash shell   | Easiest: same machine, access Windows drives under `/mnt/c/`. |
-| **Docker**                        | Terminal on your host; commands run inside a container | Use `ci/windows-x86_64-shared/Dockerfile` to match CI.        |
+| **Docker**                        | Terminal on your host; commands run inside a container | Use `ci/windows-x86_64/Dockerfile` to match CI.        |
 | **Native Linux**                  | Any terminal (e.g. GNOME Terminal) with bash           | Use if you already have Ubuntu/Debian.                        |
 
 All commands in Phase 1 are meant to be run in a **bash** shell on that Linux environment (WSL2, inside Docker, or native Linux). Do not use PowerShell or Command Prompt for Phase 1.
@@ -57,7 +57,7 @@ All commands in Phase 1 are meant to be run in a **bash** shell on that Linux en
 1. **Install Docker Desktop for Windows** (or Docker Engine on Linux) and ensure Docker is running.
 2. **Build the CI image** (from the repo root on Windows or Linux, in PowerShell or a normal terminal):
    ```bash
-   docker build -f ci/windows-x86_64-shared/Dockerfile -t green-windows-deps .
+   docker build -f ci/windows-x86_64/Dockerfile -t green-windows-deps .
    ```
    That image already builds GDK and libserialport and puts them in `/depends`. To get the artifacts on your Windows machine, run a container and copy `/depends` out, e.g. (from PowerShell, after creating `C:\depends`):
    ```powershell
@@ -277,7 +277,7 @@ Copy the **entire** `$PREFIX` tree to your Windows machine so that Phase 2 can u
   - C++ build tools
   - CMake
   - Ninja
-- **Qt 6.8.3** (or the version used in CI) for MSVC 2022 64-bit, e.g. installed under `C:\qt\6.8.3\msvc2022_64`.
+- **Qt 6.11.0** (or the version used in CI) for MSVC 2022 64-bit, e.g. installed under `C:\qt\6.11.0\msvc2022_64`.
 - **Git** and **7-Zip** (e.g. via Chocolatey), for cloning and extracting sources.
 - **Python** (for GDK was already used on Linux; not required on Windows for the steps below).
 
@@ -301,7 +301,7 @@ set PREFIX=C:\deps
 Then run (from a directory where you have the repo and where the scripts can clone dependencies):
 
 - **Countly:** `ci\x64-windows\countly.bat`
-- **KDSingleApplication:** `ci\x64-windows\kdsingleapplication.bat` (expects Qt at `\qt\6.8.3\msvc2022_64`; adjust if your Qt path is different)
+- **KDSingleApplication:** `ci\x64-windows\kdsingleapplication.bat` (expects Qt at `\qt\6.11.0\msvc2022_64`; adjust if your Qt path is different)
 - **ZXing:** `ci\x64-windows\zxing.bat`
 - **hidapi:** `ci\x64-windows\hidapi.bat`
 
@@ -321,7 +321,7 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliar
 If you use a different VS or Qt path, adjust the next lines accordingly:
 
 ```bat
-call C:\qt\6.8.3\msvc2022_64\bin\qt-cmake -S . -B bld -DCMAKE_PREFIX_PATH=C:\deps;C:\depends\windows-x86_64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-dev -DGREEN_LOG_FILE=dev -DENABLE_SENTRY=OFF
+call C:\qt\6.11.0\msvc2022_64\bin\qt-cmake -S . -B bld -DCMAKE_PREFIX_PATH=C:\deps;C:\depends\windows-x86_64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-dev -DGREEN_LOG_FILE=dev -DENABLE_SENTRY=OFF
 
 cmake --build bld --config RelWithDebInfo
 ```
@@ -338,7 +338,7 @@ For a production-style build (e.g. release):
 After a successful build:
 
 ```bat
-C:\qt\6.8.3\msvc2022_64\bin\windeployqt.exe --qmldir qml bld\RelWithDebInfo\blockstream.exe
+C:\qt\6.11.0\msvc2022_64\bin\windeployqt.exe --qmldir qml bld\RelWithDebInfo\blockstream.exe
 
 copy C:\depends\windows-x86_64\bin\libgreen_gdk.dll bld\RelWithDebInfo\
 copy C:\depends\windows-x86_64\bin\libserialport-0.dll bld\RelWithDebInfo\

@@ -38,11 +38,18 @@ RUN curl -SL --output qt-online-installer-windows-x64-online.exe https://downloa
 ARG QT_INSTALLER_JWT_TOKEN
 ENV QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN}
 RUN qt-online-installer-windows-x64-online.exe `
-    --root c:\\qt --accept-licenses `
-    --default-answer `
-    --confirm-command `
-    --accept-obligations `
-    install qt6.8.3-msvc2022-full-dev
+    --root c:\\qt `
+    --accept-licenses --default-answer --confirm-command --accept-obligations `
+    install `
+        qt.qt6.6110.win64_msvc2022_64 `
+        qt.qt6.6110.addons.qt5compat `
+        qt.qt6.6110.addons.qtconnectivity `
+        qt.qt6.6110.addons.qtmultimedia `
+        qt.qt6.6110.addons.qtserialport `
+        qt.qt6.6110.addons.qtpositioning `
+        extensions.qtwebengine.6110.win64_msvc2022_64 `
+        qt.qt6.6110.addons.qtwebview `
+        qt.qt6.6110.addons.qtwebchannel
 
 ENV PREFIX=C:\deps
 

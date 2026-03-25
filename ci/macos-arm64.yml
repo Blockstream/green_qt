@@ -54,7 +54,7 @@ macos-arm64:build:
     - .build
     - .macos-arm64
   after_script:
-    - $HOME/qt-install/6.8.3/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
+    - $HOME/qt-install/6.11.0/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
     - rm -rf build/Blockstream.app/Contents/MacOS/Blockstream.dSYM
     - mkdir macos-arm64-shared
     - mv build/Blockstream.app macos-arm64-shared

@@ -16,7 +16,7 @@ if /i "%CI_COMMIT_REF_NAME:~0,8%"=="release_" (
     set "GREEN_BUILD_ID=-%CI_COMMIT_SHORT_SHA%"
 )
 
-call C:\qt\6.8.3\msvc2022_64\bin\qt-cmake ^
+call C:\qt\6.11.0\msvc2022_64\bin\qt-cmake ^
     -S C:\src -B C:\src\bld ^
     -DCMAKE_BUILD_TYPE=RelWithDebInfo ^
     -DGREEN_ENV=%GREEN_ENV% ^
@@ -27,7 +27,7 @@ call C:\qt\6.8.3\msvc2022_64\bin\qt-cmake ^
 
 cmake --build C:\src\bld --config RelWithDebInfo
 
-C:\qt\6.8.3\msvc2022_64\bin\windeployqt.exe --qmldir C:\src\qml C:\src\bld\RelWithDebInfo\blockstream.exe
+C:\qt\6.11.0\msvc2022_64\bin\windeployqt.exe --qmldir C:\src\qml C:\src\bld\RelWithDebInfo\blockstream.exe
 
 copy C:\depends\windows-x86_64\bin\libgreen_gdk.dll C:\src\bld\RelWithDebInfo\
 copy C:\depends\windows-x86_64\bin\lwk.dll C:\src\bld\RelWithDebInfo\
