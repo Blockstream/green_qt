@@ -19,21 +19,39 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLoggingCategory>
 #include <QString>
 #include <QtConcurrentRun>
 
+Q_LOGGING_CATEGORY(lcLwk, "lwk")
+
+static lwk::LogLevel lwkMinLogLevel()
+{
+    const auto val = qEnvironmentVariable("GREEN_LWK_LOG_LEVEL", "info").toLower();
+    if (val == "debug" || val == "trace") return lwk::LogLevel::kDebug;
+    if (val == "warn" || val == "warning") return lwk::LogLevel::kWarn;
+    if (val == "error") return lwk::LogLevel::kError;
+    return lwk::LogLevel::kInfo;
+}
+
 struct Logger : public lwk::Logging
 {
+    Logger() : m_min_level(lwkMinLogLevel()) {}
+
     void log(const lwk::LogLevel& level, const std::string& message) override
     {
+        if (level < m_min_level) return;
+
         switch (int(level)) {
-        // case 1: qDebug() << "lwk(debug)" << message.c_str(); break;
-        case 2: qInfo() << "lwk(info)" << message.c_str(); break;
-        case 3: qWarning() << "lwk(warn)" << message.c_str(); break;
-        case 4: qCritical() << "lwk(error)" << message.c_str(); break;
+        case 1: qCDebug(lcLwk)    << message.c_str(); break;
+        case 2: qCInfo(lcLwk)     << message.c_str(); break;
+        case 3: qCWarning(lcLwk)  << message.c_str(); break;
+        case 4: qCCritical(lcLwk) << message.c_str(); break;
         default: return;
         }
     }
+
+    lwk::LogLevel m_min_level;
 };
 
 struct Store : public lwk::ForeignStore

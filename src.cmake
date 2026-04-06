@@ -40,6 +40,7 @@ SET(TARGET_SOURCES
 	src/httprequestactivity.cpp
 	src/json.cpp
 	src/loginwithpincontroller.cpp
+	src/logging.h src/logging.cpp
 	src/main.cpp
 	src/network.cpp
 	src/networkmanager.cpp

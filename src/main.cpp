@@ -37,6 +37,7 @@
 #include "devicemanager.h"
 #include "ga.h"
 #include "green_settings.h"
+#include "logging.h"
 #include "httpmanager.h"
 #include "networkmanager.h"
 #include "sessionmanager.h"
@@ -183,6 +184,8 @@ int main(int argc, char *argv[])
     } else {
         g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     }
+
+    qInstallMessageHandler(logMessageHandler);
 
     // only change app name after setting g_data_location
     QCoreApplication::setApplicationName("Blockstream");
