@@ -6,6 +6,12 @@ default:
       - unknown_failure
       - stuck_or_timeout_failure
 
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    - when: always
+
 stages:
   - lint
   - depends
