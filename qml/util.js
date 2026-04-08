@@ -126,6 +126,40 @@ function accountLabel (account) {
     }
 }
 
+function assets(context) {
+    if (!context) return []
+    const assets = new Map
+    for (let i = 0; i < context.sessions.length; i++) {
+        const session = context.sessions[i]
+        const asset = context.getOrCreateAsset(session.network.policyAsset)
+        assets.set(asset, { asset, satoshi: 0 })
+    }
+    for (const account of accounts(context)) {
+        for (let asset_id in account.json.satoshi) {
+            const satoshi = account.json.satoshi[asset_id]
+            const asset = context.getOrCreateAsset(asset_id)
+            let sum = assets.get(asset)
+            if (sum) {
+                sum.satoshi += satoshi
+            } else {
+                sum = { satoshi, asset }
+                assets.set(asset, sum)
+            }
+        }
+    }
+    return [...assets.values()].sort((a, b) => {
+        if (a.asset.weight > b.asset.weight) return -1
+        if (b.asset.weight > a.asset.weight) return 1
+        if (b.asset.weight === 0) {
+            if (a.asset.icon && !b.asset.icon) return -1
+            if (!a.asset.icon && b.asset.icon) return 1
+            if (Object.keys(a.asset.data).length > 0 && Object.keys(b.asset.data).length === 0) return -1
+            if (Object.keys(a.asset.data).length === 0 && Object.keys(b.asset.data).length > 0) return 1
+        }
+        return a.asset.name.localeCompare(b.asset.name)
+    })
+}
+
 function networkLabel (network) {
     if (!network) return '-'
     return network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig')
@@ -155,6 +189,31 @@ function incognito(enabled, value, size = 5) {
 
 function unit(target) {
     return target.primarySession.unit
+}
+
+function currency(context) {
+    return context.primarySession?.settings?.pricing?.currency ?? 'USD'
+}
+
+function formatAmount(amount, currency, options = {}) {
+    const locale = options.locale ?? Qt.locale()
+    const precision = options.precision ?? 2
+
+    const value = Number(amount)
+    if (!isFinite(value)) return currency ? `-/- ${currency}` : ''
+
+    let formatted = locale.toString(value, 'f', precision)
+    const decimalPoint = locale.decimalPoint
+    if (formatted.includes(decimalPoint)) {
+        while (formatted.endsWith('0')) {
+            formatted = formatted.slice(0, -1)
+        }
+        if (formatted.endsWith(decimalPoint)) {
+            formatted = formatted.slice(0, -decimalPoint.length)
+        }
+    }
+
+    return currency ? `${formatted} ${currency}` : formatted
 }
 
 function normalizeUnit(unit) {

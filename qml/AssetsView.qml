@@ -10,40 +10,7 @@ Pane {
     signal assetClicked(Asset asset)
 
     required property Context context
-    readonly property var assets: {
-        const context = self.context
-        if (!context) return []
-        const assets = new Map
-        for (let i = 0; i < self.context.sessions.length; i++) {
-            const session = self.context.sessions[i]
-            const asset = context.getOrCreateAsset(session.network.policyAsset)
-            assets.set(asset, { asset, satoshi: 0 })
-        }
-        for (const account of UtilJS.accounts(context)) {
-            for (let asset_id in account.json.satoshi) {
-                const satoshi = account.json.satoshi[asset_id]
-                const asset = context.getOrCreateAsset(asset_id)
-                let sum = assets.get(asset)
-                if (sum) {
-                    sum.satoshi += satoshi
-                } else {
-                    sum = { satoshi, asset }
-                    assets.set(asset, sum)
-                }
-            }
-        }
-        return [...assets.values()].sort((a, b) => {
-            if (a.asset.weight > b.asset.weight) return -1
-            if (b.asset.weight > a.asset.weight) return 1
-            if (b.asset.weight === 0) {
-                if (a.asset.icon && !b.asset.icon) return -1
-                if (!a.asset.icon && b.asset.icon) return 1
-                if (Object.keys(a.asset.data).length > 0 && Object.keys(b.asset.data).length === 0) return -1
-                if (Object.keys(a.asset.data).length === 0 && Object.keys(b.asset.data).length > 0) return 1
-            }
-            return a.asset.name.localeCompare(b.asset.name)
-        })
-    }
+    readonly property var assets: UtilJS.assets(self.context)
     id: self
     padding: 0
     background: null

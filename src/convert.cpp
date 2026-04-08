@@ -159,14 +159,15 @@ QVariantMap Convert::formatFiat(double additional_value) const
         { "label", "" },
         { "amount", "" },
         { "value", 0.0 },
-        { "available", false }
+        { "available", false },
+        { "currency", m_result.value("fiat_currency").toString("") }
     };
 
     if (m_result.contains("fiat") && !m_result.value("fiat").isNull() && m_result.contains("fiat_currency")) {        
         bool ok = false;
         const auto base = QLocale::c().toDouble(m_result.value("fiat").toString(), &ok);
         if (!ok) return empty_result;
-        
+
         const auto currency = mainnet() ? m_result.value("fiat_currency").toString() : "FIAT";
         const auto value = base + additional_value;
         const auto amount = number_to_string(QLocale::system(), QLocale::c().toString(value, 'f', 10), 2);

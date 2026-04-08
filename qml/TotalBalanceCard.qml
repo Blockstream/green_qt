@@ -8,14 +8,27 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 WalletHeaderCard {
-    id: self
-    
-    Convert {
-        id: convert
-        context: self.context
-        input: ({ satoshi: String(UtilJS.accounts(self.context).reduce((balance, account) => balance + account.balance, 0)) })
-        unit: UtilJS.unit(self.context)
+    readonly property string currency: UtilJS.currency(self.context)
+    readonly property var total: {
+        let loading = false
+        let value = 0
+
+        for (let index = 0; index < assets.count; index++) {
+            const fiat = assets.objectAt(index).fiat
+            if (!fiat.available) continue
+
+            // Currency is not updated means conversion is still loading
+            if (fiat.currency !== self.currency) {
+                loading = true
+            }
+
+            value += fiat.value
+        }
+
+        return { loading, value }
     }
+
+    id: self
 
     headerItem: RowLayout {
         Label {
@@ -23,7 +36,7 @@ WalletHeaderCard {
             color: '#A0A0A0'
             font.pixelSize: 12
             font.weight: 400
-            text: qsTrId('id_bitcoin_balance')
+            text: qsTrId('id_total_balance')
         }
         AbstractButton {
             contentItem: Image {
@@ -44,21 +57,33 @@ WalletHeaderCard {
     }
 
     contentItem: ColumnLayout {
-        spacing: 4
         Label {
+            id: total_balance_label
             topPadding: 4
             font.pixelSize: 22
             font.weight: 600
-            text: UtilJS.incognito(Settings.incognito, convert.output.label)
+            text: UtilJS.incognito(Settings.incognito, UtilJS.formatAmount(self.total.value, self.currency))
+            visible: !self.total.loading
         }
-        Label {
-            color: '#FFFFFF'
-            font.pixelSize: 14
-            font.weight: 400
-            opacity: 0.6
-            text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
+        BusyIndicator {
+            Layout.preferredHeight: total_balance_label.implicitHeight
+            Layout.preferredWidth: total_balance_label.implicitHeight
+            running: self.total.loading
+            visible: self.total.loading
         }
         VSpacer {
+        }
+    }
+
+    Instantiator {
+        id: assets
+        model: UtilJS.assets(self.context)
+        delegate: Convert {
+            required property var modelData
+            id: delegate
+            context: self.context
+            asset: delegate.modelData.asset
+            input: ({ satoshi: String(delegate.modelData.satoshi) })
         }
     }
 }
