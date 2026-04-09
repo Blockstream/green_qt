@@ -137,6 +137,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("Blockstream");
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
+    QApplication::setDesktopFileName("blockstream");
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QtWebEngineQuick::initialize();

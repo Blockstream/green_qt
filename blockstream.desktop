@@ -8,3 +8,4 @@ Exec=blockstream %U
 Categories=Office;Finance;
 Keywords=Blockstream;Wallet;Bitcoin;Blockstream;Liquid;
 MimeType=x-scheme-handler/bitcoin;x-scheme-handler/liquidnetwork;x-scheme-handler/lightning;
+StartupWMClass=Blockstream
