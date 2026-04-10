@@ -39,7 +39,7 @@ if $PLUGIN_QT; then
     chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
     export EXTRA_QT_MODULES="waylandcompositor"
-    export EXTRA_PLATFORM_PLUGINS="libqwayland-generic.so;libqwayland-egl.so"
+    export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
     env QML_SOURCES_PATHS=$SOURCE_PATH/qml TARGET_APP_IMAGE=linuxdeploy-plugin-qt-x86_64.AppImage ./linuxdeploy-plugin-qt-x86_64.AppImage --appdir blockstream.AppDir
 fi
 
