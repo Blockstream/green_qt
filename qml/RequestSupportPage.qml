@@ -8,7 +8,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal submitted(var request)
+    signal submitted(var result)
     required property string type
     required property string subject
     property Context context
@@ -18,7 +18,9 @@ StackViewPage {
             self.enabled = true
             error_badge.raise('Your request failed', error)
         }
-        onSubmitted: (result) => self.submitted(result.request)
+        onSubmitted: (response) => {
+            self.submitted(response)
+        }
     }
     id: self
     title: {

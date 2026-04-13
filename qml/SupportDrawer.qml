@@ -17,8 +17,8 @@ WalletDrawer {
             rightItem: CloseButton {
                 onClicked: self.close()
             }
-            onSubmitted: (request) => {
-                page.StackView.view.replace(page, support_submitted_page, { request, type: page.type }, StackView.PushTransition)
+            onSubmitted: (response) => {
+                page.StackView.view.replace(page, support_submitted_page, { response, type: page.type }, StackView.PushTransition)
             }
         }
     }

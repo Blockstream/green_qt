@@ -14,7 +14,10 @@ public slots:
     void submit(bool share_logs, const QJsonObject& data);
 signals:
     void failed(const QString& error);
-    void submitted(const QJsonObject& result);
+    void submitted(const QJsonObject& response);
+private:
+    void createSupportRequest(const QJsonArray& uploads, const QJsonObject& data);
+    void createSupportRequest(const QJsonObject& body);
 };
 
 #endif // GREEN_REQUESTSUPPORTCONTROLLER_H

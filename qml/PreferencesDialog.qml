@@ -457,8 +457,8 @@ AbstractDialog {
         id: request_support_page
         RequestSupportPage {
             id: page
-            onSubmitted: (request) => {
-                page.StackView.view.replace(page, support_submitted_page, { request, type: page.type }, StackView.PushTransition)
+            onSubmitted: (response) => {
+                page.StackView.view.replace(page, support_submitted_page, { response, type: page.type }, StackView.PushTransition)
             }
         }
     }

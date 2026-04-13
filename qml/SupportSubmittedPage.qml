@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 StackViewPage {
     required property string type
-    required property var request
+    required property var response
     id: self
     title: qsTrId('id_support')
     contentItem: ColumnLayout {
@@ -28,11 +28,6 @@ StackViewPage {
                 }
             }
         }
-        // CopyAddressButton {
-        //     Layout.alignment: Qt.AlignCenter
-        //     text: `ID ${self.request.id}`
-        //     content: self.request.id
-        // }
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
