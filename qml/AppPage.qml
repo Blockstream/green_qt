@@ -136,21 +136,19 @@ MainPage {
     }
     function closeWallet(wallet) {
         stack_layout.currentIndex = 0
-        for (let i = 0; i < stack_layout.children.length; ++i) {
+        for (let i = stack_layout.children.length - 1; i >= 0; --i) {
             const child = stack_layout.children[i]
             if (child instanceof WalletView && child.wallet === wallet) {
                 child.destroy()
-                break
             }
         }
     }
     function closeDevice(device) {
         stack_layout.currentIndex = 0
-        for (let i = 0; i < stack_layout.children.length; ++i) {
+        for (let i = stack_layout.children.length - 1; i >= 0; --i) {
             const child = stack_layout.children[i]
             if (child instanceof WalletView && child.device === device) {
                 child.destroy()
-                break
             }
         }
     }
