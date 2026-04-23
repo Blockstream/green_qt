@@ -18,14 +18,16 @@ if /i "%CI_COMMIT_REF_NAME:~0,8%"=="release_" (
 
 call C:\qt\6.11.0\msvc2022_64\bin\qt-cmake ^
     -S C:\src -B C:\src\bld ^
+    -G "Ninja Multi-Config" ^
     -DCMAKE_BUILD_TYPE=RelWithDebInfo ^
+    -DCMAKE_CXX_FLAGS="/FS" ^
     -DGREEN_ENV=%GREEN_ENV% ^
     -DGREEN_BUILD_ID="%GREEN_BUILD_ID%" ^
     -DGREEN_LOG_FILE=%CI_COMMIT_BRANCH% ^
     -DENABLE_SENTRY=OFF ^
     -DSENTRY_KEY=%SENTRY_KEY%
 
-cmake --build C:\src\bld --config RelWithDebInfo
+cmake --build C:\src\bld --config RelWithDebInfo --parallel 4
 
 C:\qt\6.11.0\msvc2022_64\bin\windeployqt.exe --qmldir C:\src\qml C:\src\bld\RelWithDebInfo\blockstream.exe
 
