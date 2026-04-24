@@ -13,6 +13,8 @@ Usage:
   ./tools/test.sh build
   ./tools/test.sh all
   ./tools/test.sh one <suite_regex>
+  ./tools/test.sh js
+  ./tools/test.sh js-one <suite_regex>
   ./tools/test.sh list
 
 Environment overrides:
@@ -24,6 +26,8 @@ Examples:
   ./tools/test.sh all
   ./tools/test.sh one test_json
   ./tools/test.sh one "test_(util|json)"
+  ./tools/test.sh js
+  ./tools/test.sh js-one util
 EOF
 }
 
@@ -37,7 +41,18 @@ configure_tests() {
 }
 
 build_tests() {
-    cmake --build "$ROOT_DIR/$BUILD_DIR"
+    local build_path="$ROOT_DIR/$BUILD_DIR"
+    mapfile -t test_targets < <(
+        cmake --build "$build_path" --target help \
+            | awk '/^\.\.\. test_[A-Za-z0-9_]+$/ { t=$2; if (t !~ /(autogen|qmlimportscan|timestamp|copy_qml|copy_res|other_files|qmltyperegistration|lrelease|lupdate)/) print t }'
+    )
+
+    if [[ ${#test_targets[@]} -eq 0 ]]; then
+        echo "No buildable test_* targets found in $build_path."
+        return 0
+    fi
+
+    cmake --build "$build_path" --target "${test_targets[@]}"
 }
 
 run_all_tests() {
@@ -57,6 +72,20 @@ run_one_test() {
         exit 1
     fi
     ctest --test-dir "$ROOT_DIR/$BUILD_DIR" -R "$suite_regex" --output-on-failure
+}
+
+run_js_tests() {
+    ctest --test-dir "$ROOT_DIR/$BUILD_DIR" -R "test_js_" --output-on-failure
+}
+
+run_one_js_test() {
+    local suite_regex="${1:-}"
+    if [[ -z "$suite_regex" ]]; then
+        echo "Missing suite regex for 'js-one' command."
+        usage
+        exit 1
+    fi
+    ctest --test-dir "$ROOT_DIR/$BUILD_DIR" -R "test_js_.*${suite_regex}" --output-on-failure
 }
 
 list_tests() {
@@ -81,6 +110,14 @@ main() {
             configure_tests
             build_tests
             run_one_test "${2:-}"
+            ;;
+        js)
+            configure_tests
+            run_js_tests
+            ;;
+        js-one)
+            configure_tests
+            run_one_js_test "${2:-}"
             ;;
         list)
             list_tests
