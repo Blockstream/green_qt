@@ -1,2 +1,6 @@
 module Blockstream.Green.Core
+ContextTransaction 1.0 ContextTransaction.qml
+AccountTransaction 1.0 AccountTransaction.qml
+LightningTransaction 1.0 LightningTransaction.qml
+Convert 1.0 Convert.qml
 singleton Settings 1.0 Settings.qml

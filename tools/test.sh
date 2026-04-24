@@ -15,6 +15,8 @@ Usage:
   ./tools/test.sh one <suite_regex>
   ./tools/test.sh js
   ./tools/test.sh js-one <suite_regex>
+  ./tools/test.sh qml
+  ./tools/test.sh qml-one <suite_regex>
   ./tools/test.sh list
 
 Environment overrides:
@@ -28,6 +30,8 @@ Examples:
   ./tools/test.sh one "test_(util|json)"
   ./tools/test.sh js
   ./tools/test.sh js-one util
+  ./tools/test.sh qml
+  ./tools/test.sh qml-one amountvalidator
 EOF
 }
 
@@ -88,6 +92,20 @@ run_one_js_test() {
     ctest --test-dir "$ROOT_DIR/$BUILD_DIR" -R "test_js_.*${suite_regex}" --output-on-failure
 }
 
+run_qml_tests() {
+    ctest --test-dir "$ROOT_DIR/$BUILD_DIR" -R "test_qml_" --output-on-failure
+}
+
+run_one_qml_test() {
+    local suite_regex="${1:-}"
+    if [[ -z "$suite_regex" ]]; then
+        echo "Missing suite regex for 'qml-one' command."
+        usage
+        exit 1
+    fi
+    ctest --test-dir "$ROOT_DIR/$BUILD_DIR" -R "test_qml_.*${suite_regex}" --output-on-failure
+}
+
 list_tests() {
     ctest --test-dir "$ROOT_DIR/$BUILD_DIR" -N
 }
@@ -118,6 +136,14 @@ main() {
         js-one)
             configure_tests
             run_one_js_test "${2:-}"
+            ;;
+        qml)
+            configure_tests
+            run_qml_tests
+            ;;
+        qml-one)
+            configure_tests
+            run_one_qml_test "${2:-}"
             ;;
         list)
             list_tests
