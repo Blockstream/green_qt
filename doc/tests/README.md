@@ -17,7 +17,7 @@ Other commands:
 - Run tests matching a regex (same as `ctest -R`):
 
   ```sh
-  ./tools/test.sh one test_smoke
+  ./tools/test.sh one test_util
   ./tools/test.sh one "test_(util|json)"
   ```
 
