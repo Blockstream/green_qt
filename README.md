@@ -14,6 +14,10 @@ For build instructions, see:
 - [Linux](doc/linux/README.md)
 - [Windows](doc/windows/README.md)
 
+## Tests
+
+For test instructions, see [Tests guide](doc/tests/README.md).
+
 ## Application data directory
 
 Ubuntu:

@@ -4,6 +4,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(cmake/ProjectMeta.cmake)
 
 project(blockstream VERSION 3.3.0 LANGUAGES CXX)
+include(CTest)
 
 include(GNUInstallDirs)
 
@@ -21,3 +22,6 @@ include(cmake/QmlModule.cmake)
 
 add_subdirectory(assets)
 add_subdirectory(i18n)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
