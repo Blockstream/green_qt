@@ -15,8 +15,8 @@ package:build:
     - rm -fr dist
     - mkdir dist
     - mv BlockstreamSetup.exe dist/BlockstreamSetup-x86_64.exe
-    - mv macos-arm64-shared/Blockstream.dmg dist/Blockstream-arm64.dmg
-    - mv macos-x86_64-shared/Blockstream.dmg dist/Blockstream-x86_64.dmg
+    - mv macos-arm64/Blockstream.dmg dist/Blockstream-arm64.dmg
+    - mv macos-x86_64/Blockstream.dmg dist/Blockstream-x86_64.dmg
     - mv macos-universal-shared/Blockstream.dmg dist/Blockstream-universal.dmg
     - chmod +x linux-x86_64/Blockstream-x86_64.AppImage
     - mv linux-x86_64/Blockstream-x86_64.AppImage dist

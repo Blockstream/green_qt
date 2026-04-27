@@ -2,23 +2,40 @@
   extends:
     - .macos
   variables:
-    PREFIX: "$CI_PROJECT_DIR/depends/macos-arm64-shared"
+    PREFIX: "$CI_PROJECT_DIR/depends/macos-arm64"
     ARCH: "arm64"
     PKG_CONFIG_PATH: "$PREFIX/lib/pkgconfig"
     CMAKE_INSTALL_PREFIX: "$PREFIX"
-    gdk_ROOT: "$PREFIX/lib/arm64-apple-darwin/gdk"
+  before_script:
+    - export BREW_PREFIX="/opt/homebrew"
+    - export PATH="$PREFIX/bin:$PATH"
+    - export PATH="$HOME/qt-install/6.11.0/macos/bin/:$PATH"
+    - export CMAKE_PREFIX_PATH="$PREFIX/lib/aarch64-apple-darwin:$PREFIX/lib/cmake"
+  tags:
+    - macos-arm64
+
+macos-arm64:depends:
+  stage: depends
+  extends:
+    - .macos-arm64
   cache:
     - key: macos_arm64
       paths:
         - depends/
-  tags:
-    - macos-arm64
-
-macos-arm64:depends-gdk:
-  stage: depends
-  extends:
-    - .macos-arm64
+      policy: push
   script:
+    - export
+    - tools/buildkdsingleapplication.sh
+    - tools/buildlibserialport.sh --disable-shared
+    - tools/buildlibusb.sh
+    - tools/buildhidapi.sh
+    - tools/buildcountly.sh
+    - tools/buildzxing.sh
+    - tools/buildbreakpad.sh
+    - tools/buildcrashpad.sh
+    - tools/buildgpgme.sh
+    - tools/buildleveldb.sh
+    - tools/buildlwk.sh
     - export LLVM_PATH="$BREW_PREFIX/opt/llvm@17"
     - export PATH="$LLVM_PATH/bin:$PATH"
     - export CC="$LLVM_PATH/bin/clang"
@@ -31,38 +48,25 @@ macos-arm64:depends-gdk:
     - tools/buildgdk.sh --static
   when: manual
 
-macos-arm64:depends:
-  stage: depends
-  extends:
-    - .macos-arm64
-  script:
-    - tools/buildkdsingleapplication.sh
-    - tools/buildlibserialport.sh --disable-shared
-    - tools/buildlibusb.sh
-    - tools/buildhidapi.sh
-    - tools/buildcountly.sh
-    - tools/buildzxing.sh
-    - tools/buildbreakpad.sh
-    - tools/buildcrashpad.sh
-    - tools/buildgpgme.sh
-    - tools/buildleveldb.sh
-    - tools/buildlwk.sh
-  when: manual
-
 macos-arm64:build:
   extends:
     - .build
     - .macos-arm64
+  cache:
+    - key: macos_arm64
+      paths:
+        - depends/
+      policy: pull
   after_script:
     - $HOME/qt-install/6.11.0/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
     - rm -rf build/Blockstream.app/Contents/MacOS/Blockstream.dSYM
-    - mkdir macos-arm64-shared
-    - mv build/Blockstream.app macos-arm64-shared
+    - mkdir macos-arm64
+    - mv build/Blockstream.app macos-arm64
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
-      - macos-arm64-shared/Blockstream.app
+      - macos-arm64/Blockstream.app
 
 macos-arm64:staple:
   extends:
@@ -72,13 +76,13 @@ macos-arm64:staple:
     expire_in: 1 week
     when: always
     paths:
-      - macos-arm64-shared/Blockstream.dmg
+      - macos-arm64/Blockstream.dmg
   needs:
     - job: macos-arm64:build
       optional: true
   script:
-    - mv macos-arm64-shared/Blockstream.app Blockstream.app
+    - mv macos-arm64/Blockstream.app Blockstream.app
     - tools/macos-staple.sh Blockstream.app
     - tools/packdmg.sh Blockstream.app
     - tools/macos-staple.sh Blockstream.dmg
-    - mv Blockstream.dmg macos-arm64-shared/
+    - mv Blockstream.dmg macos-arm64/

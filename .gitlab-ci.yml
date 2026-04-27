@@ -52,8 +52,6 @@ sast:
 
 .build:
   stage: build
-  before_script:
-    - export PATH="$PREFIX/bin:$PATH"
   script:
     - |
       qt-cmake -S . -B build \

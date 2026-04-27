@@ -3,10 +3,6 @@
     HOST: "macos"
     MACOSX_DEPLOYMENT_TARGET: 12.0
     SHA256SUM: "shasum -a 256"
-  before_script:
-    - export BREW_PREFIX=$( [[ $(uname -m) == "arm64" ]] && echo "/opt/homebrew" || echo "/usr/local" )
-    - export PATH="$PREFIX/bin:$PATH"
-    - export PATH="$HOME/qt-install/6.11.0/macos/bin/:$PATH"
 
 .macos:staple:
   tags:
