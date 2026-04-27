@@ -241,61 +241,188 @@ Page {
             }
 
             SettingsBox {
-                title: qsTrId('id_request_twofactor_reset')
-                contentItem: AbstractButton {
-                    id: button2
-                    leftPadding: 20
-                    rightPadding: 20
-                    topPadding: 15
-                    bottomPadding: 15
-                    enabled: {
-                        if (view.session.config.twofactor_reset?.is_active ?? false) {
-                            return true
-                        } else {
-                            return view.session.config.any_enabled || false
+                title: 'Two-Factor reset'
+                contentItem: ColumnLayout {
+                    AbstractButton {
+                        Layout.fillWidth: true
+                        id: reset_button
+                        leftPadding: 20
+                        rightPadding: 20
+                        topPadding: 15
+                        bottomPadding: 15
+                        enabled: view.session.config.any_enabled || false
+                        visible: !(view.session.config.twofactor_reset?.is_active ?? false)
+                        background: Rectangle {
+                            radius: 5
+                            color: Qt.lighter('#262626', reset_button.enabled && reset_button.hovered ? 1.2 : 1)
                         }
-                    }
-                    background: Rectangle {
-                        radius: 5
-                        color: Qt.lighter('#262626', button2.enabled && button2.hovered ? 1.2 : 1)
-                    }
-                    contentItem: RowLayout {
-                        ColumnLayout {
-                            spacing: 20
-                            Label {
-                                Layout.fillWidth: true
-                                Layout.minimumWidth: 0
-                                font.pixelSize: 14
-                                font.weight: 600
-                                text: view.session.config.twofactor_reset?.is_active ?? false ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
-                                wrapMode: Text.WordWrap
-                            }
-                            Label {
-                                Layout.fillWidth: true
-                                Layout.preferredWidth: 0
-                                color: '#6F6F6F'
-                                font.pixelSize: 14
-                                font.weight: 500
-                                text: {
-                                    if (view.session.config.twofactor_reset?.is_active ?? false) {
-                                        return qsTrId('id_your_wallet_is_locked_for_a').arg(view.session.config.twofactor_reset.days_remaining)
-                                    } else {
-                                        return qsTrId('id_start_a_2fa_reset_process_if')
-                                    }
+                        contentItem: RowLayout {
+                            ColumnLayout {
+                                spacing: 20
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.minimumWidth: 0
+                                    font.pixelSize: 14
+                                    font.weight: 600
+                                    text: qsTrId('id_request_twofactor_reset')
+                                    wrapMode: Text.WordWrap
                                 }
-                                wrapMode: Label.WordWrap
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: 0
+                                    color: '#6F6F6F'
+                                    font.pixelSize: 14
+                                    font.weight: 500
+                                    text: qsTrId('id_start_a_2fa_reset_process_if')
+                                    wrapMode: Label.WordWrap
+                                }
+                            }
+                            RightArrowIndicator {
+                                active: true
+                                opacity: reset_button.enabled ? 1 : 0.6
                             }
                         }
-                        RightArrowIndicator {
-                            active: true
-                            opacity: button2.enabled ? 1 : 0.6
+                        onClicked: {
+                            const drawer = request_drawer.createObject(view, { dispute: false, session: view.session })
+                            drawer.open()
                         }
                     }
-                    onClicked: {
-                        const locked = view.session.config.twofactor_reset?.is_active ?? false
-                        const comp = locked ? cancel_drawer : request_drawer
-                        const drawer = comp.createObject(view, { session: view.session })
-                        drawer.open()
+                    AbstractButton {
+                        Layout.fillWidth: true
+                        id: cancel_button
+                        leftPadding: 20
+                        rightPadding: 20
+                        topPadding: 15
+                        bottomPadding: 15
+                        visible: view.session.config.twofactor_reset?.is_active ?? false
+                        background: Rectangle {
+                            radius: 5
+                            color: Qt.lighter('#262626', cancel_button.enabled && cancel_button.hovered ? 1.2 : 1)
+                        }
+                        contentItem: RowLayout {
+                            ColumnLayout {
+                                spacing: 20
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.minimumWidth: 0
+                                    font.pixelSize: 14
+                                    font.weight: 600
+                                    text: qsTrId('id_cancel_twofactor_reset')
+                                    wrapMode: Text.WordWrap
+                                }
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: 0
+                                    color: '#6F6F6F'
+                                    font.pixelSize: 14
+                                    font.weight: 500
+                                    text: {
+                                        if (view.session.config.twofactor_reset?.is_disputed ?? false) {
+                                            return qsTrId('id_the_1_year_2fa_reset_process')
+                                        }
+                                        if (view.session.config.twofactor_reset?.is_active ?? false) {
+                                            return qsTrId('id_your_wallet_is_locked_for_a').arg(view.session.config.twofactor_reset.days_remaining)
+                                        }
+                                        return ''
+                                    }
+                                    wrapMode: Label.WordWrap
+                                }
+                            }
+                            RightArrowIndicator {
+                                active: true
+                                opacity: cancel_button.enabled ? 1 : 0.6
+                            }
+                        }
+                        onClicked: {
+                            const drawer = cancel_drawer.createObject(view, { session: view.session })
+                            drawer.open()
+                        }
+                    }
+                    AbstractButton {
+                        Layout.fillWidth: true
+                        id: dispute_button
+                        leftPadding: 20
+                        rightPadding: 20
+                        topPadding: 15
+                        bottomPadding: 15
+                        visible: view.session.config.twofactor_reset?.is_active ?? false
+                        background: Rectangle {
+                            radius: 5
+                            color: Qt.lighter('#262626', dispute_button.enabled && dispute_button.hovered ? 1.2 : 1)
+                        }
+                        contentItem: RowLayout {
+                            ColumnLayout {
+                                spacing: 20
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.minimumWidth: 0
+                                    font.pixelSize: 14
+                                    font.weight: 600
+                                    text: qsTrId('id_dispute_twofactor_reset')
+                                    wrapMode: Text.WordWrap
+                                }
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: 0
+                                    color: '#6F6F6F'
+                                    font.pixelSize: 14
+                                    font.weight: 500
+                                    text: qsTrId('id_if_you_did_not_request_the')
+                                    wrapMode: Label.WordWrap
+                                }
+                            }
+                            RightArrowIndicator {
+                                active: true
+                                opacity: dispute_button.enabled ? 1 : 0.6
+                            }
+                        }
+                        onClicked: {
+                            const drawer = request_drawer.createObject(view, { dispute: true, session: view.session })
+                            drawer.open()
+                        }
+                    }
+                    AbstractButton {
+                        Layout.fillWidth: true
+                        id: undo_button
+                        leftPadding: 20
+                        rightPadding: 20
+                        topPadding: 15
+                        bottomPadding: 15
+                        visible: view.session.config.twofactor_reset?.is_disputed ?? false
+                        background: Rectangle {
+                            radius: 5
+                            color: Qt.lighter('#262626', undo_button.enabled && undo_button.hovered ? 1.2 : 1)
+                        }
+                        contentItem: RowLayout {
+                            ColumnLayout {
+                                spacing: 20
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.minimumWidth: 0
+                                    font.pixelSize: 14
+                                    font.weight: 600
+                                    text: qsTrId('id_undo_2fa_dispute')
+                                    wrapMode: Text.WordWrap
+                                }
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: 0
+                                    color: '#6F6F6F'
+                                    font.pixelSize: 14
+                                    font.weight: 500
+                                    text: qsTrId('id_if_you_initiated_the_2fa_reset')
+                                    wrapMode: Label.WordWrap
+                                }
+                            }
+                            RightArrowIndicator {
+                                active: true
+                                opacity: undo_button.enabled ? 1 : 0.6
+                            }
+                        }
+                        onClicked: {
+                            const drawer = undo_drawer.createObject(view, { session: view.session })
+                            drawer.open()
+                        }
                     }
                 }
             }
@@ -393,6 +520,13 @@ Page {
     Component {
         id: request_drawer
         RequestTwoFactorResetDrawer {
+            context: self.context
+        }
+    }
+
+    Component {
+        id: undo_drawer
+        TwoFactorUndoResetDrawer {
             context: self.context
         }
     }

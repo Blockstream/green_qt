@@ -547,7 +547,23 @@ class TwoFactorResetTask : public AuthHandlerTask
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    TwoFactorResetTask(const QString& email, Session* session);
+    TwoFactorResetTask(const QString& email, bool dispute, Session* session);
+    QString email() const { return m_email; }
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QString m_email;
+    const bool m_dispute;
+};
+
+class TwoFactorUndoResetTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    Q_PROPERTY(QString email READ email CONSTANT)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    TwoFactorUndoResetTask(const QString& email, Session* session);
     QString email() const { return m_email; }
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;

@@ -19,16 +19,28 @@ void SessionController::setSession(Session* session)
     if (m_session) setContext(m_session->context());
 }
 
-void SessionController::requestTwoFactorReset(const QString& email)
+void SessionController::requestTwoFactorReset(const QString& email, bool dispute)
 {
     auto group = new TaskGroup(this);
-    auto request = new TwoFactorResetTask(email, m_session);
+    auto request = new TwoFactorResetTask(email, dispute, m_session);
     auto load = new LoadTwoFactorConfigTask(m_session);
-    connect(group, &TaskGroup::finished, this, [=, this] {
-        emit finished();
-        auto notification = new TwoFactorResetNotification(m_session->network(), m_context);
-        m_context->addNotification(notification);
+    connect(group, &TaskGroup::finished, this, &SessionController::finished);
+    connect(request, &Task::failed, this, [=, this](const QString& error) {
+        emit failed(error);
     });
+    request->then(load);
+    group->add(request);
+    group->add(load);
+    monitor()->add(group);
+    dispatcher()->add(group);
+}
+
+void SessionController::undoTwoFactorReset(const QString &email)
+{
+    auto group = new TaskGroup(this);
+    auto request = new TwoFactorUndoResetTask(email, m_session);
+    auto load = new LoadTwoFactorConfigTask(m_session);
+    connect(group, &TaskGroup::finished, this, &SessionController::finished);
     connect(request, &Task::failed, this, [=, this](const QString& error) {
         emit failed(error);
     });

@@ -68,7 +68,7 @@ void Controller::changeSettings(const QJsonObject& data)
 
 void Controller::changeSessionSettings(Session* session, const QJsonObject& data)
 {
-    if (session->config().value("twofactor_reset").toObject().value("is_active").toBool()) {
+    if (session->isTwoFactorResetActive()) {
         return;
     }
     if (!DeepContains(session->settings(), data)) {

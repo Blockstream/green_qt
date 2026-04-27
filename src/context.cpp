@@ -97,29 +97,26 @@ TaskGroup* Context::cleanAccounts()
     auto group = new TaskGroup(this);
     if (m_watchonly) return group;
     for (auto account : m_accounts) {
-        if (account->pointer() == 0 && account->name().isEmpty()) {
-            bool hide = true;
-            if (account->isSinglesig()) {
-                if (account->json().value("bip44_discovered").toBool()) {
-                    hide = false;
-                }
-            }
-            const auto satoshi = account->json().value("satoshi").toObject();
-            for (auto key : satoshi.keys()) {
-                if (satoshi.value(key).toInteger() > 0) {
-                    hide = false;
-                    break;
-                }
-            }
-            if (hide) {
-                auto task = new UpdateAccountTask({
-                    { "subaccount", static_cast<qint64>(account->pointer()) },
-                    { "hidden", true },
-                }, account->session());
-                account->setHidden(true);
-                group->add(task);
-            }
+        if (account->pointer() > 0) {
+            continue;
         }
+        if (!account->name().isEmpty()) {
+            continue;
+        }
+        if (account->session()->isTwoFactorResetActive()) {
+            continue;
+        }
+        if (account->isSinglesig() && account->json().value("bip44_discovered").toBool()) {
+            continue;
+        }
+        if (account->hasBalance()) {
+            continue;
+        }
+        account->setHidden(true);
+        group->add(new UpdateAccountTask({
+            { "subaccount", static_cast<qint64>(account->pointer()) },
+            { "hidden", true },
+        }, account->session()));
     }
     return group;
 }
@@ -187,12 +184,6 @@ Session* Context::getOrCreateSession(Network* network)
                 }
             }
         });
-        connect(session, &Session::twoFactorResetEvent, this, [=, this](const QJsonObject& event) {
-            if (event.value("is_active").toBool()) {
-                auto notification = new TwoFactorResetNotification(session->network(), this);
-                addNotification(notification);
-            }
-        });
         connect(session, &Session::transactionEvent, this, [=, this](const QJsonObject& event) {
             auto group = new TaskGroup(this);
             for (auto pointer : event.value("subaccounts").toArray()) {
@@ -203,6 +194,28 @@ Session* Context::getOrCreateSession(Network* network)
                 connect(group, &TaskGroup::finished, account, &Account::loadBalance);
             }
             dispatcher()->add(group);
+        });
+        connect(session, &Session::configChanged, this, [=, this] {
+            TwoFactorResetNotification* two_factor_reset_notification = nullptr;
+            for (auto notification : m_notifications) {
+                two_factor_reset_notification = qobject_cast<TwoFactorResetNotification*>(notification);
+                if (two_factor_reset_notification) {
+                    if (two_factor_reset_notification->network() == session->network()) {
+                        break;
+                    } else {
+                        two_factor_reset_notification = nullptr;
+                    }
+                }
+            }
+            if (session->isTwoFactorResetActive()) {
+                if (!two_factor_reset_notification) {
+                    addNotification(new TwoFactorResetNotification(session->network(), this));
+                }
+            } else {
+                if (two_factor_reset_notification) {
+                    removeNotification(two_factor_reset_notification);
+                }
+            }
         });
         m_sessions.insert(network, session);
         m_sessions_list.append(session);

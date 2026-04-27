@@ -241,7 +241,21 @@ QtObject {
                 font.weight: 600
                 horizontalAlignment: Label.AlignHCenter
                 text: qsTrId('id_to_authorize_the_transaction')
-                visible: !(view.prompt.task instanceof ChangeTwoFactorTask)
+                visible: {
+                    if (view.prompt.task instanceof ChangeTwoFactorTask) {
+                        return false
+                    }
+                    if (view.prompt.task instanceof TwoFactorResetTask) {
+                        return false
+                    }
+                    if (view.prompt.task instanceof TwoFactorCancelResetTask) {
+                        return false
+                    }
+                    if (view.prompt.task instanceof TwoFactorUndoResetTask) {
+                        return false
+                    }
+                    return true
+                }
                 wrapMode: Label.WordWrap
             }
             Loader {

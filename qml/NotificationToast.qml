@@ -454,7 +454,7 @@ ColumnLayout {
     component TwoFactorResetToast: Toast {
         readonly property Session session: toast.notification.context.getOrCreateSession(toast.notification.network)
         id: toast
-        borderColor: '#262626'
+        borderColor: '#181818'
         backgroundColor: '#0A0A0C'
         textColor: '#FFFFFF'
         
@@ -488,7 +488,12 @@ ColumnLayout {
                     color: toast.textColor
                     font.pixelSize: 13
                     font.weight: 700
-                    text: qsTrId('id_twofactor_reset_in_progress')
+                    text: {
+                        if (toast.session.config.twofactor_reset?.is_disputed ?? false) {
+                            return qsTrId('id_2fa_dispute_in_progress')
+                        }
+                        return qsTrId('id_twofactor_reset_in_progress')
+                    }
                     wrapMode: Label.WordWrap
                 }
                 
@@ -499,11 +504,13 @@ ColumnLayout {
                     opacity: 0.8
                     font.pixelSize: 12
                     text: {
+                        if (toast.session.config.twofactor_reset?.is_disputed ?? false) {
+                            return qsTrId('id_the_1_year_2fa_reset_process')
+                        }
                         if (toast.session.config.twofactor_reset?.is_active ?? false) {
                             return qsTrId('id_your_wallet_is_locked_for_a').arg(toast.session.config.twofactor_reset.days_remaining)
-                        } else {
-                            return ''
                         }
+                        return ''
                     }
                     wrapMode: Label.WordWrap
                 }
@@ -578,7 +585,7 @@ ColumnLayout {
 
     component AnalyticsAlertToast: Toast {
         id: toast
-        borderColor: '#262626'
+        borderColor: '#181818'
         backgroundColor: '#0A0A0C'
         textColor: '#FFFFFF'
         

@@ -81,6 +81,17 @@ qint64 Account::balance() const
     return m_json.value("satoshi").toObject().value(key).toDouble();
 }
 
+bool Account::hasBalance() const
+{
+    const auto satoshi = m_json.value("satoshi").toObject();
+    for (auto it = satoshi.begin(); it != satoshi.end(); ++it) {
+        if (it.value().toInteger() > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Account::isEmpty() const
 {
     if (!m_name.isEmpty()) return false;

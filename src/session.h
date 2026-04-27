@@ -86,6 +86,8 @@ public:
     QString walletHashId() const { return m_wallet_hash_id; }
     void setWalletHashId(const QString& wallet_hash_id);
 
+    bool isTwoFactorResetActive() const;
+
 signals:
     void contextChanged();
     void notificationHandled(const QJsonObject& notification);

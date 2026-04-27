@@ -144,7 +144,7 @@ AbstractDrawer {
 
     component NotificationItem: AbstractButton {
         property Notification notification: _notification
-        property color backgroundColor: '#262626'
+        property color backgroundColor: '#181818'
         id: item
         topPadding: 18
         leftPadding: 18
@@ -403,7 +403,12 @@ AbstractDrawer {
                 color: '#FFF'
                 font.pixelSize: 14
                 font.weight: 500
-                text: qsTrId('id_twofactor_reset_in_progress')
+                text: {
+                    if (view.session.config.twofactor_reset?.is_disputed ?? false) {
+                        return qsTrId('id_2fa_dispute_in_progress')
+                    }
+                    return qsTrId('id_twofactor_reset_in_progress')
+                }
                 wrapMode: Label.WordWrap
             }
             Label {
@@ -412,6 +417,9 @@ AbstractDrawer {
                 color: '#FFF'
                 opacity: 0.8
                 text: {
+                    if (view.session.config.twofactor_reset?.is_disputed ?? false) {
+                        return qsTrId('id_the_1_year_2fa_reset_process')
+                    }
                     if (view.session.config.twofactor_reset?.is_active ?? false) {
                         return qsTrId('id_your_wallet_is_locked_for_a').arg(view.session.config.twofactor_reset.days_remaining)
                     } else {

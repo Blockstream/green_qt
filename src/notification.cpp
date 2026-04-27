@@ -187,20 +187,6 @@ void SystemNotification::accept(TaskGroupMonitor* monitor)
 TwoFactorResetNotification::TwoFactorResetNotification(Network* network, Context* context)
     : NetworkNotification(network, context)
 {
-    auto remove = [=, this](bool is_active) {
-        if (is_active) return;
-        m_context->removeNotification(this);
-        deleteLater();
-    };
-    auto session = context->getOrCreateSession(network);
-    connect(session, &Session::configChanged, this, [=, this] {
-        bool is_active = session->config().value("twofactor_reset").toObject().value("is_active").toBool();
-        remove(is_active);
-    });
-    connect(session, &Session::twoFactorResetEvent, this, [=, this](const QJsonObject& event) {
-        bool is_active = event.value("is_active").toBool();
-        remove(is_active);
-    });
 }
 
 TwoFactorExpiredNotification::TwoFactorExpiredNotification(Context* context)

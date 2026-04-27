@@ -1072,19 +1072,30 @@ ContextTask::ContextTask(Context* context)
     Q_ASSERT(context);
 }
 
-TwoFactorResetTask::TwoFactorResetTask(const QString& email, Session* session)
+TwoFactorResetTask::TwoFactorResetTask(const QString& email, bool dispute, Session* session)
     : AuthHandlerTask(session)
     , m_email(email)
+    , m_dispute(dispute)
 {
 }
 
 bool TwoFactorResetTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const uint32_t is_dispute = GA_FALSE;
-    const auto rc = GA_twofactor_reset(session, m_email.toUtf8().constData(), is_dispute, auth_handler);
+    const auto rc = GA_twofactor_reset(session, m_email.toUtf8().constData(), m_dispute, auth_handler);
     return rc == GA_OK;
 }
 
+TwoFactorUndoResetTask::TwoFactorUndoResetTask(const QString& email, Session* session)
+    : AuthHandlerTask(session)
+    , m_email(email)
+{
+}
+
+bool TwoFactorUndoResetTask::call(GA_session* session, GA_auth_handler** auth_handler)
+{
+    const auto rc = GA_twofactor_undo_reset(session, m_email.toUtf8().constData(), auth_handler);
+    return rc == GA_OK;
+}
 
 SetCsvTimeTask::SetCsvTimeTask(const int value, Session* session)
     : AuthHandlerTask(session)

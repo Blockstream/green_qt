@@ -224,6 +224,11 @@ void Session::setWalletHashId(const QString& wallet_hash_id)
     emit walletHashIdChanged();
 }
 
+bool Session::isTwoFactorResetActive() const
+{
+    return m_config.value("twofactor_reset").toObject().value("is_active").toBool();
+}
+
 void Session::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == m_logout_timer) {

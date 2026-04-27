@@ -9,18 +9,7 @@ import "util.js" as UtilJS
 
 WalletDrawer {
     required property Session session
-    required property bool dispute
-    property string title: {
-        if (self.dispute) {
-            return qsTrId('id_dispute_twofactor_reset')
-        }
-        return qsTrId('id_request_twofactor_reset')
-    }
-    AnalyticsView {
-        active: self.visible
-        name: 'WalletSettings2FAReset'
-        segmentation: AnalyticsJS.segmentationSession(Settings, controller.context)
-    }
+    property string title: qsTrId('id_undo_2fa_dispute')
     SessionController {
         id: controller
         context: self.context
@@ -34,9 +23,9 @@ WalletDrawer {
         target: stack_view
     }
     Action {
-        id: request_twofactor_reset_action
+        id: next_action
         enabled: email_field.text.trim() !== ''
-        onTriggered: controller.requestTwoFactorReset(email_field.text, self.dispute)
+        onTriggered: controller.undoTwoFactorReset(email_field.text)
     }
     id: self
     contentItem: GStackView {
@@ -47,30 +36,25 @@ WalletDrawer {
             }
             title: self.title
             contentItem: ColumnLayout {
-                spacing: constants.s1
+                spacing: 5
                 Label {
-                    text: {
-                        if (self.dispute) {
-                            return qsTrId('id_if_you_did_not_request_the')
-                        }
-                        return qsTrId('id_the_new_email_will_be_used_for')
-                    }
+                    text: qsTrId('id_if_you_initiated_the_2fa_reset')
                     wrapMode: Text.Wrap
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                 }
-                SectionLabel {
-                    text: qsTrId('id_enter_new_email')
+                FieldTitle {
+                    text: qsTrId('id_email')
                 }
                 TTextField {
                     Layout.fillWidth: true
                     id: email_field
-                    onAccepted: request_twofactor_reset_action.trigger()
+                    onAccepted: next_action.trigger()
                 }
                 PrimaryButton {
-                    Layout.alignment: Qt.AlignCenter
                     Layout.minimumWidth: 150
-                    action: request_twofactor_reset_action
+                    Layout.alignment: Qt.AlignCenter
+                    action: next_action
                     text: qsTrId('id_next')
                 }
                 VSpacer {

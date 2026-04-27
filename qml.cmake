@@ -279,6 +279,7 @@ SET(QML_FILES
     qml/SwapDrawer.qml
     qml/ChainSwapCreatePage.qml
     qml/ChainSwapReviewPage.qml
+    qml/TwoFactorUndoResetDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)

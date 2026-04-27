@@ -15,7 +15,8 @@ public:
     Session* session() const { return m_session; }
     void setSession(Session* session);
 public slots:
-    void requestTwoFactorReset(const QString& email);
+    void requestTwoFactorReset(const QString& email, bool dispute);
+    void undoTwoFactorReset(const QString& email);
     void cancelTwoFactorReset();
     void setUnspentOutputsStatus(Account* account, const QVariantList &outputs, const QString &status);
     void sendRecoveryTransactions();
