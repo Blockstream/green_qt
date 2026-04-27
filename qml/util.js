@@ -450,3 +450,7 @@ function swapNetworkType(network) {
     if (network?.mainnet) return 'mainnet'
     return null
 }
+
+function isAmpAccount(account) {
+    return account?.type === '2of2_no_recovery'
+}

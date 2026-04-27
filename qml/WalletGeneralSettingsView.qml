@@ -29,6 +29,11 @@ Pane {
         return result
     }
 
+    readonly property var ampAccounts: {
+        return UtilJS.accounts(self.context)
+            .filter(account => UtilJS.isAmpAccount(account))
+    }
+
     function updateCurrency(currency) {
         if (currency === self.session.settings.pricing.currency) return
         const exchange = self.session.settings.pricing.exchange
@@ -425,6 +430,119 @@ Pane {
                         id: support_timer
                         repeat: false
                         interval: 1000
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+            visible: amp_box.visible
+        }
+
+        // AMP ID
+        RowLayout {
+            id: amp_box
+            Layout.fillWidth: true
+            spacing: 20
+            visible: self.ampAccounts.length > 0
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 8
+                    Label {
+                        text: qsTrId('id_amp_account')
+                        font.pixelSize: 14
+                        font.weight: 600
+                        color: '#FFFFFF'
+                    }
+                    LinkButton {
+                        text: qsTrId('id_learn_more')
+                        font.pixelSize: 12
+                        external: true
+                        onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900003418286')
+                    }
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: 'Share your AMP ID with your security token issuer to receive authorization to move funds'
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
+                }
+            }
+
+            // Right: Cards
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 8
+
+                Repeater {
+                    model: self.ampAccounts
+                    delegate: AbstractButton {
+                        required property Account modelData
+                        readonly property Account account: modelData
+                        readonly property string ampId: account.json.receiving_id
+                        Layout.fillWidth: true
+                        id: amp_account_button
+                        leftPadding: 16
+                        rightPadding: 16
+                        topPadding: 12
+                        bottomPadding: 12
+
+                        background: Rectangle {
+                            radius: 5
+                            color: Qt.lighter('#262626', amp_account_button.hovered ? 1.2 : 1)
+                        }
+
+                        contentItem: RowLayout {
+                            spacing: 12
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 2
+                                Label {
+                                    Layout.fillWidth: true
+                                    color: '#FFFFFF'
+                                    font.pixelSize: 13
+                                    font.weight: 600
+                                    text: UtilJS.accountName(amp_account_button.account)
+                                    elide: Label.ElideRight
+                                }
+                                Label {
+                                    Layout.fillWidth: true
+                                    color: '#6F6F6F'
+                                    font.pixelSize: 11
+                                    font.weight: 400
+                                    text: 'ID: ' + amp_account_button.ampId
+                                    elide: Label.ElideRight
+                                    Layout.preferredWidth: 0
+                                }
+                            }
+                            Image {
+                                source: amp_timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
+                            }
+                        }
+
+                        onClicked: {
+                            Clipboard.copy(amp_account_button.ampId)
+                            amp_timer.restart()
+                        }
+
+                        Timer {
+                            id: amp_timer
+                            repeat: false
+                            interval: 1000
+                        }
                     }
                 }
             }
