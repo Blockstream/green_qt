@@ -1,7 +1,7 @@
 #include "chainswapcontroller.h"
 
-#include "address.h"
 #include "account.h"
+#include "address.h"
 #include "context.h"
 #include "lwk/lwk.hpp"
 #include "network.h"
@@ -10,6 +10,10 @@
 #include <QDebug>
 #include <QJsonObject>
 #include <QtConcurrentRun>
+
+#include <algorithm>
+#include <memory>
+#include <utility>
 
 class ChainSwapControllerPrivate
 {

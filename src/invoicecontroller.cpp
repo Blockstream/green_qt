@@ -1,11 +1,12 @@
-#include "invoicecontroller.h"
-
 #include "context.h"
+#include "invoicecontroller.h"
 #include "lwk/lwk.hpp"
 #include "swap.h"
 
 #include <QDebug>
 #include <QtConcurrentRun>
+
+#include <memory>
 
 class InvoiceControllerPrivate
 {

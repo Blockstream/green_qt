@@ -7,6 +7,9 @@
 #include <QDebug>
 #include <QtConcurrentRun>
 
+#include <string>
+#include <utility>
+
 class SubmarineControllerPrivate {
 public:
     int timer_id{-1};

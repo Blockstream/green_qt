@@ -66,8 +66,7 @@ void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const 
         qPrintable(currentTimestamp()),
         ansi(lvl.color), lvl.label,
         qPrintable(category), qPrintable(msg),
-        ansi(color::reset)
-    );
+        ansi(color::reset));
 
     if (type == QtFatalMsg) abort();
 }

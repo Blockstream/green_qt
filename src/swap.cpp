@@ -1,7 +1,5 @@
-#include "transaction.h"
 #include "swap.h"
-
-#include <memory>
+#include "transaction.h"
 
 #include <QDebug>
 #include <QFutureWatcher>
@@ -9,6 +7,8 @@
 #include <QJsonObject>
 #include <QTimer>
 #include <QtConcurrentRun>
+
+#include <memory>
 
 namespace {
 

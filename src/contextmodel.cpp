@@ -19,6 +19,8 @@
 #include <QTextStream>
 #include <QUrl>
 
+#include <algorithm>
+
 ContextModel::ContextModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
