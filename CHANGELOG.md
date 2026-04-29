@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-05-05
+### Added
+- Total fiat balance in wallet header
+- Expose AMP ID in wallet settings
+
+### Changed
+- Updated GDK to 0.77.3
+- Updated Qt to 6.11.0
+- Improved support ticket submission
+- Improved logging system with categories
+
+### Fixed
+- Handle Two-Factor Reset disputed state
+- Wallet views properly destroyed
+- Linux desktop integration
+- Fix support under Wayland
+
 ## [3.2.0] - 2026-04-03
 ### Added
 - Fiat pricing support for Liquid assets

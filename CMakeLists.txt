@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-project(blockstream VERSION 3.2.0 LANGUAGES CXX)
+project(blockstream VERSION 3.3.0 LANGUAGES CXX)
 
 option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)
 
