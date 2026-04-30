@@ -1,14 +1,16 @@
 #!/bin/bash
 set -eo pipefail
 
-FILENAME=hidapi-0.14.0
+FILENAME=hidapi-0.15.0
 ARCHIVE=$FILENAME.tar.gz
 DIRNAME=hidapi-$FILENAME
+HASH=5d84dec684c27b97b921d2f3b73218cb773cf4ea915caee317ac8fc73cef8136
 
 mkdir -p build && cd build
 
 if [ ! -d $DIRNAME ]; then
     curl -s -L -o $ARCHIVE https://github.com/libusb/hidapi/archive/refs/tags/$ARCHIVE
+    echo "${HASH}  ${ARCHIVE}" | ${SHA256SUM:-sha256sum} --check
     tar zxf $ARCHIVE
 fi
 

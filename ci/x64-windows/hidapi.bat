@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set FILENAME=hidapi-0.14.0
+set FILENAME=hidapi-0.15.0
 set ARCHIVE=%FILENAME%.tar.gz
 
 curl -s -L -o %ARCHIVE% https://github.com/libusb/hidapi/archive/refs/tags/%ARCHIVE%
