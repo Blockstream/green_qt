@@ -1,14 +1,13 @@
 #!/bin/bash
 set -eox pipefail
 
-LIBSERIALPORT_REPO=https://github.com/sigrokproject/libserialport
-LIBSERIALPORT_BRANCH=master
-LIBSERIALPORT_COMMIT=21b3dfe5f68c205be4086469335fd2fc2ce11ed2
+REPO=https://github.com/sigrokproject/libserialport
+COMMIT=21b3dfe5f68c205be4086469335fd2fc2ce11ed2
 
 mkdir -p build && cd build
 
-git clone --quiet --depth 1 --branch $LIBSERIALPORT_BRANCH --single-branch $LIBSERIALPORT_REPO libserialport-src
-(cd libserialport-src && git rev-parse HEAD && git checkout $LIBSERIALPORT_COMMIT)
+curl -sL $REPO/archive/$COMMIT.tar.gz | tar xz
+mv libserialport-$COMMIT libserialport-src
 
 mkdir libserialport-bld && cd libserialport-bld
 
