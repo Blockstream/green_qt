@@ -90,7 +90,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_amp2_cosign() != 5581) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_amp2_descriptor_from_str() != 752) {
+    if (uniffi_lwk_checksum_method_amp2_descriptor_from_str() != 47737) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_amp2_register_wallet() != 64376) {
@@ -390,7 +390,22 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_issuance_token_satoshi() != 60126) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_lightningpayment_bolt11_invoice() != 41990) {
+    if (uniffi_lwk_checksum_method_lightningpayment_bolt11_invoice() != 47603) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_lightningpayment_bolt12_invoice_amount() != 1090) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_lightningpayment_bolt12_offer_has_amount() != 19213) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_lightningpayment_is_bolt12() != 28992) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_lightningpayment_set_bolt12_invoice_amount() != 30788) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_lightningpayment_set_bolt12_invoice_amount_via_items() != 53725) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_lockupresponse_advance() != 46331) {
@@ -465,6 +480,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_lwktestenv_issue_asset() != 64492) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_lwktestenv_network() != 45785) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_lwktestenv_send_to_address() != 578) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -519,6 +537,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_payment_bitcoin_address() != 29551) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_payment_fetch_lnurl_invoice() != 15964) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_payment_kind() != 21742) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -538,6 +559,12 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_payment_lnurl() != 34751) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_payment_resolve_bip353() != 62126) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_payment_resolve_lnurl_info() != 1427) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_posconfig_currency() != 11088) {
@@ -705,16 +732,19 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_recipient_vout() != 24321) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_script_bytes() != 35040) {
+    if (uniffi_lwk_checksum_method_script_bytes() != 57904) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_script_is_provably_unspendable() != 12490) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_script_jet_sha256_hex() != 5565) {
+    if (uniffi_lwk_checksum_method_script_jet_sha256_hex() != 57228) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_script_to_asm() != 32896) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_script_to_bytes() != 34286) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_secretkey_bytes() != 43476) {
@@ -855,10 +885,10 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_txoutsecrets_asset() != 26014) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txoutsecrets_asset_bf() != 3179) {
+    if (uniffi_lwk_checksum_method_txoutsecrets_asset_bf() != 30117) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txoutsecrets_asset_commitment() != 16600) {
+    if (uniffi_lwk_checksum_method_txoutsecrets_asset_commitment() != 19954) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txoutsecrets_is_explicit() != 53000) {
@@ -867,13 +897,16 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_txoutsecrets_value() != 16330) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txoutsecrets_value_bf() != 58526) {
+    if (uniffi_lwk_checksum_method_txoutsecrets_value_bf() != 3529) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txoutsecrets_value_commitment() != 41762) {
+    if (uniffi_lwk_checksum_method_txoutsecrets_value_commitment() != 62649) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txid_bytes() != 6953) {
+    if (uniffi_lwk_checksum_method_txid_bytes() != 44008) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_txid_to_bytes() != 51573) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_unvalidatedliquidexproposal_insecure_validate() != 45940) {
@@ -1014,10 +1047,13 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_wolletbuilder_build() != 21047) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_wolletbuilder_utxo_only() != 35283) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_wolletbuilder_with_legacy_fs_store() != 35203) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_wolletbuilder_with_merge_threshold() != 37282) {
+    if (uniffi_lwk_checksum_method_wolletbuilder_with_merge_threshold() != 61627) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_wolletdescriptor_derive_blinding_key() != 27121) {
@@ -1045,6 +1081,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_amp0pset_new() != 58003) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_amp2_new() != 8911) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_amp2_new_testnet() != 61837) {
@@ -1111,6 +1150,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_esploraclient_new_waterfalls() != 40758) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_externalutxo_from_unchecked_data() != 15302) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_externalutxo_new() != 40531) {
@@ -1182,7 +1224,13 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_script_empty() != 47087) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_constructor_script_new() != 12404) {
+    if (uniffi_lwk_checksum_constructor_script_from_bytes() != 13959) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_script_from_string() != 12141) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_script_new() != 19671) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_script_new_op_return() != 7079) {
@@ -1206,7 +1254,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_transaction_from_string() != 61469) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_constructor_transaction_new() != 34031) {
+    if (uniffi_lwk_checksum_constructor_transaction_new() != 64527) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_txbuilder_new() != 56158) {
@@ -1215,7 +1263,13 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_txout_from_explicit() != 4839) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_constructor_txid_new() != 63870) {
+    if (uniffi_lwk_checksum_constructor_txid_from_bytes() != 287) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_txid_from_string() != 27945) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_txid_new() != 77) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_unvalidatedliquidexproposal_from_pset() != 44953) {
@@ -2068,6 +2122,14 @@ Amp2::Amp2(const Amp2 &other) : instance(nullptr) {
 
 
 
+std::shared_ptr<Amp2> Amp2::init(const std::string &server_key, const std::string &url) {
+    return std::shared_ptr<Amp2>(
+        new Amp2(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_amp2_new,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(server_key), uniffi::FfiConverterString::lower(url)))
+    );
+}
+
 std::shared_ptr<Amp2> Amp2::new_testnet() {
     return std::shared_ptr<Amp2>(new Amp2(uniffi::rust_call(
         uniffi_lwk_fn_constructor_amp2_new_testnet,
@@ -2081,12 +2143,12 @@ std::shared_ptr<Pset> Amp2::cosign(const std::shared_ptr<Pset> &pset) {
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterPset::lower(pset)));
 }
-std::shared_ptr<Amp2Descriptor> Amp2::descriptor_from_str(const std::string &keyorigin_xpub) {
+std::shared_ptr<Amp2Descriptor> Amp2::descriptor_from_str(const std::string &keyorigin_xpub, const std::string &descriptor_blinding_key) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterAmp2Descriptor::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_amp2_descriptor_from_str,
         uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterString::lower(keyorigin_xpub)));
+        ptr, uniffi::FfiConverterString::lower(keyorigin_xpub), uniffi::FfiConverterString::lower(descriptor_blinding_key)));
 }
 std::string Amp2::register_wallet(const std::shared_ptr<Amp2Descriptor> &desc) {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -3149,6 +3211,14 @@ bool CurrencyCode::ne(const std::shared_ptr<CurrencyCode> &other) const {
 }
 
 
+uint64_t CurrencyCode::hash() const {
+    return uniffi::FfiConverterUInt64::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_currencycode_uniffi_trait_hash,
+        nullptr,
+        this->_uniffi_internal_clone_pointer()));
+}
+
+
 
 
 
@@ -3335,6 +3405,12 @@ std::shared_ptr<ExternalUtxo> ExternalUtxo::init(uint32_t vout, const std::share
         uniffi_lwk_fn_constructor_externalutxo_new,
         uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterUInt32::lower(vout), uniffi::FfiConverterTransaction::lower(tx), uniffi::FfiConverterTxOutSecrets::lower(unblinded), uniffi::FfiConverterUInt32::lower(max_weight_to_satisfy), uniffi::FfiConverterBool::lower(is_segwit)))
     );
+}
+
+std::shared_ptr<ExternalUtxo> ExternalUtxo::from_unchecked_data(const std::shared_ptr<OutPoint> &outpoint, const std::shared_ptr<TxOut> &txout, const std::shared_ptr<TxOutSecrets> &unblinded, uint32_t max_weight_to_satisfy) {
+    return std::shared_ptr<ExternalUtxo>(new ExternalUtxo(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_externalutxo_from_unchecked_data,
+        nullptr, uniffi::FfiConverterOutPoint::lower(outpoint), uniffi::FfiConverterTxOut::lower(txout), uniffi::FfiConverterTxOutSecrets::lower(unblinded), uniffi::FfiConverterUInt32::lower(max_weight_to_satisfy))));
 }
 
 
@@ -3735,8 +3811,43 @@ std::shared_ptr<Bolt11Invoice> LightningPayment::bolt11_invoice() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterOptionalBolt11Invoice::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_lightningpayment_bolt11_invoice,
-        nullptr,
+        uniffi::FfiConverterLwkError::lift,
         ptr));
+}
+std::optional<uint64_t> LightningPayment::bolt12_invoice_amount() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalUInt64::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_lightningpayment_bolt12_invoice_amount,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+bool LightningPayment::bolt12_offer_has_amount() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_lightningpayment_bolt12_offer_has_amount,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+bool LightningPayment::is_bolt12() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_lightningpayment_is_bolt12,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+void LightningPayment::set_bolt12_invoice_amount(uint64_t amount_sats) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_lightningpayment_set_bolt12_invoice_amount,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterUInt64::lower(amount_sats));
+}
+void LightningPayment::set_bolt12_invoice_amount_via_items(uint64_t items) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_lightningpayment_set_bolt12_invoice_amount_via_items,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterUInt64::lower(items));
 }
 
 LightningPayment::~LightningPayment() {
@@ -4075,6 +4186,13 @@ AssetId LwkTestEnv::issue_asset(uint64_t satoshi) {
         nullptr,
         ptr, uniffi::FfiConverterUInt64::lower(satoshi)));
 }
+std::shared_ptr<Network> LwkTestEnv::network() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterNetwork::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_lwktestenv_network,
+        nullptr,
+        ptr));
+}
 std::shared_ptr<Txid> LwkTestEnv::send_to_address(const std::shared_ptr<Address> &address, uint64_t satoshi, std::optional<AssetId> asset) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterTxid::lift(uniffi::rust_call(
@@ -4351,6 +4469,14 @@ bool Network::ne(const std::shared_ptr<Network> &other) const {
 }
 
 
+uint64_t Network::hash() const {
+    return uniffi::FfiConverterUInt64::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_network_uniffi_trait_hash,
+        nullptr,
+        this->_uniffi_internal_clone_pointer()));
+}
+
+
 
 
 
@@ -4468,6 +4594,13 @@ std::shared_ptr<BitcoinAddress> Payment::bitcoin_address() {
         nullptr,
         ptr));
 }
+std::shared_ptr<Payment> Payment::fetch_lnurl_invoice(const LnUrlPayResponse &info, uint64_t amount_sats) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterPayment::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_payment_fetch_lnurl_invoice,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterTypeLnUrlPayResponse::lower(info), uniffi::FfiConverterUInt64::lower(amount_sats)));
+}
 PaymentKind Payment::kind() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterPaymentKind::lift(uniffi::rust_call(
@@ -4515,6 +4648,20 @@ std::optional<std::string> Payment::lnurl() {
     return uniffi::FfiConverterOptionalString::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_payment_lnurl,
         nullptr,
+        ptr));
+}
+std::shared_ptr<Payment> Payment::resolve_bip353() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterPayment::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_payment_resolve_bip353,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+LnUrlPayResponse Payment::resolve_lnurl_info() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterTypeLnUrlPayResponse::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_payment_resolve_lnurl_info,
+        uniffi::FfiConverterLwkError::lift,
         ptr));
 }
 
@@ -4639,6 +4786,14 @@ bool PosConfig::ne(const std::shared_ptr<PosConfig> &other) const {
         uniffi_lwk_fn_method_posconfig_uniffi_trait_eq_ne,
         nullptr,
         this->_uniffi_internal_clone_pointer(), uniffi::FfiConverterPosConfig::lower(other)));
+}
+
+
+uint64_t PosConfig::hash() const {
+    return uniffi::FfiConverterUInt64::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_posconfig_uniffi_trait_hash,
+        nullptr,
+        this->_uniffi_internal_clone_pointer()));
 }
 
 
@@ -5340,11 +5495,11 @@ Script::Script(const Script &other) : instance(nullptr) {
 
 
 
-std::shared_ptr<Script> Script::init(const Hex &hex) {
+std::shared_ptr<Script> Script::init(const std::string &hex) {
     return std::shared_ptr<Script>(
         new Script(uniffi::rust_call(
         uniffi_lwk_fn_constructor_script_new,
-        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterTypeHex::lower(hex)))
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(hex)))
     );
 }
 
@@ -5352,6 +5507,18 @@ std::shared_ptr<Script> Script::empty() {
     return std::shared_ptr<Script>(new Script(uniffi::rust_call(
         uniffi_lwk_fn_constructor_script_empty,
         nullptr)));
+}
+
+std::shared_ptr<Script> Script::from_bytes(const std::vector<uint8_t> &bytes) {
+    return std::shared_ptr<Script>(new Script(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_script_from_bytes,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterBytes::lower(bytes))));
+}
+
+std::shared_ptr<Script> Script::from_string(const std::string &s) {
+    return std::shared_ptr<Script>(new Script(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_script_from_string,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(s))));
 }
 
 std::shared_ptr<Script> Script::new_op_return(const std::vector<uint8_t> &data) {
@@ -5374,9 +5541,9 @@ bool Script::is_provably_unspendable() {
         nullptr,
         ptr));
 }
-Hex Script::jet_sha256_hex() {
+std::string Script::jet_sha256_hex() {
     auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterTypeHex::lift(uniffi::rust_call(
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_script_jet_sha256_hex,
         nullptr,
         ptr));
@@ -5385,6 +5552,13 @@ std::string Script::to_asm() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterString::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_script_to_asm,
+        nullptr,
+        ptr));
+}
+std::vector<uint8_t> Script::to_bytes() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBytes::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_script_to_bytes,
         nullptr,
         ptr));
 }
@@ -5638,11 +5812,11 @@ Transaction::Transaction(const Transaction &other) : instance(nullptr) {
 
 
 
-std::shared_ptr<Transaction> Transaction::init(const Hex &hex) {
+std::shared_ptr<Transaction> Transaction::init(const std::string &hex) {
     return std::shared_ptr<Transaction>(
         new Transaction(uniffi::rust_call(
         uniffi_lwk_fn_constructor_transaction_new,
-        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterTypeHex::lower(hex)))
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(hex)))
     );
 }
 
@@ -6050,16 +6224,16 @@ AssetId TxOutSecrets::asset() {
         nullptr,
         ptr));
 }
-Hex TxOutSecrets::asset_bf() {
+std::string TxOutSecrets::asset_bf() {
     auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterTypeHex::lift(uniffi::rust_call(
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_txoutsecrets_asset_bf,
         nullptr,
         ptr));
 }
-Hex TxOutSecrets::asset_commitment() {
+std::string TxOutSecrets::asset_commitment() {
     auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterTypeHex::lift(uniffi::rust_call(
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_txoutsecrets_asset_commitment,
         nullptr,
         ptr));
@@ -6078,16 +6252,16 @@ uint64_t TxOutSecrets::value() {
         nullptr,
         ptr));
 }
-Hex TxOutSecrets::value_bf() {
+std::string TxOutSecrets::value_bf() {
     auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterTypeHex::lift(uniffi::rust_call(
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_txoutsecrets_value_bf,
         nullptr,
         ptr));
 }
-Hex TxOutSecrets::value_commitment() {
+std::string TxOutSecrets::value_commitment() {
     auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterTypeHex::lift(uniffi::rust_call(
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_txoutsecrets_value_commitment,
         nullptr,
         ptr));
@@ -6123,18 +6297,37 @@ Txid::Txid(const Txid &other) : instance(nullptr) {
 
 
 
-std::shared_ptr<Txid> Txid::init(const Hex &hex) {
+std::shared_ptr<Txid> Txid::init(const std::string &hex) {
     return std::shared_ptr<Txid>(
         new Txid(uniffi::rust_call(
         uniffi_lwk_fn_constructor_txid_new,
-        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterTypeHex::lower(hex)))
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(hex)))
     );
+}
+
+std::shared_ptr<Txid> Txid::from_bytes(const std::vector<uint8_t> &bytes) {
+    return std::shared_ptr<Txid>(new Txid(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_txid_from_bytes,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterBytes::lower(bytes))));
+}
+
+std::shared_ptr<Txid> Txid::from_string(const std::string &s) {
+    return std::shared_ptr<Txid>(new Txid(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_txid_from_string,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(s))));
 }
 
 std::vector<uint8_t> Txid::bytes() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterBytes::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_txid_bytes,
+        nullptr,
+        ptr));
+}
+std::vector<uint8_t> Txid::to_bytes() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBytes::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_txid_to_bytes,
         nullptr,
         ptr));
 }
@@ -6840,6 +7033,13 @@ std::shared_ptr<Wollet> WolletBuilder::build() {
         uniffi_lwk_fn_method_wolletbuilder_build,
         uniffi::FfiConverterLwkError::lift,
         ptr));
+}
+void WolletBuilder::utxo_only(bool utxo_only) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_wolletbuilder_utxo_only,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterBool::lower(utxo_only));
 }
 void WolletBuilder::with_legacy_fs_store(const std::string &datadir) {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -8783,6 +8983,7 @@ BoltzSessionBuilder FfiConverterTypeBoltzSessionBuilder::read(RustStream &stream
         FfiConverterOptionalUInt32::read(stream),
         FfiConverterOptionalString::read(stream),
         FfiConverterOptionalString::read(stream),
+        FfiConverterOptionalString::read(stream),
         FfiConverterBool::read(stream),
         FfiConverterOptionalForeignStoreLink::read(stream)
     };
@@ -8798,6 +8999,7 @@ void FfiConverterTypeBoltzSessionBuilder::write(RustStream &stream, const BoltzS
     FfiConverterOptionalUInt64::write(stream, val.timeout_advance);
     FfiConverterOptionalUInt32::write(stream, val.next_index_to_use);
     FfiConverterOptionalString::write(stream, val.referral_id);
+    FfiConverterOptionalString::write(stream, val.api_url);
     FfiConverterOptionalString::write(stream, val.bitcoin_electrum_client_url);
     FfiConverterBool::write(stream, val.random_preimages);
     FfiConverterOptionalForeignStoreLink::write(stream, val.store);
@@ -8815,6 +9017,7 @@ uint64_t FfiConverterTypeBoltzSessionBuilder::allocation_size(const BoltzSession
         FfiConverterOptionalUInt64::allocation_size(val.timeout_advance) +
         FfiConverterOptionalUInt32::allocation_size(val.next_index_to_use) +
         FfiConverterOptionalString::allocation_size(val.referral_id) +
+        FfiConverterOptionalString::allocation_size(val.api_url) +
         FfiConverterOptionalString::allocation_size(val.bitcoin_electrum_client_url) +
         FfiConverterBool::allocation_size(val.random_preimages) +
         FfiConverterOptionalForeignStoreLink::allocation_size(val.store);
@@ -8911,6 +9114,54 @@ uint64_t FfiConverterTypeLiquidBip21::allocation_size(const LiquidBip21 &val) {
         FfiConverterAddress::allocation_size(val.address) +
         FfiConverterTypeAssetId::allocation_size(val.asset) +
         FfiConverterOptionalUInt64::allocation_size(val.satoshi);
+    
+}
+
+
+LnUrlPayResponse FfiConverterTypeLnUrlPayResponse::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterTypeLnUrlPayResponse::read(stream);
+
+    rustbuffer_free(buf);
+
+    return std::move(ret);
+}
+
+RustBuffer FfiConverterTypeLnUrlPayResponse::lower(const LnUrlPayResponse &val) {
+    auto buf = rustbuffer_alloc(allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterTypeLnUrlPayResponse::write(stream, val);
+
+    return std::move(buf);
+}
+
+LnUrlPayResponse FfiConverterTypeLnUrlPayResponse::read(RustStream &stream) {
+    return {
+        FfiConverterString::read(stream),
+        FfiConverterUInt64::read(stream),
+        FfiConverterUInt64::read(stream),
+        FfiConverterString::read(stream),
+        FfiConverterString::read(stream)
+    };
+}
+
+void FfiConverterTypeLnUrlPayResponse::write(RustStream &stream, const LnUrlPayResponse &val) {
+    FfiConverterString::write(stream, val.callback);
+    FfiConverterUInt64::write(stream, val.max_sendable);
+    FfiConverterUInt64::write(stream, val.min_sendable);
+    FfiConverterString::write(stream, val.metadata);
+    FfiConverterString::write(stream, val.tag);
+}
+
+uint64_t FfiConverterTypeLnUrlPayResponse::allocation_size(const LnUrlPayResponse &val) {
+    
+    return 
+        FfiConverterString::allocation_size(val.callback) +
+        FfiConverterUInt64::allocation_size(val.max_sendable) +
+        FfiConverterUInt64::allocation_size(val.min_sendable) +
+        FfiConverterString::allocation_size(val.metadata) +
+        FfiConverterString::allocation_size(val.tag);
     
 }
 
@@ -9186,11 +9437,18 @@ std::shared_ptr<LwkError> FfiConverterLwkError::read(RustStream &stream) {
     }
     case 2:
     {
+        lwk_error::GenericWithSwapId var;
+        var.msg = FfiConverterString::read(stream);
+        var.swap_id = FfiConverterString::read(stream);
+        return std::make_shared<lwk_error::GenericWithSwapId>(var);
+    }
+    case 3:
+    {
         lwk_error::PoisonError var;
         var.msg = FfiConverterString::read(stream);
         return std::make_shared<lwk_error::PoisonError>(var);
     }
-    case 3:
+    case 4:
     {
         lwk_error::MagicRoutingHint var;
         var.address = FfiConverterString::read(stream);
@@ -9198,24 +9456,24 @@ std::shared_ptr<LwkError> FfiConverterLwkError::read(RustStream &stream) {
         var.uri = FfiConverterString::read(stream);
         return std::make_shared<lwk_error::MagicRoutingHint>(var);
     }
-    case 4:
+    case 5:
     {
         lwk_error::SwapExpired var;
         var.swap_id = FfiConverterString::read(stream);
         var.status = FfiConverterString::read(stream);
         return std::make_shared<lwk_error::SwapExpired>(var);
     }
-    case 5:
+    case 6:
     {
         lwk_error::NoBoltzUpdate var;
         return std::make_shared<lwk_error::NoBoltzUpdate>(var);
     }
-    case 6:
+    case 7:
     {
         lwk_error::ObjectConsumed var;
         return std::make_shared<lwk_error::ObjectConsumed>(var);
     }
-    case 7:
+    case 8:
     {
         lwk_error::BoltzBackendHttpError var;
         var.status = FfiConverterUInt16::read(stream);
@@ -9238,11 +9496,18 @@ void FfiConverterLwkError::write(RustStream &stream, const LwkError &val) {
     }
     case 2:
     {
+        auto var = static_cast<const lwk_error::GenericWithSwapId&>(val);
+        FfiConverterString::write(stream, var.msg);
+        FfiConverterString::write(stream, var.swap_id);
+        break;
+    }
+    case 3:
+    {
         auto var = static_cast<const lwk_error::PoisonError&>(val);
         FfiConverterString::write(stream, var.msg);
         break;
     }
-    case 3:
+    case 4:
     {
         auto var = static_cast<const lwk_error::MagicRoutingHint&>(val);
         FfiConverterString::write(stream, var.address);
@@ -9250,24 +9515,24 @@ void FfiConverterLwkError::write(RustStream &stream, const LwkError &val) {
         FfiConverterString::write(stream, var.uri);
         break;
     }
-    case 4:
+    case 5:
     {
         auto var = static_cast<const lwk_error::SwapExpired&>(val);
         FfiConverterString::write(stream, var.swap_id);
         FfiConverterString::write(stream, var.status);
         break;
     }
-    case 5:
+    case 6:
     {
         auto var = static_cast<const lwk_error::NoBoltzUpdate&>(val);
         break;
     }
-    case 6:
+    case 7:
     {
         auto var = static_cast<const lwk_error::ObjectConsumed&>(val);
         break;
     }
-    case 7:
+    case 8:
     {
         auto var = static_cast<const lwk_error::BoltzBackendHttpError&>(val);
         FfiConverterUInt16::write(stream, var.status);
@@ -9287,11 +9552,18 @@ uint64_t FfiConverterLwkError::allocation_size(const LwkError &val) {
     }
     case 2:
     {
+        auto var = static_cast<const lwk_error::GenericWithSwapId&>(val);
+        return static_cast<uint64_t>(sizeof(int32_t)
+            + FfiConverterString::allocation_size(var.msg)
+            + FfiConverterString::allocation_size(var.swap_id));
+    }
+    case 3:
+    {
         auto var = static_cast<const lwk_error::PoisonError&>(val);
         return static_cast<uint64_t>(sizeof(int32_t)
             + FfiConverterString::allocation_size(var.msg));
     }
-    case 3:
+    case 4:
     {
         auto var = static_cast<const lwk_error::MagicRoutingHint&>(val);
         return static_cast<uint64_t>(sizeof(int32_t)
@@ -9299,24 +9571,24 @@ uint64_t FfiConverterLwkError::allocation_size(const LwkError &val) {
             + FfiConverterUInt64::allocation_size(var.amount)
             + FfiConverterString::allocation_size(var.uri));
     }
-    case 4:
+    case 5:
     {
         auto var = static_cast<const lwk_error::SwapExpired&>(val);
         return static_cast<uint64_t>(sizeof(int32_t)
             + FfiConverterString::allocation_size(var.swap_id)
             + FfiConverterString::allocation_size(var.status));
     }
-    case 5:
+    case 6:
     {
         auto var = static_cast<const lwk_error::NoBoltzUpdate&>(val);
         return static_cast<uint64_t>(sizeof(int32_t));
     }
-    case 6:
+    case 7:
     {
         auto var = static_cast<const lwk_error::ObjectConsumed&>(val);
         return static_cast<uint64_t>(sizeof(int32_t));
     }
-    case 7:
+    case 8:
     {
         auto var = static_cast<const lwk_error::BoltzBackendHttpError&>(val);
         return static_cast<uint64_t>(sizeof(int32_t)
@@ -11854,7 +12126,6 @@ uint64_t FfiConverterMapTypeAssetIdInt64::allocation_size(const std::unordered_m
 
     return size;
 }
-
 
 
 }

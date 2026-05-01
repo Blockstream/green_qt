@@ -92,6 +92,7 @@ struct WolletDescriptor;
 struct BoltzSessionBuilder;
 struct EsploraClientBuilder;
 struct LiquidBip21;
+struct LnUrlPayResponse;
 struct Quote;
 enum class Chain;
 enum class DescriptorBlindingKey;
@@ -102,133 +103,6 @@ enum class PaymentState;
 enum class Singlesig;
 enum class SwapAsset;
 typedef std::string AssetId;
-typedef std::string Hex;
-
-
-namespace uniffi {
-    struct FfiConverterAddress;
-} // namespace uniffi
-
-/**
- * A Liquid address
- */
-struct Address
-
-
-
-{
-    friend uniffi::FfiConverterAddress;
-
-    Address() = delete;
-
-    Address(Address &&) = delete;
-
-    Address &operator=(const Address &) = delete;
-    Address &operator=(Address &&) = delete;
-
-    ~Address();
-    /**
-     * Construct an Address object
-     */
-    static std::shared_ptr<Address> init(const std::string &s);
-    /**
-     * Return true if the address is blinded.
-     */
-    bool is_blinded();
-    /**
-     * Returns the network of the address
-     */
-    std::shared_ptr<Network> network();
-    /**
-     * Returns a string of the QR code printable in a terminal environment
-     */
-    std::string qr_code_text();
-    /**
-     * Returns a string encoding an image in a uri
-     *
-     * The string can be open in the browser or be used as `src` field in `img` in HTML
-     *
-     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
-     * and use styling to scale up the image in the browser. eg
-     * `style="image-rendering: pixelated; border: 20px solid white;"`
-     */
-    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
-    /**
-     * Return the script pubkey of the address.
-     */
-    std::shared_ptr<Script> script_pubkey();
-    /**
-     * Return the unconfidential address.
-     */
-    std::shared_ptr<Address> to_unconfidential();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-
-    private:
-    Address(const Address &);
-
-    Address(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
-    struct FfiConverterMnemonic;
-} // namespace uniffi
-
-/**
- * Wrapper over [`bip39::Mnemonic`]
- */
-struct Mnemonic
-
-
-
-{
-    friend uniffi::FfiConverterMnemonic;
-
-    Mnemonic() = delete;
-
-    Mnemonic(Mnemonic &&) = delete;
-
-    Mnemonic &operator=(const Mnemonic &) = delete;
-    Mnemonic &operator=(Mnemonic &&) = delete;
-
-    ~Mnemonic();
-    /**
-     * Construct a Mnemonic type
-     */
-    static std::shared_ptr<Mnemonic> init(const std::string &s);
-    /**
-     * Creates a Mnemonic from entropy, at least 16 bytes are needed.
-     */
-    static std::shared_ptr<Mnemonic> from_entropy(const std::vector<uint8_t> &b);
-    /**
-     * Creates a random Mnemonic of given words (12,15,18,21,24)
-     */
-    static std::shared_ptr<Mnemonic> from_random(uint8_t word_count);
-    /**
-     * Get the number of words in this mnemonic
-     */
-    uint8_t word_count();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-
-    private:
-    Mnemonic(const Mnemonic &);
-
-    Mnemonic(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
 
 
 
@@ -294,77 +168,6 @@ struct LoggingImpl
     LoggingImpl(const LoggingImpl &);
 
     LoggingImpl(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
-    struct FfiConverterAnyClient;
-} // namespace uniffi
-
-struct AnyClient
-
-
-
-{
-    friend uniffi::FfiConverterAnyClient;
-
-    AnyClient() = delete;
-
-    AnyClient(AnyClient &&) = delete;
-
-    AnyClient &operator=(const AnyClient &) = delete;
-    AnyClient &operator=(AnyClient &&) = delete;
-
-    ~AnyClient();
-    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
-    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
-
-    private:
-    AnyClient(const AnyClient &);
-
-    AnyClient(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
-    struct FfiConverterForeignStoreLink;
-} // namespace uniffi
-
-/**
- * A bridge that connects a [`ForeignStore`] to [`lwk_common::Store`].
- */
-struct ForeignStoreLink
-
-
-
-{
-    friend uniffi::FfiConverterForeignStoreLink;
-
-    ForeignStoreLink() = delete;
-
-    ForeignStoreLink(ForeignStoreLink &&) = delete;
-
-    ForeignStoreLink &operator=(const ForeignStoreLink &) = delete;
-    ForeignStoreLink &operator=(ForeignStoreLink &&) = delete;
-
-    ~ForeignStoreLink();
-    /**
-     * Create a new `ForeignStoreLink` from a foreign store implementation.
-     */
-    static std::shared_ptr<ForeignStoreLink> init(const std::shared_ptr<ForeignStore> &store);
-
-    private:
-    ForeignStoreLink(const ForeignStoreLink &);
-
-    ForeignStoreLink(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -446,11 +249,212 @@ struct Network
      * Inequality check, internally calls Rust's `Ne` trait.
      */
     bool ne(const std::shared_ptr<Network> &other) const;
+    /**
+     * Returns a hash of the object, internally calls Rust's `Hash` trait.
+     */
+    uint64_t hash() const;
 
     private:
     Network(const Network &);
 
     Network(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterMnemonic;
+} // namespace uniffi
+
+/**
+ * Wrapper over [`bip39::Mnemonic`]
+ */
+struct Mnemonic
+
+
+
+{
+    friend uniffi::FfiConverterMnemonic;
+
+    Mnemonic() = delete;
+
+    Mnemonic(Mnemonic &&) = delete;
+
+    Mnemonic &operator=(const Mnemonic &) = delete;
+    Mnemonic &operator=(Mnemonic &&) = delete;
+
+    ~Mnemonic();
+    /**
+     * Construct a Mnemonic type
+     */
+    static std::shared_ptr<Mnemonic> init(const std::string &s);
+    /**
+     * Creates a Mnemonic from entropy, at least 16 bytes are needed.
+     */
+    static std::shared_ptr<Mnemonic> from_entropy(const std::vector<uint8_t> &b);
+    /**
+     * Creates a random Mnemonic of given words (12,15,18,21,24)
+     */
+    static std::shared_ptr<Mnemonic> from_random(uint8_t word_count);
+    /**
+     * Get the number of words in this mnemonic
+     */
+    uint8_t word_count();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    Mnemonic(const Mnemonic &);
+
+    Mnemonic(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterAddress;
+} // namespace uniffi
+
+/**
+ * A Liquid address
+ */
+struct Address
+
+
+
+{
+    friend uniffi::FfiConverterAddress;
+
+    Address() = delete;
+
+    Address(Address &&) = delete;
+
+    Address &operator=(const Address &) = delete;
+    Address &operator=(Address &&) = delete;
+
+    ~Address();
+    /**
+     * Construct an Address object
+     */
+    static std::shared_ptr<Address> init(const std::string &s);
+    /**
+     * Return true if the address is blinded.
+     */
+    bool is_blinded();
+    /**
+     * Returns the network of the address
+     */
+    std::shared_ptr<Network> network();
+    /**
+     * Returns a string of the QR code printable in a terminal environment
+     */
+    std::string qr_code_text();
+    /**
+     * Returns a string encoding an image in a uri
+     *
+     * The string can be open in the browser or be used as `src` field in `img` in HTML
+     *
+     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
+     * and use styling to scale up the image in the browser. eg
+     * `style="image-rendering: pixelated; border: 20px solid white;"`
+     */
+    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
+    /**
+     * Return the script pubkey of the address.
+     */
+    std::shared_ptr<Script> script_pubkey();
+    /**
+     * Return the unconfidential address.
+     */
+    std::shared_ptr<Address> to_unconfidential();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    Address(const Address &);
+
+    Address(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterAnyClient;
+} // namespace uniffi
+
+struct AnyClient
+
+
+
+{
+    friend uniffi::FfiConverterAnyClient;
+
+    AnyClient() = delete;
+
+    AnyClient(AnyClient &&) = delete;
+
+    AnyClient &operator=(const AnyClient &) = delete;
+    AnyClient &operator=(AnyClient &&) = delete;
+
+    ~AnyClient();
+    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
+    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+
+    private:
+    AnyClient(const AnyClient &);
+
+    AnyClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterForeignStoreLink;
+} // namespace uniffi
+
+/**
+ * A bridge that connects a [`ForeignStore`] to [`lwk_common::Store`].
+ */
+struct ForeignStoreLink
+
+
+
+{
+    friend uniffi::FfiConverterForeignStoreLink;
+
+    ForeignStoreLink() = delete;
+
+    ForeignStoreLink(ForeignStoreLink &&) = delete;
+
+    ForeignStoreLink &operator=(const ForeignStoreLink &) = delete;
+    ForeignStoreLink &operator=(ForeignStoreLink &&) = delete;
+
+    ~ForeignStoreLink();
+    /**
+     * Create a new `ForeignStoreLink` from a foreign store implementation.
+     */
+    static std::shared_ptr<ForeignStoreLink> init(const std::shared_ptr<ForeignStore> &store);
+
+    private:
+    ForeignStoreLink(const ForeignStoreLink &);
+
+    ForeignStoreLink(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -472,6 +476,45 @@ struct EsploraClientBuilder {
 
 
 /**
+ * A builder for the `BoltzSession`
+ */
+struct BoltzSessionBuilder {
+    std::shared_ptr<Network> network;
+    std::shared_ptr<AnyClient> client;
+    std::optional<uint64_t> timeout = std::nullopt;
+    std::shared_ptr<Mnemonic> mnemonic = nullptr;
+    std::shared_ptr<Logging> logging = nullptr;
+    bool polling = false;
+    std::optional<uint64_t> timeout_advance = std::nullopt;
+    std::optional<uint32_t> next_index_to_use = std::nullopt;
+    std::optional<std::string> referral_id = std::nullopt;
+    /**
+     * Optional Boltz API base URL override.
+     *
+     * The caller is responsible for ensuring the provider behind this URL matches `network`.
+     *
+     * If this is used together with `store`, the caller must use a different store per provider.
+     * Persisted swap data is not namespaced by provider, so reusing the same store across
+     * different `api_url` values can mix swaps from different providers.
+     */
+    std::optional<std::string> api_url = std::nullopt;
+    std::optional<std::string> bitcoin_electrum_client_url = std::nullopt;
+    bool random_preimages = false;
+    /**
+     * Optional store for persisting swap data
+     *
+     * When set, swap data will be automatically persisted to the store after creation
+     * and on each state change. This enables automatic restoration of pending swaps.
+     *
+     * The store is not namespaced by provider, so if different `api_url` values are used the
+     * caller must use a different store per provider to avoid mixing swaps from different
+     * providers.
+     */
+    std::shared_ptr<ForeignStoreLink> store = nullptr;
+};
+
+
+/**
  * Liquid BIP21 payment details
  */
 struct LiquidBip21 {
@@ -487,31 +530,6 @@ struct LiquidBip21 {
      * The amount in satoshis
      */
     std::optional<uint64_t> satoshi;
-};
-
-
-/**
- * A builder for the `BoltzSession`
- */
-struct BoltzSessionBuilder {
-    std::shared_ptr<Network> network;
-    std::shared_ptr<AnyClient> client;
-    std::optional<uint64_t> timeout = std::nullopt;
-    std::shared_ptr<Mnemonic> mnemonic = nullptr;
-    std::shared_ptr<Logging> logging = nullptr;
-    bool polling = false;
-    std::optional<uint64_t> timeout_advance = std::nullopt;
-    std::optional<uint32_t> next_index_to_use = std::nullopt;
-    std::optional<std::string> referral_id = std::nullopt;
-    std::optional<std::string> bitcoin_electrum_client_url = std::nullopt;
-    bool random_preimages = false;
-    /**
-     * Optional store for persisting swap data
-     *
-     * When set, swap data will be automatically persisted to the store after creation
-     * and on each state change. This enables automatic restoration of pending swaps.
-     */
-    std::shared_ptr<ForeignStoreLink> store = nullptr;
 };
 
 
@@ -833,6 +851,13 @@ struct Amp2
 
     ~Amp2();
     /**
+     * Create a new AMP2 client
+     *
+     * * `server_key` - The keyorigin xpub of the AMP2 server key
+     * * `url` - The URL of the AMP2 server
+     */
+    static std::shared_ptr<Amp2> init(const std::string &server_key, const std::string &url);
+    /**
      * Construct an AMP2 context for Liquid Testnet
      */
     static std::shared_ptr<Amp2> new_testnet();
@@ -843,7 +868,7 @@ struct Amp2
     /**
      * Create an AMP2 wallet descriptor from the keyorigin xpub of a signer
      */
-    std::shared_ptr<Amp2Descriptor> descriptor_from_str(const std::string &keyorigin_xpub);
+    std::shared_ptr<Amp2Descriptor> descriptor_from_str(const std::string &keyorigin_xpub, const std::string &descriptor_blinding_key);
     /**
      * Register an AMP2 wallet with the AMP2 server
      */
@@ -1684,6 +1709,10 @@ struct CurrencyCode
      * Inequality check, internally calls Rust's `Ne` trait.
      */
     bool ne(const std::shared_ptr<CurrencyCode> &other) const;
+    /**
+     * Returns a hash of the object, internally calls Rust's `Hash` trait.
+     */
+    uint64_t hash() const;
 
     private:
     CurrencyCode(const CurrencyCode &);
@@ -1893,6 +1922,26 @@ struct ExternalUtxo
      * Construct an ExternalUtxo
      */
     static std::shared_ptr<ExternalUtxo> init(uint32_t vout, const std::shared_ptr<Transaction> &tx, const std::shared_ptr<TxOutSecrets> &unblinded, uint32_t max_weight_to_satisfy, bool is_segwit);
+    /**
+     * Construct an `ExternalUtxo` from unchecked outpoint/txout data.
+     *
+     * Unlike [`ExternalUtxo::new`], this constructor does not inspect a parent transaction or
+     * derive `outpoint` and `txout` from it. It exists as an optimisation for callers that
+     * already hold the exact outpoint, prevout, and unblinded data and want to avoid fetching or
+     * materialising the full transaction just to construct the bindings object.
+     *
+     * Do not use this for pre-segwit external UTXOs. Pre-segwit inputs require the parent
+     * transaction so the builder can populate `non_witness_utxo`, while this constructor always
+     * creates an `ExternalUtxo` without it.
+     *
+     * Use this cautiously. Callers are responsible for ensuring that `outpoint` and `txout`
+     * describe the same UTXO. As with [`ExternalUtxo::new`], callers must also ensure that
+     * `unblinded` and `max_weight_to_satisfy` match that UTXO.
+     *
+     * IMPORTANT: This is a temporary workaround to speed up integration work
+     * and should be removed after a more complete migration to `lwk`.
+     */
+    static std::shared_ptr<ExternalUtxo> from_unchecked_data(const std::shared_ptr<OutPoint> &outpoint, const std::shared_ptr<TxOut> &txout, const std::shared_ptr<TxOutSecrets> &unblinded, uint32_t max_weight_to_satisfy);
 
     private:
     ExternalUtxo(const ExternalUtxo &);
@@ -2177,6 +2226,50 @@ struct LightningPayment
      * Returns the bolt11 invoice if the lightning payment is a bolt11 invoice
      */
     std::shared_ptr<Bolt11Invoice> bolt11_invoice();
+    /**
+     * Returns the invoice amount in satoshis for a BOLT12 offer if set
+     *
+     * Returns an error if this is not a BOLT12 offer
+     */
+    std::optional<uint64_t> bolt12_invoice_amount();
+    /**
+     * Checks if the BOLT12 offer has an amount
+     *
+     * Returns true if the offer has a per-item amount (requires specifying number of items),
+     * false if it doesn't (requires specifying total amount in sats).
+     *
+     * Returns an error if this is not a BOLT12 offer.
+     */
+    bool bolt12_offer_has_amount();
+    /**
+     * Returns true if this is a BOLT12 offer
+     */
+    bool is_bolt12();
+    /**
+     * Sets the amount for a BOLT12 offer without an amount
+     *
+     * The amount should be in satoshis.
+     *
+     * # Errors
+     *
+     * Returns an error if:
+     * - This is not a BOLT12 offer
+     * - The offer already has an amount (use set_bolt12_invoice_amount_via_items instead)
+     */
+    void set_bolt12_invoice_amount(uint64_t amount_sats);
+    /**
+     * Sets the amount for a BOLT12 offer based on number of items
+     *
+     * This calculates the final amount as `items * offer_amount` where
+     * `offer_amount` is the per-item amount specified in the offer.
+     *
+     * # Errors
+     *
+     * Returns an error if:
+     * - This is not a BOLT12 offer
+     * - The offer does not have an amount set
+     */
+    void set_bolt12_invoice_amount_via_items(uint64_t items);
 
     private:
     LightningPayment(const LightningPayment &);
@@ -2366,6 +2459,10 @@ struct LwkTestEnv
      */
     AssetId issue_asset(uint64_t satoshi);
     /**
+     * Get the network of the test environment.
+     */
+    std::shared_ptr<Network> network();
+    /**
      * Send `satoshi` to `address` from the node
      */
     std::shared_ptr<Txid> send_to_address(const std::shared_ptr<Address> &address, uint64_t satoshi, std::optional<AssetId> asset);
@@ -2541,6 +2638,10 @@ struct Payment
      */
     std::shared_ptr<BitcoinAddress> bitcoin_address();
     /**
+     * Fetches a Bolt11 invoice from a LNURL callback (second step of LNURL-pay).
+     */
+    std::shared_ptr<Payment> fetch_lnurl_invoice(const LnUrlPayResponse &info, uint64_t amount_sats);
+    /**
      * Returns the kind of payment category
      */
     PaymentKind kind();
@@ -2571,6 +2672,14 @@ struct Payment
      * Returns the LNURL as a string if this is an LnUrl category, None otherwise
      */
     std::optional<std::string> lnurl();
+    /**
+     * Resolves a BIP353 payment instruction into a LightningOffer payment.
+     */
+    std::shared_ptr<Payment> resolve_bip353();
+    /**
+     * Resolves a LNURL into its metadata (first step of LNURL-pay).
+     */
+    LnUrlPayResponse resolve_lnurl_info();
 
     private:
     Payment(const Payment &);
@@ -2649,6 +2758,10 @@ struct PosConfig
      * Inequality check, internally calls Rust's `Ne` trait.
      */
     bool ne(const std::shared_ptr<PosConfig> &other) const;
+    /**
+     * Returns a hash of the object, internally calls Rust's `Hash` trait.
+     */
+    uint64_t hash() const;
 
     private:
     PosConfig(const PosConfig &);
@@ -3201,18 +3314,31 @@ struct Script
     /**
      * Construct a Script object from its hex representation.
      * To create the hex representation of a script use `to_string()`.
+     *
+     * Deprecated: use `from_string()` instead.
      */
-    static std::shared_ptr<Script> init(const Hex &hex);
+    static std::shared_ptr<Script> init(const std::string &hex);
     /**
      * Create an empty script (for fee outputs).
      */
     static std::shared_ptr<Script> empty();
+    /**
+     * Construct a Script object from its bytes.
+     */
+    static std::shared_ptr<Script> from_bytes(const std::vector<uint8_t> &bytes);
+    /**
+     * Construct a Script object from its canonical string representation.
+     * To create the string representation of a script use `to_string()`.
+     */
+    static std::shared_ptr<Script> from_string(const std::string &s);
     /**
      * Create an OP_RETURN script (for burn outputs).
      */
     static std::shared_ptr<Script> new_op_return(const std::vector<uint8_t> &data);
     /**
      * Return the consensus encoded bytes of the script.
+     *
+     * Deprecated: use `to_bytes()` instead.
      */
     std::vector<uint8_t> bytes();
     /**
@@ -3224,12 +3350,16 @@ struct Script
      *
      * Returns an equivalent value to the `jet::input_script_hash(index)`/`jet::output_script_hash(index)`.
      */
-    Hex jet_sha256_hex();
+    std::string jet_sha256_hex();
     /**
      * Return the string representation of the script showing op codes and their arguments.
      * For example: "OP_0 OP_PUSHBYTES_32 d2e99f0c38089c08e5e1080ff6658c6075afaa7699d384333d956c470881afde"
      */
     std::string to_asm();
+    /**
+     * Return the consensus encoded bytes of the script.
+     */
+    std::vector<uint8_t> to_bytes();
     /**
      * Returns a string representation of the object, internally calls Rust's `Display` trait.
      */
@@ -3460,7 +3590,7 @@ struct Transaction
      *
      * Deprecated: use `from_string()` instead.
      */
-    static std::shared_ptr<Transaction> init(const Hex &hex);
+    static std::shared_ptr<Transaction> init(const std::string &hex);
     /**
      * Construct a Transaction object from its bytes.
      */
@@ -3816,13 +3946,13 @@ struct TxOutSecrets
      *
      * Deprecated: use `asset_blinding_factor()` instead.
      */
-    Hex asset_bf();
+    std::string asset_bf();
     /**
      * Get the asset commitment
      *
      * If the output is explicit, returns the empty string
      */
-    Hex asset_commitment();
+    std::string asset_commitment();
     /**
      * Return true if the output is explicit (no blinding factors).
      */
@@ -3836,13 +3966,13 @@ struct TxOutSecrets
      *
      * Deprecated: use `value_blinding_factor()` instead.
      */
-    Hex value_bf();
+    std::string value_bf();
     /**
      * Get the value commitment
      *
      * If the output is explicit, returns the empty string
      */
-    Hex value_commitment();
+    std::string value_commitment();
 
     private:
     TxOutSecrets(const TxOutSecrets &);
@@ -3879,12 +4009,30 @@ struct Txid
     ~Txid();
     /**
      * Construct a Txid object
+     *
+     * Deprecated: use `from_string()` instead.
      */
-    static std::shared_ptr<Txid> init(const Hex &hex);
+    static std::shared_ptr<Txid> init(const std::string &hex);
+    /**
+     * Construct a Transaction object from its bytes.
+     */
+    static std::shared_ptr<Txid> from_bytes(const std::vector<uint8_t> &bytes);
+    /**
+     * Construct a Txid object from its canonical string representation.
+     *
+     * To create the string representation of a Txid use `to_string()`.
+     */
+    static std::shared_ptr<Txid> from_string(const std::string &s);
+    /**
+     * Return the bytes of the transaction identifier.
+     *
+     * Deprecated: use `to_bytes()` instead.
+     */
+    std::vector<uint8_t> bytes();
     /**
      * Return the bytes of the transaction identifier.
      */
-    std::vector<uint8_t> bytes();
+    std::vector<uint8_t> to_bytes();
     /**
      * Returns a string representation of the object, internally calls Rust's `Display` trait.
      */
@@ -4475,11 +4623,19 @@ struct WolletBuilder
      */
     std::shared_ptr<Wollet> build();
     /**
+     * Set the wallet as "utxo only"
+     *
+     * **Experimental**: This API may change without notice.
+     */
+    void utxo_only(bool utxo_only);
+    /**
      * Persist wallet updates in the legacy encrypted filesystem store.
      */
     void with_legacy_fs_store(const std::string &datadir);
     /**
      * Set the threshold used to merge persisted updates during build.
+     *
+     * **Experimental**: This API may change without notice.
      *
      * `None` disables merging (default behavior).
      */
@@ -4555,6 +4711,33 @@ struct WolletDescriptor
     void *_uniffi_internal_clone_pointer() const;
 
     void *instance = nullptr;
+};
+
+
+/**
+ * LNURL-pay metadata response
+ */
+struct LnUrlPayResponse {
+    /**
+     * The callback URL to fetch the invoice
+     */
+    std::string callback;
+    /**
+     * Maximum amount (in millisatoshis) the service is willing to receive
+     */
+    uint64_t max_sendable;
+    /**
+     * Minimum amount (in millisatoshis) the service is willing to receive
+     */
+    uint64_t min_sendable;
+    /**
+     * Metadata describing the payment
+     */
+    std::string metadata;
+    /**
+     * The type of LNURL request (should be "payRequest")
+     */
+    std::string tag;
 };
 
 
@@ -4679,6 +4862,23 @@ protected:
     }
 };
 
+struct GenericWithSwapId: LwkError {
+    std::string msg;
+    std::string swap_id;
+
+    GenericWithSwapId() : LwkError("") {}
+    GenericWithSwapId(const std::string &what_arg) : LwkError(what_arg) {}
+
+    void throw_underlying() override {
+        throw *this;
+    }
+
+protected:
+    int32_t get_variant_idx() const override {
+        return 2;
+    }
+};
+
 struct PoisonError: LwkError {
     std::string msg;
 
@@ -4691,7 +4891,7 @@ struct PoisonError: LwkError {
 
 protected:
     int32_t get_variant_idx() const override {
-        return 2;
+        return 3;
     }
 };
 
@@ -4709,7 +4909,7 @@ struct MagicRoutingHint: LwkError {
 
 protected:
     int32_t get_variant_idx() const override {
-        return 3;
+        return 4;
     }
 };
 
@@ -4726,7 +4926,7 @@ struct SwapExpired: LwkError {
 
 protected:
     int32_t get_variant_idx() const override {
-        return 4;
+        return 5;
     }
 };
 
@@ -4741,7 +4941,7 @@ struct NoBoltzUpdate: LwkError {
 
 protected:
     int32_t get_variant_idx() const override {
-        return 5;
+        return 6;
     }
 };
 
@@ -4756,7 +4956,7 @@ struct ObjectConsumed: LwkError {
 
 protected:
     int32_t get_variant_idx() const override {
-        return 6;
+        return 7;
     }
 };
 
@@ -4773,7 +4973,7 @@ struct BoltzBackendHttpError: LwkError {
 
 protected:
     int32_t get_variant_idx() const override {
-        return 7;
+        return 8;
     }
 };
 } // namespace lwk_error
@@ -5740,6 +5940,14 @@ struct FfiConverterTypeLiquidBip21 {
     static uint64_t allocation_size(const LiquidBip21 &);
 };
 
+struct FfiConverterTypeLnUrlPayResponse {
+    static LnUrlPayResponse lift(RustBuffer);
+    static RustBuffer lower(const LnUrlPayResponse &);
+    static LnUrlPayResponse read(RustStream &);
+    static void write(RustStream &, const LnUrlPayResponse &);
+    static uint64_t allocation_size(const LnUrlPayResponse &);
+};
+
 struct FfiConverterTypeQuote {
     static Quote lift(RustBuffer);
     static RustBuffer lower(const Quote &);
@@ -6145,7 +6353,6 @@ struct FfiConverterMapTypeAssetIdInt64 {
     static uint64_t allocation_size(const std::unordered_map<AssetId, int64_t> &);
 };
 typedef struct FfiConverterString FfiConverterTypeAssetId;
-typedef struct FfiConverterString FfiConverterTypeHex;
 } // namespace uniffi
 
 /**
