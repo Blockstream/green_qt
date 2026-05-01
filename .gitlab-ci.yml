@@ -30,26 +30,6 @@ sast:
   variables:
     SAST_EXCLUDED_ANALYZERS: "semgrep"
 
-
-.depends:
-  stage: depends
-  when: manual
-  before_script:
-    - export PATH="$PREFIX/bin:$PATH"
-  script:
-    - rm -rf $PREFIX
-    - tools/buildgdk.sh --static
-    - tools/buildbreakpad.sh
-    - tools/buildcrashpad.sh
-    - tools/buildgpgme.sh
-    - tools/buildlibusb.sh
-    - tools/buildhidapi.sh
-    - tools/buildcountly.sh
-    - tools/buildzxing.sh
-    - tools/buildlibserialport.sh --disable-shared
-    - tools/buildqt.sh
-    - tools/buildkdsingleapplication.sh
-
 .build:
   stage: build
   script:
