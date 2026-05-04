@@ -1,14 +1,15 @@
 #!/bin/bash
 set -exo pipefail
 
-FILENAME=kdsingleapplication-1.2.0
+VERSION=1.2.1
+FILENAME=kdsingleapplication-$VERSION
 ARCHIVE=$FILENAME.tar.gz
-DIRNAME=KDSingleApplication-1.2.0
+DIRNAME=KDSingleApplication-$VERSION
 
 mkdir -p build && cd build
 
 if [ ! -d $DIRNAME ]; then
-    curl -s -L -o $ARCHIVE https://github.com/KDAB/KDSingleApplication/releases/download/v1.2.0/$ARCHIVE
+    curl -s -L -o $ARCHIVE https://github.com/KDAB/KDSingleApplication/releases/download/v$VERSION/$ARCHIVE
     tar zxf $ARCHIVE
 fi
 

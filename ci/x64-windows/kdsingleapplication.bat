@@ -1,6 +1,6 @@
 setlocal enabledelayedexpansion
 
-set VERSION=1.1.0
+set VERSION=1.2.1
 set FILENAME=kdsingleapplication-%VERSION%
 set ARCHIVE=%FILENAME%.tar.gz
 set DIRNAME=%FILENAME%
@@ -11,7 +11,6 @@ curl -s -L -o %ARCHIVE% https://github.com/KDAB/KDSingleApplication/releases/dow
 
 call \qt\6.11.0\msvc2022_64\bin\qt-cmake -S %FILENAME% -B kdsingleapplication-bld ^
     -DBUILD_SHARED_LIBS=OFF ^
-    -DKDSingleApplication_QT6=true ^
     -DKDSingleApplication_STATIC=true ^
     -DKDSingleApplication_TESTS=false ^
     -DKDSingleApplication_EXAMPLES=false ^
