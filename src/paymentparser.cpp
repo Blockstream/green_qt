@@ -1,146 +1,284 @@
 #include "paymentparser.h"
 #include "lwk/lwk.hpp"
 
+#include <QtConcurrentRun>
+#include <QFutureWatcher>
+#include <QTimerEvent>
+
 #include <memory>
 
 namespace {
 
-void fill(QVariantMap& payment, std::shared_ptr<lwk::BitcoinAddress> address)
+void fill(QVariantMap& result, std::shared_ptr<lwk::BitcoinAddress> bitcoin_address)
 {
-    const bool is_mainnet = address->is_mainnet();
-    payment.insert("network", is_mainnet ? "bitcoin" : "testnet");
-    payment.insert("address", QString::fromStdString(address->to_string()));
+    QVariantMap address;
+    const bool is_mainnet = bitcoin_address->is_mainnet();
+    address.insert("network", is_mainnet ? "bitcoin" : "testnet");
+    address.insert("address", QString::fromStdString(bitcoin_address->to_string()));
+    result.insert("address", address);
 }
 
-void fill(QVariantMap& payment, std::shared_ptr<lwk::Address> address)
+void fill(QVariantMap& result, std::shared_ptr<lwk::Address> liquid_address)
 {
-    const bool is_mainnet = address->network()->is_mainnet();
-    payment.insert("network", is_mainnet ? "liquid" : "testnet-liquid");
-    payment.insert("address", QString::fromStdString(address->to_string()));
+    QVariantMap address;
+    const bool is_mainnet = liquid_address->network()->is_mainnet();
+    address.insert("network", is_mainnet ? "liquid" : "testnet-liquid");
+    address.insert("address", QString::fromStdString(liquid_address->to_string()));
+    result.insert("address", address);
 }
 
-void fill(QVariantMap& payment, std::shared_ptr<lwk::Bip21> bip21)
+void fill(QVariantMap& result, std::shared_ptr<lwk::Bolt11Invoice> lightning_invoice) {
+    QVariantMap invoice;
+
+    if (lightning_invoice->amount_milli_satoshis().has_value()) {
+        invoice.insert("amount_milli_satoshis", QString::number(*lightning_invoice->amount_milli_satoshis()));
+    }
+    invoice.insert("expiry_time", QString::number(lightning_invoice->expiry_time()));
+    invoice.insert("invoice", QString::fromStdString(lightning_invoice->to_string()));
+    invoice.insert("description", QString::fromStdString(lightning_invoice->invoice_description()));
+    invoice.insert("min_final_cltv_expiry_delta", QString::number(lightning_invoice->min_final_cltv_expiry_delta()));
+    invoice.insert("network", QString::fromStdString(lightning_invoice->network()).toLower());
+    if (lightning_invoice->payee_pub_key().has_value()) {
+        invoice.insert("payee_pub_key", QString::fromStdString(*lightning_invoice->payee_pub_key()));
+    }
+    invoice.insert("payment_hash", QString::fromStdString(lightning_invoice->payment_hash()));
+    invoice.insert("payment_secret", QString::fromStdString(lightning_invoice->payment_secret()));
+    invoice.insert("timestamp", QDateTime::fromSecsSinceEpoch(lightning_invoice->timestamp()));
+
+    result.insert("invoice", invoice);
+}
+
+void fill(QVariantMap& result, std::shared_ptr<lwk::Bip21> uri)
 {
-    fill(payment, bip21->address());
-    if (bip21->amount().has_value()) {
-        payment.insert("amount", QString::number(*bip21->amount()));
+    fill(result, uri->address());
+    QVariantMap bip21;
+    if (uri->amount().has_value()) {
+        bip21.insert("amount", QString::number(*uri->amount()));
     }
-    if (bip21->label().has_value()) {
-        payment.insert("label", QString::fromStdString(*bip21->label()));
+    if (uri->label().has_value()) {
+        bip21.insert("label", QString::fromStdString(*uri->label()));
     }
-    if (bip21->message().has_value()) {
-        payment.insert("message", QString::fromStdString(*bip21->message()));
+    if (uri->message().has_value()) {
+        bip21.insert("message", QString::fromStdString(*uri->message()));
     }
+    result.insert("bip21", bip21);
 }
 
-void fill(QVariantMap& payment, lwk::LiquidBip21 liquid_bip21)
+void fill(QVariantMap& result, lwk::LiquidBip21 uri)
 {
-    fill(payment, liquid_bip21.address);
-    payment.insert("asset_id", QString::fromStdString(liquid_bip21.asset));
-    if (liquid_bip21.satoshi.has_value()) {
-        payment.insert("amount", QString::number(*liquid_bip21.satoshi));
+    fill(result, uri.address);
+    QVariantMap bip21;
+    bip21.insert("asset_id", QString::fromStdString(uri.asset));
+    if (uri.satoshi.has_value()) {
+        bip21.insert("amount", QString::number(*uri.satoshi));
+    }
+    result.insert(bip21);
+}
+
+void fill(QVariantMap& result, std::shared_ptr<lwk::Payment> payment, const QVariantMap& data)
+{
+    if (payment->kind() == lwk::PaymentKind::kBitcoinAddress) {
+        fill(result, payment->bitcoin_address());
+        return;
+    }
+
+    if (payment->kind() == lwk::PaymentKind::kLiquidAddress) {
+        fill(result, payment->liquid_address());
+        return;
+    }
+
+    if (payment->kind() == lwk::PaymentKind::kLightningInvoice) {
+        fill(result, payment->lightning_invoice());
+        return;
+    }
+
+    if (payment->kind() == lwk::PaymentKind::kLightningOffer) {
+        try {
+            const auto lightning_payment = payment->lightning_payment();
+            QVariantMap bolt12;
+            bolt12.insert("offer", QString::fromStdString(*payment->lightning_offer()));
+            if (lightning_payment->bolt12_offer_has_amount()) {
+                lightning_payment->set_bolt12_invoice_amount_via_items(1);
+                const auto amount = lightning_payment->bolt12_invoice_amount().value_or(0);
+                bolt12.insert("amount", QVariant::fromValue(amount));
+            }
+            result.insert("bolt12", bolt12);
+        } catch (lwk::lwk_error::Generic error) {
+            result.insert("error", QString::fromStdString(error.msg));
+        } catch (...) {
+            result.insert("error", "unknown");
+        }
+        return;
+    }
+
+    if (payment->kind() == lwk::PaymentKind::kLnUrl) {
+        QVariantMap lnurl;
+        lnurl.insert("address", QString::fromStdString(*payment->lnurl()));
+
+        try {
+            const auto info = payment->resolve_lnurl_info();
+
+            lnurl.insert("callback", QString::fromStdString(info.callback));
+            lnurl.insert("max_sendable", QVariant::fromValue(info.max_sendable));
+            lnurl.insert("min_sendable", QVariant::fromValue(info.min_sendable));
+            lnurl.insert("metadata", QString::fromStdString(info.metadata));
+            lnurl.insert("tag", QString::fromStdString(info.tag));
+
+            if (data.contains("satoshi")) {
+                try {
+                    auto satoshi = data.value("satoshi").toULongLong();
+                    fill(result, payment->fetch_lnurl_invoice(info, satoshi), data);
+                } catch (lwk::lwk_error::Generic error) {
+                    qDebug() << Q_FUNC_INFO << error.msg << error.what();
+                    result.insert("error", QString::fromStdString(error.msg));
+                } catch (...) {
+                    result.insert("error", "unknown");
+                }
+            }
+
+            result.insert("lnurl", lnurl);
+        } catch (lwk::lwk_error::Generic error) {
+            result.insert("error", QString::fromStdString(error.msg));
+        } catch (...) {
+            result.insert("error", "unknown");
+        }
+        return;
+    }
+
+    if (payment->kind() == lwk::PaymentKind::kBip353) {
+        try {
+            fill(result, payment->resolve_bip353(), data);
+            result.insert("bip353", QString::fromStdString(*payment->bip353()));
+        } catch (lwk::lwk_error::Generic error) {
+            result.insert("error", QString::fromStdString(error.msg));
+        } catch (...) {
+            result.insert("error", "unknown");
+        }
+        return;
+    }
+
+    if (payment->kind() == lwk::PaymentKind::kBip21) {
+        fill(result, payment->bip21());
+        return;
+    }
+
+    if (payment->kind() == lwk::PaymentKind::kLiquidBip21) {
+        fill(result, *payment->liquid_bip21());
+        return;
     }
 }
 
-void fill(QVariantMap& payment, std::shared_ptr<lwk::Bolt11Invoice> invoice) {
-    if (invoice->amount_milli_satoshis().has_value()) {
-        payment.insert("amount_milli_satoshis", QString::number(*invoice->amount_milli_satoshis()));
+QVariantMap parse(const QString& input, const QVariantMap& data)
+{
+    if (input.trimmed().isEmpty()) {
+        return {};
     }
-    payment.insert("expiry_time", QString::number(invoice->expiry_time()));
-    payment.insert("invoice", QString::fromStdString(invoice->to_string()));
-    payment.insert("invoice_description", QString::fromStdString(invoice->invoice_description()));
-    payment.insert("min_final_cltv_expiry_delta", QString::number(invoice->min_final_cltv_expiry_delta()));
-    payment.insert("network", QString::fromStdString(invoice->network()).toLower());
-    if (invoice->payee_pub_key().has_value()) {
-        payment.insert("payee_pub_key", QString::fromStdString(*invoice->payee_pub_key()));
+
+    QVariantMap result;
+    result.insert("input", input);
+
+    if (!data.isEmpty()) {
+        result.insert("data", data);
     }
-    payment.insert("payment_hash", QString::fromStdString(invoice->payment_hash()));
-    payment.insert("payment_secret", QString::fromStdString(invoice->payment_secret()));
-    payment.insert("timestamp", QDateTime::fromSecsSinceEpoch(invoice->timestamp()));
-}
+
+    try {
+        fill(result, lwk::Payment::init(input.trimmed().toStdString()), data);
+    } catch (lwk::lwk_error::Generic error) {
+        result.insert("error", QString::fromStdString(error.msg));
+    } catch (...) {
+        result.insert("error", "unknown");
+    }
+    return result;
 }
 
-class PaymentParserPrivate
+} // namespace
+
+class RecipientParserPrivate
 {
 public:
     QString input;
-    QVariantMap payment;
+    QVariantMap data;
+    QVariantMap recipient;
+    int timer_id{-1};
+    bool busy{false};
 };
 
-PaymentParser::PaymentParser(QObject* parent)
+RecipientParser::RecipientParser(QObject* parent)
     : QObject(parent)
-    , d(new PaymentParserPrivate)
+    , d(new RecipientParserPrivate)
 {
 }
 
-PaymentParser::~PaymentParser()
+RecipientParser::~RecipientParser()
 {
     delete d;
 }
 
-QString PaymentParser::input() const
+QString RecipientParser::input() const
 {
     return d->input;
 }
 
-void PaymentParser::setInput(const QString& input)
+void RecipientParser::setInput(const QString& input)
 {
     if (d->input == input) return;
     d->input = input;
     emit inputChanged();
-
-    QVariantMap result;
-    try {
-        auto payment = lwk::Payment::init(input.toStdString());
-        if (payment->kind() == lwk::PaymentKind::kBitcoinAddress) {
-            result.insert("valid", true);
-            result.insert("type", "address");
-            fill(result, payment->bitcoin_address());
-        } else if (payment->kind() == lwk::PaymentKind::kLiquidAddress) {
-            result.insert("valid", true);
-            result.insert("type", "address");
-            fill(result, payment->liquid_address());
-        } else if (payment->kind() == lwk::PaymentKind::kLightningInvoice) {
-            result.insert("valid", true);
-            result.insert("type", "lightning_invoice");
-            fill(result, payment->lightning_invoice());
-        } else if (payment->kind() == lwk::PaymentKind::kBip21) {
-            result.insert("valid", true);
-            result.insert("type", "bip21");
-            fill(result, payment->bip21());
-        } else if (payment->kind() == lwk::PaymentKind::kLiquidBip21) {
-            result.insert("valid", true);
-            result.insert("type", "bip21");
-            fill(result, *payment->liquid_bip21());
-        } else if (payment->kind() == lwk::PaymentKind::kLightningOffer) {
-            result.insert("valid", true);
-            result.insert("type", "bolt12");
-            if (payment->lightning_offer()) {
-                result.insert("lightning_offer", QString::fromStdString(*payment->lightning_offer()));
-            }
-        } else if (payment->kind() == lwk::PaymentKind::kLnUrl) {
-            result.insert("valid", true);
-            result.insert("type", "lnurl");
-            if (payment->lnurl()) {
-                result.insert("lnurl", QString::fromStdString(*payment->lnurl()));
-            }
-        } else if (payment->kind() == lwk::PaymentKind::kBip353) {
-            result.insert("valid", true);
-            result.insert("type", "bip353");
-        } else {
-            qDebug() << Q_FUNC_INFO << "unhandled kind" << int(payment->kind());
-            result.insert("valid", false);
-        }
-    } catch (lwk::lwk_error::Generic) {
-        qDebug() << Q_FUNC_INFO << "error";
-        result.insert("valid", false);
-    }
-    result.insert("string", input);
-    d->payment = result;
-    emit updated();
+    invalidate();
 }
 
-QVariantMap PaymentParser::payment() const
+QVariantMap RecipientParser::data() const
 {
-    return d->payment;
+    return d->data;
+}
+
+void RecipientParser::setData(const QVariantMap& data)
+{
+    if (d->data== data) return;
+    d->data = data;
+    emit dataChanged();
+    invalidate();
+}
+
+bool RecipientParser::isBusy() const
+{
+    return d->busy;
+}
+
+QVariantMap RecipientParser::recipient() const
+{
+    return d->recipient;
+}
+
+void RecipientParser::invalidate()
+{
+    if (d->timer_id != -1) killTimer(d->timer_id);
+    d->timer_id = startTimer(50);
+    d->busy = true;
+    emit busyChanged();
+}
+
+void RecipientParser::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == d->timer_id) {
+        killTimer(d->timer_id);
+        d->timer_id = -1;
+        update();
+    }
+}
+
+void RecipientParser::update()
+{
+    using Watcher = QFutureWatcher<QVariantMap>;
+    auto watcher = new Watcher(this);
+
+    connect(watcher, &Watcher::finished, this, [=, this] {
+        watcher->deleteLater();
+        d->busy = false;
+        emit busyChanged();
+        d->recipient = watcher->result();
+        emit recipientChanged();
+    });
+
+    watcher->setFuture(QtConcurrent::run(parse, d->input, d->data));
 }

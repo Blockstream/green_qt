@@ -17,7 +17,7 @@ StackViewPage {
     required property var transaction
     required property bool bumpRedeposit
 
-    property var payment
+    property var label
     property bool note: controller.memo.length > 0
     property string address_input
 
@@ -130,7 +130,7 @@ StackViewPage {
         GTextArea {
             Layout.fillWidth: true
             id: note_text_area
-            text: self.payment?.label ?? self.transaction.previous_transaction?.memo ?? ''
+            text: self.label ?? self.transaction.previous_transaction?.memo ?? ''
             visible: self.note
             wrapMode: TextArea.Wrap
         }

@@ -289,6 +289,9 @@ set(QML_FILES_FEATURES
     ChainSwapCreatePage.qml
     ChainSwapReviewPage.qml
     TwoFactorUndoResetDrawer.qml
+    Bolt12Page.qml
+    Bip353Page.qml
+    LnurlPage.qml
 )
 
 set(QML_FILES

@@ -6,14 +6,14 @@ import QtQuick.Layouts
 GTextArea {
     property string input
     property string previousText: ''
-    property var payment: parser.payment
+    property var recipient: parser.recipient
     Layout.fillWidth: true
     Layout.minimumHeight: 200
     id: field
     focus: true
     rightPadding: 15
     bottomPadding: 50
-    PaymentParser {
+    RecipientParser {
         id: parser
         input: field.text.trim()
     }

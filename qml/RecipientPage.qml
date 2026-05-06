@@ -4,7 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
@@ -16,17 +15,41 @@ StackViewPage {
     property list<Account> accounts
     property var assets
     property var error: null
-    function update() {
-        const payment = recipient_field.payment
-        let { asset_id, network, type } = payment
-        let error
+    function update(recipient) {
+        let asset, asset_id, error, network
+
+        if (recipient.error) {
+            if (recipient.error.includes('DNS resolution failed')) {
+                self.error = { code: 'DNS resolution failed', visible: true }
+            } else {
+                const code = recipient.error
+                    .replace('Reqwest error: ', '')
+                self.error = { code, visible: true }
+            }
+            return
+        }
 
         self.page = (() => {
-            if (type === 'lightning_invoice') {
-                if (!payment.amount_milli_satoshis) {
-                    error = 'Format not supported. Please paste an invoice with an amount.'
-                    return null
-                }
+            if (recipient.bip353) {
+                network = 'liquid'
+                asset_id = NetworkManager.network('liquid').policyAsset
+                return bip353_page
+            }
+            if (recipient.bolt12) {
+                network = 'liquid'
+                asset_id = NetworkManager.network('liquid').policyAsset
+                return bolt12_page
+            }
+            if (recipient.lnurl) {
+                network = 'liquid'
+                asset_id = NetworkManager.network('liquid').policyAsset
+                return lnurl_page
+            }
+            if (recipient.address) {
+                network = recipient.address.network
+                return send_page
+            }
+            if (recipient.invoice) {
                 if (!self.context.mainnet) {
                     error = 'Not supported in testnet.'
                     return null
@@ -39,28 +62,17 @@ StackViewPage {
                     error = 'Not supported with Hardware Wallet.'
                     return null
                 }
-                if (Settings.isEventRegistered({ invoice: payment.invoice })) {
+                if (Settings.isEventRegistered({ invoice: recipient.input })) {
                     error = 'Invoice already paid.'
+                    return null
+                }
+                if (!recipient.invoice.amount_milli_satoshis) {
+                    error = 'Format not supported. Please paste an invoice with an amount.'
                     return null
                 }
                 network = 'liquid'
                 asset_id = NetworkManager.network('liquid').policyAsset
                 return submarine_swap_page
-            }
-            if (type === 'bolt12') {
-                error = 'BOLT12 not supported. Please paste an invoice with an amount.'
-                return null
-            }
-            if (type === 'lnurl') {
-                error = 'LnUrl not supported. Please paste an invoice with an amount.'
-                return null
-            }
-            if (type === 'bip353') {
-                error = 'DNS Payment Instructions not supported. Please paste an invoice with an amount.'
-                return null
-            }
-            if (type === 'address' || type === 'bip21') {
-                return send_page
             }
             return null
         })()
@@ -116,7 +128,7 @@ StackViewPage {
             self.error = { code: error, visible: true }
             return
         }
-        if (!self.page || !recipient_field.payment.valid) {
+        if (!self.page) {
             self.error = { code: 'id_invalid_address', visible: recipient_field.text !== '' }
             return
         }
@@ -146,7 +158,7 @@ StackViewPage {
                 account: self.accounts[0],
                 asset: self.assets[0].asset,
                 input: recipient_field.input,
-                payment: recipient_field.payment
+                recipient: recipient_field.recipient
             })
         }
         self.error = { code: 'unknown error', visible: true }
@@ -159,7 +171,7 @@ StackViewPage {
     }
     Component.onCompleted: {
         if (self.url && self.url.toString() !== '') {
-            self.update()
+            self.update(recipient_field.recipient)
         }
     }
     contentItem: VFlickable {
@@ -193,27 +205,97 @@ StackViewPage {
             id: recipient_field
             text: self.url
             error: self.error?.visible ? self.error.code : null
-            onPaymentChanged: self.update()
+            onRecipientChanged: self.update(recipient_field.recipient)
         }
         ErrorPane {
             Layout.topMargin: -15
             Layout.bottomMargin: 15
-            error: recipient_field.error
+            error: self.error?.visible ? self.error?.code : null
         }
+        // FieldTitle {
+        //     text: 'ACCOUNTS'
+        // }
+        // Repeater {
+        //     model: self.accounts
+        //     delegate: Label {
+        //         text: UtilJS.accountName(modelData)
+        //     }
+        // }
+        // FieldTitle {
+        //     text: 'ASSETS'
+        // }
+        // Repeater {
+        //     model: self.assets
+        //     delegate: Label {
+        //         text: modelData.id
+        //     }
+        // }
+        // FieldTitle {
+        //     text: 'RECIPIENT'
+        // }
+        // Label {
+        //     Layout.fillWidth: true
+        //     Layout.preferredWidth: 0
+        //     text: JSON.stringify(recipient_field.recipient, null, 4)
+        //     font.pixelSize: 10
+        //     wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        // }
         VSpacer {
         }
     }
     footerItem: PrimaryButton {
         enabled: self.error === null
         text: qsTrId('id_next')
-        onClicked: self.update()
+        onClicked: {
+            self.update(recipient_field.recipient)
+        }
     }
+
+    Component {
+        id: bolt12_page
+        Bolt12Page {
+            context: self.context
+            onCloseClicked: self.closeClicked()
+            onContinueClicked: (properties) => {
+                self.StackView.view.push(submarine_swap_page, properties)
+            }
+        }
+    }
+
+    Component {
+        id: lnurl_page
+        LnurlPage {
+            context: self.context
+            input: recipient_field.input
+            recipient: recipient_field.recipient
+            onCloseClicked: self.closeClicked()
+            onContinueClicked: (properties) => {
+                self.StackView.view.push(submarine_swap_page, properties)
+            }
+        }
+    }
+
+    Component {
+        id: bip353_page
+        Bip353Page {
+            context: self.context
+            input: recipient_field.input
+            recipient: recipient_field.recipient
+            onCloseClicked: self.closeClicked()
+            onContinueClicked: (properties) => {
+                self.StackView.view.push(submarine_swap_page, properties)
+            }
+        }
+    }
+
     Component {
         id: submarine_swap_page
         SubmarineSwapPage {
             context: self.context
+            fiat: false
             input: recipient_field.input
-            payment: recipient_field.payment
+            recipient: recipient_field.recipient
+            unit: self.context.primarySession.unit
             onCloseClicked: self.closeClicked()
         }
     }
@@ -223,7 +305,7 @@ StackViewPage {
             id: page
             context: self.context
             input: recipient_field.input
-            payment: recipient_field.payment
+            recipient: recipient_field.recipient
             onCloseClicked: self.closeClicked()
         }
     }
@@ -234,11 +316,12 @@ StackViewPage {
             context: self.context
             onAssetClicked: (asset) => {
                 const accounts = UtilJS.accounts(self.context).filter(account => (account.json.satoshi[asset.key] ?? 0) !== 0)
-                // const accounts = self.selectAccounts(asset)
                 if (accounts.length === 1) {
                     return self.StackView.view.push(self.page, {
                         account: accounts[0],
                         asset: asset,
+                        input: recipient_field.input,
+                        recipient: recipient_field.recipient
                     })
                 }
                 if (accounts.length > 1) {
@@ -260,6 +343,8 @@ StackViewPage {
                 self.StackView.view.push(self.page, {
                     account,
                     asset: page.asset,
+                    input: recipient_field.input,
+                    recipient: recipient_field.recipient
                 })
             }
             onCloseClicked: self.closeClicked()

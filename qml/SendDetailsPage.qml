@@ -12,9 +12,8 @@ StackViewPage {
     required property Asset asset
     required property Context context
     required property string input
-    required property var payment
-    readonly property string address: self.payment?.address ?? ''
-    readonly property var amount: ({ satoshi: self.payment?.amount ?? '0' })
+    required property var recipient
+    readonly property var amount: ({ satoshi: self.recipient?.bip21?.amount ?? '0' })
     property var available: {
         if (controller.coins.length > 0) {
             let satoshi = 0
@@ -53,7 +52,7 @@ StackViewPage {
         feeRate: estimates.fees[3]
         recipient.convert.unit: controller.account.session.unit
         recipient.convert.input: self.amount
-        recipient.address: self.address
+        recipient.address: self.recipient.address.address ?? ''
     }
     AnalyticsView {
         name: 'Send'
@@ -339,7 +338,7 @@ StackViewPage {
             account: controller.account
             asset: controller.asset
             context: self.context
-            payment: self.payment
+            label: self.recipient?.bip21?.label ?? null
             onCloseClicked: self.closeClicked()
         }
     }

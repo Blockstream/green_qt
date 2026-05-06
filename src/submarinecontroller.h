@@ -11,7 +11,7 @@ class SubmarineControllerPrivate;
 class SubmarineController : public Controller
 {
     Q_OBJECT
-    Q_PROPERTY(QString payment READ payment WRITE setPayment NOTIFY paymentChanged)
+    Q_PROPERTY(QVariantMap recipient READ recipient WRITE setRecipient NOTIFY recipientChanged)
     Q_PROPERTY(QString refundAddress READ refundAddress WRITE setRefundAddress NOTIFY refundAddressChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(QVariant error READ error NOTIFY errorChanged)
@@ -20,8 +20,8 @@ class SubmarineController : public Controller
 public:
     SubmarineController(QObject* parent = nullptr);
     ~SubmarineController();
-    QString payment() const;
-    void setPayment(const QString& payment);
+    QVariantMap recipient() const;
+    void setRecipient(const QVariantMap& recipient);
     QString refundAddress() const;
     void setRefundAddress(const QString& refund_address);
     bool isBusy() const;
@@ -30,7 +30,7 @@ public:
 public slots:
     void setLockupTransaction(ChainTransaction* transaction);
 signals:
-    void paymentChanged();
+    void recipientChanged();
     void refundAddressChanged();
     void busyChanged();
     void swapChanged();

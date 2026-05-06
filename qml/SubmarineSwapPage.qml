@@ -12,8 +12,16 @@ StackViewPage {
     required property Account account
     required property Asset asset
     required property string input
-    required property var payment
-    property bool note: false
+    required property var recipient
+    required property bool fiat
+    required property string unit
+    property bool note: self.recipient?.invoice?.description ?? false
+    readonly property string amount: {
+        if (submarine_controller.swap?.data?.boltz_fee && self.recipient.invoice) {
+            return String(Math.ceil(Number(self.recipient.invoice.amount_milli_satoshis) / 1000))
+        }
+        return Number(submarine_controller.swap?.data?.amount ?? 0) - Number(submarine_controller.swap?.data?.fee ?? 0)
+    }
     ReceiveAddressController {
         id: receive_controller
         context: self.context
@@ -22,7 +30,7 @@ StackViewPage {
     SubmarineController {
         id: submarine_controller
         context: self.context
-        payment: self.payment.invoice
+        recipient: self.recipient
         refundAddress: receive_controller.address?.address ?? ''
     }
     FeeEstimates {
@@ -51,7 +59,7 @@ StackViewPage {
                 from: UtilJS.swapNetworkType(self.account.network),
                 to: 'lightning'
             }))
-            Settings.registerEvent({ invoice: self.payment.invoice })
+            Settings.registerEvent({ invoice: self.recipient.input })
             self.StackView.view.push(complete_page, { swap: submarine_controller.swap, transaction })
         }
         onFailed: (error) => {
@@ -106,12 +114,18 @@ StackViewPage {
         AddressLabel {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            address: self.payment.invoice
+            address: self.recipient.input
             padding: 20
+            visible: !address_field.visible
             background: Rectangle {
                 color: '#181818'
                 radius: 5
             }
+        }
+        Bip353Page.Bip353AddressField {
+            id: address_field
+            address: self.recipient?.bip353 ?? self.recipient?.lnurl?.address ?? ''
+            visible: (self.recipient?.lnurl ?? false) || (self.recipient?.bip353 ?? false)
         }
         FieldTitle {
             text: qsTrId('id_amount')
@@ -120,21 +134,23 @@ StackViewPage {
         AmountField {
             Layout.fillWidth: true
             id: amount_field
+            fiat: self.fiat
             readOnly: true
             session: self.account.session
+            unit: self.unit
             visible: confirm_button.enabled
             convert: Convert {
                 asset: self.asset
                 context: self.context
-                input: ({ satoshi: submarine_controller.swap?.data?.boltz_fee ? String(Number(self.payment.amount_milli_satoshis) / 1000) : submarine_controller.swap?.data?.amount ?? '0' })
-                unit: self.context.primarySession.unit
+                input: ({ satoshi: self.amount })
+                unit: self.unit
             }
         }
         Label {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
             color: '#A0A0A0'
-            text: 'You are paying this Lightning invoice with Liquid Bitcoin'
+            text: 'You are paying with Liquid Bitcoin'
             horizontalAlignment: Label.AlignHCenter
             wrapMode: Label.WordWrap
         }
@@ -156,6 +172,7 @@ StackViewPage {
             Layout.fillWidth: true
             id: note_text_area
             visible: self.note
+            text: self.recipient?.invoice?.description ?? ''
             wrapMode: TextArea.Wrap
         }
         VSpacer {
@@ -163,6 +180,20 @@ StackViewPage {
         ErrorPane {
             error: submarine_controller.error || controller.transaction.error
         }
+        // Label {
+        //     Layout.fillWidth: true
+        //     Layout.preferredWidth: 0
+        //     text: JSON.stringify(self.recipient, null, 4)
+        //     font.pixelSize: 10
+        //     wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        // }
+        // Label {
+        //     Layout.fillWidth: true
+        //     Layout.preferredWidth: 0
+        //     text: JSON.stringify(submarine_controller.swap.data, null, 4)
+        //     font.pixelSize: 10
+        //     wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        // }
         ColumnLayout {
             visible: confirm_button.enabled
             spacing: 5
@@ -230,7 +261,7 @@ StackViewPage {
                 convert: Convert {
                     context: self.context
                     account: self.account
-                    input: ({ satoshi: submarine_controller.swap?.data?.boltz_fee ? String(Number(self.payment.amount_milli_satoshis) / 1000) : submarine_controller.swap?.data?.amount ?? '0' })
+                    input: ({ satoshi: self.amount })
                     unit: amount_field.convert.unit
                 }
             }

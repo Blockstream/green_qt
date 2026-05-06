@@ -13,11 +13,44 @@
 class SubmarineControllerPrivate {
 public:
     int timer_id{-1};
-    QString payment;
+    QVariantMap recipient;
     QString refund_address;
     bool busy{false};
     QVariant error;
     SubmarineSwap* swap{nullptr};
+
+    std::shared_ptr<lwk::LightningPayment> payment() const
+    {
+        if (recipient.contains("bolt12")) {
+            const auto bolt12 = recipient.value("bolt12").toMap();
+            const auto data = recipient.value("data").toMap();
+            const auto offer = bolt12.value("offer").toString();
+
+            auto lightning_payment = lwk::LightningPayment::init(offer.toStdString());
+
+            if (lightning_payment->bolt12_offer_has_amount()) {
+                const auto items = data.value("items", 1).toULongLong();
+
+                lightning_payment->set_bolt12_invoice_amount_via_items(items);
+            } else {
+                const auto satoshi = data.value("satoshi").toULongLong();
+
+                lightning_payment->set_bolt12_invoice_amount(satoshi);
+            }
+
+            return lightning_payment;
+        }
+
+        if (recipient.contains("invoice")) {
+            auto invoice = recipient.value("invoice").toMap().value("invoice").toString();
+
+            auto lightning_payment = lwk::LightningPayment::init(invoice.toStdString());
+
+            return lightning_payment;
+        }
+
+            Q_UNREACHABLE();
+    }
 };
 
 SubmarineController::SubmarineController(QObject* parent)
@@ -31,15 +64,16 @@ SubmarineController::~SubmarineController()
     delete d;
 }
 
-QString SubmarineController::payment() const
+QVariantMap SubmarineController::recipient() const
 {
-    return d->payment;
+    return d->recipient;
 }
 
-void SubmarineController::setPayment(const QString& payment)
+void SubmarineController::setRecipient(const QVariantMap& recipient)
 {
-    if (d->payment == payment) return;
-    d->payment = payment;
+    if (d->recipient == recipient) return;
+    d->recipient = recipient;
+    emit recipientChanged();
     invalidate();
 }
 
@@ -111,29 +145,29 @@ void SubmarineController::timerEvent(QTimerEvent* event)
 void SubmarineController::update()
 {
     if (!m_context->m_boltz_session) return;
-    if (d->payment.isEmpty()) return;
+    if (d->recipient.isEmpty()) return;
     if (d->refund_address.isEmpty()) return;
 
-    for (const auto swap : m_context->m_swaps) {
-        auto submarine_swap = qobject_cast<SubmarineSwap*>(swap);
-        if (submarine_swap && submarine_swap->invoice() == d->payment) {
-            qDebug() << Q_FUNC_INFO << "found swap for invoice" << submarine_swap->status();
-            d->busy = false;
-            emit busyChanged();
-            setSwap(submarine_swap);
-            setError({});
-            return;
-        }
-    }
+    // FIXME
+    // for (const auto swap : m_context->m_swaps) {
+    //     auto submarine_swap = qobject_cast<SubmarineSwap*>(swap);
+    //     if (submarine_swap && submarine_swap->invoice() == d->recipient) {
+    //         qDebug() << Q_FUNC_INFO << "found swap for invoice" << submarine_swap->status();
+    //         d->busy = false;
+    //         emit busyChanged();
+    //         setSwap(submarine_swap);
+    //         setError({});
+    //         return;
+    //     }
+    // }
 
     typedef std::variant<std::shared_ptr<lwk::PreparePayResponse>, std::pair<std::string, uint64_t>, std::string> Result;
     using Watcher = QFutureWatcher<Result>;
     const auto watcher = new Watcher(this);
     watcher->setFuture(QtConcurrent::run([=, this]() -> Result {
         try {
-            auto lightning_payment = lwk::LightningPayment::init(d->payment.toStdString());
             auto address = lwk::Address::init(d->refund_address.toStdString());
-            return m_context->m_boltz_session->prepare_pay(lightning_payment, address, nullptr);
+            return m_context->m_boltz_session->prepare_pay(d->payment(), address, nullptr);
         } catch (lwk::lwk_error::Generic error) {
             qDebug() << Q_FUNC_INFO << "generic error"
                 << QString::fromStdString(error.msg);
@@ -145,8 +179,8 @@ void SubmarineController::update()
                 << error.amount;
             return std::make_pair(error.address, error.amount);
         } catch (lwk::lwk_error::BoltzBackendHttpError error) {
-            qDebug() << Q_FUNC_INFO << "BoltzBackendHttpError" << error.status << QString::fromStdString(error.error.value_or("unknonw error"));
-            return error.error.value_or("unknonw error");
+            qDebug() << Q_FUNC_INFO << "BoltzBackendHttpError" << error.status << QString::fromStdString(error.error.value_or("unknown error"));
+            return error.error.value_or("unknown error");
         } catch (...) {
             qDebug() << Q_FUNC_INFO << "unexpected error";
             return std::string();
@@ -159,8 +193,9 @@ void SubmarineController::update()
         emit busyChanged();
 
         if (result.index() == 0) {
+            auto invoice = d->recipient.value("invoice").toMap().value("invoice").toString();
             auto prepare_pay_response = std::get<0>(result);
-            auto swap = new SubmarineSwap(d->payment, prepare_pay_response, context());
+            auto swap = new SubmarineSwap(invoice, prepare_pay_response, context());
             context()->addSwap(swap);
             setSwap(swap);
             setError({});
