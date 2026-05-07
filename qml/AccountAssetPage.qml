@@ -122,7 +122,7 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     enabled: !self.account.network.liquid && self.asset.key === 'btc'
                     icon.source: 'qrc:/fafafa/20/coin-vertical.svg'
-                    text: 'Buy'
+                    text: qsTrId('id_buy')
                     visible: self.context.mainnet
                     onClicked: {
                         self.StackView.view.push(buy_page)
@@ -145,6 +145,17 @@ StackViewPage {
                     text: qsTrId('id_receive')
                     onClicked: {
                         self.StackView.view.push(receive_page)
+                    }
+                }
+                ActionButton {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    enabled: !self.context.watchonly
+                    icon.source: 'qrc:/fafafa/20/arrows-down-up.svg'
+                    text: qsTrId('id_swap')
+                    visible: self.context.mainnet && self.asset.policy
+                    onClicked: {
+                        self.StackView.view.push(chain_swap_create_page)
                     }
                 }
             }
@@ -248,6 +259,16 @@ StackViewPage {
             context: self.context
             account: self.account
             asset: self.asset
+            onCloseClicked: self.closeClicked()
+        }
+    }
+
+    Component {
+        id: chain_swap_create_page
+        ChainSwapCreatePage {
+            context: self.context
+            sendNetworkKey: self.account.network.liquid ? 'liquid' : 'bitcoin'
+            receiveNetworkKey: self.account.network.liquid ? 'bitcoin' : 'liquid'
             onCloseClicked: self.closeClicked()
         }
     }

@@ -9,6 +9,8 @@ import 'util.js' as UtilJS
 
 StackViewPage {
     required property Context context
+    property string sendNetworkKey: 'bitcoin'
+    property string receiveNetworkKey: 'liquid'
     property bool sendActive: true
     property real feeRate: fee_estimates.fees[3] ?? 0
     property var error: {
@@ -33,6 +35,7 @@ StackViewPage {
         }
     }
     Component.onCompleted: {
+        controller.update()
         const accounts = UtilJS.accounts(self.context)
         receive_field.account = accounts.find(account => account.network.key === controller.receiveNetworkKey) ?? null
         send_field.account = accounts.find(account => account.network.key === controller.sendNetworkKey) ?? null
@@ -40,6 +43,8 @@ StackViewPage {
     SwapQuoteController {
         id: controller
         context: self.context
+        sendNetworkKey: self.sendNetworkKey
+        receiveNetworkKey: self.receiveNetworkKey
         onQuoteChanged: {
             if (self.sendActive) {
                 receive_field.convert.input = { satoshi: controller.quote.receive_amount }

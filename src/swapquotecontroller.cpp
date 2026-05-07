@@ -55,6 +55,25 @@ void SwapQuoteController::setLightning(bool lightning)
     update();
 }
 
+static lwk::SwapAsset assetFromNetworkKey(const QString& key)
+{
+    return key == QLatin1String("liquid") ? lwk::SwapAsset::kLiquid : lwk::SwapAsset::kOnchain;
+}
+
+void SwapQuoteController::setReceiveNetworkKey(const QString& networkKey)
+{
+    const auto asset = assetFromNetworkKey(networkKey);
+    if (d->send_asset == asset) return;
+    d->send_asset = asset;
+}
+
+void SwapQuoteController::setSendNetworkKey(const QString& networkKey)
+{
+    const auto asset = assetFromNetworkKey(networkKey);
+    if (d->receive_asset == asset) return;
+    d->receive_asset = asset;
+}
+
 QVariantMap SwapQuoteController::quote() const
 {
     return d->quote;
