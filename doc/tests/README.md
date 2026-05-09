@@ -4,27 +4,43 @@ This project uses CMake/CTest and Qt Test (`Qt6::Test`) for unit tests.
 
 ## Run Tests
 
-From the repository root:
+From the repository root, use [`tools/test.sh`](../../tools/test.sh). It configures with `qt-cmake`, builds the default tree directory `build`, and runs CTest.
+
+Configure, build, and run everything:
 
 ```sh
-cmake -S . -B build-tests -DBUILD_TESTING=ON
-cmake --build build-tests
-ctest --test-dir build-tests --output-on-failure
+./tools/test.sh all
 ```
 
-Useful options:
+Other commands:
 
-- Run a specific test:
-
-  ```sh
-  ctest --test-dir build-tests -R test_smoke --output-on-failure
-  ```
-
-- List all discovered tests:
+- Run tests matching a regex (same as `ctest -R`):
 
   ```sh
-  ctest --test-dir build-tests -N
+  ./tools/test.sh one test_smoke
+  ./tools/test.sh one "test_(util|json)"
   ```
+
+- List discovered tests:
+
+  ```sh
+  ./tools/test.sh list
+  ```
+
+- Configure or build only:
+
+  ```sh
+  ./tools/test.sh configure
+  ./tools/test.sh build
+  ```
+
+Environment overrides:
+
+- `BUILD_DIR` — build directory (default: `build`). Example: `BUILD_DIR=build-tests ./tools/test.sh all`
+- `QT_CMAKE_BIN` — path to `qt-cmake` if it is not on `PATH`
+- `CTEST_JUNIT_FILE` — if set, CTest writes JUnit XML there (used in CI for GitLab test reports)
+
+If you need raw CMake/CTest invocations instead of the script, use the same build directory and flags as `tools/test.sh` (`qt-cmake -S . -B <dir> -DBUILD_TESTING=ON`, then `cmake --build` and `ctest --test-dir <dir>`).
 
 ## Add a New Test
 

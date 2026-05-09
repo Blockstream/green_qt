@@ -18,6 +18,7 @@ Usage:
 Environment overrides:
   BUILD_DIR=<dir>        Build directory (default: build)
   QT_CMAKE_BIN=<path>    qt-cmake command/path (default: qt-cmake from PATH)
+  CTEST_JUNIT_FILE=<path> If set, write JUnit XML for GitLab test reports (ctest --output-junit)
 
 Examples:
   ./tools/test.sh all
@@ -40,7 +41,12 @@ build_tests() {
 }
 
 run_all_tests() {
-    ctest --test-dir "$ROOT_DIR/$BUILD_DIR" --output-on-failure
+    local ctest_args=(--test-dir "$ROOT_DIR/$BUILD_DIR" --output-on-failure)
+    if [[ -n "${CTEST_JUNIT_FILE:-}" ]]; then
+        mkdir -p "$(dirname "$CTEST_JUNIT_FILE")"
+        ctest_args+=(--output-junit "$CTEST_JUNIT_FILE")
+    fi
+    ctest "${ctest_args[@]}"
 }
 
 run_one_test() {

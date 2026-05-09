@@ -12,6 +12,27 @@ linux-x86_64:build-image:
   tags:
     - cloud
 
+linux-x86_64:test:
+  stage: test
+  extends:
+    - .linux-x86_64
+  needs:
+    - job: linux-x86_64:build-appimage
+      artifacts: false
+  variables:
+    CTEST_JUNIT_FILE: "$CI_PROJECT_DIR/build/ctest-junit.xml"
+  before_script:
+    - export PATH="/qt/6.11.0/gcc_64/bin:$PREFIX/bin/:$PATH"
+    - export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH"
+  script:
+    - bash tools/test.sh all
+  artifacts:
+    when: always
+    reports:
+      junit: build/ctest-junit.xml
+    paths:
+      - build/ctest-junit.xml
+
 linux-x86_64:build-appimage:
   extends:
     - .linux-x86_64
