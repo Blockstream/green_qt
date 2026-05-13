@@ -29,7 +29,7 @@ bool IsSegwitAddressType(const QString& addr_type)
     Q_UNREACHABLE();
 }
 
-const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{1, 0, 37};
+const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{1, 0, 40};
 
 } // namespace
 
