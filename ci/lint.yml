@@ -1,3 +1,15 @@
+commitlint:
+  image: commitlint/commitlint
+  tags:
+    - k8s
+  stage: lint
+  variables:
+    GIT_DEPTH: 0
+  allow_failure: true
+  script:
+    - BASE=${CI_MERGE_REQUEST_DIFF_BASE_SHA:-$(git merge-base HEAD origin/dev)}
+    - commitlint --verbose --from "$BASE"
+
 cpplint:
   image: python:3
   tags:
