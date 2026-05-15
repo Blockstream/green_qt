@@ -17,7 +17,7 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
 - **Homebrew**: `https://brew.sh`
 - **Bash 4+**: Required for GDK build scripts. macOS ships with Bash 3.2; install via `brew install bash`. Check version with `bash --version`.
 - **C/C++ compiler**: Apple clang from Xcode (default on macOS).
-- **Build tools**: `brew install cmake ninja python git pkg-config`
+- **Build tools**: `brew install cmake ninja python git pkg-config protobuf`
 - **Qt 6.11**: installed via the Qt online installer (see below).
 
 The build uses a local dependency prefix under `depends/` plus a **Qt 6.11** installation.
@@ -110,6 +110,7 @@ tools/buildzxing.sh
 tools/buildlibserialport.sh --disable-shared
 tools/buildkdsingleapplication.sh
 tools/buildlwk.sh
+tools/buildglsdk.sh
 tools/buildleveldb.sh
 ```
 

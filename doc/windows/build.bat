@@ -69,10 +69,23 @@ if errorlevel 1 (
     )
 )
 
+REM Rust is required for the native LWK and GLSDK build steps.
+where cargo >nul 2>&1
+if errorlevel 1 (
+    echo ERROR: Rust not found.
+    exit /b 1
+)
+
+where rustc >nul 2>&1
+if errorlevel 1 (
+    echo ERROR: Rust compiler not found.
+    exit /b 1
+)
+
 REM Validate paths
 if not exist "%DEPENDS_PREFIX%\bin\libgreen_gdk.dll" (
     echo ERROR: Phase 1 artifacts not found at %DEPENDS_PREFIX%
-    echo Run doc/windows/build-win-dependencies.sh on Linux first, then copy artifacts to this location.
+    echo Run doc/windows/build-dependencies.sh on Linux first, then copy artifacts to this location.
     exit /b 1
 )
 
@@ -87,12 +100,10 @@ cd /d "%~dp0\..\.."
 REM --- Step 1: Create .lib from .def ---
 if %LAST_STEP% LSS 1 (
     echo.
-    echo [Step 1/9] Creating import libraries from .def files...
+    echo [Step 1/11] Creating import libraries from .def files...
     lib /def:%DEPENDS_PREFIX%\bin\libgreen_gdk.def /out:%DEPENDS_PREFIX%\lib\libgreen_gdk.lib /machine:x64
     if errorlevel 1 goto :fail
     lib /def:%DEPENDS_PREFIX%\bin\libserialport-0.def /out:%DEPENDS_PREFIX%\lib\libserialport-0.lib /machine:x64
-    if errorlevel 1 goto :fail
-    lib /def:%DEPENDS_PREFIX%\bin\lwk.def /out:%DEPENDS_PREFIX%\lib\lwk.lib /machine:x64
     if errorlevel 1 goto :fail
     (echo 1)>%STATE_FILE%
     set LAST_STEP=1
@@ -101,7 +112,7 @@ if %LAST_STEP% LSS 1 (
 REM --- Step 2: Build Countly ---
 if %LAST_STEP% LSS 2 (
     echo.
-    echo [Step 2/9] Building Countly...
+    echo [Step 2/11] Building Countly...
     set PREFIX=%PREFIX%
     call ci\x64-windows\countly.bat
     if errorlevel 1 goto :fail
@@ -112,7 +123,7 @@ if %LAST_STEP% LSS 2 (
 REM --- Step 3: Build KDSingleApplication ---
 if %LAST_STEP% LSS 3 (
     echo.
-    echo [Step 3/9] Building KDSingleApplication...
+    echo [Step 3/11] Building KDSingleApplication...
     set PREFIX=%PREFIX%
     call ci\x64-windows\kdsingleapplication.bat
     if errorlevel 1 goto :fail
@@ -123,7 +134,7 @@ if %LAST_STEP% LSS 3 (
 REM --- Step 4: Build ZXing ---
 if %LAST_STEP% LSS 4 (
     echo.
-    echo [Step 4/9] Building ZXing...
+    echo [Step 4/11] Building ZXing...
     set PREFIX=%PREFIX%
     call ci\x64-windows\zxing.bat
     if errorlevel 1 goto :fail
@@ -134,7 +145,7 @@ if %LAST_STEP% LSS 4 (
 REM --- Step 5: Build hidapi ---
 if %LAST_STEP% LSS 5 (
     echo.
-    echo [Step 5/9] Building hidapi...
+    echo [Step 5/11] Building hidapi...
     set PREFIX=%PREFIX%
     call ci\x64-windows\hidapi.bat
     if errorlevel 1 goto :fail
@@ -145,7 +156,7 @@ if %LAST_STEP% LSS 5 (
 REM --- Step 6: Build leveldb ---
 if %LAST_STEP% LSS 6 (
     echo.
-    echo [Step 6/9] Building leveldb...
+    echo [Step 6/11] Building leveldb...
     set PREFIX=%PREFIX%
     call ci\x64-windows\leveldb.bat
     if errorlevel 1 goto :fail
@@ -153,37 +164,58 @@ if %LAST_STEP% LSS 6 (
     set LAST_STEP=6
 )
 
-REM --- Step 7: Configure CMake ---
+REM --- Step 7: Build LWK ---
 if %LAST_STEP% LSS 7 (
     echo.
-    echo [Step 7/9] Configuring with CMake...
-    set CMAKE_PREFIX_PATH=%PREFIX%;%DEPENDS_PREFIX%
-    if exist "%QT_ROOT%\bin\qt-cmake.bat" (call "%QT_ROOT%\bin\qt-cmake.bat" -S . -B bld -DCMAKE_PREFIX_PATH=%PREFIX%;%DEPENDS_PREFIX% -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-dev -DGREEN_LOG_FILE=dev -DENABLE_SENTRY=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5) else (call "%QT_ROOT%\bin\qt-cmake.exe" -S . -B bld -DCMAKE_PREFIX_PATH=%PREFIX%;%DEPENDS_PREFIX% -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-dev -DGREEN_LOG_FILE=dev -DENABLE_SENTRY=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5)
+    echo [Step 7/11] Building LWK...
+    set PREFIX=%PREFIX%
+    call ci\x64-windows\lwk.bat
     if errorlevel 1 goto :fail
     (echo 7)>%STATE_FILE%
     set LAST_STEP=7
 )
 
-REM --- Step 8: Build ---
+REM --- Step 8: Build GLSDK ---
 if %LAST_STEP% LSS 8 (
     echo.
-    echo [Step 8/9] Building...
-    cmake --build bld --config RelWithDebInfo
+    echo [Step 8/11] Building GLSDK...
+    set PREFIX=%PREFIX%
+    call ci\x64-windows\glsdk.bat
     if errorlevel 1 goto :fail
     (echo 8)>%STATE_FILE%
     set LAST_STEP=8
 )
 
-REM --- Step 9: Deploy Qt and copy DLLs ---
+REM --- Step 9: Configure CMake ---
 if %LAST_STEP% LSS 9 (
     echo.
-    echo [Step 9/9] Deploying Qt and copying DLLs...
+    echo [Step 9/11] Configuring with CMake...
+    set CMAKE_PREFIX_PATH=%PREFIX%;%DEPENDS_PREFIX%
+    if exist "%QT_ROOT%\bin\qt-cmake.bat" (call "%QT_ROOT%\bin\qt-cmake.bat" -S . -B bld -DCMAKE_PREFIX_PATH=%PREFIX%;%DEPENDS_PREFIX% -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-dev -DGREEN_LOG_FILE=dev -DENABLE_SENTRY=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5) else (call "%QT_ROOT%\bin\qt-cmake.exe" -S . -B bld -DCMAKE_PREFIX_PATH=%PREFIX%;%DEPENDS_PREFIX% -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-dev -DGREEN_LOG_FILE=dev -DENABLE_SENTRY=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5)
+    if errorlevel 1 goto :fail
+    (echo 9)>%STATE_FILE%
+    set LAST_STEP=9
+)
+
+REM --- Step 10: Build ---
+if %LAST_STEP% LSS 10 (
+    echo.
+    echo [Step 10/11] Building...
+    cmake --build bld --config RelWithDebInfo
+    if errorlevel 1 goto :fail
+    (echo 10)>%STATE_FILE%
+    set LAST_STEP=10
+)
+
+REM --- Step 11: Deploy Qt and copy DLLs ---
+if %LAST_STEP% LSS 11 (
+    echo.
+    echo [Step 11/11] Deploying Qt and copying DLLs...
     call "%QT_ROOT%\bin\windeployqt.exe" --qmldir qml bld\RelWithDebInfo\blockstream.exe
     if errorlevel 1 goto :fail
     copy /Y "%DEPENDS_PREFIX%\bin\libgreen_gdk.dll" bld\RelWithDebInfo\
     copy /Y "%DEPENDS_PREFIX%\bin\libserialport-0.dll" bld\RelWithDebInfo\
-    copy /Y "%DEPENDS_PREFIX%\bin\lwk.dll" bld\RelWithDebInfo\
-    (echo 9)>%STATE_FILE%
+    (echo 11)>%STATE_FILE%
 )
 
 REM Success

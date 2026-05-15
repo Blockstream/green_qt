@@ -1,6 +1,6 @@
 ## Building Blockstream Green for Windows
 
-**Important:** The Windows build is split into two phases. **You must build GDK (and libserialport) first on Linux with MinGW** — they are cross-compiled and cannot be built natively on Windows for this project. The rest of the build (application, Countly, ZXing, etc.) is done on Windows with MSVC and Qt.
+**Important:** The Windows build is split into two phases. **You must build GDK (and libserialport) first on Linux with MinGW** — they are cross-compiled and cannot be built natively on Windows for this project. The rest of the build (application, Countly, ZXing, hidapi, leveldb, LWK, GLSDK, etc.) is done on Windows with MSVC and Qt.
 
 **Quick start:**
 
@@ -14,12 +14,13 @@ Both scripts support resume on failure: run again to continue. Use `--restart` t
 ## Overview
 
 1. **Phase 1 (Linux with MinGW):** Build GDK and libserialport for Windows. This produces DLLs and `.def` files that you copy to your Windows machine.
-2. **Phase 2 (Windows):** Install Visual Studio Build Tools and Qt, build the remaining dependencies (Countly, KDSingleApplication, ZXing, hidapi) natively, generate `.lib` import libraries from the `.def` files, then build the application with CMake.
+2. **Phase 2 (Windows):** Install Visual Studio Build Tools and Qt, generate `.lib` import libraries for GDK/libserialport from `.def`, build the remaining native dependencies (Countly, KDSingleApplication, ZXing, hidapi, leveldb, LWK, GLSDK) with the `ci\x64-windows\*.bat` scripts, then build the application with CMake.
 
 The layout expected by the main project is:
 
 - **`C:\depends\windows-x86_64`** — MinGW-built dependencies (GDK, libserialport) from Phase 1: `bin/` (DLLs + `.def`), `lib/` (`.lib` created on Windows), `include/`
-- **`C:\deps`** or **`C:\deps` + `C:\depends\windows-x86_64`** — Native Windows builds (Countly, KDSingleApplication, ZXing, hidapi) and the MinGW deps; `build.bat` and CMake use `CMAKE_PREFIX_PATH=C:\deps;C:\depends\windows-x86_64`
+- **`C:\deps`** — Native Windows builds from Phase 2 (`countly`, `kdsingleapplication`, `zxing`, `hidapi`, `leveldb`, `lwk`, `glsdk`)
+- CMake uses `CMAKE_PREFIX_PATH=C:\deps;C:\depends\windows-x86_64`
 
 If you use different paths, adjust the steps and/or `CMakeLists.txt` (which currently hardcodes `C:/depends/windows-x86_64` for GDK on Windows).
 
@@ -98,6 +99,7 @@ sudo apt install -y \
 sudo apt install -y \
   cmake \
   git \
+  protobuf-compiler \
   unzip \
   automake \
   autoconf \
@@ -136,12 +138,12 @@ sudo apt install -y \
 Run this in the same bash shell (do not use `sudo` for rustup):
 
 ```bash
-curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.85.0
+curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.88.0
 source "$HOME/.cargo/env"
 rustup target add x86_64-pc-windows-gnu
 ```
 
-- The first command installs Rust (or updates it) with toolchain 1.85.0. If you already have Rust, ensure `rustc --version` reports 1.85.0 or higher.
+- The first command installs Rust (or updates it) with toolchain 1.88.0. If you already have Rust, ensure `rustc --version` reports 1.88.0 or higher.
 - `source "$HOME/.cargo/env"` adds Rust to your PATH for this session; add it to `~/.bashrc` if you want it in every new shell.
 - The last line adds the 64-bit Windows (GNU) target so GDK can be built for Windows.
 
@@ -151,9 +153,10 @@ rustup target add x86_64-pc-windows-gnu
 x86_64-w64-mingw32-g++-posix --version
 rustc --version
 gendef --version
+protoc --version
 ```
 
-You should see version output for the MinGW compiler, Rust, and `gendef`. If `gendef` is not found, ensure `mingw-w64-tools` is installed.
+You should see version output for the MinGW compiler, Rust, `gendef`, and `protoc`. If `gendef` is not found, ensure `mingw-w64-tools` is installed. If `protoc` is not found, install `protobuf-compiler`.
 
 ---
 
@@ -195,7 +198,7 @@ source "$HOME/.cargo/env"
 
 ---
 
-### 1.4 Build GDK and other dependencies for Windows
+### 1.4 Build GDK for Windows
 
 Still in the **same bash shell**, from the **project root** (`green_qt`), with the variables above set:
 
@@ -203,13 +206,9 @@ Still in the **same bash shell**, from the **project root** (`green_qt`), with t
 
 ```bash
 ./tools/buildgdk.sh
-./tools/buildlwk.sh
-./tools/buildleveldb.sh
 ```
 
 - `buildgdk.sh`: clones GDK, sets up a Python venv, and runs the GDK build with `--mingw-w64` (because `HOST=windows`). When it finishes, GDK is installed under `$PREFIX`; the DLL is also produced in the build tree.
-- `buildlwk.sh`: builds and installs LWK into the same `$PREFIX`.
-- `buildleveldb.sh`: builds and installs LevelDB into `$PREFIX`.
 
 **2. Copy the DLL and generate the `.def` file:**
 
@@ -279,7 +278,11 @@ Copy the **entire** `$PREFIX` tree to your Windows machine so that Phase 2 can u
   - Ninja
 - **Qt 6.11.0** (or the version used in CI) for MSVC 2022 64-bit, e.g. installed under `C:\qt\6.11.0\msvc2022_64`.
 - **Git** and **7-Zip** (e.g. via Chocolatey), for cloning and extracting sources.
+- **Rust** via `rustup` for the native LWK and GLSDK steps:
+  - Default toolchain: `1.88.0`
+  - Extra toolchain used in LWK: `1.85.0-x86_64-pc-windows-msvc`
 - **Python** (for GDK was already used on Linux; not required on Windows for the steps below).
+- **Protobuf compiler** (`protoc`) to build GLSDK.
 
 ### 2.2 Create import libraries (.lib) from .def files
 
@@ -290,7 +293,7 @@ lib /def:C:\depends\windows-x86_64\bin\libgreen_gdk.def /out:C:\depends\windows-
 lib /def:C:\depends\windows-x86_64\bin\libserialport-0.def /out:C:\depends\windows-x86_64\lib\libserialport-0.lib /machine:x64
 ```
 
-### 2.3 Build native dependencies (Countly, KDSingleApplication, ZXing, hidapi)
+### 2.3 Build native dependencies (Countly, KDSingleApplication, ZXing, hidapi, leveldb, LWK, GLSDK)
 
 The CI builds these on Windows in the `x64-windows` image; see `ci/x64-windows/*.bat`. Set the prefix and use the same compiler environment (e.g. `vcvarsall.bat x64`):
 
@@ -304,6 +307,9 @@ Then run (from a directory where you have the repo and where the scripts can clo
 - **KDSingleApplication:** `ci\x64-windows\kdsingleapplication.bat` (expects Qt at `\qt\6.11.0\msvc2022_64`; adjust if your Qt path is different)
 - **ZXing:** `ci\x64-windows\zxing.bat`
 - **hidapi:** `ci\x64-windows\hidapi.bat`
+- **leveldb:** `ci\x64-windows\leveldb.bat`
+- **LWK:** `ci\x64-windows\lwk.bat`
+- **GLSDK:** `ci\x64-windows\glsdk.bat`
 
 Each script clones the dependency, configures with CMake, builds, and installs into `%PREFIX%`. Ensure `PREFIX` is set and that the VS environment is active.
 

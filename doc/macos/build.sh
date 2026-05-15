@@ -6,7 +6,7 @@
 #   - Xcode command line tools: xcode-select --install
 #   - Homebrew: https://brew.sh
 #   - Bash 4+: brew install bash
-#   - Build tools: brew install cmake ninja python git pkg-config
+#   - Build tools: brew install cmake ninja python git pkg-config protobuf
 #   - Qt 6.11.0: from https://www.qt.io/download-qt-installer
 #
 
@@ -111,9 +111,9 @@ if [[ "$LAST_STEP" -lt $STEP_PREREQS ]]; then
         fail "Bash 4+ required. macOS ships with Bash 3.2. Run: brew install bash"
     fi
 
-    for cmd in cmake ninja python3 git pkg-config; do
+    for cmd in cmake ninja python3 git pkg-config protoc; do
         if ! command -v "$cmd" &>/dev/null; then
-            fail "Missing $cmd. Run: brew install cmake ninja python git pkg-config"
+            fail "Missing $cmd. Run: brew install cmake ninja python git pkg-config protobuf"
         fi
     done
 
@@ -220,6 +220,7 @@ if [[ "$LAST_STEP" -lt $STEP_DEPS ]]; then
     ./tools/buildlibserialport.sh --disable-shared || fail "buildlibserialport.sh failed"
     ./tools/buildkdsingleapplication.sh || fail "buildkdsingleapplication.sh failed"
     ./tools/buildlwk.sh || fail "buildlwk.sh failed"
+    ./tools/buildglsdk.sh || fail "buildglsdk.sh failed"
     ./tools/buildleveldb.sh || fail "buildleveldb.sh failed"
 
     save_progress $STEP_DEPS

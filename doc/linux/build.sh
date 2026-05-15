@@ -110,9 +110,9 @@ if [[ "$LAST_STEP" -lt $STEP_PREREQS ]]; then
     echo ""
     echo "[Step 1/5] Checking prerequisites..."
 
-    for cmd in cmake ninja git pkg-config; do
+    for cmd in cmake ninja git pkg-config protoc; do
         if ! command -v "$cmd" &>/dev/null; then
-            fail "Missing $cmd. Install build dependencies (see doc/linux/README.md): sudo apt install build-essential cmake ninja-build git pkg-config ..."
+            fail "Missing $cmd. Install build dependencies (see doc/linux/README.md): sudo apt install build-essential cmake ninja-build git pkg-config protobuf-compiler ..."
         fi
     done
 
@@ -181,6 +181,7 @@ if [[ "$LAST_STEP" -lt $STEP_DEPS ]]; then
     ./tools/buildlibserialport.sh --disable-shared || fail "buildlibserialport.sh failed"
     ./tools/buildkdsingleapplication.sh || fail "buildkdsingleapplication.sh failed"
     ./tools/buildlwk.sh || fail "buildlwk.sh failed"
+    ./tools/buildglsdk.sh || fail "buildglsdk.sh failed"
     ./tools/buildleveldb.sh || fail "buildleveldb.sh failed"
 
     save_progress $STEP_DEPS

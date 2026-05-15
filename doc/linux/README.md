@@ -19,6 +19,7 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
   sudo apt update
   sudo apt install -y \
     build-essential clang llvm-dev cmake ninja-build git python3 python3-venv python3-pip pkg-config \
+    protobuf-compiler \
     libgl1-mesa-dev libfontconfig1-dev libfreetype6-dev \
     libcap-dev \
     libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev \
@@ -104,6 +105,7 @@ tools/buildzxing.sh
 tools/buildlibserialport.sh --disable-shared
 tools/buildkdsingleapplication.sh
 tools/buildlwk.sh
+tools/buildglsdk.sh
 tools/buildleveldb.sh
 ```
 

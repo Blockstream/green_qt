@@ -35,6 +35,7 @@ macos-x86_64:depends:
     - tools/buildgpgme.sh
     - tools/buildleveldb.sh
     - tools/buildlwk.sh
+    - tools/buildglsdk.sh --verbose
     - export LLVM_PATH="$BREW_PREFIX/opt/llvm@17"
     - export PATH="$LLVM_PATH/bin:$PATH"
     - export CC="$LLVM_PATH/bin/clang"

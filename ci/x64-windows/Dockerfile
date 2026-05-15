@@ -32,11 +32,13 @@ RUN curl -o install.ps1 https://community.chocolatey.org/install.ps1 && `
 
 RUN choco install git -y
 RUN choco install 7zip -y
+RUN choco install protoc -y
 
 ENV RUSTUP_HOME=C:\rustup
 ENV CARGO_HOME=C:\cargo
 RUN curl -SL --output rustup-init.exe https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe && `
-    rustup-init.exe -y --default-toolchain 1.85.0 --profile minimal --default-host x86_64-pc-windows-msvc && `
+    rustup-init.exe -y --default-toolchain 1.88.0 --profile minimal --default-host x86_64-pc-windows-msvc && `
+    \cargo\bin\rustup toolchain install 1.85.0-x86_64-pc-windows-msvc && `
     del rustup-init.exe
 
 RUN curl -SL --output qt-online-installer-windows-x64-online.exe https://download.qt.io/official_releases/online_installers/qt-online-installer-windows-x64-online.exe
@@ -76,5 +78,8 @@ RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\V
 
 COPY lwk.bat .
 RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" x64 && lwk.bat"
+
+COPY glsdk.bat .
+RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" x64 && glsdk.bat"
 
 COPY depends\ C:\depends

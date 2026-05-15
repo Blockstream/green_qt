@@ -77,6 +77,10 @@ FROM base AS lwk
 COPY tools/buildlwk.sh tools/
 RUN . /root/.cargo/env && tools/buildlwk.sh
 
+FROM base AS glsdk
+COPY tools/buildglsdk.sh tools/
+RUN . /root/.cargo/env && tools/buildglsdk.sh --verbose
+
 FROM base
 COPY --from=hidapi /depends /depends
 COPY --from=countly /depends /depends
@@ -89,3 +93,4 @@ COPY --from=breakpad /depends /depends
 COPY --from=gpgme /depends /depends
 COPY --from=leveldb /depends /depends
 COPY --from=lwk /depends /depends
+COPY --from=glsdk /depends /depends

@@ -4,7 +4,7 @@
 # Run this in WSL2, Docker, or native Linux. Then copy artifacts to Windows
 # and run doc/windows/build.bat there.
 #
-# Prerequisites: See doc/windows/README.md (MinGW, Rust, gendef, etc.)
+# Prerequisites: See doc/windows/README.md (MinGW, Rust, gendef, protoc, etc.)
 #
 
 set -e
@@ -29,7 +29,7 @@ step_name() {
     case "$1" in
         $STEP_PREREQS) echo "prerequisites check" ;;
         $STEP_ENV) echo "environment setup" ;;
-        $STEP_GDK) echo "GDK/LWK/LevelDB build" ;;
+        $STEP_GDK) echo "GDK build" ;;
         $STEP_LIBSERIALPORT) echo "libserialport build" ;;
         $STEP_COPY) echo "copy artifacts" ;;
         $STEP_DONE) echo "complete" ;;
@@ -46,10 +46,10 @@ fail() {
     echo "Error: $1"
     echo ""
     echo "To resume from this step, run the script again:"
-    echo "  ./doc/windows/build-win-dependencies.sh"
+    echo "  ./doc/windows/build-dependencies.sh"
     echo ""
     echo "To start over from the beginning, run:"
-    echo "  ./doc/windows/build-win-dependencies.sh --restart"
+    echo "  ./doc/windows/build-dependencies.sh --restart"
     echo ""
     echo "$CURRENT_STEP" > "$STATE_FILE.failed"
     exit 1
@@ -104,11 +104,15 @@ if [[ "$LAST_STEP" -lt $STEP_PREREQS ]]; then
     fi
 
     if ! command -v rustc &>/dev/null; then
-        fail "Rust not found. Install via: curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.85.0 && rustup target add x86_64-pc-windows-gnu"
+        fail "Rust not found. Install via: curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.88.0 && rustup target add x86_64-pc-windows-gnu"
     fi
 
     if ! command -v gendef &>/dev/null; then
         fail "gendef not found. Run: sudo apt install mingw-w64-tools"
+    fi
+
+    if ! command -v protoc &>/dev/null; then
+        fail "protoc not found. Run: sudo apt install protobuf-compiler"
     fi
 
     for cmd in cmake git; do
@@ -155,9 +159,6 @@ if [[ "$LAST_STEP" -lt $STEP_GDK ]]; then
     [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
     ./tools/buildgdk.sh || fail "buildgdk.sh failed"
-    ./tools/buildlwk.sh || fail "buildlwk.sh failed"
-    rm -rf build/leveldb-src build/leveldb-bld
-    ./tools/buildleveldb.sh || fail "buildleveldb.sh failed"
 
     GDK_DLL="build/gdk/build-windows-mingw-w64/src/libgreen_gdk.dll"
     if [[ ! -f "$GDK_DLL" ]]; then

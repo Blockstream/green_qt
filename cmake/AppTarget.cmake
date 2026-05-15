@@ -64,25 +64,36 @@ if(TARGET libgpgme::libgpgme)
 endif()
 
 if (WIN32 AND NOT QT_FEATURE_static)
-    # lwk is built natively in the MSVC container (ci/x64-windows/lwk.bat) as a static
-    # library and installed into CMAKE_PREFIX_PATH (C:/deps). gdk is still cross-built.
+    # lwk and glsdk are built natively in the MSVC container as a static library
+    # and installed into CMAKE_PREFIX_PATH (C:/deps). gdk is still cross-built.
     find_library(LIBLWK lwk REQUIRED)
+    find_library(LIBGLSDK glsdk REQUIRED)
+
     # The windows.<ver>.lib umbrella import libs come from the Rust windows-targets crate
     # (not the Windows SDK); lwk.bat copies them next to lwk.lib. Glob them by full path so
     # we don't hardcode the version (it tracks the pinned lwk commit's deps).
     get_filename_component(LWK_LIBDIR ${LIBLWK} DIRECTORY)
+    get_filename_component(LIBGLSDK_DIR ${LIBGLSDK} DIRECTORY)
+
     file(GLOB LWK_WINDOWS_IMPORT_LIBS "${LWK_LIBDIR}/windows.*.lib")
+    file(GLOB GLSDK_WINDOWS_IMPORT_LIBS "${LIBGLSDK_DIR}/windows.*.lib")
+
     target_link_libraries(${APP_TARGET}
         PRIVATE
         "C:/depends/windows-x86_64/lib/libgreen_gdk.lib"
         ${LIBLWK}
+        ${LIBGLSDK}
         ${LWK_WINDOWS_IMPORT_LIBS}
+        ${GLSDK_WINDOWS_IMPORT_LIBS}
         # Native system libs required to statically link lwk.lib. Source of truth is the
         # "native-static-libs:" line printed by ci/x64-windows/lwk.bat; keep in sync.
         # (kernel32/user32/advapi32 are MSVC defaults and msvcrt matches /MD, but listed
         # explicitly for clarity/robustness; ntdll is also added in the WIN32 block below.)
         advapi32 bcrypt cfgmgr32 dbghelp kernel32 ntdll user32 userenv ws2_32
     )
+    # Use /FORCE:MULTIPLE to allow LWK and GLSDK to be linked together,
+    # since they both link to some of the same system libs (e.g. ntdll).
+    target_link_options(${APP_TARGET} PRIVATE /FORCE:MULTIPLE)
     target_include_directories(${APP_TARGET} PRIVATE
         "C:/depends/windows-x86_64/include/gdk"
         "C:/depends/windows-x86_64/include/gdk/libwally-core"
@@ -136,11 +147,13 @@ if(ENABLE_SENTRY)
 endif()
 
 if (WIN32)
-    target_link_libraries(${APP_TARGET} PRIVATE hid ntdll)
+    target_link_libraries(${APP_TARGET} PRIVATE hid ntdll userenv bcrypt)
 elseif (APPLE)
     find_library(LIBLWK lwk REQUIRED)
+    find_library(LIBGLSDK glsdk REQUIRED)
     target_link_libraries(${APP_TARGET} PRIVATE
       ${LIBLWK}
+      ${LIBGLSDK}
       "-framework SystemConfiguration"
     )
     set_target_properties(${APP_TARGET} PROPERTIES OUTPUT_NAME "Blockstream")
@@ -153,7 +166,8 @@ elseif (UNIX)
         -Wl,--wrap=log2f
     )
     find_library(LIBLWK lwk REQUIRED)
-    target_link_libraries(${APP_TARGET} PRIVATE dl Xrender cap ${LIBLWK} Qt6::WaylandClient)
+    find_library(LIBGLSDK glsdk REQUIRED)
+    target_link_libraries(${APP_TARGET} PRIVATE dl Xrender cap ${LIBLWK} ${LIBGLSDK} Qt6::WaylandClient)
     qt_import_plugins(${APP_TARGET} INCLUDE Qt6::QXcbIntegrationPlugin Qt6::QWaylandIntegrationPlugin Qt6::QFFmpegMediaPlugin)
 endif()
 
@@ -164,6 +178,7 @@ set(APP_PRIVATE_INCLUDE_DIRS
     src/controllers
     src/ledger
     src/handlers
+    src/glsdk
     "${CMAKE_BINARY_DIR}"
 )
 
@@ -176,4 +191,3 @@ target_include_directories(${APP_TARGET} PRIVATE ${APP_PRIVATE_INCLUDE_DIRS})
 install(TARGETS ${APP_TARGET}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-

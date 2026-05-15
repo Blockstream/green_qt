@@ -121,6 +121,12 @@ target_sources(${APP_TARGET} PRIVATE
 )
 
 target_sources(${APP_TARGET} PRIVATE
+    glsdk/glsdk.cpp
+    glsdk/glsdk.hpp
+    glsdk/glsdk_scaffolding.hpp
+)
+
+target_sources(${APP_TARGET} PRIVATE
     outputlistmodel.cpp
     outputlistmodelfilter.cpp
     walletlistmodel.cpp
