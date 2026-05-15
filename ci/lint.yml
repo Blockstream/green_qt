@@ -19,3 +19,15 @@ cpplint:
   script:
     - pip install cpplint
     - ./tools/lint/cpplint.sh
+
+qmllint:
+  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:c9d4c4202b3e9341203e686aaf9efadf691e6729a061025da416e68b62d8389c
+  tags:
+    - k8s
+  stage: lint
+  allow_failure: true
+  before_script:
+    - export PATH="/qt/6.11.0/gcc_64/bin:${PATH}"
+    - qmllint --version
+  script:
+    - ./tools/lint/qmllint.sh
