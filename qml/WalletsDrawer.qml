@@ -64,8 +64,8 @@ AbstractDrawer {
                     pinData: WalletListModel.No
                 }
                 delegate: WalletButton {
-                    id: wallet_button
-                    onClicked: self.walletClicked(wallet_button.wallet)
+                    id: device_button
+                    onClicked: self.walletClicked(device_button.wallet)
                 }
             }
             VSpacer {

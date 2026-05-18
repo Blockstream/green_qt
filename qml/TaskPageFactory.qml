@@ -72,7 +72,7 @@ QtObject {
             const status = prompt.result.status
             if (status === 'request_code') {
                 const methods = prompt.result.methods
-                self.push(method_view, { prompt, methods })
+                self.push(method_view_component, { prompt, methods })
             } else if (status === 'resolve_code') {
                 self.push(code_view, { prompt })
             }
@@ -114,20 +114,20 @@ QtObject {
     property Component device_prompt_view: DevicePromptView {
     }
 
-    property Component method_view: StackViewPage {
+    property Component method_view_component: StackViewPage {
         required property CodePrompt prompt
         required property var methods
         Connections {
-            target: view.prompt
+            target: method_view.prompt
             function onResultChanged() {
-                const prompt = view.prompt
+                const prompt = method_view.prompt
                 const status = prompt.result.status
                 if (status === 'resolve_code') {
                     self.target.replace(code_view, { prompt }, StackView.PushTransition)
                 }
             }
         }
-        id: view
+        id: method_view
         title: qsTrId('id_twofactor_authentication')
         contentItem: VFlickable {
             alignment: Qt.AlignTop
@@ -149,7 +149,7 @@ QtObject {
                 text: qsTrId('id_choose_method_to_authorize_the')
             }
             Repeater {
-                model: view.methods
+                model: method_view.methods
                 delegate: AbstractButton {
                     property string method: modelData
                     Layout.alignment: Qt.AlignCenter
@@ -173,7 +173,7 @@ QtObject {
                                 text: UtilJS.twoFactorMethodLabel(method)
                             }
                             Label {
-                                text: view.prompt.task.session.config[delegate.method].data
+                                text: method_view.prompt.task.session.config[delegate.method].data
                                 opacity: 0.6
                             }
                         }
@@ -182,7 +182,7 @@ QtObject {
                             source: 'qrc:/svg2/next_arrow.svg'
                         }
                     }
-                    onClicked: view.prompt.select(delegate.method)
+                    onClicked: method_view.prompt.select(delegate.method)
                 }
             }
             VSpacer {

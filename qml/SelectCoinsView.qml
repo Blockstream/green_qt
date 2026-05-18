@@ -51,14 +51,14 @@ StackViewPage {
                     return filters
                 }
                 delegate: AbstractButton {
-                    id: self
+                    id: filter_button
                     ButtonGroup.group: button_group
                     checked: index === 0
                     checkable: true
                     background: null
-                    opacity: self.checked ? 1 : 0.4
+                    opacity: filter_button.checked ? 1 : 0.4
                     contentItem: Label {
-                        text: self.text
+                        text: filter_button.text
                         font.pixelSize: 12
                         font.weight: 400
                         font.styleName: 'Regular'

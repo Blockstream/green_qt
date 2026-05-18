@@ -294,7 +294,7 @@ Page {
                     context: self.context
                 }
                 delegate: TransactionDelegate {
-                    id: delegate
+                    id: transaction_delegate
                     context: self.context
                     leftPadding: 24
                     rightPadding: 24
@@ -304,10 +304,10 @@ Page {
                     background: Rectangle {
                         border.color: '#262626'
                         border.width: 1
-                        color: Qt.lighter('#181818', delegate.enabled && delegate.hovered ? 1.2 : 1)
+                        color: Qt.lighter('#181818', transaction_delegate.enabled && transaction_delegate.hovered ? 1.2 : 1)
                         radius: 8
                     }
-                    onClicked: self.transactionClicked(delegate.transaction)
+                    onClicked: self.transactionClicked(transaction_delegate.transaction)
                 }
             }
             ListPage {
@@ -318,7 +318,7 @@ Page {
                     context: self.context
                 }
                 delegate: AddressDelegate {
-                    id: delegate
+                    id: address_delegate
                     leftPadding: 24
                     rightPadding: 24
                     topPadding: 12
@@ -326,10 +326,10 @@ Page {
                     background: Rectangle {
                         border.color: '#262626'
                         border.width: 1
-                        color: Qt.lighter('#181818', delegate.enabled && delegate.hovered ? 1.2 : 1)
+                        color: Qt.lighter('#181818', address_delegate.enabled && address_delegate.hovered ? 1.2 : 1)
                         radius: 8
                     }
-                    onClicked: self.addressClicked(delegate.address)
+                    onClicked: self.addressClicked(address_delegate.address)
                 }
             }
             ListPage {
@@ -340,10 +340,10 @@ Page {
                 }
                 delegate: OutputDelegate {
                     // highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
-                    id: delegate
+                    id: output_delegate
                     width: ListView.view.width
                     //onClicked: {
-                        // selection_model.select(output_model.index(output_model.indexOf(delegate.output), 0), ItemSelectionModel.Toggle)
+                        // selection_model.select(output_model.index(output_model.indexOf(output_delegate.output), 0), ItemSelectionModel.Toggle)
                     // }
                     leftPadding: 24
                     rightPadding: 24
@@ -352,7 +352,7 @@ Page {
                     background: Rectangle {
                         border.color: '#262626'
                         border.width: 1
-                        color: Qt.lighter('#181818', delegate.enabled && delegate.hovered ? 1.2 : 1)
+                        color: Qt.lighter('#181818', output_delegate.enabled && output_delegate.hovered ? 1.2 : 1)
                         radius: 8
                     }
                 }

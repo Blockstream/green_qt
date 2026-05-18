@@ -40,8 +40,8 @@ FilterPopup {
             Layout.topMargin: 4
             Layout.minimumWidth: 350
             Layout.fillWidth: true
-            id: delegate
-            account: delegate.modelData
+            id: account_delegate
+            account: account_delegate.modelData
             opacity: 1
         }
     }

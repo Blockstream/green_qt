@@ -138,14 +138,14 @@ Page {
                 enabled: !(view.session.config.twofactor_reset?.is_active ?? false)
                 visible: !view.network.liquid && !!view.session.config.limits
                 contentItem: AbstractButton {
-                    id: button
+                    id: threshold_button
                     leftPadding: 20
                     rightPadding: 20
                     topPadding: 15
                     bottomPadding: 15
                     background: Rectangle {
                         radius: 5
-                        color: Qt.lighter('#262626', button.hovered ? 1.2 : 1)
+                        color: Qt.lighter('#262626', threshold_button.hovered ? 1.2 : 1)
                     }
                     contentItem: RowLayout {
                         ColumnLayout {
@@ -432,7 +432,7 @@ Page {
                     required property var modelData
                     readonly property Session session: box.modelData
                     SessionController {
-                        id: controller
+                        id: session_controller
                         context: self.context
                         session: box.session
                         onFailed: (error) => error_badge.raise(error)
@@ -477,20 +477,20 @@ Page {
                                 RightArrowIndicator {
                                     active: true
                                     opacity: button2.enabled ? 1 : 0.6
-                                    visible: controller.monitor.idle
+                                    visible: session_controller.monitor.idle
                                 }
                                 ProgressIndicator {
                                     x: 10
                                     width: 24
                                     height: 24
-                                    indeterminate: !controller.monitor.idle
-                                    visible: !controller.monitor.idle
+                                    indeterminate: !session_controller.monitor.idle
+                                    visible: !session_controller.monitor.idle
                                 }
                             }
                             onClicked: {
-                                if (controller.monitor.idle) {
+                                if (session_controller.monitor.idle) {
                                     error_badge.clear()
-                                    controller.sendRecoveryTransactions()
+                                    session_controller.sendRecoveryTransactions()
                                 }
                             }
                         }

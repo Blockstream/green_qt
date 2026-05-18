@@ -98,8 +98,8 @@ MainPage {
                 }
                 WalletsDrawer.WalletButton {
                     Layout.fillWidth: true
-                    id: wallet_button
-                    onClicked: self.openWallet(wallet_button.wallet)
+                    id: device_button
+                    onClicked: self.openWallet(device_button.wallet)
                 }
             }
         }

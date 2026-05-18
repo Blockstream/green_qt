@@ -308,8 +308,8 @@ StackViewPage {
                     delegate: AddressLabel {
                         required property var modelData
                         Layout.fillWidth: true
-                        id: delegate
-                        address: delegate.modelData
+                        id: address_delegate
+                        address: address_delegate.modelData
                         copyEnabled: true
                         elide: AddressLabel.ElideNone
                         font.pixelSize: 14
