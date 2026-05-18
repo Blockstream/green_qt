@@ -197,6 +197,14 @@ void Settings::unregisterEvent(const QJsonObject& event)
     }
 }
 
+void Settings::setGapLimit(int gap_limit)
+{
+    if (m_gap_limit == gap_limit) return;
+    m_gap_limit = gap_limit;
+    emit gapLimitChanged();
+    saveLater();
+}
+
 void Settings::toggleRememberDevices()
 {
     setRememberDevices(!m_remember_devices);
@@ -353,6 +361,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_remember_devices)
     LOAD(m_promos_dismissed)
     LOAD(m_registered_events)
+    LOAD(m_gap_limit)
 #undef LOAD
 }
 
@@ -394,6 +403,7 @@ void Settings::saveNow()
     SAVE(m_remember_devices)
     SAVE(m_promos_dismissed)
     SAVE(m_registered_events)
+    SAVE(m_gap_limit);
 #undef SAVE
 }
 

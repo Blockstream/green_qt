@@ -86,6 +86,7 @@ public:
     void setWalletHashId(const QString& wallet_hash_id);
 
     bool isTwoFactorResetActive() const;
+    int gapLimit() const { return m_gap_limit; };
 
 signals:
     void contextChanged();
@@ -133,6 +134,7 @@ private:
     QString m_display_unit;
     int m_altimeout{0};
     int m_logout_timer{-1};
+    int const m_gap_limit;
 public:
     // TODO: make m_session private
     GA_session* m_session{nullptr};

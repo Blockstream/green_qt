@@ -36,6 +36,7 @@ class Settings : public QObject
     Q_PROPERTY(bool rememberDevices READ rememberDevices NOTIFY rememberDevicesChanged)
     Q_PROPERTY(QStringList promosDismissed READ promosDismissed NOTIFY promosDismissedChanged)
     Q_PROPERTY(int registeredEventsCount READ registeredEventsCount NOTIFY registeredEventsCountChanged)
+    Q_PROPERTY(int gapLimit READ gapLimit WRITE setGapLimit NOTIFY gapLimitChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -94,6 +95,8 @@ public:
     Q_INVOKABLE void registerEvent(const QJsonObject& event);
     Q_INVOKABLE void unregisterEvent(const QJsonObject& event);
     int registeredEventsCount() const { return m_registered_events.size(); }
+    int gapLimit() const { return m_gap_limit; }
+    void setGapLimit(int gap_limit);
 public slots:
     void updateRecentWallet(const QString& id);
     void acceptTermsOfService();
@@ -128,6 +131,7 @@ signals:
     void rememberDevicesChanged();
     void promosDismissedChanged();
     void registeredEventsCountChanged();
+    void gapLimitChanged();
 private:
     void load();
     void load(const QSettings& settings);
@@ -164,6 +168,7 @@ private:
     bool m_remember_devices{true};
     QStringList m_promos_dismissed;
     QStringList m_registered_events;
+    int m_gap_limit{20};
 };
 
 #endif // GREEN_SETTINGS_H

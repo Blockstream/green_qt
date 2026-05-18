@@ -466,7 +466,8 @@ namespace {
         QJsonObject params{
             { "name", network->id() },
             { "use_tor", session->useTor() },
-            { "user_agent", user_agent }
+            { "user_agent", user_agent },
+            { "gap_limit", session->gapLimit() }
         };
         if (!session->proxy().isEmpty()) {
             params.insert("proxy", session->proxy());

@@ -391,6 +391,34 @@ AbstractDialog {
                         }
                     }
                 }
+                SectionLabel {
+                    Layout.topMargin: 10
+                    text: qsTrId('id_electrum_server_gap_limit')
+                }
+                TTextField {
+                    Layout.fillWidth: true
+                    id: gap_limit_field
+                    error: !acceptableInput
+                    text: Settings.gapLimit
+                    validator: IntValidator {
+                        bottom: 1
+                        top: 100
+                    }
+                    onEditingFinished: {
+                        if (acceptableInput) {
+                            Settings.gapLimit = text
+                        }
+                    }
+                }
+                ErrorPane {
+                    Layout.topMargin: -15
+                    Layout.bottomMargin: 15
+                    error: {
+                        if (gap_limit_field.error) {
+                            return 'Must be between 1 and 100'
+                        }
+                    }
+                }
                 VSpacer {
                 }
             }

@@ -37,6 +37,7 @@ Session::Session(Network* network, QObject* parent)
     , m_proxy(Settings::instance()->proxy())
     , m_enable_electrum_tls(Settings::instance()->enableElectrumTls())
     , m_electrum_url(ElectrumUrlForNetwork(network))
+    , m_gap_limit(Settings::instance()->gapLimit())
 {
     if (m_network->isElectrum()) {
         // emit ticker event each minute on singlesig session
