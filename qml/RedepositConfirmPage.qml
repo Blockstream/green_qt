@@ -5,7 +5,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
-import "util.js" as UtilJS
 
 StackViewPage {
     required property Context context

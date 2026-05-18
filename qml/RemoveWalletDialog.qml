@@ -4,8 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "analytics.js" as AnalyticsJS
-
 AbstractDialog {
     signal removeWallet(Wallet wallet)
     required property Wallet wallet

@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
 Switch {
     property color baseColor: self.checked ? '#00BCFF' : Qt.alpha('#000', 0.4)

@@ -2,12 +2,8 @@ import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 import QtQuick.Window
 import QtMultimedia
-
-import "analytics.js" as AnalyticsJS
-import "util.js" as UtilJS
 
 ApplicationWindow {
     readonly property bool hasVideoInput: media_devices.videoInputs.length > 0

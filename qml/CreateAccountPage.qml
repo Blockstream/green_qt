@@ -5,8 +5,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 
-import "util.js" as UtilJS
-
 StackViewPage {
     signal created(account: Account)
     required property Context context

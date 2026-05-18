@@ -1,6 +1,5 @@
 import Blockstream.Green
 import QtQuick
-import QtQuick.Controls
 
 AbstractDialog {
     required property Context context

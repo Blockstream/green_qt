@@ -6,7 +6,6 @@ import QtQuick.Layouts
 import QtQuick.Window
 
 import "analytics.js" as AnalyticsJS
-import "util.js" as UtilJS
 
 Loader {
     signal clicked()

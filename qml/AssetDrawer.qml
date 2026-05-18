@@ -2,9 +2,6 @@ import Blockstream.Green
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import QtQuick.Layouts
-
-import "util.js" as UtilJS
 
 WalletDrawer {
     signal accountClicked(Asset asset, Account account)

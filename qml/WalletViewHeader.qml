@@ -4,10 +4,8 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Shapes
 import QtQml
 
-import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 GPane {

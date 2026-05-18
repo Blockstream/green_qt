@@ -3,8 +3,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "util.js" as UtilJS
-
 FilterPopup {
     required property Context context
     required property AddressModel model

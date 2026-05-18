@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
 TextField {
     signal edited(string text, bool activeFocus)

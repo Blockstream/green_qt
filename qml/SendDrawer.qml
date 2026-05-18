@@ -1,11 +1,8 @@
 import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
-import "util.js" as UtilJS
 
 WalletDrawer {
     property Asset asset

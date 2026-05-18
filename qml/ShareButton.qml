@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 
 CircleButton {
     required property url url

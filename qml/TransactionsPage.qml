@@ -6,7 +6,6 @@ import QtQuick.Layouts
 import QtQuick.Window
 import QtQml
 
-import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 Page {

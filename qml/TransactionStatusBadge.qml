@@ -1,7 +1,6 @@
 import Blockstream.Green
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
 Label {
     required property int confirmations

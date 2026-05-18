@@ -1,6 +1,4 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
 GHeader {
     leftPadding: constants.p3

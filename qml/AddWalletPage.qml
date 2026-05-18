@@ -4,8 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "util.js" as UtilJS
-
 StackViewPage {
     signal newWallet()
     signal restoreWallet()

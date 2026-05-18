@@ -5,8 +5,6 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "util.js" as UtilJS
-
 MnemonicWarningsPage {
     signal completed()
     required property Context context

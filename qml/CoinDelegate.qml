@@ -4,7 +4,6 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQml.Models
 
 import "util.js" as UtilJS
 

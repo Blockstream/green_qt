@@ -3,7 +3,6 @@ import Blockstream.Green.Core
 import QtMultimedia
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS

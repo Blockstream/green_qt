@@ -4,8 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "analytics.js" as AnalyticsJS
-
 StackViewPage {
     signal next(string data)
     required property Session session

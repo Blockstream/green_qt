@@ -5,7 +5,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
-import "util.js" as UtilJS
 
 StackViewPage {
     required property Account account
@@ -104,9 +103,9 @@ StackViewPage {
             text: qsTrId('id_confirm')
             visible: self.invoice && !invoice_controller.swap
             onClicked: {
-                Analytics.recordEvent('swap_receive', AnalyticsJS.segmentationSwap(Settings, self.context, { 
-                    from: 'lightning', 
-                    to: 'liquid' 
+                Analytics.recordEvent('swap_receive', AnalyticsJS.segmentationSwap(Settings, self.context, {
+                    from: 'lightning',
+                    to: 'liquid'
                 }))
                 invoice_controller.request()
             }
@@ -182,7 +181,7 @@ StackViewPage {
                     text: 'Lightning'
                     checked: self.invoice
                     onClicked: {
-                        Analytics.recordEvent('swap_toggle', AnalyticsJS.segmentationSwap(Settings, self.context, { 
+                        Analytics.recordEvent('swap_toggle', AnalyticsJS.segmentationSwap(Settings, self.context, {
                             from: 'lightning',
                             to: 'liquid'
                         }))

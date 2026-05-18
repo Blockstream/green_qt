@@ -1,13 +1,8 @@
 import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 import QtQuick.Window
 import QtQml
-
-import "analytics.js" as AnalyticsJS
-import "util.js" as UtilJS
 
 AbstractDrawer {
     required property Notification notification

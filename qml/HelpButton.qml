@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 
 CircleButton {
     id: self

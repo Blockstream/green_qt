@@ -1,6 +1,4 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
 Canvas {
     property bool black: false

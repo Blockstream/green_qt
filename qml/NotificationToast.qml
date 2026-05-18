@@ -3,15 +3,14 @@ import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Effects
 
 import "util.js" as UtilJS
 
 ColumnLayout {
     required property var notifications
-    
+
     property var animatedSet: new Set()
-    
+
     readonly property var items: {
         const items = []
         for (let i = 0; i < self.notifications.length; i++) {
@@ -40,7 +39,7 @@ ColumnLayout {
         }
         return items.reverse()
     }
-    
+
     onNotificationsChanged: {
         if (self.notifications.length > 0) {
             const newestNotification = self.notifications[self.notifications.length - 1]
@@ -55,7 +54,7 @@ ColumnLayout {
     visible: self.items.length > 0
     spacing: 12
     height: implicitHeight
-    
+
     Repeater {
         model: self.items
         delegate: Loader {
@@ -96,25 +95,25 @@ ColumnLayout {
         WarningToast {
         }
     }
-    
+
     Component {
         id: two_factor_reset_toast
         TwoFactorResetToast {
         }
     }
-    
+
     Component {
         id: two_factor_expired_toast
         TwoFactorExpiredToast {
         }
     }
-    
+
     Component {
         id: analytics_alert_toast
         AnalyticsAlertToast {
         }
     }
-    
+
     Component {
         id: update_toast
         UpdateToast {
@@ -126,27 +125,27 @@ ColumnLayout {
         required property color textColor
         property Notification notification: _notification
         property color borderColor: backgroundColor
-        
+
         id: toast
         padding: 20
-        
+
         background: Rectangle {
             color: toast.backgroundColor
             radius: 8
             border.width: 1
             border.color: toast.borderColor
         }
-        
+
         property bool isAnimatingIn: false
         property bool isAnimatingOut: false
         property bool shouldBeVisible: true
         property bool isDismissed: false
         property var creationTime: Date.now()
         property bool hasAnimatedIn: false
-        
+
         x: implicitWidth
         opacity: 0
-        
+
         Behavior on x {
             enabled: toast.isAnimatingIn || toast.isAnimatingOut
             NumberAnimation {
@@ -160,7 +159,7 @@ ColumnLayout {
                 duration: 300
             }
         }
-        
+
         Behavior on height {
             enabled: toast.isAnimatingOut
             NumberAnimation {
@@ -168,7 +167,7 @@ ColumnLayout {
                 easing.type: Easing.OutCubic
             }
         }
-        
+
         Component.onCompleted: {
             if (toast.notification.dismissed) {
                 toast.opacity = 0
@@ -206,7 +205,7 @@ ColumnLayout {
                 }
             }
         }
-        
+
         Connections {
             target: toast.notification
             function onDismissedChanged() {
@@ -215,20 +214,20 @@ ColumnLayout {
                 }
             }
         }
-        
+
         function slideOutAndDismiss() {
             if (toast.isAnimatingOut || toast.isDismissed) return
-            
+
             toast.isAnimatingOut = true
             toast.isDismissed = true
             toast.x = toast.parent.width
             toast.opacity = 0
             finishSlideOutTimer.restart()
         }
-        
+
         function dismissImmediately() {
             if (toast.isAnimatingOut) return
-            
+
             console.log("Dismissing notification immediately")
             toast.height = 0
             toast.notification.dismiss()
@@ -245,7 +244,7 @@ ColumnLayout {
         borderColor: '#7E2A0D'
         backgroundColor: '#432004'
         textColor: '#FFFFFF'
-        
+
         contentItem: RowLayout {
             spacing: 8
             Layout.alignment: Qt.AlignCenter
@@ -322,7 +321,7 @@ ColumnLayout {
         borderColor: '#00BCFF'
         backgroundColor: '#004A66'
         textColor: '#FFFFFF'
-        
+
         contentItem: RowLayout {
             spacing: 8
             Layout.alignment: Qt.AlignCenter
@@ -396,7 +395,7 @@ ColumnLayout {
         borderColor: '#9A0000'
         backgroundColor: '#4D0000'
         textColor: '#FFFFFF'
-        
+
         contentItem: RowLayout {
             spacing: 8
             Layout.alignment: Qt.AlignCenter
@@ -406,11 +405,11 @@ ColumnLayout {
                 Layout.preferredHeight: 24
                 source: 'qrc:/svg2/plugs_white'
             }
-            
+
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 6
-                
+
                 Label {
                     Layout.preferredWidth: 0
                     Layout.fillWidth: true
@@ -420,7 +419,7 @@ ColumnLayout {
                     text: 'Some accounts can not be logged in due to network issues. Please try again later.'
                     wrapMode: Label.WordWrap
                 }
-                
+
                 RowLayout {
                     Layout.topMargin: 4
                     spacing: 8
@@ -443,7 +442,7 @@ ColumnLayout {
                     }
                 }
             }
-            
+
             CloseButton {
                 Layout.alignment: Qt.AlignTop
                 onClicked: toast.slideOutAndDismiss()
@@ -457,21 +456,21 @@ ColumnLayout {
         borderColor: '#181818'
         backgroundColor: '#0A0A0C'
         textColor: '#FFFFFF'
-        
+
         contentItem: RowLayout {
             spacing: 8
-            Layout.alignment: Qt.AlignCenter    
+            Layout.alignment: Qt.AlignCenter
             Image {
                 Layout.alignment: Qt.AlignTop
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 24
                 source: UtilJS.networkIcon(toast.notification.network)
             }
-            
+
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 6
-                
+
                 RowLayout {
                     spacing: 8
                     Label {
@@ -481,7 +480,7 @@ ColumnLayout {
                         text: toast.notification.network.displayName
                     }
                 }
-                
+
                 Label {
                     Layout.preferredWidth: 0
                     Layout.fillWidth: true
@@ -496,7 +495,7 @@ ColumnLayout {
                     }
                     wrapMode: Label.WordWrap
                 }
-                
+
                 Label {
                     Layout.preferredWidth: 0
                     Layout.fillWidth: true
@@ -515,7 +514,7 @@ ColumnLayout {
                     wrapMode: Label.WordWrap
                 }
             }
-            
+
             CloseButton {
                 Layout.alignment: Qt.AlignTop
                 onClicked: toast.slideOutAndDismiss()
@@ -528,7 +527,7 @@ ColumnLayout {
         borderColor: '#F7D000'
         backgroundColor: '#7A5F00'
         textColor: '#FFFFFF'
-        
+
         contentItem: RowLayout {
             spacing: 8
             Layout.alignment: Qt.AlignCenter
@@ -538,11 +537,11 @@ ColumnLayout {
                 Layout.preferredHeight: 24
                 source: 'qrc:/svg2/expired_2fa_white.svg'
             }
-            
+
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 6
-                
+
                 Label {
                     Layout.preferredWidth: 0
                     Layout.fillWidth: true
@@ -552,7 +551,7 @@ ColumnLayout {
                     text: 'Some coins are no longer 2FA protected (%1 accounts)'.arg(toast.notification.accounts.length)
                     wrapMode: Label.WordWrap
                 }
-                
+
                 RowLayout {
                     Layout.topMargin: 4
                     spacing: 8
@@ -575,7 +574,7 @@ ColumnLayout {
                     }
                 }
             }
-            
+
             CloseButton {
                 Layout.alignment: Qt.AlignTop
                 onClicked: toast.slideOutAndDismiss()
@@ -588,7 +587,7 @@ ColumnLayout {
         borderColor: '#181818'
         backgroundColor: '#0A0A0C'
         textColor: '#FFFFFF'
-        
+
         contentItem: ColumnLayout {
             spacing: 6
             Layout.alignment: Qt.AlignCenter
@@ -614,7 +613,7 @@ ColumnLayout {
                     onClicked: toast.slideOutAndDismiss()
                 }
             }
-            
+
             Label {
                 Layout.preferredWidth: 0
                 Layout.fillWidth: true
@@ -625,7 +624,7 @@ ColumnLayout {
                 textFormat: Label.RichText
                 wrapMode: Label.WordWrap
             }
-            
+
             LinkButton {
                 Layout.alignment: Qt.AlignLeft
                 font.bold: true
@@ -643,7 +642,7 @@ ColumnLayout {
         borderColor: '#7E2A0D'
         backgroundColor: '#432004'
         textColor: '#FFFFFF'
-        
+
         contentItem: RowLayout {
             spacing: 8
             Layout.alignment: Qt.AlignCenter

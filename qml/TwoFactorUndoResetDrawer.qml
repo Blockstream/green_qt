@@ -4,9 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "analytics.js" as AnalyticsJS
-import "util.js" as UtilJS
-
 WalletDrawer {
     required property Session session
     property string title: qsTrId('id_undo_2fa_dispute')
