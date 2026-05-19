@@ -201,6 +201,7 @@ StackViewPage {
         id: button
         fillColor: '#181818'
         borderColor: '#262626'
+        textColor: '#FAFAFA'
         leftPadding: 20
         rightPadding: 20
         topPadding: 20

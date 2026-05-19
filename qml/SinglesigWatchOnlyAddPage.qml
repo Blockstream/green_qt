@@ -163,7 +163,6 @@ StackViewPage {
         }
     }
     component Option: AbstractButton {
-        required property int index
         id: option
         implicitHeight: 35
         implicitWidth: 163

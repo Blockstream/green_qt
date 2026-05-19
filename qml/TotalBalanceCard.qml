@@ -83,8 +83,8 @@ WalletHeaderCard {
             property var modelData
             id: delegate
             context: self.context
-            asset: delegate.modelData.asset
-            input: ({ satoshi: String(delegate.modelData.satoshi) })
+            asset: delegate.modelData?.asset ?? null
+            input: ({ satoshi: String(delegate.modelData?.satoshi ?? '0' ) })
         }
     }
 }

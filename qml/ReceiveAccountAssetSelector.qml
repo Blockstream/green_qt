@@ -48,6 +48,7 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.topMargin: 5
                     amp: false
+                    asset: null
                     enabled: self.supportsLiquid
                     index: -1
                     icon.source: 'qrc:/svg2/liquid_icon.svg'
@@ -63,6 +64,7 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.topMargin: 5
                     amp: true
+                    asset: null
                     enabled: self.supportsLiquid
                     index: -1
                     icon.source: 'qrc:/svg2/amp_icon.svg'
@@ -90,10 +92,10 @@ StackViewPage {
     component SelectorDelegate: ItemDelegate {
         required property int index
         required property Asset asset
-        property bool amp: delegate.asset.amp
+        property bool amp: delegate.asset?.amp ?? false
         id: delegate
-        icon.source: UtilJS.assetIcon(delegate.asset)
-        text: delegate.asset.name || delegate.asset.id
+        icon.source: delegate.asset ? UtilJS.assetIcon(delegate.asset) : ''
+        text: delegate.asset?.name || delegate.asset?.id || ''
         padding: 0
         topPadding: 0
         bottomPadding: 0
