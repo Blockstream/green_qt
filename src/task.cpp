@@ -13,10 +13,13 @@
 #include "resolver.h"
 #include "session.h"
 #include "sessionmanager.h"
+#include "profile.h"
 #include "task.h"
 #include "util.h"
 #include "wallet.h"
 
+#include <QDebug>
+#include <QMetaEnum>
 #include <QFileInfo>
 #include <QNetworkAccessManager>
 #include <QString>
@@ -29,9 +32,19 @@
 
 #include <nlohmann/json.hpp>
 
+namespace {
+QString taskStatusLabel(Task::Status status)
+{
+    const auto meta = QMetaEnum::fromType<Task::Status>();
+    const char* key = meta.valueToKey(static_cast<int>(status));
+    return key ? QString::fromLatin1(key) : QStringLiteral("?");
+}
+} // namespace
+
 Task::Task(QObject* parent)
     : QObject(parent)
 {
+    m_status_timer.start();
 }
 
 Task::~Task()
@@ -54,6 +67,16 @@ QString Task::type() const
 
     if (parts.last() == "Task") parts.removeLast();
     return parts.join(' ');
+}
+
+QString Task::description() const
+{
+    return type();
+}
+
+const void* Task::profilingContext() const
+{
+    return parent() ? static_cast<const void*>(parent()) : static_cast<const void*>(this);
 }
 
 void Task::setError(const QString& error)
@@ -85,6 +108,15 @@ void Task::dispatch()
 void Task::setStatus(Status status)
 {
     if (m_status == status) return;
+
+    const qint64 duration_ms = m_status_timer.elapsed();
+    const Status from = m_status;
+    m_status_timer.restart();
+
+    qCInfo(profile).nospace() << description() << " status change "
+                              << taskStatusLabel(from) << " -> " << taskStatusLabel(status)
+                              << " duration_ms=" << duration_ms << " context=0x"
+                              << Qt::hex << reinterpret_cast<quintptr>(profilingContext()) << Qt::dec;
 
     m_status = status;
     emit statusChanged();
@@ -305,6 +337,16 @@ SessionTask::SessionTask(Session* session)
     : Task(session)
     , m_session(session)
 {
+}
+
+QString SessionTask::description() const
+{
+    if (!m_session) {
+        return Task::description();
+    }
+    const auto network = m_session->network();
+    const QString network_id = network ? network->id() : QStringLiteral("?");
+    return QStringLiteral("%1 network=%2").arg(Task::description(), network_id);
 }
 
 namespace {
@@ -625,6 +667,40 @@ void RegisterUserTask::handleDone(const QJsonObject& result)
     AuthHandlerTask::handleDone(result);
 }
 
+namespace {
+QString loginTaskModeLabel(const QJsonObject& details, const QJsonObject& hw_device, Session* session)
+{
+    if (session && session->m_ready && details.isEmpty() && hw_device.isEmpty()) {
+        return QStringLiteral("already_ready");
+    }
+    if (details.contains(QStringLiteral("pin"))) {
+        return QStringLiteral("pin");
+    }
+    if (details.contains(QStringLiteral("mnemonic"))) {
+        return QStringLiteral("mnemonic");
+    }
+    if (details.contains(QStringLiteral("username"))) {
+        return QStringLiteral("username_password");
+    }
+    if (details.contains(QStringLiteral("slip132_extended_pubkeys"))) {
+        return QStringLiteral("extended_pubkeys");
+    }
+    if (details.contains(QStringLiteral("core_descriptors"))) {
+        return QStringLiteral("core_descriptors");
+    }
+    if (!hw_device.isEmpty() && details.isEmpty()) {
+        return QStringLiteral("hw_device");
+    }
+    if (!details.isEmpty() && !hw_device.isEmpty()) {
+        return QStringLiteral("details+hw_device");
+    }
+    if (!details.isEmpty()) {
+        return QStringLiteral("details");
+    }
+    return QStringLiteral("default");
+}
+} // namespace
+
 LoginTask::LoginTask(Session* session)
     : AuthHandlerTask(session)
 {
@@ -668,6 +744,12 @@ LoginTask::LoginTask(const QJsonObject& details, const QJsonObject& hw_device, S
     , m_details(details)
     , m_hw_device(hw_device)
 {
+}
+
+QString LoginTask::description() const
+{
+    const auto mode = loginTaskModeLabel(m_details, m_hw_device, m_session);
+    return QStringLiteral("%1 mode=%2").arg(SessionTask::description(), mode);
 }
 
 void LoginTask::update()
@@ -758,6 +840,11 @@ LoadAccountTask::LoadAccountTask(uint32_t pointer, Session* session)
 {
 }
 
+QString LoadAccountTask::description() const
+{
+    return QStringLiteral("%1 pointer=%2").arg(SessionTask::description()).arg(m_pointer);
+}
+
 bool LoadAccountTask::active() const
 {
     return AuthHandlerTask::active() && m_session->m_ready;
@@ -799,6 +886,11 @@ LoadAccountsTask::LoadAccountsTask(bool refresh, Session* session)
 {
 }
 
+QString LoadAccountsTask::description() const
+{
+    return QStringLiteral("%1 refresh=%2").arg(SessionTask::description(), m_refresh ? QStringLiteral("true") : QStringLiteral("false"));
+}
+
 bool LoadAccountsTask::active() const
 {
     return AuthHandlerTask::active() && m_session->m_ready;
@@ -827,6 +919,11 @@ SyncAccountsTask::SyncAccountsTask(Session* session)
 {
 }
 
+QString SyncAccountsTask::description() const
+{
+    return QStringLiteral("%1 phase=account_sync").arg(SessionTask::description());
+}
+
 void SyncAccountsTask::update()
 {
     if (m_status == Status::Ready) {
@@ -846,6 +943,13 @@ LoadBalanceTask::LoadBalanceTask(Account* account)
     : AuthHandlerTask(account->session())
     , m_account(account)
 {
+}
+
+QString LoadBalanceTask::description() const
+{
+    return QStringLiteral("%1 subaccount=%2")
+        .arg(SessionTask::description())
+        .arg(m_account ? static_cast<int>(m_account->pointer()) : -1);
 }
 
 bool LoadBalanceTask::active() const
@@ -912,6 +1016,11 @@ LoadAssetsTask::LoadAssetsTask(bool refresh, Session* session)
     : SessionTask(session)
     , m_refresh(refresh)
 {
+}
+
+QString LoadAssetsTask::description() const
+{
+    return QStringLiteral("%1 refresh=%2").arg(SessionTask::description(), m_refresh ? QStringLiteral("true") : QStringLiteral("false"));
 }
 
 void LoadAssetsTask::update()
@@ -1072,6 +1181,19 @@ ContextTask::ContextTask(Context* context)
     Q_ASSERT(context);
 }
 
+QString ContextTask::description() const
+{
+    if (!m_context) {
+        return Task::description();
+    }
+    const QString base = Task::description();
+    const QString xpub = m_context->xpubHashId();
+    if (xpub.size() >= 8) {
+        return QStringLiteral("%1 xpub_prefix=%2").arg(base, xpub.left(8));
+    }
+    return QStringLiteral("%1 (no xpub yet)").arg(base);
+}
+
 TwoFactorResetTask::TwoFactorResetTask(const QString& email, bool dispute, Session* session)
     : AuthHandlerTask(session)
     , m_email(email)
@@ -1119,6 +1241,11 @@ void SetCsvTimeTask::handleDone(const QJsonObject &result)
 GetCredentialsTask::GetCredentialsTask(Session* session)
     : AuthHandlerTask(session)
 {
+}
+
+QString GetCredentialsTask::description() const
+{
+    return QStringLiteral("%1 phase=post_login_credentials").arg(SessionTask::description());
 }
 
 bool GetCredentialsTask::call(GA_session *session, GA_auth_handler **auth_handler)
@@ -1558,6 +1685,11 @@ ConnectTask::ConnectTask(int timeout, Session *session)
     : SessionTask(session)
     , m_timeout(timeout)
 {
+}
+
+QString ConnectTask::description() const
+{
+    return QStringLiteral("%1 timeout_ms=%2").arg(SessionTask::description()).arg(m_timeout);
 }
 
 void ConnectTask::update()

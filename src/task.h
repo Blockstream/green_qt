@@ -3,6 +3,7 @@
 
 #include "green.h"
 
+#include <QElapsedTimer>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
@@ -123,6 +124,8 @@ public:
     ~Task();
     TaskGroup* group() const { return m_group; }
     QString type() const;
+    virtual QString description() const;
+    virtual const void* profilingContext() const;
     Status status() const { return m_status; }
     QString error() const { return m_error; }
     void setError(const QString &error);
@@ -145,6 +148,7 @@ protected:
     QSet<Task*> m_outputs;
     Status m_status{Status::Ready};
     QString m_error;
+    QElapsedTimer m_status_timer;
     friend class TaskGroup;
     friend class TaskDispatcher;
 };
@@ -185,6 +189,7 @@ class SessionTask : public Task
 public:
     SessionTask(Session* session);
     Session* session() const { return m_session; }
+    QString description() const override;
 protected:
     Session* const m_session;
 };
@@ -198,6 +203,7 @@ class ContextTask : public Task
 public:
     ContextTask(Context* context);
     Context* context() const { return m_context; }
+    QString description() const override;
 protected:
     Context* const m_context;
 };
@@ -210,6 +216,7 @@ class ConnectTask : public SessionTask
 public:
     ConnectTask(Session* session);
     ConnectTask(int timeout, Session* session);
+    QString description() const override;
     void update() override;
 private:
     int m_timeout{0};
@@ -338,6 +345,7 @@ public:
     LoginTask(const QJsonObject& hw_device, Session* session);
     LoginTask(const QString& username, const QString& password, Session* session);
     LoginTask(const QJsonObject& details, const QJsonObject& hw_device, Session* session);
+    QString description() const override;
 private:
     void update() override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
@@ -417,6 +425,7 @@ class LoadAccountTask : public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     LoadAccountTask(uint32_t pointer, Session* session);
+    QString description() const override;
     Account* account() const { return m_account; }
 private:
     bool active() const override;
@@ -434,6 +443,7 @@ class LoadAccountsTask : public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     LoadAccountsTask(bool refresh, Session* session);
+    QString description() const override;
     QList<Account*> accounts() const { return m_accounts; }
 private:
     bool active() const override;
@@ -451,6 +461,7 @@ class SyncAccountsTask : public SessionTask
     QML_UNCREATABLE("")
 public:
     SyncAccountsTask(Session* session);
+    QString description() const override;
 private:
     void update() override;
 };
@@ -462,6 +473,7 @@ class LoadBalanceTask : public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     LoadBalanceTask(Account* account);
+    QString description() const override;
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
@@ -477,6 +489,7 @@ class LoadAssetsTask : public SessionTask
     QML_UNCREATABLE("")
 public:
     LoadAssetsTask(bool refresh, Session* session);
+    QString description() const override;
 private:
     void update() override;
 private:
@@ -592,6 +605,7 @@ class GetCredentialsTask : public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     GetCredentialsTask(Session* session);
+    QString description() const override;
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
