@@ -354,8 +354,10 @@ Page {
             reveal_anim.start()
         }
 
-        NumberAnimation on revealProgress {
+        NumberAnimation {
             id: reveal_anim
+            target: chartArea
+            property: 'revealProgress'
             from: 0
             to: 1
             duration: 1000

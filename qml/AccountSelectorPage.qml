@@ -28,7 +28,7 @@ StackViewPage {
             horizontalAlignment: Label.AlignHCenter
             color: '#A0A0A0'
             text: self.message
-            visible: self.message?.length > 0
+            visible: self.message.length > 0
             wrapMode: Label.Wrap
         }
         Pane {

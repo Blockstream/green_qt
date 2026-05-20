@@ -24,7 +24,7 @@ TextField {
     }
 
     function remove() {
-        if (self.pin?.length > 0) {
+        if (self.pin.length > 0) {
             self.pin = self.pin.slice(0, -1)
         }
     }
