@@ -1,5 +1,5 @@
-#ifndef GREEN_UTIL_H
-#define GREEN_UTIL_H
+#ifndef BLOCKSTREAM_CORE_UTIL_H
+#define BLOCKSTREAM_CORE_UTIL_H
 
 #include <QByteArray>
 #include <QJsonArray>
@@ -30,4 +30,4 @@ QString GetPlatformName();
 
 void ShowApplication();
 
-#endif // GREEN_UTIL_H
+#endif // BLOCKSTREAM_CORE_UTIL_H

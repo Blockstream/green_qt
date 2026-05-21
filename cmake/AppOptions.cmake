@@ -15,6 +15,5 @@ if(NOT GREEN_ENV)
     set(GREEN_LOG_FILE dev)
 endif()
 
-configure_file("${CMAKE_SOURCE_DIR}/config.h.in" "${CMAKE_BINARY_DIR}/config.h" @ONLY)
 configure_file("${CMAKE_SOURCE_DIR}/installer.iss.in" "${CMAKE_BINARY_DIR}/installer.iss" @ONLY)
 

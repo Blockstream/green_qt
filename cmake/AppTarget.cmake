@@ -179,7 +179,6 @@ set(APP_PRIVATE_INCLUDE_DIRS
     src/ledger
     src/handlers
     src/glsdk
-    "${CMAKE_BINARY_DIR}"
 )
 
 if (GDK_INCLUDE)

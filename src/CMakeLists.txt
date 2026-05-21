@@ -1,3 +1,6 @@
+add_subdirectory(core)
+target_link_libraries(${APP_TARGET} PRIVATE blockstream_core)
+
 target_sources(${APP_TARGET} PRIVATE
     main.cpp
     application.h application.cpp
@@ -7,7 +10,6 @@ target_sources(${APP_TARGET} PRIVATE
     limitmodel.h limitmodel.cpp
     green.h
     green_settings.h green_settings.cpp
-    util.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
