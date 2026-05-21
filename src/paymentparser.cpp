@@ -103,7 +103,7 @@ void fill(QVariantMap& result, std::shared_ptr<lwk::Payment> payment, const QVar
                 bolt12.insert("amount", QVariant::fromValue(amount));
             }
             result.insert("bolt12", bolt12);
-        } catch (lwk::lwk_error::Generic error) {
+        } catch (const lwk::lwk_error::Generic& error) {
             result.insert("error", QString::fromStdString(error.msg));
         } catch (...) {
             result.insert("error", "unknown");
@@ -128,7 +128,7 @@ void fill(QVariantMap& result, std::shared_ptr<lwk::Payment> payment, const QVar
                 try {
                     auto satoshi = data.value("satoshi").toULongLong();
                     fill(result, payment->fetch_lnurl_invoice(info, satoshi), data);
-                } catch (lwk::lwk_error::Generic error) {
+                } catch (const lwk::lwk_error::Generic& error) {
                     qDebug() << Q_FUNC_INFO << error.msg << error.what();
                     result.insert("error", QString::fromStdString(error.msg));
                 } catch (...) {
@@ -137,7 +137,7 @@ void fill(QVariantMap& result, std::shared_ptr<lwk::Payment> payment, const QVar
             }
 
             result.insert("lnurl", lnurl);
-        } catch (lwk::lwk_error::Generic error) {
+        } catch (const lwk::lwk_error::Generic& error) {
             result.insert("error", QString::fromStdString(error.msg));
         } catch (...) {
             result.insert("error", "unknown");
@@ -149,7 +149,7 @@ void fill(QVariantMap& result, std::shared_ptr<lwk::Payment> payment, const QVar
         try {
             fill(result, payment->resolve_bip353(), data);
             result.insert("bip353", QString::fromStdString(*payment->bip353()));
-        } catch (lwk::lwk_error::Generic error) {
+        } catch (const lwk::lwk_error::Generic& error) {
             result.insert("error", QString::fromStdString(error.msg));
         } catch (...) {
             result.insert("error", "unknown");
@@ -183,7 +183,7 @@ QVariantMap parse(const QString& input, const QVariantMap& data)
 
     try {
         fill(result, lwk::Payment::init(input.trimmed().toStdString()), data);
-    } catch (lwk::lwk_error::Generic error) {
+    } catch (const lwk::lwk_error::Generic& error) {
         result.insert("error", QString::fromStdString(error.msg));
     } catch (...) {
         result.insert("error", "unknown");

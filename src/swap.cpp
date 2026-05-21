@@ -49,20 +49,20 @@ void Swap::sync()
         try {
             auto state = advance();
             return statusFromState(state);
-        } catch (lwk::lwk_error::NoBoltzUpdate) {
+        } catch (const lwk::lwk_error::NoBoltzUpdate&) {
             return Status::Pending;
-        } catch (lwk::lwk_error::ObjectConsumed) {
+        } catch (const lwk::lwk_error::ObjectConsumed&) {
             return Status::Pending;
-        } catch (lwk::lwk_error::BoltzBackendHttpError error) {
+        } catch (const lwk::lwk_error::BoltzBackendHttpError& error) {
             qDebug() << Q_FUNC_INFO << "BoltzBackendHttpError" << id();
             return Status::Pending;
-        } catch (lwk::lwk_error::SwapExpired error) {
+        } catch (const lwk::lwk_error::SwapExpired& error) {
             qDebug() << Q_FUNC_INFO << "SwapExpired" << id();
             return Status::Pending;
-        } catch (lwk::lwk_error::Generic error) {
+        } catch (const lwk::lwk_error::Generic& error) {
             qDebug() << Q_FUNC_INFO << "Generic error" << id() << error.msg;
             return Status::Pending;
-        } catch (std::exception error) {
+        } catch (const std::exception& error) {
             qDebug() << Q_FUNC_INFO << "exception" << id() << error.what();
             return Status::Pending;
         }
@@ -162,7 +162,7 @@ SubmarineSwap::SubmarineSwap(const QString& invoice, std::shared_ptr<lwk::Prepar
 {
 }
 
-SubmarineSwap::SubmarineSwap(const QString& address, uint64_t amount, Context* context)
+SubmarineSwap::SubmarineSwap(uint64_t amount, const QString& address, Context* context)
     : Swap(QUuid::createUuid().toString(QUuid::WithoutBraces), context)
     , m_address(address)
     , m_amount(amount)

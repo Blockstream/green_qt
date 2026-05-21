@@ -70,7 +70,7 @@ class SubmarineSwap : public Swap
     QML_UNCREATABLE("")
 public:
     SubmarineSwap(const QString& invoice, std::shared_ptr<lwk::PreparePayResponse> prepare_pay_response, Context* context);
-    SubmarineSwap(const QString& address, uint64_t amount, Context* context);
+    SubmarineSwap(uint64_t amount, const QString& address, Context* context);
     QString invoice() const { return m_invoice; }
     QVariantMap data() const override;
     void setLockupTransaction(ChainTransaction* lockup_transaction) override;

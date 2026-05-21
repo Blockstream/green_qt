@@ -148,18 +148,30 @@ void SubmarineController::update()
     if (d->recipient.isEmpty()) return;
     if (d->refund_address.isEmpty()) return;
 
-    // FIXME
-    // for (const auto swap : m_context->m_swaps) {
-    //     auto submarine_swap = qobject_cast<SubmarineSwap*>(swap);
-    //     if (submarine_swap && submarine_swap->invoice() == d->recipient) {
-    //         qDebug() << Q_FUNC_INFO << "found swap for invoice" << submarine_swap->status();
-    //         d->busy = false;
-    //         emit busyChanged();
-    //         setSwap(submarine_swap);
-    //         setError({});
-    //         return;
-    //     }
-    // }
+    {
+        const auto invoice = d->recipient.value("invoice").toMap().value("invoice").toString();
+        if (!invoice.isEmpty()) {
+            for (const auto swap : m_context->m_swaps) {
+                auto submarine_swap = qobject_cast<SubmarineSwap*>(swap);
+                if (submarine_swap && submarine_swap->invoice() == invoice) {
+                    if (submarine_swap->status() == Swap::Status::Pending) {
+                        qDebug() << Q_FUNC_INFO << "found swap for invoice";
+                        d->busy = false;
+                        emit busyChanged();
+                        setSwap(submarine_swap);
+                        setError({});
+                    } else {
+                        qDebug() << Q_FUNC_INFO << "found non pending swap for invoice" << submarine_swap->status();
+                        d->busy = false;
+                        emit busyChanged();
+                        setSwap(nullptr);
+                        setError(QString("id_there_is_already_a_swap_in"));
+                    }
+                    return;
+                }
+            }
+        }
+    }
 
     typedef std::variant<std::shared_ptr<lwk::PreparePayResponse>, std::pair<std::string, uint64_t>, std::string> Result;
     using Watcher = QFutureWatcher<Result>;
@@ -168,17 +180,17 @@ void SubmarineController::update()
         try {
             auto address = lwk::Address::init(d->refund_address.toStdString());
             return m_context->m_boltz_session->prepare_pay(d->payment(), address, nullptr);
-        } catch (lwk::lwk_error::Generic error) {
+        } catch (const lwk::lwk_error::Generic& error) {
             qDebug() << Q_FUNC_INFO << "generic error"
                 << QString::fromStdString(error.msg);
             return error.msg;
-        } catch (lwk::lwk_error::MagicRoutingHint error) {
+        } catch (const lwk::lwk_error::MagicRoutingHint& error) {
             qDebug() << Q_FUNC_INFO << "magic routing hint error"
                 << QString::fromStdString(error.uri)
                 << QString::fromStdString(error.address)
                 << error.amount;
             return std::make_pair(error.address, error.amount);
-        } catch (lwk::lwk_error::BoltzBackendHttpError error) {
+        } catch (const lwk::lwk_error::BoltzBackendHttpError& error) {
             qDebug() << Q_FUNC_INFO << "BoltzBackendHttpError" << error.status << QString::fromStdString(error.error.value_or("unknown error"));
             return error.error.value_or("unknown error");
         } catch (...) {
@@ -203,7 +215,7 @@ void SubmarineController::update()
         }
 
         if (result.index() == 1) {
-            auto swap = new SubmarineSwap(QString::fromStdString(std::get<1>(result).first), std::get<1>(result).second, context());
+            auto swap = new SubmarineSwap(std::get<1>(result).second, QString::fromStdString(std::get<1>(result).first), context());
             context()->addSwap(swap);
             setSwap(swap);
             setError({});

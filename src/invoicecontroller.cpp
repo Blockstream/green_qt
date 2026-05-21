@@ -132,7 +132,7 @@ void InvoiceController::update()
             watcher->setFuture(QtConcurrent::run([=, this]() -> std::shared_ptr<lwk::InvoiceResponse> {
                 try {
                     return m_context->m_boltz_session->invoice(satoshi, description, address, nullptr);
-                } catch (lwk::lwk_error::Generic error) {
+                } catch (const lwk::lwk_error::Generic& error) {
                     qDebug() << Q_FUNC_INFO << "generic error";
                     return nullptr;
                 } catch (...) {
@@ -155,7 +155,7 @@ void InvoiceController::update()
             });
             return;
         }
-    } catch (lwk::lwk_error::Generic error) {
+    } catch (const lwk::lwk_error::Generic& error) {
         qDebug() << Q_FUNC_INFO << error.what();
     }
 

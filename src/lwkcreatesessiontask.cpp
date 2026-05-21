@@ -154,13 +154,21 @@ void LwkCreateSessionTask::update()
     const auto p = m_context->credentials().value("bip39_passphrase").toString();
     const auto r = derive_mnemonic(m_context->isMainnet(), m, p, BOLTZ_BIP85_INDEX);
 
-    using Watcher = QFutureWatcher<std::shared_ptr<lwk::BoltzSession>>;
+    struct Result {
+        std::shared_ptr<lwk::BoltzSession> session;
+        std::vector<std::pair<QString, std::shared_ptr<lwk::PreparePayResponse>>> prepare_pay_responses;
+        std::vector<std::shared_ptr<lwk::LockupResponse>> lockup_responses;
+        std::vector<std::shared_ptr<lwk::InvoiceResponse>> invoice_responses;
+    };
+
+    using Watcher = QFutureWatcher<Result>;
     const auto watcher = new Watcher(this);
-    watcher->setFuture(QtConcurrent::run([=, this]() -> std::shared_ptr<lwk::BoltzSession> {
+    watcher->setFuture(QtConcurrent::run([=, this]() -> Result {
         try {
+            Result result;
             auto mnemonic = lwk::Mnemonic::init(r.toStdString());
             auto network = m_context->isMainnet() ? lwk::Network::mainnet() : lwk::Network::testnet();
-            auto session = lwk::BoltzSession::from_builder({
+            result.session = lwk::BoltzSession::from_builder({
                 .network = network,
                 .client = lwk::AnyClient::from_electrum(network->default_electrum_client()),
                 .mnemonic = mnemonic,
@@ -172,68 +180,75 @@ void LwkCreateSessionTask::update()
             });
 
             try {
-                session->refresh_swap_info();
-            } catch (lwk::lwk_error::Generic error) {
+                result.session->refresh_swap_info();
+            } catch (const lwk::lwk_error::Generic& error) {
                 qDebug() << Q_FUNC_INFO << "refresh_swap_info error";
             }
 
-            return session;
-        } catch(lwk::lwk_error::Generic error) {
+            auto load = [&](const std::string& swap_id) {
+                auto data = result.session->get_swap_data(swap_id);
+                if (!data) return;
+
+                try {
+                    const auto swap_data = QJsonDocument::fromJson(QByteArray::fromStdString(*data)).object();
+                    const auto type = swap_data.value("swap_type").toString();
+                    const auto last_state = swap_data.value("last_state").toString();
+
+                    if (last_state == "swap.expired") return;
+                    if (last_state == "invoice.failedToPay") return;
+
+                    if (type == "submarine") {
+                        auto invoice = swap_data.value("bolt11_invoice").toString();
+                        auto prepare_pay_response = result.session->restore_prepare_pay(*data);
+                        result.prepare_pay_responses.push_back(std::make_pair(invoice, prepare_pay_response));
+                    } else if (type == "chain") {
+                        result.lockup_responses.push_back(result.session->restore_lockup(*data));
+                    } else if (type == "reverse") {
+                        result.invoice_responses.push_back(result.session->restore_invoice(*data));
+                    } else {
+                        qWarning() << Q_FUNC_INFO << "unexpected swap type" << swap_id.c_str() << qPrintable(type);
+                    }
+                } catch (const lwk::lwk_error::Generic& error) {
+                    qDebug() << Q_FUNC_INFO << "error: " << error.msg.c_str();
+                    qDebug() << Q_FUNC_INFO << "swap: " << data->c_str();
+                }
+            };
+
+            for (const auto& swap_id : result.session->pending_swap_ids()) {
+                load(swap_id);
+            }
+            for (const auto& swap_id : result.session->completed_swap_ids()) {
+                load(swap_id);
+            }
+
+            return result;
+        } catch(const lwk::lwk_error::Generic& error) {
             qDebug() << Q_FUNC_INFO << "generic error";
-            return nullptr;
+            return {};
         } catch (...) {
             qDebug() << Q_FUNC_INFO << "unexpected error";
-            return nullptr;
+            return {};
         }
     }));
     connect(watcher, &Watcher::finished, this, [=, this] {
         watcher->deleteLater();
-        auto session = watcher->result();
-        if (!session) {
+        auto result = watcher->result();
+        if (!result.session) {
             setStatus(Status::Failed);
             return;
         }
 
-        auto load = [&](const std::string& swap_id) {
-            auto data = session->get_swap_data(swap_id);
-            if (!data) return;
-
-            try {
-                const auto swap_data = QJsonDocument::fromJson(QByteArray::fromStdString(*data)).object();
-                const auto type = swap_data.value("swap_type").toString();
-                const auto last_state = swap_data.value("last_state").toString();
-
-                if (last_state == "swap.expired") return;
-                if (last_state == "invoice.failedToPay") return;
-
-                Swap* swap = nullptr;
-                if (type == "submarine") {
-                    auto invoice = swap_data.value("bolt11_invoice").toString();
-                    swap = new SubmarineSwap(invoice, session->restore_prepare_pay(*data), m_context);
-                } else if (type == "chain") {
-                    swap = new ChainSwap(session->restore_lockup(*data), m_context);
-                } else if (type == "reverse") {
-                    swap = new ReverseSwap(session->restore_invoice(*data), m_context);
-                } else {
-                    qWarning() << Q_FUNC_INFO << "unexpected swap type" << swap_id.c_str() << qPrintable(type);
-                }
-                if (swap) {
-                    m_context->addSwap(swap);
-                }
-            } catch (lwk::lwk_error::Generic error) {
-                qDebug() << Q_FUNC_INFO << "error: " << error.msg.c_str();
-                qDebug() << Q_FUNC_INFO << "swap: " << data->c_str();
-            }
-        };
-
-        for (const auto swap_id : session->pending_swap_ids()) {
-            load(swap_id);
+        for (const auto& [invoice, prepare_pay_response] : result.prepare_pay_responses) {
+            m_context->addSwap(new SubmarineSwap(invoice, prepare_pay_response, m_context));
         }
-        for (const auto swap_id : session->completed_swap_ids()) {
-            load(swap_id);
+        for (const auto& lockup_response : result.lockup_responses) {
+            m_context->addSwap(new ChainSwap(lockup_response, m_context));
+        }
+        for (const auto& invoice_response : result.invoice_responses) {
+            m_context->addSwap(new ReverseSwap(invoice_response, m_context));
         }
 
-        m_context->m_boltz_session = session;
+        m_context->m_boltz_session = result.session;
 
         setStatus(Status::Finished);
     });
