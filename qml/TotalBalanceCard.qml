@@ -1,5 +1,6 @@
 import Blockstream.Green
 import Blockstream.Green.Core
+import QtQml.Models
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -79,7 +80,7 @@ WalletHeaderCard {
         id: assets
         model: UtilJS.assets(self.context)
         delegate: Convert {
-            required property var modelData
+            property var modelData
             id: delegate
             context: self.context
             asset: delegate.modelData.asset
