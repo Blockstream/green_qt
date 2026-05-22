@@ -80,11 +80,11 @@ WalletHeaderCard {
         id: assets
         model: UtilJS.assets(self.context)
         delegate: Convert {
-            property var modelData
+            required property var modelData
             id: delegate
             context: self.context
-            asset: delegate.modelData?.asset ?? null
-            input: ({ satoshi: String(delegate.modelData?.satoshi ?? '0' ) })
+            asset: delegate.modelData.asset
+            input: ({ satoshi: delegate.modelData.satoshi })
         }
     }
 }
