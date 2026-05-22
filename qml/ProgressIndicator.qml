@@ -7,7 +7,7 @@ Canvas {
     property int current: 0
     property int max: 0
     property real progress: 0
-
+    property real lineWidth: 1
     Component.onCompleted: progress = Qt.binding(() => self.max > 0 ? Math.min(1, self.current / self.max) : 0)
 
     property bool indeterminate: false
@@ -39,7 +39,7 @@ Canvas {
     onPaint: {
         var ctx = getContext("2d");
         ctx.clearRect(0, 0, width, height)
-        ctx.lineWidth = 1
+        ctx.lineWidth = self.lineWidth
         ctx.strokeStyle = self.black ? '#000' : '#FFF'
         ctx.beginPath()
         ctx.arc(centerX, centerY, radius, startAngle - Math.PI / 2, startAngle +  sweepAngle - Math.PI / 2)

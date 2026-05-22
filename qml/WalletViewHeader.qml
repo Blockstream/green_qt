@@ -200,50 +200,17 @@ GPane {
                 }
                 HSpacer {
                 }
-                RowLayout {
-                    property real _opacity: -1
-                    Layout.fillWidth: false
-                    Layout.leftMargin: 20
-                    Layout.rightMargin: 20
-                    id: task_info_layout
-                    spacing: constants.s1
-                    opacity: Math.max(0, task_info_layout._opacity)
-                    Behavior on _opacity {
-                        SmoothedAnimation {
-                            velocity: 3
-                        }
-                    }
-                    Label {
-                        property string task: {
-                            const groups = self.context?.dispatcher?.groups ?? []
-                            for (let i = 0; i < groups.length; i++) {
-                                const group = groups[i]
-                                if (!group) continue
-                                for (let j = 0; j < group.tasks.length; j++) {
-                                    const task  = group.tasks[j]
-                                    if (task.status === Task.Active) {
-                                        return task.type
-                                    }
-                                }
-                            }
-                            return ''
-                        }
-                        id: task_label
-                        visible: false
-                        onTaskChanged: {
-                            if (task_label.task.length > 0) {
-                                task_label.text = task_label.task
-                                task_info_layout._opacity = 1
-                            } else {
-                                task_info_layout._opacity = -1
-                            }
-                        }
-                    }
+                Item {
+                    Layout.minimumHeight: 24
+                    Layout.minimumWidth: 24
+                    Layout.margins: 10
                     ProgressIndicator {
-                        Layout.minimumHeight: 24
-                        Layout.minimumWidth: 24
+                        anchors.centerIn: parent
+                        anchors.fill: parent
+                        anchors.margins: 2
                         indeterminate: self.busy
                         current: 0
+                        lineWidth: 1.5
                         max: 1
                     }
                 }
