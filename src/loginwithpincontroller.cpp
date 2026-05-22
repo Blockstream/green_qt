@@ -6,6 +6,7 @@
 #include "jadedevice.h"
 #include "json.h"
 #include "ledgerdevice.h"
+#include "lwkcreatesessiontask.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "session.h"
@@ -280,6 +281,16 @@ static void fetchAddresses(Context* context, Account* account, int last_pointer)
     context->dispatcher()->add(task);
 }
 
+
+static bool compatibleToNetworks(Network* network, const QList<Network*> networks)
+{
+    for (auto net : networks) {
+        if (net->isMainnet() != network->isMainnet()) return false;
+        if (net->isDevelopment() != network->isDevelopment()) return false;
+    }
+    return true;
+}
+
 LoadController::LoadController(QObject* parent)
     : Controller(parent)
 {
@@ -301,30 +312,9 @@ LoadController::LoadController(QObject* parent)
             wallet->save();
 
             emit loadFinished();
-
-            for (auto session : m_context->getSessions()) {
-                if (session->network()->isLiquid()) {
-                    dispatcher()->add(new LoadAssetsTask(true, session));
-                }
-            }
-
-            for (auto account : m_context->getAccounts()) {
-                fetchAddresses(m_context, account, 0);
-            }
         });
     });
 }
-
-static bool compatibleToNetworks(Network* network, const QList<Network*> networks)
-{
-    for (auto net : networks) {
-        if (net->isMainnet() != network->isMainnet()) return false;
-        if (net->isDevelopment() != network->isDevelopment()) return false;
-    }
-    return true;
-}
-
-#include "lwkcreatesessiontask.h"
 
 void LoadController::load()
 {
@@ -336,13 +326,6 @@ void LoadController::load()
 
     for (auto network : networks) {
         loadNetwork(group, network);
-    }
-
-    if (m_context->isMainnet() && !m_context->isWatchonly() && !qobject_cast<DeviceData*>(m_context->wallet()->login())) {
-        group->add(new LwkCreateSessionTask(m_context));
-    }
-    if (m_context->isMainnet()) {
-        loadPayments(group);
     }
 
     m_monitor->add(group);
@@ -374,7 +357,52 @@ void LoadController::loginNetwork(Network* network)
     dispatcher()->add(group);
 }
 
-void LoadController::loadPayments(TaskGroup *group)
+BackgroundLoadController::BackgroundLoadController(QObject* parent)
+    : Controller(parent)
+{
+    setMonitor(new TaskGroupMonitor(this));
+
+    connect(m_monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=, this] {
+        auto group = m_context->cleanAccounts();
+        dispatcher()->add(group);
+        connect(group, &TaskGroup::finished, this, [=, this] {
+            emit loadFinished();
+
+            for (auto session : m_context->getSessions()) {
+                if (session->network()->isLiquid()) {
+                    dispatcher()->add(new LoadAssetsTask(true, session));
+                }
+            }
+
+            for (auto account : m_context->getAccounts()) {
+                fetchAddresses(m_context, account, 0);
+            }
+        });
+    });
+}
+
+void BackgroundLoadController::load()
+{
+    auto group = new TaskGroup(this);
+    group->setName("background load");
+
+    if (m_context->isMainnet() && !m_context->isWatchonly() && !qobject_cast<DeviceData*>(m_context->wallet()->login())) {
+        loadSwaps(group);
+    }
+    if (m_context->isMainnet()) {
+        loadPayments(group);
+    }
+
+    m_monitor->add(group);
+    dispatcher()->add(group);
+}
+
+void BackgroundLoadController::loadSwaps(TaskGroup* group)
+{
+    group->add(new LwkCreateSessionTask(m_context));
+}
+
+void BackgroundLoadController::loadPayments(TaskGroup* group)
 {
     auto engine = qmlEngine(this);
     auto task = new LoadPaymentsTask(engine->networkAccessManager(), m_context);

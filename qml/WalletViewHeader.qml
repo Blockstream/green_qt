@@ -229,6 +229,7 @@ GPane {
                             return ''
                         }
                         id: task_label
+                        visible: false
                         onTaskChanged: {
                             if (task_label.task.length > 0) {
                                 task_label.text = task_label.task

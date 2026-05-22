@@ -103,6 +103,11 @@ Page {
         // network: self.wallet.network.id
     }
 
+    BackgroundLoadController {
+        id: background_load_controller
+        context: self.context
+    }
+
     PaymentSyncController {
         context: self.context
     }
@@ -111,6 +116,7 @@ Page {
         self.forceActiveFocus()
         Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(Settings, self.context))
         self.context.checkAndAddBackupWarningNotification()
+        background_load_controller.load()
     }
 
     id: self

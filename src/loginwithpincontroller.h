@@ -53,7 +53,21 @@ signals:
 private:
     void loadNetwork(TaskGroup* group, Network* network);
     void loginNetwork(Network* network);
+};
+
+class BackgroundLoadController : public Controller
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    BackgroundLoadController(QObject* parent = nullptr);
+public slots:
+    void load();
+signals:
+    void loadFinished();
+private:
     void loadPayments(TaskGroup* group);
+    void loadSwaps(TaskGroup* group);
 };
 
 class PinDataController : public Controller
