@@ -598,7 +598,11 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
             }
         }
 
-        loadNetwork2(group, network);
+        for (auto account : load_accounts->accounts()) {
+            group->add(new LoadBalanceTask(account));
+            fetchCoins(group, account);
+            fetchTransactions(group, account);
+        }
     });
     connect(load_accounts2, &Task::failed, this, [=, this](auto error) {
         // TODO: deal with these errors
@@ -636,25 +640,6 @@ void Context::createStandardAccount(TaskGroup *group, Network *network)
     });
 
     group->add(create_account);
-}
-
-void Context::loadNetwork2(TaskGroup *group, Network *network)
-{
-    auto session = getOrCreateSession(network);
-    if (!session->m_ready) {
-        Q_UNREACHABLE();
-        return;
-    }
-
-    auto load_accounts = new LoadAccountsTask(false, session);
-    connect(load_accounts, &Task::finished, this, [=, this] {
-        for (auto account : load_accounts->accounts()) {
-            group->add(new LoadBalanceTask(account));
-            fetchCoins(group, account);
-            fetchTransactions(group, account);
-        }
-    });
-    group->add(load_accounts);
 }
 
 QJsonObject device_details_from_device(Device* device);

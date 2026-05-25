@@ -126,7 +126,6 @@ public:
     Q_INVOKABLE void checkAndAddBackupWarningNotification();
 
     void loadNetwork(TaskGroup* group, Network* network);
-    void loadNetwork2(TaskGroup* group, Network* network);
     void loginNetwork(TaskGroup* group, Network* network);
     void createStandardAccount(TaskGroup* group, Network* network);
 
