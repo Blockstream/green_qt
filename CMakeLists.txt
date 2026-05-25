@@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 3.16)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(cmake/ProjectMeta.cmake)
 
-project(blockstream VERSION 3.4.1 LANGUAGES CXX)
+project(${BLOCKSTREAM_PROJECT_NAME}
+    VERSION "${BLOCKSTREAM_VERSION}"
+    DESCRIPTION "${BLOCKSTREAM_DESCRIPTION}"
+    HOMEPAGE_URL "${BLOCKSTREAM_HOMEPAGE_URL}"
+    LANGUAGES CXX
+)
 include(CTest)
 
 include(GNUInstallDirs)

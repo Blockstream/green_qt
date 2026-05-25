@@ -1,14 +1,14 @@
-#define AppName "Blockstream"
+#define AppName "@BLOCKSTREAM_DISPLAY_NAME@"
 #define PreviousAppName "Blockstream Green"
 #define AppVersion "@PROJECT_VERSION@"
-#define AppPublisher "Blockstream"
-#define AppURL "https://blockstream.com/app/"
+#define AppPublisher "@BLOCKSTREAM_VENDOR@"
+#define AppURL "@BLOCKSTREAM_HOMEPAGE_URL@"
 
 [Setup]
 AppId={{e6223cfe-f798-4592-a835-c6a9b3d874d8}
 AppName={#AppName}
 AppVersion={#AppVersion}
-AppVerName="Blockstream {#AppVersion}"
+AppVerName="{#AppName} {#AppVersion}"
 AppPublisher={#AppPublisher}
 AppPublisherURL={#AppURL}
 AppSupportURL={#AppURL}

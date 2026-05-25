@@ -7,11 +7,11 @@
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleName</key>
-  <string>Blockstream</string>
+  <string>@BLOCKSTREAM_DISPLAY_NAME@</string>
   <key>CFBundleIdentifier</key>
   <string>com.blockstream.App</string>
   <key>CFBundleExecutable</key>
-  <string>Blockstream</string>
+  <string>@BLOCKSTREAM_DISPLAY_NAME@</string>
   <key>CFBundleVersion</key>
   <string>@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@</string>
   <key>CFBundleShortVersionString</key>
@@ -19,7 +19,7 @@
   <key>LSMinimumSystemVersion</key>
   <string></string>
   <key>NSHumanReadableCopyright</key>
-  <string></string>
+  <string>@BLOCKSTREAM_VENDOR@ @PROJECT_VERSION@</string>
   <key>CFBundleIconFile</key>
   <string>production.icns</string>
   <key>CFBundleDevelopmentRegion</key>

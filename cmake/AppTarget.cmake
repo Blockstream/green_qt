@@ -154,7 +154,7 @@ elseif (APPLE)
       ${LIBGLSDK}
       "-framework SystemConfiguration"
     )
-    set_target_properties(${APP_TARGET} PROPERTIES OUTPUT_NAME "Blockstream")
+    set_target_properties(${APP_TARGET} PROPERTIES OUTPUT_NAME "${BLOCKSTREAM_DISPLAY_NAME}")
 elseif (UNIX)
     target_link_options(${APP_TARGET} PRIVATE
         -static-libgcc
