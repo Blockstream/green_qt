@@ -45,6 +45,7 @@ void Swap::sync()
 
     using Watcher = QFutureWatcher<Swap::Status>;
     const auto watcher = new Watcher(this);
+    const auto _id = id();
     watcher->setFuture(QtConcurrent::run(&g_swap_thread_pool, [=, this] {
         try {
             auto state = advance();
@@ -54,16 +55,16 @@ void Swap::sync()
         } catch (const lwk::lwk_error::ObjectConsumed&) {
             return Status::Pending;
         } catch (const lwk::lwk_error::BoltzBackendHttpError& error) {
-            qDebug() << Q_FUNC_INFO << "BoltzBackendHttpError" << id();
+            qDebug() << Q_FUNC_INFO << "BoltzBackendHttpError" << _id;
             return Status::Pending;
         } catch (const lwk::lwk_error::SwapExpired& error) {
-            qDebug() << Q_FUNC_INFO << "SwapExpired" << id();
+            qDebug() << Q_FUNC_INFO << "SwapExpired" << _id;
             return Status::Pending;
         } catch (const lwk::lwk_error::Generic& error) {
-            qDebug() << Q_FUNC_INFO << "Generic error" << id() << error.msg;
+            qDebug() << Q_FUNC_INFO << "Generic error" << _id << error.msg;
             return Status::Pending;
         } catch (const std::exception& error) {
-            qDebug() << Q_FUNC_INFO << "exception" << id() << error.what();
+            qDebug() << Q_FUNC_INFO << "exception" << _id << error.what();
             return Status::Pending;
         }
     }));
