@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] - 2026-05-25
+### Added
+- Support for paying BOLT12 offers, LNURL, and BIP353 addresses
+- Swap button on account asset page
+
+### Changed
+- Updated minimum Jade firmware version to 1.0.40
+- Load swaps in background thread for faster startup
+- Reduce tasks during loading for improved performance
+- Updated GDK to 0.77.4
+- Updated hidapi to 0.15.0
+- Updated libusb to 1.0.29
+
+### Fixed
+- Race condition during swap sync
+- Various QML linting issues
+
 ## [3.3.0] - 2026-05-05
 ### Added
 - Total fiat balance in wallet header
