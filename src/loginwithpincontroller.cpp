@@ -371,6 +371,7 @@ BackgroundLoadController::BackgroundLoadController(QObject* parent)
             for (auto session : m_context->getSessions()) {
                 if (session->network()->isLiquid()) {
                     dispatcher()->add(new LoadAssetsTask(true, session));
+                    break;
                 }
             }
 

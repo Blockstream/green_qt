@@ -574,19 +574,13 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
     }
 
     auto load_accounts = new LoadAccountsTask(false, session);
-    auto sync_accounts = new SyncAccountsTask(session);
-    auto load_accounts2 = new LoadAccountsTask(false, session);
-    load_accounts->then(sync_accounts);
-    sync_accounts->then(load_accounts2);
     group->add(load_accounts);
-    group->add(sync_accounts);
-    group->add(load_accounts2);
 
-    connect(load_accounts2, &Task::finished, this, [=, this] {
+    connect(load_accounts, &Task::finished, this, [=, this] {
         if (network->isElectrum()) {
             bool has_native_segwit = false;
 
-            for (auto account : load_accounts2->accounts()) {
+            for (auto account : load_accounts->accounts()) {
                 if (account->type() == "p2wpkh") {
                     has_native_segwit = true;
                     break;
@@ -604,7 +598,7 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
             fetchTransactions(group, account);
         }
     });
-    connect(load_accounts2, &Task::failed, this, [=, this](auto error) {
+    connect(load_accounts, &Task::failed, this, [=, this](auto error) {
         // TODO: deal with these errors
         qDebug() << Q_FUNC_INFO << error;
     });
