@@ -909,6 +909,9 @@ private:
 
 class LoadPaymentsTask : public ContextTask
 {
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LoadPaymentsTask(QNetworkAccessManager* net, Context* context);
     void update() override;

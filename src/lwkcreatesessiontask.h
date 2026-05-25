@@ -3,8 +3,13 @@
 
 #include "task.h"
 
+#include <QQmlEngine>
+
 class LwkCreateSessionTask : public ContextTask
 {
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LwkCreateSessionTask(Context* context);
     void update() override;
