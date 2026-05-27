@@ -201,7 +201,7 @@ StackViewPage {
         }
     }
     footerItem: PrimaryButton {
-        enabled: !self.error
+        enabled: !self.error && Number(controller.quote?.receive_amount) > 0
         text: qsTrId('id_next')
         onClicked: {
             Analytics.recordEvent('swap_initiate', AnalyticsJS.segmentationSwap(Settings, self.context, { 
