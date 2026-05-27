@@ -102,14 +102,14 @@ StackViewPage {
                 color: '#FAFAFA'
                 font.pixelSize: 24
                 font.weight: 500
-                text: convert.output.label
+                text: UtilJS.incognito(Settings.incognito, convert.output.label)
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
                 color: '#A0A0A0'
                 font.pixelSize: 14
                 font.weight: 400
-                text: convert.fiat.label
+                text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
                 visible: convert.fiat.available
             }
             RowLayout {

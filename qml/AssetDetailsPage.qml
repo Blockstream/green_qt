@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -104,14 +105,14 @@ StackViewPage {
             color: '#FAFAFA'
             font.pixelSize: 24
             font.weight: 500
-            text: convert.output.label
+            text: UtilJS.incognito(Settings.incognito, convert.output.label)
         }
         Label {
             Layout.alignment: Qt.AlignCenter
             color: '#A0A0A0'
             font.pixelSize: 14
             font.weight: 400
-            text: convert.fiat.label
+            text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
             visible: convert.fiat.available
         }
         FieldTitle {
@@ -283,14 +284,14 @@ StackViewPage {
                     color: '#FFF'
                     font.pixelSize: 14
                     font.weight: 500
-                    text: convert.output.label
+                    text: UtilJS.incognito(Settings.incognito, convert.output.label)
                 }
                 Label {
                     Layout.alignment: Qt.AlignRight
                     color: '#929292'
                     font.pixelSize: 12
                     font.weight: 400
-                    text: convert.fiat.label
+                    text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
                     visible: convert.fiat.available
                 }
             }
