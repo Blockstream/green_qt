@@ -49,7 +49,7 @@ void ReceiveAddressController::setAsset(Asset* asset)
 
 QString ReceiveAddressController::uri() const
 {
-    if (!m_account || m_generating) return {};
+    if (!m_account || m_generating || !m_address) return {};
     const auto context = m_account->context();
     const auto network = m_account->network();
     const auto wallet = context->wallet();
@@ -93,6 +93,9 @@ void ReceiveAddressController::generate()
 
     if (m_generating) return;
 
+    m_error.clear();
+    emit errorChanged();
+
     setGenerating(true);
     const auto get_receive_address = new GetReceiveAddressTask(m_account);
     connect(get_receive_address, &Task::finished, this, [=, this] {
@@ -102,6 +105,15 @@ void ReceiveAddressController::generate()
         setGenerating(false);
         emit changed();
         emit m_account->addressGenerated();
+        get_receive_address->deleteLater();
+    });
+    connect(get_receive_address, &Task::failed, this, [=, this](const QString& error) {
+        setGenerating(false);
+        m_address = nullptr;
+        m_error = error;
+        emit errorChanged();
+        emit changed();
+        get_receive_address->deleteLater();
     });
 
     auto group = new TaskGroup(this);

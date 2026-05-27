@@ -270,8 +270,14 @@ StackViewPage {
         ErrorPane {
             error: {
                 const error = controller.transaction?.error
-                if (error === 'id_invalid_replacement_fee_rate') return error
-                if (error === 'Insufficient funds for fees') return error
+                if (!error) return null
+                if (error === 'id_invalid_replacement_fee_rate'
+                    || error === 'Insufficient funds for fees'
+                    || error === 'id_rate_limited'
+                    || error === 'id_rate_connection_limited'
+                    || !error.startsWith('id_')) {
+                    return error
+                }
             }
         }
         RowLayout {

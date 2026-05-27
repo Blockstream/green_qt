@@ -191,7 +191,7 @@ void CreateTransactionController::update()
             if (m_seq == seq) {
                 qDebug() << error;
                 task->deleteLater();
-                setTransaction({});
+                setTransaction(QJsonObject{{ "error", error }});
             }
         });
         group->add(task);

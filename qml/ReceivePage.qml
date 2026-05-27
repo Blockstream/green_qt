@@ -271,12 +271,16 @@ StackViewPage {
         }
         FieldTitle {
             text: self.invoice ? qsTrId('id_invoice') : qsTrId('id_account_address')
-            visible: !self.invoice || invoice_controller.swap?.data?.invoice.length > 0
+            visible: !controller.error && (!self.invoice || invoice_controller.swap?.data?.invoice.length > 0)
+        }
+        ErrorPane {
+            error: controller.error || null
+            visible: !self.invoice
         }
         Pane {
             Layout.fillWidth: true
             padding: 20
-            visible: !self.invoice || invoice_controller.swap?.data?.invoice.length > 0
+            visible: !controller.error && (!self.invoice || invoice_controller.swap?.data?.invoice.length > 0)
             background: Rectangle {
                 radius: 5
                 color: '#181818'

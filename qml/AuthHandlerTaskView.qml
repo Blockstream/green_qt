@@ -187,7 +187,11 @@ StackLayout {
         }
         Label {
             Layout.alignment: Qt.AlignCenter
-            text: qsTrId(task.result.error)
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Label.Wrap
+            text: UtilJS.formatError(task.result.error ?? '')
         }
         VSpacer {
         }

@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 Collapsible {
     Layout.minimumWidth: 300
     id: self
@@ -19,8 +21,8 @@ Collapsible {
         if (self.error) {
             const error = self.error?.error ?? self.error ?? ''
             const details = self.error?.details ?? ''
-            error_label.text = error.startsWith('id_') ? qsTrId(error) : error
-            details_label.text = details.startsWith('id_') ? qsTrId(details) : details
+            error_label.text = UtilJS.formatError(error)
+            details_label.text = UtilJS.formatError(details)
         }
     }
     animationVelocity: 200

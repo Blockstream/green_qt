@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 Collapsible {
     required property var error
     property var _error
@@ -50,7 +52,7 @@ Collapsible {
                 font.pixelSize: 12
                 font.weight: 600
                 color: '#C91D36'
-                text: self._error && self._error.startsWith('id_') ? qsTrId(self._error) : (self._error ?? '')
+                text: UtilJS.formatError(self._error ?? '')
                 wrapMode: Label.Wrap
             }
         }

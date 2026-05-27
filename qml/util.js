@@ -1,5 +1,17 @@
 .pragma library
 
+function formatError(error) {
+    if (!error) return ''
+    if (error === 'id_rate_limited') {
+        return 'The Electrum server is rate limiting requests. Please wait a moment and try again.'
+    }
+    if (error === 'id_rate_connection_limited') {
+        return 'Too many connections to the Electrum server. Please wait a moment and try again.'
+    }
+    if (typeof error === 'string' && error.startsWith('id_')) return qsTrId(error)
+    return error
+}
+
 function flatten(...args) {
     const result = []
     for (const arg of args) {

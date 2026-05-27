@@ -20,6 +20,7 @@ class ReceiveAddressController : public SessionController
     Q_PROPERTY(Address* address READ address NOTIFY changed)
     Q_PROPERTY(QString uri READ uri NOTIFY changed)
     Q_PROPERTY(bool generating READ generating NOTIFY generatingChanged)
+    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
     QML_ELEMENT
 public:
     explicit ReceiveAddressController(QObject* parent = nullptr);
@@ -33,6 +34,7 @@ public:
     QString uri() const;
     bool generating() const;
     void setGenerating(bool generating);
+    QString error() const { return m_error; }
 public slots:
     void generate();
 signals:
@@ -40,12 +42,14 @@ signals:
     void assetChanged();
     void changed();
     void generatingChanged(bool generating);
+    void errorChanged();
 private:
     Account* m_account{nullptr};
     Asset* m_asset{nullptr};
     Convert* const m_convert;
     Address* m_address{nullptr};
     bool m_generating{false};
+    QString m_error;
 };
 
 #endif // GREEN_RECEIVEADDRESSCONTROLLER_H

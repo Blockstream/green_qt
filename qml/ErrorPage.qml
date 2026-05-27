@@ -3,6 +3,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 StackViewPage {
     required property string error
     id: self
@@ -21,7 +23,7 @@ StackViewPage {
             horizontalAlignment: Label.AlignHCenter
             font.pixelSize: 14
             font.weight: 400
-            text: qsTrId(self.error)
+            text: UtilJS.formatError(self.error)
             wrapMode: Label.Wrap
         }
         PrimaryButton {
