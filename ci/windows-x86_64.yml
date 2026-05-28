@@ -3,25 +3,28 @@ windows-x86_64:build-gdk:
   variables:
     IMAGE: $CI_REGISTRY_IMAGE/windows-x86_64
     DOCKER_FILE: ci/windows-x86_64/Dockerfile
-
-windows-x86_64:share-gdk:
-  image: $CI_REGISTRY_IMAGE/windows-x86_64@sha256:c9e62d0a95eb0707e03f86988b6763421a936f77f510cd2869d6045862b72d68
   script:
-    - cp -R /depends depends
-  stage: depends
-  tags:
-    - cloud
+    - docker pull ${IMAGE}:latest || true
+    - >
+      docker build --network=host --build-arg BUILDKIT_INLINE_CACHE=1
+      --cache-from ${IMAGE}:latest -t ${IMAGE}:$CI_COMMIT_SHA -t ${IMAGE}:latest
+      -f ${DOCKER_FILE} . --progress=plain &>docker-build.log
+    - tail -n 1000 docker-build.log
+    - id=$(docker create ${IMAGE}:$CI_COMMIT_SHA)
+    - docker cp $id:/depends depends
+    - docker rm $id
+    - docker push ${IMAGE}:${CI_COMMIT_SHA}
+    - if [ ${CI_COMMIT_BRANCH} == "master" ]; then docker push ${IMAGE}:latest; fi
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
       - depends
-  when: manual
+      - docker-build.log
 
 windows-x86_64:build-image:
   stage: depends
   image: docker:27
-  when: manual
   retry:
     max: 2
     when:
@@ -34,7 +37,7 @@ windows-x86_64:build-image:
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
   needs:
-    - windows-x86_64:share-gdk
+    - windows-x86_64:build-gdk
   tags:
     - windows
   script:
@@ -55,7 +58,7 @@ windows-x86_64:build:
     DOCKER_DRIVER: null
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
-    IMAGE: $CI_REGISTRY_IMAGE/x64-windows@sha256:78950905cfe5c5a614023607d472e7caae2be49dd35b6549dfd17707e8e5e6ac
+    IMAGE: $CI_REGISTRY_IMAGE/x64-windows@sha256:17e6df9860c59ae2f1623c50c7fcbb2a2143bbc8ef38162b27e7eeffe3a62ce4
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker image inspect $IMAGE || docker pull $IMAGE

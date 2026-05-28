@@ -18,11 +18,6 @@ RUN install -d $PREFIX/bin
 RUN install build/gdk/build-windows-mingw-w64/src/libgreen_gdk.dll $PREFIX/bin
 RUN cd $PREFIX/bin && gendef libgreen_gdk.dll
 
-FROM base AS lwk
-RUN apt install -yqq mingw-w64-tools
-COPY tools/buildlwk.sh tools/
-RUN . /root/.cargo/env && tools/buildlwk.sh
-
 FROM base as libserialport
 COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
 RUN tools/buildlibserialport.sh
@@ -32,4 +27,3 @@ RUN cd $PREFIX/bin && gendef libserialport-0.dll
 FROM base
 COPY --from=gdk /depends /depends
 COPY --from=libserialport /depends /depends
-COPY --from=lwk /depends /depends

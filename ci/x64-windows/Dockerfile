@@ -33,6 +33,12 @@ RUN curl -o install.ps1 https://community.chocolatey.org/install.ps1 && `
 RUN choco install git -y
 RUN choco install 7zip -y
 
+ENV RUSTUP_HOME=C:\rustup
+ENV CARGO_HOME=C:\cargo
+RUN curl -SL --output rustup-init.exe https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe && `
+    rustup-init.exe -y --default-toolchain 1.85.0 --profile minimal --default-host x86_64-pc-windows-msvc && `
+    del rustup-init.exe
+
 RUN curl -SL --output qt-online-installer-windows-x64-online.exe https://download.qt.io/official_releases/online_installers/qt-online-installer-windows-x64-online.exe
 
 ARG QT_INSTALLER_JWT_TOKEN
@@ -67,5 +73,8 @@ RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\V
 
 COPY leveldb.bat .
 RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" x64 && leveldb.bat"
+
+COPY lwk.bat .
+RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" x64 && lwk.bat"
 
 COPY depends\ C:\depends

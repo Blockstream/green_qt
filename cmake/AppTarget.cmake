@@ -64,10 +64,24 @@ if(TARGET libgpgme::libgpgme)
 endif()
 
 if (WIN32 AND NOT QT_FEATURE_static)
+    # lwk is built natively in the MSVC container (ci/x64-windows/lwk.bat) as a static
+    # library and installed into CMAKE_PREFIX_PATH (C:/deps). gdk is still cross-built.
+    find_library(LIBLWK lwk REQUIRED)
+    # The windows.<ver>.lib umbrella import libs come from the Rust windows-targets crate
+    # (not the Windows SDK); lwk.bat copies them next to lwk.lib. Glob them by full path so
+    # we don't hardcode the version (it tracks the pinned lwk commit's deps).
+    get_filename_component(LWK_LIBDIR ${LIBLWK} DIRECTORY)
+    file(GLOB LWK_WINDOWS_IMPORT_LIBS "${LWK_LIBDIR}/windows.*.lib")
     target_link_libraries(${APP_TARGET}
         PRIVATE
         "C:/depends/windows-x86_64/lib/libgreen_gdk.lib"
-        "C:/depends/windows-x86_64/lib/lwk.lib"
+        ${LIBLWK}
+        ${LWK_WINDOWS_IMPORT_LIBS}
+        # Native system libs required to statically link lwk.lib. Source of truth is the
+        # "native-static-libs:" line printed by ci/x64-windows/lwk.bat; keep in sync.
+        # (kernel32/user32/advapi32 are MSVC defaults and msvcrt matches /MD, but listed
+        # explicitly for clarity/robustness; ntdll is also added in the WIN32 block below.)
+        advapi32 bcrypt cfgmgr32 dbghelp kernel32 ntdll user32 userenv ws2_32
     )
     target_include_directories(${APP_TARGET} PRIVATE
         "C:/depends/windows-x86_64/include/gdk"

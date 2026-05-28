@@ -6,7 +6,6 @@ set PREFIX=C:\deps
 set CMAKE_PREFIX_PATH=C:\deps;C:\depends\windows-x86_64
 
 lib /def:C:\depends\windows-x86_64\bin\libgreen_gdk.def /out:C:\depends\windows-x86_64\lib\libgreen_gdk.lib /machine:x64
-lib /def:C:\depends\windows-x86_64\bin\lwk.def /out:C:\depends\windows-x86_64\lib\lwk.lib /machine:x64
 lib /def:C:\depends\windows-x86_64\bin\libserialport-0.def /out:C:\depends\windows-x86_64\lib\libserialport-0.lib /machine:x64
 
 if /i "%CI_COMMIT_REF_NAME:~0,8%"=="release_" (
@@ -32,7 +31,6 @@ cmake --build C:\src\bld --config RelWithDebInfo --parallel 4
 C:\qt\6.11.0\msvc2022_64\bin\windeployqt.exe --qmldir C:\src\qml C:\src\bld\RelWithDebInfo\blockstream.exe
 
 copy C:\depends\windows-x86_64\bin\libgreen_gdk.dll C:\src\bld\RelWithDebInfo\
-copy C:\depends\windows-x86_64\bin\lwk.dll C:\src\bld\RelWithDebInfo\
 copy C:\depends\windows-x86_64\bin\libserialport-0.dll C:\src\bld\RelWithDebInfo\
 
 endlocal
