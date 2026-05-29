@@ -12,8 +12,8 @@ class SwapQuoteController : public Controller
     Q_OBJECT
     Q_PROPERTY(QVariantMap quote READ quote NOTIFY updated)
     Q_PROPERTY(bool lightning READ isLightning WRITE setLightning NOTIFY updated)
-    Q_PROPERTY(QString receiveNetworkKey READ receiveNetworkKey WRITE setSendNetworkKey NOTIFY updated)
-    Q_PROPERTY(QString sendNetworkKey READ sendNetworkKey WRITE setReceiveNetworkKey NOTIFY updated)
+    Q_PROPERTY(QString receiveNetworkKey READ receiveNetworkKey WRITE setReceiveNetworkKey NOTIFY updated)
+    Q_PROPERTY(QString sendNetworkKey READ sendNetworkKey WRITE setSendNetworkKey NOTIFY updated)
     QML_ELEMENT
 public:
     SwapQuoteController(QObject* parent = nullptr);

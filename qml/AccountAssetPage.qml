@@ -268,6 +268,7 @@ StackViewPage {
         id: chain_swap_create_page
         ChainSwapCreatePage {
             context: self.context
+            sendAccount: self.account
             sendNetworkKey: self.account.network.liquid ? 'liquid' : 'bitcoin'
             receiveNetworkKey: self.account.network.liquid ? 'bitcoin' : 'liquid'
             onCloseClicked: self.closeClicked()

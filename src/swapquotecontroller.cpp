@@ -63,15 +63,15 @@ static lwk::SwapAsset assetFromNetworkKey(const QString& key)
 void SwapQuoteController::setReceiveNetworkKey(const QString& networkKey)
 {
     const auto asset = assetFromNetworkKey(networkKey);
-    if (d->send_asset == asset) return;
-    d->send_asset = asset;
+    if (d->receive_asset == asset) return;
+    d->receive_asset = asset;
 }
 
 void SwapQuoteController::setSendNetworkKey(const QString& networkKey)
 {
     const auto asset = assetFromNetworkKey(networkKey);
-    if (d->receive_asset == asset) return;
-    d->receive_asset = asset;
+    if (d->send_asset == asset) return;
+    d->send_asset = asset;
 }
 
 QVariantMap SwapQuoteController::quote() const
