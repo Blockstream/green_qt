@@ -41,7 +41,8 @@ StackViewPage {
     SwapQuoteController {
         id: quote_controller
         context: self.context
-        lightning: true
+        sendNetworkKey: 'lightning'
+        receiveNetworkKey: 'liquid'
     }
     Connections {
         enabled: self.invoice

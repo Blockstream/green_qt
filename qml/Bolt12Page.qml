@@ -52,9 +52,8 @@ StackViewPage {
     SwapQuoteController {
         id: controller
         context: self.context
-        lightning: true
         sendNetworkKey: 'liquid'
-        receiveNetworkKey: 'bitcoin'
+        receiveNetworkKey: 'lightning'
     }
     id: self
     rightItem: CloseButton {
@@ -64,7 +63,7 @@ StackViewPage {
     footerItem: PrimaryButton {
         busy: parser.busy
         enabled: !parser.busy && self.error === null && (Number(amount_field.convert.result?.satoshi ?? 0) > 0 || (self.recipient?.bolt12?.amount ?? false))
-        text: qsTrId('id_confirm')
+        text: qsTrId('id_next')
         onClicked: {
             self.continueClicked({
                 account: self.account,

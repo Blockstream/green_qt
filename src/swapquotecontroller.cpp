@@ -26,6 +26,7 @@ public:
     lwk::SwapAsset receive_asset{lwk::SwapAsset::kLiquid};
     bool send_amount{true};
     QString amount;
+    int timer_id{-1};
 };
 
 SwapQuoteController::SwapQuoteController(QObject* parent)
@@ -40,24 +41,32 @@ SwapQuoteController::~SwapQuoteController()
     delete d;
 }
 
-bool SwapQuoteController::isLightning() const
-{
-    return d->send_asset == lwk::SwapAsset::kLightning || d->receive_asset == lwk::SwapAsset::kLightning;
-}
-
-void SwapQuoteController::setLightning(bool lightning)
-{
-    if (d->send_asset == lwk::SwapAsset::kOnchain) {
-        d->send_asset = lwk::SwapAsset::kLightning;
-    } else if (d->receive_asset == lwk::SwapAsset::kOnchain) {
-        d->receive_asset = lwk::SwapAsset::kLightning;
-    }
-    update();
-}
-
 static lwk::SwapAsset assetFromNetworkKey(const QString& key)
 {
-    return key == QLatin1String("liquid") ? lwk::SwapAsset::kLiquid : lwk::SwapAsset::kOnchain;
+    if (key == QLatin1String("liquid")) {
+        return lwk::SwapAsset::kLiquid;
+    }
+    if (key == QLatin1String("bitcoin")) {
+        return lwk::SwapAsset::kOnchain;
+    }
+    if (key == QLatin1String("lightning")) {
+        return lwk::SwapAsset::kLightning;
+    }
+    Q_UNREACHABLE();
+}
+
+static QString assetToNetworkKey(lwk::SwapAsset asset)
+{
+    if (asset == lwk::SwapAsset::kLiquid) {
+        return QLatin1String("liquid");
+    }
+    if (asset == lwk::SwapAsset::kOnchain) {
+        return QLatin1String("bitcoin");
+    }
+    if (asset == lwk::SwapAsset::kLightning) {
+        return QLatin1String("lightning");
+    }
+    Q_UNREACHABLE();
 }
 
 void SwapQuoteController::setReceiveNetworkKey(const QString& networkKey)
@@ -65,6 +74,7 @@ void SwapQuoteController::setReceiveNetworkKey(const QString& networkKey)
     const auto asset = assetFromNetworkKey(networkKey);
     if (d->receive_asset == asset) return;
     d->receive_asset = asset;
+    invalidate();
 }
 
 void SwapQuoteController::setSendNetworkKey(const QString& networkKey)
@@ -72,6 +82,7 @@ void SwapQuoteController::setSendNetworkKey(const QString& networkKey)
     const auto asset = assetFromNetworkKey(networkKey);
     if (d->send_asset == asset) return;
     d->send_asset = asset;
+    invalidate();
 }
 
 QVariantMap SwapQuoteController::quote() const
@@ -81,12 +92,12 @@ QVariantMap SwapQuoteController::quote() const
 
 QString SwapQuoteController::receiveNetworkKey() const
 {
-    return d->receive_asset == lwk::SwapAsset::kLiquid ? "liquid" : "bitcoin";
+    return assetToNetworkKey(d->receive_asset);
 }
 
 QString SwapQuoteController::sendNetworkKey() const
 {
-    return d->send_asset == lwk::SwapAsset::kLiquid ? "liquid" : "bitcoin";
+    return assetToNetworkKey(d->send_asset);
 }
 
 void SwapQuoteController::receive(const QString& amount)
@@ -95,7 +106,7 @@ void SwapQuoteController::receive(const QString& amount)
     if (d->amount == amount) return;
     d->send_amount = false;
     d->amount = amount;
-    update();
+    invalidate();
 }
 
 void SwapQuoteController::send(const QString& amount)
@@ -104,14 +115,29 @@ void SwapQuoteController::send(const QString& amount)
     if (d->amount == amount) return;
     d->send_amount = true;
     d->amount = amount;
-    update();
+    invalidate();
 }
 
 void SwapQuoteController::swapNetworks()
 {
     if (!context()) return;
     qSwap(d->send_asset, d->receive_asset);
-    update();
+    invalidate();
+}
+
+void SwapQuoteController::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == d->timer_id) {
+        killTimer(d->timer_id);
+        d->timer_id = -1;
+        update();
+    }
+}
+
+void SwapQuoteController::invalidate()
+{
+    if (d->timer_id != -1) killTimer(d->timer_id);
+    d->timer_id = startTimer(10);
 }
 
 void SwapQuoteController::update()
@@ -145,6 +171,16 @@ void SwapQuoteController::update()
     connect(watcher, &Watcher::finished, this, [=, this] {
         watcher->deleteLater();
         d->quote = watcher->result();
+
+        if (d->send_asset == lwk::SwapAsset::kLiquid && d->receive_asset == lwk::SwapAsset::kLightning) {
+            const auto submarine = m_context->m_boltz_swaps_infos.value("submarine").toObject();
+            const auto lbtc = submarine.value("L-BTC").toObject();
+            const auto btc = lbtc.value("BTC").toObject();
+            const auto limits = btc.value("limits").toObject();
+            const auto minimalBatched = limits.value("minimalBatched").toInt();
+            d->quote.insert("min", minimalBatched);
+        }
+
         emit updated();
     });
 }

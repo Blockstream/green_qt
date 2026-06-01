@@ -159,6 +159,7 @@ void LwkCreateSessionTask::update()
         std::vector<std::pair<QString, std::shared_ptr<lwk::PreparePayResponse>>> prepare_pay_responses;
         std::vector<std::shared_ptr<lwk::LockupResponse>> lockup_responses;
         std::vector<std::shared_ptr<lwk::InvoiceResponse>> invoice_responses;
+        std::string swaps_infos;
     };
 
     using Watcher = QFutureWatcher<Result>;
@@ -181,6 +182,7 @@ void LwkCreateSessionTask::update()
 
             try {
                 result.session->refresh_swap_info();
+                result.swaps_infos = result.session->fetch_swaps_info();
             } catch (const lwk::lwk_error::Generic& error) {
                 qDebug() << Q_FUNC_INFO << "refresh_swap_info error";
             }
@@ -248,6 +250,7 @@ void LwkCreateSessionTask::update()
             m_context->addSwap(new ReverseSwap(invoice_response, m_context));
         }
 
+        m_context->m_boltz_swaps_infos = QJsonDocument::fromJson(QByteArray::fromStdString(result.swaps_infos)).object();
         m_context->m_boltz_session = result.session;
 
         setStatus(Status::Finished);

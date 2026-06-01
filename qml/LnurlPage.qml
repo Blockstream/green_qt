@@ -45,9 +45,8 @@ StackViewPage {
     SwapQuoteController {
         id: controller
         context: self.context
-        lightning: true
         sendNetworkKey: 'liquid'
-        receiveNetworkKey: 'bitcoin'
+        receiveNetworkKey: 'lightning'
     }
     id: self
     rightItem: CloseButton {
@@ -58,7 +57,7 @@ StackViewPage {
         id: confirm_button
         enabled: !parser.busy && self.error === null && (parser.recipient?.invoice ?? false)
         busy: parser.busy
-        text: qsTrId('id_confirm')
+        text: qsTrId('id_next')
         onClicked: {
             self.continueClicked({
                 account: self.account,

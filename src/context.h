@@ -206,6 +206,7 @@ public:
     void addSwap(Swap* swap);
     void removeSwap(Swap* swap);
     std::shared_ptr<lwk::BoltzSession> m_boltz_session;
+    QJsonObject m_boltz_swaps_infos;
     QList<Swap*> m_swaps;
 };
 

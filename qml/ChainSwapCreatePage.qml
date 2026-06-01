@@ -36,7 +36,7 @@ StackViewPage {
         }
     }
     Component.onCompleted: {
-        controller.update()
+        controller.invalidate()
         const accounts = UtilJS.accounts(self.context)
         receive_field.account = accounts.find(account => account.network.key === controller.receiveNetworkKey) ?? null
         send_field.account = self.sendAccount ?? accounts.find(account => account.network.key === controller.sendNetworkKey) ?? null
