@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -36,6 +37,8 @@ Page {
     component View: Flickable {
         required property Session session
         required property Network network
+        readonly property Account mainAccount: self.context.getOrCreateAccount(view.session.network, 0)
+        readonly property bool hasPreCsvNlocktimeCoins: pre_csv_probe.count > 0
         ScrollIndicator.vertical: ScrollIndicator {
         }
         id: view
@@ -45,6 +48,19 @@ Page {
         Controller {
             id: controller
             context: self.context
+        }
+        OutputListModelFilter {
+            id: pre_csv_outputs
+            filter: "!csv"
+            model: OutputListModel {
+                account: view.mainAccount
+            }
+        }
+        ListView {
+            id: pre_csv_probe
+            visible: false
+            interactive: false
+            model: pre_csv_outputs
         }
         ColumnLayout {
             id: layout
@@ -236,6 +252,51 @@ Page {
                     onClicked: {
                         const drawer = two_factor_auth_expiry_drawer.createObject(view, { session: view.session })
                         drawer.open()
+                    }
+                }
+            }
+
+            SettingsBox {
+                title: qsTrId('id_set_locktime')
+                visible: !view.network.electrum && !view.network.liquid && view.hasPreCsvNlocktimeCoins
+                contentItem: AbstractButton {
+                    id: locktime_button
+                    leftPadding: 20
+                    rightPadding: 20
+                    topPadding: 15
+                    bottomPadding: 15
+                    background: Rectangle {
+                        radius: 5
+                        color: Qt.lighter('#262626', locktime_button.hovered ? 1.2 : 1)
+                    }
+                    contentItem: RowLayout {
+                        ColumnLayout {
+                            spacing: 10
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.minimumWidth: 0
+                                font.pixelSize: 14
+                                font.weight: 600
+                                text: qsTrId('id_set_locktime')
+                                wrapMode: Text.WordWrap
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.preferredWidth: 0
+                                color: '#6F6F6F'
+                                font.pixelSize: 14
+                                font.weight: 500
+                                text: qsTrId('id_coins_protected_by_the_legacy')
+                                wrapMode: Text.WordWrap
+                            }
+                        }
+                        RightArrowIndicator {
+                            active: locktime_button.hovered
+                        }
+                    }
+                    onClicked: {
+                        const dialog = nlocktime_dialog.createObject(view, { session: view.session })
+                        dialog.open()
                     }
                 }
             }
@@ -553,6 +614,13 @@ Page {
     Component {
         id: two_factor_auth_expiry_drawer
         TwoFactorAuthExpiryDialog {
+            context: self.context
+        }
+    }
+
+    Component {
+        id: nlocktime_dialog
+        NLockTimeDialog {
             context: self.context
         }
     }

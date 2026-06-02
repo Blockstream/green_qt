@@ -41,7 +41,7 @@ public:
 public slots:
     void changeSettings(const QJsonObject& data);
     void changeSessionSettings(Session* session, const QJsonObject& data);
-    void setRecoveryEmail(const QString& email);
+    void setSessionRecoveryEmail(Session* session, const QString& email);
     void deleteWallet();
     void disableAllPins();
     void changePin(const QString& pin);
@@ -57,6 +57,7 @@ signals:
     void contextChanged();
     void monitorChanged();
     void resolver(Resolver* resolver);
+    void failed(const QString& error);
     void finished();
 
 protected:

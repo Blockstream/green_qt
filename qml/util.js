@@ -108,7 +108,7 @@ function findChildIndex(parent, pred) {
     let index = 0
     for (let i = 0; i < parent.children.length; ++i) {
         const child = parent.children[i]
-        if (!(child instanceof Item)) continue
+        if (!child || typeof child !== 'object') continue
         if (pred(child)) index = i
     }
     return index

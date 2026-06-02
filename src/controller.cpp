@@ -15,6 +15,7 @@
 Controller::Controller(QObject* parent)
     : Controller(new ControllerPrivate, parent)
 {
+    setMonitor(new TaskGroupMonitor(this));
 }
 
 Controller::Controller(ControllerPrivate* d, QObject* parent)
@@ -98,19 +99,32 @@ void Controller::changeSettings(const QJsonObject& data)
 
 void Controller::changeSessionSettings(Session* session, const QJsonObject& data)
 {
+    if (!session) return;
     if (session->isTwoFactorResetActive()) {
+        emit failed("The action can't be completed");
         return;
     }
-    if (!DeepContains(session->settings(), data)) {
-        auto change_settings = new ChangeSettingsTask(data, session);
-        dispatcher()->add(change_settings);
+    if (DeepContains(session->settings(), data)) {
+        emit finished();
+        return;
     }
+    auto group = new TaskGroup(this);
+    auto task = new ChangeSettingsTask(data, session);
+    connect(task, &Task::failed, this, [this](const QString& error) {
+        emit failed(error);
+    });
+    group->add(task);
+    connect(group, &TaskGroup::finished, this, [this] {
+        emit finished();
+    });
+    monitor()->add(group);
+    dispatcher()->add(group);
 }
 
-void Controller::setRecoveryEmail(const QString& email)
+void Controller::setSessionRecoveryEmail(Session* session, const QString& email)
 {
-    Q_D(Controller);
-    if (!d->context) return;
+    if (!session) return;
+
     const auto method = QByteArray{"email"};
     const auto twofactor_details = QJsonObject{
         { "data", email.toUtf8().data() },
@@ -125,11 +139,18 @@ void Controller::setRecoveryEmail(const QString& email)
         }
     };
 
-    auto session = d->context->primarySession();
-
     const auto change_twofactor = new ChangeTwoFactorTask(method, twofactor_details, session);
     const auto update_config = new LoadTwoFactorConfigTask(session);
     const auto change_settings = new ChangeSettingsTask(settings_details, session);
+    connect(change_twofactor, &Task::failed, this, [this](const QString& error) {
+        emit failed(error);
+    });
+    connect(update_config, &Task::failed, this, [this](const QString& error) {
+        emit failed(error);
+    });
+    connect(change_settings, &Task::failed, this, [this](const QString& error) {
+        emit failed(error);
+    });
 
     change_twofactor->then(update_config);
     update_config->then(change_settings);
@@ -140,6 +161,10 @@ void Controller::setRecoveryEmail(const QString& email)
     group->add(update_config);
     group->add(change_settings);
 
+    connect(group, &TaskGroup::finished, this, [this] {
+        emit finished();
+    });
+    monitor()->add(group);
     dispatcher()->add(group);
 }
 

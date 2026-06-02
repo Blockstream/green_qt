@@ -8,55 +8,61 @@ import "util.js" as UtilJS
 StackLayout {
     required property AuthHandlerTask task
     readonly property Session session: task.session
+    readonly property var authResult: {
+        if (!task) return null
+        if (task.prompt instanceof CodePrompt)
+            return task.prompt.result
+        return task.result
+    }
     id: self
 
     currentIndex: UtilJS.findChildIndex(self, child => child.active)
     BusyView {
     }
     AnimLoader {
-        active: task.result.status === 'request_code'
+        active: self.authResult?.status === 'request_code'
         animated: true
         sourceComponent: RequestCodeView {
         }
     }
     AnimLoader {
-        active: task.result.status === 'resolve_code' && task.result.method === 'email'
+        active: self.authResult?.status === 'resolve_code' && self.authResult?.method === 'email'
         animated: true
         sourceComponent: ResolveTwoFactorCodeView {
         }
     }
     AnimLoader {
-        active: task.result.status === 'resolve_code' && task.result.method === 'sms'
+        active: self.authResult?.status === 'resolve_code' && self.authResult?.method === 'sms'
         animated: true
         sourceComponent: ResolveTwoFactorCodeView {
         }
     }
     AnimLoader {
-        active: task.result.status === 'resolve_code' && task.result.method === 'phone'
+        active: self.authResult?.status === 'resolve_code' && self.authResult?.method === 'phone'
         animated: true
         sourceComponent: ResolveTwoFactorCodeView {
         }
     }
     AnimLoader {
-        active: task.result.status === 'resolve_code' && task.result.method === 'gauth'
+        active: self.authResult?.status === 'resolve_code' && self.authResult?.method === 'gauth'
         animated: true
         sourceComponent: ResolveTwoFactorCodeView {
         }
     }
     AnimLoader {
-        active: task.result.status === 'resolve_code' && task.result.method === 'telegram'
+        active: self.authResult?.status === 'resolve_code' && self.authResult?.method === 'telegram'
         animated: true
         sourceComponent: ResolveTwoFactorCodeView {
         }
     }
     AnimLoader {
-        active: task.result.status === 'error'
+        active: self.authResult?.status === 'error'
         animated: true
         sourceComponent: ErrorView {
         }
     }
     AnimLoader {
-        active: task.result.status === 'done'
+        active: self.authResult?.status === 'done'
         animated: true
         sourceComponent: DoneView {
         }
@@ -71,7 +77,7 @@ StackLayout {
             text: qsTrId('id_choose_method_to_authorize_the')
         }
         Repeater {
-            model: task.result?.methods ?? []
+            model: self.authResult?.methods ?? []
             Button {
                 property string method: modelData
                 icon.source: `qrc:/svg3/2fa_${method}.svg`
@@ -96,7 +102,7 @@ StackLayout {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
-            source: `qrc:/svg3/2fa_${task.result.method}.svg`
+            source: `qrc:/svg3/2fa_${self.authResult?.method ?? ''}.svg`
             sourceSize.width: 32
             sourceSize.height: 32
         }
@@ -112,12 +118,12 @@ StackLayout {
         }
         Loader {
             Layout.alignment: Qt.AlignCenter
-            active: self.session.config[task.result.method].enabled && !(task instanceof TwoFactorResetTask)
+            active: self.session.config[self.authResult?.method]?.enabled && !(task instanceof TwoFactorResetTask)
             visible: active
             sourceComponent: Label {
                 text: {
-                    if (task.result.method === 'gauth') return qsTrId('id_authenticator_app')
-                    return self.session.config[task.result.method].data
+                    if (self.authResult?.method === 'gauth') return qsTrId('id_authenticator_app')
+                    return self.session.config[self.authResult?.method]?.data
                 }
                 color: constants.c100
                 font.pixelSize: 14
@@ -125,11 +131,11 @@ StackLayout {
         }
         Loader {
             Layout.alignment: Qt.AlignCenter
-            active: task.result.method === 'telegram'
+            active: self.authResult?.method === 'telegram'
             visible: active
             sourceComponent: RowLayout {
-                readonly property url browser: task.result.auth_data.telegram_url
-                readonly property url app: task.result.auth_data.telegram_url.replace('https://t.me/', 'tg://resolve?domain=').replace('?start=', '&start=')
+                readonly property url browser: self.authResult?.auth_data?.telegram_url
+                readonly property url app: self.authResult?.auth_data?.telegram_url?.replace('https://t.me/', 'tg://resolve?domain=')?.replace('?start=', '&start=')
                 spacing: constants.s1
                 ColumnLayout {
                     GButton {
@@ -151,7 +157,7 @@ StackLayout {
         PinView {
             Layout.alignment: Qt.AlignCenter
             id: keypad
-            label: qsTrId('id_please_provide_your_1s_code').arg(task.result.method)
+            label: qsTrId('id_please_provide_your_1s_code').arg(self.authResult?.method ?? '')
             focus: true
             onPinEntered: pin => task.resolveCode(pin)
             Connections {
@@ -161,11 +167,11 @@ StackLayout {
         }
         Loader {
             Layout.alignment: Qt.AlignCenter
-            active: task.result.method !== 'gauth' && task.result.method !== 'telegram'
+            active: self.authResult?.method !== 'gauth' && self.authResult?.method !== 'telegram'
             visible: active
-            opacity: task.result.attempts_remaining < 3 ? 1 : 0
+            opacity: (self.authResult?.attempts_remaining ?? 3) < 3 ? 1 : 0
             sourceComponent: Label {
-                text: qsTrId('id_attempts_remaining_d').arg(task.result.attempts_remaining)
+                text: qsTrId('id_attempts_remaining_d').arg(self.authResult?.attempts_remaining ?? 0)
             }
         }
         VSpacer {
@@ -191,7 +197,7 @@ StackLayout {
             Layout.preferredWidth: 0
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Label.Wrap
-            text: UtilJS.formatError(task.result.error ?? '')
+            text: UtilJS.formatError(self.authResult?.error ?? '')
         }
         VSpacer {
         }

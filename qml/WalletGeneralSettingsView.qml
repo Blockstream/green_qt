@@ -361,6 +361,170 @@ Pane {
             Layout.fillWidth: true
             height: 1
             color: '#262626'
+            visible: recovery_email_box.visible
+        }
+
+        RowLayout {
+            id: recovery_email_box
+            Layout.fillWidth: true
+            spacing: 20
+            readonly property var legacyRecoverySessions: self.context.sessions.filter(session => !session.network.electrum && !session.network.liquid)
+            visible: recovery_email_rows.hasVisibleRows
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_recovery_transactions')
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTrId('id_use_your_email_to_receive')
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
+                }
+            }
+            ColumnLayout {
+                id: recovery_email_rows
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 8
+                property bool hasVisibleRows: false
+                function updateVisibleRows() {
+                    let visible = false
+                    for (let i = 0; i < recovery_sessions_repeater.count; ++i) {
+                        const item = recovery_sessions_repeater.itemAt(i)
+                        if (item && item.visible) {
+                            visible = true
+                            break
+                        }
+                    }
+                    if (hasVisibleRows !== visible) hasVisibleRows = visible
+                }
+                Component.onCompleted: updateVisibleRows()
+                Repeater {
+                    id: recovery_sessions_repeater
+                    model: recovery_email_box.legacyRecoverySessions
+                    onItemAdded: recovery_email_rows.updateVisibleRows()
+                    onItemRemoved: recovery_email_rows.updateVisibleRows()
+                    delegate: ColumnLayout {
+                        id: recovery_session_row
+                        required property var modelData
+                        readonly property Session session: modelData
+                        readonly property Account mainAccount: self.context.getOrCreateAccount(session.network, 0)
+                        readonly property bool hasPreCsvNlocktimeCoins: pre_csv_probe.count > 0
+                        readonly property bool emailConfigured: session.config.email?.confirmed ?? false
+                        Layout.fillWidth: true
+                        spacing: 8
+                        visible: hasPreCsvNlocktimeCoins
+                        onVisibleChanged: recovery_email_rows.updateVisibleRows()
+                        OutputListModelFilter {
+                            id: pre_csv_outputs
+                            filter: "!csv"
+                            model: OutputListModel {
+                                account: recovery_session_row.mainAccount
+                            }
+                        }
+                        ListView {
+                            id: pre_csv_probe
+                            visible: false
+                            interactive: false
+                            model: pre_csv_outputs
+                            onCountChanged: recovery_email_rows.updateVisibleRows()
+                        }
+                        AbstractButton {
+                            Layout.fillWidth: true
+                            id: recovery_email_button
+                            leftPadding: 16
+                            rightPadding: 16
+                            topPadding: 12
+                            bottomPadding: 12
+                            visible: !recovery_session_row.emailConfigured
+                            background: Rectangle {
+                                radius: 5
+                                color: Qt.lighter('#262626', recovery_email_button.hovered ? 1.2 : 1)
+                            }
+                            contentItem: RowLayout {
+                                spacing: 12
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 2
+                                    Label {
+                                        Layout.fillWidth: true
+                                        font.pixelSize: 13
+                                        font.weight: 600
+                                        text: recovery_session_row.session.network.displayName
+                                    }
+                                    Label {
+                                        font.pixelSize: 11
+                                        color: '#6F6F6F'
+                                        text: qsTrId('id_set_an_email_for_recovery')
+                                    }
+                                }
+                                RightArrowIndicator {
+                                    active: recovery_email_button.hovered
+                                }
+                            }
+                            onClicked: {
+                                const dialog = set_recovery_email_dialog.createObject(recovery_email_button, {
+                                    context: self.context,
+                                    session: recovery_session_row.session,
+                                })
+                                dialog.open()
+                            }
+                        }
+                        Pane {
+                            Layout.fillWidth: true
+                            id: recovery_email_configured_row
+                            visible: recovery_session_row.emailConfigured
+                            leftPadding: 16
+                            rightPadding: 16
+                            topPadding: 12
+                            bottomPadding: 12
+                            background: Rectangle {
+                                radius: 5
+                                color: '#262626'
+                            }
+                            contentItem: RowLayout {
+                                spacing: 12
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 2
+                                    Label {
+                                        Layout.fillWidth: true
+                                        font.pixelSize: 13
+                                        font.weight: 600
+                                        text: recovery_session_row.session.network.displayName
+                                    }
+                                    Label {
+                                        Layout.fillWidth: true
+                                        font.pixelSize: 11
+                                        color: '#6F6F6F'
+                                        text: qsTrId('id_recovery_transaction_emails') + ' ' + (recovery_session_row.session.config.email?.data ?? '')
+                                        wrapMode: Label.Wrap
+                                    }
+                                }
+                                Image {
+                                    source: 'qrc:/svg2/check.svg'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
             visible: support_box.visible
         }
 
@@ -637,6 +801,12 @@ Pane {
             id: copy_timer
             repeat: false
             interval: 1000
+        }
+    }
+
+    Component {
+        id: set_recovery_email_dialog
+        SetRecoveryEmailDialog {
         }
     }
 }

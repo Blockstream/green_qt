@@ -539,6 +539,7 @@ void AuthHandlerTask::requestCode(const QString &method)
         if (ok) {
             next();
         } else {
+            setError("The action can't be completed");
             setStatus(Status::Failed);
         }
     });
@@ -558,6 +559,7 @@ void AuthHandlerTask::resolveCode(const QByteArray& code)
         if (ok) {
             next();
         } else {
+            setError("The action can't be completed");
             setStatus(Status::Failed);
         }
     });
@@ -592,6 +594,7 @@ void AuthHandlerTask::handleError(const QJsonObject& result)
 
 void AuthHandlerTask::handleRequestCode(const QJsonObject& result)
 {
+    setResult(result);
     const auto methods = result.value("methods").toArray();
     if (methods.size() == 1) {
         const auto method = methods.first().toString();
@@ -610,6 +613,7 @@ void AuthHandlerTask::promptDevice(const QJsonObject& result)
 void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 {
     if (result.contains("method")) {
+        setResult(result);
         const auto method = result.value("method").toString();
         auto prompt = qobject_cast<CodePrompt*>(m_prompt);
         if (prompt) {
@@ -679,6 +683,7 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 void AuthHandlerTask::handleCall(const QJsonObject& result)
 {
     Q_D(AuthHandlerTask);
+    setResult(result);
     auto future = QtConcurrent::run([=, this] {
         const auto rc = GA_auth_handler_call(d->auth_handler);
         return rc == GA_OK;
@@ -688,6 +693,7 @@ void AuthHandlerTask::handleCall(const QJsonObject& result)
         if (ok) {
             next();
         } else {
+            setError("The action can't be completed");
             setStatus(Status::Failed);
         }
     });
@@ -706,6 +712,7 @@ void AuthHandlerTask::next()
     GA_json* output;
     const auto rc = GA_auth_handler_get_status(d->auth_handler, &output);
     if (rc != GA_OK) {
+        setError("The action can't be completed");
         setStatus(Status::Failed);
         return;
     }
