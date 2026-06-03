@@ -222,6 +222,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_boltzsession_completed_swap_ids() != 32553) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_boltzsession_fetch_bolt12_invoice() != 35212) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_boltzsession_fetch_swaps_info() != 41140) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -333,6 +336,21 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_foreignstore_remove() != 51371) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_invoice_amount_sats() != 2137) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_invoice_bolt11_invoice() != 55620) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_invoice_bolt12_invoice() != 16474) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_invoice_is_bolt11() != 29075) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_invoice_is_bolt12() != 51626) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_invoiceresponse_advance() != 28093) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -397,6 +415,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_lightningpayment_bolt12_offer_has_amount() != 19213) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_lightningpayment_description() != 12541) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_lightningpayment_is_bolt12() != 28992) {
@@ -2918,6 +2939,13 @@ std::vector<std::string> BoltzSession::completed_swap_ids() {
         uniffi::FfiConverterLwkError::lift,
         ptr));
 }
+std::shared_ptr<Invoice> BoltzSession::fetch_bolt12_invoice(const std::shared_ptr<LightningPayment> &lightning_payment) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterInvoice::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_boltzsession_fetch_bolt12_invoice,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterLightningPayment::lower(lightning_payment)));
+}
 std::string BoltzSession::fetch_swaps_info() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterString::lift(uniffi::rust_call(
@@ -3587,6 +3615,80 @@ void *ForeignStoreLink::_uniffi_internal_clone_pointer() const {
 
 
 
+Invoice::Invoice(void *ptr): instance(ptr) {}
+
+Invoice::Invoice(const Invoice &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+uint64_t Invoice::amount_sats() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterUInt64::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_invoice_amount_sats,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+std::shared_ptr<Bolt11Invoice> Invoice::bolt11_invoice() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalBolt11Invoice::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_invoice_bolt11_invoice,
+        nullptr,
+        ptr));
+}
+std::optional<std::string> Invoice::bolt12_invoice() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_invoice_bolt12_invoice,
+        nullptr,
+        ptr));
+}
+bool Invoice::is_bolt11() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_invoice_is_bolt11,
+        nullptr,
+        ptr));
+}
+bool Invoice::is_bolt12() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_invoice_is_bolt12,
+        nullptr,
+        ptr));
+}
+
+Invoice::~Invoice() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_invoice,
+        nullptr,
+        this->instance
+    );
+}
+
+void *Invoice::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_invoice,
+        nullptr,
+        this->instance
+    );
+}
+
+std::string Invoice::to_string() const {
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_invoice_uniffi_trait_display,
+        nullptr,
+        this->_uniffi_internal_clone_pointer()));
+}
+
+
+
+
+
 InvoiceResponse::InvoiceResponse(void *ptr): instance(ptr) {}
 
 InvoiceResponse::InvoiceResponse(const InvoiceResponse &other) : instance(nullptr) {
@@ -3825,6 +3927,13 @@ bool LightningPayment::bolt12_offer_has_amount() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterBool::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_lightningpayment_bolt12_offer_has_amount,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+std::optional<std::string> LightningPayment::description() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_lightningpayment_description,
         uniffi::FfiConverterLwkError::lift,
         ptr));
 }
@@ -7873,6 +7982,31 @@ void FfiConverterForeignStoreLink::write(RustStream &stream, const std::shared_p
 }
 
 uint64_t FfiConverterForeignStoreLink::allocation_size(const std::shared_ptr<ForeignStoreLink> &) {
+    return 8;
+}
+
+
+
+std::shared_ptr<Invoice> FfiConverterInvoice::lift(void *ptr) {
+    return std::shared_ptr<Invoice>(new Invoice(ptr));
+}
+
+void *FfiConverterInvoice::lower(const std::shared_ptr<Invoice> &obj) {
+    return reinterpret_cast<Invoice*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<Invoice> FfiConverterInvoice::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterInvoice::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterInvoice::write(RustStream &stream, const std::shared_ptr<Invoice> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterInvoice::lower(obj));
+}
+
+uint64_t FfiConverterInvoice::allocation_size(const std::shared_ptr<Invoice> &) {
     return 8;
 }
 

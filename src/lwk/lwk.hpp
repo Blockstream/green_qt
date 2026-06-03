@@ -46,6 +46,7 @@ struct EsploraClient;
 struct ExternalUtxo;
 struct ForeignStore;
 struct ForeignStoreLink;
+struct Invoice;
 struct InvoiceResponse;
 struct Issuance;
 struct LightningPayment;
@@ -176,6 +177,78 @@ struct LoggingImpl
 
 
 namespace uniffi {
+    struct FfiConverterAddress;
+} // namespace uniffi
+
+/**
+ * A Liquid address
+ */
+struct Address
+
+
+
+{
+    friend uniffi::FfiConverterAddress;
+
+    Address() = delete;
+
+    Address(Address &&) = delete;
+
+    Address &operator=(const Address &) = delete;
+    Address &operator=(Address &&) = delete;
+
+    ~Address();
+    /**
+     * Construct an Address object
+     */
+    static std::shared_ptr<Address> init(const std::string &s);
+    /**
+     * Return true if the address is blinded.
+     */
+    bool is_blinded();
+    /**
+     * Returns the network of the address
+     */
+    std::shared_ptr<Network> network();
+    /**
+     * Returns a string of the QR code printable in a terminal environment
+     */
+    std::string qr_code_text();
+    /**
+     * Returns a string encoding an image in a uri
+     *
+     * The string can be open in the browser or be used as `src` field in `img` in HTML
+     *
+     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
+     * and use styling to scale up the image in the browser. eg
+     * `style="image-rendering: pixelated; border: 20px solid white;"`
+     */
+    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
+    /**
+     * Return the script pubkey of the address.
+     */
+    std::shared_ptr<Script> script_pubkey();
+    /**
+     * Return the unconfidential address.
+     */
+    std::shared_ptr<Address> to_unconfidential();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    Address(const Address &);
+
+    Address(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
     struct FfiConverterNetwork;
 } // namespace uniffi
 
@@ -266,6 +339,39 @@ struct Network
 
 
 namespace uniffi {
+    struct FfiConverterAnyClient;
+} // namespace uniffi
+
+struct AnyClient
+
+
+
+{
+    friend uniffi::FfiConverterAnyClient;
+
+    AnyClient() = delete;
+
+    AnyClient(AnyClient &&) = delete;
+
+    AnyClient &operator=(const AnyClient &) = delete;
+    AnyClient &operator=(AnyClient &&) = delete;
+
+    ~AnyClient();
+    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
+    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+
+    private:
+    AnyClient(const AnyClient &);
+
+    AnyClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
     struct FfiConverterMnemonic;
 } // namespace uniffi
 
@@ -320,111 +426,6 @@ struct Mnemonic
 
 
 namespace uniffi {
-    struct FfiConverterAddress;
-} // namespace uniffi
-
-/**
- * A Liquid address
- */
-struct Address
-
-
-
-{
-    friend uniffi::FfiConverterAddress;
-
-    Address() = delete;
-
-    Address(Address &&) = delete;
-
-    Address &operator=(const Address &) = delete;
-    Address &operator=(Address &&) = delete;
-
-    ~Address();
-    /**
-     * Construct an Address object
-     */
-    static std::shared_ptr<Address> init(const std::string &s);
-    /**
-     * Return true if the address is blinded.
-     */
-    bool is_blinded();
-    /**
-     * Returns the network of the address
-     */
-    std::shared_ptr<Network> network();
-    /**
-     * Returns a string of the QR code printable in a terminal environment
-     */
-    std::string qr_code_text();
-    /**
-     * Returns a string encoding an image in a uri
-     *
-     * The string can be open in the browser or be used as `src` field in `img` in HTML
-     *
-     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
-     * and use styling to scale up the image in the browser. eg
-     * `style="image-rendering: pixelated; border: 20px solid white;"`
-     */
-    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
-    /**
-     * Return the script pubkey of the address.
-     */
-    std::shared_ptr<Script> script_pubkey();
-    /**
-     * Return the unconfidential address.
-     */
-    std::shared_ptr<Address> to_unconfidential();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-
-    private:
-    Address(const Address &);
-
-    Address(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
-    struct FfiConverterAnyClient;
-} // namespace uniffi
-
-struct AnyClient
-
-
-
-{
-    friend uniffi::FfiConverterAnyClient;
-
-    AnyClient() = delete;
-
-    AnyClient(AnyClient &&) = delete;
-
-    AnyClient &operator=(const AnyClient &) = delete;
-    AnyClient &operator=(AnyClient &&) = delete;
-
-    ~AnyClient();
-    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
-    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
-
-    private:
-    AnyClient(const AnyClient &);
-
-    AnyClient(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
     struct FfiConverterForeignStoreLink;
 } // namespace uniffi
 
@@ -459,19 +460,6 @@ struct ForeignStoreLink
     void *_uniffi_internal_clone_pointer() const;
 
     void *instance = nullptr;
-};
-
-
-/**
- * A builder for the `EsploraClient`
- */
-struct EsploraClientBuilder {
-    std::string base_url;
-    std::shared_ptr<Network> network;
-    bool waterfalls = false;
-    std::optional<uint32_t> concurrency = std::nullopt;
-    std::optional<uint8_t> timeout = std::nullopt;
-    bool utxo_only = false;
 };
 
 
@@ -530,6 +518,19 @@ struct LiquidBip21 {
      * The amount in satoshis
      */
     std::optional<uint64_t> satoshi;
+};
+
+
+/**
+ * A builder for the `EsploraClient`
+ */
+struct EsploraClientBuilder {
+    std::string base_url;
+    std::shared_ptr<Network> network;
+    bool waterfalls = false;
+    std::optional<uint32_t> concurrency = std::nullopt;
+    std::optional<uint8_t> timeout = std::nullopt;
+    bool utxo_only = false;
 };
 
 
@@ -1460,6 +1461,10 @@ struct BoltzSession
      */
     std::vector<std::string> completed_swap_ids();
     /**
+     * Fetch a BOLT12 invoice without creating or starting a swap
+     */
+    std::shared_ptr<Invoice> fetch_bolt12_invoice(const std::shared_ptr<LightningPayment> &lightning_payment);
+    /**
      * Fetch informations, such as min and max amounts, about the reverse and submarine pairs from the boltz api.
      */
     std::string fetch_swaps_info();
@@ -2057,6 +2062,64 @@ struct ForeignStoreImpl
 
 
 namespace uniffi {
+    struct FfiConverterInvoice;
+} // namespace uniffi
+
+/**
+ * Represents a lightning invoice (BOLT11 or BOLT12).
+ */
+struct Invoice
+
+
+
+{
+    friend uniffi::FfiConverterInvoice;
+
+    Invoice() = delete;
+
+    Invoice(Invoice &&) = delete;
+
+    Invoice &operator=(const Invoice &) = delete;
+    Invoice &operator=(Invoice &&) = delete;
+
+    ~Invoice();
+    /**
+     * Returns the amount in whole satoshis.
+     */
+    uint64_t amount_sats();
+    /**
+     * Returns the BOLT11 invoice if this is a BOLT11 invoice.
+     */
+    std::shared_ptr<Bolt11Invoice> bolt11_invoice();
+    /**
+     * Returns the BOLT12 invoice string if this is a BOLT12 invoice.
+     */
+    std::optional<std::string> bolt12_invoice();
+    /**
+     * Returns true if this is a BOLT11 invoice.
+     */
+    bool is_bolt11();
+    /**
+     * Returns true if this is a BOLT12 invoice.
+     */
+    bool is_bolt12();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    Invoice(const Invoice &);
+
+    Invoice(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
     struct FfiConverterInvoiceResponse;
 } // namespace uniffi
 
@@ -2241,6 +2304,10 @@ struct LightningPayment
      * Returns an error if this is not a BOLT12 offer.
      */
     bool bolt12_offer_has_amount();
+    /**
+     * Returns the payment description if present
+     */
+    std::optional<std::string> description();
     /**
      * Returns true if this is a BOLT12 offer
      */
@@ -5481,6 +5548,16 @@ struct FfiConverterForeignStoreLink {
     static std::shared_ptr<ForeignStoreLink> read(RustStream &);
     static void write(RustStream &, const std::shared_ptr<ForeignStoreLink> &);
     static uint64_t allocation_size(const std::shared_ptr<ForeignStoreLink> &);
+private:
+};
+
+
+struct FfiConverterInvoice {
+    static std::shared_ptr<Invoice> lift(void *);
+    static void *lower(const std::shared_ptr<Invoice> &);
+    static std::shared_ptr<Invoice> read(RustStream &);
+    static void write(RustStream &, const std::shared_ptr<Invoice> &);
+    static uint64_t allocation_size(const std::shared_ptr<Invoice> &);
 private:
 };
 
