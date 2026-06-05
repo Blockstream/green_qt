@@ -49,15 +49,15 @@ RUN qt-online-installer-windows-x64-online.exe `
     --root c:\\qt `
     --accept-licenses --default-answer --confirm-command --accept-obligations `
     install `
-        qt.qt6.6110.win64_msvc2022_64 `
-        qt.qt6.6110.addons.qt5compat `
-        qt.qt6.6110.addons.qtconnectivity `
-        qt.qt6.6110.addons.qtmultimedia `
-        qt.qt6.6110.addons.qtserialport `
-        qt.qt6.6110.addons.qtpositioning `
-        extensions.qtwebengine.6110.win64_msvc2022_64 `
-        qt.qt6.6110.addons.qtwebview `
-        qt.qt6.6110.addons.qtwebchannel
+        qt.qt6.6111.win64_msvc2022_64 `
+        qt.qt6.6111.addons.qt5compat `
+        qt.qt6.6111.addons.qtconnectivity `
+        qt.qt6.6111.addons.qtmultimedia `
+        qt.qt6.6111.addons.qtserialport `
+        qt.qt6.6111.addons.qtpositioning `
+        extensions.qtwebengine.6111.win64_msvc2022_64 `
+        qt.qt6.6111.addons.qtwebview `
+        qt.qt6.6111.addons.qtwebchannel
 
 ENV PREFIX=C:\deps
 

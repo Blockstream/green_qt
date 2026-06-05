@@ -27,7 +27,7 @@ qmllint:
   stage: lint
   allow_failure: true
   before_script:
-    - export PATH="/qt/6.11.0/gcc_64/bin:${PATH}"
+    - export PATH="/qt/6.11.1/gcc_64/bin:${PATH}"
     - qmllint --version
   script:
     - ./tools/lint/qmllint.sh

@@ -39,7 +39,7 @@ if exist "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxi
 REM Allow override via environment
 if defined WINDOWS_DEPENDS_PREFIX set DEPENDS_PREFIX=%WINDOWS_DEPENDS_PREFIX%
 if defined WINDOWS_DEPS_PREFIX set PREFIX=%WINDOWS_DEPS_PREFIX%
-if not defined QT_ROOT set QT_ROOT=C:\qt\6.11.0\msvc2022_64
+if not defined QT_ROOT set QT_ROOT=C:\qt\6.11.1\msvc2022_64
 
 REM Read last completed step
 set LAST_STEP=0
@@ -91,7 +91,7 @@ if not exist "%DEPENDS_PREFIX%\bin\libgreen_gdk.dll" (
 
 if not exist "%QT_ROOT%\bin\qt-cmake.bat" if not exist "%QT_ROOT%\bin\qt-cmake.exe" (
     echo ERROR: Qt not found at %QT_ROOT%
-    echo Set QT_ROOT or install Qt 6.11.0 for MSVC 2022 64-bit.
+    echo Set QT_ROOT or install Qt 6.11.1 for MSVC 2022 64-bit.
     exit /b 1
 )
 

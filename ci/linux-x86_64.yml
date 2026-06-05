@@ -6,7 +6,7 @@ linux-x86_64:build-image:
     DOCKER_BUILD_ARGS: --build-arg QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN}
 
 .linux-x86_64:
-  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:28266ea43146cd78acc42f365c836250322a2dc4f07bed0b7bf48ac5f65af8f2
+  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:cf74947bb0665e133f3f5d46553a3974cd884e79aef977f26a9a6fe391d015d2
   extends:
     - .build
   tags:
@@ -22,7 +22,7 @@ linux-x86_64:test:
   variables:
     CTEST_JUNIT_FILE: "$CI_PROJECT_DIR/build/ctest-junit.xml"
   before_script:
-    - export PATH="/qt/6.11.0/gcc_64/bin:$PREFIX/bin/:$PATH"
+    - export PATH="/qt/6.11.1/gcc_64/bin:$PREFIX/bin/:$PATH"
     - export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH"
   script:
     - bash tools/test.sh all
@@ -39,7 +39,7 @@ linux-x86_64:build-appimage:
   variables:
     AFTER_SCRIPT_IGNORE_ERRORS: "false"
   before_script:
-    - export PATH="/qt/6.11.0/gcc_64/bin:$PREFIX/bin/:$PATH"
+    - export PATH="/qt/6.11.1/gcc_64/bin:$PREFIX/bin/:$PATH"
     - export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH"
   after_script:
     - mv build/blockstream .
