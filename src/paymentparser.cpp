@@ -102,6 +102,9 @@ void fill(QVariantMap& result, std::shared_ptr<lwk::Payment> payment, const QVar
                 const auto amount = lightning_payment->bolt12_invoice_amount().value_or(0);
                 bolt12.insert("amount", QVariant::fromValue(amount));
             }
+            if (lightning_payment->description()) {
+                bolt12.insert("description", QString::fromStdString(lightning_payment->description().value_or("")));
+            }
             result.insert("bolt12", bolt12);
         } catch (const lwk::lwk_error::Generic& error) {
             result.insert("error", QString::fromStdString(error.msg));

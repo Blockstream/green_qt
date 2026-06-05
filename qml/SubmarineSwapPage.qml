@@ -15,7 +15,7 @@ StackViewPage {
     required property var recipient
     required property bool fiat
     required property string unit
-    property bool note: self.recipient?.invoice?.description ?? false
+    property bool note: self.recipient?.invoice?.description ?? self.recipient?.bolt12?.description ?? false
     readonly property string amount: {
         if (submarine_controller.swap?.data?.boltz_fee && self.recipient.invoice) {
             return String(Math.ceil(Number(self.recipient.invoice.amount_milli_satoshis) / 1000))
@@ -172,7 +172,7 @@ StackViewPage {
             Layout.fillWidth: true
             id: note_text_area
             visible: self.note
-            text: self.recipient?.invoice?.description ?? ''
+            text: self.recipient?.invoice?.description ?? self.recipient?.bolt12?.description ?? ''
             wrapMode: TextArea.Wrap
         }
         VSpacer {
