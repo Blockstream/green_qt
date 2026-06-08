@@ -1,5 +1,6 @@
 #include "lwkcreatesessiontask.h"
 
+#include "bip85.h"
 #include "context.h"
 #include "lwk/lwk.hpp"
 #include "network.h"
@@ -12,8 +13,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <wally_wrapper.h>
 
 #include <QByteArray>
 #include <QDebug>
@@ -100,32 +99,6 @@ struct Store : public lwk::ForeignStore
 leveldb::DB* Store::db{nullptr};
 int Store::count{0};
 
-QString derive_mnemonic(bool mainnet, const QString& mnemonic, const QString& passphrase, int index)
-{
-    unsigned char seed_bytes[BIP39_SEED_LEN_512];
-
-    bip39_mnemonic_to_seed512(mnemonic.toUtf8().constData(), passphrase.toUtf8().constData(), seed_bytes, BIP39_SEED_LEN_512);
-
-    const uint32_t version = mainnet ? BIP32_VER_MAIN_PRIVATE : BIP32_VER_TEST_PRIVATE;
-
-    ext_key key;
-    bip32_key_from_seed(seed_bytes, BIP39_SEED_LEN_512, version, BIP32_FLAG_SKIP_HASH, &key);
-
-    unsigned char entropy_bytes[HMAC_SHA512_LEN];
-    size_t entropy_len;
-
-    bip85_get_bip39_entropy(&key, NULL, 12, index, entropy_bytes, HMAC_SHA512_LEN, &entropy_len);
-
-    char* derived_mnemonic_chars;
-    bip39_mnemonic_from_bytes(nullptr, entropy_bytes, entropy_len, &derived_mnemonic_chars);
-
-    const auto derived_mnemonic = QString::fromLatin1(derived_mnemonic_chars);
-
-    wally_free_string(derived_mnemonic_chars);
-
-    return derived_mnemonic;
-}
-
 LwkCreateSessionTask::LwkCreateSessionTask(Context* context)
     : ContextTask(context)
 {
@@ -152,7 +125,7 @@ void LwkCreateSessionTask::update()
     constexpr int BOLTZ_BIP85_INDEX{26589};
     const auto m = context()->credentials().value("mnemonic").toString();
     const auto p = context()->credentials().value("bip39_passphrase").toString();
-    const auto r = derive_mnemonic(context()->isMainnet(), m, p, BOLTZ_BIP85_INDEX);
+    const auto r = DeriveBip85Mnemonic(context()->isMainnet(), m, p, BOLTZ_BIP85_INDEX);
 
     struct Result {
         std::shared_ptr<lwk::BoltzSession> session;
