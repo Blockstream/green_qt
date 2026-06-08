@@ -45,6 +45,7 @@ target_sources(${APP_TARGET} PRIVATE
     controllers/watchonlycontroller.h controllers/watchonlycontroller.cpp
     createtransactioncontroller.h createtransactioncontroller.cpp
     signtransactioncontroller.h signtransactioncontroller.cpp
+    airgappedsigncontroller.h airgappedsigncontroller.cpp
     redepositcontroller.h redepositcontroller.cpp
     jadeverifyaddresscontroller.h jadeverifyaddresscontroller.cpp
     requestsupportcontroller.h requestsupportcontroller.cpp

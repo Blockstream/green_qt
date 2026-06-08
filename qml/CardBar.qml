@@ -61,7 +61,7 @@ Pane {
             TransactButton {
                 action.shortcut: 'Ctrl+S'
                 action.onTriggered: self.sendClicked()
-                enabled: !self.context.watchonly
+                enabled: UtilJS.isSendEnabled(self.context)
                 icon.source: 'qrc:/svg/send.svg'
                 text: qsTrId('id_send')
                 // TODO move to send page

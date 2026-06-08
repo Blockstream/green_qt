@@ -131,7 +131,7 @@ StackViewPage {
                 ActionButton {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    enabled: !self.context.watchonly
+                    enabled: UtilJS.isSendEnabled(self.context)
                     icon.source: 'qrc:/svg/send-white.svg'
                     text: qsTrId('id_send')
                     onClicked: {

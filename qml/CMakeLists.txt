@@ -182,6 +182,11 @@ set(QML_FILES_DEVICES
     JadeNotificationDialog.qml
     SendPage.qml
     SendConfirmPage.qml
+    AirgappedUnlockPage.qml
+    AirgappedExportPage.qml
+    AirgappedImportPage.qml
+    JadeUnlockSignView.qml
+    JadeQRUnlockPage.qml
     PinPadButton.qml
     TransactionCompletedPage.qml
     TransactionDetailsDrawer.qml

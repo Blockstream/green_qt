@@ -20,6 +20,7 @@ public:
     void setProgress(int progress);
 public slots:
     void process(const QString& data);
+    void reset();
 signals:
     void progressChanged();
     void resultDecoded(const QJsonObject& result);

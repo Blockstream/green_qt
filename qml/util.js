@@ -8,7 +8,22 @@ function formatError(error) {
     if (error === 'id_rate_connection_limited') {
         return 'Too many connections to the Electrum server. Please wait a moment and try again.'
     }
-    if (typeof error === 'string' && error.startsWith('id_')) return qsTrId(error)
+    if (typeof error === 'string') {
+        const lower = error.toLowerCase()
+        if (lower.includes('assertion failure') && lower.includes('ga_psbt')) {
+            return 'The signed PSBT is invalid or corrupted.'
+        }
+        if (lower.includes('could not finalize')) {
+            return 'The PSBT could not be finalized.'
+        }
+        if (lower === 'invalid psbt') {
+            return 'The PSBT file is empty or invalid.'
+        }
+        if (lower.includes('no such host')) {
+            return qsTrId('id_connection_failed')
+        }
+        if (error.startsWith('id_')) return qsTrId(error)
+    }
     return error
 }
 
@@ -466,4 +481,18 @@ function swapNetworkType(network) {
 
 function isAmpAccount(account) {
     return account?.type === '2of2_no_recovery'
+}
+
+function canAirgapSend(context) {
+    if (!context?.watchonly || !context.wallet) return false
+    const login = context.wallet.login
+    if (!login?.coreDescriptors?.length) return false
+    const network = login.network
+    if (!network?.electrum || network.liquid) return false
+    return true
+}
+
+function isSendEnabled(context) {
+    if (!context?.watchonly) return true
+    return canAirgapSend(context)
 }

@@ -941,6 +941,34 @@ private:
 
 class RSAVerifyTaskPrivate;
 
+class PsbtFromJsonTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    PsbtFromJsonTask(const QJsonObject& details, Session* session);
+    QString psbt() const;
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QJsonObject m_details;
+};
+
+class BroadcastTransactionTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    BroadcastTransactionTask(const QJsonObject& details, Session* session);
+    QJsonObject transaction() const;
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QJsonObject m_details;
+};
+
 class RSAVerifyTask : public AuthHandlerTask
 {
     Q_OBJECT

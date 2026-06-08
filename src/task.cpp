@@ -2230,6 +2230,40 @@ bool EncodeBCURTask::call(GA_session* session, GA_auth_handler** auth_handler)
     return rc == GA_OK;
 }
 
+PsbtFromJsonTask::PsbtFromJsonTask(const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
+    , m_details(details)
+{
+}
+
+QString PsbtFromJsonTask::psbt() const
+{
+    return m_result.value("result").toObject().value("psbt").toString();
+}
+
+bool PsbtFromJsonTask::call(GA_session* session, GA_auth_handler** auth_handler)
+{
+    const auto rc = GA_psbt_from_json(session, Json::fromObject(m_details).get(), auth_handler);
+    return rc == GA_OK;
+}
+
+BroadcastTransactionTask::BroadcastTransactionTask(const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
+    , m_details(details)
+{
+}
+
+QJsonObject BroadcastTransactionTask::transaction() const
+{
+    return m_result.value("result").toObject();
+}
+
+bool BroadcastTransactionTask::call(GA_session* session, GA_auth_handler** auth_handler)
+{
+    const auto rc = GA_broadcast_transaction(session, Json::fromObject(m_details).get(), auth_handler);
+    return rc == GA_OK;
+}
+
 RSAVerifyTask::RSAVerifyTask(const QString& pem, const QByteArray& challenge, const QByteArray& signature, Session* session)
     : RSAVerifyTask({
         { "pem", pem },

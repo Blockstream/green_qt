@@ -152,6 +152,10 @@ void Analytics::start()
             return res;
         }
 
+        if (!d->session->isConnected()) {
+            return res;
+        }
+
         QJsonObject req;
         if (use_post) {
             QJsonArray urls;

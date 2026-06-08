@@ -1,6 +1,7 @@
 #include "analytics.h"
 #include "buybitcoinquoteservice.h"
 #include "context.h"
+#include "session.h"
 #include "task.h"
 
 #include <QDebug>
@@ -701,12 +702,27 @@ PaymentSyncController::PaymentSyncController(QObject* parent)
 #include "payment.h"
 void PaymentSyncController::sync()
 {
+    const auto schedule_next = [=, this] {
+        QTimer::singleShot(10000, this, &PaymentSyncController::sync);
+    };
+
+    if (!context()) {
+        schedule_next();
+        return;
+    }
+
+    const auto session = context()->primarySession();
+    if (!session || !session->isConnected()) {
+        schedule_next();
+        return;
+    }
+
     auto task = new LoadPaymentsTask(qmlEngine(this)->networkAccessManager(), context());
     connect(task, &Task::finished, this, [=, this] {
         for (const auto payment : context()->m_payments.values()) {
             payment->refresh();
         }
-        QTimer::singleShot(10000, this, &PaymentSyncController::sync);
+        schedule_next();
     });
     connect(task, &Task::finished, context(), &Context::paymentUpdated);
     context()->dispatcher()->add(task);

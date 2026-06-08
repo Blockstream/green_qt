@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtMultimedia
 import QtCore
 import QtQml
@@ -9,19 +10,32 @@ import QtQuick.Shapes
 import QtQuick.Window
 
 Item {
+    property Context context
+    readonly property int bcurProgress: controller.progress
+    readonly property bool permissionDenied: permission.status === Qt.Denied
+    readonly property bool waitingForPermission: permission.status === Qt.Undetermined
+    readonly property bool hasCamera: media_devices.videoInputs.length > 0
+    readonly property bool cameraAvailable: !self.permissionDenied && self.hasCamera
+    readonly property bool waitingForCamera: self.cameraAvailable && permission.status === Qt.Granted && !camera.active
+    readonly property bool showCameraWarning: !self.cameraAvailable && !self.waitingForPermission
     signal codeScanned(string code)
     signal bcurScanned(var result)
     function start() {
-        if (permission.status === Qt.Granted) {
-            camera.start()
-        } else if (permission.status === Qt.Undetermined) {
+        if (permission.status === Qt.Undetermined) {
             permission.request()
         }
+    }
+    function reset() {
+        controller.reset()
     }
 
     id: self
 
     Component.onCompleted: self.start()
+
+    MediaDevices {
+        id: media_devices
+    }
 
     CameraPermission {
         id: permission
@@ -31,12 +45,36 @@ Item {
     BusyIndicator {
         anchors.centerIn: parent
         hoverEnabled: false
+        running: self.waitingForCamera || self.waitingForPermission
+        visible: running
+    }
+
+    ColumnLayout {
+        anchors.centerIn: parent
+        spacing: 12
+        visible: self.showCameraWarning
+        width: Math.min(parent.width - 40, 280)
+        Image {
+            Layout.alignment: Qt.AlignHCenter
+            source: 'qrc:/svg2/warning.svg'
+        }
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            horizontalAlignment: Label.AlignHCenter
+            font.pixelSize: 14
+            font.weight: 400
+            opacity: 0.8
+            wrapMode: Label.WordWrap
+            text: self.permissionDenied ? qsTrId('id_please_enable_camera') : qsTrId('id_camera_problem')
+        }
     }
 
     CaptureSession {
         camera: Camera {
             id: camera
             cameraDevice: camera_selector.cameraDevice
+            active: self.cameraAvailable && permission.status === Qt.Granted
         }
         videoOutput: video_output
     }
@@ -45,10 +83,12 @@ Item {
         id: video_output
         anchors.fill: parent
         fillMode: VideoOutput.PreserveAspectCrop
+        visible: self.cameraAvailable && camera.active
     }
 
     Item {
         anchors.centerIn: self
+        visible: self.cameraAvailable && camera.active
         scale: Math.max(self.width / video_output.sourceRect.width, self.height / video_output.sourceRect.height)
         width: video_output.sourceRect.width
         height: video_output.sourceRect.height
@@ -87,15 +127,13 @@ Item {
         id: detector
         videoSink: video_output.videoSink
         onResultsChanged: {
-            for (const result of detector.results) {
+            for (const result of detector.results)
                 controller.process(result.text)
-                // ignore remaining results
-                break
-            }
         }
     }
     BCURController {
         id: controller
+        context: self.context
         onResultDecoded: (result) => self.bcurScanned(result)
         onDataDiscarded: (data) => self.codeScanned(data)
     }
@@ -108,7 +146,7 @@ Item {
         from: 0
         opacity: 0.6
         to: 100
-        visible: controller.progress > 0
+        visible: self.cameraAvailable && controller.progress > 0
         value: controller.progress
     }
 
@@ -117,6 +155,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.margins: 16
+        visible: self.cameraAvailable && camera.active
     }
 
     component CameraSelector: AbstractButton {

@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 StackViewPage {
     required property Context context
@@ -22,6 +23,7 @@ StackViewPage {
 
     readonly property bool isFiatOutputAvailable: self.recipient.convert.fiat.available && fee_convert.fiat.available
     readonly property bool isTotalDisplayed: !self.recipient.convert.isLiquidAsset || self.isFiatOutputAvailable
+    readonly property bool noteEnabled: !self.context.watchonly
 
     StackView.onActivated: controller.cancel()
 
@@ -53,6 +55,19 @@ StackViewPage {
             const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
+            self.pushPage(error_page, { error })
+        }
+    }
+    AirgappedSignController {
+        id: airgap_controller
+        context: self.context
+        account: self.account
+        transaction: self.transaction
+        memo: self.noteEnabled ? note_text_area.text : ''
+        onTransactionCompleted: transaction => {
+            self.pushPage(transaction_completed_page, { transaction })
+        }
+        onFailed: (error) => {
             self.pushPage(error_page, { error })
         }
     }
@@ -116,7 +131,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 15
             text: qsTrId('id_add_note')
-            visible: !self.note
+            visible: self.noteEnabled && !self.note
             onClicked: {
                 self.note = true
                 note_text_area.forceActiveFocus()
@@ -124,13 +139,13 @@ StackViewPage {
         }
         FieldTitle {
             text: qsTrId('id_note')
-            visible: self.note
+            visible: self.noteEnabled && self.note
         }
         GTextArea {
             Layout.fillWidth: true
             id: note_text_area
             text: self.label ?? self.transaction.previous_transaction?.memo ?? ''
-            visible: self.note
+            visible: self.noteEnabled && self.note
             wrapMode: TextArea.Wrap
         }
         VSpacer {
@@ -263,8 +278,14 @@ StackViewPage {
             Layout.topMargin: 20
             enabled: controller.monitor?.idle ?? true
             busy: !(controller.monitor?.idle ?? true)
-            text: qsTrId('id_confirm_transaction')
-            onClicked: controller.sign()
+            text: UtilJS.canAirgapSend(self.context) ? qsTrId('id_sign_transaction_via_qr') : qsTrId('id_confirm_transaction')
+            onClicked: {
+                if (UtilJS.canAirgapSend(self.context)) {
+                    self.pushPage(airgap_unlock_page)
+                } else {
+                    controller.sign()
+                }
+            }
         }
         RowLayout {
             Layout.fillWidth: false
@@ -292,6 +313,16 @@ StackViewPage {
         id: transaction_completed_page
         TransactionCompletedPage {
             onCloseClicked: self.closeClicked()
+        }
+    }
+
+    Component {
+        id: airgap_unlock_page
+        AirgappedUnlockPage {
+            controller: airgap_controller
+            recipient: self.recipient
+            rootPage: self
+            onExitSendFlow: self.closeClicked()
         }
     }
 }

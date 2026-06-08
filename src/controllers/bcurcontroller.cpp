@@ -14,6 +14,18 @@ void BCURController::setProgress(int progress)
     emit progressChanged();
 }
 
+void BCURController::reset()
+{
+    if (m_task) {
+        m_task->deleteLater();
+        m_task = nullptr;
+    }
+    m_result = {};
+    m_seen.clear();
+    m_pending.clear();
+    setProgress(0);
+}
+
 void BCURController::process(const QString& data)
 {
     if (!m_result.isEmpty()) return;

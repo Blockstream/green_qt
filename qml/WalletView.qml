@@ -362,6 +362,7 @@ MainPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.minimumWidth: 350
                 Layout.minimumHeight: 350
+                context: self.context
                 onBcurScanned: (result) => controller.process(result)
             }
             VSpacer {
