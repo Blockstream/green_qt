@@ -9,14 +9,18 @@
 #include <QStandardItemModel>
 
 #include <memory>
+#include <vector>
 
 #include "lwk/lwk.hpp"
 
 Q_MOC_INCLUDE("network.h")
 Q_MOC_INCLUDE("device.h")
+Q_MOC_INCLUDE("lightningsession.h")
 Q_MOC_INCLUDE("notification.h")
 Q_MOC_INCLUDE("session.h")
 Q_MOC_INCLUDE("wallet.h")
+
+class LightningSession;
 
 class ContextTransaction : public QObject
 {
@@ -50,6 +54,9 @@ class Context : public QObject
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QJsonObject credentials READ credentials NOTIFY credentialsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
+    Q_PROPERTY(bool lightningEnabled READ lightningEnabled NOTIFY lightningEnabledChanged)
+    Q_PROPERTY(QStringList lightningMnemonic READ lightningMnemonic NOTIFY lightningMnemonicChanged)
+    Q_PROPERTY(LightningSession* lightningSession READ lightningSession NOTIFY lightningSessionChanged)
     Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(QQmlListProperty<Notification> notifications READ notifications NOTIFY notificationsChanged)
     QML_ELEMENT
@@ -109,6 +116,10 @@ public:
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
+    QStringList lightningMnemonic() const;
+    LightningSession* lightningSession();
+    bool lightningEnabled() const;
+
     QList<Notification*> getNotifications() const { return m_notifications; }
     QQmlListProperty<Notification> notifications();
     void addNotification(Notification* notification);
@@ -152,8 +163,13 @@ signals:
     void coinUpdated();
     void addressUpdated();
     void paymentUpdated();
+    void lightningMnemonicChanged();
+    void lightningSessionChanged();
+    void lightningEnabledChanged();
 
 private:
+    void releaseLightningSession();
+
     const QString m_deployment;
     const bool m_bip39;
     bool m_skip_load_accounts{false};
@@ -208,6 +224,8 @@ public:
     std::shared_ptr<lwk::BoltzSession> m_boltz_session;
     QJsonObject m_boltz_swaps_infos;
     QList<Swap*> m_swaps;
+
+    LightningSession* m_lightning_session{nullptr};
 };
 
 class ContextManager : public QObject

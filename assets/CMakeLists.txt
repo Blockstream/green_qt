@@ -128,6 +128,9 @@ qt_add_resources(${APP_TARGET} "images"
         png/jade_genuine.png
 
         png/logo_bubbles.png
+
+        greenlight/greenlight_device_cert.txt
+        greenlight/greenlight_device_key.txt
         
         svg2/alert.svg
         svg2/arrow_square_down.svg

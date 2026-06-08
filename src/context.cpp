@@ -2,10 +2,12 @@
 #include "address.h"
 #include "appupdatecontroller.h"
 #include "asset.h"
+#include "bip85.h"
 #include "context.h"
 #include "device.h"
 #include "green_settings.h"
 #include "json.h"
+#include "lightningsession.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "notification.h"
@@ -21,6 +23,8 @@
 #include <gdk.h>
 
 #include <algorithm>
+#include <memory>
+#include <optional>
 
 #include <QDateTime>
 #include <QDesktopServices>
@@ -54,6 +58,7 @@ void UpdateAsset(GA_session* session, Asset* asset)
     }
     GA_destroy_json(output);
 }
+
 }
 
 void fetchCoins(TaskGroup* group, Account* account);
@@ -80,6 +85,8 @@ Context::Context(const QString& deployment, bool bip39, QObject* parent)
 
 Context::~Context()
 {
+    releaseLightningSession();
+
     for (auto session : m_sessions_list) {
         SessionManager::instance()->release(session);
         session->setContext(nullptr);
@@ -268,6 +275,7 @@ void Context::setDevice(Device* device)
         }
     }
     emit deviceChanged();
+    emit lightningEnabledChanged();
 }
 
 void Context::setRemember(bool remember)
@@ -280,9 +288,14 @@ void Context::setRemember(bool remember)
 void Context::setCredentials(const QJsonObject &credentials)
 {
     if (m_credentials == credentials) return;
+    const auto mnemonic = credentials.value("mnemonic").toString().split(" ");
+    const auto mnemonic_changed = m_mnemonic != mnemonic;
     m_credentials = credentials;
     emit credentialsChanged();
-    setMnemonic(credentials.value("mnemonic").toString().split(" "));
+    setMnemonic(mnemonic);
+    if (!mnemonic_changed) {
+        emit lightningMnemonicChanged();
+    }
 }
 
 void Context::setMnemonic(const QStringList& mnemonic)
@@ -291,6 +304,7 @@ void Context::setMnemonic(const QStringList& mnemonic)
     Q_ASSERT(m_mnemonic.isEmpty());
     m_mnemonic = mnemonic;
     emit mnemonicChanged();
+    emit lightningMnemonicChanged();
 }
 
 void Context::setWatchonly(bool watchonly)
@@ -298,6 +312,19 @@ void Context::setWatchonly(bool watchonly)
     if (m_watchonly == watchonly) return;
     m_watchonly = watchonly;
     emit watchonlyChanged();
+    emit lightningEnabledChanged();
+}
+
+QStringList Context::lightningMnemonic() const
+{
+    const auto source_mnemonic = m_mnemonic.join(' ');
+    if (source_mnemonic.trimmed().isEmpty()) return {};
+
+    const auto source_passphrase = m_credentials.value("bip39_passphrase").toString();
+    const auto lightning_mnemonic = DeriveBip85Mnemonic(isMainnet(), source_mnemonic, source_passphrase, 0);
+    if (lightning_mnemonic.isEmpty()) return {};
+
+    return lightning_mnemonic.split(' ', Qt::SkipEmptyParts);
 }
 
 QList<Network*> Context::getActiveNetworks() const
@@ -388,6 +415,37 @@ void Context::setXPubHashId(const QString& xpub_hash_id)
         m_wallet->setXPubHashId(xpub_hash_id);
     }
     emit xpubHashIdChanged();
+}
+
+LightningSession* Context::lightningSession()
+{
+    if (m_xpub_hash_id.isEmpty()) return nullptr;
+
+    if (!m_lightning_session) {
+        m_lightning_session = new LightningSession(this);
+        emit lightningSessionChanged();
+    }
+
+    return m_lightning_session;
+}
+
+bool Context::lightningEnabled() const
+{
+    return isMainnet() && !isWatchonly() && !m_device;
+}
+
+void Context::releaseLightningSession()
+{
+    if (!m_lightning_session) return;
+
+    auto session = m_lightning_session;
+    m_lightning_session = nullptr;
+    session->disconnectNode();
+    delete session;
+
+    emit lightningSessionChanged();
+
+    // TODO: clear Lightning transactions
 }
 
 QQmlListProperty<Notification> Context::notifications()

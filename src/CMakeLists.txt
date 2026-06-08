@@ -129,6 +129,12 @@ target_sources(${APP_TARGET} PRIVATE
 )
 
 target_sources(${APP_TARGET} PRIVATE
+    lightning/lightningclient.cpp lightning/lightningclient.h
+    lightning/lightningsession.cpp lightning/lightningsession.h
+    lightning/lightningtask.h lightning/lightningtask.cpp
+)
+
+target_sources(${APP_TARGET} PRIVATE
     outputlistmodel.cpp
     outputlistmodelfilter.cpp
     walletlistmodel.cpp
@@ -140,4 +146,3 @@ target_sources(${APP_TARGET} PRIVATE
 if(UNIX AND NOT APPLE AND NOT WIN32)
     target_sources(${APP_TARGET} PRIVATE glibc_compat.cpp)
 endif()
-

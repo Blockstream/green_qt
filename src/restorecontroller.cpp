@@ -1,5 +1,6 @@
 #include "account.h"
 #include "context.h"
+#include "lightningtask.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "restorecontroller.h"
@@ -115,6 +116,12 @@ TaskGroup* RestoreController::check(Network* network)
 
     connect_session->then(login);
     login->then(get_credentials);
+
+    if (network == context()->primaryNetwork()) {
+        auto connect_lightning = new LightningConnectNodeTask(context());
+        group->add(connect_lightning);
+        get_credentials->then(connect_lightning);
+    }
 
     if (network->isElectrum()) {
         auto load_accounts = new LoadAccountsTask(true, session);

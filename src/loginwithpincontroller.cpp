@@ -6,6 +6,7 @@
 #include "jadedevice.h"
 #include "json.h"
 #include "ledgerdevice.h"
+#include "lightningtask.h"
 #include "lwkcreatesessiontask.h"
 #include "network.h"
 #include "networkmanager.h"
@@ -327,6 +328,7 @@ void LoadController::load()
     for (auto network : networks) {
         loadNetwork(group, network);
     }
+    connectLightningNode(group);
 
     monitor()->add(group);
     dispatcher()->add(group);
@@ -346,6 +348,11 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
 {
     qDebug() << Q_FUNC_INFO << network->id();
     context()->loadNetwork(group, network);
+}
+
+void LoadController::connectLightningNode(TaskGroup* group)
+{
+    group->add(new LightningConnectNodeTask(context()));
 }
 
 void LoadController::loginNetwork(Network* network)

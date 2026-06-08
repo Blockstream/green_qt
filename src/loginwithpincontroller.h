@@ -52,6 +52,7 @@ signals:
     void loadFinished();
 private:
     void loadNetwork(TaskGroup* group, Network* network);
+    void connectLightningNode(TaskGroup* group);
     void loginNetwork(Network* network);
 };
 

@@ -1,4 +1,5 @@
 #include "context.h"
+#include "lightningtask.h"
 #include "networkmanager.h"
 #include "signupcontroller.h"
 #include "task.h"
@@ -39,6 +40,7 @@ void SignupController::signup(const QString& deployment)
     auto create_wallet = new SignupCreateWalletTask(this);
     auto persist_wallet = new SignupPersistWalletTask(this);
     auto get_credentials = new GetCredentialsTask(session);
+    auto connect_lightning = new LightningConnectNodeTask(context());
 
     group->add(connect_session);
     group->add(register_user);
@@ -46,11 +48,13 @@ void SignupController::signup(const QString& deployment)
     group->add(create_wallet);
     group->add(persist_wallet);
     group->add(get_credentials);
+    group->add(connect_lightning);
 
     connect_session->then(register_user);
     register_user->then(mnemonic_login);
     mnemonic_login->then(create_wallet);
     create_wallet->then(get_credentials);
+    get_credentials->then(connect_lightning);
     persist_wallet->needs(get_credentials);
 
     dispatcher()->add(group);

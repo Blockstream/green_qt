@@ -177,6 +177,7 @@ set(APP_PRIVATE_INCLUDE_DIRS
     src/ledger
     src/handlers
     src/glsdk
+    src/lightning
 )
 
 target_include_directories(${APP_TARGET} PRIVATE ${APP_PRIVATE_INCLUDE_DIRS})
