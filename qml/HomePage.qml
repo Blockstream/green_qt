@@ -314,7 +314,7 @@ Page {
             }
             Image {
                 source: 'qrc:/ffffff/16/note.svg'
-                visible: delegate.transaction.memo.length > 0
+                visible: delegate.transaction.memo?.length > 0
             }
             TransactionAmounts {
                 Layout.fillWidth: false

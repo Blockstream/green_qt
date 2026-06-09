@@ -28,3 +28,10 @@ void LightningController::enable()
     monitor()->add(group);
     dispatcher()->add(group);
 }
+
+void LightningController::disable()
+{
+    if (!context() || !context()->lightningEnabled()) return;
+
+    context()->setLightningEnabled(false);
+}

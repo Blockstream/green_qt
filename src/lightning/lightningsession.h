@@ -50,12 +50,13 @@ signals:
     void errorChanged();
     void nodeInfoChanged();
     void invoicePaid(QString payment_hash, quint64 amount_satoshi);
+    void paymentsUpdated(const std::vector<LightningPayment>& payments);
 
 private:
     struct ConnectNodeResult {
         std::shared_ptr<glsdk::Node> node;
         std::optional<LightningNodeInfo> node_info;
-        std::vector<LightningPayment> payments;
+        std::optional<std::vector<LightningPayment>> payments;
         QString error;
     };
 

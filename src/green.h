@@ -7,6 +7,7 @@ class AccountTransaction;
 class Asset;
 class AssetManager;
 class ChainTransaction;
+class LightningTransaction;
 class Context;
 class Controller;
 class Device;

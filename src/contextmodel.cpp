@@ -197,6 +197,7 @@ void TransactionModel::exportToFile()
         const auto row_count = rowCount();
         for (int row = 0; row < row_count; ++row) {
             const auto transaction = index(row, 0).data(Qt::UserRole).value<AccountTransaction*>();
+            if (!transaction) continue;
             const auto network = transaction->account()->network();
             const auto data = transaction->data();
             const auto block_height = data.value("block_height").toInt();
@@ -286,6 +287,13 @@ bool TransactionModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
         if (!filterAccountsAcceptsTransaction(transaction)) return false;
         if (!filterAssetsAcceptsTransaction(transaction)) return false;
         if (!filterTextAcceptsTransaction(transaction)) return false;
+    } else if (const auto transaction = qobject_cast<LightningTransaction*>(context_transaction)) {
+        if (!transaction->data().contains("satoshi")) return false;
+        if (!transaction->data().contains("type")) return false;
+
+        if (!filterAccountsAcceptsLightningTransaction(transaction)) return false;
+        if (!filterAssetsAcceptsLightningTransaction(transaction)) return false;
+        if (!filterTextAcceptsLightningTransaction(transaction)) return false;
     }
     return ContextModel::filterAcceptsRow(source_row, source_parent);
 }
@@ -328,6 +336,36 @@ bool TransactionModel::filterTextAcceptsTransaction(AccountTransaction* transact
             return true;
         }
     }
+    return false;
+}
+
+bool TransactionModel::filterAccountsAcceptsLightningTransaction(LightningTransaction* transaction) const
+{
+    Q_UNUSED(transaction)
+    return m_filter_accounts.isEmpty();
+}
+
+bool TransactionModel::filterAssetsAcceptsLightningTransaction(LightningTransaction* transaction) const
+{
+    if (m_filter_assets.isEmpty()) return true;
+
+    for (auto asset : m_filter_assets) {
+        if (asset->isLightning() && transaction->data().value("satoshi").toObject().contains(asset->id())) return true;
+    }
+
+    return false;
+}
+
+bool TransactionModel::filterTextAcceptsLightningTransaction(LightningTransaction* transaction) const
+{
+    if (m_filter_text.isEmpty()) return true;
+
+    const auto data = transaction->data();
+    if (transaction->id().contains(m_filter_text, Qt::CaseInsensitive)) return true;
+    if (data.value("description").toString().contains(m_filter_text, Qt::CaseInsensitive)) return true;
+    if (data.value("destination").toString().contains(m_filter_text, Qt::CaseInsensitive)) return true;
+    if (data.value("bolt11").toString().contains(m_filter_text, Qt::CaseInsensitive)) return true;
+
     return false;
 }
 

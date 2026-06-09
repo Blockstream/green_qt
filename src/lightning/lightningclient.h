@@ -28,13 +28,6 @@ enum class LightningPaymentType {
     Unknown,
 };
 
-enum class LightningPaymentStatus {
-    Pending,
-    Complete,
-    Failed,
-    Unknown,
-};
-
 // Shared result wrappers.
 struct LightningOperationResult {
     bool success{false};
@@ -69,7 +62,6 @@ struct LightningPayment {
     quint64 payment_time{0};
     quint64 amount{0};
     quint64 fee{0};
-    LightningPaymentStatus status{LightningPaymentStatus::Unknown};
     std::optional<QString> description;
     std::optional<QString> bolt11;
     std::optional<QString> preimage;

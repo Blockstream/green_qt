@@ -138,16 +138,6 @@ LightningPaymentType ToLightningPaymentType(const glsdk::PaymentType type)
     return LightningPaymentType::Unknown;
 }
 
-LightningPaymentStatus ToLightningPaymentStatus(const glsdk::PaymentStatus status)
-{
-    switch (status) {
-    case glsdk::PaymentStatus::kPending: return LightningPaymentStatus::Pending;
-    case glsdk::PaymentStatus::kComplete: return LightningPaymentStatus::Complete;
-    case glsdk::PaymentStatus::kFailed: return LightningPaymentStatus::Failed;
-    }
-    return LightningPaymentStatus::Unknown;
-}
-
 QString CurrentGlsdkExceptionMessage()
 {
     try {
@@ -265,13 +255,14 @@ LightningValueResult<std::vector<LightningPayment>> LightningClient::listPayment
         std::vector<LightningPayment> result;
         result.reserve(payments.size());
         for (const auto& payment : payments) {
+            if (payment.status != glsdk::PaymentStatus::kComplete) continue;
+
             result.emplace_back(LightningPayment{
                 QString::fromStdString(payment.id),
                 ToLightningPaymentType(payment.payment_type),
                 payment.payment_time,
                 MsatToSatoshi(payment.amount_msat),
                 MsatToSatoshi(payment.fee_msat),
-                ToLightningPaymentStatus(payment.status),
                 ToOptionalQString(payment.description),
                 ToOptionalQString(payment.bolt11),
                 ToOptionalQString(payment.preimage),

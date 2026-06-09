@@ -218,8 +218,9 @@ QFuture<QString> LightningSession::connectNode(const QString& mnemonic)
 
         if (result.node && result.node_info) {
             finishConnect(result.node, *result.node_info, result.error);
-            Q_UNUSED(result.payments);
-            // TODO: update transactions with payments
+            if (result.payments) {
+                emit paymentsUpdated(*result.payments);
+            }
         } else {
             failConnect(result.error);
         }

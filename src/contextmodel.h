@@ -73,6 +73,9 @@ private:
     bool filterAccountsAcceptsTransaction(AccountTransaction* transaction) const;
     bool filterAssetsAcceptsTransaction(AccountTransaction* transaction) const;
     bool filterTextAcceptsTransaction(AccountTransaction* transaction) const;
+    bool filterAccountsAcceptsLightningTransaction(LightningTransaction* transaction) const;
+    bool filterAssetsAcceptsLightningTransaction(LightningTransaction* transaction) const;
+    bool filterTextAcceptsLightningTransaction(LightningTransaction* transaction) const;
 };
 
 class AddressModel : public ContextModel

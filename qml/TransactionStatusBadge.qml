@@ -5,7 +5,10 @@ import QtQuick.Controls
 Label {
     required property int confirmations
     required property bool liquid
-    readonly property bool completed: self.confirmations >= (self.liquid ? 2 : 6)
+    property bool lightning: false
+
+    readonly property int requiredConfirmations: self.lightning ? 1 : (self.liquid ? 2 : 6)
+    readonly property bool completed: self.confirmations >= self.requiredConfirmations
     readonly property var status: {
         if (self.completed) {
             return { color: '#0A9252', text: qsTrId('id_completed'), visible: false }

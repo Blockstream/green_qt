@@ -9,7 +9,7 @@ import QtQml
 import "util.js" as UtilJS
 
 Page {
-    signal transactionClicked(AccountTransaction transaction)
+    signal transactionClicked(ContextTransaction transaction)
     signal addressClicked(Address transaction)
     required property Context context
     readonly property ContextModel currentModel: (stack_layout.children[stack_layout.currentIndex] as ListPage).model

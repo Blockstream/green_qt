@@ -282,6 +282,9 @@ set(QML_FILES_FEATURES
     AccountSelectorPage.qml
     AssetSelectorPage.qml
     AccountAssetPage.qml
+    LightningAssetPage.qml
+    LightningTransactionDetailsPage.qml
+    LightningTransactionPage.qml
     RightArrowIndicator.qml
     PushButton.qml
     ErrorPane.qml

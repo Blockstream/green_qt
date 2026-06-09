@@ -45,7 +45,6 @@ public:
 
     bool isBitcoin() const;
     bool isLiquid() const;
-    bool isLightning() const;
     bool isSinglesig() const;
     bool isMultisig() const;
     bool isAmp() const;

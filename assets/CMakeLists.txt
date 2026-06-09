@@ -267,6 +267,7 @@ qt_add_resources(${APP_TARGET} "images"
         svg3/arrow-line-up-right.svg
         svg3/Btc-portal.svg
         svg3/lightning.svg
+        svg3/magnifying-glass.svg
 
         svg/blockstream.svg
         svg/menu-home.svg

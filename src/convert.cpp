@@ -342,6 +342,7 @@ QVariantMap Convert::format(const QString& unit) const
 bool Convert::isLiquidAsset() const
 {
   Q_D(const Convert);
+  if (d->asset && d->asset->isLightning()) return false;
   if (d->account) {
     const auto network = d->account->network();
     return d->asset && network->isLiquid() && network->policyAsset() != d->asset->id();

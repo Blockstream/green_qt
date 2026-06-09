@@ -1,6 +1,7 @@
 #include "account.h"
 #include "asset.h"
 #include "context.h"
+#include "lightning/lightningclient.h"
 #include "network.h"
 #include "output.h"
 #include "session.h"
@@ -20,6 +21,16 @@ AccountTransaction::Type ParseType(const QString& type)
     if (type == QStringLiteral("mixed")) return AccountTransaction::Type::Mixed;
     if (type == QStringLiteral("not unblindable")) return AccountTransaction::Type::NotUnblindable;
     return AccountTransaction::Type::Unknown;
+}
+
+QString LightningPaymentTypeString(const LightningPaymentType type)
+{
+    switch (type) {
+    case LightningPaymentType::Received: return QStringLiteral("incoming");
+    case LightningPaymentType::Sent: return QStringLiteral("outgoing");
+    case LightningPaymentType::Unknown: return QStringLiteral("unknown");
+    }
+    return QStringLiteral("unknown");
 }
 
 } // namespace
@@ -191,4 +202,45 @@ void ChainTransaction::setSwap(Swap* swap)
     if (m_swap == swap) return;
     m_swap = swap;
     emit swapChanged();
+}
+
+LightningTransaction::LightningTransaction(const QString& id, Context* context)
+    : ContextTransaction(id, context)
+{
+}
+
+QDateTime LightningTransaction::timestamp() const
+{
+    const auto created_at_ts = m_data.value("created_at_ts");
+    const auto timestamp = created_at_ts.isNull() ? QDateTime::currentDateTime() : QDateTime::fromMSecsSinceEpoch(created_at_ts.toInteger() / 1000);
+    return timestamp;
+}
+
+void LightningTransaction::updateFromPayment(const LightningPayment& payment)
+{
+    const auto type = LightningPaymentTypeString(payment.payment_type);
+    auto amount = static_cast<qint64>(payment.amount);
+    if (payment.payment_type == LightningPaymentType::Sent) {
+        // GL-SDK doesn't include the fee in the amount for sent payments,
+        // but we want to show the total outgoing amount in the UI.
+        amount += static_cast<qint64>(payment.fee);
+        amount = -amount;
+    }
+
+    QJsonObject data{
+        { QStringLiteral("txhash"), payment.id },
+        { QStringLiteral("type"), type },
+        { QStringLiteral("satoshi"), QJsonObject{{ QStringLiteral("lnbtc"), amount }} },
+        { QStringLiteral("fee"), static_cast<qint64>(payment.fee) },
+        { QStringLiteral("created_at_ts"), static_cast<qint64>(payment.payment_time) * 1000000 },
+    };
+
+    if (payment.description) data.insert(QStringLiteral("description"), *payment.description);
+    if (payment.bolt11) data.insert(QStringLiteral("bolt11"), *payment.bolt11);
+    if (payment.preimage) data.insert(QStringLiteral("preimage"), *payment.preimage);
+    if (payment.destination) data.insert(QStringLiteral("destination"), *payment.destination);
+
+    if (m_data == data) return;
+    m_data = data;
+    emit dataChanged();
 }

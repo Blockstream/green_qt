@@ -8,7 +8,7 @@ import "util.js" as UtilJS
 
 ColumnLayout {
     required property Context context
-    required property AccountTransaction transaction
+    required property ContextTransaction transaction
     id: self
     spacing: 1
     Repeater {
@@ -19,7 +19,8 @@ ColumnLayout {
             readonly property var amount: delegate.modelData[1]
             Convert {
                 id: convert
-                account: self.transaction.account
+                context: self.transaction instanceof LightningTransaction ? self.context : null
+                account: self.transaction instanceof AccountTransaction ? self.transaction.account : null
                 asset: delegate.asset
                 input: ({ satoshi: delegate.amount })
                 unit: UtilJS.unit(self.context)
@@ -43,6 +44,7 @@ ColumnLayout {
             }
             visible: {
                 if (delegate.amount === 0) return false
+                if (self.transaction instanceof LightningTransaction) return true
                 if (!self.transaction.account.network.liquid) return true
                 if (delegate.asset.id !== self.transaction.account.network.policyAsset) return true
                 if (self.transaction.data.type === 'redeposit') return true

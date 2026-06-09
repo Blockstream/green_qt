@@ -87,6 +87,7 @@ Page {
     }
 
     function transactionConfirmations(transaction) {
+        if (transaction instanceof LightningTransaction) return 1
         return UtilJS.confirmations(transaction.account.session, transaction.data.block_height)
     }
 
@@ -240,7 +241,7 @@ Page {
             context: self.context
             onAssetClicked: (asset) => asset_drawer.createObject(self, { context: self.context, asset }).open()
             onTransactionClicked: (transaction) => {
-                if (transaction instanceof AccountTransaction) {
+                if (transaction instanceof AccountTransaction || transaction instanceof LightningTransaction) {
                     transaction_details_drawer.createObject(self, { context: self.context, transaction }).open()
                 } else if (transaction instanceof Swap) {
                     console.log('its a swap')

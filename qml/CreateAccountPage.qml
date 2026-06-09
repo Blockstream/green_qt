@@ -36,22 +36,6 @@ StackViewPage {
     component MultisigButton: SecurityPolicyButton2 {
         serverType: 'green'
     }
-    component LightningButton: SecurityPolicyButton {
-        beta: true
-        description: 'Fast transactions on the Lightning Network, powered by Greenlight.'
-        icon.source: 'qrc:/svg2/lightning.svg'
-        network: NetworkManager.networkWithServerType(self.context.deployment, 'bitcoin', 'electrum')
-        tag: 'fastest'
-        tagColor: '#D8A800'
-        text: 'lightning'
-        title: qsTrId('id_lightning')
-        visible: self.context.mainnet && self.asset?.networkKey === 'bitcoin' && Settings.enableExperimental
-        action: Action {
-            onTriggered: {
-                self.pushPage(lightning_page);
-            }
-        }
-    }
 
     id: self
     title: qsTrId('id_create_new_account')
@@ -90,8 +74,6 @@ StackViewPage {
             title: qsTrId('id_standard')
             description: qsTrId('id_cheaper_singlesig_option')
             visible: self.asset && !self.asset.amp || self.anyLiquid
-        }
-        LightningButton {
         }
         SinglesigButton {
             type: 'p2sh-p2wpkh'
@@ -240,50 +222,6 @@ StackViewPage {
         id: error_page
         ErrorPage {
             title: self.title
-        }
-    }
-
-    Component {
-        id: lightning_page
-        StackViewPage {
-            title: qsTrId('id_lightning')
-            contentItem: ColumnLayout {
-                spacing: 40
-                VSpacer {
-                }
-                RowLayout {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: false
-                    spacing: 8
-                    Label {
-                        color: '#FFF'
-                        font.pixelSize: 16
-                        font.weight: 600
-                        text: qsTrId('id_lightning')
-                    }
-                    Image {
-                        source: 'qrc:/svg2/lightning.svg'
-                    }
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    color: '#FFF'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    horizontalAlignment: Qt.AlignCenter
-                    text: `This feature is coming soon on desktop, but it's already available on Blockstream mobile now!`
-                    wrapMode: Label.WordWrap
-                }
-                LinkButton {
-                    Layout.alignment: Qt.AlignCenter
-                    text: 'https://blockstream.com/app'
-                    external: true
-                    onClicked: Qt.openUrlExternally('https://blockstream.com/app')
-                }
-                VSpacer {
-                }
-            }
         }
     }
 

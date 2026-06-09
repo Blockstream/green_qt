@@ -399,6 +399,36 @@ QList<ContextTransaction*> Context::getTransaction(const QString &hash) const
     return m_transaction_map.values(hash);
 }
 
+void Context::updateLightningTransactions(const std::vector<LightningPayment>& payments)
+{
+    auto dangling_transactions = m_lightning_transactions.keys();
+
+    for (const auto& payment : payments) {
+        const auto id = payment.id;
+        if (id.isEmpty()) continue;
+
+        auto transaction = m_lightning_transactions.value(id);
+        if (!transaction) {
+            transaction = new LightningTransaction(id, this);
+            m_lightning_transactions.insert(id, transaction);
+        }
+
+        transaction->updateFromPayment(payment);
+        addTransaction(transaction);
+        dangling_transactions.removeOne(id);
+    }
+
+    while (!dangling_transactions.isEmpty()) {
+        const auto id = dangling_transactions.takeFirst();
+        auto transaction = m_lightning_transactions.take(id);
+        if (!transaction) continue;
+        removeTransaction(transaction);
+        transaction->deleteLater();
+    }
+
+    emit transactionUpdated();
+}
+
 Payment* Context::getOrCreatePayment(const QString &id)
 {
     auto payment = m_payments.value(id);
@@ -437,6 +467,9 @@ LightningSession* Context::lightningSession()
     if (!m_lightning_session) {
         m_lightning_session = new LightningSession(this);
         connect(m_lightning_session, &LightningSession::nodeInfoChanged, this, &Context::lightningNodeInfoChanged);
+        connect(m_lightning_session, &LightningSession::paymentsUpdated, this, [this](const std::vector<LightningPayment>& payments) {
+            updateLightningTransactions(payments);
+        });
         emit lightningSessionChanged();
     }
 
@@ -481,7 +514,13 @@ void Context::releaseLightningSession()
     emit lightningSessionChanged();
     emit lightningNodeInfoChanged();
 
-    // TODO: clear Lightning transactions
+    const auto transactions = m_lightning_transactions.values();
+    m_lightning_transactions.clear();
+    for (auto transaction : transactions) {
+        removeTransaction(transaction);
+        transaction->deleteLater();
+    }
+    emit transactionUpdated();
 }
 
 QQmlListProperty<Notification> Context::notifications()
@@ -829,6 +868,7 @@ void Context::addTransaction(ContextTransaction* transaction)
 void Context::removeTransaction(ContextTransaction* transaction)
 {
     auto item = m_transaction_item.take(transaction);
+    m_transaction_map.remove(transaction->id(), transaction);
 
     if (item) {
         m_transaction_model->removeRow(item->row());

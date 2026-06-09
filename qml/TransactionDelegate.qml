@@ -8,9 +8,9 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 ItemDelegate {
-    signal transactionClicked(AccountTransaction transaction)
+    signal transactionClicked(ContextTransaction transaction)
     required property Context context
-    required property AccountTransaction transaction
+    required property ContextTransaction transaction
     property int confirmations: transactionConfirmations(transaction)
 
     onClicked: self.transactionClicked(transaction)
@@ -69,7 +69,16 @@ ItemDelegate {
         AccountLabel {
             Layout.fillWidth: true
             Layout.maximumWidth: 150
-            account: self.transaction.account
+            account: self.transaction instanceof AccountTransaction ? self.transaction.account : null
+            visible: self.transaction instanceof AccountTransaction
+        }
+        Label {
+            Layout.fillWidth: true
+            Layout.maximumWidth: 150
+            elide: Label.ElideRight
+            font.weight: 500
+            text: qsTrId('id_lightning')
+            visible: self.transaction instanceof LightningTransaction
         }
         Label {
             Layout.alignment: Qt.AlignCenter
@@ -80,14 +89,16 @@ ItemDelegate {
             font.pixelSize: 12
             font.weight: 400
             text: {
-                const lines = transaction.memo.trim().split('\n')
+                const memo = (self.transaction instanceof LightningTransaction ?  self.transaction.data.description : self.transaction.memo) ?? ''
+                const lines = memo.trim().split('\n')
                 return lines[0] + (lines.length > 1 ? '...' : '')
             }
             wrapMode: Label.NoWrap
         }
         TransactionStatusBadge {
             confirmations: self.confirmations
-            liquid: self.transaction.account.network.liquid
+            liquid: self.transaction instanceof AccountTransaction && self.transaction.account.network.liquid
+            lightning: self.transaction instanceof LightningTransaction
         }
         TransactionAmounts {
             Layout.fillWidth: true

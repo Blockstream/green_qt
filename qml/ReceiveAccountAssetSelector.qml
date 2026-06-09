@@ -39,6 +39,7 @@ StackViewPage {
                 filter: search_field.text.trim()
                 context: self.context
                 minWeight: search_field.text.trim().length > 0 ? 0 : 1
+                showLightning: true
             }
             spacing: 5
             footer: ColumnLayout {
@@ -79,6 +80,8 @@ StackViewPage {
             }
             delegate: SelectorDelegate {
                 id: delegate
+                // TODO: Navigate to Lightning receive page
+                enabled: !delegate.asset?.lightning
                 width: ListView.view.width
                 onClicked: {
                     self.anyLiquid = false

@@ -234,11 +234,6 @@ bool Account::isLiquid() const
     return m_network->isLiquid();
 }
 
-bool Account::isLightning() const
-{
-    return false;
-}
-
 bool Account::isSinglesig() const
 {
     return m_network->isElectrum();

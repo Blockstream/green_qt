@@ -11,8 +11,12 @@
 
 namespace {
 
+constexpr auto kLightningAssetId = "lnbtc";
+
 QString GetNetworkKey(const QString& deployment, const QString& id)
 {
+    if (id == QLatin1String(kLightningAssetId)) return QStringLiteral("lightning");
+
     const bool liquid = (id != "btc");
     for (const auto network : NetworkManager::instance()->networks()) {
         if (network->deployment() == deployment && network->isLiquid() == liquid) {
@@ -75,6 +79,11 @@ void Asset::setPolicy(bool policy)
     if (m_policy == policy) return;
     m_policy = policy;
     emit policyChanged();
+}
+
+bool Asset::isLightning() const
+{
+    return m_id == QLatin1String(kLightningAssetId);
 }
 
 int Asset::precision() const
@@ -153,7 +162,7 @@ AssetManager::AssetManager()
         const auto key = network->data().value("policy_asset").toString("btc");
         auto asset = assetWithId(network->deployment(), id);
         asset->setPolicy(true);
-        asset->setWeight(INT_MAX);
+        asset->setWeight(network->isLiquid() ? INT_MAX - 2 : INT_MAX);
         asset->setKey(key);
         if (network->isLiquid() && network->isMainnet()) {
             asset->setName(network->displayName() + " Bitcoin");
@@ -161,6 +170,16 @@ AssetManager::AssetManager()
             asset->setName(network->displayName());
         }
     }
+
+    auto lightning_asset = assetWithId(QStringLiteral("mainnet"), QString::fromLatin1(kLightningAssetId));
+    lightning_asset->setWeight(INT_MAX - 1);
+    lightning_asset->setName(QStringLiteral("Lightning Bitcoin"));
+    lightning_asset->setIcon(QStringLiteral("qrc:/svg3/lightning.svg"));
+    lightning_asset->setData({
+        { QStringLiteral("name"), QStringLiteral("Lightning Bitcoin") },
+        { QStringLiteral("ticker"), QStringLiteral("BTC") },
+        { QStringLiteral("precision"), 8 },
+    });
 }
 
 AssetManager::~AssetManager()
@@ -226,10 +245,23 @@ void AssetsModel::setMinWeight(int min_weight)
     endFilterChange(Direction::Rows);
 }
 
+void AssetsModel::setShowLightning(bool show_lightning)
+{
+    if (m_show_lightning == show_lightning) return;
+    beginFilterChange();
+    m_show_lightning = show_lightning;
+    emit showLightningChanged();
+    endFilterChange(Direction::Rows);
+}
+
 bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     const auto index = sourceModel()->index(source_row, 0, source_parent);
     const auto asset = index.data(Qt::UserRole + 1).value<Asset*>();
+
+    if (asset->isLightning() && (!m_show_lightning || !m_context || !m_context->lightningEnabled())) {
+        return false;
+    }
 
     if (asset->weight() < m_min_weight) return false;
 

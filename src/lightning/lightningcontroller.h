@@ -12,6 +12,7 @@ public:
 
 public slots:
     void enable();
+    void disable();
 
 signals:
     void failed(const QString& error);

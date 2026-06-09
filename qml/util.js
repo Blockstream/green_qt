@@ -162,6 +162,10 @@ function assets(context) {
         const asset = context.getOrCreateAsset(session.network.policyAsset)
         assets.set(asset, { asset, satoshi: 0 })
     }
+    if (context.lightningEnabled) {
+        const asset = context.getOrCreateAsset('lnbtc')
+        assets.set(asset, { asset, satoshi: context.lightningNodeInfo?.channel_balance ?? 0 })
+    }
     for (const account of accounts(context)) {
         for (let asset_id in account.json.satoshi) {
             const satoshi = account.json.satoshi[asset_id]

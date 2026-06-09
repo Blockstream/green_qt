@@ -21,6 +21,7 @@ Q_MOC_INCLUDE("session.h")
 Q_MOC_INCLUDE("wallet.h")
 
 class LightningSession;
+struct LightningPayment;
 
 class ContextTransaction : public QObject
 {
@@ -175,6 +176,7 @@ signals:
 private:
     void releaseLightningSession();
     void updateLightningEnabled(bool was_enabled);
+    void updateLightningTransactions(const std::vector<LightningPayment>& payments);
 
     const QString m_deployment;
     const bool m_bip39;
@@ -203,6 +205,7 @@ public:
     QJsonObject m_hw_device;
 
     QMap<QString, ChainTransaction*> m_chain_transactions;
+    QMap<QString, LightningTransaction*> m_lightning_transactions;
     QMap<ContextTransaction*, QStandardItem*> m_transaction_item;
     QMultiMap<QString, ContextTransaction*> m_transaction_map;
     QStandardItemModel* const m_transaction_model;

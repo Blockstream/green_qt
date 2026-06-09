@@ -8,6 +8,10 @@ WalletDrawer {
     required property Asset asset
 
     Component.onCompleted: {
+        if (self.asset.lightning) {
+            stack_view.push(null, lightning_asset_page)
+            return
+        }
         let accounts = self.context?.accounts ?? []
         accounts = accounts.filter(account => account.network.key === self.asset.networkKey)
         accounts = accounts.filter(account => !account.hidden)
@@ -44,6 +48,15 @@ WalletDrawer {
             id: page
             asset: self.asset
             context: self.context
+            onCloseClicked: self.close()
+        }
+    }
+
+    Component {
+        id: lightning_asset_page
+        LightningAssetPage {
+            context: self.context
+            asset: self.asset
             onCloseClicked: self.close()
         }
     }

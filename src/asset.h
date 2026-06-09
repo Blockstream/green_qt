@@ -19,6 +19,7 @@ class Asset : public QObject
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(bool policy READ policy NOTIFY policyChanged)
+    Q_PROPERTY(bool lightning READ isLightning CONSTANT)
     Q_PROPERTY(bool hasData READ hasData NOTIFY dataChanged)
     Q_PROPERTY(bool amp READ isAmp NOTIFY isAmpChanged)
     Q_PROPERTY(int weight READ weight NOTIFY weightChanged)
@@ -52,6 +53,8 @@ public:
 
     bool policy() const { return m_policy; }
     void setPolicy(bool policy);
+
+    bool isLightning() const;
 
     int precision() const;
 
@@ -114,6 +117,7 @@ class AssetsModel : public QSortFilterProxyModel
     Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
     Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     Q_PROPERTY(int minWeight READ minWeight WRITE setMinWeight NOTIFY minWeightChanged)
+    Q_PROPERTY(bool showLightning READ showLightning WRITE setShowLightning NOTIFY showLightningChanged)
     QML_ELEMENT
 public:
     AssetsModel(QObject* parent = nullptr);
@@ -123,10 +127,13 @@ public:
     void setContext(Context* context);
     int minWeight() const { return m_min_weight; }
     void setMinWeight(int min_weight);
+    bool showLightning() const { return m_show_lightning; }
+    void setShowLightning(bool show_lightning);
 signals:
     void filterChanged();
     void contextChanged();
     void minWeightChanged();
+    void showLightningChanged();
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
@@ -134,6 +141,7 @@ private:
     QString m_filter;
     Context* m_context{nullptr};
     int m_min_weight{0};
+    bool m_show_lightning{false};
 };
 
 #endif // GREEN_ASSET_H

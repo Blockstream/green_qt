@@ -36,12 +36,10 @@ StackViewPage {
             const is_bitcoin = !is_liquid
             const is_singlesig = account.network.electrum
             const is_multisig = !is_singlesig
-            const is_lightning = false
             const is_amp = is_liquid && account.type === "2of2_no_recovery"
 
             if (is_bitcoin && is_singlesig) return 0
             if (is_bitcoin && is_multisig) return 1
-            if (is_lightning) return 2
             if (is_liquid && is_singlesig) return 3
             if (is_liquid && is_multisig && !is_amp) return 4
             if (is_liquid && is_multisig && is_amp) return 5

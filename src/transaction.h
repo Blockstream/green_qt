@@ -13,6 +13,8 @@ Q_MOC_INCLUDE("asset.h")
 Q_MOC_INCLUDE("payment.h")
 Q_MOC_INCLUDE("swap.h")
 
+struct LightningPayment;
+
 class ChainTransaction : public ContextTransaction
 {
     Q_OBJECT
@@ -101,6 +103,26 @@ private:
     QJsonObject m_data;
     QString m_memo;
     Payment* m_payment{nullptr};
+};
+
+class LightningTransaction : public ContextTransaction
+{
+    Q_OBJECT
+    Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    explicit LightningTransaction(const QString& id, Context* context);
+
+    QDateTime timestamp() const override;
+    QJsonObject data() const { return m_data; }
+    void updateFromPayment(const LightningPayment& payment);
+
+signals:
+    void dataChanged();
+
+private:
+    QJsonObject m_data;
 };
 
 #endif // GREEN_TRANSACTION_H
