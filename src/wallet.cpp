@@ -124,6 +124,7 @@ void Wallet::save()
         { "name", m_name },
         { "deployment", m_deployment },
         { "hashes", QJsonArray::fromStringList(m_hashes.values()) },
+        { "lightning_enabled", m_lightning_enabled },
     });
     if (!m_xpub_hash_id.isEmpty()) {
         data.insert("xpub_hash_id", m_xpub_hash_id);
@@ -213,6 +214,14 @@ void Wallet::setXPubHashId(const QString &xpub_hash_id)
     // Q_ASSERT(m_xpub_hash_id.isEmpty());
     m_xpub_hash_id = xpub_hash_id;
     emit xpubHashIdChanged();
+    save();
+}
+
+void Wallet::setLightningEnabled(bool enabled)
+{
+    if (m_lightning_enabled == enabled) return;
+    m_lightning_enabled = enabled;
+    emit lightningEnabledChanged();
     save();
 }
 

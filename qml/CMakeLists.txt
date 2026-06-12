@@ -13,6 +13,7 @@ set(QML_FILES_CORE
     TwoFactorEnableDrawer.qml
     DebugRectangle.qml
     WalletGeneralSettingsView.qml
+    EnableLightningDrawer.qml
     WalletsView.qml
     TransactionView.qml
     HSpacer.qml

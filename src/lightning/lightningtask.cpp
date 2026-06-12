@@ -50,3 +50,55 @@ void LightningConnectNodeTask::update()
 
     waitForFuture(future);
 }
+
+LightningEnableTask::LightningEnableTask(Context* context)
+    : ContextTask(context)
+{
+}
+
+void LightningEnableTask::update()
+{
+    setError({});
+
+    if (status() != Status::Ready) return;
+
+    if (context()->lightningEnabled()) {
+        setStatus(Status::Finished);
+        return;
+    }
+
+    const auto lightning_mnemonic = context()->lightningMnemonic().join(' ');
+    if (lightning_mnemonic.trimmed().isEmpty()) {
+        setError(QStringLiteral("Lightning mnemonic is not available"));
+        setStatus(Status::Failed);
+        return;
+    }
+
+    auto session = context()->lightningSession();
+    if (!session) {
+        setError(QStringLiteral("Lightning session is not available"));
+        setStatus(Status::Failed);
+        return;
+    }
+
+    const QPointer<LightningSession> session_guard(session);
+    setStatus(Status::Active);
+
+    auto future = session->connectNode(lightning_mnemonic).then(this, [=, this](const QString& error) {
+        if (!session_guard) {
+            setError(QStringLiteral("Lightning session is not available"));
+            setStatus(Status::Failed);
+            return;
+        }
+        if (!error.isEmpty()) {
+            qWarning() << Q_FUNC_INFO << error;
+            setError(error);
+            setStatus(Status::Failed);
+            return;
+        }
+        context()->setLightningEnabled(true);
+        setStatus(Status::Finished);
+    });
+
+    waitForFuture(future);
+}

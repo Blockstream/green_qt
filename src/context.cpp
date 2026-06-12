@@ -131,9 +131,19 @@ TaskGroup* Context::cleanAccounts()
 void Context::setWallet(Wallet* wallet)
 {
     if (m_wallet == wallet) return;
+    const auto was_lightning_enabled = lightningEnabled();
+    if (m_wallet) {
+        disconnect(m_wallet, &Wallet::lightningEnabledChanged, this, nullptr);
+    }
     m_wallet = wallet;
     emit walletChanged();
     if (m_wallet) {
+        connect(m_wallet, &Wallet::lightningEnabledChanged, this, [this] {
+            if (!lightningEnabled()) {
+                releaseLightningSession();
+            }
+            emit lightningEnabledChanged();
+        });
         if (!m_bip39 && !m_xpub_hash_id.isEmpty()) {
             m_wallet->setXPubHashId(m_xpub_hash_id);
         }
@@ -141,6 +151,7 @@ void Context::setWallet(Wallet* wallet)
             // m_wallet->updateDeviceDetails(m_device->details());
         }
     }
+    updateLightningEnabled(was_lightning_enabled);
 }
 
 Session* Context::getOrCreateSession(Network* network)
@@ -261,6 +272,7 @@ void Context::releaseSession(Session* session)
 void Context::setDevice(Device* device)
 {
     if (m_device == device) return;
+    const auto was_lightning_enabled = lightningEnabled();
     m_device = device;
     if (m_device) {
         QObject::connect(m_device, &QObject::destroyed, this, [=, this] {
@@ -275,7 +287,7 @@ void Context::setDevice(Device* device)
         }
     }
     emit deviceChanged();
-    emit lightningEnabledChanged();
+    updateLightningEnabled(was_lightning_enabled);
 }
 
 void Context::setRemember(bool remember)
@@ -310,9 +322,10 @@ void Context::setMnemonic(const QStringList& mnemonic)
 void Context::setWatchonly(bool watchonly)
 {
     if (m_watchonly == watchonly) return;
+    const auto was_lightning_enabled = lightningEnabled();
     m_watchonly = watchonly;
     emit watchonlyChanged();
-    emit lightningEnabledChanged();
+    updateLightningEnabled(was_lightning_enabled);
 }
 
 QStringList Context::lightningMnemonic() const
@@ -423,15 +436,37 @@ LightningSession* Context::lightningSession()
 
     if (!m_lightning_session) {
         m_lightning_session = new LightningSession(this);
+        connect(m_lightning_session, &LightningSession::nodeInfoChanged, this, &Context::lightningNodeInfoChanged);
         emit lightningSessionChanged();
     }
 
     return m_lightning_session;
 }
 
+QJsonObject Context::lightningNodeInfo() const
+{
+    return m_lightning_session ? m_lightning_session->nodeInfo() : QJsonObject{};
+}
+
 bool Context::lightningEnabled() const
 {
-    return isMainnet() && !isWatchonly() && !m_device;
+    return isMainnet() && !m_watchonly && !m_device && m_wallet && m_wallet->lightningEnabled();
+}
+
+void Context::updateLightningEnabled(bool was_enabled)
+{
+    if (!lightningEnabled()) {
+        releaseLightningSession();
+    }
+    if (was_enabled != lightningEnabled()) {
+        emit lightningEnabledChanged();
+    }
+}
+
+void Context::setLightningEnabled(bool enabled)
+{
+    if (!m_wallet || m_wallet->lightningEnabled() == enabled) return;
+    m_wallet->setLightningEnabled(enabled);
 }
 
 void Context::releaseLightningSession()
@@ -444,6 +479,7 @@ void Context::releaseLightningSession()
     delete session;
 
     emit lightningSessionChanged();
+    emit lightningNodeInfoChanged();
 
     // TODO: clear Lightning transactions
 }

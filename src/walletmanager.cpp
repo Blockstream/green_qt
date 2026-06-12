@@ -119,6 +119,7 @@ void WalletManager::loadWallets()
         wallet->m_deployment = data.value("deployment").toString("mainnet");
         wallet->m_name = data.value("name").toString();
         wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
+        wallet->m_lightning_enabled = data.value("lightning_enabled").toBool(false);
         for (const auto hash : data.value("hashes").toArray()) {
             wallet->m_hashes.insert(hash.toString());
         }

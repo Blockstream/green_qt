@@ -128,6 +128,7 @@ qt_add_resources(${APP_TARGET} "images"
         png/jade_genuine.png
 
         png/logo_bubbles.png
+        png/lightning_shine.png
 
         greenlight/greenlight_device_cert.txt
         greenlight/greenlight_device_key.txt
@@ -173,6 +174,7 @@ qt_add_resources(${APP_TARGET} "images"
         svg2/info_red.svg
         svg2/info_white.svg
         svg2/info_blue.svg
+        svg2/info_fill_blue.svg
         svg2/jade-logo.svg
         svg2/lightning.svg
         svg2/list_bullets.svg
@@ -520,7 +522,12 @@ qt_add_resources(${APP_TARGET} "images"
 
         000000/24/arrows-down-up.svg
         000000/24/list-checks.svg
+
+        a0a0a0/24/bolt.svg
+        a0a0a0/24/coins.svg
         a0a0a0/24/faders-horizontal.svg
+        a0a0a0/24/globe.svg
+
         fafafa/20/arrows-down-up.svg
         fafafa/20/coin-vertical.svg
         ffffff/16/note.svg

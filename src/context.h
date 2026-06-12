@@ -57,6 +57,7 @@ class Context : public QObject
     Q_PROPERTY(bool lightningEnabled READ lightningEnabled NOTIFY lightningEnabledChanged)
     Q_PROPERTY(QStringList lightningMnemonic READ lightningMnemonic NOTIFY lightningMnemonicChanged)
     Q_PROPERTY(LightningSession* lightningSession READ lightningSession NOTIFY lightningSessionChanged)
+    Q_PROPERTY(QJsonObject lightningNodeInfo READ lightningNodeInfo NOTIFY lightningNodeInfoChanged)
     Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(QQmlListProperty<Notification> notifications READ notifications NOTIFY notificationsChanged)
     QML_ELEMENT
@@ -116,9 +117,12 @@ public:
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
+    bool lightningEnabled() const;
+    void setLightningEnabled(bool enabled);
+
     QStringList lightningMnemonic() const;
     LightningSession* lightningSession();
-    bool lightningEnabled() const;
+    QJsonObject lightningNodeInfo() const;
 
     QList<Notification*> getNotifications() const { return m_notifications; }
     QQmlListProperty<Notification> notifications();
@@ -163,12 +167,14 @@ signals:
     void coinUpdated();
     void addressUpdated();
     void paymentUpdated();
+    void lightningEnabledChanged();
     void lightningMnemonicChanged();
     void lightningSessionChanged();
-    void lightningEnabledChanged();
+    void lightningNodeInfoChanged();
 
 private:
     void releaseLightningSession();
+    void updateLightningEnabled(bool was_enabled);
 
     const QString m_deployment;
     const bool m_bip39;

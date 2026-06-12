@@ -15,4 +15,14 @@ public:
     void update() override;
 };
 
+class LightningEnableTask : public ContextTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    LightningEnableTask(Context* context);
+    void update() override;
+};
+
 #endif // BLOCKSTREAM_LIGHTNING_TASK_H

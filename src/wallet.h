@@ -119,6 +119,7 @@ class Wallet : public QObject
     Q_PROPERTY(Context* context READ context NOTIFY contextChanged)
     Q_PROPERTY(QString xpubHashId READ xpubHashId NOTIFY xpubHashIdChanged)
     Q_PROPERTY(LoginData* login READ login NOTIFY loginChanged)
+    Q_PROPERTY(bool lightningEnabled READ lightningEnabled WRITE setLightningEnabled NOTIFY lightningEnabledChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -147,6 +148,9 @@ public:
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
+    bool lightningEnabled() const { return m_lightning_enabled; }
+    void setLightningEnabled(bool enabled);
+
 public slots:
     void disconnect();
     void reload(bool refresh_accounts = false);
@@ -159,6 +163,7 @@ signals:
     void xpubHashIdChanged();
     void incognitoChanged();
     void loginChanged();
+    void lightningEnabledChanged();
 public:
     bool m_is_persisted{false};
     QString m_deployment;
@@ -168,6 +173,7 @@ public:
 
     QString m_xpub_hash_id;
     QSet<QString> m_hashes;
+    bool m_lightning_enabled{false};
     bool m_busy{false};
 
     void save();

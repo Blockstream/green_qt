@@ -268,10 +268,11 @@ Pane {
             Layout.fillWidth: true
             height: 1
             color: '#262626'
-            visible: !self.context.device
+            visible: notifications_box.visible
         }
 
         RowLayout {
+            id: notifications_box
             Layout.fillWidth: true
             spacing: 20
             visible: self.context.sessions.filter(session => !session.network.electrum).length > 0
@@ -371,17 +372,19 @@ Pane {
             visible: supportId !== ''
 
             readonly property string supportId: {
-                return UtilJS.accounts(self.context)
+                const ids = UtilJS.accounts(self.context)
                     .filter(account => account.pointer === 0 && !account.network.electrum)
                     .map(account => `${account.network.data.bip21_prefix}:${account.json.receiving_id}`)
-                    .join(',')
+                const lightningNodeId = self.context.lightningNodeInfo?.id ?? ''
+                if (lightningNodeId) ids.push(`lightning:${lightningNodeId}`)
+                return ids.join(',')
             }
 
             // Left: Label
             ColumnLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 1
-                Layout.alignment: Qt.AlignTop
+                Layout.alignment: Qt.AlignVCenter
                 spacing: 4
                 Label {
                     Layout.fillWidth: true
@@ -398,39 +401,106 @@ Pane {
                 Layout.preferredWidth: 1
                 Layout.alignment: Qt.AlignTop
                 implicitHeight: support_button.height
-                AbstractButton {
+                CopyButton {
                     id: support_button
                     anchors.right: parent.right
                     width: Math.min(200, parent.width)
-                    leftPadding: 16
-                    rightPadding: 16
-                    topPadding: 12
-                    bottomPadding: 12
+                    title: qsTrId('id_copy_support_id')
+                    copyText: support_box.supportId
+                }
+            }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+            visible: lightning_box.visible
+        }
+
+        // Lightning
+        RowLayout {
+            id: lightning_box
+            spacing: 20
+            Layout.fillWidth: true
+            visible: self.context.mainnet && !self.context.watchonly && !self.context.device
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.minimumWidth: (lightning_box.width - lightning_box.spacing) / 2
+                Layout.alignment: Qt.AlignVCenter
+                spacing: 0
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 8
+                    Label {
+                        text: self.context.lightningEnabled ? 'Lightning Network (Beta)' : 'Lightning Network'
+                        font.pixelSize: 14
+                        font.weight: 600
+                        color: '#FFFFFF'
+                    }
+                    LinkButton {
+                        text: qsTrId('id_learn_more')
+                        font.pixelSize: 12
+                        external: true
+                        visible: self.context.lightningEnabled
+                        onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/18788578831897-Understand-Lightning-support-in-the-Blockstream-app')
+                    }
+                }
+            }
+
+            // Right: Control
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignVCenter
+                implicitHeight: self.context.lightningEnabled ? lightning_node_button.implicitHeight : lightning_button.implicitHeight
+                AbstractButton {
+                    id: lightning_button
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    leftPadding: 12
+                    rightPadding: 12
+                    topPadding: 8
+                    bottomPadding: 8
+                    visible: !self.context.lightningEnabled
                     background: Rectangle {
-                        radius: 5
-                        color: Qt.lighter('#262626', support_button.hovered ? 1.2 : 1)
+                        color: '#FFF'
+                        radius: 4
+                        opacity: 0.2
+                        visible: lightning_button.hovered
                     }
                     contentItem: RowLayout {
-                        spacing: 12
+                        spacing: 4
+                        opacity: 0.7
                         Label {
-                            Layout.fillWidth: true
-                            font.pixelSize: 13
-                            font.weight: 600
-                            text: qsTrId('id_copy_support_id')
+                            color: '#FFFFFF'
+                            font.pixelSize: 14
+                            font.weight: 500
+                            text: 'Beta'
                         }
                         Image {
-                            source: support_timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
+                            Layout.alignment: Qt.AlignCenter
+                            source: 'qrc:/svg2/caret-down-white.svg'
+                            rotation: -90
                         }
                     }
                     onClicked: {
-                        Clipboard.copy(support_box.supportId)
-                        support_timer.restart()
+                        const drawer = enable_lightning_drawer.createObject(self, { context: self.context })
+                        drawer.open()
                     }
-                    Timer {
-                        id: support_timer
-                        repeat: false
-                        interval: 1000
-                    }
+                }
+                CopyButton {
+                    id: lightning_node_button
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    visible: self.context.lightningEnabled
+                    title: 'Lightning Node'
+                    subtitle: self.context.lightningNodeInfo?.id ?? 'Not available'
+                    subtitleElide: Label.ElideMiddle
+                    copyText: self.context.lightningNodeInfo?.id ?? ''
                 }
             }
         }
@@ -489,66 +559,84 @@ Pane {
 
                 Repeater {
                     model: self.ampAccounts
-                    delegate: AbstractButton {
+                    delegate: CopyButton {
                         required property Account modelData
-                        readonly property Account account: modelData
-                        readonly property string ampId: account.json.receiving_id
+                        readonly property string ampId: modelData.json.receiving_id
                         Layout.fillWidth: true
                         id: amp_account_button
-                        leftPadding: 16
-                        rightPadding: 16
-                        topPadding: 12
-                        bottomPadding: 12
-
-                        background: Rectangle {
-                            radius: 5
-                            color: Qt.lighter('#262626', amp_account_button.hovered ? 1.2 : 1)
-                        }
-
-                        contentItem: RowLayout {
-                            spacing: 12
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                spacing: 2
-                                Label {
-                                    Layout.fillWidth: true
-                                    color: '#FFFFFF'
-                                    font.pixelSize: 13
-                                    font.weight: 600
-                                    text: UtilJS.accountName(amp_account_button.account)
-                                    elide: Label.ElideRight
-                                }
-                                Label {
-                                    Layout.fillWidth: true
-                                    color: '#6F6F6F'
-                                    font.pixelSize: 11
-                                    font.weight: 400
-                                    text: 'ID: ' + amp_account_button.ampId
-                                    elide: Label.ElideRight
-                                    Layout.preferredWidth: 0
-                                }
-                            }
-                            Image {
-                                source: amp_timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
-                            }
-                        }
-
-                        onClicked: {
-                            Clipboard.copy(amp_account_button.ampId)
-                            amp_timer.restart()
-                        }
-
-                        Timer {
-                            id: amp_timer
-                            repeat: false
-                            interval: 1000
-                        }
+                        title: UtilJS.accountName(modelData)
+                        subtitle: 'ID: ' + modelData.json.receiving_id
+                        copyText: modelData.json.receiving_id
                     }
                 }
             }
         }
 
         VSpacer {
+        }
+    }
+
+    Component {
+        id: enable_lightning_drawer
+        EnableLightningDrawer {
+        }
+    }
+
+    component CopyButton: AbstractButton {
+        property string title
+        property string subtitle: ''
+        property string copyText: ''
+        property int subtitleElide: Label.ElideRight
+
+        id: copy_button
+        leftPadding: 16
+        rightPadding: 16
+        topPadding: 12
+        bottomPadding: 12
+
+        background: Rectangle {
+            radius: 5
+            color: Qt.lighter('#262626', copy_button.hovered ? 1.2 : 1)
+        }
+
+        contentItem: RowLayout {
+            spacing: 12
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 2
+                Label {
+                    Layout.fillWidth: true
+                    color: '#FFFFFF'
+                    font.pixelSize: 13
+                    font.weight: 600
+                    text: copy_button.title
+                    elide: Label.ElideRight
+                }
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    visible: copy_button.subtitle !== ''
+                    color: '#6F6F6F'
+                    font.pixelSize: 11
+                    font.weight: 400
+                    text: copy_button.subtitle
+                    elide: copy_button.subtitleElide
+                }
+            }
+            Image {
+                source: copy_timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
+            }
+        }
+
+        onClicked: {
+            Clipboard.copy(copy_button.copyText)
+            copy_timer.restart()
+        }
+
+        Timer {
+            id: copy_timer
+            repeat: false
+            interval: 1000
         }
     }
 }
