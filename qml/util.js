@@ -496,3 +496,18 @@ function isSendEnabled(context) {
     if (!context?.watchonly) return true
     return canAirgapSend(context)
 }
+
+// Detect the electrum (singlesig) network from a scanned output descriptor or xpub,
+// mirroring green_android WatchOnlyDetector.detectNetwork(). The extended-key prefix
+// (xpub/ypub/zpub vs tpub/upub/vpub) is the reliable testnet signal; slip77/ct/el and
+// the 1776 coin type indicate Liquid. Returns a NetworkManager network id.
+function networkFromDescriptor(descriptor) {
+    const d = (descriptor || '').toLowerCase()
+    const liquid = d.includes('slip77(') || d.includes('ct(') ||
+                   d.includes('elwpkh') || d.includes('elwsh') ||
+                   d.includes('elsh') || d.includes('elpkh') ||
+                   d.includes("/1776'") || d.includes('/1776h')
+    const testnet = d.includes('tpub') || d.includes('upub') || d.includes('vpub')
+    if (liquid) return testnet ? 'electrum-testnet-liquid' : 'electrum-liquid'
+    return testnet ? 'electrum-testnet' : 'electrum-mainnet'
+}

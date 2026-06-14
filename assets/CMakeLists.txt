@@ -243,8 +243,6 @@ qt_add_resources(${APP_TARGET} "images"
         svg3/2fa_phone.svg
         svg3/2fa_sms.svg
         svg3/Authenticator.svg
-        svg3/Authenticator-2.svg
-        svg3/Authenticator-3.svg
         svg3/Cancel.svg
         svg3/Check.svg
         svg3/Chip.svg
@@ -255,6 +253,11 @@ qt_add_resources(${APP_TARGET} "images"
         svg3/questions.svg
         svg3/key.svg
         svg3/Jade.svg
+        svg3/jade_welcome.svg
+        svg3/jade_connect_1.svg
+        svg3/jade_connect_2.svg
+        svg3/jade_qr_unlock_step_1.svg
+        svg3/jade_qr_unlock_step_2.svg
         svg3/Backup.svg
         svg3/Pin.svg
         svg3/Warning.svg

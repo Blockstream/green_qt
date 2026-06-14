@@ -175,6 +175,8 @@ set(QML_FILES_DEVICES
     AlreadyRestoredPage.qml
     UseDevicePage.qml
     ConnectJadePage.qml
+    JadeQrConnectPage.qml
+    JadeQrConnectUnlockPage.qml
     JadePage.qml
     JadeInitializedView.qml
     JadeLoginView.qml

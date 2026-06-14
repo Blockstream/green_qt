@@ -5,38 +5,31 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    required property Context context
+    signal doneClicked()
 
-    signal exportRequested()
+    property var returnPage: null
 
-    id: self
-    title: qsTrId('id_qr_pin_unlock')
-    leftItem: BackButton {
-        onClicked: self.popPage()
+    function finishUnlock() {
+        if (self.returnPage) {
+            self.returnPage.StackView.view.pop(self.returnPage)
+        } else {
+            self.doneClicked()
+        }
     }
-    rightItem: CloseButton {
-        onClicked: self.closeClicked()
-    }
-    function continueAirgapFlow() {
-        if (self.StackView.view.currentItem !== self)
-            self.StackView.view.pop(self)
-        self.popPage()
-        self.exportRequested()
-    }
+
     JadeQRController {
         id: qr_controller
-        context: self.context
         onHttpRequest: (request) => {
-            const dialog = http_request_dialog.createObject(self, { request, context: self.context })
+            const dialog = http_request_dialog.createObject(self, { request, context: null })
             dialog.open()
         }
-        onResultEncoded: (result) => self.pushPage(reply_page, {
-            parts: result.parts,
-            unlockPage: self,
-        })
+        onResultEncoded: (result) => self.pushPage(parts_page, result)
     }
-    StackView.onActivated: scanner.reset()
+    id: self
     footer: null
+    padding: 60
+    StackView.onActivated: scanner.reset()
+    title: qsTrId('id_qr_pin_unlock')
     contentItem: VFlickable {
         alignment: Qt.AlignTop
         spacing: 10
@@ -83,51 +76,40 @@ StackViewPage {
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
             opacity: 0.6
-            text: 'On Jade select QR mode > QR PIN Unlock > Continue > Enter your PIN'
+            text: 'On Jade select QR Mode > QR PIN Unlock > Continue > Enter your PIN'
             wrapMode: Label.WordWrap
         }
         ScannerView {
             id: scanner
             Layout.alignment: Qt.AlignCenter
+            Layout.preferredWidth: 350
+            Layout.preferredHeight: 350
+            Layout.minimumWidth: 350
+            Layout.minimumHeight: 350
             Layout.topMargin: 10
-            Layout.minimumWidth: 320
-            Layout.minimumHeight: 320
             visible: self.StackView.status === StackView.Active
-            context: self.context
             onBcurScanned: (result) => qr_controller.process(result)
         }
         VSpacer {
         }
     }
     Component {
-        id: reply_page
+        id: parts_page
         StackViewPage {
             required property var parts
-            required property var unlockPage
-
+            footer: null
+            padding: 60
             id: page
-            title: qsTrId('id_qr_pin_unlock')
-            rightItem: CloseButton {
-                onClicked: page.unlockPage.closeClicked()
-            }
-            footer: next_footer
-            Pane {
-                id: next_footer
-                background: null
-                padding: page.padding
-                leftPadding: page.padding
-                rightPadding: page.padding
-                bottomPadding: page.padding
-                topPadding: 20
-                contentItem: PrimaryButton {
-                    Layout.fillWidth: true
-                    text: qsTrId('id_next')
-                    onClicked: page.unlockPage.continueAirgapFlow()
-                }
-            }
+            title: qsTrId('id_scan_qr_code')
             contentItem: VFlickable {
                 alignment: Qt.AlignTop
                 spacing: 10
+                Timer {
+                    interval: 250
+                    running: page.parts.length > 1
+                    repeat: true
+                    onTriggered: reply_qrcode.index = (reply_qrcode.index + 1) % page.parts.length
+                }
                 ColumnLayout {
                     Layout.alignment: Qt.AlignCenter
                     Image {
@@ -197,29 +179,22 @@ StackViewPage {
                     HSpacer {
                     }
                 }
-                Rectangle {
+                QRCode {
+                    id: reply_qrcode
+                    property int index: 0
                     Layout.alignment: Qt.AlignCenter
                     Layout.topMargin: 10
-                    implicitWidth: 320
-                    implicitHeight: 320
-                    radius: 8
-                    color: '#FFFFFF'
-                    Timer {
-                        interval: 250
-                        running: page.parts.length > 1
-                        repeat: true
-                        onTriggered: reply_qrcode.index = (reply_qrcode.index + 1) % page.parts.length
-                    }
-                    QRCode {
-                        id: reply_qrcode
-                        property int index: 0
-                        anchors.centerIn: parent
-                        width: 300
-                        height: 300
-                        text: page.parts.length > 0 ? page.parts[reply_qrcode.index] : ''
-                    }
+                    implicitWidth: 280
+                    implicitHeight: 280
+                    text: page.parts.length > 0 ? page.parts[reply_qrcode.index].toUpperCase() : ''
                 }
-                VSpacer {
+                PrimaryButton {
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.minimumWidth: 350
+                    Layout.topMargin: 10
+                    Layout.bottomMargin: 20
+                    text: qsTrId('id_done')
+                    onClicked: finishUnlock()
                 }
             }
         }

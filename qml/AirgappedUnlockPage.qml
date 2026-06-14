@@ -1,7 +1,6 @@
 import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
@@ -12,7 +11,7 @@ StackViewPage {
     signal exitSendFlow
 
     id: self
-    title: qsTrId('id_unlock_jade_before_signing_the')
+    title: 'Unlock Jade'
     rightItem: CloseButton {
         onClicked: self.exitToSendConfirm()
     }
@@ -52,9 +51,10 @@ StackViewPage {
     }
 
     contentItem: VFlickable {
-        alignment: Qt.AlignCenter
+        alignment: Qt.AlignTop
         JadeUnlockSignView {
             Layout.fillWidth: true
+            Layout.fillHeight: true
             onAlreadyUnlocked: self.pushExport()
             onUnlockRequested: self.pushQrUnlock()
         }

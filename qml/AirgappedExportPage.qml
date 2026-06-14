@@ -13,7 +13,7 @@ StackViewPage {
     signal importRequested()
 
     id: self
-    title: qsTrId('id_scan_qr_with_jade')
+    title: 'Validate transaction'
 
     StackView.onActivated: {
         if (self.controller.parts.length === 0 && (self.controller.monitor?.idle ?? true))
@@ -24,31 +24,51 @@ StackViewPage {
     }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
-        spacing: 15
-        Label {
+        spacing: 10
+        ColumnLayout {
             Layout.alignment: Qt.AlignCenter
-            color: constants.g500
-            font.pixelSize: 14
-            font.weight: 600
-            text: qsTrId('id_step_1s').arg(1)
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                Layout.preferredHeight: 32
+                Layout.preferredWidth: 32
+                antialiasing: true
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                smooth: true
+                source: 'qrc:/svg3/jade_qr_unlock_step_1.svg'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                font.pixelSize: 12
+                font.weight: 700
+                horizontalAlignment: Label.AlignHCenter
+                text: 'STEP 1'
+                wrapMode: Label.WordWrap
+            }
         }
         Label {
+            Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            font.pixelSize: 18
-            font.weight: 700
+            Layout.topMargin: 10
+            font.pixelSize: 26
+            font.weight: 600
             horizontalAlignment: Label.AlignHCenter
             text: qsTrId('id_scan_qr_with_jade')
             wrapMode: Label.WordWrap
         }
         Label {
+            Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
+            Layout.maximumWidth: 420
             Layout.preferredWidth: 0
-            font.pixelSize: 12
+            font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
             opacity: 0.6
-            text: qsTrId('id_start_scan_qr_on_jade_and')
+            text: 'On Jade, scan QR and validate transaction details'
             wrapMode: Label.WordWrap
         }
         Rectangle {
@@ -137,7 +157,8 @@ StackViewPage {
         spacing: 10
         RegularButton {
             Layout.fillWidth: true
-            text: qsTrId('id_export')
+            cyan: true
+            text: qsTr('Export to file')
             enabled: self.controller.unsignedPsbt.length > 0
             onClicked: self.controller.savePsbtToFile()
         }

@@ -12,25 +12,29 @@ ColumnLayout {
     ColumnLayout {
         Layout.fillWidth: true
         Layout.maximumWidth: 360
-        Layout.alignment: Qt.AlignHCenter
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
         spacing: 15
         Item {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 120
+            Layout.alignment: Qt.AlignHCenter
+            width: jade_image.width
+            height: jade_image.height
             Image {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.horizontalCenterOffset: -14
-                source: 'qrc:/svg3/Jade.svg'
+                id: jade_image
+                anchors.centerIn: parent
+                antialiasing: true
                 fillMode: Image.PreserveAspectFit
-                sourceSize: Qt.size(82, 113)
-                height: 120
-                width: height * 82 / 113
+                height: 190
+                width: 88
+                mipmap: true
+                smooth: true
+                source: 'qrc:/svg3/Jade.svg'
+                sourceSize: Qt.size(width, height)
             }
         }
         Label {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
+            Layout.topMargin: 10
             font.pixelSize: 18
             font.weight: 700
             horizontalAlignment: Label.AlignHCenter
@@ -48,14 +52,17 @@ ColumnLayout {
             wrapMode: Label.WordWrap
         }
     }
-    RegularButton {
-        Layout.fillWidth: true
-        text: qsTrId('id_jade_already_unlocked')
-        onClicked: self.alreadyUnlocked()
+    VSpacer {
     }
     PrimaryButton {
         Layout.fillWidth: true
         text: qsTrId('id_qr_pin_unlock')
         onClicked: self.unlockRequested()
+    }
+    LinkButton {
+        Layout.alignment: Qt.AlignCenter
+        Layout.topMargin: 5
+        text: qsTrId('id_jade_already_unlocked')
+        onClicked: self.alreadyUnlocked()
     }
 }

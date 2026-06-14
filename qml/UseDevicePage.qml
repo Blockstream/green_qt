@@ -35,7 +35,7 @@ StackViewPage {
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
                 smooth: true
-                source: 'qrc:/svg3/Authenticator-2.svg'
+                source: 'qrc:/svg3/jade_welcome.svg'
             }
             Label {
                 Layout.fillWidth: true
