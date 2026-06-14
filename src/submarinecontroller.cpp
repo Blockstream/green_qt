@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QtConcurrentRun>
 
+#include <memory>
 #include <string>
 #include <utility>
 
