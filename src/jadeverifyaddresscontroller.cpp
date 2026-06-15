@@ -60,7 +60,7 @@ void JadeVerifyAddressController::verifyMultisig() {
     setAddressVerification(VerificationPending);
     const auto account = m_address->account();
     const auto network = account->network();
-    auto device = qobject_cast<JadeDevice*>(m_context->device());
+    auto device = qobject_cast<JadeDevice*>(context()->device());
     Q_ASSERT(device);
     const auto account_recovery_xpub = account->json().value("recovery_xpub").toString().toUtf8();
     const quint32 subaccount = m_address->data().value("subaccount").toDouble();
@@ -96,7 +96,7 @@ void JadeVerifyAddressController::verifySinglesig()
     setAddressVerification(VerificationPending);
     const auto account = m_address->account();
     const auto network = account->network();
-    auto device = qobject_cast<JadeDevice*>(m_context->device());
+    auto device = qobject_cast<JadeDevice*>(context()->device());
     Q_ASSERT(device);
     const auto type = account->type();
     const auto path = ParsePath(m_address->data().value("user_path"));

@@ -30,12 +30,12 @@ void BCURController::process(const QString& data)
         return;
     }
 
-    if (!m_context) {
+    if (!context()) {
         setContext(ContextManager::instance()->create("mainnet", false));
     }
 
     if (!m_task) {
-        auto session = m_context->primarySession();
+        auto session = context()->primarySession();
         dispatcher()->add(new ConnectTask(session));
 
         m_task = new DecodeBCURTask(data, session);

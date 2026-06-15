@@ -14,10 +14,10 @@ class InvoiceController : public Controller
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(ReverseSwap* swap READ swap NOTIFY swapChanged)
+    Q_DECLARE_PRIVATE(InvoiceController)
     QML_ELEMENT
 public:
     InvoiceController(QObject* parent = nullptr);
-    ~InvoiceController();
     QString address() const;
     void setAddress(const QString& address);
     QString satoshi() const;
@@ -37,7 +37,6 @@ signals:
 protected:
     void timerEvent(QTimerEvent* event);
 private:
-    InvoiceControllerPrivate* const d;
     void invalidate(int timeout);
     void update();
     bool isValid() const;

@@ -13,7 +13,7 @@ void WatchOnlyController::update(const QString& username, const QString& passwor
 {
     if (!m_session) return;
 
-    auto watchonly_data = qobject_cast<WatchonlyData*>(m_context->wallet()->login());
+    auto watchonly_data = qobject_cast<WatchonlyData*>(context()->wallet()->login());
     if (watchonly_data) return;
 
     auto task = new RegisterUserTask({{ "username", username }, { "password", password }}, {}, m_session);

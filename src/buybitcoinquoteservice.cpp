@@ -86,12 +86,12 @@ QString BuyBitcoinQuoteService::selectedServiceProvider() const
 
 void BuyBitcoinQuoteService::fetchQuote(const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress)
 {
-    if (!m_context) {
+    if (!context()) {
         qDebug() << Q_FUNC_INFO << "context not set";
         return;
     }
 
-    const auto walletHashedId = m_context->xpubHashId();
+    const auto walletHashedId = context()->xpubHashId();
 
     // Cancel any pending request
     if (m_reply) {
@@ -372,7 +372,7 @@ void BuyBitcoinQuoteService::onReplyFinished()
 
 void BuyBitcoinQuoteService::createWidgetSession(const QString& serviceProvider, const QString& countryCode, double sourceAmount, const QString& sourceCurrencyCode, const QString& walletAddress, bool useDebugMode)
 {
-    if (!m_context) {
+    if (!context()) {
         qDebug() << Q_FUNC_INFO << "context not set";
         return;
     }
@@ -419,7 +419,7 @@ void BuyBitcoinQuoteService::createWidgetSession(const QString& serviceProvider,
     QJsonObject requestData;
     requestData["sessionData"] = sessionData;
     requestData["sessionType"] = "BUY";
-    requestData["externalCustomerId"] = m_context->xpubHashId();
+    requestData["externalCustomerId"] = context()->xpubHashId();
 
     qDebug() << Q_FUNC_INFO << qPrintable(QJsonDocument(requestData).toJson());
     QJsonDocument doc(requestData);

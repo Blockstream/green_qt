@@ -1,6 +1,7 @@
 #ifndef BLOCKSTREAM_SWAP_H
 #define BLOCKSTREAM_SWAP_H
 
+#include <QFuture>
 #include <QObject>
 #include <QQmlEngine>
 
@@ -27,6 +28,7 @@ public:
     };
     Q_ENUM(Status)
     Swap(const QString& id, Context* context);
+    virtual ~Swap();
     Status status() const { return m_status; }
     virtual QVariantMap data() const = 0;
     void sync();
@@ -46,6 +48,7 @@ protected:
     Status m_status{Status::Pending};
     ChainTransaction* m_lockup_transaction{nullptr};
     ChainTransaction* m_claim_transaction{nullptr};
+    QFuture<void> m_future;
 };
 
 class ReverseSwap : public Swap

@@ -26,7 +26,7 @@ void TwoFactorController::disable()
 
 void TwoFactorController::change(const QJsonObject& details)
 {
-    if (!m_context) return;
+    if (!context()) return;
     if (!m_session) return;
     if (m_method.isEmpty()) return;
 
@@ -52,7 +52,7 @@ void TwoFactorController::change(const QJsonObject& details)
     group->add(update_config);
 
     dispatcher()->add(group);
-    m_monitor->add(group);
+    monitor()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=, this] {
         emit finished();
@@ -61,7 +61,7 @@ void TwoFactorController::change(const QJsonObject& details)
 
 void TwoFactorController::changeLimits(const QString& satoshi)
 {
-    if (!m_context) return;
+    if (!context()) return;
     if (!m_session) return;
 
     auto details = QJsonObject{
@@ -80,7 +80,7 @@ void TwoFactorController::changeLimits(const QString& satoshi)
     group->add(load_twofactor_config);
 
     dispatcher()->add(group);
-    m_monitor->add(group);
+    monitor()->add(group);
 
     connect(change_twofactor_limits, &Task::failed, this, [=, this](const QString& error) {
         emit failed(error);
@@ -92,7 +92,7 @@ void TwoFactorController::changeLimits(const QString& satoshi)
 
 void TwoFactorController::setCsvTime(int value)
 {
-    if (!m_context) return;
+    if (!context()) return;
     if (!m_session) return;
 
     auto set_csv_time = new SetCsvTimeTask(value, m_session);
@@ -102,7 +102,7 @@ void TwoFactorController::setCsvTime(int value)
     group->add(set_csv_time);
 
     dispatcher()->add(group);
-    m_monitor->add(group);
+    monitor()->add(group);
 
     connect(set_csv_time, &Task::failed, this, [=, this](const QString& error) {
         emit failed(error);

@@ -1,7 +1,7 @@
 #ifndef GREEN_ZXING_H
 #define GREEN_ZXING_H
 
-#include <QFutureWatcher>
+#include <QFuture>
 #include <QObject>
 #include <QQmlEngine>
 #include <QQuickImageProvider>
@@ -16,6 +16,7 @@ class ZXingDetector : public QObject
     QML_ELEMENT
 public:
     ZXingDetector(QObject* parent = nullptr);
+    virtual ~ZXingDetector();
     QVideoSink* videoSink() const { return m_video_sink; }
     void setVideoSink(QVideoSink* video_sink);
     QVariantList results() const { return m_results; }
@@ -27,7 +28,7 @@ private slots:
 private:
     QVideoSink* m_video_sink{nullptr};
     QVariantList m_results;
-    QFutureWatcher<QVariantList>* m_watcher{nullptr};
+    QFuture<void> m_future;
 };
 
 class ZXingImageProvider : public QQuickImageProvider

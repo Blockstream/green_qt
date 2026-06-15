@@ -18,7 +18,7 @@ WatchOnlyLoginController::WatchOnlyLoginController(QObject* parent)
 
 //    connect(m_dispatcher, &TaskDispatcher::finished, this, [=, this] {
 //        if (m_wallet) {
-//            m_wallet->setContext(m_context);
+//            m_wallet->setContext(context());
 //            WalletManager::instance()->addWallet(m_wallet);
 //            setWallet(nullptr);
 //        }
@@ -62,7 +62,7 @@ void WatchOnlyLoginController::setWallet(Wallet* wallet)
     if (m_wallet == wallet) return;
     m_wallet = wallet;
     emit walletChanged();
-    if (m_context) m_context->setWallet(wallet);
+    if (context()) context()->setWallet(wallet);
     update();
 }
 
@@ -96,9 +96,9 @@ void WatchOnlyLoginController::login()
     const auto network = watchonly_data ? watchonly_data->network() : m_network;
 
     setContext(ContextManager::instance()->create(network->deployment(), false));
-    m_context->setWatchonly(true);
+    context()->setWatchonly(true);
 
-    auto session = m_context->getOrCreateSession(network);
+    auto session = context()->getOrCreateSession(network);
 
     if (!network->isElectrum()) {
         const auto username = watchonly_data ? watchonly_data->username() : m_username;
@@ -119,9 +119,8 @@ void WatchOnlyLoginController::login(LoginTask* login_task)
     Q_ASSERT(m_valid);
     m_error.clear();
 
-    if (m_monitor) m_monitor->deleteLater();
-    m_monitor = new TaskGroupMonitor(this);
-    emit monitorChanged();
+    if (monitor()) monitor()->deleteLater();
+    setMonitor(new TaskGroupMonitor(this));
 
     auto session = login_task->session();
     auto network = session->network();
@@ -142,7 +141,7 @@ void WatchOnlyLoginController::login(LoginTask* login_task)
         m_error = error;
     });
 
-    m_context->setWallet(m_wallet);
+    context()->setWallet(m_wallet);
 
     connect_session->then(login_task);
     login_task->then(create_wallet);
@@ -154,7 +153,7 @@ void WatchOnlyLoginController::login(LoginTask* login_task)
     group->add(create_wallet);
 
     dispatcher()->add(group);
-    m_monitor->add(group);
+    monitor()->add(group);
 
     connect(group, &TaskGroup::finished, this, &WatchOnlyLoginController::loginFinished);
     connect(group, &TaskGroup::failed, this, [=, this] {
@@ -167,9 +166,9 @@ void WatchOnlyLoginController::loginExtendedPublicKeys(const QString& input)
     qDebug() << m_network->id();
 
     setContext(ContextManager::instance()->create(m_network->deployment(), false));
-    m_context->setWatchonly(true);
+    context()->setWatchonly(true);
 
-    auto session = m_context->getOrCreateSession(m_network);
+    auto session = context()->getOrCreateSession(m_network);
 
     m_extended_pubkeys = input.split('\n', Qt::SkipEmptyParts);
 
@@ -180,9 +179,9 @@ void WatchOnlyLoginController::loginExtendedPublicKeys(const QString& input)
 void WatchOnlyLoginController::loginDescriptors(const QString& input)
 {
     setContext(ContextManager::instance()->create(m_network->deployment(), false));
-    m_context->setWatchonly(true);
+    context()->setWatchonly(true);
 
-    auto session = m_context->getOrCreateSession(m_network);
+    auto session = context()->getOrCreateSession(m_network);
 
     m_core_descriptors = input.split('\n', Qt::SkipEmptyParts);
 

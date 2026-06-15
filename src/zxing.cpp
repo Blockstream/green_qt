@@ -12,6 +12,11 @@ ZXingDetector::ZXingDetector(QObject *parent)
 {
 }
 
+ZXingDetector::~ZXingDetector()
+{
+    m_future.waitForFinished();
+}
+
 void ZXingDetector::setVideoSink(QVideoSink* video_sink)
 {
     if (m_video_sink == video_sink) return;
@@ -26,12 +31,11 @@ void ZXingDetector::setVideoSink(QVideoSink* video_sink)
 
 void ZXingDetector::videoFrameChanged(const QVideoFrame& frame)
 {
-    // discard frames while a frame is being processed
-    if (m_watcher) return;
+    if (!m_future.isFinished()) return;
 
     auto current = m_results;
-    m_watcher = new QFutureWatcher<QVariantList>(this);
-    m_watcher->setFuture(QtConcurrent::run([=, this] {
+
+    auto future = QtConcurrent::run([=, this] {
         auto results = current;
         auto image = frame.toImage().convertedTo(QImage::Format_Grayscale8);
         ZXing::ReaderOptions options;
@@ -76,14 +80,14 @@ void ZXingDetector::videoFrameChanged(const QVideoFrame& frame)
             });
         }
         return results;
-    }));
-
-    connect(m_watcher, &QFutureWatcher<QVariantList>::finished, this, [=, this] {
-        m_results = m_watcher->result();
-        emit resultsChanged();
-        delete m_watcher;
-        m_watcher = nullptr;
     });
+
+    future.then(this, [=, this](QVariantList results) {
+        m_results = results;
+        emit resultsChanged();
+    });
+
+    m_future = future;
 }
 
 ZXingImageProvider::ZXingImageProvider()

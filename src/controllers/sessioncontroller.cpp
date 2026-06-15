@@ -84,7 +84,7 @@ void SessionController::setUnspentOutputsStatus(Account* account, const QVariant
     group->add(get_unspent_outputs);
 
     dispatcher()->add(group);
-    m_monitor->add(group);
+    monitor()->add(group);
 
     connect(get_unspent_outputs, &Task::finished, this, [=, this] {
         for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {

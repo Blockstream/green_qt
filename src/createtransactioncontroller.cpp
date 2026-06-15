@@ -98,7 +98,7 @@ void CreateTransactionController::invalidate()
 
 void CreateTransactionController::update()
 {
-    if (!m_context) {
+    if (!context()) {
         qDebug() << Q_FUNC_INFO << "no context";
         return;
     }
@@ -225,7 +225,7 @@ void CreateTransactionController::setTransaction(const QJsonObject& transaction)
             const auto bip21_params = addressee.value("bip21-params").toObject();
             if (bip21_params.contains("assetid")) {
                 const auto asset_id = bip21_params.value("assetid").toString();
-                const auto asset = m_context->getOrCreateAsset(asset_id);
+                const auto asset = context()->getOrCreateAsset(asset_id);
                 setAsset(asset);
             }
             const auto address = addressee.value("address").toString();

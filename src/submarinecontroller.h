@@ -16,10 +16,10 @@ class SubmarineController : public Controller
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(QVariant error READ error NOTIFY errorChanged)
     Q_PROPERTY(SubmarineSwap* swap READ swap NOTIFY swapChanged)
+    Q_DECLARE_PRIVATE(SubmarineController)
     QML_ELEMENT
 public:
     SubmarineController(QObject* parent = nullptr);
-    ~SubmarineController();
     QVariantMap recipient() const;
     void setRecipient(const QVariantMap& recipient);
     QString refundAddress() const;
@@ -38,7 +38,6 @@ signals:
 protected:
     void timerEvent(QTimerEvent* event);
 private:
-    SubmarineControllerPrivate* const d;
     void invalidate();
     void update();
     void setError(const QVariant& error);

@@ -19,6 +19,7 @@
 #include "wallet.h"
 
 #include <QDebug>
+#include <QFutureSynchronizer>
 #include <QMetaEnum>
 #include <QFileInfo>
 #include <QNetworkAccessManager>
@@ -41,17 +42,86 @@ QString taskStatusLabel(Task::Status status)
 }
 } // namespace
 
+class TaskPrivate
+{
+public:
+    virtual ~TaskPrivate() = default;
+    QFutureSynchronizer<void> future_synchronizer;
+};
+
+class SessionTaskPrivate : public TaskPrivate { public: Session* session{nullptr}; };
+class ContextTaskPrivate : public TaskPrivate { public: Context* context{nullptr}; };
+
+class AuthHandlerTaskPrivate : public SessionTaskPrivate
+{
+public:
+    ~AuthHandlerTaskPrivate() override
+    {
+        if (auth_handler) {
+            GA_destroy_auth_handler(auth_handler);
+        }
+    }
+    GA_auth_handler* auth_handler{nullptr};
+};
+
+class RegisterUserTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; QJsonObject device_details; };
+class LoginTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; QJsonObject hw_device; };
+class LoadAccountTaskPrivate : public AuthHandlerTaskPrivate { public: uint32_t pointer{0}; Account* account{nullptr}; };
+class LoadAccountsTaskPrivate : public AuthHandlerTaskPrivate { public: bool refresh{false}; QList<Account*> accounts; };
+class LoadBalanceTaskPrivate : public AuthHandlerTaskPrivate { public: Account* account{nullptr}; };
+class EncryptWithPinTaskPrivate : public AuthHandlerTaskPrivate { public: QString pin; QJsonValue plaintext; };
+class CreateAccountTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; quint32 pointer{0}; };
+class UpdateAccountTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class ValidateTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class ChangeTwoFactorTaskPrivate : public AuthHandlerTaskPrivate { public: QString method; QJsonObject details; };
+class TwoFactorResetTaskPrivate : public AuthHandlerTaskPrivate { public: QString email; bool dispute{false}; };
+class TwoFactorUndoResetTaskPrivate : public AuthHandlerTaskPrivate { public: QString email; };
+class SetCsvTimeTaskPrivate : public AuthHandlerTaskPrivate { public: int value{0}; };
+class ChangeSettingsTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject data; };
+class TwoFactorChangeLimitsTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class CreateTransactionTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class CreateRedepositTransactionTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class SignTransactionTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class BlindTransactionTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class SendTransactionTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class GetUnspentOutputsTaskPrivate : public AuthHandlerTaskPrivate { public: qint64 subaccount{0}; int num_confs{0}; bool all_coins{false}; uint32_t expired_at{0}; };
+class SetUnspentOutputsStatusTaskPrivate : public AuthHandlerTaskPrivate { public: QVariantList outputs; QString status; };
+class GetTransactionsTaskPrivate : public AuthHandlerTaskPrivate { public: qint64 subaccount{0}; int first{0}; int count{0}; };
+class GetReceiveAddressTaskPrivate : public AuthHandlerTaskPrivate { public: Account* account{nullptr}; };
+class GetAddressesTaskPrivate : public AuthHandlerTaskPrivate { public: qint64 subaccount{0}; int last_pointer{0}; };
+class SignMessageTaskPrivate : public AuthHandlerTaskPrivate { public: Address* address{nullptr}; QString message; };
+class AckSystemMessageTaskPrivate : public AuthHandlerTaskPrivate { public: QString message; };
+class DecodeBCURTaskPrivate : public AuthHandlerTaskPrivate { public: QString part; };
+class EncodeBCURTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class RSAVerifyTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
+class ConnectTaskPrivate : public SessionTaskPrivate { public: int timeout{0}; };
+class LoadAssetsTaskPrivate : public SessionTaskPrivate { public: bool refresh{false}; };
+class GetSystemMessageTaskPrivate : public SessionTaskPrivate { public: QString message; };
+class HttpRequestTaskPrivate : public SessionTaskPrivate { public: QJsonObject params; QJsonObject response; };
+class LoadPaymentsTaskPrivate : public ContextTaskPrivate { public: QNetworkAccessManager* net{nullptr}; };
+
 Task::Task(QObject* parent)
+    : Task(new TaskPrivate, parent)
+{
+}
+
+Task::Task(TaskPrivate* d, QObject* parent)
     : QObject(parent)
+    , d_ptr(d)
 {
     m_status_timer.start();
 }
 
 Task::~Task()
 {
+    Q_D(Task);
+    // Drain any in-flight workers before destroying the private (and any
+    // resources it owns, e.g. AuthHandlerTaskPrivate::auth_handler).
+    d->future_synchronizer.waitForFinished();
     if (m_group) {
         m_group->remove(this);
     }
+    delete d_ptr;
 }
 
 QString Task::type() const
@@ -132,6 +202,12 @@ void Task::setStatus(Status status)
     }
 
     dispatch();
+}
+
+void Task::waitForFuture(QFuture<void> future)
+{
+    Q_D(Task);
+    d->future_synchronizer.addFuture(std::move(future));
 }
 
 TaskDispatcher::TaskDispatcher(QObject* parent)
@@ -334,17 +410,28 @@ void TaskGroupMonitor::clear()
 }
 
 SessionTask::SessionTask(Session* session)
-    : Task(session)
-    , m_session(session)
+    : SessionTask(new SessionTaskPrivate, session)
 {
+}
+
+SessionTask::SessionTask(SessionTaskPrivate* d, Session* session)
+    : Task(d, session)
+{
+    d->session = session;
+}
+
+Session* SessionTask::session() const
+{
+    Q_D(const SessionTask);
+    return d->session;
 }
 
 QString SessionTask::description() const
 {
-    if (!m_session) {
+    if (!session()) {
         return Task::description();
     }
-    const auto network = m_session->network();
+    const auto network = session()->network();
     const QString network_id = network ? network->id() : QStringLiteral("?");
     return QStringLiteral("%1 network=%2").arg(Task::description(), network_id);
 }
@@ -378,15 +465,13 @@ namespace {
 } // namespace
 
 AuthHandlerTask::AuthHandlerTask(Session* session)
-    : SessionTask(session)
+    : SessionTask(new AuthHandlerTaskPrivate, session)
 {
 }
 
-AuthHandlerTask::~AuthHandlerTask()
+AuthHandlerTask::AuthHandlerTask(AuthHandlerTaskPrivate* d, Session* session)
+    : SessionTask(d, session)
 {
-    if (m_auth_handler) {
-        GA_destroy_auth_handler(m_auth_handler);
-    }
 }
 
 void AuthHandlerTask::setResult(const QJsonObject& result)
@@ -418,19 +503,18 @@ void AuthHandlerTask::update()
 
     setStatus(Status::Active);
 
-    using Watcher = QFutureWatcher<QPair<bool, QJsonObject>>;
-    const auto watcher = new Watcher(this);
-    watcher->setFuture(QtConcurrent::run([=, this] {
-        const auto ok = call(m_session->m_session, &m_auth_handler);
+    Q_D(AuthHandlerTask);
+    auto future = QtConcurrent::run([=, this] {
+        const auto ok = call(session()->m_session, &d->auth_handler);
         const auto error = gdk::get_thread_error_details();
         return qMakePair(ok, error);
-    }));
+    });
 
-    connect(watcher, &Watcher::finished, this, [=, this] {
-        if (watcher->result().first) {
+    future.then(this, [=, this](std::pair<bool, QJsonObject> result) {
+        if (result.first) {
             next();
         } else {
-            const auto error = watcher->result().second.value("details").toString();
+            const auto error = result.second.value("details").toString();
             if (error == "id_you_are_not_connected") {
                 setStatus(Status::Ready);
             } else {
@@ -439,39 +523,51 @@ void AuthHandlerTask::update()
             }
         }
     });
+
+    waitForFuture(future);
 }
 
 void AuthHandlerTask::requestCode(const QString &method)
 {
-    QtConcurrent::run([=, this] {
-        const auto rc = GA_auth_handler_request_code(m_auth_handler, method.toUtf8().constData());
+    Q_D(AuthHandlerTask);
+    auto future = QtConcurrent::run([=, this] {
+        const auto rc = GA_auth_handler_request_code(d->auth_handler, method.toUtf8().constData());
         return rc == GA_OK;
-    }).then(this, [=, this](bool ok) {
+    });
+
+    future.then(this, [=, this](bool ok) {
         if (ok) {
             next();
         } else {
             setStatus(Status::Failed);
         }
     });
+
+    waitForFuture(future);
 }
 
 void AuthHandlerTask::resolveCode(const QByteArray& code)
 {
-    QtConcurrent::run([=, this] {
-        const auto rc = GA_auth_handler_resolve_code(m_auth_handler, code.constData());
+    Q_D(AuthHandlerTask);
+    auto future = QtConcurrent::run([=, this] {
+        const auto rc = GA_auth_handler_resolve_code(d->auth_handler, code.constData());
         return rc == GA_OK;
-    }).then(this, [=, this](bool ok) {
+    });
+
+    future.then(this, [=, this](bool ok) {
         if (ok) {
             next();
         } else {
             setStatus(Status::Failed);
         }
     });
+
+    waitForFuture(future);
 }
 
 bool AuthHandlerTask::active() const
 {
-    return m_session && m_session->isConnected();
+    return session() && session()->isConnected();
 }
 
 void AuthHandlerTask::handleDone(const QJsonObject& result)
@@ -486,7 +582,7 @@ void AuthHandlerTask::handleError(const QJsonObject& result)
     const auto error = result.value("error").toString();
 
     if (error == "id_connection_failed") {
-        m_session->setConnected(false);
+        session()->setConnected(false);
     }
 
     setResult(result);
@@ -530,15 +626,15 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 
     if (result.contains("required_data")) {
         Resolver* resolver{nullptr};
-        const auto device = m_session->context()->device();
-        const auto xpub_hash_id = m_session->context()->xpubHashId();
+        const auto device = session()->context()->device();
+        const auto xpub_hash_id = session()->context()->xpubHashId();
         if (!device) return promptDevice(result);
         if (device->session() && !xpub_hash_id.isEmpty()) {
             if (device->session()->xpubHashId() != xpub_hash_id) {
                 return promptDevice(result);
             }
         }
-        auto network = m_session->network();
+        auto network = session()->network();
         const auto required_data = result.value("required_data").toObject();
         const auto action = required_data.value("action").toString();
         if (action == "get_xpubs") {
@@ -582,27 +678,33 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 
 void AuthHandlerTask::handleCall(const QJsonObject& result)
 {
-    QtConcurrent::run([=, this] {
-        const auto rc = GA_auth_handler_call(m_auth_handler);
+    Q_D(AuthHandlerTask);
+    auto future = QtConcurrent::run([=, this] {
+        const auto rc = GA_auth_handler_call(d->auth_handler);
         return rc == GA_OK;
-    }).then(this, [=, this](bool ok) {
+    });
+
+    future.then(this, [=, this](bool ok) {
         if (ok) {
             next();
         } else {
             setStatus(Status::Failed);
         }
     });
+
+    waitForFuture(future);
 }
 
 void AuthHandlerTask::next()
 {
-    if (!m_auth_handler) {
+    Q_D(AuthHandlerTask);
+    if (!d->auth_handler) {
         setStatus(Status::Finished);
         return;
     }
 
     GA_json* output;
-    const auto rc = GA_auth_handler_get_status(m_auth_handler, &output);
+    const auto rc = GA_auth_handler_get_status(d->auth_handler, &output);
     if (rc != GA_OK) {
         setStatus(Status::Failed);
         return;
@@ -640,16 +742,18 @@ void AuthHandlerTask::next()
 }
 
 RegisterUserTask::RegisterUserTask(const QJsonObject& details, const QJsonObject& hw_device, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
-    , m_device_details(hw_device)
+    : AuthHandlerTask(new RegisterUserTaskPrivate, session)
 {
+    Q_D(RegisterUserTask);
+    d->details = details;
+    d->device_details = hw_device;
 }
 
 bool RegisterUserTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto details = Json::fromObject(m_details);
-    auto device_details = Json::fromObject(m_device_details);
+    Q_D(RegisterUserTask);
+    const auto details = Json::fromObject(d->details);
+    auto device_details = Json::fromObject(d->device_details);
     const auto rc = GA_register_user(session, device_details.get(), details.get(), auth_handler);
     return rc == GA_OK;
 }
@@ -659,9 +763,9 @@ void RegisterUserTask::handleDone(const QJsonObject& result)
     const auto xpub_hash_id = result.value("result").toObject().value("xpub_hash_id").toString();
     const auto wallet_hash_id = result.value("result").toObject().value("wallet_hash_id").toString();
 
-    m_session->setWalletHashId(wallet_hash_id);
+    session()->setWalletHashId(wallet_hash_id);
 
-    auto context = m_session->context();
+    auto context = session()->context();
     context->setXPubHashId(xpub_hash_id);
 
     AuthHandlerTask::handleDone(result);
@@ -702,59 +806,65 @@ QString loginTaskModeLabel(const QJsonObject& details, const QJsonObject& hw_dev
 } // namespace
 
 LoginTask::LoginTask(Session* session)
-    : AuthHandlerTask(session)
+    : AuthHandlerTask(new LoginTaskPrivate, session)
 {
 }
 
 LoginTask::LoginTask(const QString& pin, const QJsonObject& pin_data, Session* session)
-    : AuthHandlerTask(session)
-    , m_details({
-          { "pin", pin },
-          { "pin_data", pin_data }
-      })
+    : AuthHandlerTask(new LoginTaskPrivate, session)
 {
+    Q_D(LoginTask);
+    d->details = {
+        { "pin", pin },
+        { "pin_data", pin_data }
+    };
 }
 
 LoginTask::LoginTask(const QStringList& mnemonic, const QString& password, Session* session)
-    : AuthHandlerTask(session)
-    , m_details({
-          { "mnemonic", mnemonic.join(' ') },
-          { "password", password }
-      })
+    : AuthHandlerTask(new LoginTaskPrivate, session)
 {
+    Q_D(LoginTask);
+    d->details = {
+        { "mnemonic", mnemonic.join(' ') },
+        { "password", password }
+    };
 }
 
 LoginTask::LoginTask(const QJsonObject& hw_device, Session* session)
-    : AuthHandlerTask(session)
-    , m_hw_device(hw_device)
+    : AuthHandlerTask(new LoginTaskPrivate, session)
 {
+    Q_D(LoginTask);
+    d->hw_device = hw_device;
 }
 
 LoginTask::LoginTask(const QString& username, const QString& password, Session* session)
-    : AuthHandlerTask(session)
-    , m_details({
-          { "username", username },
-          { "password", password }
-      })
+    : AuthHandlerTask(new LoginTaskPrivate, session)
 {
+    Q_D(LoginTask);
+    d->details = {
+        { "username", username },
+        { "password", password }
+    };
 }
 
 LoginTask::LoginTask(const QJsonObject& details, const QJsonObject& hw_device, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
-    , m_hw_device(hw_device)
+    : AuthHandlerTask(new LoginTaskPrivate, session)
 {
+    Q_D(LoginTask);
+    d->details = details;
+    d->hw_device = hw_device;
 }
 
 QString LoginTask::description() const
 {
-    const auto mode = loginTaskModeLabel(m_details, m_hw_device, m_session);
+    Q_D(const LoginTask);
+    const auto mode = loginTaskModeLabel(d->details, d->hw_device, session());
     return QStringLiteral("%1 mode=%2").arg(SessionTask::description(), mode);
 }
 
 void LoginTask::update()
 {
-    if (m_session->m_ready) {
+    if (session()->m_ready) {
         setStatus(Status::Finished);
     } else {
         AuthHandlerTask::update();
@@ -763,8 +873,9 @@ void LoginTask::update()
 
 bool LoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    auto hw_device = Json::fromObject(m_hw_device);
-    auto details = Json::fromObject(m_details);
+    Q_D(LoginTask);
+    auto hw_device = Json::fromObject(d->hw_device);
+    auto details = Json::fromObject(d->details);
     const auto rc = GA_login_user(session, hw_device.get(), details.get(), auth_handler);
     return rc == GA_OK;
 }
@@ -774,9 +885,9 @@ void LoginTask::handleDone(const QJsonObject& result)
     const auto xpub_hash_id = result.value("result").toObject().value("xpub_hash_id").toString();
     const auto wallet_hash_id = result.value("result").toObject().value("wallet_hash_id").toString();
 
-    m_session->m_ready = true;
-    m_session->setWalletHashId(wallet_hash_id);
-    auto context = m_session->context();
+    session()->m_ready = true;
+    session()->setWalletHashId(wallet_hash_id);
+    auto context = session()->context();
     context->setXPubHashId(xpub_hash_id);
 
     AuthHandlerTask::handleDone(result);
@@ -792,7 +903,7 @@ void LoadTwoFactorConfigTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    auto context = m_session->context();
+    auto context = session()->context();
     const auto wallet = context->wallet();
     if (!wallet) return;
 
@@ -801,16 +912,20 @@ void LoadTwoFactorConfigTask::update()
         return;
     }
 
-    if (!m_session->m_ready) return;
+    if (!session()->m_ready) return;
 
     setStatus(Status::Active);
 
-    QtConcurrent::run([=, this] {
-        return gdk::get_twofactor_config(m_session->m_session);
-    }).then(this, [=, this](const QJsonObject& config) {
-        m_session->setConfig(config);
+    auto future = QtConcurrent::run([=, this] {
+        return gdk::get_twofactor_config(session()->m_session);
+    });
+
+    future.then(this, [=, this](const QJsonObject& config) {
+        session()->setConfig(config);
         setStatus(Status::Finished);
     });
+
+    waitForFuture(future);
 }
 
 LoadCurrenciesTask::LoadCurrenciesTask(Session* session)
@@ -822,46 +937,60 @@ void LoadCurrenciesTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    if (!m_session->m_ready) return;
+    if (!session()->m_ready) return;
 
     setStatus(Status::Active);
 
-    QtConcurrent::run([=, this] {
-        return gdk::get_available_currencies(m_session->m_session);
-    }).then(this, [=, this](const QJsonObject& currencies) {
-        m_session->setCurrencies(currencies);
+    auto future = QtConcurrent::run([=, this] {
+        return gdk::get_available_currencies(session()->m_session);
+    });
+
+    future.then(this, [=, this](const QJsonObject& currencies) {
+        session()->setCurrencies(currencies);
         setStatus(Status::Finished);
     });
+
+    waitForFuture(future);
 }
 
 LoadAccountTask::LoadAccountTask(uint32_t pointer, Session* session)
-    : AuthHandlerTask(session)
-    , m_pointer(pointer)
+    : AuthHandlerTask(new LoadAccountTaskPrivate, session)
 {
+    Q_D(LoadAccountTask);
+    d->pointer = pointer;
+}
+
+Account* LoadAccountTask::account() const
+{
+    Q_D(const LoadAccountTask);
+    return d->account;
 }
 
 QString LoadAccountTask::description() const
 {
-    return QStringLiteral("%1 pointer=%2").arg(SessionTask::description()).arg(m_pointer);
+    Q_D(const LoadAccountTask);
+    return QStringLiteral("%1 pointer=%2").arg(SessionTask::description()).arg(d->pointer);
 }
 
 bool LoadAccountTask::active() const
 {
-    return AuthHandlerTask::active() && m_session->m_ready;
+    return AuthHandlerTask::active() && session()->m_ready;
 }
 
 bool LoadAccountTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    int res = GA_get_subaccount(session, m_pointer, auth_handler);
+    Q_D(LoadAccountTask);
+    int res = GA_get_subaccount(session, d->pointer, auth_handler);
     return res == GA_OK;
 }
 
 void LoadAccountTask::handleDone(const QJsonObject& result)
 {
+    Q_D(LoadAccountTask);
     const auto data = result.value("result").toObject();
-    auto context = m_session->context();
-    auto network = m_session->network();
-    m_account = context->getOrCreateAccount(network, data);
+    auto context = session()->context();
+    auto network = session()->network();
+    d->account = context->getOrCreateAccount(network, data);
     setStatus(Status::Finished);
 }
 
@@ -881,35 +1010,45 @@ bool ShouldRefresh(Session* session)
 }
 
 LoadAccountsTask::LoadAccountsTask(bool refresh, Session* session)
-    : AuthHandlerTask(session)
-    , m_refresh(refresh || ShouldRefresh(session))
+    : AuthHandlerTask(new LoadAccountsTaskPrivate, session)
 {
+    Q_D(LoadAccountsTask);
+    d->refresh = refresh || ShouldRefresh(session);
+}
+
+QList<Account*> LoadAccountsTask::accounts() const
+{
+    Q_D(const LoadAccountsTask);
+    return d->accounts;
 }
 
 QString LoadAccountsTask::description() const
 {
-    return QStringLiteral("%1 refresh=%2").arg(SessionTask::description(), m_refresh ? QStringLiteral("true") : QStringLiteral("false"));
+    Q_D(const LoadAccountsTask);
+    return QStringLiteral("%1 refresh=%2").arg(SessionTask::description(), d->refresh ? QStringLiteral("true") : QStringLiteral("false"));
 }
 
 bool LoadAccountsTask::active() const
 {
-    return AuthHandlerTask::active() && m_session->m_ready;
+    return AuthHandlerTask::active() && session()->m_ready;
 }
 
 bool LoadAccountsTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    auto details = Json::fromObject({{ "refresh", m_refresh }});
+    Q_D(LoadAccountsTask);
+    auto details = Json::fromObject({{ "refresh", d->refresh }});
     int res = GA_get_subaccounts(session, details.get(), auth_handler);
     return res == GA_OK;
 }
 
 void LoadAccountsTask::handleDone(const QJsonObject& result)
 {
+    Q_D(LoadAccountsTask);
     const auto subaccounts = result.value("result").toObject().value("subaccounts").toArray();
-    auto context = m_session->context();
-    auto network = m_session->network();
+    auto context = session()->context();
+    auto network = session()->network();
     for (auto value : subaccounts) {
-        m_accounts.append(context->getOrCreateAccount(network, value.toObject()));
+        d->accounts.append(context->getOrCreateAccount(network, value.toObject()));
     }
     setStatus(Status::Finished);
 }
@@ -931,8 +1070,8 @@ void SyncAccountsTask::update()
     }
 
     if (m_status == Status::Active) {
-        for (auto account : m_session->context()->getAccounts()) {
-            if (account->session() != m_session) continue;
+        for (auto account : session()->context()->getAccounts()) {
+            if (account->session() != session()) continue;
             if (!account->synced()) return;
         }
         setStatus(Status::Finished);
@@ -940,27 +1079,30 @@ void SyncAccountsTask::update()
 }
 
 LoadBalanceTask::LoadBalanceTask(Account* account)
-    : AuthHandlerTask(account->session())
-    , m_account(account)
+    : AuthHandlerTask(new LoadBalanceTaskPrivate, account->session())
 {
+    Q_D(LoadBalanceTask);
+    d->account = account;
 }
 
 QString LoadBalanceTask::description() const
 {
+    Q_D(const LoadBalanceTask);
     return QStringLiteral("%1 subaccount=%2")
         .arg(SessionTask::description())
-        .arg(m_account ? static_cast<int>(m_account->pointer()) : -1);
+        .arg(d->account ? static_cast<int>(d->account->pointer()) : -1);
 }
 
 bool LoadBalanceTask::active() const
 {
-    return AuthHandlerTask::active() && m_session->m_ready;
+    return AuthHandlerTask::active() && session()->m_ready;
 }
 
 bool LoadBalanceTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
+    Q_D(LoadBalanceTask);
     auto details = Json::fromObject({
-        { "subaccount", static_cast<qint64>(m_account->pointer()) },
+        { "subaccount", static_cast<qint64>(d->account->pointer()) },
         { "num_confs", 0 }
     });
 
@@ -970,8 +1112,9 @@ bool LoadBalanceTask::call(GA_session* session, GA_auth_handler** auth_handler)
 
 void LoadBalanceTask::handleDone(const QJsonObject& result)
 {
+    Q_D(LoadBalanceTask);
     const auto data = result.value("result").toObject();
-    m_account->setBalanceData(data);
+    d->account->setBalanceData(data);
     setStatus(Status::Finished);
 }
 
@@ -984,60 +1127,67 @@ void GetWatchOnlyDetailsTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    const auto wallet = m_session->context()->wallet();
+    const auto wallet = session()->context()->wallet();
     if (!wallet) return;
     if (qobject_cast<WatchonlyData*>(wallet->login())) {
         setStatus(Status::Finished);
         return;
     }
 
-    if (!m_session->m_ready) return;
+    if (!session()->m_ready) return;
 
     setStatus(Status::Active);
 
-    QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([=, this] {
         char* data;
-        const auto rc = GA_get_watch_only_username(m_session->m_session, &data);
+        const auto rc = GA_get_watch_only_username(session()->m_session, &data);
         if (rc != GA_OK) return QString();
         const auto username = QString::fromUtf8(data);
         GA_destroy_string(data);
         return username;
-    }).then(this, [=, this](const QString& username) {
+    });
+
+    future.then(this, [=, this](QString username) {
         if (username.isNull()) {
             setStatus(Status::Failed);
         } else {
-            m_session->setUsername(username);
+            session()->setUsername(username);
             setStatus(Status::Finished);
         }
     });
+
+    waitForFuture(future);
 }
 
 LoadAssetsTask::LoadAssetsTask(bool refresh, Session* session)
-    : SessionTask(session)
-    , m_refresh(refresh)
+    : SessionTask(new LoadAssetsTaskPrivate, session)
 {
+    Q_D(LoadAssetsTask);
+    d->refresh = refresh;
 }
 
 QString LoadAssetsTask::description() const
 {
-    return QStringLiteral("%1 refresh=%2").arg(SessionTask::description(), m_refresh ? QStringLiteral("true") : QStringLiteral("false"));
+    Q_D(const LoadAssetsTask);
+    return QStringLiteral("%1 refresh=%2").arg(SessionTask::description(), d->refresh ? QStringLiteral("true") : QStringLiteral("false"));
 }
 
 void LoadAssetsTask::update()
 {
+    Q_D(LoadAssetsTask);
     if (m_status != Status::Ready) return;
 
-    if (!m_session->network()->isLiquid()) {
+    if (!session()->network()->isLiquid()) {
         setStatus(Status::Finished);
         return;
     }
 
     setStatus(Status::Active);
 
-    QtConcurrent::run([=, this] {
-        if (m_refresh) {
+    auto future = QtConcurrent::run([=, this] {
+        if (d->refresh) {
             const auto params = Json::fromObject({{ "assets", true }, { "icons", true }});
-            const auto rc = GA_refresh_assets(m_session->m_session, params.get());
+            const auto rc = GA_refresh_assets(session()->m_session, params.get());
             qDebug() << Q_FUNC_INFO << "REFRESH" << rc;
             if (rc != GA_OK) return false;
         }
@@ -1046,7 +1196,7 @@ void LoadAssetsTask::update()
 
         {
             const auto params = Json::fromObject({{ "category", "all" }});
-            const auto err = GA_get_assets(m_session->m_session, params.get(), &output);
+            const auto err = GA_get_assets(session()->m_session, params.get(), &output);
             qDebug() << Q_FUNC_INFO << "GET" << err;
             if (err != GA_OK) return false;
         }
@@ -1058,8 +1208,8 @@ void LoadAssetsTask::update()
             const auto asset_id = i.key();
             const auto data = i.value().toObject();
             const auto icon = icons.value(asset_id);
-            QMetaObject::invokeMethod(m_session, [=, this] {
-                auto context = m_session->context();
+            QMetaObject::invokeMethod(session(), [=, this] {
+                auto context = session()->context();
                 if (!context) return;
                 auto asset = context->getOrCreateAsset(asset_id);
                 asset->setData(data);
@@ -1071,123 +1221,158 @@ void LoadAssetsTask::update()
         GA_destroy_json((GA_json*) output);
 
         return true;
-    }).then(this, [=, this](bool ok) {
+    });
+
+    future.then(this, [=, this](bool ok) {
         setStatus(ok ? Status::Finished : Status::Failed);
     });
+
+    waitForFuture(future);
 }
 
 EncryptWithPinTask::EncryptWithPinTask(const QString& pin, Session* session)
-    : AuthHandlerTask(session)
-    , m_pin(pin)
+    : AuthHandlerTask(new EncryptWithPinTaskPrivate, session)
 {
+    Q_D(EncryptWithPinTask);
+    d->pin = pin;
 }
 
 EncryptWithPinTask::EncryptWithPinTask(const QJsonValue& plaintext, const QString& pin, Session* session)
-    : AuthHandlerTask(session)
-    , m_plaintext(plaintext)
-    , m_pin(pin)
+    : AuthHandlerTask(new EncryptWithPinTaskPrivate, session)
 {
+    Q_D(EncryptWithPinTask);
+    d->plaintext = plaintext;
+    d->pin = pin;
 }
 
 void EncryptWithPinTask::setPlaintext(const QJsonValue& plaintext)
 {
-    if (m_plaintext == plaintext) return;
-    m_plaintext = plaintext;
+    Q_D(EncryptWithPinTask);
+    if (d->plaintext == plaintext) return;
+    d->plaintext = plaintext;
     dispatch();
 }
 
 bool EncryptWithPinTask::active() const
 {
+    Q_D(const EncryptWithPinTask);
     if (!AuthHandlerTask::active()) return false;
-    if (m_plaintext.isNull() || m_plaintext.isUndefined()) return false;
+    if (d->plaintext.isNull() || d->plaintext.isUndefined()) return false;
     return true;
 }
 
 bool EncryptWithPinTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
+    Q_D(EncryptWithPinTask);
     const QJsonObject details({
-        { "pin", m_pin },
-        { "plaintext", m_plaintext }
+        { "pin", d->pin },
+        { "plaintext", d->plaintext }
     });
     const auto rc = GA_encrypt_with_pin(session, Json::fromObject(details).get(), auth_handler);
     return rc == GA_OK;
 }
 
 CreateAccountTask::CreateAccountTask(const QJsonObject& details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new CreateAccountTaskPrivate, session)
 {
+    Q_D(CreateAccountTask);
+    d->details = details;
+}
+
+quint32 CreateAccountTask::pointer() const
+{
+    Q_D(const CreateAccountTask);
+    return d->pointer;
 }
 
 bool CreateAccountTask::active() const
 {
-    return AuthHandlerTask::active() && m_session->m_ready;
+    return AuthHandlerTask::active() && session()->m_ready;
 }
 
 bool CreateAccountTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    const auto rc = GA_create_subaccount(session, Json::fromObject(m_details).get(), auth_handler);
+    Q_D(CreateAccountTask);
+    const auto rc = GA_create_subaccount(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
 
 void CreateAccountTask::handleDone(const QJsonObject &result)
 {
-    m_pointer = result.value("result").toObject().value("pointer").toInteger();
+    Q_D(CreateAccountTask);
+    d->pointer = result.value("result").toObject().value("pointer").toInteger();
     setStatus(Status::Finished);
 }
 
 UpdateAccountTask::UpdateAccountTask(const QJsonObject &details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new UpdateAccountTaskPrivate, session)
 {
+    Q_D(UpdateAccountTask);
+    d->details = details;
 }
 
 bool UpdateAccountTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto rc = GA_update_subaccount(session, Json::fromObject(m_details).get(), auth_handler);
+    Q_D(UpdateAccountTask);
+    const auto rc = GA_update_subaccount(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
 
 ValidateTask::ValidateTask(const QJsonObject &details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new ValidateTaskPrivate, session)
 {
+    Q_D(ValidateTask);
+    d->details = details;
 }
 
 bool ValidateTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    const auto rc = GA_validate(session, Json::fromObject(m_details).get(), auth_handler);
+    Q_D(ValidateTask);
+    const auto rc = GA_validate(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
 
 ChangeTwoFactorTask::ChangeTwoFactorTask(const QString& method, const QJsonObject& details, Session* session)
-    : AuthHandlerTask(session)
-    , m_method(method)
-    , m_details(details)
+    : AuthHandlerTask(new ChangeTwoFactorTaskPrivate, session)
 {
+    Q_D(ChangeTwoFactorTask);
+    d->method = method;
+    d->details = details;
 }
 
 bool ChangeTwoFactorTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto details = Json::fromObject(m_details);
-    const auto rc = GA_change_settings_twofactor(session, m_method.toUtf8().constData(), details.get(), auth_handler);
+    Q_D(ChangeTwoFactorTask);
+    const auto details = Json::fromObject(d->details);
+    const auto rc = GA_change_settings_twofactor(session, d->method.toUtf8().constData(), details.get(), auth_handler);
     return rc == GA_OK;
 }
 
 ContextTask::ContextTask(Context* context)
-    : Task(context)
-    , m_context(context)
+    : ContextTask(new ContextTaskPrivate, context)
+{
+}
+
+ContextTask::ContextTask(ContextTaskPrivate* d, Context* context)
+    : Task(d, context)
 {
     Q_ASSERT(context);
+    d->context = context;
+}
+
+Context* ContextTask::context() const
+{
+    Q_D(const ContextTask);
+    return d->context;
 }
 
 QString ContextTask::description() const
 {
-    if (!m_context) {
+    if (!context()) {
         return Task::description();
     }
     const QString base = Task::description();
-    const QString xpub = m_context->xpubHashId();
+    const QString xpub = context()->xpubHashId();
     if (xpub.size() >= 8) {
         return QStringLiteral("%1 xpub_prefix=%2").arg(base, xpub.left(8));
     }
@@ -1195,46 +1380,64 @@ QString ContextTask::description() const
 }
 
 TwoFactorResetTask::TwoFactorResetTask(const QString& email, bool dispute, Session* session)
-    : AuthHandlerTask(session)
-    , m_email(email)
-    , m_dispute(dispute)
+    : AuthHandlerTask(new TwoFactorResetTaskPrivate, session)
 {
+    Q_D(TwoFactorResetTask);
+    d->email = email;
+    d->dispute = dispute;
+}
+
+QString TwoFactorResetTask::email() const
+{
+    Q_D(const TwoFactorResetTask);
+    return d->email;
 }
 
 bool TwoFactorResetTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto rc = GA_twofactor_reset(session, m_email.toUtf8().constData(), m_dispute, auth_handler);
+    Q_D(TwoFactorResetTask);
+    const auto rc = GA_twofactor_reset(session, d->email.toUtf8().constData(), d->dispute, auth_handler);
     return rc == GA_OK;
 }
 
 TwoFactorUndoResetTask::TwoFactorUndoResetTask(const QString& email, Session* session)
-    : AuthHandlerTask(session)
-    , m_email(email)
+    : AuthHandlerTask(new TwoFactorUndoResetTaskPrivate, session)
 {
+    Q_D(TwoFactorUndoResetTask);
+    d->email = email;
+}
+
+QString TwoFactorUndoResetTask::email() const
+{
+    Q_D(const TwoFactorUndoResetTask);
+    return d->email;
 }
 
 bool TwoFactorUndoResetTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto rc = GA_twofactor_undo_reset(session, m_email.toUtf8().constData(), auth_handler);
+    Q_D(TwoFactorUndoResetTask);
+    const auto rc = GA_twofactor_undo_reset(session, d->email.toUtf8().constData(), auth_handler);
     return rc == GA_OK;
 }
 
 SetCsvTimeTask::SetCsvTimeTask(const int value, Session* session)
-    : AuthHandlerTask(session)
-    , m_value(value)
+    : AuthHandlerTask(new SetCsvTimeTaskPrivate, session)
 {
+    Q_D(SetCsvTimeTask);
+    d->value = value;
 }
 
 bool SetCsvTimeTask::call(GA_session* session, GA_auth_handler** auth_handler) {
-    auto details = Json::fromObject({{ "value", m_value }});
+    Q_D(SetCsvTimeTask);
+    auto details = Json::fromObject({{ "value", d->value }});
     const auto rc = GA_set_csvtime(session, details.get(), auth_handler);
     return rc == GA_OK;
 }
 
 void SetCsvTimeTask::handleDone(const QJsonObject &result)
 {
-    auto settings = gdk::get_settings(m_session->m_session);
-    m_session->setSettings(settings);
+    auto settings = gdk::get_settings(session()->m_session);
+    session()->setSettings(settings);
     AuthHandlerTask::handleDone(result);
 }
 
@@ -1257,32 +1460,34 @@ bool GetCredentialsTask::call(GA_session *session, GA_auth_handler **auth_handle
 
 bool GetCredentialsTask::active() const
 {
-    return AuthHandlerTask::active() && m_session->m_ready;
+    return AuthHandlerTask::active() && session()->m_ready;
 }
 
 void GetCredentialsTask::handleDone(const QJsonObject& result)
 {
     const auto credentials = result.value("result").toObject();
-    m_session->context()->setCredentials(credentials);
+    session()->context()->setCredentials(credentials);
     AuthHandlerTask::handleDone(result);
 }
 
 ChangeSettingsTask::ChangeSettingsTask(const QJsonObject& data, Session* session)
-    : AuthHandlerTask(session)
-    , m_data(data)
+    : AuthHandlerTask(new ChangeSettingsTaskPrivate, session)
 {
+    Q_D(ChangeSettingsTask);
+    d->data = data;
 }
 
 bool ChangeSettingsTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto rc = GA_change_settings(session, Json::fromObject(m_data).get(), auth_handler);
+    Q_D(ChangeSettingsTask);
+    const auto rc = GA_change_settings(session, Json::fromObject(d->data).get(), auth_handler);
     return rc == GA_OK;
 }
 
 void ChangeSettingsTask::handleDone(const QJsonObject& result)
 {
-    auto settings = gdk::get_settings(m_session->m_session);
-    if (!settings.isEmpty()) m_session->setSettings(settings);
+    auto settings = gdk::get_settings(session()->m_session);
+    if (!settings.isEmpty()) session()->setSettings(settings);
     AuthHandlerTask::handleDone(result);
 }
 
@@ -1298,26 +1503,30 @@ bool DisableAllPinLoginsTask::call(GA_session* session, GA_auth_handler** auth_h
 }
 
 TwoFactorChangeLimitsTask::TwoFactorChangeLimitsTask(const QJsonObject& details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new TwoFactorChangeLimitsTaskPrivate, session)
 {
+    Q_D(TwoFactorChangeLimitsTask);
+    d->details = details;
 }
 
 bool TwoFactorChangeLimitsTask::call(GA_session *session, GA_auth_handler **auth_handler) {
-    const auto details = Json::fromObject(m_details);
+    Q_D(TwoFactorChangeLimitsTask);
+    const auto details = Json::fromObject(d->details);
     const auto rc = GA_twofactor_change_limits(session, details.get(), auth_handler);
     return rc == GA_OK;
 }
 
 CreateTransactionTask::CreateTransactionTask(const QJsonObject &details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new CreateTransactionTaskPrivate, session)
 {
+    Q_D(CreateTransactionTask);
+    d->details = details;
 }
 
 bool CreateTransactionTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    const auto rc = GA_create_transaction(session, Json::fromObject(m_details).get(), auth_handler);
+    Q_D(CreateTransactionTask);
+    const auto rc = GA_create_transaction(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
 
@@ -1327,14 +1536,16 @@ QJsonObject CreateTransactionTask::transaction() const
 }
 
 CreateRedepositTransactionTask::CreateRedepositTransactionTask(const QJsonObject &details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new CreateRedepositTransactionTaskPrivate, session)
 {
+    Q_D(CreateRedepositTransactionTask);
+    d->details = details;
 }
 
 bool CreateRedepositTransactionTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    const auto rc = GA_create_redeposit_transaction(session, Json::fromObject(m_details).get(), auth_handler);
+    Q_D(CreateRedepositTransactionTask);
+    const auto rc = GA_create_redeposit_transaction(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
 
@@ -1352,26 +1563,30 @@ void SendNLocktimesTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    if (!m_session->m_ready) return;
+    if (!session()->m_ready) return;
 
     setStatus(Status::Active);
 
-    QtConcurrent::run([=, this] {
-        const auto rc = GA_send_nlocktimes(m_session->m_session);
+    auto future = QtConcurrent::run([=, this] {
+        const auto rc = GA_send_nlocktimes(session()->m_session);
         if (rc == GA_OK) {
-            return qMakePair(true, gdk::get_settings(m_session->m_session));
+            return qMakePair(true, gdk::get_settings(session()->m_session));
         } else {
             return qMakePair(false, gdk::get_thread_error_details());
         }
-    }).then(this, [=, this](QPair<bool, QJsonObject> result) {
+    });
+
+    future.then(this, [=, this](QPair<bool, QJsonObject> result) {
         if (result.first) {
-            m_session->setSettings(result.second);
+            session()->setSettings(result.second);
             setStatus(Status::Finished);
         } else {
             setError(result.second.value("details").toString());
             setStatus(Status::Failed);
         }
     });
+
+    waitForFuture(future);
 }
 
 TaskGroup::TaskGroup(QObject* parent)
@@ -1432,35 +1647,44 @@ void TaskGroup::dispatch()
 }
 
 SignTransactionTask::SignTransactionTask(Session* session)
-    : AuthHandlerTask(session)
+    : AuthHandlerTask(new SignTransactionTaskPrivate, session)
 {
+}
+
+QJsonObject SignTransactionTask::details() const
+{
+    Q_D(const SignTransactionTask);
+    return d->details;
 }
 
 void SignTransactionTask::setDetails(const QJsonObject& details)
 {
-    if (m_details == details) return;
-    m_details = details;
+    Q_D(SignTransactionTask);
+    if (d->details == details) return;
+    d->details = details;
     emit detailsChanged();
 }
 
 bool SignTransactionTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    auto details = Json::fromObject(m_details);
+    Q_D(SignTransactionTask);
+    auto details = Json::fromObject(d->details);
     const auto rc = GA_sign_transaction(session, details.get(), auth_handler);
     return rc == GA_OK;
 }
 
 SendTransactionTask::SendTransactionTask(Session* session)
-    : AuthHandlerTask(session)
+    : AuthHandlerTask(new SendTransactionTaskPrivate, session)
 {
 }
 
 void SendTransactionTask::update()
 {
+    Q_D(SendTransactionTask);
     const bool mock_send = qApp->arguments().contains("--mock-send");
     if (mock_send) {
         qDebug() << Q_FUNC_INFO << "inputs";
-        const auto inputs = m_details.value("transaction_inputs").toArray();
+        const auto inputs = d->details.value("transaction_inputs").toArray();
         for (const auto value : inputs) {
             const auto input = value.toObject();
             qDebug()
@@ -1470,7 +1694,7 @@ void SendTransactionTask::update()
                 << input.value("satoshi").toInteger();
         }
         qDebug() << Q_FUNC_INFO << "outputs";
-        const auto outputs = m_details.value("transaction_outputs").toArray();
+        const auto outputs = d->details.value("transaction_outputs").toArray();
         for (const auto value : outputs) {
             const auto output = value.toObject();
             qDebug()
@@ -1487,44 +1711,55 @@ void SendTransactionTask::update()
 
 void SendTransactionTask::setDetails(const QJsonObject &details)
 {
-    m_details = details;
+    Q_D(SendTransactionTask);
+    d->details = details;
 }
 
 QJsonObject SendTransactionTask::transaction() const
 {
+    Q_D(const SendTransactionTask);
     QJsonObject transaction;
 
     const bool mock_send = qApp->arguments().contains("--mock-send");
     if (mock_send) {
-        transaction = m_details;
+        transaction = d->details;
     } else {
         Q_ASSERT(m_result.value("status") == "done");
         transaction = m_result.value("result").toObject();
     }
-    transaction.insert("inputs", m_details.value("transaction_inputs"));
+    transaction.insert("inputs", d->details.value("transaction_inputs"));
 
     return transaction;
 }
 
 bool SendTransactionTask::active() const
 {
-    if (m_details.isEmpty()) return false;
+    Q_D(const SendTransactionTask);
+    if (d->details.isEmpty()) return false;
     return AuthHandlerTask::active();
 }
 
 bool SendTransactionTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    auto details = Json::fromObject(m_details);
+    Q_D(SendTransactionTask);
+    auto details = Json::fromObject(d->details);
     const auto rc = GA_send_transaction(session, details.get(), auth_handler);
     return rc == GA_OK;
 }
 
 GetUnspentOutputsTask::GetUnspentOutputsTask(int num_confs, bool all_coins, Account* account)
-    : AuthHandlerTask(account->session())
-    , m_subaccount(account->pointer())
-    , m_num_confs(num_confs)
-    , m_all_coins(all_coins)
+    : AuthHandlerTask(new GetUnspentOutputsTaskPrivate, account->session())
 {
+    Q_D(GetUnspentOutputsTask);
+    d->subaccount = account->pointer();
+    d->num_confs = num_confs;
+    d->all_coins = all_coins;
+}
+
+void GetUnspentOutputsTask::setExpiredAt(uint32_t expired_at)
+{
+    Q_D(GetUnspentOutputsTask);
+    d->expired_at = expired_at;
 }
 
 QJsonObject GetUnspentOutputsTask::unspentOutputs() const
@@ -1534,18 +1769,19 @@ QJsonObject GetUnspentOutputsTask::unspentOutputs() const
 
 bool GetUnspentOutputsTask::active() const
 {
-    return AuthHandlerTask::active() && m_session->m_ready;
+    return AuthHandlerTask::active() && session()->m_ready;
 }
 
 bool GetUnspentOutputsTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
+    Q_D(GetUnspentOutputsTask);
     auto details = QJsonObject{
-        { "subaccount", m_subaccount },
-        { "num_confs", m_num_confs },
-        { "all_coins", m_all_coins }
+        { "subaccount", d->subaccount },
+        { "num_confs", d->num_confs },
+        { "all_coins", d->all_coins }
     };
-    if (m_expired_at > 0) {
-        details["expired_at"] = qint64(m_expired_at);
+    if (d->expired_at > 0) {
+        details["expired_at"] = qint64(d->expired_at);
     }
 
     const auto rc = GA_get_unspent_outputs(session, Json::fromObject(details).get(), auth_handler);
@@ -1553,19 +1789,21 @@ bool GetUnspentOutputsTask::call(GA_session *session, GA_auth_handler **auth_han
 }
 
 GetTransactionsTask::GetTransactionsTask(int first, int count, Account* account)
-    : AuthHandlerTask(account->session())
-    , m_subaccount(account->pointer())
-    , m_first(first)
-    , m_count(count)
+    : AuthHandlerTask(new GetTransactionsTaskPrivate, account->session())
 {
+    Q_D(GetTransactionsTask);
+    d->subaccount = account->pointer();
+    d->first = first;
+    d->count = count;
 }
 
 bool GetTransactionsTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
+    Q_D(GetTransactionsTask);
     auto details = Json::fromObject({
-        { "subaccount", m_subaccount },
-        { "first", m_first },
-        { "count", m_count }
+        { "subaccount", d->subaccount },
+        { "first", d->first },
+        { "count", d->count }
     });
 
     const auto rc = GA_get_transactions(session, details.get(), auth_handler);
@@ -1578,15 +1816,17 @@ QJsonArray GetTransactionsTask::transactions() const
 }
 
 GetReceiveAddressTask::GetReceiveAddressTask(Account *account)
-    : AuthHandlerTask(account->session())
-    , m_account(account)
+    : AuthHandlerTask(new GetReceiveAddressTaskPrivate, account->session())
 {
+    Q_D(GetReceiveAddressTask);
+    d->account = account;
 }
 
 bool GetReceiveAddressTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
+    Q_D(GetReceiveAddressTask);
     const auto address_details = Json::fromObject({
-        { "subaccount", static_cast<qint64>(m_account->pointer()) },
+        { "subaccount", static_cast<qint64>(d->account->pointer()) },
     });
 
     const auto rc = GA_get_receive_address(session, address_details.get(), auth_handler);
@@ -1594,16 +1834,18 @@ bool GetReceiveAddressTask::call(GA_session *session, GA_auth_handler **auth_han
 }
 
 GetAddressesTask::GetAddressesTask(int last_pointer, Account* account)
-    : AuthHandlerTask(account->session())
-    , m_subaccount(account->pointer())
-    , m_last_pointer(last_pointer)
+    : AuthHandlerTask(new GetAddressesTaskPrivate, account->session())
 {
+    Q_D(GetAddressesTask);
+    d->subaccount = account->pointer();
+    d->last_pointer = last_pointer;
 }
 
 bool GetAddressesTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    QJsonObject _details({{ "subaccount", m_subaccount }});
-    if (m_last_pointer != 0) _details["last_pointer"] = m_last_pointer;
+    Q_D(GetAddressesTask);
+    QJsonObject _details({{ "subaccount", d->subaccount }});
+    if (d->last_pointer != 0) _details["last_pointer"] = d->last_pointer;
     auto details = Json::fromObject(_details);
 
     const auto rc = GA_get_previous_addresses(session, details.get(), auth_handler);
@@ -1649,22 +1891,24 @@ bool TwoFactorCancelResetTask::call(GA_session* session, GA_auth_handler** auth_
 }
 
 SetUnspentOutputsStatusTask::SetUnspentOutputsStatusTask(const QVariantList &outputs, const QString &status, Session* session)
-    : AuthHandlerTask(session)
-    , m_outputs(outputs)
-    , m_status(status)
+    : AuthHandlerTask(new SetUnspentOutputsStatusTaskPrivate, session)
 {
+    Q_D(SetUnspentOutputsStatusTask);
+    d->outputs = outputs;
+    d->status = status;
 }
 
 bool SetUnspentOutputsStatusTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
+    Q_D(SetUnspentOutputsStatusTask);
     QJsonArray list;
-    for (const auto& variant : m_outputs)
+    for (const auto& variant : d->outputs)
     {
         auto output = variant.value<Output*>();
         QJsonObject o;
         o["txhash"] = output->data()["txhash"].toString();
         o["pt_idx"] = output->data()["pt_idx"].toInt();
-        o["user_status"] = m_status;
+        o["user_status"] = d->status;
         list.append(o);
     }
     auto details = Json::fromObject({
@@ -1676,31 +1920,35 @@ bool SetUnspentOutputsStatusTask::call(GA_session *session, GA_auth_handler **au
 }
 
 ConnectTask::ConnectTask(Session* session)
-    : SessionTask(session)
-    , m_timeout(60000)
+    : SessionTask(new ConnectTaskPrivate, session)
 {
+    Q_D(ConnectTask);
+    d->timeout = 60000;
 }
 
 ConnectTask::ConnectTask(int timeout, Session *session)
-    : SessionTask(session)
-    , m_timeout(timeout)
+    : SessionTask(new ConnectTaskPrivate, session)
 {
+    Q_D(ConnectTask);
+    d->timeout = timeout;
 }
 
 QString ConnectTask::description() const
 {
-    return QStringLiteral("%1 timeout_ms=%2").arg(SessionTask::description()).arg(m_timeout);
+    Q_D(const ConnectTask);
+    return QStringLiteral("%1 timeout_ms=%2").arg(SessionTask::description()).arg(d->timeout);
 }
 
 void ConnectTask::update()
 {
+    Q_D(ConnectTask);
     if (m_status == Status::Ready) {
-        if (m_session->useTor() && !m_session->useProxy()) {
+        if (session()->useTor() && !session()->useProxy()) {
             auto tor_session = SessionManager::instance()->torSession();
-            if (tor_session != m_session) {
+            if (tor_session != session()) {
                 const auto tag = tor_session->events().value("tor").toObject().value("tag").toString();
                 if (tag != "done") {
-                    qDebug() << Q_FUNC_INFO << m_session->network()->id() << "wait for tor session";
+                    qDebug() << Q_FUNC_INFO << session()->network()->id() << "wait for tor session";
                     return;
                 }
             }
@@ -1708,34 +1956,31 @@ void ConnectTask::update()
 
         setStatus(Status::Active);
 
-        if (m_session->isConnected()) {
+        if (session()->isConnected()) {
             setStatus(Status::Finished);
             return;
         }
 
-        if (m_timeout > 0) {
-            QTimer::singleShot(m_timeout, this, [=, this] {
-                if (m_status == Status::Active && !m_session->isConnected()) {
-                    qDebug() << Q_FUNC_INFO << m_session->network()->id() << "timeout after" << m_timeout;
+        if (d->timeout > 0) {
+            QTimer::singleShot(d->timeout, this, [=, this] {
+                if (m_status == Status::Active && !session()->isConnected()) {
+                    qDebug() << Q_FUNC_INFO << session()->network()->id() << "timeout after" << d->timeout;
                     setError("timeout error");
                     setStatus(Status::Failed);
                 }
             });
         }
 
-        using Watcher = QFutureWatcher<QString>;
-        const auto watcher = new Watcher(this);
-        watcher->setFuture(QtConcurrent::run([=, this] {
-            const auto params = get_params(m_session);
-            const auto rc = GA_connect(m_session->m_session, Json::fromObject(params).get());
+        auto future = QtConcurrent::run([=, this] {
+            const auto params = get_params(session());
+            const auto rc = GA_connect(session()->m_session, Json::fromObject(params).get());
             if (rc == GA_OK) return QString();
             const auto error = gdk::get_thread_error_details();
             return error.value("details").toString();
-        }));
+        });
 
-        connect(watcher, &Watcher::finished, this, [=, this] {
+        future.then(this, [=, this](QString error) {
             if (m_status != Status::Active) return;
-            const auto error = watcher->result();
             if (error.contains("session already connected")) {
                 setStatus(Status::Finished);
                 return;
@@ -1745,30 +1990,35 @@ void ConnectTask::update()
                 setStatus(Status::Failed);
             }
         });
+
+        waitForFuture(future);
     } else if (m_status == Status::Active) {
-        if (m_session->isConnected()) {
+        if (session()->isConnected()) {
             setStatus(Status::Finished);
         }
     }
 }
 
 BlindTransactionTask::BlindTransactionTask(const QJsonObject& details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new BlindTransactionTaskPrivate, session)
 {
+    Q_D(BlindTransactionTask);
+    d->details = details;
 }
 
 bool BlindTransactionTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto rc = GA_blind_transaction(session, Json::fromObject(m_details).get(), auth_handler);
+    Q_D(BlindTransactionTask);
+    const auto rc = GA_blind_transaction(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
 
 SignMessageTask::SignMessageTask(const QString &message, Address* address)
-    : AuthHandlerTask(address->account()->session())
-    , m_address(address)
-    , m_message(message)
+    : AuthHandlerTask(new SignMessageTaskPrivate, address->account()->session())
 {
+    Q_D(SignMessageTask);
+    d->address = address;
+    d->message = message;
 }
 
 QString SignMessageTask::signature() const
@@ -1778,10 +2028,11 @@ QString SignMessageTask::signature() const
 
 bool SignMessageTask::call(GA_session* session, GA_auth_handler** call)
 {
-    const auto address = m_address->data().value("address").toString();
+    Q_D(SignMessageTask);
+    const auto address = d->address->data().value("address").toString();
     QJsonObject details{
         { "address", address },
-        { "message", m_message }
+        { "message", d->message }
     };
     const auto rc = GA_sign_message(session, Json::fromObject(details).get(), call);
     return rc == GA_OK;
@@ -1836,21 +2087,28 @@ void DevicePrompt::select(Device* device)
 
 
 GetSystemMessageTask::GetSystemMessageTask(Session* session)
-    : SessionTask(session)
+    : SessionTask(new GetSystemMessageTaskPrivate, session)
 {
+}
+
+QString GetSystemMessageTask::message() const
+{
+    Q_D(const GetSystemMessageTask);
+    return d->message;
 }
 
 void GetSystemMessageTask::update()
 {
+    Q_D(GetSystemMessageTask);
     if (status() != Status::Ready) return;
 
-    if (!m_session->m_ready) return;
+    if (!session()->m_ready) return;
 
     setStatus(Status::Active);
 
-    QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([=, this] {
         char* message_text;
-        const auto rc = GA_get_system_message(m_session->m_session, &message_text);
+        const auto rc = GA_get_system_message(session()->m_session, &message_text);
         if (rc != GA_OK) {
             const auto error = gdk::get_thread_error_details();
             return qMakePair(false, QString());
@@ -1860,46 +2118,60 @@ void GetSystemMessageTask::update()
         GA_destroy_string(message_text);
 
         return qMakePair(true, message);
-    }).then(this, [=, this](QPair<bool, QString> result) {
+    });
+
+    future.then(this, [=, this](QPair<bool, QString> result) {
         if (result.first) {
-            m_message = result.second;
+            d->message = result.second;
             setStatus(Status::Finished);
         } else {
             setStatus(Status::Failed);
         }
     });
+
+    waitForFuture(future);
 }
 
 AckSystemMessageTask::AckSystemMessageTask(const QString& message, Session* session)
-    : AuthHandlerTask(session)
-    , m_message(message)
+    : AuthHandlerTask(new AckSystemMessageTaskPrivate, session)
 {
+    Q_D(AckSystemMessageTask);
+    d->message = message;
 }
 
 bool AckSystemMessageTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto rc = GA_ack_system_message(session, m_message.toUtf8().constData(), auth_handler);
+    Q_D(AckSystemMessageTask);
+    const auto rc = GA_ack_system_message(session, d->message.toUtf8().constData(), auth_handler);
     return rc == GA_OK;
 }
 
 HttpRequestTask::HttpRequestTask(const QJsonObject& params, Session* session)
-    : SessionTask(session)
-    , m_params(params)
+    : SessionTask(new HttpRequestTaskPrivate, session)
 {
+    Q_D(HttpRequestTask);
+    d->params = params;
+}
+
+QJsonObject HttpRequestTask::response() const
+{
+    Q_D(const HttpRequestTask);
+    return d->response;
 }
 
 void HttpRequestTask::update()
 {
+    Q_D(HttpRequestTask);
     if (status() != Status::Ready) return;
 
-    if (!m_session->isConnected()) return;
+    if (!session()->isConnected()) return;
 
     setStatus(Status::Active);
 
-    QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([=, this] {
         GA_json* output;
-        const auto params = Json::fromObject(m_params);
-        const auto rc = GA_http_request(m_session->m_session, params.get(), &output);
+        const auto params = Json::fromObject(d->params);
+        const auto rc = GA_http_request(session()->m_session, params.get(), &output);
         if (rc == GA_OK) {
             auto res = Json::toObject(output);
             GA_destroy_json(output);
@@ -1907,20 +2179,25 @@ void HttpRequestTask::update()
         } else {
             return qMakePair(false, QJsonObject{});
         }
-    }).then(this, [=, this](QPair<bool, QJsonObject> result) {
+    });
+
+    future.then(this, [=, this](QPair<bool, QJsonObject> result) {
         if (result.first) {
-            m_response = result.second;
+            d->response = result.second;
             setStatus(Status::Finished);
         } else {
             setStatus(Status::Failed);
         }
     });
+
+    waitForFuture(future);
 }
 
 DecodeBCURTask::DecodeBCURTask(const QString& part, Session* session)
-    : AuthHandlerTask(session)
-    , m_part(part)
+    : AuthHandlerTask(new DecodeBCURTaskPrivate, session)
 {
+    Q_D(DecodeBCURTask);
+    d->part = part;
 }
 
 QJsonObject DecodeBCURTask::decodedResult() const
@@ -1930,8 +2207,9 @@ QJsonObject DecodeBCURTask::decodedResult() const
 
 bool DecodeBCURTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
+    Q_D(DecodeBCURTask);
     const QJsonObject details{
-        { "part", m_part },
+        { "part", d->part },
         { "return_raw_data", false }
     };
     const auto rc = GA_bcur_decode(session, Json::fromObject(details).get(), auth_handler);
@@ -1939,14 +2217,16 @@ bool DecodeBCURTask::call(GA_session *session, GA_auth_handler **auth_handler)
 }
 
 EncodeBCURTask::EncodeBCURTask(const QJsonObject& details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new EncodeBCURTaskPrivate, session)
 {
+    Q_D(EncodeBCURTask);
+    d->details = details;
 }
 
 bool EncodeBCURTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto rc = GA_bcur_encode(session, Json::fromObject(m_details).get(), auth_handler);
+    Q_D(EncodeBCURTask);
+    const auto rc = GA_bcur_encode(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
 
@@ -1960,21 +2240,24 @@ RSAVerifyTask::RSAVerifyTask(const QString& pem, const QByteArray& challenge, co
 }
 
 RSAVerifyTask::RSAVerifyTask(const QJsonObject& details, Session* session)
-    : AuthHandlerTask(session)
-    , m_details(details)
+    : AuthHandlerTask(new RSAVerifyTaskPrivate, session)
 {
+    Q_D(RSAVerifyTask);
+    d->details = details;
 }
 
 bool RSAVerifyTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    const auto rc = GA_rsa_verify(session, Json::fromObject(m_details).get(), auth_handler);
+    Q_D(RSAVerifyTask);
+    const auto rc = GA_rsa_verify(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
 
 LoadPaymentsTask::LoadPaymentsTask(QNetworkAccessManager *net, Context *context)
-    : ContextTask(context)
-    , m_net(net)
+    : ContextTask(new LoadPaymentsTaskPrivate, context)
 {
+    Q_D(LoadPaymentsTask);
+    d->net = net;
 }
 
 void LoadPaymentsTask::update()
@@ -1985,6 +2268,7 @@ void LoadPaymentsTask::update()
 }
 
 void LoadPaymentsTask::fetch(const QString &key) {
+    Q_D(LoadPaymentsTask);
     QUrl url("https://ramps.blockstream.com/payments/transactions");
     QUrlQuery query;
     query.addQueryItem("externalCustomerIds", context()->xpubHashId());
@@ -1992,7 +2276,7 @@ void LoadPaymentsTask::fetch(const QString &key) {
     url.setQuery(query);
 
     QNetworkRequest req(url);
-    auto reply = m_net->get(req);
+    auto reply = d->net->get(req);
     connect(reply, &QNetworkReply::finished, this, [=, this] {
         reply->deleteLater();
 

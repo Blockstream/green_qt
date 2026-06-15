@@ -88,7 +88,7 @@ void CreateAccountController::create()
 
 void CreateAccountController::ensureSession()
 {
-    auto session = m_context->getOrCreateSession(m_network);
+    auto session = context()->getOrCreateSession(m_network);
     auto session_connect = new ConnectTask(session);
     auto session_register = session->registerUser();
     auto session_login = session->login();
@@ -107,8 +107,8 @@ void CreateAccountController::ensureSession()
     group->add(session_login);
     group->add(load_accounts);
 
-    const auto pricing = m_context->primarySession()->settings().value("pricing");
-    if (pricing.isObject() && session != m_context->primarySession()) {
+    const auto pricing = context()->primarySession()->settings().value("pricing");
+    if (pricing.isObject() && session != context()->primarySession()) {
         auto sync_settings = new ChangeSettingsTask(QJsonObject{{ "pricing", pricing }}, session);
         session_login->then(sync_settings);
         group->add(sync_settings);
@@ -141,7 +141,7 @@ void CreateAccountController::ensureAccount()
     while (retry) {
         retry = false;
         if (n > 1) suffix = " " + QString::number(n);
-        for (auto account : m_context->getAccounts()) {
+        for (auto account : context()->getAccounts()) {
             if (account->name() == name + suffix) {
                 n ++;
                 retry = true;
@@ -150,10 +150,10 @@ void CreateAccountController::ensureAccount()
         }
     }
 
-    auto session = m_context->getOrCreateSession(m_network);
+    auto session = context()->getOrCreateSession(m_network);
     auto group = new TaskGroup(this);
     Task* last = nullptr;
-    for (auto account : m_context->getAccounts()) {
+    for (auto account : context()->getAccounts()) {
         if (account->session() != session) continue;
         if (account->pointer() == 0 && account->type() != m_type && account->isEmpty()) {
             auto task = new UpdateAccountTask({
@@ -217,7 +217,7 @@ void CreateAccountController::ensureAccount()
             m_error = error;
         });
         connect(create_account, &Task::finished, this, [=, this] {
-            m_account = m_context->getAccountByPointer(m_network, create_account->pointer());
+            m_account = context()->getAccountByPointer(m_network, create_account->pointer());
         });
     }
 

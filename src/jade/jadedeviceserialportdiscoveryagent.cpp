@@ -88,18 +88,13 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
         }
     }
 
-    using Watcher = QFutureWatcher<QList<QSerialPortInfo>>;
-    const auto watcher = new Watcher(this);
-
-    watcher->setFuture(QtConcurrent::run([=, this] {
+    QtConcurrent::run([=, this] {
         return AvailablePorts();
-    }));
-
-    connect(watcher, &Watcher::finished, this, [=, this] {
+    }).then(this, [=, this](QList<QSerialPortInfo> result) {
         auto backends = m_backends;
         m_backends.clear();
 
-        for (const auto &info : watcher->result()) {
+        for (const auto &info : result) {
             const auto system_location = info.systemLocation();
 
             auto backend = backends.take(system_location);

@@ -163,7 +163,7 @@ QVariantMap Convert::formatFiat(double additional_value) const
         { "currency", m_result.value("fiat_currency").toString("") }
     };
 
-    if (m_result.contains("fiat") && !m_result.value("fiat").isNull() && m_result.contains("fiat_currency")) {        
+    if (m_result.contains("fiat") && !m_result.value("fiat").isNull() && m_result.contains("fiat_currency")) {
         bool ok = false;
         const auto base = QLocale::c().toDouble(m_result.value("fiat").toString(), &ok);
         if (!ok) return empty_result;
@@ -372,9 +372,7 @@ void Convert::update()
         return;
     }
 
-    using Watcher = QFutureWatcher<QJsonObject>;
-    const auto watcher = new Watcher(this);
-    watcher->setFuture(QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([=, this] {
         GA_json* output;
         const int rc = GA_convert_amount(session->m_session, Json::fromObject(details).get(), &output);
         if (rc == GA_OK) {
@@ -386,17 +384,17 @@ void Convert::update()
             qDebug() << Q_FUNC_INFO << details << gdk::get_thread_error_details();
             return QJsonObject{};
         }
-    }));
+    });
 
-    connect(watcher, &Watcher::finished, this, [=, this] {
-        watcher->deleteLater();
-        QJsonObject result = watcher->result();
+    future.then(this, [=, this](QJsonObject result) {
         auto satoshi = result.value("satoshi");
         if (!satoshi.isNull()) {
             result["satoshi"] = QLocale::c().toString(satoshi.toInteger());
         }
         setResult(result);
     });
+
+    m_future_synchronizer.addFuture(future);
 }
 
 bool Convert::mainnet() const
@@ -414,4 +412,3 @@ void Convert::timerEvent(QTimerEvent *event)
         update();
     }
 }
-

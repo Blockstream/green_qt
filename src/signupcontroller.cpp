@@ -26,13 +26,13 @@ void SignupController::signup(const QString& deployment)
 
     auto group = new TaskGroup(this);
 
-    if (!m_context) {
+    if (!context()) {
         setContext(ContextManager::instance()->create(deployment, false));
     }
 
-    m_context->setSkipLoadAccounts(true);
+    context()->setSkipLoadAccounts(true);
 
-    auto session = m_context->primarySession();
+    auto session = context()->primarySession();
     auto connect_session = new ConnectTask(session);
     auto register_user = new RegisterUserTask(credentials, {}, session);
     auto mnemonic_login = new LoginTask(credentials, {}, session);

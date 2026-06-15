@@ -83,32 +83,19 @@ void HttpRequestActivity::exec()
     Q_ASSERT(!m_method.isEmpty());
     Q_ASSERT(!m_urls.isEmpty());
 
-    auto watcher = new QFutureWatcher<QJsonObject>(this);
+    QJsonObject details;
+    details.insert("method", m_method);
+    details.insert("urls", QJsonArray::fromStringList(m_urls));
 
-    connect(this, &QObject::destroyed, watcher, &QObject::deleteLater);
-    connect(watcher, &QFutureWatcherBase::finished, this, [this, watcher] {
-        watcher->deleteLater();
-        m_response = watcher->resultAt(0);
-        if (m_response.empty()) {
-            fail();
-        } else {
-            finish();
-        }
-    });
+    if (!m_accept.isEmpty()) details.insert("accept", m_accept);
+    if (!m_data.isNull()) details.insert("data", m_data);
 
-    watcher->setFuture(QtConcurrent::run([this] {
-        QJsonObject details;
-        details.insert("method", m_method);
-        details.insert("urls", QJsonArray::fromStringList(m_urls));
+    if (!m_headers.isEmpty()) details.insert("headers", QJsonObject::fromVariantMap(m_headers));
+    if (m_timeout > 0) details.insert("timeout", m_timeout);
 
-        if (!m_accept.isEmpty()) details.insert("accept", m_accept);
-        if (!m_data.isNull()) details.insert("data", m_data);
+    if (!m_root_certificates.isEmpty()) details.insert("root_certificates", QJsonArray::fromStringList(m_root_certificates));
 
-        if (!m_headers.isEmpty()) details.insert("headers", QJsonObject::fromVariantMap(m_headers));
-        if (m_timeout > 0) details.insert("timeout", m_timeout);
-
-        if (!m_root_certificates.isEmpty()) details.insert("root_certificates", QJsonArray::fromStringList(m_root_certificates));
-
+    QtConcurrent::run([=, this] {
         auto params = Json::fromObject(details);
         GA_json* output;
         int rc = GA_http_request(session()->m_session, params.get(), &output);
@@ -116,5 +103,12 @@ void HttpRequestActivity::exec()
         auto response = Json::toObject(output);
         GA_destroy_json(output);
         return response;
-    }));
+    }).then(this, [=, this](QJsonObject response) {
+        m_response = response;
+        if (m_response.empty()) {
+            fail();
+        } else {
+            finish();
+        }
+    });
 }

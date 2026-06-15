@@ -36,8 +36,8 @@ void RestoreController::setPassword(const QString& password)
 
 void RestoreController::restore(const QString& deployment)
 {
-    if (m_context) {
-        m_context->deleteLater();
+    if (context()) {
+        context()->deleteLater();
         setContext(nullptr);
     }
     Q_ASSERT(!m_wallet || m_wallet->deployment() == deployment);
@@ -46,14 +46,14 @@ void RestoreController::restore(const QString& deployment)
     auto monitor = new TaskGroupMonitor(this);
     connect(monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=, this] {
         if (m_wallet) {
-            if (m_wallet->xpubHashId() == m_context->xpubHashId()) {
-                m_context->setWallet(m_wallet);
-                m_wallet->setContext(m_context);
+            if (m_wallet->xpubHashId() == context()->xpubHashId()) {
+                context()->setWallet(m_wallet);
+                m_wallet->setContext(context());
                 setContext(nullptr);
                 emit restoreFinished(m_wallet->context());
                 return;
             } else {
-                m_context->deleteLater();
+                context()->deleteLater();
                 setContext(nullptr);
                 emit mismatch();
                 return;
@@ -62,14 +62,14 @@ void RestoreController::restore(const QString& deployment)
 
         Wallet* wallet = nullptr;
         for (auto w : WalletManager::instance()->getWallets()) {
-            if (qobject_cast<PinData*>(w->login()) && w->xpubHashId() == m_context->xpubHashId()) {
+            if (qobject_cast<PinData*>(w->login()) && w->xpubHashId() == context()->xpubHashId()) {
                 m_wallet = w;
                 break;
             }
         }
 
         if (wallet) {
-            m_context->deleteLater();
+            context()->deleteLater();
             setContext(nullptr);
             emit alreadyRestored(wallet);
             return;
@@ -77,12 +77,12 @@ void RestoreController::restore(const QString& deployment)
 
         wallet = WalletManager::instance()->createWallet();
         wallet->setName(WalletManager::instance()->newWalletName());
-        wallet->setXPubHashId(m_context->xpubHashId());
-        wallet->m_deployment = m_context->deployment();
+        wallet->setXPubHashId(context()->xpubHashId());
+        wallet->m_deployment = context()->deployment();
         wallet->m_is_persisted = true;
 
-        m_context->setWallet(wallet);
-        wallet->setContext(m_context);
+        context()->setWallet(wallet);
+        wallet->setContext(context());
         setContext(nullptr);
 
         WalletManager::instance()->insertWallet(wallet);
@@ -90,7 +90,7 @@ void RestoreController::restore(const QString& deployment)
         emit restoreFinished(wallet->context());
     });
 
-    m_context->primarySession();
+    context()->primarySession();
 
     for (auto network : NetworkManager::instance()->networks()) {
         if (network->deployment() == deployment) {
@@ -104,7 +104,7 @@ TaskGroup* RestoreController::check(Network* network)
 {
     auto group = new TaskGroup(this);
 
-    auto session = m_context->getOrCreateSession(network);
+    auto session = context()->getOrCreateSession(network);
     auto connect_session = new ConnectTask(session);
     auto login = new LoginTask(m_mnemonic, m_password, session);
     auto get_credentials = new GetCredentialsTask(session);
@@ -132,7 +132,7 @@ TaskGroup* RestoreController::check(Network* network)
     dispatcher()->add(group);
 
     connect(group, &TaskGroup::failed, this, [=, this] {
-        m_context->releaseSession(session);
+        context()->releaseSession(session);
     });
 
     return group;

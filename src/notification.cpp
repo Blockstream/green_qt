@@ -66,34 +66,34 @@ void NotificationsController::reset()
     while (!m_items.isEmpty()) {
         delete m_items.take(m_items.firstKey());
     }
-    if (!m_context) return;
+    if (!context()) return;
 
-    connect(m_context, &Context::notificationAdded, this, [=, this](Notification* notification) {
+    connect(context(), &Context::notificationAdded, this, [=, this](Notification* notification) {
         auto item = new QStandardItem();
         item->setData(QVariant::fromValue(notification));
         m_items.insert(notification, item);
         m_model->insertRow(0, item);
     });
-    connect(m_context, &Context::notificationRemoved, this, [=, this](Notification* notification) {
+    connect(context(), &Context::notificationRemoved, this, [=, this](Notification* notification) {
         auto item = m_items.take(notification);
         if (!item) return;
         m_model->takeRow(item->row());
         delete item;
     });
-    for (auto notification : m_context->getNotifications()) {
+    for (auto notification : context()->getNotifications()) {
         auto item = new QStandardItem();
         item->setData(QVariant::fromValue(notification));
         m_items.insert(notification, item);
         m_model->insertRow(0, item);
     }
 
-    for (auto session : m_context->getSessions()) {
+    for (auto session : context()->getSessions()) {
         auto task = new GetSystemMessageTask(session);
         connect(task, &Task::finished, [=, this] {
             task->deleteLater();
             if (!task->message().isEmpty()) {
-                auto notification = new SystemNotification(task->message(), session->network(), m_context);
-                m_context->addNotification(notification);
+                auto notification = new SystemNotification(task->message(), session->network(), context());
+                context()->addNotification(notification);
             }
         });
         connect(task, &Task::failed, [=, this] {

@@ -15,6 +15,7 @@ class ChainSwapController : public Controller
     Q_PROPERTY(Address* claimAddress READ claimAddress WRITE setClaimAddress NOTIFY claimAddressChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(ChainSwap* swap READ swap NOTIFY swapChanged)
+    Q_DECLARE_PRIVATE(ChainSwapController)
     QML_ELEMENT
 public:
     ChainSwapController(QObject* parent = nullptr);
@@ -39,7 +40,6 @@ signals:
 protected:
     void timerEvent(QTimerEvent* event);
 private:
-    ChainSwapControllerPrivate* const d;
     void invalidate();
     void update();
 };

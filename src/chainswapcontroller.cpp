@@ -15,7 +15,7 @@
 #include <memory>
 #include <utility>
 
-class ChainSwapControllerPrivate
+class ChainSwapControllerPrivate : public ControllerPrivate
 {
 public:
     int timer_id{-1};
@@ -28,28 +28,29 @@ public:
 };
 
 ChainSwapController::ChainSwapController(QObject* parent)
-    : Controller(parent)
-    , d(new ChainSwapControllerPrivate)
+    : Controller(new ChainSwapControllerPrivate, parent)
 {
     invalidate();
 }
 
 ChainSwapController::~ChainSwapController()
 {
+    Q_D(ChainSwapController);
     if (d->swap && !d->swap->lockupTransaction()) {
         context()->removeSwap(d->swap);
         d->swap->deleteLater();
     }
-    delete d;
 }
 
 QString ChainSwapController::amount() const
 {
+    Q_D(const ChainSwapController);
     return d->amount;
 }
 
 void ChainSwapController::setAmount(const QString& amount)
 {
+    Q_D(ChainSwapController);
     if (d->amount == amount) return;
     d->amount = amount;
     emit amountChanged();
@@ -58,11 +59,13 @@ void ChainSwapController::setAmount(const QString& amount)
 
 ChainSwap *ChainSwapController::swap() const
 {
+    Q_D(const ChainSwapController);
     return d->swap;
 }
 
 void ChainSwapController::setLockupTransaction(ChainTransaction* transaction)
 {
+    Q_D(ChainSwapController);
     if (d->swap) {
         d->swap->setLockupTransaction(transaction);
     }
@@ -70,11 +73,13 @@ void ChainSwapController::setLockupTransaction(ChainTransaction* transaction)
 
 Address* ChainSwapController::refundAddress() const
 {
+    Q_D(const ChainSwapController);
     return d->refund_address;
 }
 
 void ChainSwapController::setRefundAddress(Address* refund_address)
 {
+    Q_D(ChainSwapController);
     if (d->refund_address == refund_address) return;
     d->refund_address = refund_address;
     emit refundAddressChanged();
@@ -83,11 +88,13 @@ void ChainSwapController::setRefundAddress(Address* refund_address)
 
 Address* ChainSwapController::claimAddress() const
 {
+    Q_D(const ChainSwapController);
     return d->claim_address;
 }
 
 void ChainSwapController::setClaimAddress(Address* claim_address)
 {
+    Q_D(ChainSwapController);
     if (d->claim_address == claim_address) return;
     d->claim_address = claim_address;
     emit claimAddressChanged();
@@ -96,6 +103,7 @@ void ChainSwapController::setClaimAddress(Address* claim_address)
 
 void ChainSwapController::invalidate()
 {
+    Q_D(ChainSwapController);
     if (d->timer_id != -1) killTimer(d->timer_id);
     d->timer_id = startTimer(50);
     d->busy = true;
@@ -104,6 +112,7 @@ void ChainSwapController::invalidate()
 
 void ChainSwapController::timerEvent(QTimerEvent* event)
 {
+    Q_D(ChainSwapController);
     if (event->timerId() == d->timer_id) {
         killTimer(d->timer_id);
         d->timer_id = -1;
@@ -113,8 +122,8 @@ void ChainSwapController::timerEvent(QTimerEvent* event)
 
 bool ChainSwapController::isValid() const
 {
+    Q_D(const ChainSwapController);
     if (!context()) return false;
-
     if (!d->claim_address) return false;
     if (!d->refund_address) return false;
     bool ok = false;
@@ -125,12 +134,15 @@ bool ChainSwapController::isValid() const
 
 bool ChainSwapController::isBusy() const
 {
+    Q_D(const ChainSwapController);
     return d->busy;
 }
 
 void ChainSwapController::update()
 {
-    if (!m_context->m_boltz_session) return;
+    Q_D(ChainSwapController);
+    if (!context()) return;
+    if (!context()->m_boltz_session) return;
 
     if (!isValid()) {
         if (d->busy) {
@@ -144,11 +156,9 @@ void ChainSwapController::update()
         return;
     }
 
-    using Watcher = QFutureWatcher<std::pair<bool, std::shared_ptr<lwk::LockupResponse>>>;
-    const auto watcher = new Watcher(this);
-    const auto session = m_context->m_boltz_session;
+    const auto session = context()->m_boltz_session;
     uint64_t amount = d->amount.toULongLong();
-    watcher->setFuture(QtConcurrent::run([=, this]() -> std::pair<bool, std::shared_ptr<lwk::LockupResponse>> {
+    auto future = QtConcurrent::run([=, this]() -> std::pair<bool, std::shared_ptr<lwk::LockupResponse>> {
         try {
             auto claim_network = d->claim_address->account()->network();
             auto refund_network = d->refund_address->account()->network();
@@ -170,10 +180,9 @@ void ChainSwapController::update()
         } catch (...) {
             return std::make_pair(false, nullptr);
         }
-    }));
-    connect(watcher, &Watcher::finished, this, [=, this] {
-        watcher->deleteLater();
-        auto result = watcher->result();
+    });
+
+    future.then(this, [=, this](std::pair<bool, std::shared_ptr<lwk::LockupResponse>> result) {
         if (!result.first) {
             d->timer_id = startTimer(200);
             return;
@@ -183,9 +192,11 @@ void ChainSwapController::update()
             emit busyChanged();
         }
         if (result.second) {
-            d->swap = new ChainSwap(result.second, m_context);
-            m_context->addSwap(d->swap);
+            d->swap = new ChainSwap(result.second, context());
+            context()->addSwap(d->swap);
             emit swapChanged();
         }
     });
+
+    waitForFuture(future);
 }

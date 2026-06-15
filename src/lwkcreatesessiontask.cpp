@@ -139,20 +139,20 @@ void LwkCreateSessionTask::update()
 
     setStatus(Status::Active);
 
-    if (m_context->m_boltz_session) {
+    if (context()->m_boltz_session) {
         setStatus(Status::Finished);
         return;
     }
 
-    if (!m_context->isMainnet()) {
+    if (!context()->isMainnet()) {
         setStatus(Status::Failed);
         return;
     }
 
     constexpr int BOLTZ_BIP85_INDEX{26589};
-    const auto m = m_context->credentials().value("mnemonic").toString();
-    const auto p = m_context->credentials().value("bip39_passphrase").toString();
-    const auto r = derive_mnemonic(m_context->isMainnet(), m, p, BOLTZ_BIP85_INDEX);
+    const auto m = context()->credentials().value("mnemonic").toString();
+    const auto p = context()->credentials().value("bip39_passphrase").toString();
+    const auto r = derive_mnemonic(context()->isMainnet(), m, p, BOLTZ_BIP85_INDEX);
 
     struct Result {
         std::shared_ptr<lwk::BoltzSession> session;
@@ -162,13 +162,11 @@ void LwkCreateSessionTask::update()
         std::string swaps_infos;
     };
 
-    using Watcher = QFutureWatcher<Result>;
-    const auto watcher = new Watcher(this);
-    watcher->setFuture(QtConcurrent::run([=, this]() -> Result {
+    auto future = QtConcurrent::run([=, this]() -> Result {
         try {
             Result result;
             auto mnemonic = lwk::Mnemonic::init(r.toStdString());
-            auto network = m_context->isMainnet() ? lwk::Network::mainnet() : lwk::Network::testnet();
+            auto network = context()->isMainnet() ? lwk::Network::mainnet() : lwk::Network::testnet();
             result.session = lwk::BoltzSession::from_builder({
                 .network = network,
                 .client = lwk::AnyClient::from_electrum(network->default_electrum_client()),
@@ -231,28 +229,29 @@ void LwkCreateSessionTask::update()
             qDebug() << Q_FUNC_INFO << "unexpected error";
             return {};
         }
-    }));
-    connect(watcher, &Watcher::finished, this, [=, this] {
-        watcher->deleteLater();
-        auto result = watcher->result();
+    });
+
+    future.then(this, [=, this](Result result) {
         if (!result.session) {
             setStatus(Status::Failed);
             return;
         }
 
         for (const auto& [invoice, prepare_pay_response] : result.prepare_pay_responses) {
-            m_context->addSwap(new SubmarineSwap(invoice, prepare_pay_response, m_context));
+            context()->addSwap(new SubmarineSwap(invoice, prepare_pay_response, context()));
         }
         for (const auto& lockup_response : result.lockup_responses) {
-            m_context->addSwap(new ChainSwap(lockup_response, m_context));
+            context()->addSwap(new ChainSwap(lockup_response, context()));
         }
         for (const auto& invoice_response : result.invoice_responses) {
-            m_context->addSwap(new ReverseSwap(invoice_response, m_context));
+            context()->addSwap(new ReverseSwap(invoice_response, context()));
         }
 
-        m_context->m_boltz_swaps_infos = QJsonDocument::fromJson(QByteArray::fromStdString(result.swaps_infos)).object();
-        m_context->m_boltz_session = result.session;
+        context()->m_boltz_swaps_infos = QJsonDocument::fromJson(QByteArray::fromStdString(result.swaps_infos)).object();
+        context()->m_boltz_session = result.session;
 
         setStatus(Status::Finished);
     });
+
+    waitForFuture(future);
 }

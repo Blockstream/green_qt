@@ -4,6 +4,7 @@
 #include "green.h"
 
 #include <QElapsedTimer>
+#include <QFuture>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
@@ -104,12 +105,15 @@ private:
     friend class TaskDispatcher;
 };
 
+class TaskPrivate;
+
 class Task : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString type READ type CONSTANT)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QString error READ error NOTIFY errorChanged);
+    Q_DECLARE_PRIVATE(Task)
     QML_ELEMENT
     QML_UNCREATABLE("")
 
@@ -139,10 +143,13 @@ signals:
     void failed(const QString& error);
 protected:
     Task(QObject* parent);
+    Task(TaskPrivate* d, QObject* parent);
     void setStatus(Status status);
+    void waitForFuture(QFuture<void> future);
 private:
     virtual void update() = 0;
 protected:
+    TaskPrivate* const d_ptr;
     TaskGroup* m_group{nullptr};
     QSet<Task*> m_inputs;
     QSet<Task*> m_outputs;
@@ -180,37 +187,46 @@ struct GA_session;
 class Session;
 class Context;
 
+class SessionTaskPrivate;
+
 class SessionTask : public Task
 {
     Q_OBJECT
     Q_PROPERTY(Session* session READ session CONSTANT)
+    Q_DECLARE_PRIVATE(SessionTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     SessionTask(Session* session);
-    Session* session() const { return m_session; }
+    Session* session() const;
     QString description() const override;
 protected:
-    Session* const m_session;
+    SessionTask(SessionTaskPrivate* d, Session* session);
 };
+
+class ContextTaskPrivate;
 
 class ContextTask : public Task
 {
     Q_OBJECT
     Q_PROPERTY(Context* context READ context CONSTANT)
+    Q_DECLARE_PRIVATE(ContextTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     ContextTask(Context* context);
-    Context* context() const { return m_context; }
+    Context* context() const;
     QString description() const override;
 protected:
-    Context* const m_context;
+    ContextTask(ContextTaskPrivate* d, Context* context);
 };
+
+class ConnectTaskPrivate;
 
 class ConnectTask : public SessionTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(ConnectTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -218,8 +234,6 @@ public:
     ConnectTask(int timeout, Session* session);
     QString description() const override;
     void update() override;
-private:
-    int m_timeout{0};
 };
 
 class Prompt : public QObject
@@ -231,17 +245,19 @@ public:
     Prompt(Task* task);
 };
 
+class AuthHandlerTaskPrivate;
+
 class AuthHandlerTask : public SessionTask
 {
     Q_OBJECT
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     Q_PROPERTY(Prompt* prompt READ prompt NOTIFY promptChanged)
     Q_PROPERTY(Resolver* resolver READ resolver NOTIFY resolverChanged)
+    Q_DECLARE_PRIVATE(AuthHandlerTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     AuthHandlerTask(Session* session);
-    ~AuthHandlerTask();
     QJsonObject result() const { return m_result; }
     void setResult(const QJsonObject& result);
     Prompt* prompt() const { return m_prompt; }
@@ -269,7 +285,7 @@ private:
     void promptDevice(const QJsonObject& result);
     void next();
 protected:
-    GA_auth_handler* m_auth_handler{nullptr};
+    AuthHandlerTask(AuthHandlerTaskPrivate* d, Session* session);
     QJsonObject m_result;
     Prompt* m_prompt{nullptr};
     Resolver* m_resolver{nullptr};
@@ -318,9 +334,12 @@ private:
     QJsonObject m_result;
 };
 
+class RegisterUserTaskPrivate;
+
 class RegisterUserTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(RegisterUserTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -328,14 +347,14 @@ public:
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
-private:
-    const QJsonObject m_details;
-    const QJsonObject m_device_details;
 };
+
+class LoginTaskPrivate;
 
 class LoginTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(LoginTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -350,9 +369,6 @@ private:
     void update() override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
-private:
-    const QJsonObject m_details;
-    const QJsonObject m_hw_device;
 };
 
 class LoadTwoFactorConfigTask : public SessionTask
@@ -388,9 +404,12 @@ private:
     void update() override;
 };
 
+class EncryptWithPinTaskPrivate;
+
 class EncryptWithPinTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(EncryptWithPinTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -400,58 +419,56 @@ public:
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    QString m_pin;
-    QJsonValue m_plaintext;
 };
+
+class ChangeSettingsTaskPrivate;
 
 class ChangeSettingsTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(ChangeSettingsTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     ChangeSettingsTask(const QJsonObject& data, Session* session);
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
-private:
-    const QJsonObject m_data;
 };
+
+class LoadAccountTaskPrivate;
 
 class LoadAccountTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(LoadAccountTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     LoadAccountTask(uint32_t pointer, Session* session);
     QString description() const override;
-    Account* account() const { return m_account; }
+    Account* account() const;
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
-private:
-    const uint32_t m_pointer;
-    Account* m_account{nullptr};
 };
+
+class LoadAccountsTaskPrivate;
 
 class LoadAccountsTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(LoadAccountsTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     LoadAccountsTask(bool refresh, Session* session);
     QString description() const override;
-    QList<Account*> accounts() const { return m_accounts; }
+    QList<Account*> accounts() const;
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
-private:
-    const bool m_refresh;
-    QList<Account*> m_accounts;
 };
 
 class SyncAccountsTask : public SessionTask
@@ -466,9 +483,12 @@ private:
     void update() override;
 };
 
+class LoadBalanceTaskPrivate;
+
 class LoadBalanceTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(LoadBalanceTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -478,13 +498,14 @@ private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
-private:
-    Account* const m_account;
 };
+
+class LoadAssetsTaskPrivate;
 
 class LoadAssetsTask : public SessionTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(LoadAssetsTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -492,101 +513,105 @@ public:
     QString description() const override;
 private:
     void update() override;
-private:
-    const bool m_refresh;
 };
+
+class CreateAccountTaskPrivate;
 
 class CreateAccountTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(CreateAccountTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     CreateAccountTask(const QJsonObject& details, Session* session);
-    quint32 pointer() const { return m_pointer; }
+    quint32 pointer() const;
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
-private:
-    const QJsonObject m_details;
-    quint32 m_pointer{0};
 };
+
+class UpdateAccountTaskPrivate;
 
 class UpdateAccountTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(UpdateAccountTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     UpdateAccountTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QJsonObject m_details;
 };
+
+class ValidateTaskPrivate;
 
 class ValidateTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(ValidateTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
      ValidateTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QJsonObject m_details;
 };
+
+class ChangeTwoFactorTaskPrivate;
 
 class ChangeTwoFactorTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(ChangeTwoFactorTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     ChangeTwoFactorTask(const QString& method, const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    QString m_method;
-    QJsonObject m_details;
 };
+
+class TwoFactorResetTaskPrivate;
 
 class TwoFactorResetTask : public AuthHandlerTask
 {
     Q_OBJECT
     Q_PROPERTY(QString email READ email CONSTANT)
+    Q_DECLARE_PRIVATE(TwoFactorResetTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     TwoFactorResetTask(const QString& email, bool dispute, Session* session);
-    QString email() const { return m_email; }
+    QString email() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QString m_email;
-    const bool m_dispute;
 };
+
+class TwoFactorUndoResetTaskPrivate;
 
 class TwoFactorUndoResetTask : public AuthHandlerTask
 {
     Q_OBJECT
     Q_PROPERTY(QString email READ email CONSTANT)
+    Q_DECLARE_PRIVATE(TwoFactorUndoResetTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     TwoFactorUndoResetTask(const QString& email, Session* session);
-    QString email() const { return m_email; }
+    QString email() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QString m_email;
 };
+
+class SetCsvTimeTaskPrivate;
 
 class SetCsvTimeTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(SetCsvTimeTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -594,8 +619,6 @@ public:
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
-private:
-    const int m_value;
 };
 
 class GetCredentialsTask : public AuthHandlerTask
@@ -623,22 +646,26 @@ private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 };
 
+class TwoFactorChangeLimitsTaskPrivate;
+
 class TwoFactorChangeLimitsTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(TwoFactorChangeLimitsTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     TwoFactorChangeLimitsTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QJsonObject m_details;
 };
+
+class CreateTransactionTaskPrivate;
 
 class CreateTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(CreateTransactionTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -646,13 +673,14 @@ public:
     QJsonObject transaction() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QJsonObject m_details;
 };
+
+class CreateRedepositTransactionTaskPrivate;
 
 class CreateRedepositTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(CreateRedepositTransactionTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -660,44 +688,47 @@ public:
     QJsonObject transaction() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QJsonObject m_details;
 };
+
+class SignTransactionTaskPrivate;
 
 class SignTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
     Q_PROPERTY(QJsonObject details READ details NOTIFY detailsChanged)
+    Q_DECLARE_PRIVATE(SignTransactionTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     SignTransactionTask(Session* session);
-    QJsonObject details() const { return m_details; }
+    QJsonObject details() const;
     void setDetails(const QJsonObject& details);
 signals:
     void detailsChanged();
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    QJsonObject m_details;
 };
+
+class BlindTransactionTaskPrivate;
 
 class BlindTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(BlindTransactionTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     BlindTransactionTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QJsonObject m_details;
 };
+
+class SendTransactionTaskPrivate;
 
 class SendTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(SendTransactionTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -708,8 +739,6 @@ public:
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    QJsonObject m_details;
 };
 
 class SendNLocktimesTask : public SessionTask
@@ -734,42 +763,43 @@ private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 };
 
+class GetUnspentOutputsTaskPrivate;
+
 class GetUnspentOutputsTask: public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(GetUnspentOutputsTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     GetUnspentOutputsTask(int num_confs, bool all_coins, Account* account);
-    void setExpiredAt(uint32_t expired_at) { m_expired_at = expired_at; }
+    void setExpiredAt(uint32_t expired_at);
     QJsonObject unspentOutputs() const;
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-public:
-    qint64 m_subaccount;
-    int m_num_confs;
-    bool m_all_coins;
-    uint32_t m_expired_at{0};
 };
+
+class SetUnspentOutputsStatusTaskPrivate;
 
 class SetUnspentOutputsStatusTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(SetUnspentOutputsStatusTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     SetUnspentOutputsStatusTask(const QVariantList& outputs, const QString& status, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    QVariantList m_outputs;
-    QString m_status;
 };
+
+class GetTransactionsTaskPrivate;
 
 class GetTransactionsTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(GetTransactionsTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -777,27 +807,28 @@ public:
     QJsonArray transactions() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const qint64 m_subaccount;
-    int m_first;
-    int m_count;
 };
+
+class GetReceiveAddressTaskPrivate;
 
 class GetReceiveAddressTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(GetReceiveAddressTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    Account* const m_account;
-    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-public:
     GetReceiveAddressTask(Account* account);
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 };
+
+class GetAddressesTaskPrivate;
 
 class GetAddressesTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(GetAddressesTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -807,9 +838,6 @@ public:
     bool hasMore() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const qint64 m_subaccount;
-    const int m_last_pointer = 0;
 };
 
 class DeleteWalletTask : public AuthHandlerTask
@@ -823,9 +851,12 @@ private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 };
 
+class SignMessageTaskPrivate;
+
 class SignMessageTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(SignMessageTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -833,56 +864,58 @@ public:
     QString signature() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    Address* const m_address;
-    const QString m_message;
 };
+
+class GetSystemMessageTaskPrivate;
 
 class GetSystemMessageTask : public SessionTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(GetSystemMessageTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     GetSystemMessageTask(Session* session);
-    QString message() const { return m_message; }
+    QString message() const;
 private:
     void update() override;
-private:
-    QString m_message;
 };
+
+class AckSystemMessageTaskPrivate;
 
 class AckSystemMessageTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(AckSystemMessageTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     AckSystemMessageTask(const QString& message, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QString m_message;
 };
+
+class HttpRequestTaskPrivate;
 
 class HttpRequestTask : public SessionTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(HttpRequestTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     HttpRequestTask(const QJsonObject& params, Session* session);
-    QJsonObject response() const { return m_response; }
+    QJsonObject response() const;
 private:
     void update() override;
-private:
-    const QJsonObject m_params;
-    QJsonObject m_response;
 };
+
+class DecodeBCURTaskPrivate;
 
 class DecodeBCURTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(DecodeBCURTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -890,26 +923,28 @@ public:
     QJsonObject decodedResult() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QString m_part;
 };
+
+class EncodeBCURTaskPrivate;
 
 class EncodeBCURTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(EncodeBCURTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     EncodeBCURTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QJsonObject m_details;
 };
+
+class RSAVerifyTaskPrivate;
 
 class RSAVerifyTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(RSAVerifyTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -917,21 +952,20 @@ public:
     RSAVerifyTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-private:
-    const QJsonObject m_details;
 };
+
+class LoadPaymentsTaskPrivate;
 
 class LoadPaymentsTask : public ContextTask
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(LoadPaymentsTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     LoadPaymentsTask(QNetworkAccessManager* net, Context* context);
     void update() override;
     void fetch(const QString& key);
-private:
-    QNetworkAccessManager* const m_net;
 };
 
 #endif // GREEN_TASK_H

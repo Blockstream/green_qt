@@ -18,7 +18,7 @@ static QVariantMap parseQuote(const lwk::Quote& quote)
     };
 }
 
-class SwapQuoteControllerPrivate
+class SwapQuoteControllerPrivate : public ControllerPrivate
 {
 public:
     QVariantMap quote;
@@ -30,15 +30,9 @@ public:
 };
 
 SwapQuoteController::SwapQuoteController(QObject* parent)
-    : Controller(parent)
-    , d(new SwapQuoteControllerPrivate)
+    : Controller(new SwapQuoteControllerPrivate, parent)
 {
     connect(this, &Controller::contextChanged, this, &SwapQuoteController::update);
-}
-
-SwapQuoteController::~SwapQuoteController()
-{
-    delete d;
 }
 
 static lwk::SwapAsset assetFromNetworkKey(const QString& key)
@@ -71,6 +65,7 @@ static QString assetToNetworkKey(lwk::SwapAsset asset)
 
 void SwapQuoteController::setReceiveNetworkKey(const QString& networkKey)
 {
+    Q_D(SwapQuoteController);
     const auto asset = assetFromNetworkKey(networkKey);
     if (d->receive_asset == asset) return;
     d->receive_asset = asset;
@@ -79,6 +74,7 @@ void SwapQuoteController::setReceiveNetworkKey(const QString& networkKey)
 
 void SwapQuoteController::setSendNetworkKey(const QString& networkKey)
 {
+    Q_D(SwapQuoteController);
     const auto asset = assetFromNetworkKey(networkKey);
     if (d->send_asset == asset) return;
     d->send_asset = asset;
@@ -87,21 +83,25 @@ void SwapQuoteController::setSendNetworkKey(const QString& networkKey)
 
 QVariantMap SwapQuoteController::quote() const
 {
+    Q_D(const SwapQuoteController);
     return d->quote;
 }
 
 QString SwapQuoteController::receiveNetworkKey() const
 {
+    Q_D(const SwapQuoteController);
     return assetToNetworkKey(d->receive_asset);
 }
 
 QString SwapQuoteController::sendNetworkKey() const
 {
+    Q_D(const SwapQuoteController);
     return assetToNetworkKey(d->send_asset);
 }
 
 void SwapQuoteController::receive(const QString& amount)
 {
+    Q_D(SwapQuoteController);
     if (!context()) return;
     if (d->amount == amount) return;
     d->send_amount = false;
@@ -111,6 +111,7 @@ void SwapQuoteController::receive(const QString& amount)
 
 void SwapQuoteController::send(const QString& amount)
 {
+    Q_D(SwapQuoteController);
     if (!context()) return;
     if (d->amount == amount) return;
     d->send_amount = true;
@@ -120,6 +121,7 @@ void SwapQuoteController::send(const QString& amount)
 
 void SwapQuoteController::swapNetworks()
 {
+    Q_D(SwapQuoteController);
     if (!context()) return;
     qSwap(d->send_asset, d->receive_asset);
     invalidate();
@@ -127,6 +129,7 @@ void SwapQuoteController::swapNetworks()
 
 void SwapQuoteController::timerEvent(QTimerEvent *event)
 {
+    Q_D(SwapQuoteController);
     if (event->timerId() == d->timer_id) {
         killTimer(d->timer_id);
         d->timer_id = -1;
@@ -136,14 +139,16 @@ void SwapQuoteController::timerEvent(QTimerEvent *event)
 
 void SwapQuoteController::invalidate()
 {
+    Q_D(SwapQuoteController);
     if (d->timer_id != -1) killTimer(d->timer_id);
     d->timer_id = startTimer(10);
 }
 
 void SwapQuoteController::update()
 {
-    if (!m_context) return;
-    if (!m_context->m_boltz_session) return;
+    Q_D(SwapQuoteController);
+    if (!context()) return;
+    if (!context()->m_boltz_session) return;
 
     bool ok = false;
     uint64_t satoshi = d->amount.toULongLong(&ok);
@@ -153,10 +158,8 @@ void SwapQuoteController::update()
         return;
     }
 
-    using Watcher = QFutureWatcher<QVariantMap>;
-    const auto watcher = new Watcher(this);
-    const auto session = m_context->m_boltz_session;
-    watcher->setFuture(QtConcurrent::run([=, this]() -> QVariantMap {
+    const auto session = context()->m_boltz_session;
+    auto future = QtConcurrent::run([=, this]() -> QVariantMap {
         try {
             auto builder = d->send_amount ? session->quote(satoshi) : session->quote_receive(satoshi);
 
@@ -167,10 +170,12 @@ void SwapQuoteController::update()
         } catch (...) {
             return {};
         }
-    }));
-    connect(watcher, &Watcher::finished, this, [=, this] {
-        watcher->deleteLater();
-        d->quote = watcher->result();
+    });
+
+    future.then(this, [=, this](QVariantMap quote) {
+        d->quote = quote;
         emit updated();
     });
+
+    waitForFuture(future);
 }

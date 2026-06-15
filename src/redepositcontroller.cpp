@@ -50,7 +50,7 @@ void RedepositController::invalidate()
 
 void RedepositController::update()
 {
-    if (m_context && m_account) {
+    if (context() && m_account) {
         auto context = m_account->context();
         auto dispatcher = context->dispatcher();
 

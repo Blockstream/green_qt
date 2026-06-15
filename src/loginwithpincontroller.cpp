@@ -48,10 +48,10 @@ void LoginController::loginWithPin(const QString& pin)
     Q_ASSERT(pin_data);
 
     auto network = pin_data->network();
-    if (m_context) m_context->deleteLater();
+    if (context()) context()->deleteLater();
     setContext(ContextManager::instance()->create(m_wallet->deployment(), false));
 
-    auto session = m_context->getOrCreateSession(network);
+    auto session = context()->getOrCreateSession(network);
     auto login_task = new LoginTask(pin, pin_data->data(), session);
 
     connect(login_task, &Task::failed, this, [=, this](const QString& error) {
@@ -130,31 +130,31 @@ void LoginController::loginWithDevice(Device* device)
 {
     m_error.clear();
 
-    if (!m_context) {
+    if (!context()) {
         const auto deployment = device_deployment(device);
         if (deployment.isEmpty()) {
             emit loginFailed({});
             return;
         }
         setContext(ContextManager::instance()->create(deployment, false));
-        m_context->setDevice(device);
+        context()->setDevice(device);
     }
 
-    m_context->setRemember(Settings::instance()->rememberDevices());
+    context()->setRemember(Settings::instance()->rememberDevices());
 
     const auto hw_device = device_details_from_device(device);
-    auto session = m_context->primarySession();
+    auto session = context()->primarySession();
     auto login_task = new LoginTask(hw_device, session);
 
     connect(login_task, &Task::finished, this, [=, this] {
-        m_context->m_hw_device = hw_device;
+        context()->m_hw_device = hw_device;
 
-        device->createSession(m_context->xpubHashId());
+        device->createSession(context()->xpubHashId());
 
-        m_wallet = m_context->wallet();
+        m_wallet = context()->wallet();
         if (!m_wallet) {
             for (auto w : WalletManager::instance()->getWallets()) {
-                if (qobject_cast<DeviceData*>(w->login()) && w->xpubHashId() == m_context->xpubHashId()) {
+                if (qobject_cast<DeviceData*>(w->login()) && w->xpubHashId() == context()->xpubHashId()) {
                     m_wallet = w;
                     break;
                 }
@@ -162,9 +162,9 @@ void LoginController::loginWithDevice(Device* device)
         }
         if (!m_wallet) {
             // TODO: attempt to match with other wallets
-            // auto master_xpub = device->masterPublicKey(NetworkManager::instance()->networkForDeployment(m_context->deployment()));
+            // auto master_xpub = device->masterPublicKey(NetworkManager::instance()->networkForDeployment(context()->deployment()));
             // for (auto net : NetworkManager::instance()->networks()) {
-            //     if (net->deployment() == m_context->deployment()) {
+            //     if (net->deployment() == context()->deployment()) {
             //         const auto net_params = Json::fromObject({{ "name", net->id() }});
             //         const auto params = Json::fromObject({{ "master_xpub", QString::fromLocal8Bit(master_xpub) }});
             //         GA_json* output;
@@ -194,12 +194,12 @@ void LoginController::loginWithDevice(Device* device)
             }
         } else {
             m_wallet = WalletManager::instance()->createWallet();
-            m_wallet->m_deployment = m_context->deployment();
+            m_wallet->m_deployment = context()->deployment();
             m_wallet->setName(device->name());
             auto device_data = new DeviceData(m_wallet);
             device_data->setDevice(device->details());
             m_wallet->setLogin(device_data);
-            m_wallet->m_is_persisted = m_context->remember();
+            m_wallet->m_is_persisted = context()->remember();
             WalletManager::instance()->insertWallet(m_wallet);
         }
     });
@@ -221,21 +221,21 @@ void LoginController::login(LoginTask* login_task, const QString& passphrase)
     connect(group, &TaskGroup::failed, this, [=, this] {
         emit loginFailed(m_error);
         if (m_error == "id_connection_failed") {
-            m_context->deleteLater();
+            context()->deleteLater();
             setContext(nullptr);
         }
     });
     connect(group, &TaskGroup::finished, this, [=, this] {
         if (passphrase.isEmpty()) {
-            m_context->setWallet(m_wallet);
-            emit loginFinished(m_context);
+            context()->setWallet(m_wallet);
+            emit loginFinished(context());
         } else {
-            auto mnemonic = m_context->credentials().value("mnemonic").toString();
-            auto network = m_context->primaryNetwork();
-            m_context->deleteLater();
+            auto mnemonic = context()->credentials().value("mnemonic").toString();
+            auto network = context()->primaryNetwork();
+            context()->deleteLater();
             setContext(ContextManager::instance()->create(m_wallet->deployment(), true));
 
-            auto session = m_context->getOrCreateSession(network);
+            auto session = context()->getOrCreateSession(network);
 
             auto task = new LoginTask({{ "mnemonic", mnemonic }, { "bip39_passphrase", passphrase }}, {}, session);
             login(task);
@@ -245,7 +245,7 @@ void LoginController::login(LoginTask* login_task, const QString& passphrase)
 
 void LoginController::login(TaskGroup* group, LoginTask* login_task)
 {
-    auto session = m_context->primarySession();
+    auto session = context()->primarySession();
     auto connect_session = new ConnectTask(session);
     auto get_credentials = new GetCredentialsTask(session);
 
@@ -296,15 +296,15 @@ LoadController::LoadController(QObject* parent)
 {
     setMonitor(new TaskGroupMonitor(this));
 
-    connect(m_monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=, this] {
-        auto group = m_context->cleanAccounts();
+    connect(monitor(), &TaskGroupMonitor::allFinishedOrFailed, this, [=, this] {
+        auto group = context()->cleanAccounts();
         dispatcher()->add(group);
         connect(group, &TaskGroup::finished, this, [=, this] {
-            auto wallet = m_context->wallet();
+            auto wallet = context()->wallet();
             Q_ASSERT(wallet);
             WalletManager::instance()->addWallet(wallet);
-            wallet->setContext(m_context);
-            for (auto session : m_context->getSessions()) {
+            wallet->setContext(context());
+            for (auto session : context()->getSessions()) {
                 if (!session->m_wallet_hash_id.isEmpty()) {
                     wallet->m_hashes.insert(session->m_wallet_hash_id);
                 }
@@ -318,7 +318,7 @@ LoadController::LoadController(QObject* parent)
 
 void LoadController::load()
 {
-    const auto networks = m_context->getActiveNetworks();
+    const auto networks = context()->getActiveNetworks();
     qDebug() << Q_FUNC_INFO << networks.size();
 
     auto group = new TaskGroup(this);
@@ -328,14 +328,14 @@ void LoadController::load()
         loadNetwork(group, network);
     }
 
-    m_monitor->add(group);
+    monitor()->add(group);
     dispatcher()->add(group);
 
-    if (!m_context->isWatchonly()) {
+    if (!context()->isWatchonly()) {
         for (auto network : NetworkManager::instance()->networks()) {
             if (networks.contains(network)) continue;
             if (!compatibleToNetworks(network, networks)) continue;
-            if (m_context->device() && !m_context->device()->supportsNetwork(network)) continue;
+            if (context()->device() && !context()->device()->supportsNetwork(network)) continue;
             qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << network->id() << network->name();
             loginNetwork(network);
         }
@@ -345,15 +345,15 @@ void LoadController::load()
 void LoadController::loadNetwork(TaskGroup* group, Network* network)
 {
     qDebug() << Q_FUNC_INFO << network->id();
-    m_context->loadNetwork(group, network);
+    context()->loadNetwork(group, network);
 }
 
 void LoadController::loginNetwork(Network* network)
 {
     auto group = new TaskGroup(this);
     group->setName(QString("load network %1").arg(network->id()));
-    m_context->loginNetwork(group, network);
-    m_monitor->add(group);
+    context()->loginNetwork(group, network);
+    monitor()->add(group);
     dispatcher()->add(group);
 }
 
@@ -362,21 +362,21 @@ BackgroundLoadController::BackgroundLoadController(QObject* parent)
 {
     setMonitor(new TaskGroupMonitor(this));
 
-    connect(m_monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=, this] {
-        auto group = m_context->cleanAccounts();
+    connect(monitor(), &TaskGroupMonitor::allFinishedOrFailed, this, [=, this] {
+        auto group = context()->cleanAccounts();
         dispatcher()->add(group);
         connect(group, &TaskGroup::finished, this, [=, this] {
             emit loadFinished();
 
-            for (auto session : m_context->getSessions()) {
+            for (auto session : context()->getSessions()) {
                 if (session->network()->isLiquid()) {
                     dispatcher()->add(new LoadAssetsTask(true, session));
                     break;
                 }
             }
 
-            for (auto account : m_context->getAccounts()) {
-                fetchAddresses(m_context, account, 0);
+            for (auto account : context()->getAccounts()) {
+                fetchAddresses(context(), account, 0);
             }
         });
     });
@@ -387,26 +387,26 @@ void BackgroundLoadController::load()
     auto group = new TaskGroup(this);
     group->setName("background load");
 
-    if (m_context->isMainnet() && !m_context->isWatchonly() && !qobject_cast<DeviceData*>(m_context->wallet()->login())) {
+    if (context()->isMainnet() && !context()->isWatchonly() && !qobject_cast<DeviceData*>(context()->wallet()->login())) {
         loadSwaps(group);
     }
-    if (m_context->isMainnet()) {
+    if (context()->isMainnet()) {
         loadPayments(group);
     }
 
-    m_monitor->add(group);
+    monitor()->add(group);
     dispatcher()->add(group);
 }
 
 void BackgroundLoadController::loadSwaps(TaskGroup* group)
 {
-    group->add(new LwkCreateSessionTask(m_context));
+    group->add(new LwkCreateSessionTask(context()));
 }
 
 void BackgroundLoadController::loadPayments(TaskGroup* group)
 {
     auto engine = qmlEngine(this);
-    auto task = new LoadPaymentsTask(engine->networkAccessManager(), m_context);
+    auto task = new LoadPaymentsTask(engine->networkAccessManager(), context());
     group->add(task);
 }
 
@@ -417,16 +417,16 @@ PinDataController::PinDataController(QObject* parent)
 
 void PinDataController::update(const QString& pin)
 {
-    if (!m_context) return;
+    if (!context()) return;
 
-    Q_ASSERT(m_context->wallet());
+    Q_ASSERT(context()->wallet());
 
-    auto session = m_context->primarySession();
+    auto session = context()->primarySession();
     Q_ASSERT(session);
 
-    auto task = new EncryptWithPinTask(m_context->credentials(), pin, session);
+    auto task = new EncryptWithPinTask(context()->credentials(), pin, session);
     connect(task, &Task::finished, this, [=, this] {
-        auto wallet = m_context->wallet();
+        auto wallet = context()->wallet();
         auto pin = new PinData(wallet);
         pin->setNetwork(session->network());
         pin->setData(task->result().value("result").toObject().value("pin_data").toObject());

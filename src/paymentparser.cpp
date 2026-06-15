@@ -2,7 +2,7 @@
 #include "lwk/lwk.hpp"
 
 #include <QtConcurrentRun>
-#include <QFutureWatcher>
+#include <QFutureSynchronizer>
 #include <QTimerEvent>
 
 #include <memory>
@@ -206,6 +206,7 @@ public:
     QVariantMap recipient;
     int timer_id{-1};
     bool busy{false};
+    QFutureSynchronizer<void> future_synchronizer;
 };
 
 RecipientParser::RecipientParser(QObject* parent)
@@ -274,16 +275,14 @@ void RecipientParser::timerEvent(QTimerEvent* event)
 
 void RecipientParser::update()
 {
-    using Watcher = QFutureWatcher<QVariantMap>;
-    auto watcher = new Watcher(this);
+    auto future = QtConcurrent::run(parse, d->input, d->data);
 
-    connect(watcher, &Watcher::finished, this, [=, this] {
-        watcher->deleteLater();
+    future.then(this, [=, this](QVariantMap recipient) {
         d->busy = false;
         emit busyChanged();
-        d->recipient = watcher->result();
+        d->recipient = recipient;
         emit recipientChanged();
     });
 
-    watcher->setFuture(QtConcurrent::run(parse, d->input, d->data));
+    d->future_synchronizer.addFuture(future);
 }

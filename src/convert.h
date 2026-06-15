@@ -1,6 +1,7 @@
 #ifndef GREEN_CONVERT_H
 #define GREEN_CONVERT_H
 
+#include <QFutureSynchronizer>
 #include <QObject>
 #include <QPointer>
 #include <QtQml>
@@ -79,6 +80,7 @@ private:
     int m_timer_id{-1};
     bool m_debug{false};
     QPointer<Session> m_connected_session;
+    QFutureSynchronizer<void> m_future_synchronizer;
 };
 
 #endif // GREEN_CONVERT_H

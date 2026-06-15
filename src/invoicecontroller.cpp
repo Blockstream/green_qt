@@ -8,7 +8,7 @@
 
 #include <memory>
 
-class InvoiceControllerPrivate
+class InvoiceControllerPrivate : public ControllerPrivate
 {
 public:
     QString address;
@@ -20,23 +20,19 @@ public:
 };
 
 InvoiceController::InvoiceController(QObject *parent)
-    : Controller(parent)
-    , d(new InvoiceControllerPrivate)
+    : Controller(new InvoiceControllerPrivate, parent)
 {
-}
-
-InvoiceController::~InvoiceController()
-{
-    delete d;
 }
 
 QString InvoiceController::address() const
 {
+    Q_D(const InvoiceController);
     return d->address;
 }
 
 void InvoiceController::setAddress(const QString& address)
 {
+    Q_D(InvoiceController);
     if (d->address == address) return;
     d->address = address;
     emit addressChanged();
@@ -45,16 +41,18 @@ void InvoiceController::setAddress(const QString& address)
 
 QString InvoiceController::satoshi() const
 {
+    Q_D(const InvoiceController);
     return d->satoshi;
 }
 
 void InvoiceController::setSatoshi(const QString& satoshi)
 {
+    Q_D(InvoiceController);
     if (d->satoshi == satoshi) return;
     d->satoshi = satoshi;
     emit satoshiChanged();
     if (d->swap) {
-        m_context->removeSwap(d->swap);
+        context()->removeSwap(d->swap);
         d->swap->deleteLater();
         setSwap(nullptr);
     }
@@ -62,11 +60,13 @@ void InvoiceController::setSatoshi(const QString& satoshi)
 
 QString InvoiceController::description() const
 {
+    Q_D(const InvoiceController);
     return d->description;
 }
 
 void InvoiceController::setDescription(const QString& description)
 {
+    Q_D(InvoiceController);
     if (d->description == description) return;
     d->description = description;
     emit descriptionChanged();
@@ -74,16 +74,19 @@ void InvoiceController::setDescription(const QString& description)
 
 bool InvoiceController::isBusy() const
 {
+    Q_D(const InvoiceController);
     return d->busy;
 }
 
 ReverseSwap *InvoiceController::swap() const
 {
+    Q_D(const InvoiceController);
     return d->swap;
 }
 
 void InvoiceController::request()
 {
+    Q_D(InvoiceController);
     if (d->busy) return;
     setBusy(true);
     invalidate(50);
@@ -91,14 +94,16 @@ void InvoiceController::request()
 
 void InvoiceController::invalidate(int timeout)
 {
+    Q_D(InvoiceController);
     if (d->timer_id != -1) killTimer(d->timer_id);
     d->timer_id = startTimer(timeout);
 }
 
 bool InvoiceController::isValid() const
 {
-    if (!m_context) return false;
-    if (!m_context->m_boltz_session) return false;
+    Q_D(const InvoiceController);
+    if (!context()) return false;
+    if (!context()->m_boltz_session) return false;
     if (d->address.isEmpty()) return false;
     bool ok = false;
     auto satoshi = d->satoshi.toULongLong(&ok);
@@ -107,6 +112,7 @@ bool InvoiceController::isValid() const
 
 void InvoiceController::setSwap(ReverseSwap* swap)
 {
+    Q_D(InvoiceController);
     if (d->swap == swap) return;
     d->swap = swap;
     emit swapChanged();
@@ -114,6 +120,7 @@ void InvoiceController::setSwap(ReverseSwap* swap)
 
 void InvoiceController::setBusy(bool busy)
 {
+    Q_D(InvoiceController);
     if (d->busy == busy) return;
     d->busy = busy;
     emit busyChanged();
@@ -121,17 +128,16 @@ void InvoiceController::setBusy(bool busy)
 
 void InvoiceController::update()
 {
+    Q_D(InvoiceController);
     try {
         if (isValid()) {
             const auto address = lwk::Address::init(d->address.toStdString());
             const auto satoshi = d->satoshi.toULongLong();
             const auto description = d->description.isEmpty() ? std::nullopt : std::make_optional(d->description.toStdString());
 
-            using Watcher = QFutureWatcher<std::shared_ptr<lwk::InvoiceResponse>>;
-            const auto watcher = new Watcher(this);
-            watcher->setFuture(QtConcurrent::run([=, this]() -> std::shared_ptr<lwk::InvoiceResponse> {
+            auto future = QtConcurrent::run([=, this]() -> std::shared_ptr<lwk::InvoiceResponse> {
                 try {
-                    return m_context->m_boltz_session->invoice(satoshi, description, address, nullptr);
+                    return context()->m_boltz_session->invoice(satoshi, description, address, nullptr);
                 } catch (const lwk::lwk_error::Generic& error) {
                     qDebug() << Q_FUNC_INFO << "generic error";
                     return nullptr;
@@ -139,20 +145,22 @@ void InvoiceController::update()
                     qDebug() << Q_FUNC_INFO << "unknown error";
                     return nullptr;
                 }
-            }));
-            connect(watcher, &Watcher::finished, this, [=, this] {
-                watcher->deleteLater();
-                auto invoice_response = watcher->result();
+            });
+
+            future.then(this, [=, this](std::shared_ptr<lwk::InvoiceResponse> invoice_response) {
                 if (invoice_response) {
-                    auto swap = new ReverseSwap(invoice_response, m_context);
+                    auto swap = new ReverseSwap(invoice_response, context());
                     setSwap(swap);
                     setBusy(false);
-                    m_context->addSwap(swap);
+                    context()->addSwap(swap);
                 } else {
                     qDebug() << Q_FUNC_INFO << "failed to create invoice, retry";
                     invalidate(200);
                 }
             });
+
+            waitForFuture(future);
+
             return;
         }
     } catch (const lwk::lwk_error::Generic& error) {
@@ -165,6 +173,7 @@ void InvoiceController::update()
 
 void InvoiceController::timerEvent(QTimerEvent* event)
 {
+    Q_D(InvoiceController);
     if (event->timerId() == d->timer_id) {
         killTimer(d->timer_id);
         d->timer_id = -1;

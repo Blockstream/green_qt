@@ -87,9 +87,9 @@ void ReceiveAddressController::setGenerating(bool generating)
 
 void ReceiveAddressController::generate()
 {
-    if (!m_context) return;
+    if (!context()) return;
 
-    if (!m_account) return; // || m_account->context()->isLocked()) return;
+    if (!m_account) return;
 
     if (m_generating) return;
 

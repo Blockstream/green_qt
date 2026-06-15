@@ -2,7 +2,6 @@
 #include "transaction.h"
 
 #include <QDebug>
-#include <QFutureWatcher>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTimer>
@@ -36,6 +35,11 @@ Swap::Swap(const QString& id, Context* context)
 {
 }
 
+Swap::~Swap()
+{
+    m_future.waitForFinished();
+}
+
 void Swap::sync()
 {
     try {
@@ -43,10 +47,8 @@ void Swap::sync()
     } catch (...) {
     }
 
-    using Watcher = QFutureWatcher<Swap::Status>;
-    const auto watcher = new Watcher(this);
     const auto _id = id();
-    watcher->setFuture(QtConcurrent::run(&g_swap_thread_pool, [=, this] {
+    auto future = QtConcurrent::run(&g_swap_thread_pool, [=, this] {
         try {
             auto state = advance();
             return statusFromState(state);
@@ -67,16 +69,13 @@ void Swap::sync()
             qDebug() << Q_FUNC_INFO << "exception" << _id << error.what();
             return Status::Pending;
         }
-    }));
-    connect(watcher, &Watcher::finished, this, [=, this] {
-        watcher->deleteLater();
+    });
 
+    future.then(this, [=, this](Status status) {
         try {
             update();
         } catch (...) {
         }
-
-        const auto status = watcher->result();
 
         setStatus(status);
 
@@ -84,6 +83,8 @@ void Swap::sync()
             QTimer::singleShot(1000, this, &Swap::sync);
         }
     });
+
+    m_future = future;
 }
 
 void Swap::setStatus(Status status)

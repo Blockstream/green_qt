@@ -18,7 +18,6 @@
 
 #include <QByteArray>
 #include <QCryptographicHash>
-#include <QFutureWatcher>
 #include <QRandomGenerator>
 #include <QtConcurrentRun>
 
@@ -118,7 +117,7 @@ void AllowHost(const QStringList& hosts)
 
 JadeHttpRequest *JadeController::handleHttpRequest(const QJsonObject& params)
 {
-    auto session = m_context->getOrCreateSession(m_network);
+    auto session = context()->getOrCreateSession(m_network);
     auto request = new JadeHttpRequest(params, session);
     if (IsHostAllowed(request->hosts())) {
         request->accept(false);
@@ -140,17 +139,17 @@ JadeSetupController::JadeSetupController(QObject* parent)
 
 void JadeSetupController::setup(const QString& deployment)
 {
-    if (!m_monitor) setMonitor(new TaskGroupMonitor(this));
-    if (!m_monitor->idle()) return;
-    if (m_context) {
-        m_context->deleteLater();
+    if (!monitor()) setMonitor(new TaskGroupMonitor(this));
+    if (!monitor()->idle()) return;
+    if (context()) {
+        context()->deleteLater();
         setContext(nullptr);
     }
     setContext(ContextManager::instance()->create(deployment, false));
-    m_context->setDevice(m_device);
+    context()->setDevice(m_device);
 
-    m_network = m_context->primaryNetwork();
-    auto session = m_context->getOrCreateSession(m_network);
+    m_network = context()->primaryNetwork();
+    auto session = context()->getOrCreateSession(m_network);
     auto connect_session = new ConnectTask(session);
     auto setup = new JadeSetupTask(this);
 
@@ -162,10 +161,10 @@ void JadeSetupController::setup(const QString& deployment)
     group->add(setup);
 
     connect(group, &TaskGroup::finished, this, [=, this] {
-        emit setupFinished(m_context);
+        emit setupFinished(context());
     });
 
-    m_monitor->add(group);
+    monitor()->add(group);
     dispatcher()->add(group);
 }
 
@@ -226,26 +225,26 @@ void JadeUnlockController::setRemember(bool remember)
     if (m_remember == remember) return;
     m_remember = remember;
     emit rememberChanged();
-    if (m_context) m_context->setRemember(remember);
+    if (context()) context()->setRemember(remember);
 }
 
 void JadeUnlockController::unlock()
 {
     if (!m_device) return;
-    if (!m_monitor) setMonitor(new TaskGroupMonitor(this));
+    if (!monitor()) setMonitor(new TaskGroupMonitor(this));
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
     const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
-    if (m_context) {
-        Q_ASSERT(m_context->deployment() == deployment);
+    if (context()) {
+        Q_ASSERT(context()->deployment() == deployment);
     } else {
         setContext(ContextManager::instance()->create(deployment, false));
     }
 
-    m_context->setDevice(m_device);
-    m_context->setRemember(m_remember);
+    context()->setDevice(m_device);
+    context()->setRemember(m_remember);
 
-    m_network = m_context->primaryNetwork();
-    auto session = m_context->getOrCreateSession(m_network);
+    m_network = context()->primaryNetwork();
+    auto session = context()->getOrCreateSession(m_network);
 
     auto connect_session = new ConnectTask(session);
     auto unlock = new JadeUnlockTask(this);
@@ -274,7 +273,7 @@ void JadeUnlockController::unlock()
 //            Q_UNREACHABLE();
 //        });
 //        ActivityManager::instance()->exec(activity);
-        emit unlocked(m_context);
+        emit unlocked(context());
     });
 
     connect(group, &TaskGroup::failed, this, [=, this] {
@@ -486,11 +485,11 @@ void JadeQRController::processJadePin(const QJsonObject& result)
     const auto params = req.value("params").toObject();
     Q_ASSERT(on_reply == "pin");
 
-    if (!m_context) {
+    if (!context()) {
         setContext(ContextManager::instance()->create("mainnet", false));
     }
 
-    m_network = m_context->primaryNetwork();
+    m_network = context()->primaryNetwork();
     auto request = handleHttpRequest(params);
     QObject::connect(request, &JadeHttpRequest::finished, this, [=, this](const QJsonObject& res) {
         const auto params = res.value("body").toObject();
@@ -506,7 +505,7 @@ void JadeQRController::processJadePin(const QJsonObject& result)
             { "max_fragment_len", 40 },
         };
 
-        auto task = new EncodeBCURTask(details, m_context->primarySession());
+        auto task = new EncodeBCURTask(details, context()->primarySession());
         connect(task, &Task::finished, this, [=, this] {
             emit resultEncoded(task->result().value("result").toObject());
         });
@@ -527,17 +526,17 @@ void JadeGenuineCheckController::genuineCheck()
     QByteArray challenge(32, Qt::Uninitialized);
     QRandomGenerator::global()->generate(challenge.begin(), challenge.end());
 
-    if (!m_context) {
+    if (!context()) {
         setContext(ContextManager::instance()->create("mainnet", false));
     }
 
-    if (!m_monitor) {
+    if (!monitor()) {
         setMonitor(new TaskGroupMonitor(this));
     }
 
     if (!m_session) {
-        auto network = m_context->primaryNetwork();
-        m_session = m_context->getOrCreateSession(network);
+        auto network = context()->primaryNetwork();
+        m_session = context()->getOrCreateSession(network);
     }
 
     m_device->api()->signAttestation(challenge, [=, this](const QVariantMap& msg) {

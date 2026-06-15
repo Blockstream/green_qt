@@ -13,10 +13,10 @@ class SwapQuoteController : public Controller
     Q_PROPERTY(QVariantMap quote READ quote NOTIFY updated)
     Q_PROPERTY(QString receiveNetworkKey READ receiveNetworkKey WRITE setReceiveNetworkKey NOTIFY updated)
     Q_PROPERTY(QString sendNetworkKey READ sendNetworkKey WRITE setSendNetworkKey NOTIFY updated)
+    Q_DECLARE_PRIVATE(SwapQuoteController)
     QML_ELEMENT
 public:
     SwapQuoteController(QObject* parent = nullptr);
-    ~SwapQuoteController();
     void setReceiveNetworkKey(const QString& networkKey);
     void setSendNetworkKey(const QString& networkKey);
     QVariantMap quote() const;
@@ -32,8 +32,6 @@ public slots:
     void invalidate();
 signals:
     void updated();
-private:
-    SwapQuoteControllerPrivate* const d;
 };
 
 #endif // BLOCKSTREAM_SWAPQUOTECONTROLLER_H

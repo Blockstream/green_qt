@@ -11,7 +11,8 @@
 #include <string>
 #include <utility>
 
-class SubmarineControllerPrivate {
+class SubmarineControllerPrivate : public ControllerPrivate
+{
 public:
     int timer_id{-1};
     QVariantMap recipient;
@@ -55,23 +56,19 @@ public:
 };
 
 SubmarineController::SubmarineController(QObject* parent)
-    : Controller(parent)
-    , d(new SubmarineControllerPrivate)
+    : Controller(new SubmarineControllerPrivate, parent)
 {
-}
-
-SubmarineController::~SubmarineController()
-{
-    delete d;
 }
 
 QVariantMap SubmarineController::recipient() const
 {
+    Q_D(const SubmarineController);
     return d->recipient;
 }
 
 void SubmarineController::setRecipient(const QVariantMap& recipient)
 {
+    Q_D(SubmarineController);
     if (d->recipient == recipient) return;
     d->recipient = recipient;
     emit recipientChanged();
@@ -80,11 +77,13 @@ void SubmarineController::setRecipient(const QVariantMap& recipient)
 
 QString SubmarineController::refundAddress() const
 {
+    Q_D(const SubmarineController);
     return d->refund_address;
 }
 
 void SubmarineController::setRefundAddress(const QString& refund_address)
 {
+    Q_D(SubmarineController);
     if (d->refund_address == refund_address) return;
     d->refund_address = refund_address;
     invalidate();
@@ -92,16 +91,19 @@ void SubmarineController::setRefundAddress(const QString& refund_address)
 
 bool SubmarineController::isBusy() const
 {
+    Q_D(const SubmarineController);
     return d->busy;
 }
 
 QVariant SubmarineController::error() const
 {
+    Q_D(const SubmarineController);
     return d->error;
 }
 
 void SubmarineController::setError(const QVariant& error)
 {
+    Q_D(SubmarineController);
     if (d->error == error) return;
     d->error = error;
     emit errorChanged();
@@ -109,11 +111,13 @@ void SubmarineController::setError(const QVariant& error)
 
 SubmarineSwap *SubmarineController::swap() const
 {
+    Q_D(const SubmarineController);
     return d->swap;
 }
 
 void SubmarineController::setLockupTransaction(ChainTransaction *transaction)
 {
+    Q_D(SubmarineController);
     if (d->swap) {
         d->swap->setLockupTransaction(transaction);
     }
@@ -121,6 +125,7 @@ void SubmarineController::setLockupTransaction(ChainTransaction *transaction)
 
 void SubmarineController::setSwap(SubmarineSwap* swap)
 {
+    Q_D(SubmarineController);
     if (d->swap == swap) return;
     d->swap = swap;
     emit swapChanged();
@@ -128,6 +133,7 @@ void SubmarineController::setSwap(SubmarineSwap* swap)
 
 void SubmarineController::invalidate()
 {
+    Q_D(SubmarineController);
     if (d->timer_id != -1) killTimer(d->timer_id);
     d->timer_id = startTimer(50);
     d->busy = true;
@@ -136,6 +142,7 @@ void SubmarineController::invalidate()
 
 void SubmarineController::timerEvent(QTimerEvent* event)
 {
+    Q_D(SubmarineController);
     if (event->timerId() == d->timer_id) {
         killTimer(d->timer_id);
         d->timer_id = -1;
@@ -145,14 +152,16 @@ void SubmarineController::timerEvent(QTimerEvent* event)
 
 void SubmarineController::update()
 {
-    if (!m_context->m_boltz_session) return;
+    Q_D(SubmarineController);
+    if (!context()) return;
+    if (!context()->m_boltz_session) return;
     if (d->recipient.isEmpty()) return;
     if (d->refund_address.isEmpty()) return;
 
     {
         const auto invoice = d->recipient.value("invoice").toMap().value("invoice").toString();
         if (!invoice.isEmpty()) {
-            for (const auto swap : m_context->m_swaps) {
+            for (const auto swap : context()->m_swaps) {
                 auto submarine_swap = qobject_cast<SubmarineSwap*>(swap);
                 if (submarine_swap && submarine_swap->invoice() == invoice) {
                     if (submarine_swap->status() == Swap::Status::Pending) {
@@ -175,12 +184,10 @@ void SubmarineController::update()
     }
 
     typedef std::variant<std::shared_ptr<lwk::PreparePayResponse>, std::pair<std::string, uint64_t>, std::string> Result;
-    using Watcher = QFutureWatcher<Result>;
-    const auto watcher = new Watcher(this);
-    watcher->setFuture(QtConcurrent::run([=, this]() -> Result {
+    auto future = QtConcurrent::run([=, this]() -> Result {
         try {
             auto address = lwk::Address::init(d->refund_address.toStdString());
-            return m_context->m_boltz_session->prepare_pay(d->payment(), address, nullptr);
+            return context()->m_boltz_session->prepare_pay(d->payment(), address, nullptr);
         } catch (const lwk::lwk_error::Generic& error) {
             qDebug() << Q_FUNC_INFO << "generic error"
                 << QString::fromStdString(error.msg);
@@ -198,10 +205,9 @@ void SubmarineController::update()
             qDebug() << Q_FUNC_INFO << "unexpected error";
             return std::string();
         }
-    }));
-    connect(watcher, &Watcher::finished, this, [=, this] {
-        watcher->deleteLater();
-        const auto result = watcher->result();
+    });
+
+    future.then(this, [=, this](Result result) {
         d->busy = false;
         emit busyChanged();
 
@@ -234,4 +240,6 @@ void SubmarineController::update()
             setError(QString(error));
         }
     });
+
+    waitForFuture(future);
 }
