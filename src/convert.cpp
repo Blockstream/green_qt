@@ -11,6 +11,8 @@
 #include <gdk.h>
 
 #include <QDebug>
+#include <QFutureSynchronizer>
+#include <QPointer>
 #include <QtConcurrentRun>
 
 #include <string>
@@ -44,38 +46,106 @@ static QString number_to_string(const QLocale& locale, QString number, int preci
     return number;
 }
 
+class ConvertPrivate
+{
+public:
+    Context* context{nullptr};
+    Account* account{nullptr};
+    Asset* asset{nullptr};
+    QString unit;
+    QVariantMap input;
+    QJsonObject result;
+    int timer_id{-1};
+    bool debug{false};
+    QPointer<Session> connected_session;
+    QFutureSynchronizer<void> future_synchronizer;
+};
+
 Convert::Convert(QObject* parent)
     : QObject(parent)
+    , d_ptr(new ConvertPrivate)
 {
+}
+
+Convert::~Convert()
+{
+    Q_D(Convert);
+    d->future_synchronizer.waitForFinished();
+    delete d;
+}
+
+Context* Convert::context() const
+{
+    Q_D(const Convert);
+    return d->context;
+}
+
+Account* Convert::account() const
+{
+    Q_D(const Convert);
+    return d->account;
+}
+
+Asset* Convert::asset() const
+{
+    Q_D(const Convert);
+    return d->asset;
+}
+
+QVariantMap Convert::input() const
+{
+    Q_D(const Convert);
+    return d->input;
+}
+
+QString Convert::unit() const
+{
+    Q_D(const Convert);
+    return d->unit;
+}
+
+QJsonObject Convert::result() const
+{
+    Q_D(const Convert);
+    return d->result;
+}
+
+bool Convert::debug() const
+{
+    Q_D(const Convert);
+    return d->debug;
 }
 
 void Convert::setContext(Context* context)
 {
-    if (m_context == context) return;
-    m_context = context;
+    Q_D(Convert);
+    if (d->context == context) return;
+    d->context = context;
     emit contextChanged();
     invalidate();
-    if (m_context) {
+    if (d->context) {
         connectToSessionSignals();
     }
 }
 
 void Convert::setAccount(Account* account)
 {
-    if (m_account == account) return;
-    m_account = account;
+    Q_D(Convert);
+    if (d->account == account) return;
+    d->account = account;
     emit accountChanged();
     emit isLiquidAssetChanged();
     invalidate();
-    if (m_account) {
-        setContext(m_account->context());
+    if (d->account) {
+        setContext(d->account->context());
     }
 }
 
 void Convert::setInput(const QVariantMap& input)
 {
-    if (m_input == input) return;
-    m_input = input;
+    Q_D(Convert);
+    if (d->input == input) return;
+    d->input = input;
     emit inputChanged();
     invalidate();
 }
@@ -88,16 +158,17 @@ void Convert::clearInput()
 
 void Convert::connectToSessionSignals()
 {
+    Q_D(Convert);
     auto session = assetSession();
 
     // Disconnect from old session if different
-    if (m_connected_session && session != m_connected_session) {
-        disconnect(m_connected_session, nullptr, this, nullptr);
+    if (d->connected_session && session != d->connected_session) {
+        disconnect(d->connected_session, nullptr, this, nullptr);
     }
 
-    if (!session || session == m_connected_session) return;
+    if (!session || session == d->connected_session) return;
 
-    m_connected_session = session;
+    d->connected_session = session;
     connect(session, &Session::settingsChanged, this, [=, this] {
         emit fiatChanged();
         invalidate();
@@ -110,30 +181,33 @@ void Convert::connectToSessionSignals()
 
 void Convert::setAsset(Asset* asset)
 {
-    if (m_asset == asset) return;
-    m_asset = asset;
+    Q_D(Convert);
+    if (d->asset == asset) return;
+    d->asset = asset;
     emit assetChanged();
     emit isLiquidAssetChanged();
     invalidate();
-    if (m_asset) connectToSessionSignals();
+    if (d->asset) connectToSessionSignals();
 }
 
 void Convert::setUnit(const QString& unit)
 {
-    if (m_unit == unit) return;
-    m_unit = unit;
+    Q_D(Convert);
+    if (d->unit == unit) return;
+    d->unit = unit;
     emit unitChanged();
     emit outputChanged();
 }
 
 void Convert::changeUnit(const QString& unit)
 {
-    if (m_unit == unit) return;
-    m_unit = unit;
-    const auto u = m_unit == "\u00B5BTC" ? "ubtc" : m_unit.toLower();
-    auto value = m_result.value(u);
+    Q_D(Convert);
+    if (d->unit == unit) return;
+    d->unit = unit;
+    const auto u = d->unit == "\u00B5BTC" ? "ubtc" : d->unit.toLower();
+    auto value = d->result.value(u);
     if (!value.isNull()) {
-        m_input = {{ u, value.toVariant() }};
+        d->input = {{ u, value.toVariant() }};
     }
     emit unitChanged();
     emit outputChanged();
@@ -141,8 +215,9 @@ void Convert::changeUnit(const QString& unit)
 
 void Convert::setResult(const QJsonObject& result)
 {
+    Q_D(Convert);
     Q_ASSERT(!result.contains("satoshi") || result.value("satoshi").type() == QJsonValue::String);
-    m_result = result;
+    d->result = result;
     emit resultChanged();
     emit fiatChanged();
     emit outputChanged();
@@ -155,20 +230,21 @@ QVariantMap Convert::fiat() const
 
 QVariantMap Convert::formatFiat(double additional_value) const
 {
+    Q_D(const Convert);
     const auto empty_result = QVariantMap{
         { "label", "" },
         { "amount", "" },
         { "value", 0.0 },
         { "available", false },
-        { "currency", m_result.value("fiat_currency").toString("") }
+        { "currency", d->result.value("fiat_currency").toString("") }
     };
 
-    if (m_result.contains("fiat") && !m_result.value("fiat").isNull() && m_result.contains("fiat_currency")) {
+    if (d->result.contains("fiat") && !d->result.value("fiat").isNull() && d->result.contains("fiat_currency")) {
         bool ok = false;
-        const auto base = QLocale::c().toDouble(m_result.value("fiat").toString(), &ok);
+        const auto base = QLocale::c().toDouble(d->result.value("fiat").toString(), &ok);
         if (!ok) return empty_result;
 
-        const auto currency = mainnet() ? m_result.value("fiat_currency").toString() : "FIAT";
+        const auto currency = mainnet() ? d->result.value("fiat_currency").toString() : "FIAT";
         const auto value = base + additional_value;
         const auto amount = number_to_string(QLocale::system(), QLocale::c().toString(value, 'f', 10), 2);
 
@@ -208,35 +284,39 @@ static QString testnetUnit(const QString& unit)
 
 QVariantMap Convert::output() const
 {
-    const auto result = format(m_unit);
-    if (m_debug) qDebug() << Q_FUNC_INFO << result;
+    Q_D(const Convert);
+    const auto result = format(d->unit);
+    if (d->debug) qDebug() << Q_FUNC_INFO << result;
     return result;
 }
 
 void Convert::setDebug(bool debug)
 {
-    m_debug = debug;
+    Q_D(Convert);
+    d->debug = debug;
     emit debugChanged();
 }
 
 QString Convert::satoshi() const
 {
-    return m_result.value("satoshi").toString("0");
+    Q_D(const Convert);
+    return d->result.value("satoshi").toString("0");
 }
 
 QVariantMap Convert::format(const QString& unit) const
 {
+    Q_D(const Convert);
     QVariantMap result{{ "label", "" }, { "amount", "" }, { unit, "" }};
-    if (!m_context && !m_account) return result;
+    if (!d->context && !d->account) return result;
     if (isLiquidAsset()) {
-        const auto precision = m_asset->precision();
-        const auto satoshi = m_result.value("satoshi").toString(m_input.value("satoshi").toString());
+        const auto precision = d->asset->precision();
+        const auto satoshi = d->result.value("satoshi").toString(d->input.value("satoshi").toString());
         auto amount = QLocale::c().toString(satoshi.toDouble() / qPow(10, precision), 'f', precision);
         result["bip21_amount"] = amount;
         amount = number_to_string(QLocale::system(), amount, precision);
         result["amount"] = amount;
-        if (m_asset->data().contains("ticker")) {
-            const auto ticker = m_asset->data().value("ticker").toString();
+        if (d->asset->data().contains("ticker")) {
+            const auto ticker = d->asset->data().value("ticker").toString();
             result["unit"] = ticker;
             result["label"] = amount + " " + ticker;
         } else {
@@ -245,13 +325,13 @@ QVariantMap Convert::format(const QString& unit) const
         }
     } else if (!unit.isEmpty()) {
         const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
-        const bool is_liquid = (m_account && m_account->isLiquid()) || (m_asset && m_asset->networkKey().contains("liquid"));
+        const bool is_liquid = (d->account && d->account->isLiquid()) || (d->asset && d->asset->networkKey().contains("liquid"));
         const QString prefix{is_liquid ? "L" : ""};
         const QString display_unit = prefix + (mainnet() ? mainnetUnit(unit) : testnetUnit(unit));
         result["unit"] = display_unit;
-        result["bip21_amount"] = m_result["btc"];
-        if (!m_result.contains(unit_key)) return result;
-        auto amount = m_result.value(unit_key).toString();
+        result["bip21_amount"] = d->result["btc"];
+        if (!d->result.contains(unit_key)) return result;
+        auto amount = d->result.value(unit_key).toString();
         amount = number_to_string(QLocale::system(), amount, 8);
         result["amount"] = amount;
         result["label"] = amount + " " + display_unit;
@@ -261,14 +341,15 @@ QVariantMap Convert::format(const QString& unit) const
 
 bool Convert::isLiquidAsset() const
 {
-  if (m_account) {
-    const auto network = m_account->network();
-    return m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
+  Q_D(const Convert);
+  if (d->account) {
+    const auto network = d->account->network();
+    return d->asset && network->isLiquid() && network->policyAsset() != d->asset->id();
   }
 
-  if (m_asset) {
+  if (d->asset) {
     for (const auto network : NetworkManager::instance()->networks()) {
-      if (network->policyAsset() == m_asset->id()) {
+      if (network->policyAsset() == d->asset->id()) {
         return false;
       }
     }
@@ -280,35 +361,38 @@ bool Convert::isLiquidAsset() const
 
 Session* Convert::assetSession() const
 {
-    if (!m_context) return nullptr;
+    Q_D(const Convert);
+    if (!d->context) return nullptr;
 
     const bool needsLiquid = isLiquidAsset();
-    for (auto session : m_context->getSessions()) {
+    for (auto session : d->context->getSessions()) {
         if (session->network()->isLiquid() == needsLiquid) {
             return session;
         }
     }
 
-    return m_context->primarySession();
+    return d->context->primarySession();
 }
 
 void Convert::invalidate()
 {
-    if (m_timer_id != -1) killTimer(m_timer_id);
-    m_timer_id = startTimer(10);
+    Q_D(Convert);
+    if (d->timer_id != -1) killTimer(d->timer_id);
+    d->timer_id = startTimer(10);
 }
 
 void Convert::update()
 {
-    if (m_debug) qDebug() << Q_FUNC_INFO;
+    Q_D(Convert);
+    if (d->debug) qDebug() << Q_FUNC_INFO;
 
-    if (!m_context && !m_account) {
+    if (!d->context && !d->account) {
         setInput({});
         setResult({});
         return;
     }
 
-    auto input = m_input;
+    auto input = d->input;
 
     for (auto key : input.keys()) {
         const auto value = input[key];
@@ -331,8 +415,8 @@ void Convert::update()
     auto details = QJsonObject::fromVariantMap(input);
     if (isLiquidAsset()) {
         details.insert("asset_info", QJsonObject{
-            { "asset_id", m_asset->id() },
-            { "precision", m_asset->precision() }
+            { "asset_id", d->asset->id() },
+            { "precision", d->asset->precision() }
         });
     }
 
@@ -341,9 +425,9 @@ void Convert::update()
         if (text.isEmpty()) {
             // no-op
         } else if (isLiquidAsset()) {
-            details.insert(m_asset->id(), text);
+            details.insert(d->asset->id(), text);
         } else {
-            const auto unit_key = m_unit == "\u00B5BTC" ? "ubtc" : m_unit.toLower();
+            const auto unit_key = d->unit == "\u00B5BTC" ? "ubtc" : d->unit.toLower();
             details.insert(unit_key, text);
         }
     }
@@ -357,7 +441,7 @@ void Convert::update()
     }
 
     // We need primary session to get user currency
-    auto primary_session = m_context ? m_context->primarySession() : nullptr;
+    auto primary_session = d->context ? d->context->primarySession() : nullptr;
     if (primary_session && !details.contains("fiat_currency")) {
         const auto settings = primary_session->settings();
         const auto pricing = settings.value("pricing").toObject();
@@ -367,7 +451,7 @@ void Convert::update()
 
     const auto session = assetSession();
     if (!session) {
-        qWarning() << Q_FUNC_INFO << "No session found for asset:" << (m_asset ? m_asset->id() : "null");
+        qWarning() << Q_FUNC_INFO << "No session found for asset:" << (d->asset ? d->asset->id() : "null");
         setResult({});
         return;
     }
@@ -378,7 +462,7 @@ void Convert::update()
         if (rc == GA_OK) {
             const auto result = Json::toObject(output);
             GA_destroy_json(output);
-            if (m_debug) qDebug() << Q_FUNC_INFO << session->network()->isLiquid() << details << result;
+            if (d->debug) qDebug() << Q_FUNC_INFO << session->network()->isLiquid() << details << result;
             return result;
         } else {
             qDebug() << Q_FUNC_INFO << details << gdk::get_thread_error_details();
@@ -394,21 +478,23 @@ void Convert::update()
         setResult(result);
     });
 
-    m_future_synchronizer.addFuture(future);
+    d->future_synchronizer.addFuture(future);
 }
 
 bool Convert::mainnet() const
 {
-    if (!m_context && !m_account) return false;
-    const auto context = m_context ? m_context : m_account->context();
+    Q_D(const Convert);
+    if (!d->context && !d->account) return false;
+    const auto context = d->context ? d->context : d->account->context();
     return context->isMainnet();
 }
 
 void Convert::timerEvent(QTimerEvent *event)
 {
-    if (event->timerId() == m_timer_id) {
-        killTimer(m_timer_id);
-        m_timer_id = -1;
+    Q_D(Convert);
+    if (event->timerId() == d->timer_id) {
+        killTimer(d->timer_id);
+        d->timer_id = -1;
         update();
     }
 }

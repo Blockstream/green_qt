@@ -1,12 +1,12 @@
 #ifndef GREEN_CONVERT_H
 #define GREEN_CONVERT_H
 
-#include <QFutureSynchronizer>
 #include <QObject>
-#include <QPointer>
 #include <QtQml>
 
 #include "green.h"
+
+class ConvertPrivate;
 
 class Convert : public QObject
 {
@@ -21,26 +21,28 @@ class Convert : public QObject
     Q_PROPERTY(QString unit READ unit WRITE setUnit NOTIFY unitChanged)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
     Q_PROPERTY(bool isLiquidAsset READ isLiquidAsset NOTIFY isLiquidAssetChanged)
+    Q_DECLARE_PRIVATE(Convert)
     QML_ELEMENT
 public:
     Convert(QObject* parent = nullptr);
-    Context* context() const { return m_context; }
+    ~Convert();
+    Context* context() const;
     void setContext(Context* context);
-    Account* account() const { return m_account; }
+    Account* account() const;
     void setAccount(Account* account);
-    Asset* asset() const { return m_asset; }
+    Asset* asset() const;
     void setAsset(Asset* asset);
-    QVariantMap input() const { return m_input; }
+    QVariantMap input() const;
     void setInput(const QVariantMap& input);
     void clearInput();
-    QString unit() const { return m_unit; }
+    QString unit() const;
     void setUnit(const QString& unit);
     Q_INVOKABLE void changeUnit(const QString& unit);
-    QJsonObject result() const { return m_result; }
+    QJsonObject result() const;
     void setResult(const QJsonObject& result);
     QVariantMap fiat() const;
     QVariantMap output() const;
-    bool debug() const { return m_debug; }
+    bool debug() const;
     void setDebug(bool debug);
 
     QString satoshi() const;
@@ -71,16 +73,7 @@ private:
 protected:
     void timerEvent(QTimerEvent* event) override;
 private:
-    Context* m_context{nullptr};
-    Account* m_account{nullptr};
-    Asset* m_asset{nullptr};
-    QString m_unit;
-    QVariantMap m_input;
-    QJsonObject m_result;
-    int m_timer_id{-1};
-    bool m_debug{false};
-    QPointer<Session> m_connected_session;
-    QFutureSynchronizer<void> m_future_synchronizer;
+    ConvertPrivate* const d_ptr;
 };
 
 #endif // GREEN_CONVERT_H
