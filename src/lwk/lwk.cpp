@@ -219,6 +219,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_boltzsession_btc_to_lbtc() != 27295) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_boltzsession_btc_to_ln() != 42316) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_boltzsession_completed_swap_ids() != 32553) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -235,6 +238,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_boltzsession_lbtc_to_btc() != 24979) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_boltzsession_ln_to_btc() != 6772) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_boltzsession_next_index_to_use() != 9036) {
@@ -265,6 +271,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_boltzsession_restorable_lbtc_to_btc_swaps() != 47519) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_boltzsession_restorable_reverse_btc_swaps() != 35288) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_boltzsession_restorable_reverse_swaps() != 54384) {
@@ -621,6 +630,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_preparepayresponse_fee() != 46693) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_preparepayresponse_lockup_address() != 47201) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_preparepayresponse_lockup_txid() != 24205) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -666,7 +678,13 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_psetbalance_balances() != 30248) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_psetbalance_fee() != 45919) {
+    if (uniffi_lwk_checksum_method_psetbalance_fee() != 31768) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_psetbalance_fees() != 16881) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_psetbalance_fees_in() != 37794) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_psetbalance_recipients() != 28110) {
@@ -1108,6 +1126,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_amp2_new_testnet() != 61837) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_amp2descriptor_new_with_custom_descriptor() != 53884) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_anyclient_from_electrum() != 61969) {
@@ -2209,6 +2230,12 @@ Amp2Descriptor::Amp2Descriptor(const Amp2Descriptor &other) : instance(nullptr) 
 
 
 
+std::shared_ptr<Amp2Descriptor> Amp2Descriptor::new_with_custom_descriptor(const std::shared_ptr<WolletDescriptor> &desc) {
+    return std::shared_ptr<Amp2Descriptor>(new Amp2Descriptor(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_amp2descriptor_new_with_custom_descriptor,
+        nullptr, uniffi::FfiConverterWolletDescriptor::lower(desc))));
+}
+
 std::shared_ptr<WolletDescriptor> Amp2Descriptor::descriptor() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterWolletDescriptor::lift(uniffi::rust_call(
@@ -2932,6 +2959,13 @@ std::shared_ptr<LockupResponse> BoltzSession::btc_to_lbtc(uint64_t amount, const
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterUInt64::lower(amount), uniffi::FfiConverterBitcoinAddress::lower(refund_address), uniffi::FfiConverterAddress::lower(claim_address), uniffi::FfiConverterOptionalWebHook::lower(webhook)));
 }
+std::shared_ptr<PreparePayResponse> BoltzSession::btc_to_ln(const std::shared_ptr<LightningPayment> &lightning_payment, const std::shared_ptr<BitcoinAddress> &refund_address, std::shared_ptr<WebHook> webhook) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterPreparePayResponse::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_boltzsession_btc_to_ln,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterLightningPayment::lower(lightning_payment), uniffi::FfiConverterBitcoinAddress::lower(refund_address), uniffi::FfiConverterOptionalWebHook::lower(webhook)));
+}
 std::vector<std::string> BoltzSession::completed_swap_ids() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterSequenceString::lift(uniffi::rust_call(
@@ -2973,6 +3007,13 @@ std::shared_ptr<LockupResponse> BoltzSession::lbtc_to_btc(uint64_t amount, const
         uniffi_lwk_fn_method_boltzsession_lbtc_to_btc,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterUInt64::lower(amount), uniffi::FfiConverterAddress::lower(refund_address), uniffi::FfiConverterBitcoinAddress::lower(claim_address), uniffi::FfiConverterOptionalWebHook::lower(webhook)));
+}
+std::shared_ptr<InvoiceResponse> BoltzSession::ln_to_btc(uint64_t amount, std::optional<std::string> description, const std::shared_ptr<BitcoinAddress> &claim_address, std::shared_ptr<WebHook> webhook) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterInvoiceResponse::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_boltzsession_ln_to_btc,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterUInt64::lower(amount), uniffi::FfiConverterOptionalString::lower(description), uniffi::FfiConverterBitcoinAddress::lower(claim_address), uniffi::FfiConverterOptionalWebHook::lower(webhook)));
 }
 uint32_t BoltzSession::next_index_to_use() {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -3043,6 +3084,13 @@ std::vector<std::string> BoltzSession::restorable_lbtc_to_btc_swaps(const std::s
         uniffi_lwk_fn_method_boltzsession_restorable_lbtc_to_btc_swaps,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterSwapList::lower(swap_list), uniffi::FfiConverterBitcoinAddress::lower(claim_address), uniffi::FfiConverterAddress::lower(refund_address)));
+}
+std::vector<std::string> BoltzSession::restorable_reverse_btc_swaps(const std::shared_ptr<SwapList> &swap_list, const std::shared_ptr<BitcoinAddress> &claim_address) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterSequenceString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_boltzsession_restorable_reverse_btc_swaps,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterSwapList::lower(swap_list), uniffi::FfiConverterBitcoinAddress::lower(claim_address)));
 }
 std::vector<std::string> BoltzSession::restorable_reverse_swaps(const std::shared_ptr<SwapList> &swap_list, const std::shared_ptr<Address> &claim_address) {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -5001,6 +5049,13 @@ std::optional<uint64_t> PreparePayResponse::fee() {
         uniffi::FfiConverterLwkError::lift,
         ptr));
 }
+std::string PreparePayResponse::lockup_address() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_preparepayresponse_lockup_address,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
 std::optional<std::string> PreparePayResponse::lockup_txid() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterOptionalString::lift(uniffi::rust_call(
@@ -5190,6 +5245,20 @@ uint64_t PsetBalance::fee() {
         uniffi_lwk_fn_method_psetbalance_fee,
         nullptr,
         ptr));
+}
+std::unordered_map<AssetId, uint64_t> PsetBalance::fees() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterMapTypeAssetIdUInt64::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_psetbalance_fees,
+        nullptr,
+        ptr));
+}
+uint64_t PsetBalance::fees_in(const AssetId &asset) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterUInt64::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_psetbalance_fees_in,
+        nullptr,
+        ptr, uniffi::FfiConverterTypeAssetId::lower(asset)));
 }
 std::vector<std::shared_ptr<Recipient>> PsetBalance::recipients() {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -7323,6 +7392,9 @@ std::string WolletDescriptor::to_string() const {
 
 
 
+
+
+
 namespace uniffi {
 
 
@@ -9184,7 +9256,9 @@ EsploraClientBuilder FfiConverterTypeEsploraClientBuilder::read(RustStream &stre
         FfiConverterBool::read(stream),
         FfiConverterOptionalUInt32::read(stream),
         FfiConverterOptionalUInt8::read(stream),
-        FfiConverterBool::read(stream)
+        FfiConverterBool::read(stream),
+        FfiConverterOptionalMapStringString::read(stream),
+        FfiConverterOptionalTokenProvider::read(stream)
     };
 }
 
@@ -9195,6 +9269,8 @@ void FfiConverterTypeEsploraClientBuilder::write(RustStream &stream, const Esplo
     FfiConverterOptionalUInt32::write(stream, val.concurrency);
     FfiConverterOptionalUInt8::write(stream, val.timeout);
     FfiConverterBool::write(stream, val.utxo_only);
+    FfiConverterOptionalMapStringString::write(stream, val.headers);
+    FfiConverterOptionalTokenProvider::write(stream, val.token_provider);
 }
 
 uint64_t FfiConverterTypeEsploraClientBuilder::allocation_size(const EsploraClientBuilder &val) {
@@ -9205,7 +9281,9 @@ uint64_t FfiConverterTypeEsploraClientBuilder::allocation_size(const EsploraClie
         FfiConverterBool::allocation_size(val.waterfalls) +
         FfiConverterOptionalUInt32::allocation_size(val.concurrency) +
         FfiConverterOptionalUInt8::allocation_size(val.timeout) +
-        FfiConverterBool::allocation_size(val.utxo_only);
+        FfiConverterBool::allocation_size(val.utxo_only) +
+        FfiConverterOptionalMapStringString::allocation_size(val.headers) +
+        FfiConverterOptionalTokenProvider::allocation_size(val.token_provider);
     
 }
 
@@ -9614,6 +9692,14 @@ std::shared_ptr<LwkError> FfiConverterLwkError::read(RustStream &stream) {
         var.error = FfiConverterOptionalString::read(stream);
         return std::make_shared<lwk_error::BoltzBackendHttpError>(var);
     }
+    case 9:
+    {
+        lwk_error::EsploraHttpError var;
+        var.url = FfiConverterString::read(stream);
+        var.status = FfiConverterUInt16::read(stream);
+        var.body = FfiConverterOptionalString::read(stream);
+        return std::make_shared<lwk_error::EsploraHttpError>(var);
+    }
     default:
         throw std::runtime_error("Unexpected error variant");
     }
@@ -9673,6 +9759,14 @@ void FfiConverterLwkError::write(RustStream &stream, const LwkError &val) {
         FfiConverterOptionalString::write(stream, var.error);
         break;
     }
+    case 9:
+    {
+        auto var = static_cast<const lwk_error::EsploraHttpError&>(val);
+        FfiConverterString::write(stream, var.url);
+        FfiConverterUInt16::write(stream, var.status);
+        FfiConverterOptionalString::write(stream, var.body);
+        break;
+    }
     }
 }
 
@@ -9728,6 +9822,14 @@ uint64_t FfiConverterLwkError::allocation_size(const LwkError &val) {
         return static_cast<uint64_t>(sizeof(int32_t)
             + FfiConverterUInt16::allocation_size(var.status)
             + FfiConverterOptionalString::allocation_size(var.error));
+    }
+    case 9:
+    {
+        auto var = static_cast<const lwk_error::EsploraHttpError&>(val);
+        return static_cast<uint64_t>(sizeof(int32_t)
+            + FfiConverterString::allocation_size(var.url)
+            + FfiConverterUInt16::allocation_size(var.status)
+            + FfiConverterOptionalString::allocation_size(var.body));
     }
     default:
         throw std::runtime_error("Unexpected error variant");
@@ -10019,6 +10121,104 @@ void FfiConverterSwapAsset::write(RustStream &stream, const SwapAsset &val) {
 
 uint64_t FfiConverterSwapAsset::allocation_size(const SwapAsset &) {
     return static_cast<uint64_t>(sizeof(int32_t));
+}
+
+
+TokenProvider FfiConverterTokenProvider::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterTokenProvider::read(stream);
+
+    rustbuffer_free(buf);
+
+    return std::move(ret);
+}
+
+RustBuffer FfiConverterTokenProvider::lower(const TokenProvider &val) {
+    auto buf = rustbuffer_alloc(FfiConverterTokenProvider::allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterTokenProvider::write(stream, val);
+
+    return std::move(buf);
+}
+
+TokenProvider FfiConverterTokenProvider::read(RustStream &stream) {
+    int32_t variant_id;
+    stream >> variant_id;
+
+    switch (variant_id) {
+        
+    case 1:
+        return TokenProvider::kNone {
+        };
+        
+    case 2:
+        return TokenProvider::kStatic {
+            .token = FfiConverterString::read(stream),
+        };
+        
+    case 3:
+        return TokenProvider::kBlockstream {
+            .url = FfiConverterString::read(stream),
+            .client_id = FfiConverterString::read(stream),
+            .client_secret = FfiConverterString::read(stream),
+        };
+        
+    default:
+        throw std::runtime_error("No matching TokenProvider variant");
+    }
+}
+
+void FfiConverterTokenProvider::write(RustStream &stream, const TokenProvider &val) {
+    int32_t variant_id = static_cast<int32_t>(val.variant.index() + 1);
+
+    stream << variant_id;
+
+    std::visit([&](auto &&arg) {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, TokenProvider::kNone>) {
+        }
+        else if constexpr (std::is_same_v<T, TokenProvider::kStatic>) {
+            FfiConverterString::write(stream, arg.token);
+        }
+        else if constexpr (std::is_same_v<T, TokenProvider::kBlockstream>) {
+            FfiConverterString::write(stream, arg.url);
+            FfiConverterString::write(stream, arg.client_id);
+            FfiConverterString::write(stream, arg.client_secret);
+        }
+        else {
+            static_assert(always_false_v<T>, "non-exhaustive TokenProvider visitor");
+        }
+    }, val.variant);
+}
+
+uint64_t FfiConverterTokenProvider::allocation_size(const TokenProvider &val) {
+    uint64_t size = sizeof(int32_t);
+
+    size += std::visit([&](auto &&arg) {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, TokenProvider::kNone>) {
+            uint64_t size = 0;
+            return size;
+        }
+        else if constexpr (std::is_same_v<T, TokenProvider::kStatic>) {
+            uint64_t size = 0;
+            size += FfiConverterString::allocation_size(arg.token);
+            return size;
+        }
+        else if constexpr (std::is_same_v<T, TokenProvider::kBlockstream>) {
+            uint64_t size = 0;
+            size += FfiConverterString::allocation_size(arg.url);
+            size += FfiConverterString::allocation_size(arg.client_id);
+            size += FfiConverterString::allocation_size(arg.client_secret);
+            return size;
+        }
+        else {
+            static_assert(always_false_v<T>, "non-exhaustive TokenProvider visitor");
+        }
+    }, val.variant);
+
+    return size;
 }
 
 std::optional<uint8_t> FfiConverterOptionalUInt8::lift(RustBuffer buf) {
@@ -11243,6 +11443,53 @@ uint64_t FfiConverterOptionalTypeLiquidBip21::allocation_size(const std::optiona
     return ret;
 }
 
+std::optional<TokenProvider> FfiConverterOptionalTokenProvider::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterOptionalTokenProvider::read(stream);
+
+    rustbuffer_free(buf);
+
+    return ret;
+}
+
+RustBuffer FfiConverterOptionalTokenProvider::lower(const std::optional<TokenProvider>& val) {
+    auto buf = rustbuffer_alloc(FfiConverterOptionalTokenProvider::allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterOptionalTokenProvider::write(stream, val);
+
+    return buf;
+}
+
+std::optional<TokenProvider> FfiConverterOptionalTokenProvider::read(RustStream &stream) {
+    char has_value;
+
+    stream.get(has_value);
+    if (has_value) {
+        return std::make_optional(FfiConverterTokenProvider::read(stream));
+    } else {
+        return std::nullopt;
+    }
+}
+
+void FfiConverterOptionalTokenProvider::write(RustStream &stream, const std::optional<TokenProvider>& value) {
+    stream.put(static_cast<uint8_t>(!!value));
+
+    if (value) {
+        FfiConverterTokenProvider::write(stream, value.value());
+    }
+}
+
+uint64_t FfiConverterOptionalTokenProvider::allocation_size(const std::optional<TokenProvider> &val) {
+    uint64_t ret = 1;
+
+    if (val) {
+        ret += FfiConverterTokenProvider::allocation_size(val.value());
+    }
+
+    return ret;
+}
+
 std::optional<std::vector<AssetId>> FfiConverterOptionalSequenceTypeAssetId::lift(RustBuffer buf) {
     auto stream = RustStream(&buf);
     auto ret = FfiConverterOptionalSequenceTypeAssetId::read(stream);
@@ -11285,6 +11532,53 @@ uint64_t FfiConverterOptionalSequenceTypeAssetId::allocation_size(const std::opt
 
     if (val) {
         ret += FfiConverterSequenceTypeAssetId::allocation_size(val.value());
+    }
+
+    return ret;
+}
+
+std::optional<std::unordered_map<std::string, std::string>> FfiConverterOptionalMapStringString::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterOptionalMapStringString::read(stream);
+
+    rustbuffer_free(buf);
+
+    return ret;
+}
+
+RustBuffer FfiConverterOptionalMapStringString::lower(const std::optional<std::unordered_map<std::string, std::string>>& val) {
+    auto buf = rustbuffer_alloc(FfiConverterOptionalMapStringString::allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterOptionalMapStringString::write(stream, val);
+
+    return buf;
+}
+
+std::optional<std::unordered_map<std::string, std::string>> FfiConverterOptionalMapStringString::read(RustStream &stream) {
+    char has_value;
+
+    stream.get(has_value);
+    if (has_value) {
+        return std::make_optional(FfiConverterMapStringString::read(stream));
+    } else {
+        return std::nullopt;
+    }
+}
+
+void FfiConverterOptionalMapStringString::write(RustStream &stream, const std::optional<std::unordered_map<std::string, std::string>>& value) {
+    stream.put(static_cast<uint8_t>(!!value));
+
+    if (value) {
+        FfiConverterMapStringString::write(stream, value.value());
+    }
+}
+
+uint64_t FfiConverterOptionalMapStringString::allocation_size(const std::optional<std::unordered_map<std::string, std::string>> &val) {
+    uint64_t ret = 1;
+
+    if (val) {
+        ret += FfiConverterMapStringString::allocation_size(val.value());
     }
 
     return ret;

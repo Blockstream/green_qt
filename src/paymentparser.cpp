@@ -188,6 +188,8 @@ QVariantMap parse(const QString& input, const QVariantMap& data)
         fill(result, lwk::Payment::init(input.trimmed().toStdString()), data);
     } catch (const lwk::lwk_error::Generic& error) {
         result.insert("error", QString::fromStdString(error.msg));
+    } catch (const std::runtime_error& error) {
+        result.insert("error", QString::fromStdString(error.what()));
     } catch (...) {
         result.insert("error", "unknown");
     }

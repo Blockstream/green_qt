@@ -103,77 +103,8 @@ enum class PaymentKind;
 enum class PaymentState;
 enum class Singlesig;
 enum class SwapAsset;
+struct TokenProvider;
 typedef std::string AssetId;
-
-
-
-
-/**
- * An exported trait for handling logging messages.
- *
- * Implement this trait to receive and handle logging messages from the lightning session.
- */
-struct Logging {
-    virtual ~Logging() {}
-    /**
-     * Log a message with the given level
-     */
-    virtual
-    void log(const LogLevel &level, const std::string &message) = 0;
-};
-
-namespace uniffi {
-    struct UniffiCallbackInterfaceLogging {
-        static void log(uint64_t uniffi_handle,RustBuffer level,RustBuffer message,void * uniffi_out_return,RustCallStatus *out_status);
-
-        static void uniffi_free(uint64_t uniffi_handle);
-        static void init();
-    private:
-        static inline UniffiVTableCallbackInterfaceLogging vtable = UniffiVTableCallbackInterfaceLogging {
-            .log = reinterpret_cast<void *>(&log),
-            .uniffi_free = reinterpret_cast<void *>(&uniffi_free)
-        };
-    };
-}
-
-namespace uniffi {
-    struct FfiConverterLogging;
-} // namespace uniffi
-
-/**
- * An exported trait for handling logging messages.
- *
- * Implement this trait to receive and handle logging messages from the lightning session.
- */
-struct LoggingImpl
-
- : public Logging 
-
-{
-    friend uniffi::FfiConverterLogging;
-
-    LoggingImpl() = delete;
-
-    LoggingImpl(LoggingImpl &&) = delete;
-
-    LoggingImpl &operator=(const LoggingImpl &) = delete;
-    LoggingImpl &operator=(LoggingImpl &&) = delete;
-
-    ~LoggingImpl();
-    /**
-     * Log a message with the given level
-     */
-    void log(const LogLevel &level, const std::string &message);
-
-    private:
-    LoggingImpl(const LoggingImpl &);
-
-    LoggingImpl(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
 
 
 namespace uniffi {
@@ -241,6 +172,130 @@ struct Address
     Address(const Address &);
 
     Address(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterMnemonic;
+} // namespace uniffi
+
+/**
+ * Wrapper over [`bip39::Mnemonic`]
+ */
+struct Mnemonic
+
+
+
+{
+    friend uniffi::FfiConverterMnemonic;
+
+    Mnemonic() = delete;
+
+    Mnemonic(Mnemonic &&) = delete;
+
+    Mnemonic &operator=(const Mnemonic &) = delete;
+    Mnemonic &operator=(Mnemonic &&) = delete;
+
+    ~Mnemonic();
+    /**
+     * Construct a Mnemonic type
+     */
+    static std::shared_ptr<Mnemonic> init(const std::string &s);
+    /**
+     * Creates a Mnemonic from entropy, at least 16 bytes are needed.
+     */
+    static std::shared_ptr<Mnemonic> from_entropy(const std::vector<uint8_t> &b);
+    /**
+     * Creates a random Mnemonic of given words (12,15,18,21,24)
+     */
+    static std::shared_ptr<Mnemonic> from_random(uint8_t word_count);
+    /**
+     * Get the number of words in this mnemonic
+     */
+    uint8_t word_count();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    Mnemonic(const Mnemonic &);
+
+    Mnemonic(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+
+
+/**
+ * An exported trait for handling logging messages.
+ *
+ * Implement this trait to receive and handle logging messages from the lightning session.
+ */
+struct Logging {
+    virtual ~Logging() {}
+    /**
+     * Log a message with the given level
+     */
+    virtual
+    void log(const LogLevel &level, const std::string &message) = 0;
+};
+
+namespace uniffi {
+    struct UniffiCallbackInterfaceLogging {
+        static void log(uint64_t uniffi_handle,RustBuffer level,RustBuffer message,void * uniffi_out_return,RustCallStatus *out_status);
+
+        static void uniffi_free(uint64_t uniffi_handle);
+        static void init();
+    private:
+        static inline UniffiVTableCallbackInterfaceLogging vtable = UniffiVTableCallbackInterfaceLogging {
+            .log = reinterpret_cast<void *>(&log),
+            .uniffi_free = reinterpret_cast<void *>(&uniffi_free)
+        };
+    };
+}
+
+namespace uniffi {
+    struct FfiConverterLogging;
+} // namespace uniffi
+
+/**
+ * An exported trait for handling logging messages.
+ *
+ * Implement this trait to receive and handle logging messages from the lightning session.
+ */
+struct LoggingImpl
+
+ : public Logging 
+
+{
+    friend uniffi::FfiConverterLogging;
+
+    LoggingImpl() = delete;
+
+    LoggingImpl(LoggingImpl &&) = delete;
+
+    LoggingImpl &operator=(const LoggingImpl &) = delete;
+    LoggingImpl &operator=(LoggingImpl &&) = delete;
+
+    ~LoggingImpl();
+    /**
+     * Log a message with the given level
+     */
+    void log(const LogLevel &level, const std::string &message);
+
+    private:
+    LoggingImpl(const LoggingImpl &);
+
+    LoggingImpl(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -337,6 +392,80 @@ struct Network
     void *instance = nullptr;
 };
 
+namespace uniffi {
+struct FfiConverterTokenProvider;
+} // namespace uniffi
+
+/**
+ * Provider of a token for authenticated Esplora and Waterfalls backends.
+ *
+ * Some Esplora servers, particularly enterprise deployments like
+ * [Blockstream Enterprise](https://blockstream.info/explorer-api), require authentication for
+ * access.
+ */
+struct TokenProvider {
+    friend uniffi::FfiConverterTokenProvider;
+    /**
+     * No token is needed
+     */
+    struct kNone {
+    };
+    /**
+     * A static token is used as-is for every request
+     */
+    struct kStatic {
+        /**
+         * The token value
+         */
+        std::string token;
+    };
+    /**
+     * An OAuth2 token is obtained from the Blockstream API and refreshed automatically
+     */
+    struct kBlockstream {
+        /**
+         * The url to get the token from
+         */
+        std::string url;
+        /**
+         * The client ID
+         */
+        std::string client_id;
+        /**
+         * The client secret
+         */
+        std::string client_secret;
+    };
+    TokenProvider(kNone variant): variant(variant) {}
+    TokenProvider(kStatic variant): variant(variant) {}
+    TokenProvider(kBlockstream variant): variant(variant) {}
+
+    TokenProvider(const TokenProvider &other): variant(other.variant) {}
+    TokenProvider(TokenProvider &&other): variant(std::move(other.variant)) {}
+
+    TokenProvider &operator=(const TokenProvider &other) {
+        variant = other.variant;
+        return *this;
+    }
+
+    TokenProvider &operator=(TokenProvider &&other) {
+        variant = std::move(other.variant);
+        return *this;
+    }
+
+    /**
+     * Returns the variant of this enum
+     */
+    const std::variant<kNone, kStatic, kBlockstream> &get_variant() const {
+        return variant;
+    }
+
+private:
+    std::variant<kNone, kStatic, kBlockstream> variant;
+
+    TokenProvider();
+};
+
 
 namespace uniffi {
     struct FfiConverterAnyClient;
@@ -364,60 +493,6 @@ struct AnyClient
     AnyClient(const AnyClient &);
 
     AnyClient(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
-    struct FfiConverterMnemonic;
-} // namespace uniffi
-
-/**
- * Wrapper over [`bip39::Mnemonic`]
- */
-struct Mnemonic
-
-
-
-{
-    friend uniffi::FfiConverterMnemonic;
-
-    Mnemonic() = delete;
-
-    Mnemonic(Mnemonic &&) = delete;
-
-    Mnemonic &operator=(const Mnemonic &) = delete;
-    Mnemonic &operator=(Mnemonic &&) = delete;
-
-    ~Mnemonic();
-    /**
-     * Construct a Mnemonic type
-     */
-    static std::shared_ptr<Mnemonic> init(const std::string &s);
-    /**
-     * Creates a Mnemonic from entropy, at least 16 bytes are needed.
-     */
-    static std::shared_ptr<Mnemonic> from_entropy(const std::vector<uint8_t> &b);
-    /**
-     * Creates a random Mnemonic of given words (12,15,18,21,24)
-     */
-    static std::shared_ptr<Mnemonic> from_random(uint8_t word_count);
-    /**
-     * Get the number of words in this mnemonic
-     */
-    uint8_t word_count();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-
-    private:
-    Mnemonic(const Mnemonic &);
-
-    Mnemonic(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -460,6 +535,27 @@ struct ForeignStoreLink
     void *_uniffi_internal_clone_pointer() const;
 
     void *instance = nullptr;
+};
+
+
+/**
+ * A builder for the `EsploraClient`
+ */
+struct EsploraClientBuilder {
+    std::string base_url;
+    std::shared_ptr<Network> network;
+    bool waterfalls = false;
+    std::optional<uint32_t> concurrency = std::nullopt;
+    std::optional<uint8_t> timeout = std::nullopt;
+    bool utxo_only = false;
+    /**
+     * HTTP headers to set on each request, for example to authenticate with a backend
+     */
+    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    /**
+     * Token provider for authenticated Esplora and Waterfalls backends
+     */
+    std::optional<TokenProvider> token_provider = std::nullopt;
 };
 
 
@@ -518,19 +614,6 @@ struct LiquidBip21 {
      * The amount in satoshis
      */
     std::optional<uint64_t> satoshi;
-};
-
-
-/**
- * A builder for the `EsploraClient`
- */
-struct EsploraClientBuilder {
-    std::string base_url;
-    std::shared_ptr<Network> network;
-    bool waterfalls = false;
-    std::optional<uint32_t> concurrency = std::nullopt;
-    std::optional<uint8_t> timeout = std::nullopt;
-    bool utxo_only = false;
 };
 
 
@@ -908,6 +991,14 @@ struct Amp2Descriptor
     Amp2Descriptor &operator=(Amp2Descriptor &&) = delete;
 
     ~Amp2Descriptor();
+    /**
+     * Create an `Amp2Descriptor` using any `WolletDescriptor`
+     *
+     * Warning: AMP2 server only supports a limited subset of descriptors.
+     * To make sure this AMP2 descriptor can be used safely,
+     * register this with AMP2 as soon as possible.
+     */
+    static std::shared_ptr<Amp2Descriptor> new_with_custom_descriptor(const std::shared_ptr<WolletDescriptor> &desc);
     std::shared_ptr<WolletDescriptor> descriptor();
     /**
      * Returns a string representation of the object, internally calls Rust's `Display` trait.
@@ -1455,6 +1546,10 @@ struct BoltzSession
      */
     std::shared_ptr<LockupResponse> btc_to_lbtc(uint64_t amount, const std::shared_ptr<BitcoinAddress> &refund_address, const std::shared_ptr<Address> &claim_address, std::shared_ptr<WebHook> webhook);
     /**
+     * Prepare to pay a Lightning invoice from Bitcoin onchain funds.
+     */
+    std::shared_ptr<PreparePayResponse> btc_to_ln(const std::shared_ptr<LightningPayment> &lightning_payment, const std::shared_ptr<BitcoinAddress> &refund_address, std::shared_ptr<WebHook> webhook);
+    /**
      * Get the list of completed swap IDs from the store
      *
      * Returns an error if no store is configured.
@@ -1482,6 +1577,10 @@ struct BoltzSession
      * Create an onchain swap to convert LBTC to BTC
      */
     std::shared_ptr<LockupResponse> lbtc_to_btc(uint64_t amount, const std::shared_ptr<Address> &refund_address, const std::shared_ptr<BitcoinAddress> &claim_address, std::shared_ptr<WebHook> webhook);
+    /**
+     * Create a new invoice for a Lightning to Bitcoin reverse swap.
+     */
+    std::shared_ptr<InvoiceResponse> ln_to_btc(uint64_t amount, std::optional<std::string> description, const std::shared_ptr<BitcoinAddress> &claim_address, std::shared_ptr<WebHook> webhook);
     /**
      * Get the next index to use for deriving keypairs
      */
@@ -1566,6 +1665,16 @@ struct BoltzSession
      * The claim and refund addresses don't need to be the same used when creating the swap.
      */
     std::vector<std::string> restorable_lbtc_to_btc_swaps(const std::shared_ptr<SwapList> &swap_list, const std::shared_ptr<BitcoinAddress> &claim_address, const std::shared_ptr<Address> &refund_address);
+    /**
+     * From the swaps returned by the boltz api via [`BoltzSession::swap_restore`]:
+     *
+     * - filter the reverse BTC swaps
+     * - add information from the session
+     * - return typed data
+     *
+     * The claim address doesn't need to be the same used when creating the swap.
+     */
+    std::vector<std::string> restorable_reverse_btc_swaps(const std::shared_ptr<SwapList> &swap_list, const std::shared_ptr<BitcoinAddress> &claim_address);
     /**
      * From the swaps returned by the boltz api via [`BoltzSession::swap_restore`]:
      *
@@ -2921,6 +3030,7 @@ struct PreparePayResponse
      * It is equal to the amount requested onchain minus the amount of the bolt11 invoice
      */
     std::optional<uint64_t> fee();
+    std::string lockup_address();
     /**
      * The txid of the user lockup transaction of the swap.
      */
@@ -3048,7 +3158,16 @@ struct PsetBalance
 
     ~PsetBalance();
     std::unordered_map<AssetId, int64_t> balances();
+    /**
+     * Fee paid by this transaction.
+     *
+     * Warning: if there are multiple assets paying fees this function can return an incorrect value.
+     *
+     * Deprecated: use `fees_in(asset_id)` or `fees()` instead.
+     */
     uint64_t fee();
+    std::unordered_map<AssetId, uint64_t> fees();
+    uint64_t fees_in(const AssetId &asset);
     std::vector<std::shared_ptr<Recipient>> recipients();
 
     private:
@@ -5043,6 +5162,24 @@ protected:
         return 8;
     }
 };
+
+struct EsploraHttpError: LwkError {
+    std::string url;
+    uint16_t status;
+    std::optional<std::string> body;
+
+    EsploraHttpError() : LwkError("") {}
+    EsploraHttpError(const std::string &what_arg) : LwkError(what_arg) {}
+
+    void throw_underlying() override {
+        throw *this;
+    }
+
+protected:
+    int32_t get_variant_idx() const override {
+        return 9;
+    }
+};
 } // namespace lwk_error
 
 
@@ -6089,6 +6226,13 @@ struct FfiConverterSwapAsset {
     static void write(RustStream &, const SwapAsset &);
     static uint64_t allocation_size(const SwapAsset &);
 };
+struct FfiConverterTokenProvider {
+    static TokenProvider lift(RustBuffer);
+    static RustBuffer lower(const TokenProvider &);
+    static TokenProvider read(RustStream &);
+    static void write(RustStream &, const TokenProvider &);
+    static uint64_t allocation_size(const TokenProvider &);
+};
 struct FfiConverterOptionalUInt8 {
     static std::optional<uint8_t> lift(RustBuffer buf);
     static RustBuffer lower(const std::optional<uint8_t>& val);
@@ -6271,12 +6415,26 @@ struct FfiConverterOptionalTypeLiquidBip21 {
     static void write(RustStream &stream, const std::optional<LiquidBip21>& value);
     static uint64_t allocation_size(const std::optional<LiquidBip21> &val);
 };
+struct FfiConverterOptionalTokenProvider {
+    static std::optional<TokenProvider> lift(RustBuffer buf);
+    static RustBuffer lower(const std::optional<TokenProvider>& val);
+    static std::optional<TokenProvider> read(RustStream &stream);
+    static void write(RustStream &stream, const std::optional<TokenProvider>& value);
+    static uint64_t allocation_size(const std::optional<TokenProvider> &val);
+};
 struct FfiConverterOptionalSequenceTypeAssetId {
     static std::optional<std::vector<AssetId>> lift(RustBuffer buf);
     static RustBuffer lower(const std::optional<std::vector<AssetId>>& val);
     static std::optional<std::vector<AssetId>> read(RustStream &stream);
     static void write(RustStream &stream, const std::optional<std::vector<AssetId>>& value);
     static uint64_t allocation_size(const std::optional<std::vector<AssetId>> &val);
+};
+struct FfiConverterOptionalMapStringString {
+    static std::optional<std::unordered_map<std::string, std::string>> lift(RustBuffer buf);
+    static RustBuffer lower(const std::optional<std::unordered_map<std::string, std::string>>& val);
+    static std::optional<std::unordered_map<std::string, std::string>> read(RustStream &stream);
+    static void write(RustStream &stream, const std::optional<std::unordered_map<std::string, std::string>>& value);
+    static uint64_t allocation_size(const std::optional<std::unordered_map<std::string, std::string>> &val);
 };
 struct FfiConverterOptionalTypeAssetId {
     static std::optional<AssetId> lift(RustBuffer buf);

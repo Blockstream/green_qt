@@ -171,16 +171,6 @@ void SwapQuoteController::update()
     connect(watcher, &Watcher::finished, this, [=, this] {
         watcher->deleteLater();
         d->quote = watcher->result();
-
-        if (d->send_asset == lwk::SwapAsset::kLiquid && d->receive_asset == lwk::SwapAsset::kLightning) {
-            const auto submarine = m_context->m_boltz_swaps_infos.value("submarine").toObject();
-            const auto lbtc = submarine.value("L-BTC").toObject();
-            const auto btc = lbtc.value("BTC").toObject();
-            const auto limits = btc.value("limits").toObject();
-            const auto minimalBatched = limits.value("minimalBatched").toInt();
-            d->quote.insert("min", minimalBatched);
-        }
-
         emit updated();
     });
 }
