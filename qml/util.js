@@ -36,6 +36,7 @@ function accountIcon(account) {
 }
 
 function assetIcon(asset) {
+    if (!asset) return 'qrc:/svg/generic_icon_30p.svg'
     if (asset.icon) return asset.icon
     if (asset.policy) return iconFor(asset.networkKey)
     return iconFor(asset.id)

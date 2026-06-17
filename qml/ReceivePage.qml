@@ -14,6 +14,7 @@ StackViewPage {
     property bool invoice: false
     readonly property bool lightningEnabled: self.context.mainnet && !self.context.watchonly && !controller.context.wallet.login.device && self.account.network.liquid && self.asset.id === self.account.network.policyAsset
     readonly property string qrcode: self.invoice ? 'lightning:' + invoice_controller.swap?.data?.invoice.toUpperCase() ?? '' : controller.uri
+    property bool lockAssetAndAccount: false
     readonly property var error: {
         if (!self.invoice) return null
         if (amount_field.text.length === 0) return { code: 'invalid', visible: false }
@@ -117,6 +118,7 @@ StackViewPage {
         FieldTitle {
             Layout.topMargin: 0
             text: qsTrId('id_account__asset')
+            visible: !self.lockAssetAndAccount
         }
         AbstractButton {
             Layout.fillWidth: true
@@ -149,6 +151,7 @@ StackViewPage {
             account: controller.account
             asset: controller.asset
             readonly: self.readonly
+            visible: !self.lockAssetAndAccount
             onClicked: self.StackView.view.push(account_asset_selector)
         }
         FieldTitle {
