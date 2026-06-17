@@ -4,9 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "analytics.js" as AnalyticsJS
-import "util.js" as UtilJS
-
 StackViewPage {
     signal continueClicked(var properties)
     required property Context context
