@@ -50,7 +50,12 @@ Session::Session(Network* network, QObject* parent)
 
 Session::~Session()
 {
-    setActive(false);
+    try {
+        setActive(false);
+    } catch (...) {
+        qWarning() << Q_FUNC_INFO << "unexpected error during session destruction";
+        throw;
+    }
 }
 
 void Session::setContext(Context* context)
@@ -293,7 +298,14 @@ void Session::update()
         }
 
         GA_set_notification_handler(m_session, nullptr, nullptr);
-        int rc = GA_destroy_session(m_session);
+        if (m_is_tor) {
+            QJsonObject details{{ "hint", "disconnect" }, { "tor_hint", "disconnect" }};
+            GA_reconnect_hint(m_session, Json::fromObject(details).get());
+        } else {
+            QJsonObject details{{ "hint", "disconnect" }};
+            GA_reconnect_hint(m_session, Json::fromObject(details).get());
+        }
+        GA_destroy_session(m_session);
         m_session = nullptr;
         return;
     }

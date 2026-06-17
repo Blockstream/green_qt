@@ -31,6 +31,7 @@ Session* SessionManager::create(Network* network)
     if (settings->useTor() && !settings->useProxy() && !m_tor_session) {
         qDebug() << Q_FUNC_INFO << "created tor session";
         m_tor_session = new Session(NetworkManager::instance()->network("electrum-mainnet"), this);
+        m_tor_session->m_is_tor = true;
         m_tor_session->setActive(true);
         m_dispatcher->add(new ConnectTask(m_tor_session));
         connect(m_tor_session, &Session::torEvent, this, &SessionManager::setTor);
@@ -52,10 +53,13 @@ void SessionManager::release(Session* session)
 void SessionManager::exit()
 {
     if (!m_sessions.isEmpty()) {
-        qWarning() << Q_FUNC_INFO << "total sessions:" << m_sessions.count() << m_garbage.count();
+        qWarning() << Q_FUNC_INFO << "unexpected active sessions:" << m_sessions.count();
     }
-    while (!m_garbage.isEmpty()) {
-        delete m_garbage.takeFirst();
+    if (!m_garbage.isEmpty()) {
+        qDebug() << Q_FUNC_INFO << "total garbage sessions:" << m_garbage.count();
+        while (!m_garbage.isEmpty()) {
+            delete m_garbage.takeFirst();
+        }
     }
     if (m_tor_session) {
         delete m_tor_session;

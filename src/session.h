@@ -146,6 +146,8 @@ public:
     int64_t m_id{0};
     QString m_wallet_hash_id;
     QString m_username;
+
+    bool m_is_tor{false};
 };
 
 class SessionActivity : public Activity
