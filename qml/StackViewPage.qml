@@ -11,6 +11,15 @@ Page {
     property alias centerItem: center_pane.contentItem
     property alias rightItem: right_pane.contentItem
     property alias footerItem: footer_pane.contentItem
+    function pushPage(...args) {
+        return self.StackView.view.push(...args)
+    }
+    function popPage(...args) {
+        return self.StackView.view.pop(...args)
+    }
+    function replacePage(...args) {
+        return self.StackView.view.replace(...args)
+    }
     StackView.onActivated: self.forceActiveFocus()
     id: self
     background: null
@@ -42,7 +51,7 @@ Page {
                 background: null
                 padding: 0
                 contentItem: BackButton {
-                    onClicked: self.StackView.view.pop()
+                    onClicked: self.popPage()
                     visible: self.StackView.index > 0
                     enabled: self.StackView.status === StackView.Active
                 }

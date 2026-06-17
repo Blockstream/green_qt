@@ -58,7 +58,7 @@ StackViewPage {
         context: self.context
         onWidgetUrlChanged: {
             if (service.widgetUrl.length > 0) {
-                self.StackView.view.push(webview_page, {
+                self.pushPage(webview_page, {
                     widgetUrl: service.widgetUrl
                 })
             }
@@ -70,7 +70,7 @@ StackViewPage {
         spacing: 20
         CountryButton {
             code: self.countryCode
-            onClicked: self.StackView.view.push(null, country_selector_page, { selectedCountryCode: self.countryCode })
+            onClicked: self.pushPage(null, country_selector_page, { selectedCountryCode: self.countryCode })
         }
         CloseButton {
             onClicked: self.closeClicked()
@@ -203,7 +203,7 @@ StackViewPage {
             asset: self.context.getOrCreateAsset('btc')
             readonly: self.accounts.length <= 1
             onClicked: {
-                self.StackView.view.push(null, account_selector_page)
+                self.pushPage(null, account_selector_page)
             }
         }
         FieldTitle {
@@ -244,7 +244,7 @@ StackViewPage {
             }
             onClicked: {
                 const quotes = service.allQuotes
-                self.StackView.view.push(quotes_list_page, {
+                self.pushPage(quotes_list_page, {
                     quotes: quotes,
                     quoteService: service
                 })
@@ -269,7 +269,7 @@ StackViewPage {
             onAddressChanged: {
                 if (self.pendingVerify && receive_address_controller.address && self.StackView.view) {
                     self.pendingVerify = false
-                    self.StackView.view.push(jade_verify_page, { context: self.context, address: receive_address_controller.address })
+                    self.pushPage(jade_verify_page, { context: self.context, address: receive_address_controller.address })
                 }
                 quote_fetch_timer.restart()
             }
@@ -350,7 +350,7 @@ StackViewPage {
             visible: self.context.wallet.login.device?.type === 'jade'
             onClicked: {
                 if (receive_address_controller.address) {
-                    self.StackView.view.push(jade_verify_page, { context: self.context, address: receive_address_controller.address })
+                    self.pushPage(jade_verify_page, { context: self.context, address: receive_address_controller.address })
                 } else {
                     self.pendingVerify = true
                     receive_address_controller.generate()
@@ -370,7 +370,7 @@ StackViewPage {
             context: self.context
             onCountrySelected: (code) => {
                 self.countryCode = code
-                self.StackView.view.pop()
+                self.popPage()
                 amount_input.forceActiveFocus()
                 quote_fetch_timer.restart()
             }
@@ -385,7 +385,7 @@ StackViewPage {
             message: 'Select the desired account you want to receive your bitcoin.'
             onAccountClicked: (account) => {
                 self.account = account
-                self.StackView.view.pop()
+                self.popPage()
                 amount_input.forceActiveFocus()
             }
         }
@@ -395,7 +395,7 @@ StackViewPage {
         QuotesListPage {
             onQuoteClicked: (quote) => {
                 service.setSelectedQuote(quote)
-                self.StackView.view.pop()
+                self.popPage()
             }
         }
     }

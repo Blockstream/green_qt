@@ -72,7 +72,7 @@ StackViewPage {
             Layout.topMargin: 20
             text: qsTrId('id_show_qr_code')
             visible: !!self.context
-            onClicked: self.StackView.view.push(qrcode_page)
+            onClicked: self.pushPage(qrcode_page)
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter

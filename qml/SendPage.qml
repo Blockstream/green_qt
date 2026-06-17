@@ -27,7 +27,7 @@ StackViewPage {
     }
     readonly property bool bumpRedeposit: controller.previousTransaction?.type === AccountTransaction.Redeposit
     function pushSelectCoinsPage() {
-        self.StackView.view.push(select_coins_page, {
+        self.pushPage(select_coins_page, {
             account: controller.account,
             asset: controller.asset,
             coins: controller.coins,
@@ -35,7 +35,7 @@ StackViewPage {
         })
     }
     function pushSelectFeePage() {
-        self.StackView.view.push(select_fee_page, {
+        self.pushPage(select_fee_page, {
             account: controller.account,
             unit: amount_field.unit,
             size: controller.transaction?.transaction_vsize ?? 0,
@@ -93,7 +93,7 @@ StackViewPage {
             readonly: self.readonly || !!self.transaction
             onClicked: {
                 if (!account_asset_field.readonly) {
-                    self.StackView.view.push(account_asset_selector, {
+                    self.pushPage(account_asset_selector, {
                         context: controller.context
                     })
                 }
@@ -361,7 +361,7 @@ StackViewPage {
             busy: !controller.monitor.idle
             text: qsTrId('id_next')
             onClicked: {
-                self.StackView.view.push(send_confirm_page, {
+                self.pushPage(send_confirm_page, {
                     context: self.context,
                     account: controller.account,
                     asset: controller.asset,
@@ -380,7 +380,7 @@ StackViewPage {
         id: account_asset_selector
         SendAccountAssetSelector {
             onSelected: (account, asset) => {
-                self.StackView.view.pop()
+                self.popPage()
                 controller.account = account
                 controller.asset = asset
                 controller.coins = []
@@ -401,7 +401,7 @@ StackViewPage {
         id: select_coins_page
         SelectCoinsView {
             onCoinsSelected: (coins) => {
-                self.StackView.view.pop()
+                self.popPage()
                 controller.coins = coins
             }
         }
@@ -413,7 +413,7 @@ StackViewPage {
             onCloseClicked: self.closeClicked()
             onFeeRateSelected: (fee_rate) => {
                 controller.feeRate = fee_rate
-                self.StackView.view.pop()
+                self.popPage()
             }
         }
     }

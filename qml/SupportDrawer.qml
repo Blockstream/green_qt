@@ -17,7 +17,7 @@ WalletDrawer {
                 onClicked: self.close()
             }
             onSubmitted: (response) => {
-                page.StackView.view.replace(page, support_submitted_page, { response, type: page.type }, StackView.PushTransition)
+                page.replacePage(page, support_submitted_page, { response, type: page.type }, StackView.PushTransition)
             }
         }
     }

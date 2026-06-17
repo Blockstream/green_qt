@@ -106,7 +106,7 @@ AbstractDrawer {
                     required property var modelData
                     id: delegate
                     session: modelData
-                    onClicked: page.StackView.view.push(session_page, { session: delegate.session })
+                    onClicked: page.pushPage(session_page, { session: delegate.session })
                 }
             }
             VSpacer {

@@ -24,7 +24,7 @@ Use in callbacks and QML signal handlers:
 ```qml
 onSelected: (account) => {
     self.account = account
-    self.StackView.view.pop()
+    self.popPage()
 }
 ```
 

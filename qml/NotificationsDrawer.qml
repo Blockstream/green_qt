@@ -544,7 +544,7 @@ AbstractDrawer {
         id: outage_page
         OutagePage {
             id: page
-            onLoadFinished: page.StackView.view.pop()
+            onLoadFinished: page.popPage()
         }
     }
     Component {

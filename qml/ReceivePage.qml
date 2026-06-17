@@ -92,7 +92,7 @@ StackViewPage {
             text: qsTrId('id_verify_on_device')
             visible: controller.context.wallet.login.device?.type === 'jade'
             onClicked: {
-                self.StackView.view.push(jade_verify_page, { context: self.context, address: controller.address })
+                self.pushPage(jade_verify_page, { context: self.context, address: controller.address })
                 Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, controller.account))
             }
         }
@@ -152,7 +152,7 @@ StackViewPage {
             asset: controller.asset
             readonly: self.readonly
             visible: !self.lockAssetAndAccount
-            onClicked: self.StackView.view.push(account_asset_selector)
+            onClicked: self.pushPage(account_asset_selector)
         }
         FieldTitle {
             text: qsTrId('Payer Sends')
@@ -347,7 +347,7 @@ StackViewPage {
                         Layout.preferredWidth: 0
                         icon.source: 'qrc:/svg2/zoom.svg'
                         text: qsTrId('id_increase_qr_size')
-                        onClicked: self.StackView.view.push(qrcode_page)
+                        onClicked: self.pushPage(qrcode_page)
                     }
                     CopyAddressButton {
                         Layout.fillWidth: true
@@ -431,7 +431,7 @@ StackViewPage {
                 self.account = account
                 self.asset = asset
                 amount_field.text = '0'
-                self.StackView.view.pop(self)
+                self.popPage(self)
             }
         }
     }
@@ -453,7 +453,7 @@ StackViewPage {
             icon.source: 'qrc:/svg2/list_bullets.svg'
             onClicked: {
                 menu.close()
-                self.StackView.view.push(addresses_page, { account: controller.account })
+                self.pushPage(addresses_page, { account: controller.account })
             }
         }
     }
@@ -524,7 +524,7 @@ StackViewPage {
                 active: delegate.hovered
             }
         }
-        onClicked: self.StackView.view.push(address_details_page, { context: self.context, address: delegate.address })
+        onClicked: self.pushPage(address_details_page, { context: self.context, address: delegate.address })
     }
     component ToolButton: AbstractButton {
         id: self

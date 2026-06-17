@@ -196,7 +196,7 @@ StackViewPage {
                 implicitWidth: 0
                 text: qsTrId('id_next')
                 onClicked: {
-                    self.StackView.view.push(confirm_page, {
+                    self.pushPage(confirm_page, {
                         context: self.context,
                         account: controller.account,
                         transaction: controller.transaction,

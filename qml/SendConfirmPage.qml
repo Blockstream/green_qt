@@ -47,13 +47,13 @@ StackViewPage {
                 Analytics.recordEvent('account_emptied', AnalyticsJS.segmentationWalletActive(Settings, self.context))
             }
             // TODO: should replace but we must cut dependency to the current view
-            self.StackView.view.push(transaction_completed_page, { transaction })
+            self.pushPage(transaction_completed_page, { transaction })
         }
         onFailed: (error) => {
             const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
-            self.StackView.view.push(error_page, { error })
+            self.pushPage(error_page, { error })
         }
     }
     AnalyticsView {

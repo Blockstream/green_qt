@@ -9,7 +9,7 @@ ColumnLayout {
     Connections {
         target: self.activity
         function onFinished() {
-            self.StackView.view.pop()
+            self.popPage()
         }
     }
 

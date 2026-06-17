@@ -485,7 +485,7 @@ StackViewPage {
                 text: 'Speed up Transaction'
                 badge: qsTrId('id_increase_fee')
                 visible: !self.network.liquid && (self.transaction?.data?.can_rbf ?? false)
-                onClicked: self.StackView.view.push(rbf_page)
+                onClicked: self.pushPage(rbf_page)
             }
             ActionButton {
                 icon.source: 'qrc:/svg2/pencil-simple-line-green.svg'
@@ -515,7 +515,7 @@ StackViewPage {
             ActionButton {
                 icon.source: 'qrc:/svg2/dots-three-green.svg'
                 text: qsTrId('id_show_details')
-                onClicked: self.StackView.view.push(details_page)
+                onClicked: self.pushPage(details_page)
             }
         }
 /*

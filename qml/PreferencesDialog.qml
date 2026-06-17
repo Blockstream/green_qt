@@ -433,7 +433,7 @@ AbstractDialog {
                 SubButton {
                     text: 'Give us your feedback'
                     onClicked: {
-                        page.StackView.view.push(request_support_page, {
+                        page.pushPage(request_support_page, {
                             type: 'feedback',
                             subject: 'Feedback from green_qt',
                             context: self.context
@@ -443,7 +443,7 @@ AbstractDialog {
                 SubButton {
                     text: 'Get Support'
                     onClicked: {
-                        page.StackView.view.push(request_support_page, {
+                        page.pushPage(request_support_page, {
                             type: 'incident',
                             subject: 'Bug report from green_qt',
                             context: self.context
@@ -458,7 +458,7 @@ AbstractDialog {
         RequestSupportPage {
             id: page
             onSubmitted: (response) => {
-                page.StackView.view.replace(page, support_submitted_page, { response, type: page.type }, StackView.PushTransition)
+                page.replacePage(page, support_submitted_page, { response, type: page.type }, StackView.PushTransition)
             }
         }
     }

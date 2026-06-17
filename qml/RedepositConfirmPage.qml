@@ -30,13 +30,13 @@ StackViewPage {
                 with_memo: controller.memo.length > 0,
             }))
             // TODO: should replace but we must cut dependency to the current view
-            self.StackView.view.push(transaction_completed_page, { transaction })
+            self.pushPage(transaction_completed_page, { transaction })
         }
         onFailed: (error) => {
             const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
-            self.StackView.view.push(error_page, { error })
+            self.pushPage(error_page, { error })
         }
     }
     AnalyticsView {
@@ -123,7 +123,7 @@ StackViewPage {
                             visible: controller.context?.wallet?.login?.device?.type === 'jade' && !delegate.address.verified
                             text: qsTrId('id_verify_on_device')
                             onClicked: {
-                                self.StackView.view.push(jade_verify_page, { context: self.context, address: delegate.address })
+                                self.pushPage(jade_verify_page, { context: self.context, address: delegate.address })
                                 Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, self.account))
                             }
                         }

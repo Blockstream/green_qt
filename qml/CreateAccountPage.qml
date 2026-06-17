@@ -22,7 +22,7 @@ StackViewPage {
         network: NetworkManager.networkWithServerType(self.context.deployment, btn.networkKey, btn.serverType)
         action: Action {
             onTriggered: {
-                self.StackView.view.push(controller_page, {
+                self.pushPage(controller_page, {
                     network: btn.network,
                     type: btn.type,
                 })
@@ -48,7 +48,7 @@ StackViewPage {
         visible: self.context.mainnet && self.asset?.networkKey === 'bitcoin' && Settings.enableExperimental
         action: Action {
             onTriggered: {
-                self.StackView.view.push(lightning_page);
+                self.pushPage(lightning_page);
             }
         }
     }
@@ -74,7 +74,7 @@ StackViewPage {
             editable: self.editableAsset
             onClicked: {
                 if (self.editableAsset) {
-                    self.StackView.view.push(asset_selector, {
+                    self.pushPage(asset_selector, {
                         context: self.context,
                         asset: asset_field.asset,
                     })
@@ -133,7 +133,7 @@ StackViewPage {
             }
             action: Action {
                 onTriggered: {
-                    self.StackView.view.push(select_recovery_key_page, {
+                    self.pushPage(select_recovery_key_page, {
                         network: multisig_2of3_button.network,
                         type: multisig_2of3_button.type,
                     })
@@ -210,7 +210,7 @@ StackViewPage {
                 recoveryMnemonic: page.mnemonic
                 recoveryXpub: page.xpub
                 onCreated: (account) => self.created(account)
-                onFailed: (error) => self.StackView.view.replace(error_page, { error })
+                onFailed: (error) => self.replacePage(error_page, { error })
             }
 
             TaskPageFactory {
@@ -293,14 +293,14 @@ StackViewPage {
             required property string type
             id: page
             onRecoveryKey: (mnemonic) => {
-                self.StackView.view.push(controller_page, {
+                self.pushPage(controller_page, {
                     network: page.network,
                     type: page.type,
                     mnemonic,
                 })
             }
             onXpub: (xpub) => {
-                self.StackView.view.push(controller_page, {
+                self.pushPage(controller_page, {
                     network: page.network,
                     type: page.type,
                     xpub,
@@ -316,19 +316,19 @@ StackViewPage {
                 self.asset = asset
                 self.anyLiquid = false
                 self.anyAMP = false
-                self.StackView.view.pop()
+                self.popPage()
             }
             onAnyLiquidClicked: {
                 self.asset = null
                 self.anyLiquid = true
                 self.anyAMP = false
-                self.StackView.view.pop()
+                self.popPage()
             }
             onAnyAMPClicked: {
                 self.asset = null
                 self.anyLiquid = false
                 self.anyAMP = true
-                self.StackView.view.pop()
+                self.popPage()
             }
         }
     }

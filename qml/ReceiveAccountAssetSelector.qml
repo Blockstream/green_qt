@@ -217,7 +217,7 @@ StackViewPage {
                         Layout.fillWidth: true
                         visible: !self.context.watchonly
                         onClicked: {
-                            self.StackView.view.push(create_account_page, {
+                            self.pushPage(create_account_page, {
                                 asset: delegate.asset,
                                 anyLiquid: self.anyLiquid,
                                 anyAMP: self.anyAMP,

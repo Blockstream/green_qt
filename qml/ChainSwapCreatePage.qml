@@ -178,7 +178,7 @@ StackViewPage {
                 text: qsTrId('id_change_speed')
                 visible: !send_field.account.network.liquid
                 onClicked: {
-                    self.StackView.view.push(select_fee_page, {
+                    self.pushPage(select_fee_page, {
                         account: send_field.account,
                         unit: send_field.amountField.unit,
                     })
@@ -209,7 +209,7 @@ StackViewPage {
                 from: UtilJS.swapNetworkType(send_field.account.network), 
                 to: UtilJS.swapNetworkType(receive_field.account.network)
             }))
-            self.StackView.view.push(chain_swap_review_page, {
+            self.pushPage(chain_swap_review_page, {
                 feeRate: self.feeRate,
                 quote: controller.quote
             })
@@ -270,7 +270,7 @@ StackViewPage {
                     text: UtilJS.accountName(field.account)
                     visible: field.showSelectAccount
                     onClicked: {
-                        self.StackView.view.push(account_selector_page, {
+                        self.pushPage(account_selector_page, {
                             accounts: UtilJS.accounts(self.context).filter(account => account.network.key === field.account.network.key),
                             asset: field.asset,
                             field,
@@ -323,7 +323,7 @@ StackViewPage {
             message: ''
             onAccountClicked: (account) => {
                 field.account = account
-                page.StackView.view.pop()
+                page.popPage()
             }
         }
     }
@@ -335,7 +335,7 @@ StackViewPage {
             onCloseClicked: self.closeClicked()
             onFeeRateSelected: (fee_rate) => {
                 self.feeRate = fee_rate
-                self.StackView.view.pop()
+                self.popPage()
             }
         }
     }
@@ -343,7 +343,7 @@ StackViewPage {
         id: select_coins_page
         SelectCoinsView {
             onCoinsSelected: (coins) => {
-                self.StackView.view.pop()
+                self.popPage()
                 controller.coins = coins
             }
         }

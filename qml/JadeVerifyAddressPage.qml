@@ -16,7 +16,7 @@ StackViewPage {
             break
         case JadeDevice.StateTemporary:
         case JadeDevice.StateLocked:
-            self.StackView.view.push(unlock_view, { context: self.context, device: self.context.device })
+            self.pushPage(unlock_view, { context: self.context, device: self.context.device })
             break
         }
     }
@@ -28,12 +28,12 @@ StackViewPage {
     Timer {
         running: controller.addressVerification === JadeVerifyAddressController.VerificationAccepted
         interval: 1000
-        onTriggered: self.StackView.view.pop()
+        onTriggered: self.popPage()
     }
     Timer {
         running: controller.addressVerification === JadeVerifyAddressController.VerificationRejected
         interval: 1000
-        onTriggered: self.StackView.view.pop()
+        onTriggered: self.popPage()
     }
     StackView.onActivated: self.update()
     id: self
@@ -78,12 +78,12 @@ StackViewPage {
         JadeUnlockView {
             showRemember: false
             onUnlockFinished: {
-                self.StackView.view.pop()
+                self.popPage()
                 self.update()
             }
             onUnlockFailed: {
-                self.StackView.view.pop()
-                self.StackView.view.pop()
+                self.popPage()
+                self.popPage()
             }
         }
     }

@@ -31,7 +31,7 @@ StackViewPage {
             Layout.minimumWidth: 200
             focus: true
             text: qsTrId('id_ok')
-            onClicked: self.StackView.view.pop()
+            onClicked: self.popPage()
             visible: (self.StackView.view?.depth ?? 0) > 1
         }
         VSpacer {

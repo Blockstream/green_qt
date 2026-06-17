@@ -46,7 +46,7 @@ StackViewPage {
     Component {
         id: deployment_dialog
         DeploymentDialog {
-            onCancel: self.StackView.view.pop()
+            onCancel: self.popPage()
             onDeploymentSelected: (deployment) => controller.signup(deployment)
         }
     }

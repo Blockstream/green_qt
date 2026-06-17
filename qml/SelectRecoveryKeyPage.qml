@@ -14,17 +14,17 @@ StackViewPage {
         Option {
             text: qsTrId('id_new_recovery_phrase')
             description: qsTrId('id_generate_a_new_recovery_phrase')
-            onClicked: self.StackView.view.push(mnemonic_warnings_page)
+            onClicked: self.pushPage(mnemonic_warnings_page)
         }
         Option {
             text: qsTrId('id_existing_recovery_phrase')
             description: qsTrId('id_use_an_existing_recovery_phrase')
-            onClicked: self.StackView.view.push(enter_recovery_phrase)
+            onClicked: self.pushPage(enter_recovery_phrase)
         }
         Option {
             text: qsTrId('id_use_a_public_key')
             description: qsTrId('id_use_an_xpub_for_which_you_own')
-            onClicked: self.StackView.view.push(enter_xpub)
+            onClicked: self.pushPage(enter_xpub)
         }
         VSpacer {
         }
@@ -33,7 +33,7 @@ StackViewPage {
     Component {
         id: mnemonic_warnings_page
         MnemonicWarningsPage {
-            onAccepted: self.StackView.view.push(mnemonic_backup_page)
+            onAccepted: self.pushPage(mnemonic_backup_page)
         }
     }
 
@@ -41,7 +41,7 @@ StackViewPage {
         id: mnemonic_backup_page
         MnemonicBackupPage {
             columns: 2
-            onSelected: (mnemonic) => self.StackView.view.push(mnemonic_check_page, { mnemonic })
+            onSelected: (mnemonic) => self.pushPage(mnemonic_check_page, { mnemonic })
         }
     }
 

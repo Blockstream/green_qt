@@ -43,6 +43,6 @@ StackViewPage {
     }
     footerItem: PrimaryButton {
         text: qsTrId('id_back')
-        onClicked: self.StackView.view.pop()
+        onClicked: self.popPage()
     }
 }

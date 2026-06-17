@@ -212,19 +212,23 @@ Connections {
 
 ## StackView navigation
 
+`StackViewPage` exposes `pushPage(...)` / `popPage(...)` / `replacePage(...)`
+wrappers around `self.StackView.view.push/pop/replace`. Prefer these over
+reaching into `self.StackView.view` directly.
+
 ```qml
 // Pushing pages
-self.StackView.view.push(component_id, {
+self.pushPage(component_id, {
     context: self.context,
     account: self.account
 })
 
 // Popping
-self.StackView.view.pop()
+self.popPage()
 
 // With signal callback
 onSelected: (account, asset) => {
-    self.StackView.view.pop()
+    self.popPage()
     controller.account = account
 }
 ```
@@ -248,7 +252,7 @@ Component {
         context: self.context
         onAccountClicked: (account) => {
             self.account = account
-            self.StackView.view.pop()
+            self.popPage()
         }
     }
 }

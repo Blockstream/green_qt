@@ -13,7 +13,7 @@ StackViewPage {
     Connections {
         target: self.resolver
         function onFailed() {
-            self.StackView.view.pop()
+            self.popPage()
         }
     }
     id: self

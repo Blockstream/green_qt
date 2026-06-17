@@ -12,7 +12,7 @@ MnemonicWarningsPage {
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }
-    onAccepted: self.StackView.view.push(mnemonic_backup_page)
+    onAccepted: self.pushPage(mnemonic_backup_page)
 
     Component {
         id: mnemonic_backup_page
@@ -22,7 +22,7 @@ MnemonicWarningsPage {
             rightItem: CloseButton {
                 onClicked: self.closeClicked()
             }
-            onSelected: (mnemonic) => self.StackView.view.push(mnemonic_check_page, { mnemonic })
+            onSelected: (mnemonic) => self.pushPage(mnemonic_check_page, { mnemonic })
         }
     }
 
@@ -35,7 +35,7 @@ MnemonicWarningsPage {
             onChecked: {
                 Settings.unregisterEvent({ walletId: self.context.xpubHashId, status: 'pending', type: 'wallet_backup' })
                 context.checkAndAddBackupWarningNotification();
-                self.StackView.view.push(backup_complete_page)
+                self.pushPage(backup_complete_page)
             }
         }
     }

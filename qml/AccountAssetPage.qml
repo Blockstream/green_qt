@@ -125,7 +125,7 @@ StackViewPage {
                     text: qsTrId('id_buy')
                     visible: self.context.mainnet
                     onClicked: {
-                        self.StackView.view.push(buy_page)
+                        self.pushPage(buy_page)
                     }
                 }
                 ActionButton {
@@ -135,7 +135,7 @@ StackViewPage {
                     icon.source: 'qrc:/svg/send-white.svg'
                     text: qsTrId('id_send')
                     onClicked: {
-                        self.StackView.view.push(recipient_page)
+                        self.pushPage(recipient_page)
                     }
                 }
                 ActionButton {
@@ -144,7 +144,7 @@ StackViewPage {
                     icon.source: 'qrc:/svg/receive-white.svg'
                     text: qsTrId('id_receive')
                     onClicked: {
-                        self.StackView.view.push(receive_page)
+                        self.pushPage(receive_page)
                     }
                 }
                 ActionButton {
@@ -155,7 +155,7 @@ StackViewPage {
                     text: qsTrId('id_swap')
                     visible: self.context.mainnet && self.asset.policy
                     onClicked: {
-                        self.StackView.view.push(chain_swap_create_page)
+                        self.pushPage(chain_swap_create_page)
                     }
                 }
             }
@@ -184,7 +184,7 @@ StackViewPage {
         delegate: HomePage.TransactionDelegate2 {
             id: delegate
             onClicked: {
-                self.StackView.view.push(transaction_details_page, { transaction: delegate.transaction })
+                self.pushPage(transaction_details_page, { transaction: delegate.transaction })
             }
         }
         footer: Item {

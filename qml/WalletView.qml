@@ -349,7 +349,7 @@ MainPage {
                 const dialog = http_request_dialog.createObject(page, { request, context: self.context })
                 dialog.open()
             }
-            onResultEncoded: (result) => page.StackView.view.replace(parts_page, result, StackView.PushTransition)
+            onResultEncoded: (result) => page.replacePage(parts_page, result, StackView.PushTransition)
         }
         id: page
         padding: 60
@@ -406,7 +406,7 @@ MainPage {
                 PrimaryButton {
                     Layout.minimumWidth: 350
                     text: qsTrId('id_done')
-                    onClicked: page.StackView.view.pop()
+                    onClicked: page.popPage()
                 }
                 HSpacer {
                 }

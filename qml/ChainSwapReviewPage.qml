@@ -61,13 +61,13 @@ StackViewPage {
                 from: UtilJS.swapNetworkType(self.sendAccount.network),
                 to: UtilJS.swapNetworkType(self.receiveAccount.network)
             }))
-            self.StackView.view.push(completed_page, { transaction })
+            self.pushPage(completed_page, { transaction })
         }
         onFailed: (error) => {
             const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.sendAccount)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
-            self.StackView.view.push(error_page, { error })
+            self.pushPage(error_page, { error })
         }
     }
     TaskPageFactory {

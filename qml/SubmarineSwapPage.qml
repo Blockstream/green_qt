@@ -60,13 +60,13 @@ StackViewPage {
                 to: 'lightning'
             }))
             Settings.registerEvent({ invoice: self.recipient.input })
-            self.StackView.view.push(complete_page, { swap: submarine_controller.swap, transaction })
+            self.pushPage(complete_page, { swap: submarine_controller.swap, transaction })
         }
         onFailed: (error) => {
             const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
-            self.StackView.view.push(error_page, { error })
+            self.pushPage(error_page, { error })
         }
     }
     TaskPageFactory {

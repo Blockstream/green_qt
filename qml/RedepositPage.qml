@@ -12,7 +12,7 @@ StackViewPage {
     required property Account account
 
     function pushSelectCoinsPage() {
-        self.StackView.view.push(select_coins_page, {
+        self.pushPage(select_coins_page, {
             account: controller.account,
             asset: controller.asset,
             coins: controller.coins,
@@ -20,7 +20,7 @@ StackViewPage {
         })
     }
     function pushSelectFeePage() {
-        self.StackView.view.push(select_fee_page, {
+        self.pushPage(select_fee_page, {
             account: controller.account,
             unit: controller.account.session.unit,
             size: controller.transaction?.transaction_vsize ?? 0,
@@ -139,7 +139,7 @@ StackViewPage {
                 implicitWidth: 0
                 text: qsTrId('id_next')
                 onClicked: {
-                    self.StackView.view.push(redeposit_confirm_page, {
+                    self.pushPage(redeposit_confirm_page, {
                         context: self.context,
                         account: controller.account,
                         transaction: controller.transaction,
@@ -160,7 +160,7 @@ StackViewPage {
         id: select_coins_page
         SelectCoinsView {
             onCoinsSelected: (coins) => {
-                self.StackView.view.pop()
+                self.popPage()
                 controller.coins = coins
             }
         }
@@ -172,7 +172,7 @@ StackViewPage {
             onCloseClicked: self.closeClicked()
             onFeeRateSelected: (fee_rate) => {
                 controller.feeRate = fee_rate
-                self.StackView.view.pop()
+                self.popPage()
             }
         }
     }

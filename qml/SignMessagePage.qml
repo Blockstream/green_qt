@@ -12,7 +12,7 @@ StackViewPage {
         context: self.context
         address: self.address
         message: text_area.text
-        onAccepted: (signature) => self.StackView.view.push(signature_page, { signature })
+        onAccepted: (signature) => self.pushPage(signature_page, { signature })
     }
     TaskPageFactory {
         monitor: controller.monitor

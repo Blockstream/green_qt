@@ -141,20 +141,20 @@ StackViewPage {
         }
         if (self.assets.length > 1) {
             self.error = null
-            return self.StackView.view.push(asset_selector_page, {
+            return self.pushPage(asset_selector_page, {
                 assets: self.assets
             })
         }
         if (self.accounts.length > 1) {
             self.error = null
-            return self.StackView.view.push(account_selector_page, {
+            return self.pushPage(account_selector_page, {
                 accounts: self.accounts,
                 asset: self.assets[0].asset
             })
         }
         if (self.accounts.length === 1 && self.assets.length === 1) {
             self.error = null
-            return self.StackView.view.push(self.page, {
+            return self.pushPage(self.page, {
                 account: self.accounts[0],
                 asset: self.assets[0].asset,
                 input: recipient_field.input,
@@ -257,7 +257,7 @@ StackViewPage {
             context: self.context
             onCloseClicked: self.closeClicked()
             onContinueClicked: (properties) => {
-                self.StackView.view.push(submarine_swap_page, properties)
+                self.pushPage(submarine_swap_page, properties)
             }
         }
     }
@@ -270,7 +270,7 @@ StackViewPage {
             recipient: recipient_field.recipient
             onCloseClicked: self.closeClicked()
             onContinueClicked: (properties) => {
-                self.StackView.view.push(submarine_swap_page, properties)
+                self.pushPage(submarine_swap_page, properties)
             }
         }
     }
@@ -283,7 +283,7 @@ StackViewPage {
             recipient: recipient_field.recipient
             onCloseClicked: self.closeClicked()
             onContinueClicked: (properties) => {
-                self.StackView.view.push(submarine_swap_page, properties)
+                self.pushPage(submarine_swap_page, properties)
             }
         }
     }
@@ -317,7 +317,7 @@ StackViewPage {
             onAssetClicked: (asset) => {
                 const accounts = UtilJS.accounts(self.context).filter(account => (account.json.satoshi[asset.key] ?? 0) !== 0)
                 if (accounts.length === 1) {
-                    return self.StackView.view.push(self.page, {
+                    return self.pushPage(self.page, {
                         account: accounts[0],
                         asset: asset,
                         input: recipient_field.input,
@@ -325,7 +325,7 @@ StackViewPage {
                     })
                 }
                 if (accounts.length > 1) {
-                    return self.StackView.view.push(account_selector_page, {
+                    return self.pushPage(account_selector_page, {
                         accounts,
                         asset,
                     })
@@ -340,7 +340,7 @@ StackViewPage {
             context: self.context
             message: ''
             onAccountClicked: (account) => {
-                self.StackView.view.push(self.page, {
+                self.pushPage(self.page, {
                     account,
                     asset: page.asset,
                     input: recipient_field.input,
