@@ -4,6 +4,7 @@
 #include "device.h"
 #include "network.h"
 #include "networkmanager.h"
+#include "wallet.h"
 
 #include <QLocale>
 #include <QtMath>
@@ -255,6 +256,11 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
                 }
             }
             if (!supports) return false;
+        }
+
+        const auto watchonly_data = qobject_cast<WatchonlyData*>(m_context->wallet()->login());
+        if (watchonly_data && watchonly_data->network()->key() != asset->networkKey()) {
+            return false;
         }
     }
 
