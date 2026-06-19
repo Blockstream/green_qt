@@ -12,7 +12,7 @@ StackViewPage {
 
     id: self
 
-    LightningController {
+    LightningEnableController {
         id: controller
         context: self.context
     }
@@ -81,10 +81,9 @@ StackViewPage {
                 ActionButton {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    // TODO: enable when receive flow is implemented
-                    enabled: false
                     icon.source: 'qrc:/svg/receive-white.svg'
                     text: qsTrId('id_receive')
+                    onClicked: self.StackView.view.push(lightning_receive_page)
                 }
             }
             FieldTitle {
@@ -225,6 +224,14 @@ StackViewPage {
     Component {
         id: lightning_transaction_page
         LightningTransactionPage {
+            context: self.context
+            onCloseClicked: self.closeClicked()
+        }
+    }
+
+    Component {
+        id: lightning_receive_page
+        LightningReceivePage {
             context: self.context
             onCloseClicked: self.closeClicked()
         }

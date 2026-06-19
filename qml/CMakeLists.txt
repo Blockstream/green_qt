@@ -284,6 +284,8 @@ set(QML_FILES_FEATURES
     AssetSelectorPage.qml
     AccountAssetPage.qml
     LightningAssetPage.qml
+    LightningReceivePage.qml
+    LightningInvoicePage.qml
     LightningTransactionDetailsPage.qml
     LightningTransactionPage.qml
     RightArrowIndicator.qml

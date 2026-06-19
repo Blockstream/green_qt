@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal selected(account: Account, asset: Asset)
+    signal lightningSelected()
     required property Context context
     property bool anyLiquid: false
     property bool anyAMP: false
@@ -80,10 +81,12 @@ StackViewPage {
             }
             delegate: SelectorDelegate {
                 id: delegate
-                // TODO: Navigate to Lightning receive page
-                enabled: !delegate.asset?.lightning
                 width: ListView.view.width
                 onClicked: {
+                    if (delegate.asset?.lightning) {
+                        self.lightningSelected()
+                        return
+                    }
                     self.anyLiquid = false
                     self.anyAMP = false
                     list_view.currentIndex = delegate.ListView.isCurrentItem ? -1 : delegate.index

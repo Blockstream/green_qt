@@ -30,6 +30,9 @@ WalletDrawer {
         ReceiveAccountAssetSelector {
             context: self.context
             onCloseClicked: self.close()
+            onLightningSelected: {
+                stack_view.replace(null, lightning_receive_page, {}, StackView.PushTransition)
+            }
             onSelected: (account, asset) => {
                 stack_view.replace(null, receive_page, { account, asset }, StackView.PushTransition)
             }
@@ -43,6 +46,13 @@ WalletDrawer {
             context: self.context
             lockAssetAndAccount: self.lockAssetAndAccount
             title: qsTrId('id_review')
+            onCloseClicked: self.close()
+        }
+    }
+    Component {
+        id: lightning_receive_page
+        LightningReceivePage {
+            context: self.context
             onCloseClicked: self.close()
         }
     }

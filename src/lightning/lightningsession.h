@@ -3,6 +3,7 @@
 
 #include "lightningclient.h"
 
+#include <QDateTime>
 #include <QFuture>
 #include <QFutureSynchronizer>
 #include <QJsonObject>
@@ -18,6 +19,13 @@ struct NodeEventListener;
 }
 
 class LightningSessionEventListener;
+
+struct LightningCreateInvoiceResult {
+    QString invoice;
+    quint64 opening_fee{0};
+    QDateTime expires_at;
+    QString error;
+};
 
 class LightningSession final : public QObject
 {
@@ -42,14 +50,17 @@ public:
     QString error() const { return m_error; }
     QJsonObject nodeInfo() const { return m_node_info; }
     QFuture<QString> connectNode(const QString& mnemonic);
+    QFuture<LightningCreateInvoiceResult> createInvoice(quint64 satoshi, const QString& description) const;
+    LightningValueResult<LightningParsedInvoice> parseInvoice(const QString& input) const;
     void disconnectNode();
     void refreshNodeInfo();
+    void refreshPayments();
 
 signals:
     void stateChanged();
     void errorChanged();
     void nodeInfoChanged();
-    void invoicePaid(QString payment_hash, quint64 amount_satoshi);
+    void invoicePaid(QString bolt11_invoice, quint64 amount_satoshi);
     void paymentsUpdated(const std::vector<LightningPayment>& payments);
 
 private:
@@ -76,6 +87,7 @@ private:
     bool m_connect_future_started{false};
     QFutureSynchronizer<void> m_future_synchronizer;
     QFutureSynchronizer<LightningValueResult<LightningNodeInfo>> m_refresh_synchronizer;
+    QFutureSynchronizer<LightningValueResult<std::vector<LightningPayment>>> m_payments_synchronizer;
     std::shared_ptr<glsdk::Node> m_node;
     QJsonObject m_node_info;
     State m_state{State::Disconnected};

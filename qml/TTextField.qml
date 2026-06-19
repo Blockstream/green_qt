@@ -3,6 +3,9 @@ import QtQuick.Controls
 
 TextField {
     property var error
+    property int borderWidth: 0
+    property string borderColor: '#262626'
+
     readonly property bool visualFocus: {
         if (!self.readOnly && self.activeFocus) {
             switch (self.focusReason) {
@@ -31,8 +34,8 @@ TextField {
         Rectangle {
             anchors.fill: parent
             anchors.margins: self.visualFocus ? 4 : 0
-            border.width: !!self.error ? 2 : self.visualFocus ? 1 : 0
-            border.color: !!self.error ? '#C91D36' : '#262626'
+            border.width: !!self.error ? 2 : self.visualFocus ? 1 : self.borderWidth
+            border.color: !!self.error ? '#C91D36' : self.borderColor
             color: Qt.lighter('#181818', !self.readOnly && self.hovered ? 1.2 : 1)
             radius: self.visualFocus ? 1 : 5
         }

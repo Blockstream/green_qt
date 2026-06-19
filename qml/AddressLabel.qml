@@ -6,6 +6,8 @@ import QtQuick.Controls
 Label {
     required property var address
     property bool copyEnabled: false
+    property string accentColor: '#00BCFF'
+
     TapHandler {
         onTapped: {
             timer.restart()
@@ -47,7 +49,7 @@ Label {
         const text = self.address instanceof Address ? self.address.address : self.address ?? ''
         let parts = text.match(/.{1,4}/g) ?? []
         parts = parts
-            .map((part, index) => `<span style="color:${index < 2 || index > parts.length - 3 ? '#00BCFF' : '#FFFFFF'}">${part}</span>`)
+            .map((part, index) => `<span style="color:${index < 2 || index > parts.length - 3 ? self.accentColor : '#FFFFFF'}">${part}</span>`)
         if (self.elide !== Label.ElideNone) {
             if (parts.length > 8) {
                 return parts.slice(0, 4).join(' ') + '<br/>⋯<br/>' + parts.slice(-4).join(' ')

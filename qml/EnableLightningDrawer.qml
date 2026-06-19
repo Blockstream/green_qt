@@ -11,7 +11,7 @@ WalletDrawer {
 
     id: self
 
-    LightningController {
+    LightningEnableController {
         id: controller
         context: self.context
     }

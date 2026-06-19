@@ -525,6 +525,8 @@ qt_add_resources(${APP_TARGET} "images"
         svg/receive-white.svg
 
         000000/24/arrows-down-up.svg
+        000000/24/check.svg
+        000000/24/clipboard.svg
         000000/24/list-checks.svg
 
         a0a0a0/24/bolt.svg

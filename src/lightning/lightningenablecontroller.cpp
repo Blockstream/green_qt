@@ -1,15 +1,15 @@
-#include "lightningcontroller.h"
+#include "lightningenablecontroller.h"
 
 #include "context.h"
 #include "lightningtask.h"
 #include "task.h"
 
-LightningController::LightningController(QObject* parent)
+LightningEnableController::LightningEnableController(QObject* parent)
     : Controller(parent)
 {
 }
 
-void LightningController::enable()
+void LightningEnableController::enable()
 {
     if (!context() || context()->lightningEnabled()) return;
 
@@ -29,7 +29,7 @@ void LightningController::enable()
     dispatcher()->add(group);
 }
 
-void LightningController::disable()
+void LightningEnableController::disable()
 {
     if (!context() || !context()->lightningEnabled()) return;
 

@@ -97,12 +97,14 @@ public:
         const auto& variant = event.get_variant();
         if (std::holds_alternative<glsdk::NodeEvent::kInvoicePaid>(variant)) {
             const auto details = std::get<glsdk::NodeEvent::kInvoicePaid>(variant).details;
-            const auto payment_hash = QString::fromStdString(details.payment_hash);
+            const auto bolt11_invoice = QString::fromStdString(details.bolt11);
             const auto amount_satoshi = details.amount_msat / 1000ULL;
-            QMetaObject::invokeMethod(session.data(), [session, payment_hash, amount_satoshi] {
+
+            QMetaObject::invokeMethod(session.data(), [session, bolt11_invoice, amount_satoshi] {
                 if (!session) return;
-                emit session->invoicePaid(payment_hash, amount_satoshi);
+                emit session->invoicePaid(bolt11_invoice, amount_satoshi);
                 session->refreshNodeInfo();
+                session->refreshPayments();
             }, Qt::QueuedConnection);
         }
     }
@@ -136,6 +138,7 @@ LightningSession::~LightningSession()
     disconnectNode();
     m_future_synchronizer.waitForFinished();
     m_refresh_synchronizer.waitForFinished();
+    m_payments_synchronizer.waitForFinished();
     qDebug() << Q_FUNC_INFO << "Lightning session destroyed";
 }
 
@@ -229,6 +232,47 @@ QFuture<QString> LightningSession::connectNode(const QString& mnemonic)
     });
 }
 
+QFuture<LightningCreateInvoiceResult> LightningSession::createInvoice(const quint64 satoshi, const QString& description) const
+{
+    if (QThread::currentThread() != thread()) {
+        QFuture<LightningCreateInvoiceResult> future;
+        QMetaObject::invokeMethod(const_cast<LightningSession*>(this), [this, satoshi, description, &future] {
+            future = createInvoice(satoshi, description);
+        }, Qt::BlockingQueuedConnection);
+        return future;
+    }
+
+    const auto client = m_client;
+    const auto node = m_node;
+    const auto mutex = m_node_operation_mutex;
+
+    return QtConcurrent::run([client, node, mutex, satoshi, description] {
+        LightningCreateInvoiceResult result;
+        QMutexLocker locker(mutex.get());
+
+        const auto invoice = client->createInvoice(node, satoshi, description);
+        if (!invoice) {
+            result.error = invoice.error;
+            return result;
+        }
+
+        result.invoice = invoice.value->bolt11;
+        result.opening_fee = invoice.value->opening_fee;
+
+        const auto parsed = client->parseInvoice(result.invoice);
+        if (parsed) {
+            result.expires_at = QDateTime::fromSecsSinceEpoch(parsed.value->timestamp + parsed.value->expiry);
+        }
+
+        return result;
+    });
+}
+
+LightningValueResult<LightningParsedInvoice> LightningSession::parseInvoice(const QString& input) const
+{
+    return m_client->parseInvoice(input);
+}
+
 bool LightningSession::beginConnect()
 {
     if (m_state != State::Disconnected && m_state != State::Failed) return false;
@@ -308,6 +352,37 @@ void LightningSession::refreshNodeInfo()
     });
 
     m_refresh_synchronizer.addFuture(future);
+}
+
+void LightningSession::refreshPayments()
+{
+    const auto node = m_node;
+    if (!node) {
+        setError(QStringLiteral("GL-SDK node is not connected"));
+        return;
+    }
+
+    const auto client = m_client;
+    const auto mutex = m_node_operation_mutex;
+    const auto node_generation = m_node_generation;
+
+    auto future = QtConcurrent::run([client, node, mutex] {
+        QMutexLocker locker(mutex.get());
+        return client->listPayments(node);
+    });
+
+    future.then(this, [=, this](LightningValueResult<std::vector<LightningPayment>> result) {
+        if (m_node != node || m_node_generation != node_generation) return;
+
+        if (!result) {
+            setError(result.error);
+            return;
+        }
+
+        emit paymentsUpdated(*result.value);
+    });
+
+    m_payments_synchronizer.addFuture(future);
 }
 
 void LightningSession::setState(State state)

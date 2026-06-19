@@ -232,11 +232,16 @@ void Analytics::stop()
     d->stop(Qt::BlockingQueuedConnection);
 }
 
-QJsonValue Analytics::getRemoteConfigValue(const QString &key) const
+QString Analytics::getRemoteConfigString(const QString& key) const
 {
     auto& countly = cly::Countly::getInstance();
-    const auto value = countly.getRemoteConfigValueString(key.toStdString());
-    const auto doc = QJsonDocument::fromJson(QByteArray::fromStdString(value));
+    return QString::fromStdString(countly.getRemoteConfigValueString(key.toStdString()));
+}
+
+QJsonValue Analytics::getRemoteConfigValue(const QString &key) const
+{
+    const auto value = getRemoteConfigString(key);
+    const auto doc = QJsonDocument::fromJson(value.toUtf8());
     if (doc.isObject()) return doc.object();
     if (doc.isArray()) return doc.array();
     return {};

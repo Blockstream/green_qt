@@ -22,6 +22,7 @@ public:
     QString pushView(const QString &name, const QVariantMap &segmentation);
     void popView(const QString& id);
     std::chrono::seconds timestampOffset() const;
+    QString getRemoteConfigString(const QString& key) const;
     QJsonValue getRemoteConfigValue(const QString& key) const;
     QString countlyId() const;
 signals:
