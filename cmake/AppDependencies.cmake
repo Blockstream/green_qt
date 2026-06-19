@@ -20,6 +20,7 @@ find_package(libgpgme)
 find_package(libserialport REQUIRED)
 find_package(ZXing REQUIRED)
 find_package(leveldb REQUIRED)
+find_package(libwally-core REQUIRED)
 
 if (WIN32 AND NOT QT_FEATURE_static)
 else()

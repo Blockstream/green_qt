@@ -49,6 +49,7 @@ set(APP_CORE_LIBS
     hidapi::hidapi
     KDAB::kdsingleapplication
     leveldb::leveldb
+    libwally-core::libwally-core
     ${SECURITY}
     ${FFMPEG_LIBRARIES}
 )
@@ -96,12 +97,9 @@ if (WIN32 AND NOT QT_FEATURE_static)
     target_link_options(${APP_TARGET} PRIVATE /FORCE:MULTIPLE)
     target_include_directories(${APP_TARGET} PRIVATE
         "C:/depends/windows-x86_64/include/gdk"
-        "C:/depends/windows-x86_64/include/gdk/libwally-core"
     )
 else()
     target_link_libraries(${APP_TARGET} PRIVATE gdk::green_gdk_full)
-    get_target_property(GDK_INCLUDE gdk::green_gdk_full INTERFACE_INCLUDE_DIRECTORIES)
-    target_include_directories(${APP_TARGET} PRIVATE ${GDK_INCLUDE}/libwally-core/)
 endif()
 
 if(ENABLE_SENTRY)
@@ -180,10 +178,6 @@ set(APP_PRIVATE_INCLUDE_DIRS
     src/handlers
     src/glsdk
 )
-
-if (GDK_INCLUDE)
-    list(APPEND APP_PRIVATE_INCLUDE_DIRS ${GDK_INCLUDE}/libwally-core/)
-endif()
 
 target_include_directories(${APP_TARGET} PRIVATE ${APP_PRIVATE_INCLUDE_DIRS})
 
