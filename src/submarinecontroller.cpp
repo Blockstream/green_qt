@@ -190,12 +190,16 @@ void SubmarineController::update()
             return context()->m_boltz_session->prepare_pay(d->payment(), address, nullptr);
         } catch (const lwk::lwk_error::Generic& error) {
             qDebug() << Q_FUNC_INFO << "generic error"
-                << QString::fromStdString(error.msg);
+                << error.msg.c_str();
+            return error.msg;
+        } catch (const lwk::lwk_error::GenericWithSwapId& error) {
+            qDebug() << Q_FUNC_INFO << "generic error"
+                     << error.swap_id.c_str() << error.msg.c_str();
             return error.msg;
         } catch (const lwk::lwk_error::MagicRoutingHint& error) {
             qDebug() << Q_FUNC_INFO << "magic routing hint error"
-                << QString::fromStdString(error.uri)
-                << QString::fromStdString(error.address)
+                << error.uri.c_str()
+                << error.address.c_str()
                 << error.amount;
             return std::make_pair(error.address, error.amount);
         } catch (const lwk::lwk_error::BoltzBackendHttpError& error) {

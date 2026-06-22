@@ -63,10 +63,13 @@ void Swap::sync()
             qDebug() << Q_FUNC_INFO << "SwapExpired" << _id;
             return Status::Pending;
         } catch (const lwk::lwk_error::Generic& error) {
-            qDebug() << Q_FUNC_INFO << "Generic error" << _id << error.msg;
+            qDebug() << Q_FUNC_INFO << "Generic error" << _id << error.msg.c_str();
+            return Status::Pending;
+        } catch (const lwk::lwk_error::GenericWithSwapId& error) {
+            qDebug() << Q_FUNC_INFO << "GenericWithSwapId error" << error.swap_id.c_str() << error.msg.c_str();
             return Status::Pending;
         } catch (const std::exception& error) {
-            qDebug() << Q_FUNC_INFO << "exception" << _id << error.what();
+            qDebug() << Q_FUNC_INFO << "exception" << _id << typeid(error).name() << error.what();
             return Status::Pending;
         }
     });

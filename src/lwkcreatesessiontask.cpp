@@ -155,10 +155,10 @@ void LwkCreateSessionTask::update()
                 result.session->refresh_swap_info();
                 result.swaps_infos = result.session->fetch_swaps_info();
             } catch (const lwk::lwk_error::Generic& error) {
-                qDebug() << Q_FUNC_INFO << "refresh_swap_info error";
+                qDebug() << Q_FUNC_INFO << "refresh_swap_info error" << error.msg.c_str();
             }
 
-            auto load = [&](const std::string& swap_id) {
+            auto load = [&](const std::string& swap_id, bool completed) {
                 auto data = result.session->get_swap_data(swap_id);
                 if (!data) return;
 
@@ -173,25 +173,33 @@ void LwkCreateSessionTask::update()
                     if (type == "submarine") {
                         auto invoice = swap_data.value("bolt11_invoice").toString();
                         auto prepare_pay_response = result.session->restore_prepare_pay(*data);
+                        if (!completed) prepare_pay_response->advance();
                         result.prepare_pay_responses.push_back(std::make_pair(invoice, prepare_pay_response));
                     } else if (type == "chain") {
-                        result.lockup_responses.push_back(result.session->restore_lockup(*data));
+                        auto lockup_response = result.session->restore_lockup(*data);
+                        if (!completed) lockup_response->advance();
+                        result.lockup_responses.push_back(lockup_response);
                     } else if (type == "reverse") {
-                        result.invoice_responses.push_back(result.session->restore_invoice(*data));
+                        auto invoice_response = result.session->restore_invoice(*data);
+                        if (!completed) invoice_response->advance();
+                        result.invoice_responses.push_back(invoice_response);
                     } else {
                         qWarning() << Q_FUNC_INFO << "unexpected swap type" << swap_id.c_str() << qPrintable(type);
                     }
                 } catch (const lwk::lwk_error::Generic& error) {
                     qDebug() << Q_FUNC_INFO << "error: " << error.msg.c_str();
                     qDebug() << Q_FUNC_INFO << "swap: " << data->c_str();
+                } catch (const lwk::lwk_error::GenericWithSwapId& error) {
+                    qDebug() << Q_FUNC_INFO << "error: " << error.msg.c_str();
+                    qDebug() << Q_FUNC_INFO << "swap: " << error.swap_id.c_str();
                 }
             };
 
             for (const auto& swap_id : result.session->pending_swap_ids()) {
-                load(swap_id);
+                load(swap_id, false);
             }
             for (const auto& swap_id : result.session->completed_swap_ids()) {
-                load(swap_id);
+                load(swap_id, true);
             }
 
             return result;

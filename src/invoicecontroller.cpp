@@ -139,7 +139,10 @@ void InvoiceController::update()
                 try {
                     return context()->m_boltz_session->invoice(satoshi, description, address, nullptr);
                 } catch (const lwk::lwk_error::Generic& error) {
-                    qDebug() << Q_FUNC_INFO << "generic error";
+                    qDebug() << Q_FUNC_INFO << "generic error" << error.msg.c_str();
+                    return nullptr;
+                } catch (const lwk::lwk_error::GenericWithSwapId& error) {
+                    qDebug() << Q_FUNC_INFO << "generic error" << error.swap_id.c_str() << error.msg.c_str();
                     return nullptr;
                 } catch (...) {
                     qDebug() << Q_FUNC_INFO << "unknown error";
@@ -164,9 +167,10 @@ void InvoiceController::update()
             return;
         }
     } catch (const lwk::lwk_error::Generic& error) {
-        qDebug() << Q_FUNC_INFO << error.what();
+        qDebug() << Q_FUNC_INFO << "generic error" << error.msg.c_str();
+    } catch (const lwk::lwk_error::GenericWithSwapId& error) {
+        qDebug() << Q_FUNC_INFO << "generic error" << error.swap_id.c_str() << error.msg.c_str();
     }
-
     setSwap(nullptr);
     setBusy(false);
 }
