@@ -8,39 +8,12 @@ import "util.js" as UtilJS
 FilterPopup {
     required property Context context
     required property ContextModel model
-    property var filterAssets
-    property var assets
+    property var filterAssets: []
+    property var assets: []
     Component.onCompleted: {
         self.filterAssets = [...self.model.filterAssets]
-        const context = self.context
-        if (!context) return []
-        const assets = new Map
-        for (const account of UtilJS.accounts(context)) {
-            for (let asset_id in account.json.satoshi) {
-                const satoshi = account.json.satoshi[asset_id]
-                if (satoshi === 0) continue
-                const asset = context.getOrCreateAsset(asset_id)
-                if (self.filterAssets.indexOf(asset) >= 0) continue
-                let sum = assets.get(asset)
-                if (sum) {
-                    sum.satoshi += satoshi
-                } else {
-                    sum = { satoshi, asset }
-                    assets.set(asset, sum)
-                }
-            }
-        }
-        self.assets = [...assets.values()].sort((a, b) => {
-            if (a.asset.weight > b.asset.weight) return -1
-            if (b.asset.weight > a.asset.weight) return 1
-            if (b.asset.weight === 0) {
-                if (a.asset.icon && !b.asset.icon) return -1
-                if (!a.asset.icon && b.asset.icon) return 1
-                if (Object.keys(a.asset.data).length > 0 && Object.keys(b.asset.data).length === 0) return -1
-                if (Object.keys(a.asset.data).length === 0 && Object.keys(b.asset.data).length > 0) return 1
-            }
-            return a.asset.name.localeCompare(b.asset.name)
-        })
+        self.assets = UtilJS.assets(self.context)
+            .filter(entry => self.filterAssets.indexOf(entry.asset) < 0)
     }
     id: self
     Repeater {
