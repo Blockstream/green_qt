@@ -7,7 +7,7 @@
 #include "json.h"
 #include "ledgerdevice.h"
 #include "lightningtask.h"
-#include "lwkcreatesessiontask.h"
+#include "boltzcreatesessiontask.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "session.h"
@@ -407,7 +407,7 @@ void BackgroundLoadController::load()
 
 void BackgroundLoadController::loadSwaps(TaskGroup* group)
 {
-    group->add(new LwkCreateSessionTask(context()));
+    group->add(new BoltzCreateSessionTask(context()));
 }
 
 void BackgroundLoadController::loadPayments(TaskGroup* group)

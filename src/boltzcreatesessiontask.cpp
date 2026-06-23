@@ -1,4 +1,4 @@
-#include "lwkcreatesessiontask.h"
+#include "boltzcreatesessiontask.h"
 
 #include "bip85.h"
 #include "context.h"
@@ -99,12 +99,12 @@ struct Store : public lwk::ForeignStore
 leveldb::DB* Store::db{nullptr};
 int Store::count{0};
 
-LwkCreateSessionTask::LwkCreateSessionTask(Context* context)
+BoltzCreateSessionTask::BoltzCreateSessionTask(Context* context)
     : ContextTask(context)
 {
 }
 
-void LwkCreateSessionTask::update()
+void BoltzCreateSessionTask::update()
 {
     if (m_status != Status::Ready) {
         return;
