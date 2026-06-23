@@ -1,13 +1,14 @@
 #include "loginwithpincontroller.h"
 
 #include "account.h"
+#include "boltzcreatesessiontask.h"
+#include "boltzloadswapstask.h"
 #include "context.h"
 #include "green_settings.h"
 #include "jadedevice.h"
 #include "json.h"
 #include "ledgerdevice.h"
 #include "lightningtask.h"
-#include "boltzcreatesessiontask.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "session.h"
@@ -329,6 +330,7 @@ void LoadController::load()
         loadNetwork(group, network);
     }
     connectLightningNode(group);
+    createBoltzSession(group);
 
     monitor()->add(group);
     dispatcher()->add(group);
@@ -353,6 +355,13 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
 void LoadController::connectLightningNode(TaskGroup* group)
 {
     group->add(new LightningConnectNodeTask(context()));
+}
+
+void LoadController::createBoltzSession(TaskGroup* group)
+{
+    if (context()->isMainnet() && !context()->isWatchonly() && !qobject_cast<DeviceData*>(context()->wallet()->login())) {
+        group->add(new BoltzCreateSessionTask(context()));
+    }
 }
 
 void LoadController::loginNetwork(Network* network)
@@ -407,7 +416,7 @@ void BackgroundLoadController::load()
 
 void BackgroundLoadController::loadSwaps(TaskGroup* group)
 {
-    group->add(new BoltzCreateSessionTask(context()));
+    group->add(new BoltzLoadSwapsTask(context()));
 }
 
 void BackgroundLoadController::loadPayments(TaskGroup* group)

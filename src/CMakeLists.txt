@@ -121,6 +121,7 @@ target_sources(${APP_TARGET} PRIVATE
     lwk/lwk.hpp
     lwk/lwk_scaffolding.hpp
     boltzcreatesessiontask.h boltzcreatesessiontask.cpp
+    boltzloadswapstask.h boltzloadswapstask.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
