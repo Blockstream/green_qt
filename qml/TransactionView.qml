@@ -66,43 +66,13 @@ StackViewPage {
     contentItem: VFlickable {
         alignment: Qt.AlignTop
         spacing: 10
-        Item {
-            Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: 96
-            Layout.preferredHeight: 96
-            Rectangle {
-                anchors.centerIn: parent
-                height: 72
-                width: 72
-                radius: 36
-                color: self.tx_color
-                ProgressIndicator {
-                    indeterminate: self.confirmations === 0
-                    current: self.confirmations <= (self.network.liquid ? 2 : 6) ? self.confirmations : 0
-                    max: self.network.liquid ? 2 : 6
-                    anchors.fill: parent
-                    anchors.margins: -1
-                }
-            }
-            Image {
-                anchors.centerIn: parent
-                source: UtilJS.transactionIcon(self.transaction.data.type, self.confirmations)
-                width: 32
-                height: 32
-            }
-            RowLayout {
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-                visible: self.transaction.type !== AccountTransaction.Mixed
-                Repeater {
-                    model: self.amounts
-                    delegate: AssetIcon {
-                        asset: modelData.asset
-                        border: 2
-                        borderColor: '#000'
-                    }
-                }
-            }
+        TransactionIcon {
+            assets: self.transaction.type === AccountTransaction.Mixed ? [] : self.amounts
+            backgroundColor: self.tx_color
+            confirmations: self.confirmations
+            maxConfirmations: self.network.liquid ? 2 : 6
+            showProgress: true
+            transactionType: self.transaction.data.type
         }
         TransactionStatusBadge {
             Layout.alignment: Qt.AlignCenter

@@ -90,6 +90,7 @@ set(QML_FILES_WORKFLOWS
     StatusBar.qml
     PinView.qml
     GFlickable.qml
+    TransactionIcon.qml
     TransactionStatusBadge.qml
     PopupBalloon.qml
     SectionLabel.qml
