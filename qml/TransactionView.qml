@@ -123,7 +123,7 @@ StackViewPage {
                 return parts.join(' ')
             }
         }
-        TLabel {
+        InlineCopyableLabel {
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 14
             font.weight: 400
@@ -171,7 +171,7 @@ StackViewPage {
                     }
                     ColumnLayout {
                         spacing: 4
-                        TLabel {
+                        InlineCopyableLabel {
                             Layout.alignment: self.transaction.type === AccountTransaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
                             Layout.fillWidth: false
                             copyText: convert.output.label
@@ -181,7 +181,7 @@ StackViewPage {
                             font.weight: 500
                             text: UtilJS.incognito(Settings.incognito, convert.output.label)
                         }
-                        TLabel {
+                        InlineCopyableLabel {
                             Layout.alignment: self.transaction.type === AccountTransaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
                             font.family: 'Roboto Mono'
                             font.features: { 'calt': 0, 'zero': 1 }
@@ -227,7 +227,7 @@ StackViewPage {
                 unit: self.transaction.account.session.unit
             }
             RowLayout {
-                TLabel {
+                InlineCopyableLabel {
                     topPadding: 4
                     bottomPadding: 4
                     color: '#FFF'
@@ -237,7 +237,7 @@ StackViewPage {
                     font.weight: 400
                     text: UtilJS.incognito(Settings.incognito, fee_convert.output.label)
                 }
-                TLabel {
+                InlineCopyableLabel {
                     topPadding: 4
                     bottomPadding: 4
                     color: '#FFF'
@@ -258,7 +258,7 @@ StackViewPage {
                 text: qsTrId('id_fee_rate')
             }
             RowLayout {
-                TLabel {
+                InlineCopyableLabel {
                     topPadding: 4
                     bottomPadding: 4
                     color: '#FFF'
@@ -325,7 +325,7 @@ StackViewPage {
                 font.weight: 400
                 text: qsTrId('id_transaction_id')
             }
-            TLabel {
+            InlineCopyableLabel {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 color: '#FFF'
@@ -345,7 +345,7 @@ StackViewPage {
                 text: qsTrId('Swap ID')
                 visible: self.transaction.chainTransaction.swap
             }
-            TLabel {
+            InlineCopyableLabel {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 color: '#FFF'
@@ -394,7 +394,7 @@ StackViewPage {
                         }
                         contentItem: ColumnLayout {
                             spacing: 4
-                            TLabel {
+                            InlineCopyableLabel {
                                 Layout.alignment: Qt.AlignRight
                                 Layout.fillWidth: false
                                 copyText: total_convert.output.label
@@ -404,7 +404,7 @@ StackViewPage {
                                 font.weight: 400
                                 text: UtilJS.incognito(Settings.incognito, total_convert.output.label)
                             }
-                            TLabel {
+                            InlineCopyableLabel {
                                 Layout.alignment: Qt.AlignRight
                                 font.family: 'Roboto Mono'
                                 font.features: { 'calt': 0, 'zero': 1 }
@@ -632,41 +632,6 @@ StackViewPage {
                     wrapMode: Label.Wrap
                 }
             }
-        }
-    }
-
-    component TLabel: Label {
-        signal copyClicked()
-        property string copyText: label.text
-        id: label
-        rightPadding: collapsible.width
-        Collapsible {
-            id: collapsible
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            animationVelocity: 500
-            collapsed: !hover_handler.hovered && !timer.running
-            horizontalCollapse: true
-            verticalCollapse: false
-            Image {
-                x: 8
-                source: timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
-            }
-        }
-        HoverHandler {
-            id: hover_handler
-        }
-        TapHandler {
-            onTapped: {
-                Clipboard.copy(label.copyText)
-                label.copyClicked()
-                timer.restart()
-            }
-        }
-        Timer {
-            id: timer
-            repeat: false
-            interval: 1000
         }
     }
 

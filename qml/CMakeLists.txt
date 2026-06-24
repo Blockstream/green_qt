@@ -52,6 +52,7 @@ set(QML_FILES_CORE
     DescriptiveRadioButton.qml
     SettingsPage.qml
     CopyableLabel.qml
+    InlineCopyableLabel.qml
     TransactionProgress.qml
     QRCode.qml
     JadeSignLiquidTransactionView.qml
