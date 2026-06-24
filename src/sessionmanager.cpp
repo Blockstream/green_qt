@@ -45,24 +45,41 @@ Session* SessionManager::create(Network* network)
 void SessionManager::release(Session* session)
 {
     Q_ASSERT(session);
+    if (m_garbage.contains(session)) {
+        qWarning() << Q_FUNC_INFO << "session already queued for deletion" << session;
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO << "total sessions:" << m_sessions.count();
     m_sessions.removeOne(session);
+
+    // Tear the GDK session down while the QObject is still fully alive.
+    session->setActive(false);
     m_garbage.append(session);
 }
 
 void SessionManager::exit()
 {
-    if (!m_sessions.isEmpty()) {
+    while (!m_sessions.isEmpty()) {
         qWarning() << Q_FUNC_INFO << "unexpected active sessions:" << m_sessions.count();
+        auto session = m_sessions.takeFirst();
+        if (m_garbage.contains(session)) continue;
+        session->setActive(false);
+        m_garbage.append(session);
     }
+
+
     if (!m_garbage.isEmpty()) {
         qDebug() << Q_FUNC_INFO << "total garbage sessions:" << m_garbage.count();
         while (!m_garbage.isEmpty()) {
             delete m_garbage.takeFirst();
         }
     }
+
     if (m_tor_session) {
+        m_tor_session->setActive(false);
         delete m_tor_session;
+        m_tor_session = nullptr;
     }
 }
 
