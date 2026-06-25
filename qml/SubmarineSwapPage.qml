@@ -66,7 +66,7 @@ StackViewPage {
             const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
-            self.pushPage(error_page, { error })
+            self.pushPage(failed_page, { error })
         }
     }
     TaskPageFactory {
@@ -296,9 +296,9 @@ StackViewPage {
         }
     }
     Component {
-        id: error_page
-        ErrorPage {
-            title: self.title
+        id: failed_page
+        TransactionFailedPage {
+            onCloseClicked: self.closeClicked()
         }
     }
     component Fee: RowLayout {

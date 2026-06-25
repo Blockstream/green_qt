@@ -24,6 +24,9 @@ function formatError(error) {
         }
         if (error.startsWith('id_')) return qsTrId(error)
     }
+    if (error?.message) return error.message
+    if (error?.error) return error.error
+    if (typeof error === 'object') return JSON.stringify(error)
     return error
 }
 

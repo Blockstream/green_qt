@@ -61,13 +61,13 @@ StackViewPage {
                 from: UtilJS.swapNetworkType(self.sendAccount.network),
                 to: UtilJS.swapNetworkType(self.receiveAccount.network)
             }))
-            self.pushPage(completed_page, { transaction })
+            self.pushPage(transaction_completed_page, { transaction })
         }
         onFailed: (error) => {
             const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.sendAccount)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
-            self.pushPage(error_page, { error })
+            self.pushPage(transaction_failed_page, { error })
         }
     }
     TaskPageFactory {
@@ -255,13 +255,13 @@ StackViewPage {
         onClicked: sign_transaction_controller.sign()
     }
     Component {
-        id: error_page
-        ErrorPage {
-            title: self.title
+        id: transaction_failed_page
+        TransactionFailedPage {
+            onCloseClicked: self.closeClicked()
         }
     }
     Component {
-        id: completed_page
+        id: transaction_completed_page
         TransactionCompletedPage {
             title: qsTrId('id_success')
             onCloseClicked: self.closeClicked()

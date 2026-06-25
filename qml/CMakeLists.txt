@@ -194,6 +194,7 @@ set(QML_FILES_DEVICES
     JadeQRUnlockPage.qml
     PinPadButton.qml
     TransactionCompletedPage.qml
+    TransactionFailedPage.qml
     TransactionDetailsDrawer.qml
     GStackLayout.qml
     DeploymentDialog.qml

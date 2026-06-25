@@ -36,7 +36,7 @@ StackViewPage {
             const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
-            self.pushPage(error_page, { error })
+            self.pushPage(transaction_failed_page, { error })
         }
     }
     AnalyticsView {
@@ -261,9 +261,9 @@ StackViewPage {
     }
 
     Component {
-        id: error_page
-        ErrorPage {
-            title: self.title
+        id: transaction_failed_page
+        TransactionFailedPage {
+            onCloseClicked: self.closeClicked()
         }
     }
 
