@@ -73,10 +73,9 @@ StackViewPage {
                 ActionButton {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    // TODO: enable when send flow is implemented
-                    enabled: false
                     icon.source: 'qrc:/svg/send-white.svg'
                     text: qsTrId('id_send')
+                    onClicked: self.StackView.view.push(recipient_page)
                 }
                 ActionButton {
                     Layout.fillWidth: true
@@ -233,6 +232,17 @@ StackViewPage {
         id: lightning_receive_page
         LightningReceivePage {
             context: self.context
+            onCloseClicked: self.closeClicked()
+        }
+    }
+
+    Component {
+        id: recipient_page
+        RecipientPage {
+            context: self.context
+            account: null
+            asset: self.asset
+            lightningOnly: true
             onCloseClicked: self.closeClicked()
         }
     }

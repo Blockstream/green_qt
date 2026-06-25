@@ -112,6 +112,14 @@ std::optional<quint64> MsatToSatoshi(const std::optional<uint64_t>& msat)
     return MsatToSatoshi(*msat);
 }
 
+QString GlsdkErrorMessage(const QString& fallback, const int code, const std::string& message)
+{
+    const auto error = QString::fromStdString(message).trimmed();
+    if (!error.isEmpty()) return error;
+    if (code != 0) return QStringLiteral("%1 (%2)").arg(fallback).arg(code);
+    return fallback;
+}
+
 // GL-SDK to client type conversions.
 std::optional<QString> ToOptionalQString(const std::optional<std::string>& value)
 {
@@ -138,12 +146,48 @@ LightningPaymentType ToLightningPaymentType(const glsdk::PaymentType type)
     return LightningPaymentType::Unknown;
 }
 
+QString LightningPaymentTypeId(const LightningPaymentType type)
+{
+    switch (type) {
+    case LightningPaymentType::Received: return QStringLiteral("received");
+    case LightningPaymentType::Sent: return QStringLiteral("sent");
+    case LightningPaymentType::Unknown: return QStringLiteral("unknown");
+    }
+    return QStringLiteral("unknown");
+}
+
+QString LightningPaymentId(const glsdk::Payment& payment)
+{
+    // Payment type is added to the ID to avoid collisions between sent and
+    // received payments with the same hash, e.g. when a user pays themselves
+    const auto type = ToLightningPaymentType(payment.payment_type);
+    return QStringLiteral("%1:%2").arg(QString::fromStdString(payment.id), LightningPaymentTypeId(type));
+}
+
 QString CurrentGlsdkExceptionMessage()
 {
     try {
         throw;
+    } catch (const glsdk::error::DuplicateNode& error) {
+        return GlsdkErrorMessage(QStringLiteral("Duplicate Lightning node"), error.code, error.msg);
+    } catch (const glsdk::error::NoSuchNode& error) {
+        return GlsdkErrorMessage(QStringLiteral("Lightning node not found"), error.code, error.msg);
+    } catch (const glsdk::error::UnparseableCreds& error) {
+        return GlsdkErrorMessage(QStringLiteral("Unable to parse Lightning credentials"), error.code, error.msg);
+    } catch (const glsdk::error::PhraseCorrupted& error) {
+        return GlsdkErrorMessage(QStringLiteral("Lightning recovery phrase is corrupted"), error.code, error.msg);
+    } catch (const glsdk::error::Rpc& error) {
+        return GlsdkErrorMessage(QStringLiteral("Lightning RPC failed"), error.code, error.msg);
+    } catch (const glsdk::error::Argument& error) {
+        return GlsdkErrorMessage(QStringLiteral("Invalid Lightning request"), error.code, error.msg);
+    } catch (const glsdk::error::Other& error) {
+        return GlsdkErrorMessage(QStringLiteral("Lightning operation failed"), error.code, error.msg);
+    } catch (const glsdk::Error& error) {
+        const auto message = QString::fromUtf8(error.what()).trimmed();
+        return message.isEmpty() ? QStringLiteral("Lightning operation failed") : message;
     } catch (const std::exception& error) {
-        return QString::fromUtf8(error.what());
+        const auto message = QString::fromUtf8(error.what()).trimmed();
+        return message.isEmpty() ? QStringLiteral("Unexpected GL-SDK failure") : message;
     } catch (...) {
         return QStringLiteral("Unexpected GL-SDK failure");
     }
@@ -258,7 +302,7 @@ LightningValueResult<std::vector<LightningPayment>> LightningClient::listPayment
             if (payment.status != glsdk::PaymentStatus::kComplete) continue;
 
             result.emplace_back(LightningPayment{
-                QString::fromStdString(payment.id),
+                LightningPaymentId(payment),
                 ToLightningPaymentType(payment.payment_type),
                 payment.payment_time,
                 MsatToSatoshi(payment.amount_msat),
@@ -275,7 +319,7 @@ LightningValueResult<std::vector<LightningPayment>> LightningClient::listPayment
     }
 }
 
-LightningOperationResult LightningClient::checkInvoice(const LightningParsedInvoice& invoice, const std::optional<quint64>& amount_satoshi, const std::optional<LightningNodeInfo>& node_info) const
+LightningOperationResult LightningClient::checkInvoice(const LightningParsedInvoice& invoice, const std::optional<quint64>& amount_satoshi) const
 {
     const auto expiry_at = invoice.timestamp + invoice.expiry;
     if (expiry_at <= QDateTime::currentSecsSinceEpoch()) {
@@ -286,21 +330,17 @@ LightningOperationResult LightningClient::checkInvoice(const LightningParsedInvo
     if (amount == 0) {
         return { false, QStringLiteral("Invoice amount is missing") };
     }
-
-    if (node_info && amount > node_info->max_payable) {
-        return { false, QStringLiteral("Invoice amount exceeds max payable amount") };
-    }
     return { true, {} };
 }
 
-LightningValueResult<LightningSendResponse> LightningClient::sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& satoshi, const std::optional<LightningNodeInfo>& node_info)
+LightningValueResult<LightningSendResponse> LightningClient::sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& satoshi)
 {
     if (!node) return { std::nullopt, QStringLiteral("GL-SDK node is not connected") };
 
     const auto invoice = parseInvoice(bolt11);
     if (!invoice) return { std::nullopt, invoice.error };
 
-    const auto invoice_check = checkInvoice(*invoice.value, satoshi, node_info);
+    const auto invoice_check = checkInvoice(*invoice.value, satoshi);
     if (!invoice_check) return { std::nullopt, invoice_check.error };
 
     try {

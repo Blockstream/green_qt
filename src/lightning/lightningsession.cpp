@@ -268,6 +268,35 @@ QFuture<LightningCreateInvoiceResult> LightningSession::createInvoice(const quin
     });
 }
 
+QFuture<LightningValueResult<LightningSendResponse>> LightningSession::sendPayment(const QString& invoice, const std::optional<quint64> satoshi)
+{
+    if (QThread::currentThread() != thread()) {
+        QFuture<LightningValueResult<LightningSendResponse>> future;
+        QMetaObject::invokeMethod(this, [this, invoice, satoshi, &future] {
+            future = sendPayment(invoice, satoshi);
+        }, Qt::BlockingQueuedConnection);
+        return future;
+    }
+
+    const auto client = m_client;
+    const auto node = m_node;
+    const auto mutex = m_node_operation_mutex;
+    const auto node_generation = m_node_generation;
+
+    auto future = QtConcurrent::run([client, node, mutex, invoice, satoshi] {
+        QMutexLocker locker(mutex.get());
+        return client->sendPayment(node, invoice, satoshi);
+    });
+
+    return future.then(this, [=, this](LightningValueResult<LightningSendResponse> result) {
+        if (m_node == node && m_node_generation == node_generation && result) {
+            refreshNodeInfo();
+            refreshPayments();
+        }
+        return result;
+    });
+}
+
 LightningValueResult<LightningParsedInvoice> LightningSession::parseInvoice(const QString& input) const
 {
     return m_client->parseInvoice(input);

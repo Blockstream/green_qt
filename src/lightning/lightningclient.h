@@ -118,13 +118,13 @@ public:
     LightningValueResult<std::vector<LightningPayment>> listPayments(const std::shared_ptr<glsdk::Node>& node) const;
     LightningValueResult<LightningParsedInvoice> parseInvoice(const QString& input) const;
     LightningValueResult<LightningReceiveResponse> createInvoice(const std::shared_ptr<glsdk::Node>& node, quint64 satoshi, const QString& description);
-    LightningValueResult<LightningSendResponse> sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& satoshi, const std::optional<LightningNodeInfo>& node_info);
+    LightningValueResult<LightningSendResponse> sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& satoshi);
 
     LightningValueResult<LightningOnchainReceiveResponse> onchainReceive(const std::shared_ptr<glsdk::Node>& node);
     LightningValueResult<LightningOnchainSendResponse> redeemAllOnchainFunds(const std::shared_ptr<glsdk::Node>& node, const QString& destination);
 
 private:
-    LightningOperationResult checkInvoice(const LightningParsedInvoice& invoice, const std::optional<quint64>& amount_satoshi, const std::optional<LightningNodeInfo>& node_info) const;
+    LightningOperationResult checkInvoice(const LightningParsedInvoice& invoice, const std::optional<quint64>& amount_satoshi) const;
 };
 
 #endif // BLOCKSTREAM_LIGHTNING_CLIENT_H

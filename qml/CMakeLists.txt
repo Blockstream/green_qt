@@ -286,8 +286,11 @@ set(QML_FILES_FEATURES
     LightningAssetPage.qml
     LightningReceivePage.qml
     LightningInvoicePage.qml
+    LightningAmountlessPage.qml
+    LightningSendConfirmPage.qml
     LightningTransactionDetailsPage.qml
     LightningTransactionPage.qml
+    PaymentSourceSelectorPage.qml
     RightArrowIndicator.qml
     PushButton.qml
     ErrorPane.qml

@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 StackViewPage {
     id: self
-    required property ContextTransaction transaction
+    property AccountTransaction transaction
     property string message: qsTrId('id_successfully_sent_your_funds')
     readonly property string txhash: self.transaction?.data?.txhash ?? ''
     readonly property string explorerUrl: String(self.transaction?.url ?? '')
