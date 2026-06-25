@@ -1,6 +1,7 @@
 #include "swap.h"
 #include "transaction.h"
 
+#include <QDateTime>
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -132,9 +133,12 @@ ReverseSwap::ReverseSwap(std::shared_ptr<lwk::InvoiceResponse> invoice_response,
 QVariantMap ReverseSwap::data() const
 {
     try {
+        const auto invoice = m_invoice_response->bolt11_invoice();
+        const auto expires_at = QDateTime::fromSecsSinceEpoch(invoice->timestamp() + invoice->expiry_time());
         return {
             { "fee", QVariant::fromValue<uint64_t>(m_invoice_response->fee() ? *m_invoice_response->fee() : 0) },
-            { "invoice", QString::fromStdString(m_invoice_response->bolt11_invoice()->to_string()) },
+            { "expiresAt", expires_at },
+            { "invoice", QString::fromStdString(invoice->to_string()) },
         };
     } catch (...) {
         return {};

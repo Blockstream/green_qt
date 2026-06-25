@@ -529,6 +529,8 @@ qt_add_resources(${APP_TARGET} "images"
         000000/24/clipboard.svg
         000000/24/list-checks.svg
 
+        00bcff/20/magnifying-glass-plus.svg
+
         a0a0a0/24/bolt.svg
         a0a0a0/24/coins.svg
         a0a0a0/24/faders-horizontal.svg

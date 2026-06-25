@@ -7,34 +7,53 @@ import QtQuick.Layouts
 StackViewPage {
     required property Context context
     required property string invoice
-    required property var amountSats
-    required property var fundingFeeSats
-    required property date expiresAt
+    property double amountSats: 0
+    property double fundingFeeSats: 0
+    property double totalFeesSats: 0
+    property var expiresAt: null
+    property string footerMessage: ''
+    property Asset asset: self.context.getOrCreateAsset('lnbtc')
 
     property bool paid: false
     property string note: ''
 
-    readonly property Asset asset: self.context.getOrCreateAsset('lnbtc')
     readonly property string invoiceUri: 'lightning:' + self.invoice.toUpperCase()
-    readonly property var amountToReceiveSats: amountSats > fundingFeeSats ? amountSats - fundingFeeSats : 0;
+    readonly property double amountToReceiveSats: {
+        return Math.max(0, self.amountSats - self.fundingFeeSats - self.totalFeesSats)
+    }
 
     id: self
     title: qsTrId('id_lightning_invoice')
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }
-    footerItem: PrimaryButton {
+    footerItem: ColumnLayout {
         Layout.fillWidth: true
-        icon.source: copy_timer.running ? 'qrc:/000000/24/check.svg' : 'qrc:/000000/24/clipboard.svg'
-        text: copy_timer.running ? 'Copied' : 'Copy Invoice'
-        onClicked: {
-            Clipboard.copy(self.invoiceUri)
-            copy_timer.restart()
+        spacing: 12
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            color: '#A0A0A0'
+            font.pixelSize: 12
+            font.weight: 400
+            horizontalAlignment: Label.AlignHCenter
+            text: self.footerMessage
+            visible: self.footerMessage.length > 0
+            wrapMode: Label.WordWrap
         }
-        Timer {
-            id: copy_timer
-            repeat: false
-            interval: 1000
+        PrimaryButton {
+            Layout.fillWidth: true
+            icon.source: copy_timer.running ? 'qrc:/000000/24/check.svg' : 'qrc:/000000/24/clipboard.svg'
+            text: copy_timer.running ? 'Copied' : 'Copy Invoice'
+            onClicked: {
+                Clipboard.copy(self.invoiceUri)
+                copy_timer.restart()
+            }
+            Timer {
+                id: copy_timer
+                repeat: false
+                interval: 1000
+            }
         }
     }
 
@@ -112,6 +131,7 @@ StackViewPage {
                 bottomPadding: 10
                 font.pixelSize: 14
                 fillColor: qr_button.hovered ? '#062F4A' : 'transparent'
+                icon.source: 'qrc:/00bcff/20/magnifying-glass-plus.svg'
                 textColor: '#00BCFF'
                 text: 'Enlarge QR'
                 onClicked: self.StackView.view.push(qrcode_page)
@@ -126,10 +146,16 @@ StackViewPage {
                 Layout.fillWidth: true
                 spacing: 12
                 FeeRow {
-                    visible: self.fundingFeeSats > 0
+                    title: 'Total Fees'
+                    satoshi: self.totalFeesSats
+                    subtle: true
+                    visible: self.totalFeesSats > 0
+                }
+                FeeRow {
                     title: 'Funding Fee'
                     satoshi: self.fundingFeeSats
                     subtle: true
+                    visible: self.fundingFeeSats > 0
                 }
                 FeeRow {
                     title: qsTrId('id_amount_to_receive')

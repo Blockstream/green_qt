@@ -13,8 +13,22 @@ StackViewPage {
     property bool readonly: false
     property bool invoice: false
     readonly property bool lightningEnabled: self.context.mainnet && !self.context.watchonly && !controller.context.wallet.login.device && self.account.network.liquid && self.asset.id === self.account.network.policyAsset
-    readonly property string qrcode: self.invoice ? 'lightning:' + invoice_controller.swap?.data?.invoice.toUpperCase() ?? '' : controller.uri
+    readonly property string qrcode: controller.uri
     property bool lockAssetAndAccount: false
+    property bool invoicePushed: false
+    function openLightningInvoice() {
+        if (!self.invoice || !invoice_controller.swap) return
+
+        const sendAmount = Number(quote_controller.quote?.send_amount ?? 0)
+        const receiveAmount = Number(quote_controller.quote?.receive_amount ?? 0)
+        self.invoicePushed = true
+        self.pushPage(lightning_invoice_page, {
+            invoice: invoice_controller.swap?.data?.invoice ?? '',
+            expiresAt: invoice_controller.swap?.data?.expiresAt ?? null,
+            amountSats: sendAmount,
+            totalFeesSats: sendAmount - receiveAmount,
+        })
+    }
     readonly property var error: {
         if (!self.invoice) return null
         if (amount_field.text.length === 0) return { code: 'invalid', visible: false }
@@ -57,6 +71,19 @@ StackViewPage {
         context: self.context
         address: controller.address?.address ?? ''
         satoshi: quote_controller.quote?.send_amount ?? ''
+    }
+    Connections {
+        enabled: self.invoice
+        target: invoice_controller
+        function onSwapChanged() {
+            if (!invoice_controller.swap) {
+                self.invoicePushed = false
+                return
+            }
+            if (self.invoicePushed) return
+
+            self.openLightningInvoice()
+        }
     }
 
     TaskPageFactory {
@@ -101,9 +128,13 @@ StackViewPage {
             id: confirm_button
             busy: invoice_controller.busy
             enabled: !confirm_button.busy && !self.error
-            text: qsTrId('id_confirm')
-            visible: self.invoice && !invoice_controller.swap
+            text: qsTrId('id_create_invoice')
+            visible: self.invoice
             onClicked: {
+                if (invoice_controller.swap) {
+                    self.openLightningInvoice()
+                    return
+                }
                 Analytics.recordEvent('swap_receive', AnalyticsJS.segmentationSwap(Settings, self.context, {
                     from: 'lightning',
                     to: 'liquid'
@@ -175,6 +206,7 @@ StackViewPage {
                     checked: !self.invoice
                     onClicked: {
                         self.invoice = false
+                        self.invoicePushed = false
                         amount_field.visible = false
                         amount_field.clearText()
                     }
@@ -189,6 +221,7 @@ StackViewPage {
                             to: 'liquid'
                         }))
                         self.invoice = true
+                        self.invoicePushed = false
                         amount_field.visible = true
                         amount_field.clearText()
                         amount_field.forceActiveFocus()
@@ -273,7 +306,7 @@ StackViewPage {
         }
         FieldTitle {
             text: self.invoice ? qsTrId('id_invoice') : qsTrId('id_account_address')
-            visible: !controller.error && (!self.invoice || invoice_controller.swap?.data?.invoice.length > 0)
+            visible: !controller.error && !self.invoice
         }
         ErrorPane {
             error: controller.error || null
@@ -282,7 +315,7 @@ StackViewPage {
         Pane {
             Layout.fillWidth: true
             padding: 20
-            visible: !controller.error && (!self.invoice || invoice_controller.swap?.data?.invoice.length > 0)
+            visible: !controller.error && !self.invoice
             background: Rectangle {
                 radius: 5
                 color: '#181818'
@@ -305,19 +338,14 @@ StackViewPage {
                         implicitWidth: 192
                         radius: 8
                         border: 0
-                        color: self.invoice ? '#DFB316' : '#00BCFF'
+                        color: '#00BCFF'
                         corners: true
                         AssetIcon {
                             anchors.centerIn: parent
                             asset: controller.asset
                             size: 24
                             border: 4
-                            visible: !self.invoice && !!controller.asset
-                        }
-                        Image {
-                            anchors.centerIn: parent
-                            source: 'qrc:/svg3/lightning.svg'
-                            visible: self.invoice
+                            visible: !!controller.asset
                         }
                     }
                     ColumnLayout {
@@ -338,7 +366,7 @@ StackViewPage {
                 AddressLabel {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    address: self.invoice ? invoice_controller.swap?.data?.invoice : controller.address
+                    address: controller.address
                 }
                 RowLayout {
                     spacing: 10
@@ -352,8 +380,8 @@ StackViewPage {
                     CopyAddressButton {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
-                        content: self.invoice ? 'lightning:' + invoice_controller.swap?.data?.invoice.toUpperCase() : controller.uri
-                        text: self.invoice ? qsTrId('id_copy') : qsTrId('id_copy_address')
+                        content: controller.uri
+                        text: qsTrId('id_copy_address')
                     }
                 }
             }
@@ -376,6 +404,16 @@ StackViewPage {
     Component {
         id: jade_verify_page
         JadeVerifyAddressPage {
+        }
+    }
+
+    Component {
+        id: lightning_invoice_page
+        LightningInvoicePage {
+            context: self.context
+            asset: self.asset
+            footerMessage: 'You will receive Liquid Bitcoin via Lightning invoice.'
+            onCloseClicked: self.closeClicked()
         }
     }
 
