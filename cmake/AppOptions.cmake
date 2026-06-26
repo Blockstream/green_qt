@@ -1,4 +1,3 @@
-option(GREEN_WAYLAND "Include Wayland support" OFF)
 option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)
 
 set(APP_TARGET blockstream)

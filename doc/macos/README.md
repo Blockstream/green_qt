@@ -133,7 +133,6 @@ qt-cmake -S . -B build \
   -DGREEN_ENV=Development \
   -DGREEN_BUILD_ID="-dev" \
   -DGREEN_LOG_FILE=dev \
-  -DGREEN_WAYLAND=OFF \
   -DENABLE_SENTRY=OFF
 ```
 
