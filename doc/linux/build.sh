@@ -217,13 +217,7 @@ if [[ "$LAST_STEP" -lt $STEP_CONFIGURE ]]; then
         fail "gdk CMake config not found under $PREFIX (tried: ${CANDIDATES[*]}). Run dependency build and/or adjust search list."
     fi
 
-    qt-cmake -S . -B build \
-        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -Dgdk_DIR="$GDK_CMAKE_DIR" \
-        -DGREEN_ENV=Development \
-        -DGREEN_BUILD_ID="-dev" \
-        -DGREEN_LOG_FILE=dev \
-        -DENABLE_SENTRY=OFF || fail "CMake configure failed"
+    qt-cmake --preset dev -Dgdk_DIR="$GDK_CMAKE_DIR" || fail "CMake configure failed"
 
     save_progress $STEP_CONFIGURE
 fi
@@ -256,4 +250,3 @@ echo "Run the app with:"
 echo "  export LD_LIBRARY_PATH=\"\$QT_ROOT/lib:\$LD_LIBRARY_PATH\""
 echo "  ./build/blockstream"
 echo ""
-

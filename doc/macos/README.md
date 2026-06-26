@@ -125,15 +125,11 @@ export PATH="$QT_ROOT/bin:$PATH"
 export CMAKE_PREFIX_PATH="$QT_ROOT:$PREFIX:$gdk_ROOT"
 ```
 
-Now configure a **RelWithDebInfo** build:
+Now configure a **RelWithDebInfo** build with the `dev` preset (defined in
+[`CMakePresets.json`](../../CMakePresets.json)):
 
 ```bash
-qt-cmake -S . -B build \
-  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-  -DGREEN_ENV=Development \
-  -DGREEN_BUILD_ID="-dev" \
-  -DGREEN_LOG_FILE=dev \
-  -DENABLE_SENTRY=OFF
+qt-cmake --preset dev
 ```
 
 Build:
@@ -151,4 +147,3 @@ You can run it directly with:
 ```bash
 open build/Blockstream.app
 ```
-

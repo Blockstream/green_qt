@@ -33,14 +33,9 @@ sast:
 .build:
   stage: build
   script:
-    - |
-      qt-cmake -S . -B build \
-        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -DGREEN_ENV=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "Production" || echo "Testing") \
-        -DGREEN_BUILD_ID=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "" || echo "-$CI_COMMIT_SHORT_SHA") \
-        -DGREEN_LOG_FILE=$CI_COMMIT_BRANCH \
-        -DENABLE_SENTRY=ON \
-        -DSENTRY_KEY=$SENTRY_KEY
+    - export GREEN_ENV=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "Production" || echo "Testing")
+    - export GREEN_BUILD_ID=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "" || echo "-$CI_COMMIT_SHORT_SHA")
+    - qt-cmake --preset ci
     - cmake --build build --parallel 4
     - curl -sL https://sentry.io/get-cli | INSTALL_DIR=$PWD sh
     - |

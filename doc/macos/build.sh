@@ -244,12 +244,7 @@ if [[ "$LAST_STEP" -lt $STEP_CONFIGURE ]]; then
     export PATH="$QT_ROOT/bin:$PATH"
     export CMAKE_PREFIX_PATH="$QT_ROOT:$PREFIX:$gdk_ROOT"
 
-    qt-cmake -S . -B build \
-        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -DGREEN_ENV=Development \
-        -DGREEN_BUILD_ID="-dev" \
-        -DGREEN_LOG_FILE=dev \
-        -DENABLE_SENTRY=OFF || fail "CMake configure failed"
+    qt-cmake --preset dev || fail "CMake configure failed"
 
     save_progress $STEP_CONFIGURE
 fi
@@ -281,4 +276,3 @@ echo ""
 echo "Run the app with:"
 echo "  open build/Blockstream.app"
 echo ""
-

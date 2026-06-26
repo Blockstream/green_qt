@@ -113,15 +113,17 @@ All of these install into `$PREFIX`. This is the slow part; subsequent builds ca
 
 ### Configure and build the app (qt-cmake)
 
-For a **RelWithDebInfo** build, you can run:
+For a **RelWithDebInfo** build, configure with the `dev` preset (defined in
+[`CMakePresets.json`](../../CMakePresets.json)):
 
 ```bash
-qt-cmake -S . -B build \
-  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-  -DGREEN_ENV=Development \
-  -DGREEN_BUILD_ID="-dev" \
-  -DGREEN_LOG_FILE=dev \
-  -DENABLE_SENTRY=OFF
+qt-cmake --preset dev
+```
+
+If CMake cannot locate gdk via `CMAKE_PREFIX_PATH`, point it at the config explicitly:
+
+```bash
+qt-cmake --preset dev -Dgdk_DIR=<prefix>/lib/x86_64-linux-gnu/gdk/cmake
 ```
 
 Then build:
@@ -146,4 +148,3 @@ Run it directly:
 export LD_LIBRARY_PATH="$QT_ROOT/lib:$LD_LIBRARY_PATH"
 ./build/blockstream
 ```
-

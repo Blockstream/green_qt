@@ -1,5 +1,9 @@
 option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)
 
+if(ENABLE_SENTRY AND NOT SENTRY_KEY)
+    message(FATAL_ERROR "ENABLE_SENTRY is ON but SENTRY_KEY is missing or empty")
+endif()
+
 set(APP_TARGET blockstream)
 
 message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")

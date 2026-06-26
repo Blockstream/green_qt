@@ -1,0 +1,61 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "dev",
+      "displayName": "Development build (Linux/macOS)",
+      "inherits": "base",
+      "cacheVariables": {
+        "GREEN_ENV": "Development",
+        "GREEN_BUILD_ID": "-dev",
+        "GREEN_LOG_FILE": "dev",
+        "ENABLE_SENTRY": "OFF"
+      }
+    },
+    {
+      "name": "dev-windows",
+      "displayName": "Development build (Windows)",
+      "inherits": "dev",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/bld",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "/FS"
+      }
+    },
+    {
+      "name": "ci",
+      "displayName": "CI build (Linux/macOS)",
+      "inherits": "base",
+      "cacheVariables": {
+        "GREEN_ENV": "$env{GREEN_ENV}",
+        "GREEN_BUILD_ID": "$env{GREEN_BUILD_ID}",
+        "GREEN_LOG_FILE": "$env{CI_COMMIT_BRANCH}",
+        "ENABLE_SENTRY": "ON",
+        "SENTRY_KEY": "$env{SENTRY_KEY}"
+      }
+    },
+    {
+      "name": "ci-windows",
+      "displayName": "CI build (Windows)",
+      "inherits": "ci",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/bld",
+      "cacheVariables": {
+        "ENABLE_SENTRY": "OFF",
+        "CMAKE_CXX_FLAGS": "/FS"
+      }
+    }
+  ]
+}

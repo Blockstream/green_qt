@@ -324,19 +324,20 @@ set CMAKE_PREFIX_PATH=C:\deps;C:\depends\windows-x86_64
 call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
 ```
 
-If you use a different VS or Qt path, adjust the next lines accordingly:
+`CMAKE_PREFIX_PATH` (set above) is read from the environment, and the remaining options
+come from the `dev-windows` preset in [`CMakePresets.json`](../../CMakePresets.json). If you
+use a different VS or Qt path, adjust the next lines accordingly:
 
 ```bat
-call C:\qt\6.11.1\msvc2022_64\bin\qt-cmake -S . -B bld -DCMAKE_PREFIX_PATH=C:\deps;C:\depends\windows-x86_64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-dev -DGREEN_LOG_FILE=dev -DENABLE_SENTRY=OFF
+call C:\qt\6.11.1\msvc2022_64\bin\qt-cmake --preset dev-windows
 
 cmake --build bld --config RelWithDebInfo
 ```
 
-For a production-style build (e.g. release):
+For a production-style build (e.g. release), override the preset on the command line:
 
 ```bat
--DGREEN_ENV=Production
--DGREEN_BUILD_ID=
+-DGREEN_ENV=Production -DGREEN_BUILD_ID=
 ```
 
 ### 2.5 Deploy Qt and copy DLLs
