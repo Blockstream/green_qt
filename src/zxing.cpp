@@ -1,93 +1,35 @@
 #include "zxing.h"
 
-#include <QtConcurrentRun>
+#include <QtMultimedia>
+#include <QtQml>
 #include <QUrl>
 
-#include <ZXing/BitMatrix.h>
-#include <ZXing/MultiFormatWriter.h>
-#include <ZXing/ReadBarcode.h>
+#include <ZXing/ZXingQt.h>
 
-ZXingDetector::ZXingDetector(QObject *parent)
-    : QObject(parent)
-{
-}
+using namespace ZXingQt;
 
-ZXingDetector::~ZXingDetector()
+static QImage grayscaleToTransparentArgb(const QImage& gray, const QSize& target_size)
 {
-    m_future.waitForFinished();
-}
+    QImage image(target_size, QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
 
-void ZXingDetector::setVideoSink(QVideoSink* video_sink)
-{
-    if (m_video_sink == video_sink) return;
-    if (m_video_sink) {
-        disconnect(m_video_sink, &QVideoSink::videoFrameChanged, this, &ZXingDetector::videoFrameChanged);
+    if (gray.isNull()) {
+        return image;
     }
-    m_video_sink = video_sink;
-    if (m_video_sink) {
-        connect(m_video_sink, &QVideoSink::videoFrameChanged, this, &ZXingDetector::videoFrameChanged);
-    }
-}
 
-void ZXingDetector::videoFrameChanged(const QVideoFrame& frame)
-{
-    if (!m_future.isFinished()) return;
+    const auto scaled = gray.scaled(target_size, Qt::KeepAspectRatio, Qt::FastTransformation);
+    const int x = (target_size.width() - scaled.width()) / 2;
+    const int y = (target_size.height() - scaled.height()) / 2;
 
-    auto current = m_results;
-
-    auto future = QtConcurrent::run([=, this] {
-        auto results = current;
-        auto image = frame.toImage().convertedTo(QImage::Format_Grayscale8);
-        ZXing::ReaderOptions options;
-        options.setFormats(ZXing::BarcodeFormat::QRCode);
-        options.setTryHarder(true);
-        options.setTryDownscale(true);
-
-        // increase age remove old results
-        for (auto i = results.begin(); i != results.end();) {
-            auto v = i->toMap();
-            auto age = v.value("age").toInt();
-            if (age > 5) {
-                i = results.erase(i);
-            } else {
-                v["age"] = age + 1;
-                *i = v;
-                i ++;
+    for (int py = 0; py < scaled.height(); ++py) {
+        for (int px = 0; px < scaled.width(); ++px) {
+            if (qGray(scaled.pixel(px, py)) < 128) {
+                image.setPixelColor(x + px, y + py, QColor(0, 0, 0, 255));
             }
         }
+    }
 
-        auto barcodes = ZXing::ReadBarcodes(ZXing::ImageView(image.bits(), image.width(), image.height(), ZXing::ImageFormat::Lum), options);
-        for (const auto barcode : barcodes) {
-            const auto text = QString::fromStdString(barcode.text());
-            QVariantList points;
-            for (const auto point : barcode.position()) {
-                points.append(QVariantMap{{ "x", point.x }, { "y", point.y }});
-            }
-            // search and remove from old results
-            for (auto i = results.begin(); i != results.end();) {
-                auto v = i->toMap();
-                if (v.value("text") == text) {
-                    results.erase(i);
-                    break;
-                } else {
-                    i ++;
-                }
-            }
-            results.append(QVariantMap{
-                { "age", 0 },
-                { "text", text },
-                { "points", points }
-            });
-        }
-        return results;
-    });
-
-    future.then(this, [=, this](QVariantList results) {
-        m_results = results;
-        emit resultsChanged();
-    });
-
-    m_future = future;
+    return image;
 }
 
 ZXingImageProvider::ZXingImageProvider()
@@ -107,21 +49,11 @@ QImage ZXingImageProvider::requestImage(const QString& id, QSize* size, const QS
         QImage image(*size, QImage::Format_ARGB32_Premultiplied);
         image.fill(0x0);
         return image;
-    } else {
-        ZXing::MultiFormatWriter writer(ZXing::BarcodeFormat::QRCode);
-        // writer.setEccLevel(7);
-        writer.setEncoding(ZXing::CharacterSet::UTF8);
-        // writer.setMargin(0);
-        const auto bitmatrix = writer.encode(contents.toStdString(), size->width(), size->height());
-
-        QImage image(*size, QImage::Format_ARGB32);
-        const QColor f(0, 0, 0, 255);
-        const QColor g(0, 0, 0, 0);
-        for (int x = 0; x < size->width(); x++) {
-            for (int y = 0; y < size->height(); y++) {
-                image.setPixelColor(QPoint(x, y), bitmatrix.get(x, y) ? f : g);
-            }
-        }
-        return image;
     }
+
+    const auto barcode = Barcode::fromText(contents, BarcodeFormat::QRCode);
+    const auto gray = barcode.toImage(ZXing::WriterOptions().scale(-size->width()));
+    return grayscaleToTransparentArgb(gray, *size);
 }
+
+#include "ZXing/moc_ZXingQt.cpp"

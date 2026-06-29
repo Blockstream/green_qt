@@ -43,7 +43,7 @@ set(APP_QT_LIBS
 )
 
 set(APP_CORE_LIBS
-    ZXing::Core
+    ZXing::ZXing
     Countly::SDK
     libserialport::libserialport
     hidapi::hidapi

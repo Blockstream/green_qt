@@ -8,6 +8,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
 import QtQuick.Window
+import ZXing
 
 Item {
     property Context context
@@ -18,6 +19,7 @@ Item {
     readonly property bool cameraAvailable: !self.permissionDenied && self.hasCamera
     readonly property bool waitingForCamera: self.cameraAvailable && permission.status === Qt.Granted && !camera.active
     readonly property bool showCameraWarning: !self.cameraAvailable && !self.waitingForPermission
+    property var barcodeOverlays: []
     signal codeScanned(string code)
     signal bcurScanned(var result)
     function start() {
@@ -94,41 +96,58 @@ Item {
         height: video_output.sourceRect.height
 
         Repeater {
-            model: detector.results
+            model: self.barcodeOverlays
             delegate: Shape {
                 ShapePath {
                     fillColor: Qt.alpha('#00BCFF', 0.25)
-                    startX: modelData.points[0].x
-                    startY: modelData.points[0].y
+                    startX: modelData[0].x
+                    startY: modelData[0].y
                     strokeColor: Qt.alpha('#00BCFF', 0.75)
                     strokeWidth: 10
                     joinStyle: ShapePath.RoundJoin
                     PathLine {
-                        x: modelData.points[1].x
-                        y: modelData.points[1].y
+                        x: modelData[1].x
+                        y: modelData[1].y
                     }
                     PathLine {
-                        x: modelData.points[2].x
-                        y: modelData.points[2].y
+                        x: modelData[2].x
+                        y: modelData[2].y
                     }
                     PathLine {
-                        x: modelData.points[3].x
-                        y: modelData.points[3].y
+                        x: modelData[3].x
+                        y: modelData[3].y
                     }
                     PathLine {
-                        x: modelData.points[0].x
-                        y: modelData.points[0].y
+                        x: modelData[0].x
+                        y: modelData[0].y
                     }
                 }
             }
         }
     }
-    ZXingDetector {
+
+    Timer {
+        id: overlay_timer
+        interval: 200
+        onTriggered: self.barcodeOverlays = []
+    }
+
+    BarcodeReader {
         id: detector
+        formats: [ZXing.QRCode]
+        tryHarder: true
+        tryDownscale: true
         videoSink: video_output.videoSink
-        onResultsChanged: {
-            for (const result of detector.results)
-                controller.process(result.text)
+        onFoundBarcodes: (barcodes) => {
+            self.barcodeOverlays = barcodes.map((barcode) => [
+                { x: barcode.position.topLeft.x, y: barcode.position.topLeft.y },
+                { x: barcode.position.topRight.x, y: barcode.position.topRight.y },
+                { x: barcode.position.bottomRight.x, y: barcode.position.bottomRight.y },
+                { x: barcode.position.bottomLeft.x, y: barcode.position.bottomLeft.y },
+            ])
+            for (const barcode of barcodes)
+                controller.process(barcode.text)
+            overlay_timer.restart()
         }
     }
     BCURController {

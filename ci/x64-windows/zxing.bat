@@ -1,13 +1,14 @@
 setlocal enabledelayedexpansion
 
 set ZXING_REPO=https://github.com/Blockstream/zxing-cpp
-set ZXING_COMMIT=1a5337abde0be7aef84907f5f1ca3ed09d34f713
+set ZXING_COMMIT=4103a03c62e350913e994920157d916b4cc9632a
 
 git clone %ZXING_REPO% zxing-cpp-src
 
 cd zxing-cpp-src
 git rev-parse HEAD
 git checkout %ZXING_COMMIT%
+git submodule update --init --recursive
 cd ..
 
 cmake -S zxing-cpp-src -B zxing-cpp-bld ^
@@ -17,7 +18,7 @@ cmake -S zxing-cpp-src -B zxing-cpp-bld ^
   -DZXING_C_API=OFF ^
   -DZXING_EXAMPLES=OFF ^
   -DZXING_DEPENDENCIES=LOCAL ^
-  -DZXING_USE_BUNDLED_ZINT=OFF
+  -DZXING_USE_BUNDLED_ZINT=ON
 
 cmake --build zxing-cpp-bld --config Release
 
