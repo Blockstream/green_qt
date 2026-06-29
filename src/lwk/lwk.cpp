@@ -279,16 +279,19 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_boltzsession_restorable_reverse_swaps() != 54384) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_boltzsession_restorable_submarine_btc_swaps() != 6672) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_boltzsession_restorable_submarine_swaps() != 29803) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_boltzsession_restore_invoice() != 56233) {
+    if (uniffi_lwk_checksum_method_boltzsession_restore_invoice() != 7779) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_boltzsession_restore_lockup() != 29841) {
+    if (uniffi_lwk_checksum_method_boltzsession_restore_lockup() != 34881) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_boltzsession_restore_prepare_pay() != 43475) {
+    if (uniffi_lwk_checksum_method_boltzsession_restore_prepare_pay() != 22654) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_boltzsession_set_next_index_to_use() != 46243) {
@@ -1150,6 +1153,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_bip_new_bip84() != 26707) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_bip_new_bip86() != 42046) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_bip_new_bip87() != 60988) {
@@ -2446,6 +2452,12 @@ std::shared_ptr<Bip> Bip::new_bip84() {
         nullptr)));
 }
 
+std::shared_ptr<Bip> Bip::new_bip86() {
+    return std::shared_ptr<Bip>(new Bip(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_bip_new_bip86,
+        nullptr)));
+}
+
 std::shared_ptr<Bip> Bip::new_bip87() {
     return std::shared_ptr<Bip>(new Bip(uniffi::rust_call(
         uniffi_lwk_fn_constructor_bip_new_bip87,
@@ -3098,6 +3110,13 @@ std::vector<std::string> BoltzSession::restorable_reverse_swaps(const std::share
         uniffi_lwk_fn_method_boltzsession_restorable_reverse_swaps,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterSwapList::lower(swap_list), uniffi::FfiConverterAddress::lower(claim_address)));
+}
+std::vector<std::string> BoltzSession::restorable_submarine_btc_swaps(const std::shared_ptr<SwapList> &swap_list, const std::shared_ptr<BitcoinAddress> &refund_address) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterSequenceString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_boltzsession_restorable_submarine_btc_swaps,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterSwapList::lower(swap_list), uniffi::FfiConverterBitcoinAddress::lower(refund_address)));
 }
 std::vector<std::string> BoltzSession::restorable_submarine_swaps(const std::shared_ptr<SwapList> &swap_list, const std::shared_ptr<Address> &refund_address) {
     auto ptr = this->_uniffi_internal_clone_pointer();

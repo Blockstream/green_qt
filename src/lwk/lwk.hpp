@@ -108,70 +108,159 @@ typedef std::string AssetId;
 
 
 namespace uniffi {
-    struct FfiConverterAddress;
+    struct FfiConverterForeignStoreLink;
 } // namespace uniffi
 
 /**
- * A Liquid address
+ * A bridge that connects a [`ForeignStore`] to [`lwk_common::Store`].
  */
-struct Address
+struct ForeignStoreLink
 
 
 
 {
-    friend uniffi::FfiConverterAddress;
+    friend uniffi::FfiConverterForeignStoreLink;
 
-    Address() = delete;
+    ForeignStoreLink() = delete;
 
-    Address(Address &&) = delete;
+    ForeignStoreLink(ForeignStoreLink &&) = delete;
 
-    Address &operator=(const Address &) = delete;
-    Address &operator=(Address &&) = delete;
+    ForeignStoreLink &operator=(const ForeignStoreLink &) = delete;
+    ForeignStoreLink &operator=(ForeignStoreLink &&) = delete;
 
-    ~Address();
+    ~ForeignStoreLink();
     /**
-     * Construct an Address object
+     * Create a new `ForeignStoreLink` from a foreign store implementation.
      */
-    static std::shared_ptr<Address> init(const std::string &s);
+    static std::shared_ptr<ForeignStoreLink> init(const std::shared_ptr<ForeignStore> &store);
+
+    private:
+    ForeignStoreLink(const ForeignStoreLink &);
+
+    ForeignStoreLink(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterAnyClient;
+} // namespace uniffi
+
+struct AnyClient
+
+
+
+{
+    friend uniffi::FfiConverterAnyClient;
+
+    AnyClient() = delete;
+
+    AnyClient(AnyClient &&) = delete;
+
+    AnyClient &operator=(const AnyClient &) = delete;
+    AnyClient &operator=(AnyClient &&) = delete;
+
+    ~AnyClient();
+    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
+    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+
+    private:
+    AnyClient(const AnyClient &);
+
+    AnyClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterNetwork;
+} // namespace uniffi
+
+/**
+ * The network of the elements blockchain.
+ */
+struct Network
+
+
+
+{
+    friend uniffi::FfiConverterNetwork;
+
+    Network() = delete;
+
+    Network(Network &&) = delete;
+
+    Network &operator=(const Network &) = delete;
+    Network &operator=(Network &&) = delete;
+
+    ~Network();
     /**
-     * Return true if the address is blinded.
+     * Return the mainnet network
      */
-    bool is_blinded();
+    static std::shared_ptr<Network> mainnet();
     /**
-     * Returns the network of the address
+     * Return the regtest network with the given policy asset
      */
-    std::shared_ptr<Network> network();
+    static std::shared_ptr<Network> regtest(const AssetId &policy_asset);
     /**
-     * Returns a string of the QR code printable in a terminal environment
+     * Return the default regtest network with the default policy asset
      */
-    std::string qr_code_text();
+    static std::shared_ptr<Network> regtest_default();
     /**
-     * Returns a string encoding an image in a uri
-     *
-     * The string can be open in the browser or be used as `src` field in `img` in HTML
-     *
-     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
-     * and use styling to scale up the image in the browser. eg
-     * `style="image-rendering: pixelated; border: 20px solid white;"`
+     * Return the testnet network
      */
-    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
+    static std::shared_ptr<Network> testnet();
     /**
-     * Return the script pubkey of the address.
+     * Return the default electrum client for this network
      */
-    std::shared_ptr<Script> script_pubkey();
+    std::shared_ptr<ElectrumClient> default_electrum_client();
     /**
-     * Return the unconfidential address.
+     * Return the default esplora client for this network
      */
-    std::shared_ptr<Address> to_unconfidential();
+    std::shared_ptr<EsploraClient> default_esplora_client();
+    /**
+     * Return the genesis block hash for this network as hex string.
+     */
+    std::string genesis_block_hash();
+    /**
+     * Return true if the network is the mainnet network
+     */
+    bool is_mainnet();
+    /**
+     * Return the policy asset (eg LBTC for mainnet) for this network
+     */
+    AssetId policy_asset();
+    /**
+     * Return a new `TxBuilder` for this network
+     */
+    std::shared_ptr<TxBuilder> tx_builder();
     /**
      * Returns a string representation of the object, internally calls Rust's `Display` trait.
      */
     std::string to_string() const;
+    /**
+     * Equality check, internally calls Rust's `Eq` trait.
+     */
+    bool eq(const std::shared_ptr<Network> &other) const;
+    /**
+     * Inequality check, internally calls Rust's `Ne` trait.
+     */
+    bool ne(const std::shared_ptr<Network> &other) const;
+    /**
+     * Returns a hash of the object, internally calls Rust's `Hash` trait.
+     */
+    uint64_t hash() const;
 
     private:
-    Address(const Address &);
+    Network(const Network &);
 
-    Address(void *);
+    Network(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -302,96 +391,6 @@ struct LoggingImpl
     void *instance = nullptr;
 };
 
-
-namespace uniffi {
-    struct FfiConverterNetwork;
-} // namespace uniffi
-
-/**
- * The network of the elements blockchain.
- */
-struct Network
-
-
-
-{
-    friend uniffi::FfiConverterNetwork;
-
-    Network() = delete;
-
-    Network(Network &&) = delete;
-
-    Network &operator=(const Network &) = delete;
-    Network &operator=(Network &&) = delete;
-
-    ~Network();
-    /**
-     * Return the mainnet network
-     */
-    static std::shared_ptr<Network> mainnet();
-    /**
-     * Return the regtest network with the given policy asset
-     */
-    static std::shared_ptr<Network> regtest(const AssetId &policy_asset);
-    /**
-     * Return the default regtest network with the default policy asset
-     */
-    static std::shared_ptr<Network> regtest_default();
-    /**
-     * Return the testnet network
-     */
-    static std::shared_ptr<Network> testnet();
-    /**
-     * Return the default electrum client for this network
-     */
-    std::shared_ptr<ElectrumClient> default_electrum_client();
-    /**
-     * Return the default esplora client for this network
-     */
-    std::shared_ptr<EsploraClient> default_esplora_client();
-    /**
-     * Return the genesis block hash for this network as hex string.
-     */
-    std::string genesis_block_hash();
-    /**
-     * Return true if the network is the mainnet network
-     */
-    bool is_mainnet();
-    /**
-     * Return the policy asset (eg LBTC for mainnet) for this network
-     */
-    AssetId policy_asset();
-    /**
-     * Return a new `TxBuilder` for this network
-     */
-    std::shared_ptr<TxBuilder> tx_builder();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-    /**
-     * Equality check, internally calls Rust's `Eq` trait.
-     */
-    bool eq(const std::shared_ptr<Network> &other) const;
-    /**
-     * Inequality check, internally calls Rust's `Ne` trait.
-     */
-    bool ne(const std::shared_ptr<Network> &other) const;
-    /**
-     * Returns a hash of the object, internally calls Rust's `Hash` trait.
-     */
-    uint64_t hash() const;
-
-    private:
-    Network(const Network &);
-
-    Network(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
 namespace uniffi {
 struct FfiConverterTokenProvider;
 } // namespace uniffi
@@ -468,31 +467,70 @@ private:
 
 
 namespace uniffi {
-    struct FfiConverterAnyClient;
+    struct FfiConverterAddress;
 } // namespace uniffi
 
-struct AnyClient
+/**
+ * A Liquid address
+ */
+struct Address
 
 
 
 {
-    friend uniffi::FfiConverterAnyClient;
+    friend uniffi::FfiConverterAddress;
 
-    AnyClient() = delete;
+    Address() = delete;
 
-    AnyClient(AnyClient &&) = delete;
+    Address(Address &&) = delete;
 
-    AnyClient &operator=(const AnyClient &) = delete;
-    AnyClient &operator=(AnyClient &&) = delete;
+    Address &operator=(const Address &) = delete;
+    Address &operator=(Address &&) = delete;
 
-    ~AnyClient();
-    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
-    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+    ~Address();
+    /**
+     * Construct an Address object
+     */
+    static std::shared_ptr<Address> init(const std::string &s);
+    /**
+     * Return true if the address is blinded.
+     */
+    bool is_blinded();
+    /**
+     * Returns the network of the address
+     */
+    std::shared_ptr<Network> network();
+    /**
+     * Returns a string of the QR code printable in a terminal environment
+     */
+    std::string qr_code_text();
+    /**
+     * Returns a string encoding an image in a uri
+     *
+     * The string can be open in the browser or be used as `src` field in `img` in HTML
+     *
+     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
+     * and use styling to scale up the image in the browser. eg
+     * `style="image-rendering: pixelated; border: 20px solid white;"`
+     */
+    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
+    /**
+     * Return the script pubkey of the address.
+     */
+    std::shared_ptr<Script> script_pubkey();
+    /**
+     * Return the unconfidential address.
+     */
+    std::shared_ptr<Address> to_unconfidential();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
 
     private:
-    AnyClient(const AnyClient &);
+    Address(const Address &);
 
-    AnyClient(void *);
+    Address(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -500,41 +538,22 @@ struct AnyClient
 };
 
 
-namespace uniffi {
-    struct FfiConverterForeignStoreLink;
-} // namespace uniffi
-
 /**
- * A bridge that connects a [`ForeignStore`] to [`lwk_common::Store`].
+ * Liquid BIP21 payment details
  */
-struct ForeignStoreLink
-
-
-
-{
-    friend uniffi::FfiConverterForeignStoreLink;
-
-    ForeignStoreLink() = delete;
-
-    ForeignStoreLink(ForeignStoreLink &&) = delete;
-
-    ForeignStoreLink &operator=(const ForeignStoreLink &) = delete;
-    ForeignStoreLink &operator=(ForeignStoreLink &&) = delete;
-
-    ~ForeignStoreLink();
+struct LiquidBip21 {
     /**
-     * Create a new `ForeignStoreLink` from a foreign store implementation.
+     * The Liquid address
      */
-    static std::shared_ptr<ForeignStoreLink> init(const std::shared_ptr<ForeignStore> &store);
-
-    private:
-    ForeignStoreLink(const ForeignStoreLink &);
-
-    ForeignStoreLink(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
+    std::shared_ptr<Address> address;
+    /**
+     * The asset identifier
+     */
+    AssetId asset;
+    /**
+     * The amount in satoshis
+     */
+    std::optional<uint64_t> satoshi;
 };
 
 
@@ -595,25 +614,6 @@ struct BoltzSessionBuilder {
      * providers.
      */
     std::shared_ptr<ForeignStoreLink> store = nullptr;
-};
-
-
-/**
- * Liquid BIP21 payment details
- */
-struct LiquidBip21 {
-    /**
-     * The Liquid address
-     */
-    std::shared_ptr<Address> address;
-    /**
-     * The asset identifier
-     */
-    AssetId asset;
-    /**
-     * The amount in satoshis
-     */
-    std::optional<uint64_t> satoshi;
 };
 
 
@@ -1142,6 +1142,10 @@ struct Bip
      * For P2WPKH wallets
      */
     static std::shared_ptr<Bip> new_bip84();
+    /**
+     * For P2TR wallets
+     */
+    static std::shared_ptr<Bip> new_bip86();
     /**
      * For multisig wallets
      */
@@ -1688,6 +1692,16 @@ struct BoltzSession
     /**
      * From the swaps returned by the boltz api via [`BoltzSession::swap_restore`]:
      *
+     * - filter the BTC submarine swaps
+     * - add information from the session
+     * - return typed data
+     *
+     * The refund address doesn't need to be the same used when creating the swap.
+     */
+    std::vector<std::string> restorable_submarine_btc_swaps(const std::shared_ptr<SwapList> &swap_list, const std::shared_ptr<BitcoinAddress> &refund_address);
+    /**
+     * From the swaps returned by the boltz api via [`BoltzSession::swap_restore`]:
+     *
      * - filter the submarine swaps
      * - add information from the session
      * - return typed data
@@ -1696,15 +1710,27 @@ struct BoltzSession
      */
     std::vector<std::string> restorable_submarine_swaps(const std::shared_ptr<SwapList> &swap_list, const std::shared_ptr<Address> &refund_address);
     /**
-     * Restore an invoice flow from its serialized data see `InvoiceResponse::serialize`
+     * Restore an invoice flow from its serialized data see `InvoiceResponse::serialize`.
+     *
+     * After restoring a non-terminal swap, call `InvoiceResponse::advance` promptly, preferably
+     * before restoring many other swaps on the same session, so websocket updates are consumed
+     * before the bounded broadcast buffer fills.
      */
     std::shared_ptr<InvoiceResponse> restore_invoice(const std::string &data);
     /**
-     * Restore an onchain swap from its serialized data see `LockupResponse::serialize`
+     * Restore an onchain swap from its serialized data see `LockupResponse::serialize`.
+     *
+     * After restoring a non-terminal swap, call `LockupResponse::advance` promptly, preferably
+     * before restoring many other swaps on the same session, so websocket updates are consumed
+     * before the bounded broadcast buffer fills.
      */
     std::shared_ptr<LockupResponse> restore_lockup(const std::string &data);
     /**
-     * Restore a payment from its serialized data see `PreparePayResponse::serialize`
+     * Restore a payment from its serialized data see `PreparePayResponse::serialize`.
+     *
+     * After restoring a non-terminal swap, call `PreparePayResponse::advance` promptly,
+     * preferably before restoring many other swaps on the same session, so websocket updates are
+     * consumed before the bounded broadcast buffer fills.
      */
     std::shared_ptr<PreparePayResponse> restore_prepare_pay(const std::string &data);
     /**
