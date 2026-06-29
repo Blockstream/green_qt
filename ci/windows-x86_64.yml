@@ -58,7 +58,7 @@ windows-x86_64:build:
     DOCKER_DRIVER: null
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
-    IMAGE: $CI_REGISTRY_IMAGE/x64-windows@sha256:9f17bef2e8b31b8366834e4548c815719ace8a9d71c35a5bb280080abbedad96
+    IMAGE: $CI_REGISTRY_IMAGE/x64-windows@sha256:38e022758442343e353489e52e67059cb4319a5a95c83f843132b4ca5d15c246
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker image inspect $IMAGE || docker pull $IMAGE
