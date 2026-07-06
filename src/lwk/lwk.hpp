@@ -86,6 +86,7 @@ struct ValidatedLiquidexProposal;
 struct ValueBlindingFactor;
 struct WalletTx;
 struct WalletTxOut;
+struct WaterfallsClient;
 struct WebHook;
 struct Wollet;
 struct WolletBuilder;
@@ -95,6 +96,7 @@ struct EsploraClientBuilder;
 struct LiquidBip21;
 struct LnUrlPayResponse;
 struct Quote;
+struct WaterfallsClientBuilder;
 enum class Chain;
 enum class DescriptorBlindingKey;
 enum class LogLevel;
@@ -105,77 +107,6 @@ enum class Singlesig;
 enum class SwapAsset;
 struct TokenProvider;
 typedef std::string AssetId;
-
-
-namespace uniffi {
-    struct FfiConverterForeignStoreLink;
-} // namespace uniffi
-
-/**
- * A bridge that connects a [`ForeignStore`] to [`lwk_common::Store`].
- */
-struct ForeignStoreLink
-
-
-
-{
-    friend uniffi::FfiConverterForeignStoreLink;
-
-    ForeignStoreLink() = delete;
-
-    ForeignStoreLink(ForeignStoreLink &&) = delete;
-
-    ForeignStoreLink &operator=(const ForeignStoreLink &) = delete;
-    ForeignStoreLink &operator=(ForeignStoreLink &&) = delete;
-
-    ~ForeignStoreLink();
-    /**
-     * Create a new `ForeignStoreLink` from a foreign store implementation.
-     */
-    static std::shared_ptr<ForeignStoreLink> init(const std::shared_ptr<ForeignStore> &store);
-
-    private:
-    ForeignStoreLink(const ForeignStoreLink &);
-
-    ForeignStoreLink(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
-    struct FfiConverterAnyClient;
-} // namespace uniffi
-
-struct AnyClient
-
-
-
-{
-    friend uniffi::FfiConverterAnyClient;
-
-    AnyClient() = delete;
-
-    AnyClient(AnyClient &&) = delete;
-
-    AnyClient &operator=(const AnyClient &) = delete;
-    AnyClient &operator=(AnyClient &&) = delete;
-
-    ~AnyClient();
-    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
-    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
-
-    private:
-    AnyClient(const AnyClient &);
-
-    AnyClient(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
 
 
 namespace uniffi {
@@ -268,60 +199,6 @@ struct Network
 };
 
 
-namespace uniffi {
-    struct FfiConverterMnemonic;
-} // namespace uniffi
-
-/**
- * Wrapper over [`bip39::Mnemonic`]
- */
-struct Mnemonic
-
-
-
-{
-    friend uniffi::FfiConverterMnemonic;
-
-    Mnemonic() = delete;
-
-    Mnemonic(Mnemonic &&) = delete;
-
-    Mnemonic &operator=(const Mnemonic &) = delete;
-    Mnemonic &operator=(Mnemonic &&) = delete;
-
-    ~Mnemonic();
-    /**
-     * Construct a Mnemonic type
-     */
-    static std::shared_ptr<Mnemonic> init(const std::string &s);
-    /**
-     * Creates a Mnemonic from entropy, at least 16 bytes are needed.
-     */
-    static std::shared_ptr<Mnemonic> from_entropy(const std::vector<uint8_t> &b);
-    /**
-     * Creates a random Mnemonic of given words (12,15,18,21,24)
-     */
-    static std::shared_ptr<Mnemonic> from_random(uint8_t word_count);
-    /**
-     * Get the number of words in this mnemonic
-     */
-    uint8_t word_count();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-
-    private:
-    Mnemonic(const Mnemonic &);
-
-    Mnemonic(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
 
 
 /**
@@ -385,6 +262,203 @@ struct LoggingImpl
     LoggingImpl(const LoggingImpl &);
 
     LoggingImpl(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterAddress;
+} // namespace uniffi
+
+/**
+ * A Liquid address
+ */
+struct Address
+
+
+
+{
+    friend uniffi::FfiConverterAddress;
+
+    Address() = delete;
+
+    Address(Address &&) = delete;
+
+    Address &operator=(const Address &) = delete;
+    Address &operator=(Address &&) = delete;
+
+    ~Address();
+    /**
+     * Construct an Address object
+     */
+    static std::shared_ptr<Address> init(const std::string &s);
+    /**
+     * Return true if the address is blinded.
+     */
+    bool is_blinded();
+    /**
+     * Returns the network of the address
+     */
+    std::shared_ptr<Network> network();
+    /**
+     * Returns a string of the QR code printable in a terminal environment
+     */
+    std::string qr_code_text();
+    /**
+     * Returns a string encoding an image in a uri
+     *
+     * The string can be open in the browser or be used as `src` field in `img` in HTML
+     *
+     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
+     * and use styling to scale up the image in the browser. eg
+     * `style="image-rendering: pixelated; border: 20px solid white;"`
+     */
+    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
+    /**
+     * Return the script pubkey of the address.
+     */
+    std::shared_ptr<Script> script_pubkey();
+    /**
+     * Return the unconfidential address.
+     */
+    std::shared_ptr<Address> to_unconfidential();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    Address(const Address &);
+
+    Address(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterMnemonic;
+} // namespace uniffi
+
+/**
+ * Wrapper over [`bip39::Mnemonic`]
+ */
+struct Mnemonic
+
+
+
+{
+    friend uniffi::FfiConverterMnemonic;
+
+    Mnemonic() = delete;
+
+    Mnemonic(Mnemonic &&) = delete;
+
+    Mnemonic &operator=(const Mnemonic &) = delete;
+    Mnemonic &operator=(Mnemonic &&) = delete;
+
+    ~Mnemonic();
+    /**
+     * Construct a Mnemonic type
+     */
+    static std::shared_ptr<Mnemonic> init(const std::string &s);
+    /**
+     * Creates a Mnemonic from entropy, at least 16 bytes are needed.
+     */
+    static std::shared_ptr<Mnemonic> from_entropy(const std::vector<uint8_t> &b);
+    /**
+     * Creates a random Mnemonic of given words (12,15,18,21,24)
+     */
+    static std::shared_ptr<Mnemonic> from_random(uint8_t word_count);
+    /**
+     * Get the number of words in this mnemonic
+     */
+    uint8_t word_count();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    Mnemonic(const Mnemonic &);
+
+    Mnemonic(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterForeignStoreLink;
+} // namespace uniffi
+
+/**
+ * A bridge that connects a [`ForeignStore`] to [`lwk_common::Store`].
+ */
+struct ForeignStoreLink
+
+
+
+{
+    friend uniffi::FfiConverterForeignStoreLink;
+
+    ForeignStoreLink() = delete;
+
+    ForeignStoreLink(ForeignStoreLink &&) = delete;
+
+    ForeignStoreLink &operator=(const ForeignStoreLink &) = delete;
+    ForeignStoreLink &operator=(ForeignStoreLink &&) = delete;
+
+    ~ForeignStoreLink();
+    /**
+     * Create a new `ForeignStoreLink` from a foreign store implementation.
+     */
+    static std::shared_ptr<ForeignStoreLink> init(const std::shared_ptr<ForeignStore> &store);
+
+    private:
+    ForeignStoreLink(const ForeignStoreLink &);
+
+    ForeignStoreLink(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterAnyClient;
+} // namespace uniffi
+
+struct AnyClient
+
+
+
+{
+    friend uniffi::FfiConverterAnyClient;
+
+    AnyClient() = delete;
+
+    AnyClient(AnyClient &&) = delete;
+
+    AnyClient &operator=(const AnyClient &) = delete;
+    AnyClient &operator=(AnyClient &&) = delete;
+
+    ~AnyClient();
+    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
+    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+
+    private:
+    AnyClient(const AnyClient &);
+
+    AnyClient(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -466,104 +540,12 @@ private:
 };
 
 
-namespace uniffi {
-    struct FfiConverterAddress;
-} // namespace uniffi
-
 /**
- * A Liquid address
+ * A builder for the `WaterfallsClient`
  */
-struct Address
-
-
-
-{
-    friend uniffi::FfiConverterAddress;
-
-    Address() = delete;
-
-    Address(Address &&) = delete;
-
-    Address &operator=(const Address &) = delete;
-    Address &operator=(Address &&) = delete;
-
-    ~Address();
-    /**
-     * Construct an Address object
-     */
-    static std::shared_ptr<Address> init(const std::string &s);
-    /**
-     * Return true if the address is blinded.
-     */
-    bool is_blinded();
-    /**
-     * Returns the network of the address
-     */
-    std::shared_ptr<Network> network();
-    /**
-     * Returns a string of the QR code printable in a terminal environment
-     */
-    std::string qr_code_text();
-    /**
-     * Returns a string encoding an image in a uri
-     *
-     * The string can be open in the browser or be used as `src` field in `img` in HTML
-     *
-     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
-     * and use styling to scale up the image in the browser. eg
-     * `style="image-rendering: pixelated; border: 20px solid white;"`
-     */
-    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
-    /**
-     * Return the script pubkey of the address.
-     */
-    std::shared_ptr<Script> script_pubkey();
-    /**
-     * Return the unconfidential address.
-     */
-    std::shared_ptr<Address> to_unconfidential();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-
-    private:
-    Address(const Address &);
-
-    Address(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-/**
- * Liquid BIP21 payment details
- */
-struct LiquidBip21 {
-    /**
-     * The Liquid address
-     */
-    std::shared_ptr<Address> address;
-    /**
-     * The asset identifier
-     */
-    AssetId asset;
-    /**
-     * The amount in satoshis
-     */
-    std::optional<uint64_t> satoshi;
-};
-
-
-/**
- * A builder for the `EsploraClient`
- */
-struct EsploraClientBuilder {
+struct WaterfallsClientBuilder {
     std::string base_url;
     std::shared_ptr<Network> network;
-    bool waterfalls = false;
     std::optional<uint32_t> concurrency = std::nullopt;
     std::optional<uint8_t> timeout = std::nullopt;
     bool utxo_only = false;
@@ -572,7 +554,7 @@ struct EsploraClientBuilder {
      */
     std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
     /**
-     * Token provider for authenticated Esplora and Waterfalls backends
+     * Token provider for authenticated Waterfalls backends
      */
     std::optional<TokenProvider> token_provider = std::nullopt;
 };
@@ -614,6 +596,46 @@ struct BoltzSessionBuilder {
      * providers.
      */
     std::shared_ptr<ForeignStoreLink> store = nullptr;
+};
+
+
+/**
+ * A builder for the `EsploraClient`
+ */
+struct EsploraClientBuilder {
+    std::string base_url;
+    std::shared_ptr<Network> network;
+    bool waterfalls = false;
+    std::optional<uint32_t> concurrency = std::nullopt;
+    std::optional<uint8_t> timeout = std::nullopt;
+    bool utxo_only = false;
+    /**
+     * HTTP headers to set on each request, for example to authenticate with a backend
+     */
+    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    /**
+     * Token provider for authenticated Esplora and Waterfalls backends
+     */
+    std::optional<TokenProvider> token_provider = std::nullopt;
+};
+
+
+/**
+ * Liquid BIP21 payment details
+ */
+struct LiquidBip21 {
+    /**
+     * The Liquid address
+     */
+    std::shared_ptr<Address> address;
+    /**
+     * The asset identifier
+     */
+    AssetId asset;
+    /**
+     * The amount in satoshis
+     */
+    std::optional<uint64_t> satoshi;
 };
 
 
@@ -4619,6 +4641,65 @@ struct WalletTxOut
 
 
 namespace uniffi {
+    struct FfiConverterWaterfallsClient;
+} // namespace uniffi
+
+/**
+ * A blockchain backend implementation based on the
+ * [Waterfalls HTTP API](https://github.com/RCasatta/waterfalls).
+ */
+struct WaterfallsClient
+
+
+
+{
+    friend uniffi::FfiConverterWaterfallsClient;
+
+    WaterfallsClient() = delete;
+
+    WaterfallsClient(WaterfallsClient &&) = delete;
+
+    WaterfallsClient &operator=(const WaterfallsClient &) = delete;
+    WaterfallsClient &operator=(WaterfallsClient &&) = delete;
+
+    ~WaterfallsClient();
+    /**
+     * Construct a Waterfalls Client
+     */
+    static std::shared_ptr<WaterfallsClient> init(const std::string &url, const std::shared_ptr<Network> &network);
+    /**
+     * Construct a Waterfalls Client from a `WaterfallsClientBuilder`
+     */
+    static std::shared_ptr<WaterfallsClient> from_builder(const WaterfallsClientBuilder &builder);
+    /**
+     * Broadcast a transaction to the network so that a miner can include it in a block.
+     */
+    std::shared_ptr<Txid> broadcast(const std::shared_ptr<Transaction> &tx);
+    /**
+     * Scan the blockchain for the scripts generated by a watch-only wallet
+     */
+    std::shared_ptr<Update> full_scan(const std::shared_ptr<Wollet> &wollet);
+    /**
+     * Scan the blockchain for the scripts generated by a watch-only wallet up to a specified derivation index
+     */
+    std::shared_ptr<Update> full_scan_to_index(const std::shared_ptr<Wollet> &wollet, uint32_t index);
+    /**
+     * See [`BlockchainBackend::tip`]
+     */
+    std::shared_ptr<BlockHeader> tip();
+
+    private:
+    WaterfallsClient(const WaterfallsClient &);
+
+    WaterfallsClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
     struct FfiConverterWebHook;
 } // namespace uniffi
 
@@ -6117,6 +6198,16 @@ private:
 };
 
 
+struct FfiConverterWaterfallsClient {
+    static std::shared_ptr<WaterfallsClient> lift(void *);
+    static void *lower(const std::shared_ptr<WaterfallsClient> &);
+    static std::shared_ptr<WaterfallsClient> read(RustStream &);
+    static void write(RustStream &, const std::shared_ptr<WaterfallsClient> &);
+    static uint64_t allocation_size(const std::shared_ptr<WaterfallsClient> &);
+private:
+};
+
+
 struct FfiConverterWebHook {
     static std::shared_ptr<WebHook> lift(void *);
     static void *lower(const std::shared_ptr<WebHook> &);
@@ -6194,6 +6285,14 @@ struct FfiConverterTypeQuote {
     static Quote read(RustStream &);
     static void write(RustStream &, const Quote &);
     static uint64_t allocation_size(const Quote &);
+};
+
+struct FfiConverterTypeWaterfallsClientBuilder {
+    static WaterfallsClientBuilder lift(RustBuffer);
+    static RustBuffer lower(const WaterfallsClientBuilder &);
+    static WaterfallsClientBuilder read(RustStream &);
+    static void write(RustStream &, const WaterfallsClientBuilder &);
+    static uint64_t allocation_size(const WaterfallsClientBuilder &);
 };
 struct FfiConverterChain {
     static Chain lift(RustBuffer);

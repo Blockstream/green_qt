@@ -1026,6 +1026,18 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_wallettxout_wildcard_index() != 44054) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_waterfallsclient_broadcast() != 7154) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_waterfallsclient_full_scan() != 7888) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_waterfallsclient_full_scan_to_index() != 12641) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_waterfallsclient_tip() != 38774) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_wollet_add_details() != 42615) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -1336,6 +1348,12 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_valueblindingfactor_zero() != 49915) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_waterfallsclient_from_builder() != 2573) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_waterfallsclient_new() != 26053) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_webhook_new() != 14880) {
@@ -6981,6 +6999,79 @@ void *WalletTxOut::_uniffi_internal_clone_pointer() const {
 
 
 
+WaterfallsClient::WaterfallsClient(void *ptr): instance(ptr) {}
+
+WaterfallsClient::WaterfallsClient(const WaterfallsClient &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+std::shared_ptr<WaterfallsClient> WaterfallsClient::init(const std::string &url, const std::shared_ptr<Network> &network) {
+    return std::shared_ptr<WaterfallsClient>(
+        new WaterfallsClient(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_waterfallsclient_new,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(url), uniffi::FfiConverterNetwork::lower(network)))
+    );
+}
+
+std::shared_ptr<WaterfallsClient> WaterfallsClient::from_builder(const WaterfallsClientBuilder &builder) {
+    return std::shared_ptr<WaterfallsClient>(new WaterfallsClient(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_waterfallsclient_from_builder,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterTypeWaterfallsClientBuilder::lower(builder))));
+}
+
+std::shared_ptr<Txid> WaterfallsClient::broadcast(const std::shared_ptr<Transaction> &tx) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterTxid::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsclient_broadcast,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterTransaction::lower(tx)));
+}
+std::shared_ptr<Update> WaterfallsClient::full_scan(const std::shared_ptr<Wollet> &wollet) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalUpdate::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsclient_full_scan,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterWollet::lower(wollet)));
+}
+std::shared_ptr<Update> WaterfallsClient::full_scan_to_index(const std::shared_ptr<Wollet> &wollet, uint32_t index) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalUpdate::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsclient_full_scan_to_index,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterWollet::lower(wollet), uniffi::FfiConverterUInt32::lower(index)));
+}
+std::shared_ptr<BlockHeader> WaterfallsClient::tip() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBlockHeader::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsclient_tip,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+
+WaterfallsClient::~WaterfallsClient() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_waterfallsclient,
+        nullptr,
+        this->instance
+    );
+}
+
+void *WaterfallsClient::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_waterfallsclient,
+        nullptr,
+        this->instance
+    );
+}
+
+
+
+
 WebHook::WebHook(void *ptr): instance(ptr) {}
 
 WebHook::WebHook(const WebHook &other) : instance(nullptr) {
@@ -7349,6 +7440,7 @@ std::string WolletDescriptor::to_string() const {
         nullptr,
         this->_uniffi_internal_clone_pointer()));
 }
+
 
 
 
@@ -9079,6 +9171,31 @@ uint64_t FfiConverterWalletTxOut::allocation_size(const std::shared_ptr<WalletTx
 
 
 
+std::shared_ptr<WaterfallsClient> FfiConverterWaterfallsClient::lift(void *ptr) {
+    return std::shared_ptr<WaterfallsClient>(new WaterfallsClient(ptr));
+}
+
+void *FfiConverterWaterfallsClient::lower(const std::shared_ptr<WaterfallsClient> &obj) {
+    return reinterpret_cast<WaterfallsClient*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<WaterfallsClient> FfiConverterWaterfallsClient::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterWaterfallsClient::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterWaterfallsClient::write(RustStream &stream, const std::shared_ptr<WaterfallsClient> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterWaterfallsClient::lower(obj));
+}
+
+uint64_t FfiConverterWaterfallsClient::allocation_size(const std::shared_ptr<WaterfallsClient> &) {
+    return 8;
+}
+
+
+
 std::shared_ptr<WebHook> FfiConverterWebHook::lift(void *ptr) {
     return std::shared_ptr<WebHook>(new WebHook(ptr));
 }
@@ -9444,6 +9561,60 @@ uint64_t FfiConverterTypeQuote::allocation_size(const Quote &val) {
         FfiConverterUInt64::allocation_size(val.boltz_fee) +
         FfiConverterUInt64::allocation_size(val.min) +
         FfiConverterUInt64::allocation_size(val.max);
+    
+}
+
+
+WaterfallsClientBuilder FfiConverterTypeWaterfallsClientBuilder::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterTypeWaterfallsClientBuilder::read(stream);
+
+    rustbuffer_free(buf);
+
+    return std::move(ret);
+}
+
+RustBuffer FfiConverterTypeWaterfallsClientBuilder::lower(const WaterfallsClientBuilder &val) {
+    auto buf = rustbuffer_alloc(allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterTypeWaterfallsClientBuilder::write(stream, val);
+
+    return std::move(buf);
+}
+
+WaterfallsClientBuilder FfiConverterTypeWaterfallsClientBuilder::read(RustStream &stream) {
+    return {
+        FfiConverterString::read(stream),
+        FfiConverterNetwork::read(stream),
+        FfiConverterOptionalUInt32::read(stream),
+        FfiConverterOptionalUInt8::read(stream),
+        FfiConverterBool::read(stream),
+        FfiConverterOptionalMapStringString::read(stream),
+        FfiConverterOptionalTokenProvider::read(stream)
+    };
+}
+
+void FfiConverterTypeWaterfallsClientBuilder::write(RustStream &stream, const WaterfallsClientBuilder &val) {
+    FfiConverterString::write(stream, val.base_url);
+    FfiConverterNetwork::write(stream, val.network);
+    FfiConverterOptionalUInt32::write(stream, val.concurrency);
+    FfiConverterOptionalUInt8::write(stream, val.timeout);
+    FfiConverterBool::write(stream, val.utxo_only);
+    FfiConverterOptionalMapStringString::write(stream, val.headers);
+    FfiConverterOptionalTokenProvider::write(stream, val.token_provider);
+}
+
+uint64_t FfiConverterTypeWaterfallsClientBuilder::allocation_size(const WaterfallsClientBuilder &val) {
+    
+    return 
+        FfiConverterString::allocation_size(val.base_url) +
+        FfiConverterNetwork::allocation_size(val.network) +
+        FfiConverterOptionalUInt32::allocation_size(val.concurrency) +
+        FfiConverterOptionalUInt8::allocation_size(val.timeout) +
+        FfiConverterBool::allocation_size(val.utxo_only) +
+        FfiConverterOptionalMapStringString::allocation_size(val.headers) +
+        FfiConverterOptionalTokenProvider::allocation_size(val.token_provider);
     
 }
 

@@ -2,7 +2,7 @@
 set -eox pipefail
 
 REPO=https://github.com/Blockstream/lwk
-COMMIT=82c987ceb1778b792d8eaf5e78fcc3dc7c93c4b6
+COMMIT=46e8a5b3d6708e011d43c46fec9c9215588b5db6
 
 mkdir -p build && cd build
 
