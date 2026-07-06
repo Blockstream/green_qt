@@ -10,7 +10,10 @@
 #include <QSysInfo>
 #include <QTcpSocket>
 #include <QThread>
+#include <QTimer>
 #include <QUuid>
+
+#include <algorithm>
 
 #include <map>
 #include <memory>
@@ -111,8 +114,8 @@ void Analytics::start()
         switch (level) {
         case cly::LogLevel::INFO:    qInfo() << qPrintable(QString::fromStdString(message)); break;
         case cly::LogLevel::WARNING: qWarning() << qPrintable(QString::fromStdString(message)); break;
-        case cly::LogLevel::ERROR:   qFatal("%s\n", message.c_str()); break;
-        case cly::LogLevel::FATAL:   qFatal("%s\n", message.c_str()); break;
+        case cly::LogLevel::ERROR:   qWarning() << "[Countly]" << QString::fromStdString(message); break;
+        case cly::LogLevel::FATAL:   qWarning() << "[Countly]" << QString::fromStdString(message); break;
         case cly::LogLevel::DEBUG:   break;
         default: break;
         }
@@ -126,15 +129,7 @@ void Analytics::start()
 
     countly.setRemoteConfigCallback([=, this](bool success) {
         QMetaObject::invokeMethod(this, [=, this] {
-            if (success) {
-                emit remoteConfigChanged();
-            }
-            const bool is_production = QStringLiteral("Production") == GREEN_ENV;
-            // update remote config after 60s
-            // unless last updated failed or it is not a production build
-            QTimer::singleShot(is_production && success ? 60000 : 5000, this, [=, this] {
-                cly::Countly::getInstance().updateRemoteConfig();
-            });
+            handleRemoteConfigUpdate(success);
         });
     });
 
@@ -230,6 +225,48 @@ void Analytics::start()
 void Analytics::stop()
 {
     d->stop(Qt::BlockingQueuedConnection);
+}
+
+void Analytics::handleRemoteConfigUpdate(bool success)
+{
+    if (success) {
+        emit remoteConfigChanged();
+        m_remote_config_retry_ms = 5000;
+        if (m_remote_config_notification) {
+            m_remote_config_notification->deleteLater();
+            m_remote_config_notification = nullptr;
+            emit remoteConfigNotificationChanged();
+        }
+        const bool is_production = QStringLiteral("Production") == GREEN_ENV;
+        QTimer::singleShot(is_production ? 60000 : 5000, this, [=, this] {
+            cly::Countly::getInstance().updateRemoteConfig();
+        });
+        return;
+    }
+
+    if (!d->session || !d->session->isConnected()) {
+        QTimer::singleShot(1000, this, [=, this] {
+            cly::Countly::getInstance().updateRemoteConfig();
+        });
+        return;
+    }
+
+    qWarning() << "analytics: remote config unavailable";
+    if (!m_remote_config_notification) {
+        m_remote_config_notification = new RemoteConfigUnavailableNotification(this);
+        emit remoteConfigNotificationChanged();
+    }
+    const int delay = m_remote_config_retry_ms;
+    m_remote_config_retry_ms = std::min(m_remote_config_retry_ms * 2, 300000);
+    QTimer::singleShot(delay, this, [=, this] {
+        cly::Countly::getInstance().updateRemoteConfig();
+    });
+}
+
+RemoteConfigUnavailableNotification::RemoteConfigUnavailableNotification(Analytics* analytics)
+    : Notification(analytics)
+{
+    setDismissable(true);
 }
 
 QString Analytics::getRemoteConfigString(const QString& key) const

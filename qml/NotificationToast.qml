@@ -32,6 +32,8 @@ ColumnLayout {
                 delegate = analytics_alert_toast
             } else if (notification instanceof BackupNotification) {
                 delegate = backup_toast
+            } else if (notification instanceof RemoteConfigUnavailableNotification) {
+                delegate = remote_config_toast
             }
             if (delegate) {
                 items.push({ delegate, notification })
@@ -87,6 +89,12 @@ ColumnLayout {
     Component {
         id: outage_toast
         OutageToast {
+        }
+    }
+
+    Component {
+        id: remote_config_toast
+        RemoteConfigToast {
         }
     }
 
@@ -440,6 +448,44 @@ ColumnLayout {
                             toast.notification.trigger()
                         }
                     }
+                }
+            }
+
+            CloseButton {
+                Layout.alignment: Qt.AlignTop
+                onClicked: toast.slideOutAndDismiss()
+            }
+        }
+    }
+
+    component RemoteConfigToast: Toast {
+        id: toast
+        borderColor: '#9A0000'
+        backgroundColor: '#4D0000'
+        textColor: '#FFFFFF'
+
+        contentItem: RowLayout {
+            spacing: 8
+            Layout.alignment: Qt.AlignCenter
+            Image {
+                Layout.alignment: Qt.AlignTop
+                Layout.preferredWidth: 24
+                Layout.preferredHeight: 24
+                source: 'qrc:/svg2/plugs_white'
+            }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 6
+
+                Label {
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    color: toast.textColor
+                    font.pixelSize: 13
+                    font.weight: 700
+                    text: 'Some online features are unavailable. Your wallets work offline.'
+                    wrapMode: Label.WordWrap
                 }
             }
 

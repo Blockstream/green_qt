@@ -9,10 +9,22 @@
 
 #include "notification.h"
 
+class Analytics;
 class AnalyticsPrivate;
+
+class RemoteConfigUnavailableNotification : public Notification
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    explicit RemoteConfigUnavailableNotification(Analytics* analytics);
+};
+
 class Analytics : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(RemoteConfigUnavailableNotification* remoteConfigNotification READ remoteConfigNotification NOTIFY remoteConfigNotificationChanged)
 public:
     explicit Analytics();
     ~Analytics();
@@ -25,14 +37,19 @@ public:
     QString getRemoteConfigString(const QString& key) const;
     QJsonValue getRemoteConfigValue(const QString& key) const;
     QString countlyId() const;
+    RemoteConfigUnavailableNotification* remoteConfigNotification() const { return m_remote_config_notification; }
 signals:
     void remoteConfigChanged();
+    void remoteConfigNotificationChanged();
 public slots:
     void recordEvent(const QString& name);
     void recordEvent(const QString& name, const QVariantMap& segmentation);
 private:
+    void handleRemoteConfigUpdate(bool success);
     AnalyticsPrivate* const d;
     friend class AnalyticsPrivate;
+    int m_remote_config_retry_ms{5000};
+    RemoteConfigUnavailableNotification* m_remote_config_notification{nullptr};
 };
 
 class AnalyticsView : public QObject

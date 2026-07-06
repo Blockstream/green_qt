@@ -216,7 +216,7 @@ MainPage {
             anchors.rightMargin: 20
             anchors.bottomMargin: 20
             width: Math.min(400, parent.width * 0.4)
-            notifications: UtilJS.flatten(stack_layout.currentItem?.notifications, update_controller.notification).filter(notification => !notification.dismissed)
+            notifications: UtilJS.flatten(stack_layout.currentItem?.notifications, update_controller.notification, Analytics.remoteConfigNotification).filter(notification => !notification.dismissed)
         }
 
         footer: ColumnLayout {
