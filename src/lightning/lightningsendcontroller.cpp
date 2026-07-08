@@ -4,6 +4,7 @@
 #include "asset.h"
 #include "context.h"
 #include "lightningsession.h"
+#include "lightningutil.h"
 #include "network.h"
 #include "wallet.h"
 
@@ -46,8 +47,8 @@ QJsonObject PaymentStatusObject(const LightningSendResponse& result)
         { QStringLiteral("status"), status },
         { QStringLiteral("payment_hash"), result.payment_hash },
         { QStringLiteral("preimage"), result.preimage },
-        { QStringLiteral("amount"), static_cast<qint64>(result.amount) },
-        { QStringLiteral("amount_sent"), static_cast<qint64>(result.amount_sent) },
+        { QStringLiteral("amount"), static_cast<qint64>(LightningMsatToDisplaySatoshi(result.amount_msat)) },
+        { QStringLiteral("amount_sent"), static_cast<qint64>(LightningMsatToDisplaySatoshi(result.amount_sent_msat)) },
         { QStringLiteral("parts"), static_cast<qint64>(result.parts) },
     };
 }
@@ -113,12 +114,13 @@ void LightningSendController::setEnteredSatoshi(const QString& entered_satoshi)
 
 bool LightningSendController::amountless() const
 {
-    return m_parsed_invoice && !m_parsed_invoice->amount.has_value();
+    return m_parsed_invoice && !m_parsed_invoice->amount_msat.has_value();
 }
 
 QVariant LightningSendController::invoiceAmount() const
 {
-    return m_parsed_invoice && m_parsed_invoice->amount ? QVariant::fromValue(*m_parsed_invoice->amount) : QVariant();
+    const auto amount = m_parsed_invoice ? LightningMsatToDisplaySatoshi(m_parsed_invoice->amount_msat) : std::nullopt;
+    return amount ? QVariant::fromValue(*amount) : QVariant();
 }
 
 QString LightningSendController::error() const
@@ -191,11 +193,13 @@ void LightningSendController::pay()
         return;
     }
 
-    const auto payment_amount = amount();
+    const auto payment_amount_msat = m_parsed_invoice && m_parsed_invoice->amount_msat
+        ? m_parsed_invoice->amount_msat
+        : LightningSatoshiToMsat(amount());
     setError({});
     setBusy(true);
 
-    auto future = lightning_session->sendPayment(m_invoice, payment_amount);
+    auto future = lightning_session->sendPayment(m_invoice, payment_amount_msat);
     future.then(this, [=, this](LightningValueResult<LightningSendResponse> result) {
         if (!result) {
             qWarning() << Q_FUNC_INFO << "Failed to send payment: '" << result.error << "'";
@@ -229,7 +233,7 @@ void LightningSendController::refresh()
 
 std::optional<quint64> LightningSendController::amount() const
 {
-    if (m_parsed_invoice && m_parsed_invoice->amount) return m_parsed_invoice->amount;
+    if (m_parsed_invoice && m_parsed_invoice->amount_msat) return LightningMsatToDisplaySatoshi(m_parsed_invoice->amount_msat);
 
     bool ok = false;
     const auto value = m_entered_satoshi.toULongLong(&ok);

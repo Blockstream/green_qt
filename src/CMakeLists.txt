@@ -137,6 +137,7 @@ target_sources(${APP_TARGET} PRIVATE
     lightning/lightningsendcontroller.h lightning/lightningsendcontroller.cpp
     lightning/lightningsession.cpp lightning/lightningsession.h
     lightning/lightningtask.h lightning/lightningtask.cpp
+    lightning/lightningutil.h
 )
 
 target_sources(${APP_TARGET} PRIVATE

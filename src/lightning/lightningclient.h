@@ -51,7 +51,7 @@ struct LightningParsedInvoice {
     std::optional<QString> payee_pubkey;
     QString payment_hash;
     std::optional<QString> description;
-    std::optional<quint64> amount;
+    std::optional<quint64> amount_msat;
     quint64 expiry{0};
     quint64 timestamp{0};
 };
@@ -60,8 +60,8 @@ struct LightningPayment {
     QString id;
     LightningPaymentType payment_type{LightningPaymentType::Unknown};
     quint64 payment_time{0};
-    quint64 amount{0};
-    quint64 fee{0};
+    quint64 amount_msat{0};
+    quint64 fee_msat{0};
     std::optional<QString> description;
     std::optional<QString> bolt11;
     std::optional<QString> preimage;
@@ -73,14 +73,14 @@ struct LightningSendResponse {
     QString preimage;
     QString payment_hash;
     std::optional<QString> destination_pubkey;
-    quint64 amount{0};
-    quint64 amount_sent{0};
+    quint64 amount_msat{0};
+    quint64 amount_sent_msat{0};
     quint32 parts{0};
 };
 
 struct LightningReceiveResponse {
     QString bolt11;
-    quint64 opening_fee{0};
+    quint64 opening_fee_msat{0};
 };
 
 struct LightningOnchainReceiveResponse {
@@ -97,11 +97,11 @@ struct LightningOnchainSendResponse {
 struct LightningNodeInfo {
     QString id;
     quint32 block_height{0};
-    quint64 channel_balance{0};
-    quint64 onchain_balance{0};
-    quint64 inbound_liquidity{0};
-    quint64 max_payable{0};
-    quint64 max_receivable{0};
+    quint64 channel_balance_msat{0};
+    quint64 onchain_balance_msat{0};
+    quint64 inbound_liquidity_msat{0};
+    quint64 max_payable_msat{0};
+    quint64 max_receivable_msat{0};
 };
 
 // Stateless Lightning client facade.
@@ -117,14 +117,14 @@ public:
     LightningValueResult<LightningNodeInfo> refreshNodeInfo(const std::shared_ptr<glsdk::Node>& node);
     LightningValueResult<std::vector<LightningPayment>> listPayments(const std::shared_ptr<glsdk::Node>& node) const;
     LightningValueResult<LightningParsedInvoice> parseInvoice(const QString& input) const;
-    LightningValueResult<LightningReceiveResponse> createInvoice(const std::shared_ptr<glsdk::Node>& node, quint64 satoshi, const QString& description);
-    LightningValueResult<LightningSendResponse> sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& satoshi);
+    LightningValueResult<LightningReceiveResponse> createInvoice(const std::shared_ptr<glsdk::Node>& node, quint64 amount_msat, const QString& description);
+    LightningValueResult<LightningSendResponse> sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& amount_msat);
 
     LightningValueResult<LightningOnchainReceiveResponse> onchainReceive(const std::shared_ptr<glsdk::Node>& node);
     LightningValueResult<LightningOnchainSendResponse> redeemAllOnchainFunds(const std::shared_ptr<glsdk::Node>& node, const QString& destination);
 
 private:
-    LightningOperationResult checkInvoice(const LightningParsedInvoice& invoice, const std::optional<quint64>& amount_satoshi) const;
+    LightningOperationResult checkInvoice(const LightningParsedInvoice& invoice, const std::optional<quint64>& payment_amount_msat) const;
 };
 
 #endif // BLOCKSTREAM_LIGHTNING_CLIENT_H

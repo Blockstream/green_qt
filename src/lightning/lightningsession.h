@@ -52,7 +52,7 @@ public:
     QJsonObject nodeInfo() const { return m_node_info; }
     QFuture<QString> connectNode(const QString& mnemonic);
     QFuture<LightningCreateInvoiceResult> createInvoice(quint64 satoshi, const QString& description) const;
-    QFuture<LightningValueResult<LightningSendResponse>> sendPayment(const QString& invoice, std::optional<quint64> satoshi);
+    QFuture<LightningValueResult<LightningSendResponse>> sendPayment(const QString& invoice, std::optional<quint64> amount_msat);
     LightningValueResult<LightningParsedInvoice> parseInvoice(const QString& input) const;
     void disconnectNode();
     void refreshNodeInfo();

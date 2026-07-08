@@ -1,5 +1,6 @@
 #include "glsdk.hpp"
 #include "lightningsession.h"
+#include "lightningutil.h"
 
 #include <QDebug>
 #include <QFuture>
@@ -20,11 +21,11 @@ QJsonObject ToJsonObject(const LightningNodeInfo& node_info)
     return {
         { "id", node_info.id },
         { "block_height", static_cast<qint64>(node_info.block_height) },
-        { "channel_balance", static_cast<qint64>(node_info.channel_balance) },
-        { "onchain_balance", static_cast<qint64>(node_info.onchain_balance) },
-        { "inbound_liquidity", static_cast<qint64>(node_info.inbound_liquidity) },
-        { "max_payable", static_cast<qint64>(node_info.max_payable) },
-        { "max_receivable", static_cast<qint64>(node_info.max_receivable) },
+        { "channel_balance", static_cast<qint64>(LightningMsatToSatoshi(node_info.channel_balance_msat)) },
+        { "onchain_balance", static_cast<qint64>(LightningMsatToSatoshi(node_info.onchain_balance_msat)) },
+        { "inbound_liquidity", static_cast<qint64>(LightningMsatToSatoshi(node_info.inbound_liquidity_msat)) },
+        { "max_payable", static_cast<qint64>(LightningMsatToSatoshi(node_info.max_payable_msat)) },
+        { "max_receivable", static_cast<qint64>(LightningMsatToSatoshi(node_info.max_receivable_msat)) },
     };
 }
 
@@ -98,7 +99,7 @@ public:
         if (std::holds_alternative<glsdk::NodeEvent::kInvoicePaid>(variant)) {
             const auto details = std::get<glsdk::NodeEvent::kInvoicePaid>(variant).details;
             const auto bolt11_invoice = QString::fromStdString(details.bolt11);
-            const auto amount_satoshi = details.amount_msat / 1000ULL;
+            const auto amount_satoshi = LightningMsatToSatoshi(details.amount_msat);
 
             QMetaObject::invokeMethod(session.data(), [session, bolt11_invoice, amount_satoshi] {
                 if (!session) return;
@@ -250,14 +251,14 @@ QFuture<LightningCreateInvoiceResult> LightningSession::createInvoice(const quin
         LightningCreateInvoiceResult result;
         QMutexLocker locker(mutex.get());
 
-        const auto invoice = client->createInvoice(node, satoshi, description);
+        const auto invoice = client->createInvoice(node, LightningSatoshiToMsat(satoshi), description);
         if (!invoice) {
             result.error = invoice.error;
             return result;
         }
 
         result.invoice = invoice.value->bolt11;
-        result.opening_fee = invoice.value->opening_fee;
+        result.opening_fee = LightningMsatToSatoshi(invoice.value->opening_fee_msat);
 
         const auto parsed = client->parseInvoice(result.invoice);
         if (parsed) {
@@ -268,12 +269,12 @@ QFuture<LightningCreateInvoiceResult> LightningSession::createInvoice(const quin
     });
 }
 
-QFuture<LightningValueResult<LightningSendResponse>> LightningSession::sendPayment(const QString& invoice, const std::optional<quint64> satoshi)
+QFuture<LightningValueResult<LightningSendResponse>> LightningSession::sendPayment(const QString& invoice, const std::optional<quint64> amount_msat)
 {
     if (QThread::currentThread() != thread()) {
         QFuture<LightningValueResult<LightningSendResponse>> future;
-        QMetaObject::invokeMethod(this, [this, invoice, satoshi, &future] {
-            future = sendPayment(invoice, satoshi);
+        QMetaObject::invokeMethod(this, [this, invoice, amount_msat, &future] {
+            future = sendPayment(invoice, amount_msat);
         }, Qt::BlockingQueuedConnection);
         return future;
     }
@@ -283,9 +284,9 @@ QFuture<LightningValueResult<LightningSendResponse>> LightningSession::sendPayme
     const auto mutex = m_node_operation_mutex;
     const auto node_generation = m_node_generation;
 
-    auto future = QtConcurrent::run([client, node, mutex, invoice, satoshi] {
+    auto future = QtConcurrent::run([client, node, mutex, invoice, amount_msat] {
         QMutexLocker locker(mutex.get());
-        return client->sendPayment(node, invoice, satoshi);
+        return client->sendPayment(node, invoice, amount_msat);
     });
 
     return future.then(this, [=, this](LightningValueResult<LightningSendResponse> result) {

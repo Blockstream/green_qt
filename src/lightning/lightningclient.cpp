@@ -95,23 +95,6 @@ LightningValueResult<std::shared_ptr<glsdk::Config>> BuildGlsdkConfig()
     return { config->with_developer_cert(developer_cert), {} };
 }
 
-std::optional<uint64_t> SatoshiToMsat(const std::optional<quint64>& satoshi)
-{
-    if (!satoshi) return std::nullopt;
-    return (*satoshi) * 1000ULL;
-}
-
-quint64 MsatToSatoshi(const uint64_t msat)
-{
-    return msat / 1000ULL;
-}
-
-std::optional<quint64> MsatToSatoshi(const std::optional<uint64_t>& msat)
-{
-    if (!msat) return std::nullopt;
-    return MsatToSatoshi(*msat);
-}
-
 QString GlsdkErrorMessage(const QString& fallback, const int code, const std::string& message)
 {
     const auto error = QString::fromStdString(message).trimmed();
@@ -198,11 +181,11 @@ LightningNodeInfo ToLightningNodeInfo(const glsdk::NodeState& node_state)
     LightningNodeInfo info;
     info.id = QString::fromStdString(node_state.id);
     info.block_height = node_state.block_height;
-    info.channel_balance = node_state.channels_balance_msat / 1000ULL;
-    info.onchain_balance = node_state.onchain_balance_msat / 1000ULL;
-    info.inbound_liquidity = node_state.total_inbound_liquidity_msat / 1000ULL;
-    info.max_payable = node_state.max_payable_msat / 1000ULL;
-    info.max_receivable = node_state.max_receivable_single_payment_msat / 1000ULL;
+    info.channel_balance_msat = node_state.channels_balance_msat;
+    info.onchain_balance_msat = node_state.onchain_balance_msat;
+    info.inbound_liquidity_msat = node_state.total_inbound_liquidity_msat;
+    info.max_payable_msat = node_state.max_payable_msat;
+    info.max_receivable_msat = node_state.max_receivable_single_payment_msat;
     return info;
 }
 
@@ -276,7 +259,7 @@ LightningValueResult<LightningParsedInvoice> LightningClient::parseInvoice(const
                 ToOptionalQString(invoice.payee_pubkey),
                 QString::fromStdString(invoice.payment_hash),
                 ToOptionalQString(invoice.description),
-                MsatToSatoshi(invoice.amount_msat),
+                invoice.amount_msat,
                 invoice.expiry,
                 invoice.timestamp,
             }, {} };
@@ -305,8 +288,8 @@ LightningValueResult<std::vector<LightningPayment>> LightningClient::listPayment
                 LightningPaymentId(payment),
                 ToLightningPaymentType(payment.payment_type),
                 payment.payment_time,
-                MsatToSatoshi(payment.amount_msat),
-                MsatToSatoshi(payment.fee_msat),
+                payment.amount_msat,
+                payment.fee_msat,
                 ToOptionalQString(payment.description),
                 ToOptionalQString(payment.bolt11),
                 ToOptionalQString(payment.preimage),
@@ -319,39 +302,40 @@ LightningValueResult<std::vector<LightningPayment>> LightningClient::listPayment
     }
 }
 
-LightningOperationResult LightningClient::checkInvoice(const LightningParsedInvoice& invoice, const std::optional<quint64>& amount_satoshi) const
+LightningOperationResult LightningClient::checkInvoice(const LightningParsedInvoice& invoice, const std::optional<quint64>& payment_amount_msat) const
 {
     const auto expiry_at = invoice.timestamp + invoice.expiry;
     if (expiry_at <= QDateTime::currentSecsSinceEpoch()) {
         return { false, QStringLiteral("Invoice has expired") };
     }
 
-    const auto amount = invoice.amount.value_or(amount_satoshi.value_or(0));
-    if (amount == 0) {
+    if (!payment_amount_msat || *payment_amount_msat == 0) {
         return { false, QStringLiteral("Invoice amount is missing") };
     }
     return { true, {} };
 }
 
-LightningValueResult<LightningSendResponse> LightningClient::sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& satoshi)
+LightningValueResult<LightningSendResponse> LightningClient::sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& amount_msat)
 {
     if (!node) return { std::nullopt, QStringLiteral("GL-SDK node is not connected") };
 
     const auto invoice = parseInvoice(bolt11);
     if (!invoice) return { std::nullopt, invoice.error };
 
-    const auto invoice_check = checkInvoice(*invoice.value, satoshi);
+    const auto send_amount_msat = invoice.value->amount_msat ? invoice.value->amount_msat : amount_msat;
+    const auto invoice_check = checkInvoice(*invoice.value, send_amount_msat);
     if (!invoice_check) return { std::nullopt, invoice_check.error };
 
     try {
-        const auto response = node->send(bolt11.toStdString(), SatoshiToMsat(satoshi));
+        const auto glsdk_amount_msat = send_amount_msat ? std::optional<uint64_t>(*send_amount_msat) : std::nullopt;
+        const auto response = node->send(bolt11.toStdString(), glsdk_amount_msat);
         return { LightningSendResponse{
             ToLightningPayStatus(response.status),
             QString::fromStdString(response.preimage),
             QString::fromStdString(response.payment_hash),
             ToOptionalQString(response.destination_pubkey),
-            MsatToSatoshi(response.amount_msat),
-            MsatToSatoshi(response.amount_sent_msat),
+            response.amount_msat,
+            response.amount_sent_msat,
             response.parts,
         }, {} };
     } catch (...) {
@@ -359,16 +343,16 @@ LightningValueResult<LightningSendResponse> LightningClient::sendPayment(const s
     }
 }
 
-LightningValueResult<LightningReceiveResponse> LightningClient::createInvoice(const std::shared_ptr<glsdk::Node>& node, const quint64 satoshi, const QString& description)
+LightningValueResult<LightningReceiveResponse> LightningClient::createInvoice(const std::shared_ptr<glsdk::Node>& node, const quint64 amount_msat, const QString& description)
 {
     if (!node) return { std::nullopt, QStringLiteral("GL-SDK node is not connected") };
 
     try {
         const auto label = QStringLiteral("inv-%1").arg(QDateTime::currentMSecsSinceEpoch());
-        const auto response = node->receive(label.toStdString(), description.toStdString(), satoshi * 1000ULL);
+        const auto response = node->receive(label.toStdString(), description.toStdString(), amount_msat);
         return { LightningReceiveResponse{
             QString::fromStdString(response.bolt11),
-            MsatToSatoshi(response.opening_fee_msat),
+            response.opening_fee_msat,
         }, {} };
     } catch (...) {
         return { std::nullopt, CurrentGlsdkExceptionMessage() };

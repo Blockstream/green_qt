@@ -2,6 +2,7 @@
 #include "asset.h"
 #include "context.h"
 #include "lightning/lightningclient.h"
+#include "lightning/lightningutil.h"
 #include "network.h"
 #include "output.h"
 #include "session.h"
@@ -219,11 +220,12 @@ QDateTime LightningTransaction::timestamp() const
 void LightningTransaction::updateFromPayment(const LightningPayment& payment)
 {
     const auto type = LightningPaymentTypeString(payment.payment_type);
-    auto amount = static_cast<qint64>(payment.amount);
+    const auto fee = LightningMsatToSatoshi(payment.fee_msat);
+    auto amount = static_cast<qint64>(LightningMsatToSatoshi(payment.amount_msat));
     if (payment.payment_type == LightningPaymentType::Sent) {
         // GL-SDK doesn't include the fee in the amount for sent payments,
         // but we want to show the total outgoing amount in the UI.
-        amount += static_cast<qint64>(payment.fee);
+        amount += static_cast<qint64>(fee);
         amount = -amount;
     }
 
@@ -231,7 +233,7 @@ void LightningTransaction::updateFromPayment(const LightningPayment& payment)
         { QStringLiteral("txhash"), payment.id },
         { QStringLiteral("type"), type },
         { QStringLiteral("satoshi"), QJsonObject{{ QStringLiteral("lnbtc"), amount }} },
-        { QStringLiteral("fee"), static_cast<qint64>(payment.fee) },
+        { QStringLiteral("fee"), static_cast<qint64>(fee) },
         { QStringLiteral("created_at_ts"), static_cast<qint64>(payment.payment_time) * 1000000 },
     };
 
