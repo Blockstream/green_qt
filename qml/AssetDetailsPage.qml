@@ -317,7 +317,7 @@ StackViewPage {
                             enabled: !self.context.watchonly
                             spacing: 0
                             GMenu.Item {
-                                enabled: !self.context.watchonly
+                                enabled: UtilJS.canArchiveAccount(self.context, button.account)
                                 icon.source: 'qrc:/svg/archive.svg'
                                 text: qsTrId('id_archive_account')
                                 onClicked: {

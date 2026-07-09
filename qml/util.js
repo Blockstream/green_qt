@@ -132,6 +132,22 @@ function accounts(context) {
     return context.accounts.filter(account => !account.hidden)
 }
 
+function accountHasBalance(account) {
+    const satoshi = account?.json?.satoshi
+    if (!satoshi) return false
+
+    return Object.values(satoshi).some(value => Number(value) > 0)
+}
+
+function canArchiveAccount(context, account) {
+    if (!context || !account) return false
+    if (context.watchonly) return false
+    if (account.hidden) return false
+    if (accounts(context).length <= 1) return false
+    if (accountHasBalance(account)) return false
+    return true
+}
+
 function archivedAccounts(context) {
     if (!context) return []
 
