@@ -61,12 +61,7 @@ Page {
     readonly property var latestFirmware: {
         if (!self.deviceReady) return null
         if (firmware_controller.fetching) return null
-        for (const firmware of self.firmwares) {
-            if (firmware.latest) {
-                return firmware
-            }
-        }
-        return null
+        return self.firmwares.find(firmware => firmware.latest) ?? null
     }
     
     readonly property bool runningLatest: {

@@ -275,7 +275,7 @@ Pane {
             id: notifications_box
             Layout.fillWidth: true
             spacing: 20
-            visible: self.context.sessions.filter(session => !session.network.electrum).length > 0
+            visible: self.context.sessions.some(session => !session.network.electrum)
             ColumnLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 1

@@ -7,15 +7,8 @@ import QtQuick.Layouts
 StackViewPage {
     signal checked(var mnemonic)
     required property var mnemonic
-    readonly property bool completed: {
-        if (repeater.count === 0) return false
-        for (let i = 0; i < repeater.count; i++) {
-            if (!repeater.itemAt(i).match) {
-                return false
-            }
-        }
-        return true
-    }
+    readonly property bool completed: repeater.count > 0
+        && Array.from({ length: repeater.count }).every((_, i) => repeater.itemAt(i).match)
 
     onCompletedChanged: {
         if (self.completed) self.checked(self.mnemonic)

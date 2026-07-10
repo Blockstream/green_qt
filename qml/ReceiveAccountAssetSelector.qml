@@ -12,13 +12,7 @@ StackViewPage {
     required property Context context
     property bool anyLiquid: false
     property bool anyAMP: false
-    readonly property bool supportsLiquid: {
-        const sessions = self.context.sessions
-        for (let i = 0; i < sessions.length; i++) {
-            if (sessions[i].network.liquid) return true
-        }
-        return false
-    }
+    readonly property bool supportsLiquid: self.context.sessions.some(session => session.network.liquid)
     id: self
     title: qsTrId('id_select_account__asset')
     footer: null

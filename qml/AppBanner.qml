@@ -31,13 +31,7 @@ Collapsible {
     }
 
     id: self
-    collapsed: {
-        for (let i = 0; i < self.items.length; i++) {
-            const notification = self.items[i].notification
-            if (!notification.dismissed) return false
-        }
-        return true
-    }
+    collapsed: self.items.every(item => item.notification.dismissed)
     contentWidth: self.width
     contentHeight: stack_layout.height - 20
     animationVelocity: 200

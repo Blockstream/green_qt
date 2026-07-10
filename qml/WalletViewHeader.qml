@@ -28,10 +28,7 @@ GPane {
     readonly property bool busy: {
         if (self.context?.dispatcher.busy ?? false) return true
         const accounts = self.context?.accounts ?? []
-        for (let i = 0; i < accounts.length; i++) {
-            if (!accounts[i].synced) return true
-        }
-        return false
+        return accounts.some(account => !account.synced)
     }
 
     focusPolicy: Qt.ClickFocus

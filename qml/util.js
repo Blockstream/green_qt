@@ -135,8 +135,8 @@ function accounts(context) {
 function archivedAccounts(context) {
     if (!context) return []
 
-    const has_multisig_liquid_amp = context.accounts.filter(account => !account.network.electrum && account.network.liquid && account.type === '2of2_no_recovery').length > 0
-    const has_multisig_liquid_except_amp = context.accounts.filter(account => !account.network.electrum && account.network.liquid && account.type !== '2of2_no_recovery' && (account.pointer > 0 || !account.hidden)).length > 0
+    const has_multisig_liquid_amp = context.accounts.some(account => !account.network.electrum && account.network.liquid && account.type === '2of2_no_recovery')
+    const has_multisig_liquid_except_amp = context.accounts.some(account => !account.network.electrum && account.network.liquid && account.type !== '2of2_no_recovery' && (account.pointer > 0 || !account.hidden))
 
     return context.accounts.filter(account => {
         if (!account.hidden) return false
@@ -289,10 +289,8 @@ function confirmations(session, block_height) {
 function transactionTypeLabel(transaction) {
     if (transaction.data.type === 'incoming') {
         if ((transaction.data.outputs?.length ?? 0) > 0) {
-            for (const output of transaction.data.outputs) {
-                if (output.is_relevant) {
-                    return qsTrId('id_received')
-                }
+            if (transaction.data.outputs.some(output => output.is_relevant)) {
+                return qsTrId('id_received')
             }
         } else {
             return qsTrId('id_received')
