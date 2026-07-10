@@ -9,6 +9,7 @@
 #include <QMutexLocker>
 #include <QPointer>
 #include <QThread>
+#include <QTimer>
 #include <QWaitCondition>
 #include <QtConcurrentRun>
 
@@ -104,8 +105,7 @@ public:
             QMetaObject::invokeMethod(session.data(), [session, bolt11_invoice, amount_satoshi] {
                 if (!session) return;
                 emit session->invoicePaid(bolt11_invoice, amount_satoshi);
-                session->refreshNodeInfo();
-                session->refreshPayments();
+                session->refreshAfterPayment();
             }, Qt::QueuedConnection);
         }
     }
@@ -291,8 +291,7 @@ QFuture<LightningValueResult<LightningSendResponse>> LightningSession::sendPayme
 
     return future.then(this, [=, this](LightningValueResult<LightningSendResponse> result) {
         if (m_node == node && m_node_generation == node_generation && result) {
-            refreshNodeInfo();
-            refreshPayments();
+            refreshAfterPayment();
         }
         return result;
     });
@@ -351,6 +350,19 @@ void LightningSession::disconnectNode()
     setNodeInfo({});
     setError({});
     setState(State::Disconnected);
+}
+
+void LightningSession::refreshAfterPayment()
+{
+    const auto node_generation = m_node_generation;
+    refreshPayments();
+
+    // CLN channel balances can lag the payment result/event briefly.
+    // Remove this once GL-SDK exposes a balance changed event.
+    QTimer::singleShot(1000, this, [this, node_generation] {
+        if (m_node_generation != node_generation) return;
+        refreshNodeInfo();
+    });
 }
 
 void LightningSession::refreshNodeInfo()

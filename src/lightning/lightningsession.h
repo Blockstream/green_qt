@@ -66,6 +66,8 @@ signals:
     void paymentsUpdated(const std::vector<LightningPayment>& payments);
 
 private:
+    friend class LightningSessionEventListener;
+
     struct ConnectNodeResult {
         std::shared_ptr<glsdk::Node> node;
         std::optional<LightningNodeInfo> node_info;
@@ -77,6 +79,7 @@ private:
     bool beginConnect();
     void finishConnect(const std::shared_ptr<glsdk::Node>& node, const LightningNodeInfo& node_info, const QString& error);
     void failConnect(const QString& error);
+    void refreshAfterPayment();
     void setState(State state);
     void setError(const QString& error);
     void setNodeInfo(const QJsonObject& node_info);

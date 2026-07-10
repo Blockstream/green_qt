@@ -10,7 +10,6 @@ StackViewPage {
 
     readonly property Asset asset: self.context.getOrCreateAsset('lnbtc')
     readonly property var amountSatoshi: self.controller.invoiceAmount ?? Number(self.controller.enteredSatoshi)
-    property var amountSentSatoshi: self.amountSatoshi
 
     id: self
     title: qsTrId('id_confirm_transaction')
@@ -34,7 +33,6 @@ StackViewPage {
         target: self.controller
         function onPaid() {
             Settings.registerEvent({ invoice: self.controller.input })
-            self.amountSentSatoshi = self.controller.payment.amount_sent ?? self.amountSatoshi
             self.pushPage(transaction_completed_page)
         }
         function onFailed(error) {
@@ -53,7 +51,7 @@ StackViewPage {
         id: success_amount_convert
         asset: self.asset
         context: self.context
-        input: ({ satoshi: String(self.amountSentSatoshi ?? self.amountSatoshi ?? 0) })
+        input: ({ satoshi: String(self.amountSatoshi ?? 0) })
         unit: self.context.primarySession.unit
     }
 
