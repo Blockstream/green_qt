@@ -11,7 +11,13 @@ StackViewPage {
     required property LightningSendController controller
 
     readonly property Asset asset: self.context.getOrCreateAsset('lnbtc')
-    readonly property bool errorVisible: amount_field.text.length > 0 && self.controller.error.length > 0
+    readonly property bool amountEntered: amount_field.text.length > 0
+    readonly property double enteredSatoshi: Number(amount_convert.result?.satoshi ?? 0)
+    readonly property string amountError: {
+        if (!self.amountEntered) return ''
+        if (self.enteredSatoshi <= 0) return 'id_invalid_amount'
+        return self.controller.error
+    }
 
     StackView.onActivated: amount_field.forceActiveFocus()
 
@@ -22,7 +28,7 @@ StackViewPage {
     }
     footerItem: PrimaryButton {
         Layout.fillWidth: true
-        enabled: amount_field.text.length > 0 && !self.errorVisible
+        enabled: self.amountEntered && self.enteredSatoshi > 0 && !self.amountError
         text: qsTrId('id_next')
         onClicked: self.nextClicked()
     }
@@ -52,11 +58,11 @@ StackViewPage {
             id: amount_field
             session: self.context.primarySession
             convert: amount_convert
-            error: self.errorVisible
+            error: self.amountError
         }
         ErrorPane {
             Layout.topMargin: -15
-            error: self.controller.error
+            error: self.amountError
         }
         VSpacer {
         }

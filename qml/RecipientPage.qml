@@ -39,6 +39,14 @@ StackViewPage {
         lightning_send_controller.input = recipient.input
         lightning_send_controller.invoice = recipient.invoice.invoice ?? recipient.input
 
+        if (lightning_send_controller.error.length > 0) {
+            self.error = {
+                code: lightning_send_controller.error,
+                visible: true
+            }
+            return
+        }
+
         if (lightning_send_controller.sources.length > 1) {
             self.error = null
             return self.pushPage(payment_source_selector_page, {
