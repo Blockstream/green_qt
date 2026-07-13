@@ -227,13 +227,19 @@ void JadeFirmwareCheckController::check()
                 auto index = m_index.value(type).toObject().value(channel).toObject();
 
                 auto process = [&](bool delta, QJsonObject& firmware) {
-                    const auto firmware_version = QVersionNumber::fromString(firmware.value("version").toString());
+                    const auto firmware_version_string = firmware.value("version").toString();
+                    const auto firmware_version = QVersionNumber::fromString(firmware_version_string);
+                    // QVersionNumber::fromString() drops non-numeric suffixes, so a pre-release like
+                    // "1.0.33-beta1" parses equal to its final release "1.0.33". Track the exact string
+                    // match separately so that case is still offered as an upgrade, while a truly
+                    // already-installed version (exact match) is not.
                     const bool same_version = QVersionNumber::fromString(version) == firmware_version;
-                    const bool newer_version = QVersionNumber::fromString(version) <= firmware_version;
+                    const bool exact_match = version == firmware_version_string;
+                    const bool newer_version = QVersionNumber::fromString(version) < firmware_version || (same_version && !exact_match);
                     const bool same_config = config == firmware.value("config").toString();
                     const bool upgrade = newer_version || (same_version && !same_config);
                     const bool downgrade = firmware_version < QVersionNumber::fromString(version);
-                    const bool installed = same_version && same_config && version==firmware.value("version").toString();
+                    const bool installed = exact_match && same_config;
                     const bool compatible = m_device->minimumRequiredVersion() <= firmware_version;
                     const bool latest = firmware_version == latest_version;
                     if (delta && installed) return;
@@ -458,4 +464,3 @@ void JadeFirmwareUpdateController::install(const QByteArray& data)
     emit activityCreated(activity);
     ActivityManager::instance()->exec(activity);
 }
-
