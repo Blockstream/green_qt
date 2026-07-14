@@ -140,7 +140,7 @@ Page {
                         .filter(promo => promo.ready)
                         .filter(promo => UtilJS.filterPromo(WalletManager.wallets, promo))
                         .filter(promo => promo.data.is_visible)
-                        .filter(promo => promo.data.screens.indexOf('HomeTab') >= 0)
+                        .filter(promo => promo.data.screens.includes('HomeTab'))
                         .slice(0, 1)
                 }
                 delegate: PromoCard {

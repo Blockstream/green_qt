@@ -88,7 +88,7 @@ StackViewPage {
             Layout.fillWidth: true
             Layout.minimumHeight: 150
             text: JSON.stringify(chain_swap_controller.swap?.data ?? null, null, 4)
-            visible: Qt.application.arguments.indexOf('--debug') > 0
+            visible: Qt.application.arguments.includes('--debug')
         }
         FieldTitle {
             Layout.topMargin: 0

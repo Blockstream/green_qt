@@ -322,7 +322,7 @@ StackViewPage {
             Layout.fillWidth: true
             icon.source: 'qrc:/svg3/arrow-line-up-right.svg'
             text: service.widgetLoading ? 'Loading...' : 'Buy Bitcoin (sandbox)'
-            visible: Qt.application.arguments.indexOf('--debug') > 0
+            visible: Qt.application.arguments.includes('--debug')
             enabled: amount_input.text.length > 0 &&
                      parseFloat(amount_input.text) > 0 &&
                      service.error.length === 0 &&

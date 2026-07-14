@@ -11,7 +11,7 @@ StackViewPage {
     signal firmwareSelected(var firmware)
     required property JadeDevice device
     required property bool showSkip
-    readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
+    readonly property bool debug: Qt.application.arguments.includes('--debugjade')
     id: self
     padding: 0
     background: Item {

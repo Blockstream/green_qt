@@ -441,7 +441,7 @@ StackViewPage {
                     serviceProvider: payment.data.serviceProvider
                 }, null, 4)
             }
-            visible: Qt.application.arguments.indexOf('--debug') > 0
+            visible: Qt.application.arguments.includes('--debug')
             wrapMode: Label.WordWrap
         }
         VSpacer {

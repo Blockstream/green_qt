@@ -11,7 +11,7 @@ StackViewPage {
      signal detailsClicked()
     required property JadeDevice device
     required property bool login
-    readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
+    readonly property bool debug: Qt.application.arguments.includes('--debugjade')
     readonly property bool ready: (self.device?.connected && 'BOARD_TYPE' in self.device?.versionInfo)
     StackView.onActivated: firmware_controller.check(self.device);
     JadeFirmwareController {
@@ -38,7 +38,7 @@ StackViewPage {
         }
         CircleButton {
             icon.source: 'qrc:/svg2/info.svg'
-            visible: Qt.application.arguments.indexOf('--debugjade') > 0
+            visible: Qt.application.arguments.includes('--debugjade')
             onClicked: self.detailsClicked()
         }
         WalletOptionsButton {

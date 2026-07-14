@@ -12,7 +12,7 @@ FilterPopup {
     property var accounts
     Component.onCompleted: {
         self.filterAccounts = [...self.model.filterAccounts]
-        self.accounts = UtilJS.accounts(self.context).filter(account => self.filterAccounts.indexOf(account) < 0)
+        self.accounts = UtilJS.accounts(self.context).filter(account => !self.filterAccounts.includes(account))
     }
     id: self
     height: Math.min(self.implicitHeight, 600)
@@ -50,7 +50,7 @@ FilterPopup {
         signal accountClicked(Account account)
         required property Account account
         onClicked: {
-            const filter = self.model.filterAccounts.indexOf(delegate.account) < 0
+            const filter = !self.model.filterAccounts.includes(delegate.account)
             self.model.updateFilterAccounts(delegate.account, filter)
         }
         id: delegate
@@ -90,7 +90,7 @@ FilterPopup {
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/svg2/check.svg'
-                opacity: self.model.filterAccounts.indexOf(delegate.account) >= 0 ? 1 : 0
+                opacity: self.model.filterAccounts.includes(delegate.account) ? 1 : 0
             }
         }
     }

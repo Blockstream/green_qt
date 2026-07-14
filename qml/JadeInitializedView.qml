@@ -10,7 +10,7 @@ VFlickable {
     signal updateClicked()
     required property JadeDevice device
     required property var latestFirmware
-    readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
+    readonly property bool debug: Qt.application.arguments.includes('--debugjade')
     id: self
     enabled: (self.device?.connected ?? false) && self.device.status === JadeDevice.StatusIdle
     spacing: 10

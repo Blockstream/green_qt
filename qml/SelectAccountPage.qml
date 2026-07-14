@@ -42,7 +42,7 @@ StackViewPage {
                         const asset = AssetManager.assetWithId(deployment, id)
                         if (search) {
                             const term = asset.name ? asset.name.toLowerCase() : asset.id
-                            if (term.indexOf(search) < 0) continue
+                            if (!term.includes(search)) continue
                         }
                         assets.add(asset)
                     }

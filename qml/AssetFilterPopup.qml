@@ -13,7 +13,7 @@ FilterPopup {
     Component.onCompleted: {
         self.filterAssets = [...self.model.filterAssets]
         self.assets = UtilJS.assets(self.context)
-            .filter(entry => self.filterAssets.indexOf(entry.asset) < 0)
+            .filter(entry => !self.filterAssets.includes(entry.asset))
     }
     id: self
     Repeater {
@@ -42,9 +42,9 @@ FilterPopup {
     component Delegate: AbstractButton {
         required property Asset asset
         checkable: true
-        checked: self.model.filterAssets.indexOf(button.asset) >= 0
+        checked: self.model.filterAssets.includes(button.asset)
         onClicked: {
-            self.model.updateFilterAssets(button.asset, self.model.filterAssets.indexOf(button.asset) < 0)
+            self.model.updateFilterAssets(button.asset, !self.model.filterAssets.includes(button.asset))
         }
         id: button
         leftPadding: 12

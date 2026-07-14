@@ -133,7 +133,7 @@ Pane {
         VSpacer {
         }
         SideButton {
-            visible: Qt.application.arguments.indexOf('--debug') > 0
+            visible: Qt.application.arguments.includes('--debug')
             icon.source: 'qrc:/svg2/bug.svg'
             text: 'Test'
             onClicked: menu.open()

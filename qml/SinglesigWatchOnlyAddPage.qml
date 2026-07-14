@@ -78,7 +78,7 @@ StackViewPage {
                 focus: true
                 onTextChanged: {
                     error_badge.clear()
-                    selector.index = keys_field.text.indexOf('(') < 0 ? 0 : 1
+                    selector.index = keys_field.text.includes('(') ? 1 : 0
                 }
             }
             PrimaryButton {
@@ -151,7 +151,7 @@ StackViewPage {
             spacing: 0
             Option {
                 text: qsTrId('id_xpub')
-                enabled: !self.network.liquid && keys_field.text.indexOf('(') < 0
+                enabled: !self.network.liquid && !keys_field.text.includes('(')
                 checked: selector.index === 0
                 onClicked: selector.index = 0
             }

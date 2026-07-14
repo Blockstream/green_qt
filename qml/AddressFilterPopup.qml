@@ -43,8 +43,8 @@ FilterPopup {
         required property string type
         id: button
         text: button.type.toUpperCase()
-        checked: self.model.filterTypes.indexOf(button.type) >= 0
-        onClicked: self.model.updateFilterTypes(button.type, self.model.filterTypes.indexOf(button.type) < 0)
+        checked: self.model.filterTypes.includes(button.type)
+        onClicked: self.model.updateFilterTypes(button.type, !self.model.filterTypes.includes(button.type))
     }
 
     component OptionButton: AbstractButton {

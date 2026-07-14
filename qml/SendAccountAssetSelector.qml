@@ -35,13 +35,13 @@ StackViewPage {
                 const assets = new Set()
                 const search = search_field.text.trim().toLowerCase()
                 for (const account of UtilJS.accounts(self.context)) {
-                    if (self.networks && self.networks.indexOf(account.network) < 0) continue
+                    if (self.networks && !self.networks.includes(account.network)) continue
                     for (const [id, satoshi] of Object.entries(account.json.satoshi)) {
                         if (satoshi === 0) continue
                         const asset = AssetManager.assetWithId(deployment, id)
                         if (search) {
                             const term = asset.name ? asset.name.toLowerCase() : asset.id
-                            if (term.indexOf(search) < 0) continue
+                            if (!term.includes(search)) continue
                         }
                         assets.add(asset)
                     }

@@ -11,7 +11,7 @@ VFlickable {
     signal setupFinished(Context context)
     required property JadeDevice device
     required property var latestFirmware
-    readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
+    readonly property bool debug: Qt.application.arguments.includes('--debugjade')
     function setup() {
         if (Settings.enableTestnet) {
             deployment_dialog.createObject(self).open()

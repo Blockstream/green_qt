@@ -249,7 +249,7 @@ Page {
                     required property var modelData
                     id: delegate
                     account: delegate.modelData
-                    highlighted: self.currentModel.filterAccounts.indexOf(delegate.account) >= 0
+                    highlighted: self.currentModel.filterAccounts.includes(delegate.account)
                     onAccountClicked: account => {
                         if (delegate.highlighted) {
                             self.currentModel.updateFilterAccounts(delegate.account, false)
