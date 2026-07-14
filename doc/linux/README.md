@@ -3,10 +3,10 @@
 **Quick start:** Run the automated build script from the repository root:
 
 ```bash
-./doc/linux/build.sh
+doc/linux/build.sh
 ```
 
-The script checks prerequisites, builds dependencies, and compiles the app. If a step fails, run it again to resume. Use `./doc/linux/build.sh --restart` to start over.
+The script checks prerequisites, builds dependencies, and compiles the app. If a step fails, run it again to resume. Use `doc/linux/build.sh --restart` to start over.
 
 ---
 
@@ -138,13 +138,13 @@ The resulting binary is:
 Run it directly:
 
 ```bash
-./build/blockstream
+build/blockstream
 ```
 
 **Note**: You may need to set `LD_LIBRARY_PATH` at runtime to find Qt libraries:
 
 ```bash
 export LD_LIBRARY_PATH="$QT_ROOT/lib:$LD_LIBRARY_PATH"
-./build/blockstream
+build/blockstream
 ```
 

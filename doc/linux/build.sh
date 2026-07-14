@@ -44,10 +44,10 @@ fail() {
     echo "Error: $1"
     echo ""
     echo "To resume from this step, run the script again:"
-    echo "  ./doc/linux/build.sh"
+    echo "  doc/linux/build.sh"
     echo ""
     echo "To start over from the beginning, run:"
-    echo "  ./doc/linux/build.sh --restart"
+    echo "  doc/linux/build.sh --restart"
     echo ""
     echo "$CURRENT_STEP" > "$STATE_FILE.failed"
     exit 1
