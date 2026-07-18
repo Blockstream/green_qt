@@ -63,7 +63,7 @@ StackViewPage {
                 GMenu.Item {
                     icon.source: 'qrc:/svg2/copy.svg'
                     text: qsTrId('id_copy') + ' ' + qsTrId('id_amp_id')
-                    visible: self.account.type === '2of2_no_recovery'
+                    visible: self.account.amp0
                     onClicked: {
                         options_menu.close()
                         Clipboard.copy(self.account.json.receiving_id)

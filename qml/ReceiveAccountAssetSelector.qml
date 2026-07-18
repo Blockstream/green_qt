@@ -190,14 +190,14 @@ StackViewPage {
                             for (const account of UtilJS.accounts(self.context)) {
                                 if (delegate.asset) {
                                     if (delegate.asset.networkKey !== account.network.key) continue
-                                    if (delegate.asset.amp && account.type !== '2of2_no_recovery') continue
+                                    if (delegate.asset.amp && !account.amp0) continue
                                     accounts.push(account)
                                 } else if (self.anyLiquid) {
                                     if (account.network.liquid) {
                                         accounts.push(account)
                                     }
                                 } else if (self.anyAMP) {
-                                    if (account.type === '2of2_no_recovery') {
+                                    if (account.amp0) {
                                         accounts.push(account)
                                     }
                                 }

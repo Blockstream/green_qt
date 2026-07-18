@@ -158,8 +158,8 @@ StackViewPage {
         }
     }
     readonly property bool hasMultisigBitcoin: self.context.accounts.some(account => !account.network.electrum && !account.network.liquid)
-    readonly property bool hasMultisigLiquidExceptAMP: self.context.accounts.some(account => !account.network.electrum && account.network.liquid && account.type !== '2of2_no_recovery' && (account.pointer > 0 || !account.hidden))
-    readonly property bool hasMultisigLiquidAMP: self.context.accounts.some(account => !account.network.electrum && account.network.liquid && account.type === '2of2_no_recovery')
+    readonly property bool hasMultisigLiquidExceptAMP: self.context.accounts.some(account => !account.network.electrum && account.network.liquid && !account.amp0 && (account.pointer > 0 || !account.hidden))
+    readonly property bool hasMultisigLiquidAMP: self.context.accounts.some(account => !account.network.electrum && account.network.liquid && account.amp0)
 
     footerItem: RowLayout {
         HSpacer {

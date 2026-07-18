@@ -138,7 +138,7 @@ ItemDelegate {
                     font.weight: 400
                     opacity: 0.4
                     text: delegate.account.json?.receiving_id ?? ''
-                    visible: delegate.account.type === '2of2_no_recovery'
+                    visible: delegate.account.amp0
                 }
                 Item {
                     Layout.fillWidth: true
@@ -223,7 +223,7 @@ ItemDelegate {
                                 GMenu.Item {
                                     text: qsTrId('id_copy') + ' ' + qsTrId('id_amp_id')
                                     icon.source: 'qrc:/svg2/copy.svg'
-                                    visible: delegate.account.type === '2of2_no_recovery'
+                                    visible: delegate.account.amp0
                                     onClicked: {
                                         account_delegate_menu.close()
                                         Clipboard.copy(delegate.account.json.receiving_id)

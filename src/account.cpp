@@ -244,9 +244,9 @@ bool Account::isMultisig() const
     return !m_network->isElectrum();
 }
 
-bool Account::isAmp() const
+bool Account::isAmp0() const
 {
-    return isLiquid() && m_type == "2of2_no_recovery";
+    return m_type == "2of2_no_recovery";
 }
 
 void Account::setType(const QString& type)

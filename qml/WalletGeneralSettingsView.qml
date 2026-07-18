@@ -31,7 +31,7 @@ Pane {
 
     readonly property var ampAccounts: {
         return UtilJS.accounts(self.context)
-            .filter(account => UtilJS.isAmpAccount(account))
+            .filter(account => account.amp0)
     }
 
     function updateCurrency(currency) {

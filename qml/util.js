@@ -151,8 +151,8 @@ function canArchiveAccount(context, account) {
 function archivedAccounts(context) {
     if (!context) return []
 
-    const has_multisig_liquid_amp = context.accounts.some(account => !account.network.electrum && account.network.liquid && account.type === '2of2_no_recovery')
-    const has_multisig_liquid_except_amp = context.accounts.some(account => !account.network.electrum && account.network.liquid && account.type !== '2of2_no_recovery' && (account.pointer > 0 || !account.hidden))
+    const has_multisig_liquid_amp = context.accounts.some(account => !account.network.electrum && account.network.liquid && account.amp0)
+    const has_multisig_liquid_except_amp = context.accounts.some(account => !account.network.electrum && account.network.liquid && !account.amp0 && (account.pointer > 0 || !account.hidden))
 
     return context.accounts.filter(account => {
         if (!account.hidden) return false
@@ -498,10 +498,6 @@ function swapNetworkType(network) {
     if (network?.liquid) return 'liquid'
     if (network?.mainnet) return 'mainnet'
     return null
-}
-
-function isAmpAccount(account) {
-    return account?.type === '2of2_no_recovery'
 }
 
 function canAirgapSend(context) {
