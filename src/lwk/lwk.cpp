@@ -21,6 +21,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_func_derive_token_id() != 30312) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_func_get_path() != 14693) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_func_is_provably_segwit() != 18100) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -822,6 +825,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_signer_singlesig_desc() != 29930) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_signer_slip77_master_blinding_key() != 55499) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_signer_wpkh_slip77_descriptor() != 50399) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -1035,7 +1041,16 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_waterfallsclient_full_scan_to_index() != 12641) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_waterfallsclient_subscribe() != 62222) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_waterfallsclient_tip() != 38774) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_waterfallssubscription_close_subscription() != 52559) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_waterfallssubscription_next_update() != 24742) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_wollet_add_details() != 42615) {
@@ -1366,6 +1381,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_wolletbuilder_new() != 41459) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_wolletdescriptor_from_xpub() != 10212) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_wolletdescriptor_new() != 61281) {
@@ -5950,6 +5968,13 @@ std::shared_ptr<WolletDescriptor> Signer::singlesig_desc(const Singlesig &script
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterSinglesig::lower(script_variant), uniffi::FfiConverterDescriptorBlindingKey::lower(blinding_variant)));
 }
+std::string Signer::slip77_master_blinding_key() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_signer_slip77_master_blinding_key,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
 std::shared_ptr<WolletDescriptor> Signer::wpkh_slip77_descriptor() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterWolletDescriptor::lift(uniffi::rust_call(
@@ -7045,6 +7070,13 @@ std::shared_ptr<Update> WaterfallsClient::full_scan_to_index(const std::shared_p
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterWollet::lower(wollet), uniffi::FfiConverterUInt32::lower(index)));
 }
+std::shared_ptr<WaterfallsSubscription> WaterfallsClient::subscribe(const std::shared_ptr<WolletDescriptor> &descriptor) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterWaterfallsSubscription::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsclient_subscribe,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterWolletDescriptor::lower(descriptor)));
+}
 std::shared_ptr<BlockHeader> WaterfallsClient::tip() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterBlockHeader::lift(uniffi::rust_call(
@@ -7064,6 +7096,51 @@ WaterfallsClient::~WaterfallsClient() {
 void *WaterfallsClient::_uniffi_internal_clone_pointer() const {
     return uniffi::rust_call(
         uniffi_lwk_fn_clone_waterfallsclient,
+        nullptr,
+        this->instance
+    );
+}
+
+
+
+
+WaterfallsSubscription::WaterfallsSubscription(void *ptr): instance(ptr) {}
+
+WaterfallsSubscription::WaterfallsSubscription(const WaterfallsSubscription &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+void WaterfallsSubscription::close_subscription() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallssubscription_close_subscription,
+        nullptr,
+        ptr);
+}
+std::optional<WaterfallsSubscriptionEvent> WaterfallsSubscription::next_update() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalTypeWaterfallsSubscriptionEvent::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallssubscription_next_update,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+
+WaterfallsSubscription::~WaterfallsSubscription() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_waterfallssubscription,
+        nullptr,
+        this->instance
+    );
+}
+
+void *WaterfallsSubscription::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_waterfallssubscription,
         nullptr,
         this->instance
     );
@@ -7382,6 +7459,12 @@ std::shared_ptr<WolletDescriptor> WolletDescriptor::init(const std::string &desc
     );
 }
 
+std::shared_ptr<WolletDescriptor> WolletDescriptor::from_xpub(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num, const std::string &master_blinding_key, const std::string &fingerprint, const std::string &xpub) {
+    return std::shared_ptr<WolletDescriptor>(new WolletDescriptor(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_wolletdescriptor_from_xpub,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterNetwork::lower(network), uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num), uniffi::FfiConverterString::lower(master_blinding_key), uniffi::FfiConverterString::lower(fingerprint), uniffi::FfiConverterString::lower(xpub))));
+}
+
 std::shared_ptr<SecretKey> WolletDescriptor::derive_blinding_key(const std::shared_ptr<Script> &script_pubkey) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterOptionalSecretKey::lift(uniffi::rust_call(
@@ -7440,6 +7523,11 @@ std::string WolletDescriptor::to_string() const {
         nullptr,
         this->_uniffi_internal_clone_pointer()));
 }
+
+
+
+
+
 
 
 
@@ -9196,6 +9284,31 @@ uint64_t FfiConverterWaterfallsClient::allocation_size(const std::shared_ptr<Wat
 
 
 
+std::shared_ptr<WaterfallsSubscription> FfiConverterWaterfallsSubscription::lift(void *ptr) {
+    return std::shared_ptr<WaterfallsSubscription>(new WaterfallsSubscription(ptr));
+}
+
+void *FfiConverterWaterfallsSubscription::lower(const std::shared_ptr<WaterfallsSubscription> &obj) {
+    return reinterpret_cast<WaterfallsSubscription*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<WaterfallsSubscription> FfiConverterWaterfallsSubscription::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterWaterfallsSubscription::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterWaterfallsSubscription::write(RustStream &stream, const std::shared_ptr<WaterfallsSubscription> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterWaterfallsSubscription::lower(obj));
+}
+
+uint64_t FfiConverterWaterfallsSubscription::allocation_size(const std::shared_ptr<WaterfallsSubscription> &) {
+    return 8;
+}
+
+
+
 std::shared_ptr<WebHook> FfiConverterWebHook::lift(void *ptr) {
     return std::shared_ptr<WebHook>(new WebHook(ptr));
 }
@@ -9615,6 +9728,87 @@ uint64_t FfiConverterTypeWaterfallsClientBuilder::allocation_size(const Waterfal
         FfiConverterBool::allocation_size(val.utxo_only) +
         FfiConverterOptionalMapStringString::allocation_size(val.headers) +
         FfiConverterOptionalTokenProvider::allocation_size(val.token_provider);
+    
+}
+
+
+WaterfallsSubscriptionEvent FfiConverterTypeWaterfallsSubscriptionEvent::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterTypeWaterfallsSubscriptionEvent::read(stream);
+
+    rustbuffer_free(buf);
+
+    return std::move(ret);
+}
+
+RustBuffer FfiConverterTypeWaterfallsSubscriptionEvent::lower(const WaterfallsSubscriptionEvent &val) {
+    auto buf = rustbuffer_alloc(allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterTypeWaterfallsSubscriptionEvent::write(stream, val);
+
+    return std::move(buf);
+}
+
+WaterfallsSubscriptionEvent FfiConverterTypeWaterfallsSubscriptionEvent::read(RustStream &stream) {
+    return {
+        FfiConverterString::read(stream),
+        FfiConverterOptionalTypeWaterfallsSubscriptionTip::read(stream)
+    };
+}
+
+void FfiConverterTypeWaterfallsSubscriptionEvent::write(RustStream &stream, const WaterfallsSubscriptionEvent &val) {
+    FfiConverterString::write(stream, val.kind);
+    FfiConverterOptionalTypeWaterfallsSubscriptionTip::write(stream, val.tip);
+}
+
+uint64_t FfiConverterTypeWaterfallsSubscriptionEvent::allocation_size(const WaterfallsSubscriptionEvent &val) {
+    
+    return 
+        FfiConverterString::allocation_size(val.kind) +
+        FfiConverterOptionalTypeWaterfallsSubscriptionTip::allocation_size(val.tip);
+    
+}
+
+
+WaterfallsSubscriptionTip FfiConverterTypeWaterfallsSubscriptionTip::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterTypeWaterfallsSubscriptionTip::read(stream);
+
+    rustbuffer_free(buf);
+
+    return std::move(ret);
+}
+
+RustBuffer FfiConverterTypeWaterfallsSubscriptionTip::lower(const WaterfallsSubscriptionTip &val) {
+    auto buf = rustbuffer_alloc(allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterTypeWaterfallsSubscriptionTip::write(stream, val);
+
+    return std::move(buf);
+}
+
+WaterfallsSubscriptionTip FfiConverterTypeWaterfallsSubscriptionTip::read(RustStream &stream) {
+    return {
+        FfiConverterUInt32::read(stream),
+        FfiConverterString::read(stream),
+        FfiConverterUInt32::read(stream)
+    };
+}
+
+void FfiConverterTypeWaterfallsSubscriptionTip::write(RustStream &stream, const WaterfallsSubscriptionTip &val) {
+    FfiConverterUInt32::write(stream, val.height);
+    FfiConverterString::write(stream, val.block_hash);
+    FfiConverterUInt32::write(stream, val.timestamp);
+}
+
+uint64_t FfiConverterTypeWaterfallsSubscriptionTip::allocation_size(const WaterfallsSubscriptionTip &val) {
+    
+    return 
+        FfiConverterUInt32::allocation_size(val.height) +
+        FfiConverterString::allocation_size(val.block_hash) +
+        FfiConverterUInt32::allocation_size(val.timestamp);
     
 }
 
@@ -11633,6 +11827,100 @@ uint64_t FfiConverterOptionalTypeLiquidBip21::allocation_size(const std::optiona
     return ret;
 }
 
+std::optional<WaterfallsSubscriptionEvent> FfiConverterOptionalTypeWaterfallsSubscriptionEvent::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterOptionalTypeWaterfallsSubscriptionEvent::read(stream);
+
+    rustbuffer_free(buf);
+
+    return ret;
+}
+
+RustBuffer FfiConverterOptionalTypeWaterfallsSubscriptionEvent::lower(const std::optional<WaterfallsSubscriptionEvent>& val) {
+    auto buf = rustbuffer_alloc(FfiConverterOptionalTypeWaterfallsSubscriptionEvent::allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterOptionalTypeWaterfallsSubscriptionEvent::write(stream, val);
+
+    return buf;
+}
+
+std::optional<WaterfallsSubscriptionEvent> FfiConverterOptionalTypeWaterfallsSubscriptionEvent::read(RustStream &stream) {
+    char has_value;
+
+    stream.get(has_value);
+    if (has_value) {
+        return std::make_optional(FfiConverterTypeWaterfallsSubscriptionEvent::read(stream));
+    } else {
+        return std::nullopt;
+    }
+}
+
+void FfiConverterOptionalTypeWaterfallsSubscriptionEvent::write(RustStream &stream, const std::optional<WaterfallsSubscriptionEvent>& value) {
+    stream.put(static_cast<uint8_t>(!!value));
+
+    if (value) {
+        FfiConverterTypeWaterfallsSubscriptionEvent::write(stream, value.value());
+    }
+}
+
+uint64_t FfiConverterOptionalTypeWaterfallsSubscriptionEvent::allocation_size(const std::optional<WaterfallsSubscriptionEvent> &val) {
+    uint64_t ret = 1;
+
+    if (val) {
+        ret += FfiConverterTypeWaterfallsSubscriptionEvent::allocation_size(val.value());
+    }
+
+    return ret;
+}
+
+std::optional<WaterfallsSubscriptionTip> FfiConverterOptionalTypeWaterfallsSubscriptionTip::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterOptionalTypeWaterfallsSubscriptionTip::read(stream);
+
+    rustbuffer_free(buf);
+
+    return ret;
+}
+
+RustBuffer FfiConverterOptionalTypeWaterfallsSubscriptionTip::lower(const std::optional<WaterfallsSubscriptionTip>& val) {
+    auto buf = rustbuffer_alloc(FfiConverterOptionalTypeWaterfallsSubscriptionTip::allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterOptionalTypeWaterfallsSubscriptionTip::write(stream, val);
+
+    return buf;
+}
+
+std::optional<WaterfallsSubscriptionTip> FfiConverterOptionalTypeWaterfallsSubscriptionTip::read(RustStream &stream) {
+    char has_value;
+
+    stream.get(has_value);
+    if (has_value) {
+        return std::make_optional(FfiConverterTypeWaterfallsSubscriptionTip::read(stream));
+    } else {
+        return std::nullopt;
+    }
+}
+
+void FfiConverterOptionalTypeWaterfallsSubscriptionTip::write(RustStream &stream, const std::optional<WaterfallsSubscriptionTip>& value) {
+    stream.put(static_cast<uint8_t>(!!value));
+
+    if (value) {
+        FfiConverterTypeWaterfallsSubscriptionTip::write(stream, value.value());
+    }
+}
+
+uint64_t FfiConverterOptionalTypeWaterfallsSubscriptionTip::allocation_size(const std::optional<WaterfallsSubscriptionTip> &val) {
+    uint64_t ret = 1;
+
+    if (val) {
+        ret += FfiConverterTypeWaterfallsSubscriptionTip::allocation_size(val.value());
+    }
+
+    return ret;
+}
+
 std::optional<TokenProvider> FfiConverterOptionalTokenProvider::lift(RustBuffer buf) {
     auto stream = RustStream(&buf);
     auto ret = FfiConverterOptionalTokenProvider::read(stream);
@@ -11819,6 +12107,57 @@ uint64_t FfiConverterOptionalTypeAssetId::allocation_size(const std::optional<As
     }
 
     return ret;
+}
+
+
+std::vector<uint32_t> FfiConverterSequenceUInt32::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = read(stream);
+
+    rustbuffer_free(buf);
+
+    return ret;
+}
+
+RustBuffer FfiConverterSequenceUInt32::lower(const std::vector<uint32_t> &val) {
+    auto buf = rustbuffer_alloc(allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    write(stream, val);
+
+    return buf;
+}
+
+std::vector<uint32_t> FfiConverterSequenceUInt32::read(RustStream &stream) {
+    std::vector<uint32_t> ret;
+    int32_t count;
+    stream >> count;
+
+    ret.reserve(count);
+
+    for (decltype(count) i = 0; i < count; i++) {
+        ret.push_back(FfiConverterUInt32::read(stream));
+    }
+
+    return ret;
+}
+
+void FfiConverterSequenceUInt32::write(RustStream &stream, const std::vector<uint32_t> &val) {
+    stream << static_cast<int32_t>(val.size());
+
+    for (auto &elem : val) {
+        FfiConverterUInt32::write(stream, elem);
+    }
+}
+
+uint64_t FfiConverterSequenceUInt32::allocation_size(const std::vector<uint32_t> &val) {
+    uint64_t size = sizeof(int32_t);
+
+    for (auto &elem : val) {
+        size += FfiConverterUInt32::allocation_size(elem);
+    }
+
+    return size;
 }
 
 
@@ -12763,6 +13102,15 @@ AssetId derive_token_id(const std::shared_ptr<TxIn> &txin, const std::shared_ptr
         uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterTxIn::lower(txin), uniffi::FfiConverterContract::lower(contract));
 
     return uniffi::FfiConverterTypeAssetId::lift(ret);
+}
+
+
+std::vector<uint32_t> get_path(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num) {
+    auto ret = uniffi::rust_call(
+        uniffi_lwk_fn_func_get_path,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterNetwork::lower(network), uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num));
+
+    return uniffi::FfiConverterSequenceUInt32::lift(ret);
 }
 
 

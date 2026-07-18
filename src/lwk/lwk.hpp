@@ -87,6 +87,7 @@ struct ValueBlindingFactor;
 struct WalletTx;
 struct WalletTxOut;
 struct WaterfallsClient;
+struct WaterfallsSubscription;
 struct WebHook;
 struct Wollet;
 struct WolletBuilder;
@@ -97,6 +98,8 @@ struct LiquidBip21;
 struct LnUrlPayResponse;
 struct Quote;
 struct WaterfallsClientBuilder;
+struct WaterfallsSubscriptionEvent;
+struct WaterfallsSubscriptionTip;
 enum class Chain;
 enum class DescriptorBlindingKey;
 enum class LogLevel;
@@ -107,6 +110,80 @@ enum class Singlesig;
 enum class SwapAsset;
 struct TokenProvider;
 typedef std::string AssetId;
+
+namespace uniffi {
+struct FfiConverterTokenProvider;
+} // namespace uniffi
+
+/**
+ * Provider of a token for authenticated Esplora and Waterfalls backends.
+ *
+ * Some Esplora servers, particularly enterprise deployments like
+ * [Blockstream Enterprise](https://blockstream.info/explorer-api), require authentication for
+ * access.
+ */
+struct TokenProvider {
+    friend uniffi::FfiConverterTokenProvider;
+    /**
+     * No token is needed
+     */
+    struct kNone {
+    };
+    /**
+     * A static token is used as-is for every request
+     */
+    struct kStatic {
+        /**
+         * The token value
+         */
+        std::string token;
+    };
+    /**
+     * An OAuth2 token is obtained from the Blockstream API and refreshed automatically
+     */
+    struct kBlockstream {
+        /**
+         * The url to get the token from
+         */
+        std::string url;
+        /**
+         * The client ID
+         */
+        std::string client_id;
+        /**
+         * The client secret
+         */
+        std::string client_secret;
+    };
+    TokenProvider(kNone variant): variant(variant) {}
+    TokenProvider(kStatic variant): variant(variant) {}
+    TokenProvider(kBlockstream variant): variant(variant) {}
+
+    TokenProvider(const TokenProvider &other): variant(other.variant) {}
+    TokenProvider(TokenProvider &&other): variant(std::move(other.variant)) {}
+
+    TokenProvider &operator=(const TokenProvider &other) {
+        variant = other.variant;
+        return *this;
+    }
+
+    TokenProvider &operator=(TokenProvider &&other) {
+        variant = std::move(other.variant);
+        return *this;
+    }
+
+    /**
+     * Returns the variant of this enum
+     */
+    const std::variant<kNone, kStatic, kBlockstream> &get_variant() const {
+        return variant;
+    }
+
+private:
+    std::variant<kNone, kStatic, kBlockstream> variant;
+
+    TokenProvider();
+};
 
 
 namespace uniffi {
@@ -270,70 +347,31 @@ struct LoggingImpl
 
 
 namespace uniffi {
-    struct FfiConverterAddress;
+    struct FfiConverterAnyClient;
 } // namespace uniffi
 
-/**
- * A Liquid address
- */
-struct Address
+struct AnyClient
 
 
 
 {
-    friend uniffi::FfiConverterAddress;
+    friend uniffi::FfiConverterAnyClient;
 
-    Address() = delete;
+    AnyClient() = delete;
 
-    Address(Address &&) = delete;
+    AnyClient(AnyClient &&) = delete;
 
-    Address &operator=(const Address &) = delete;
-    Address &operator=(Address &&) = delete;
+    AnyClient &operator=(const AnyClient &) = delete;
+    AnyClient &operator=(AnyClient &&) = delete;
 
-    ~Address();
-    /**
-     * Construct an Address object
-     */
-    static std::shared_ptr<Address> init(const std::string &s);
-    /**
-     * Return true if the address is blinded.
-     */
-    bool is_blinded();
-    /**
-     * Returns the network of the address
-     */
-    std::shared_ptr<Network> network();
-    /**
-     * Returns a string of the QR code printable in a terminal environment
-     */
-    std::string qr_code_text();
-    /**
-     * Returns a string encoding an image in a uri
-     *
-     * The string can be open in the browser or be used as `src` field in `img` in HTML
-     *
-     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
-     * and use styling to scale up the image in the browser. eg
-     * `style="image-rendering: pixelated; border: 20px solid white;"`
-     */
-    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
-    /**
-     * Return the script pubkey of the address.
-     */
-    std::shared_ptr<Script> script_pubkey();
-    /**
-     * Return the unconfidential address.
-     */
-    std::shared_ptr<Address> to_unconfidential();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
+    ~AnyClient();
+    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
+    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
 
     private:
-    Address(const Address &);
+    AnyClient(const AnyClient &);
 
-    Address(void *);
+    AnyClient(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -434,129 +472,112 @@ struct ForeignStoreLink
 
 
 namespace uniffi {
-    struct FfiConverterAnyClient;
+    struct FfiConverterAddress;
 } // namespace uniffi
 
-struct AnyClient
+/**
+ * A Liquid address
+ */
+struct Address
 
 
 
 {
-    friend uniffi::FfiConverterAnyClient;
+    friend uniffi::FfiConverterAddress;
 
-    AnyClient() = delete;
+    Address() = delete;
 
-    AnyClient(AnyClient &&) = delete;
+    Address(Address &&) = delete;
 
-    AnyClient &operator=(const AnyClient &) = delete;
-    AnyClient &operator=(AnyClient &&) = delete;
+    Address &operator=(const Address &) = delete;
+    Address &operator=(Address &&) = delete;
 
-    ~AnyClient();
-    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
-    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+    ~Address();
+    /**
+     * Construct an Address object
+     */
+    static std::shared_ptr<Address> init(const std::string &s);
+    /**
+     * Return true if the address is blinded.
+     */
+    bool is_blinded();
+    /**
+     * Returns the network of the address
+     */
+    std::shared_ptr<Network> network();
+    /**
+     * Returns a string of the QR code printable in a terminal environment
+     */
+    std::string qr_code_text();
+    /**
+     * Returns a string encoding an image in a uri
+     *
+     * The string can be open in the browser or be used as `src` field in `img` in HTML
+     *
+     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
+     * and use styling to scale up the image in the browser. eg
+     * `style="image-rendering: pixelated; border: 20px solid white;"`
+     */
+    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
+    /**
+     * Return the script pubkey of the address.
+     */
+    std::shared_ptr<Script> script_pubkey();
+    /**
+     * Return the unconfidential address.
+     */
+    std::shared_ptr<Address> to_unconfidential();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
 
     private:
-    AnyClient(const AnyClient &);
+    Address(const Address &);
 
-    AnyClient(void *);
+    Address(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
     void *instance = nullptr;
 };
 
-namespace uniffi {
-struct FfiConverterTokenProvider;
-} // namespace uniffi
 
 /**
- * Provider of a token for authenticated Esplora and Waterfalls backends.
- *
- * Some Esplora servers, particularly enterprise deployments like
- * [Blockstream Enterprise](https://blockstream.info/explorer-api), require authentication for
- * access.
+ * Chain tip metadata included in Waterfalls subscription events.
  */
-struct TokenProvider {
-    friend uniffi::FfiConverterTokenProvider;
+struct WaterfallsSubscriptionTip {
     /**
-     * No token is needed
+     * The tip block height.
      */
-    struct kNone {
-    };
+    uint32_t height;
     /**
-     * A static token is used as-is for every request
+     * The tip block hash.
      */
-    struct kStatic {
-        /**
-         * The token value
-         */
-        std::string token;
-    };
+    std::string block_hash;
     /**
-     * An OAuth2 token is obtained from the Blockstream API and refreshed automatically
+     * The tip block timestamp.
      */
-    struct kBlockstream {
-        /**
-         * The url to get the token from
-         */
-        std::string url;
-        /**
-         * The client ID
-         */
-        std::string client_id;
-        /**
-         * The client secret
-         */
-        std::string client_secret;
-    };
-    TokenProvider(kNone variant): variant(variant) {}
-    TokenProvider(kStatic variant): variant(variant) {}
-    TokenProvider(kBlockstream variant): variant(variant) {}
-
-    TokenProvider(const TokenProvider &other): variant(other.variant) {}
-    TokenProvider(TokenProvider &&other): variant(std::move(other.variant)) {}
-
-    TokenProvider &operator=(const TokenProvider &other) {
-        variant = other.variant;
-        return *this;
-    }
-
-    TokenProvider &operator=(TokenProvider &&other) {
-        variant = std::move(other.variant);
-        return *this;
-    }
-
-    /**
-     * Returns the variant of this enum
-     */
-    const std::variant<kNone, kStatic, kBlockstream> &get_variant() const {
-        return variant;
-    }
-
-private:
-    std::variant<kNone, kStatic, kBlockstream> variant;
-
-    TokenProvider();
+    uint32_t timestamp;
 };
 
 
 /**
- * A builder for the `WaterfallsClient`
+ * Liquid BIP21 payment details
  */
-struct WaterfallsClientBuilder {
-    std::string base_url;
-    std::shared_ptr<Network> network;
-    std::optional<uint32_t> concurrency = std::nullopt;
-    std::optional<uint8_t> timeout = std::nullopt;
-    bool utxo_only = false;
+struct LiquidBip21 {
     /**
-     * HTTP headers to set on each request, for example to authenticate with a backend
+     * The Liquid address
      */
-    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    std::shared_ptr<Address> address;
     /**
-     * Token provider for authenticated Waterfalls backends
+     * The asset identifier
      */
-    std::optional<TokenProvider> token_provider = std::nullopt;
+    AssetId asset;
+    /**
+     * The amount in satoshis
+     */
+    std::optional<uint64_t> satoshi;
 };
 
 
@@ -600,6 +621,41 @@ struct BoltzSessionBuilder {
 
 
 /**
+ * A builder for the `WaterfallsClient`
+ */
+struct WaterfallsClientBuilder {
+    std::string base_url;
+    std::shared_ptr<Network> network;
+    std::optional<uint32_t> concurrency = std::nullopt;
+    std::optional<uint8_t> timeout = std::nullopt;
+    bool utxo_only = false;
+    /**
+     * HTTP headers to set on each request, for example to authenticate with a backend
+     */
+    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    /**
+     * Token provider for authenticated Waterfalls backends
+     */
+    std::optional<TokenProvider> token_provider = std::nullopt;
+};
+
+
+/**
+ * An update received from a Waterfalls descriptor subscription stream.
+ */
+struct WaterfallsSubscriptionEvent {
+    /**
+     * The event kind: `tip`, `mempool`, `block`, or `reorg`.
+     */
+    std::string kind;
+    /**
+     * The Waterfalls server tip observed when the event was emitted.
+     */
+    std::optional<WaterfallsSubscriptionTip> tip;
+};
+
+
+/**
  * A builder for the `EsploraClient`
  */
 struct EsploraClientBuilder {
@@ -617,25 +673,6 @@ struct EsploraClientBuilder {
      * Token provider for authenticated Esplora and Waterfalls backends
      */
     std::optional<TokenProvider> token_provider = std::nullopt;
-};
-
-
-/**
- * Liquid BIP21 payment details
- */
-struct LiquidBip21 {
-    /**
-     * The Liquid address
-     */
-    std::shared_ptr<Address> address;
-    /**
-     * The asset identifier
-     */
-    AssetId asset;
-    /**
-     * The amount in satoshis
-     */
-    std::optional<uint64_t> satoshi;
 };
 
 
@@ -3746,6 +3783,10 @@ struct Signer
      */
     std::shared_ptr<WolletDescriptor> singlesig_desc(const Singlesig &script_variant, const DescriptorBlindingKey &blinding_variant);
     /**
+     * Return the signer fingerprint
+     */
+    std::string slip77_master_blinding_key();
+    /**
      * Return the witness public key hash, slip77 descriptor of this signer
      */
     std::shared_ptr<WolletDescriptor> wpkh_slip77_descriptor();
@@ -4684,6 +4725,13 @@ struct WaterfallsClient
      */
     std::shared_ptr<Update> full_scan_to_index(const std::shared_ptr<Wollet> &wollet, uint32_t index);
     /**
+     * Subscribe to Waterfalls descriptor updates.
+     *
+     * Subscription events are hints. `tip` events only indicate a new chain tip;
+     * `mempool`, `block`, and `reorg` indicate wallet invalidation hints.
+     */
+    std::shared_ptr<WaterfallsSubscription> subscribe(const std::shared_ptr<WolletDescriptor> &descriptor);
+    /**
      * See [`BlockchainBackend::tip`]
      */
     std::shared_ptr<BlockHeader> tip();
@@ -4692,6 +4740,50 @@ struct WaterfallsClient
     WaterfallsClient(const WaterfallsClient &);
 
     WaterfallsClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterWaterfallsSubscription;
+} // namespace uniffi
+
+/**
+ * A blocking Waterfalls descriptor subscription stream.
+ */
+struct WaterfallsSubscription
+
+
+
+{
+    friend uniffi::FfiConverterWaterfallsSubscription;
+
+    WaterfallsSubscription() = delete;
+
+    WaterfallsSubscription(WaterfallsSubscription &&) = delete;
+
+    WaterfallsSubscription &operator=(const WaterfallsSubscription &) = delete;
+    WaterfallsSubscription &operator=(WaterfallsSubscription &&) = delete;
+
+    ~WaterfallsSubscription();
+    /**
+     * Stop the subscription stream and release its worker thread.
+     */
+    void close_subscription();
+    /**
+     * Return the next Waterfalls subscription update.
+     *
+     * Returns `None` when the server closes the stream or [`Self::close_subscription`] is called.
+     */
+    std::optional<WaterfallsSubscriptionEvent> next_update();
+
+    private:
+    WaterfallsSubscription(const WaterfallsSubscription &);
+
+    WaterfallsSubscription(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -4971,6 +5063,15 @@ struct WolletDescriptor
      * Create a new descriptor from its string representation.
      */
     static std::shared_ptr<WolletDescriptor> init(const std::string &descriptor);
+    /**
+     * Descriptor from xpub
+     *
+     * This should be used when the xpub is obtained from a signer
+     * (e.g. Jade) managed outside LWK.
+     *
+     * If master blinding key is SLIP77, it must be wrapped in "slip77(...)"
+     */
+    static std::shared_ptr<WolletDescriptor> from_xpub(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num, const std::string &master_blinding_key, const std::string &fingerprint, const std::string &xpub);
     /**
      * Derive the private blinding key
      */
@@ -6208,6 +6309,16 @@ private:
 };
 
 
+struct FfiConverterWaterfallsSubscription {
+    static std::shared_ptr<WaterfallsSubscription> lift(void *);
+    static void *lower(const std::shared_ptr<WaterfallsSubscription> &);
+    static std::shared_ptr<WaterfallsSubscription> read(RustStream &);
+    static void write(RustStream &, const std::shared_ptr<WaterfallsSubscription> &);
+    static uint64_t allocation_size(const std::shared_ptr<WaterfallsSubscription> &);
+private:
+};
+
+
 struct FfiConverterWebHook {
     static std::shared_ptr<WebHook> lift(void *);
     static void *lower(const std::shared_ptr<WebHook> &);
@@ -6293,6 +6404,22 @@ struct FfiConverterTypeWaterfallsClientBuilder {
     static WaterfallsClientBuilder read(RustStream &);
     static void write(RustStream &, const WaterfallsClientBuilder &);
     static uint64_t allocation_size(const WaterfallsClientBuilder &);
+};
+
+struct FfiConverterTypeWaterfallsSubscriptionEvent {
+    static WaterfallsSubscriptionEvent lift(RustBuffer);
+    static RustBuffer lower(const WaterfallsSubscriptionEvent &);
+    static WaterfallsSubscriptionEvent read(RustStream &);
+    static void write(RustStream &, const WaterfallsSubscriptionEvent &);
+    static uint64_t allocation_size(const WaterfallsSubscriptionEvent &);
+};
+
+struct FfiConverterTypeWaterfallsSubscriptionTip {
+    static WaterfallsSubscriptionTip lift(RustBuffer);
+    static RustBuffer lower(const WaterfallsSubscriptionTip &);
+    static WaterfallsSubscriptionTip read(RustStream &);
+    static void write(RustStream &, const WaterfallsSubscriptionTip &);
+    static uint64_t allocation_size(const WaterfallsSubscriptionTip &);
 };
 struct FfiConverterChain {
     static Chain lift(RustBuffer);
@@ -6540,6 +6667,20 @@ struct FfiConverterOptionalTypeLiquidBip21 {
     static void write(RustStream &stream, const std::optional<LiquidBip21>& value);
     static uint64_t allocation_size(const std::optional<LiquidBip21> &val);
 };
+struct FfiConverterOptionalTypeWaterfallsSubscriptionEvent {
+    static std::optional<WaterfallsSubscriptionEvent> lift(RustBuffer buf);
+    static RustBuffer lower(const std::optional<WaterfallsSubscriptionEvent>& val);
+    static std::optional<WaterfallsSubscriptionEvent> read(RustStream &stream);
+    static void write(RustStream &stream, const std::optional<WaterfallsSubscriptionEvent>& value);
+    static uint64_t allocation_size(const std::optional<WaterfallsSubscriptionEvent> &val);
+};
+struct FfiConverterOptionalTypeWaterfallsSubscriptionTip {
+    static std::optional<WaterfallsSubscriptionTip> lift(RustBuffer buf);
+    static RustBuffer lower(const std::optional<WaterfallsSubscriptionTip>& val);
+    static std::optional<WaterfallsSubscriptionTip> read(RustStream &stream);
+    static void write(RustStream &stream, const std::optional<WaterfallsSubscriptionTip>& value);
+    static uint64_t allocation_size(const std::optional<WaterfallsSubscriptionTip> &val);
+};
 struct FfiConverterOptionalTokenProvider {
     static std::optional<TokenProvider> lift(RustBuffer buf);
     static RustBuffer lower(const std::optional<TokenProvider>& val);
@@ -6567,6 +6708,14 @@ struct FfiConverterOptionalTypeAssetId {
     static std::optional<AssetId> read(RustStream &stream);
     static void write(RustStream &stream, const std::optional<AssetId>& value);
     static uint64_t allocation_size(const std::optional<AssetId> &val);
+};
+
+struct FfiConverterSequenceUInt32 {
+    static std::vector<uint32_t> lift(RustBuffer);
+    static RustBuffer lower(const std::vector<uint32_t> &);
+    static std::vector<uint32_t> read(RustStream &);
+    static void write(RustStream &, const std::vector<uint32_t> &);
+    static uint64_t allocation_size(const std::vector<uint32_t> &);
 };
 
 struct FfiConverterSequenceString {
@@ -6723,6 +6872,10 @@ AssetId derive_asset_id(const std::shared_ptr<TxIn> &txin, const std::shared_ptr
  * Derive token id from contract and transaction input
  */
 AssetId derive_token_id(const std::shared_ptr<TxIn> &txin, const std::shared_ptr<Contract> &contract);
+/**
+ * Get the derivation path for an account
+ */
+std::vector<uint32_t> get_path(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num);
 /**
  * Whether a script pubkey is provably segwit
  */
