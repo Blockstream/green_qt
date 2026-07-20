@@ -43,6 +43,8 @@ public:
     TaskGroupMonitor* monitor() const;
     void setMonitor(TaskGroupMonitor* monitor);
 
+    void waitForFuture(QFuture<void> future);
+
 public slots:
     void clearErrors();
     void changeSettings(const QJsonObject& data);
@@ -57,7 +59,6 @@ public slots:
 
 protected:
     explicit Controller(ControllerPrivate* d, QObject* parent = nullptr);
-    void waitForFuture(QFuture<void> future);
     void setError(const QString& key, const QVariant& value);
     void clearError(const QString& key);
     bool updateError(const QString& key, const QVariant& value, bool when);

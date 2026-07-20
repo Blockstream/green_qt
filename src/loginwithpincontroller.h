@@ -55,6 +55,7 @@ private:
     void connectLightningNode(TaskGroup* group);
     void createBoltzSession(TaskGroup* group);
     void loginNetwork(Network* network);
+    void loadAmp2();
 };
 
 class BackgroundLoadController : public Controller

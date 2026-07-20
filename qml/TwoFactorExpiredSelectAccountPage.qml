@@ -98,7 +98,7 @@ StackViewPage {
                         font.pixelSize: 10
                         font.weight: 400
                         opacity: 0.6
-                        text: UtilJS.networkLabel(button.account.network) + ' / ' + UtilJS.accountLabel(button.account)
+                        text: UtilJS.accountDescription(button.account)
                         wrapMode: Label.Wrap
                     }
                 }

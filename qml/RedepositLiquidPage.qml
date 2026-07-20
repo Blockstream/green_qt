@@ -91,7 +91,7 @@ StackViewPage {
                             font.pixelSize: 11
                             font.weight: 400
                             opacity: 0.4
-                            text: UtilJS.networkLabel(self.account?.network) + ' / ' + UtilJS.accountLabel(self.account)
+                            text: UtilJS.accountDescription(self.account)
                         }
                     }
                 }

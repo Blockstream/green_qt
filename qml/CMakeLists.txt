@@ -131,6 +131,7 @@ set(QML_FILES_WORKFLOWS
     DrawerTitle.qml
     FieldTitle.qml
     CreateAccountPage.qml
+    CreateAmp2AccountPage.qml
     SecurityPolicyButton.qml
     WalletHeaderCard.qml
     TotalBalanceCard.qml
@@ -192,6 +193,8 @@ set(QML_FILES_DEVICES
     AirgappedImportPage.qml
     JadeUnlockSignView.qml
     JadeQRUnlockPage.qml
+    Amp2SendPage.qml
+    Amp2SignPage.qml
     PinPadButton.qml
     TransactionCompletedPage.qml
     TransactionFailedPage.qml

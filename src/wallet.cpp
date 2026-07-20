@@ -129,6 +129,9 @@ void Wallet::save()
     if (!m_xpub_hash_id.isEmpty()) {
         data.insert("xpub_hash_id", m_xpub_hash_id);
     }
+    if (!m_amp2_wid.isEmpty()) {
+        data.insert("amp2_wid", m_amp2_wid);
+    }
     if (m_login) m_login->write(data);
     QFile file(GetDataFile("wallets2", m_id));
     bool result = file.open(QFile::WriteOnly | QFile::Truncate);

@@ -25,6 +25,7 @@ class Account : public QObject
     Q_PROPERTY(bool synced READ synced NOTIFY syncedChanged)
     Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
     Q_PROPERTY(bool amp0 READ isAmp0 NOTIFY typeChanged)
+    Q_PROPERTY(bool amp2 READ isAmp2 NOTIFY typeChanged)
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(bool hidden READ isHidden NOTIFY hiddenChanged)
@@ -49,6 +50,7 @@ public:
     bool isSinglesig() const;
     bool isMultisig() const;
     bool isAmp0() const;
+    bool isAmp2() const;
 
     QString name() const { return m_name; }
     void setName(const QString& name);

@@ -4,6 +4,7 @@
 #include "boltzcreatesessiontask.h"
 #include "boltzloadswapstask.h"
 #include "context.h"
+#include "controllers/lwkamp2accountcontroller.h"
 #include "green_settings.h"
 #include "jadedevice.h"
 #include "json.h"
@@ -17,6 +18,7 @@
 #include "walletmanager.h"
 
 #include <QJsonDocument>
+#include <QtConcurrentRun>
 
 #include <gdk.h>
 
@@ -344,6 +346,67 @@ void LoadController::load()
             loginNetwork(network);
         }
     }
+
+    loadAmp2();
+}
+
+void LoadController::loadAmp2()
+{
+    auto wallet = context()->wallet();
+    if (!wallet) return;
+
+    // The descriptor is re-derived from the signer rather than persisted, so a
+    // software signer is required (matches the create flow).
+    const auto mnemonic = context()->credentials().value("mnemonic").toString();
+    if (mnemonic.isEmpty()) return;
+
+    if (!wallet->m_amp2_wid.isEmpty()) {
+        // context()->amp2AccountController() is gated on wallet->m_amp2_wid,
+        // already confirmed non-empty above, so this returns a real instance.
+        if (auto controller = context()->amp2AccountController()) {
+            controller->load();
+        }
+        return;
+    }
+
+    // No local wid yet. AMP2 is testnet-only (see
+    // LwkAmp2AccountController::amp2Network()); mainnet wallets have nothing
+    // to detect. On testnet the wallet may have used AMP2 elsewhere (or
+    // before wid persistence existed) — scan the derived (unregistered)
+    // descriptor for prior on-chain history and only register/persist the
+    // wid if it was actually used, so a fresh AMP2 account isn't silently
+    // registered for every wallet on every login.
+    if (context()->isMainnet()) return;
+
+    auto controller = new LwkAmp2AccountController(this);
+    controller->setContext(context());
+
+    auto future = QtConcurrent::run(controller->threadPool(), [controller] {
+        return controller->detectAndRegisterIfUsed();
+    });
+
+    future.then(this, [this, controller](LwkAmp2AccountController::Amp2DetectResult result) {
+        controller->deleteLater();
+
+        if (!result.ok) {
+            qWarning() << Q_FUNC_INFO << "AMP2 auto-detect failed:" << result.error;
+            return;
+        }
+        if (!result.has_history) return;
+
+        auto wallet = context()->wallet();
+        if (!wallet) return;
+        wallet->m_amp2_wid = result.wid;
+        wallet->save();
+
+        // context()->amp2AccountController() is gated on wallet->m_amp2_wid,
+        // just persisted above, so this now returns the real controller.
+        if (auto real_controller = context()->amp2AccountController()) {
+            real_controller->start(result.wollet, result.amp2);
+        }
+    });
+
+    waitForFuture(future);
 }
 
 void LoadController::loadNetwork(TaskGroup* group, Network* network)
@@ -392,6 +455,8 @@ BackgroundLoadController::BackgroundLoadController(QObject* parent)
             }
 
             for (auto account : context()->getAccounts()) {
+                // AMP2 accounts have no gdk subaccount; gdk rejects their pointer.
+                if (account->isAmp2()) continue;
                 fetchAddresses(context(), account, 0);
             }
         });

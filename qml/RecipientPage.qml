@@ -209,7 +209,7 @@ StackViewPage {
         }
         if (self.accounts.length === 1 && self.assets.length === 1) {
             self.error = null
-            return self.pushPage(self.page, {
+            return self.pushPage(self.pageFor(self.accounts[0]), {
                 account: self.accounts[0],
                 asset: self.assets[0].asset,
                 input: recipient_field.input,
@@ -217,6 +217,13 @@ StackViewPage {
             })
         }
         self.error = { code: 'unknown error', visible: true }
+    }
+
+    // AMP2 accounts have no gdk session, so plain address sends go through a
+    // dedicated lwk-backed send page instead of the standard SendDetailsPage.
+    function pageFor(account) {
+        if (account?.amp2 && self.page === send_page) return amp2_send_page
+        return self.page
     }
 
     id: self
@@ -398,6 +405,15 @@ StackViewPage {
         }
     }
     Component {
+        id: amp2_send_page
+        Amp2SendPage {
+            context: self.context
+            input: recipient_field.input
+            recipient: recipient_field.recipient
+            onCloseClicked: self.closeClicked()
+        }
+    }
+    Component {
         id: asset_selector_page
         AssetSelectorPage {
             id: page
@@ -405,7 +421,7 @@ StackViewPage {
             onAssetClicked: (asset) => {
                 const accounts = UtilJS.accounts(self.context).filter(account => (account.json.satoshi[asset.key] ?? 0) !== 0)
                 if (accounts.length === 1) {
-                    return self.pushPage(self.page, {
+                    return self.pushPage(self.pageFor(accounts[0]), {
                         account: accounts[0],
                         asset: asset,
                         input: recipient_field.input,
@@ -428,7 +444,7 @@ StackViewPage {
             context: self.context
             message: ''
             onAccountClicked: (account) => {
-                self.pushPage(self.page, {
+                self.pushPage(self.pageFor(account), {
                     account,
                     asset: page.asset,
                     input: recipient_field.input,

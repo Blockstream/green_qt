@@ -59,6 +59,8 @@ void Account::updateBalance()
 
 void Account::loadBalance()
 {
+    // AMP2 accounts are lwk/wollet-backed and have no gdk subaccount to query.
+    if (isAmp2()) return;
     if (m_load_balance_timer_id != -1) {
         killTimer(m_load_balance_timer_id);
     }
@@ -247,6 +249,11 @@ bool Account::isMultisig() const
 bool Account::isAmp0() const
 {
     return m_type == "2of2_no_recovery";
+}
+
+bool Account::isAmp2() const
+{
+    return m_type == "amp2";
 }
 
 void Account::setType(const QString& type)

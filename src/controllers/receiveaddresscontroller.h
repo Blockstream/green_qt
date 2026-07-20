@@ -37,6 +37,8 @@ public:
     QString error() const { return m_error; }
 public slots:
     void generate();
+private slots:
+    void generateAmp2();
 signals:
     void accountChanged();
     void assetChanged();

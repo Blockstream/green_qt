@@ -42,6 +42,8 @@ class CreateAccountController : public Controller
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QStringList recoveryMnemonic READ recoveryMnemonic WRITE setRecoveryMnemonic NOTIFY recoveryMnemonicChanged)
     Q_PROPERTY(QString recoveryXpub READ recoveryXpub WRITE setRecoveryXpub NOTIFY recoveryXpubChanged)
+    Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
+    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
     QML_ELEMENT
 
 public:
@@ -56,6 +58,8 @@ public:
     void setRecoveryMnemonic(const QStringList& recovery_mnemonic);
     QString recoveryXpub() const { return m_recovery_xpub; }
     void setRecoveryXpub(const QString& recovery_xpub);
+    bool busy() const { return m_busy; }
+    QString error() const { return m_error; }
 
     Q_INVOKABLE QStringList generateMnemonic(int size) const;
 
@@ -66,17 +70,22 @@ signals:
     void created(Account* account);
     void recoveryMnemonicChanged();
     void recoveryXpubChanged();
+    void busyChanged();
+    void errorChanged();
     void failed(const QString& error);
 public slots:
     void create();
 private slots:
+    void createAmp2Account();
     void ensureSession();
     void ensureAccount();
 private:
+    void setBusy(bool busy);
     Asset* m_asset{nullptr};
     Network* m_network{nullptr};
     QString m_type;
     QString m_error;
+    bool m_busy{false};
     QStringList m_recovery_mnemonic;
     QString m_recovery_xpub;
     Account* m_account{nullptr};

@@ -19,8 +19,10 @@ Q_MOC_INCLUDE("lightningsession.h")
 Q_MOC_INCLUDE("notification.h")
 Q_MOC_INCLUDE("session.h")
 Q_MOC_INCLUDE("wallet.h")
+Q_MOC_INCLUDE("controllers/lwkamp2accountcontroller.h")
 
 class LightningSession;
+class LwkAmp2AccountController;
 struct LightningPayment;
 
 class ContextTransaction : public QObject
@@ -107,6 +109,15 @@ public:
     Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
     Q_INVOKABLE Account* getOrCreateAccount(Network* network, quint32 pointer);
     Account* getOrCreateAccount(Network* network, const QJsonObject& data);
+
+    // Create/lookup the synthetic AMP2 account (no gdk subaccount exists).
+    Account* getOrCreateAmp2Account(Network* network);
+    // All lwk/AMP2 runtime state (wollet, waterfalls client/subscription,
+    // derivation) lives on LwkAmp2AccountController, not here. Lazily
+    // instantiated once the wallet has a registered AMP2 wid (see
+    // Wallet::m_amp2_wid); returns nullptr otherwise. Mirrors lightningSession().
+    LwkAmp2AccountController* amp2AccountController();
+
     Account* getAccountByPointer(Network* network, int pointer) const;
     ChainTransaction* getOrCreateChainTransaction(const QString& hash);
     QList<ContextTransaction*> getTransaction(const QString& hash) const;
@@ -235,6 +246,8 @@ public:
     QList<Swap*> m_swaps;
 
     LightningSession* m_lightning_session{nullptr};
+
+    LwkAmp2AccountController* m_amp2_account_controller{nullptr};
 };
 
 class ContextManager : public QObject

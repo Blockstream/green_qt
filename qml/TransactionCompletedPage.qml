@@ -8,7 +8,10 @@ StackViewPage {
     id: self
     property AccountTransaction transaction
     property string message: qsTrId('id_successfully_sent_your_funds')
-    readonly property string txhash: self.transaction?.data?.txhash ?? ''
+    // Overridable: a caller that knows the txhash but may lack the
+    // AccountTransaction (e.g. Amp2SignPage when the post-broadcast refresh
+    // scan failed) can pass it directly so the txid pane still shows.
+    property string txhash: self.transaction?.data?.txhash ?? ''
     readonly property string explorerUrl: String(self.transaction?.url ?? '')
     leftItem: Item {}
     centerItem: Item {}

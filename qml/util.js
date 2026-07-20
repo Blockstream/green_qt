@@ -93,6 +93,11 @@ function accountName(account) {
     return qsTrId('Account %1').arg(account.pointer)
 }
 
+function accountDescription(account) {
+    if (!account) return ''
+    return `${networkLabel(account?.network)} / ${accountLabel(account)}`
+}
+
 function dynamicScenePosition(item, x, y) {
     const target = item
     while (item) {
@@ -143,6 +148,7 @@ function canArchiveAccount(context, account) {
     if (!context || !account) return false
     if (context.watchonly) return false
     if (account.hidden) return false
+    if (account.amp2) return false
     if (accounts(context).length <= 1) return false
     if (accountHasBalance(account)) return false
     return true
@@ -169,6 +175,7 @@ function accountLabel (account) {
         case 'p2sh-p2wpkh': return qsTrId('id_legacy_segwit')
         case 'p2wpkh': return qsTrId('id_native_segwit')
         case 'p2pkh': return qsTrId('id_legacy')
+        case 'amp2': return 'AMP2'
         default: return qsTrId('-')
     }
 }

@@ -1,9 +1,11 @@
 #include "account.h"
 #include "asset.h"
 #include "context.h"
+#include "controllers/lwkamp2accountcontroller.h"
 #include "createaccountcontroller.h"
 #include "ga.h"
 #include "json.h"
+#include "lwk/lwk.hpp"
 #include "network.h"
 #include "session.h"
 #include "task.h"
@@ -11,6 +13,8 @@
 
 #include <gdk.h>
 #include <wally_wrapper.h>
+
+#include <QtConcurrentRun>
 
 namespace {
 
@@ -82,8 +86,120 @@ void CreateAccountController::create()
     auto monitor = new TaskGroupMonitor(this);
     setMonitor(monitor);
     m_error = {};
+    emit errorChanged();
 
-    ensureSession();
+    if (m_type == "amp2") {
+        createAmp2Account();
+    } else {
+        ensureSession();
+    }
+}
+
+void CreateAccountController::setBusy(bool busy)
+{
+    if (m_busy == busy) return;
+    m_busy = busy;
+    emit busyChanged();
+}
+
+void CreateAccountController::createAmp2Account()
+{
+    // The AMP2 path has no task group driving monitor->idle, so m_busy is
+    // what gates the QML button; it also guards against a double-click
+    // racing two register_wallet calls.
+    if (m_busy) return;
+    qDebug() << Q_FUNC_INFO << "starting AMP2 account creation on" << m_network;
+    const auto mnemonic = context()->credentials().value("mnemonic").toString();
+    if (mnemonic.isEmpty()) {
+        qDebug() << Q_FUNC_INFO << "no mnemonic available, aborting";
+        m_error = "AMP2 account creation requires a software signer.";
+        emit errorChanged();
+        emit failed(m_error);
+        return;
+    }
+
+    struct Result {
+        bool ok{false};
+        QString error;
+        QString wid;
+        std::shared_ptr<lwk::Amp2> amp2;
+        std::shared_ptr<lwk::Wollet> wollet;
+    };
+
+    // No AMP2 wid exists yet, so context()->amp2AccountController() would
+    // return nullptr; use a throwaway controller instance purely to run
+    // deriveAmp2(), then hand off to the real (cached) controller below once
+    // registration succeeds and the wid is persisted.
+    auto derive_controller = new LwkAmp2AccountController(this);
+    derive_controller->setContext(context());
+
+    setBusy(true);
+
+    auto future = QtConcurrent::run(derive_controller->threadPool(), [=, this]() -> Result {
+        Result result;
+        const auto derivation = derive_controller->deriveAmp2();
+        if (!derivation.ok) {
+            qWarning() << "createAmp2Account: deriveAmp2 failed:" << derivation.error;
+            result.error = derivation.error;
+            return result;
+        }
+        try {
+            result.wid = QString::fromStdString(derivation.amp2->register_wallet(derivation.amp2_desc));
+            qDebug() << "createAmp2Account: registered wallet, wid =" << result.wid;
+        } catch (const lwk::lwk_error::Generic& error) {
+            qWarning() << "createAmp2Account: register_wallet error:" << error.msg;
+            result.error = QString::fromStdString(error.msg);
+            return result;
+        } catch (...) {
+            qWarning() << "createAmp2Account: register_wallet unexpected error";
+            result.error = "Unexpected error registering AMP2 account.";
+            return result;
+        }
+        result.amp2 = derivation.amp2;
+        result.wollet = derivation.wollet;
+        result.ok = true;
+        return result;
+    });
+
+    future.then(this, [=, this](Result result) {
+        derive_controller->deleteLater();
+        setBusy(false);
+
+        if (!result.ok) {
+            qDebug() << Q_FUNC_INFO << "AMP2 registration failed:" << result.error;
+            m_error = result.error;
+            emit errorChanged();
+            emit failed(m_error);
+            return;
+        }
+        qDebug() << Q_FUNC_INFO << "AMP2 registration succeeded, wid =" << result.wid;
+
+        // Persist the wid so the account can be reloaded on next login. Only the
+        // wid is stored (it proves registration); the descriptor is re-derived
+        // from the signer at load to keep the blinding key off disk.
+        auto wallet = context()->wallet();
+        if (wallet) {
+            wallet->m_amp2_wid = result.wid;
+            wallet->save();
+        }
+
+        // context()->amp2AccountController() is gated on the wallet having a
+        // registered wid, which was just persisted above, so this now returns
+        // a freshly constructed controller.
+        auto controller = context()->amp2AccountController();
+        if (!wallet || !controller) {
+            qWarning() << Q_FUNC_INFO << "AMP2 registered but wallet/controller unavailable";
+            m_error = "Unable to finish setting up the AMP2 account.";
+            emit errorChanged();
+            emit failed(m_error);
+            return;
+        }
+        controller->start(result.wollet, result.amp2);
+        m_account = controller->account();
+        emit created(m_account);
+    });
+
+    waitForFuture(future);
 }
 
 void CreateAccountController::ensureSession()

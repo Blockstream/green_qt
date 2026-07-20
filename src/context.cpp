@@ -4,10 +4,12 @@
 #include "asset.h"
 #include "bip85.h"
 #include "context.h"
+#include "controllers/lwkamp2accountcontroller.h"
 #include "device.h"
 #include "green_settings.h"
 #include "json.h"
 #include "lightningsession.h"
+#include "lwk/lwk.hpp"
 #include "network.h"
 #include "networkmanager.h"
 #include "notification.h"
@@ -32,7 +34,6 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QTextStream>
-#include <QTimer>
 #include <QUrl>
 #include <QtConcurrentRun>
 
@@ -171,6 +172,8 @@ Session* Context::getOrCreateSession(Network* network)
         connect(session, &Session::blockEvent, this, [=, this](const QJsonObject& event) {
             auto group = new TaskGroup(this);
             for (auto account : m_accounts) {
+                if (account->isAmp2()) continue;
+
                 if (account->session() == session) {
                     // FIXME: Until gdk notifies of chain reorgs, resync balance every
                     // 10 blocks in case a reorged tx is somehow evicted from the mempool
@@ -382,6 +385,34 @@ Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
 Account* Context::getAccountByPointer(Network* network, int pointer) const
 {
     return m_accounts_by_pointer.value({ network, pointer });
+}
+
+Account* Context::getOrCreateAmp2Account(Network* network)
+{
+    // AMP2 has no gdk subaccount, so reserve a synthetic pointer that gdk never
+    // allocates to track the account alongside the gdk ones. The lwk wollet
+    // lives on LwkAmp2AccountController, not the Account, so the generic path
+    // is fine.
+    constexpr quint32 AMP2_POINTER = 0x40000000;
+    return getOrCreateAccount(network, QJsonObject{
+        { "pointer", static_cast<qint64>(AMP2_POINTER) },
+        { "type", "amp2" },
+        { "name", "AMP Liquid" },
+        { "hidden", false },
+        { "amp2_wid", m_wallet ? m_wallet->m_amp2_wid : QString() },
+    });
+}
+
+LwkAmp2AccountController* Context::amp2AccountController()
+{
+    if (!m_wallet || m_wallet->m_amp2_wid.isEmpty()) return nullptr;
+
+    if (!m_amp2_account_controller) {
+        m_amp2_account_controller = new LwkAmp2AccountController(this);
+        m_amp2_account_controller->setContext(this);
+    }
+
+    return m_amp2_account_controller;
 }
 
 ChainTransaction* Context::getOrCreateChainTransaction(const QString &hash)
@@ -663,7 +694,7 @@ void Context::checkAndAddBackupWarningNotification()
     if (!m_wallet || !qobject_cast<PinData*>(m_wallet->login())) {
         return;
     }
-    
+
     auto settings = Settings::instance();
     const auto event = QJsonObject{
         { "walletId", m_xpub_hash_id },
@@ -671,7 +702,7 @@ void Context::checkAndAddBackupWarningNotification()
         { "type", "wallet_backup" }
     };
     const bool event_registered = settings->isEventRegistered(event);
-    
+
     BackupNotification* backup_notification{nullptr};
     for (auto notification : m_notifications) {
         backup_notification = qobject_cast<BackupNotification*>(notification);

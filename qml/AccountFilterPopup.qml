@@ -75,7 +75,7 @@ FilterPopup {
                     font.styleName: 'Regular'
                     font.capitalization: Font.AllUppercase
                     color: 'white'
-                    text: UtilJS.networkLabel(delegate.account.network) + ' / ' + UtilJS.accountLabel(delegate.account)
+                    text: UtilJS.accountDescription(delegate.account)
                     elide: Label.ElideLeft
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0

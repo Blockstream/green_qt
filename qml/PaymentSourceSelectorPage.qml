@@ -69,7 +69,7 @@ StackViewPage {
                     color: '#A0A0A0'
                     font.pixelSize: 11
                     font.weight: 400
-                    text: button.lightning ? qsTrId('id_lightning') : UtilJS.networkLabel(button.source.account.network) + ' / ' + UtilJS.accountLabel(button.source.account)
+                    text: button.lightning ? qsTrId('id_lightning') : UtilJS.accountDescription(button.source.account)
                     elide: Label.ElideRight
                 }
             }

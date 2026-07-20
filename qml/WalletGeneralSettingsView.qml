@@ -34,6 +34,11 @@ Pane {
             .filter(account => account.amp0)
     }
 
+    readonly property var amp2Accounts: {
+        return UtilJS.accounts(self.context)
+            .filter(account => account.amp2)
+    }
+
     function updateCurrency(currency) {
         if (currency === self.session.settings.pricing.currency) return
         const exchange = self.session.settings.pricing.exchange
@@ -736,7 +741,89 @@ Pane {
             }
         }
 
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: '#262626'
+            visible: amp2_box.visible
+        }
+
+        // AMP2
+        RowLayout {
+            id: amp2_box
+            Layout.fillWidth: true
+            spacing: 20
+            visible: !self.context.mainnet && !self.context.watchonly && !self.context.device
+
+            // Left: Label
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 4
+                Label {
+                    Layout.fillWidth: true
+                    text: 'AMP2 (Testnet)'
+                    font.pixelSize: 14
+                    font.weight: 600
+                    color: '#FFFFFF'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: 'Create an AMP2 account to manage AMP2 assets.'
+                    font.pixelSize: 13
+                    color: '#6F6F6F'
+                    wrapMode: Label.Wrap
+                }
+            }
+
+            // Right: Cards / Control
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
+                spacing: 8
+
+                Repeater {
+                    model: self.amp2Accounts
+                    delegate: CopyButton {
+                        required property Account modelData
+                        Layout.fillWidth: true
+                        title: UtilJS.accountName(modelData)
+                        subtitle: 'ID: ' + modelData.json.amp2_wid
+                        copyText: modelData.json.amp2_wid
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignTop
+                    visible: self.amp2Accounts.length === 0
+                    implicitHeight: create_amp2_button.implicitHeight
+                    GButton {
+                        id: create_amp2_button
+                        large: true
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: 'Create AMP2 Account'
+                        onClicked: {
+                            const network = NetworkManager.network('electrum-testnet-liquid')
+                            const asset = self.context.getOrCreateAsset(network.policyAsset)
+                            const drawer = create_account_drawer.createObject(self, { context: self.context, asset, amp2: true })
+                            drawer.open()
+                        }
+                    }
+                }
+            }
+        }
+
         VSpacer {
+        }
+    }
+
+    Component {
+        id: create_account_drawer
+        CreateAccountDrawer {
         }
     }
 

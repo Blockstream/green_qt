@@ -21,7 +21,7 @@ StackViewPage {
     centerItem: EditableLabel {
         id: name_field
         color: '#FFFFFF'
-        readOnly: self.context.watchonly
+        readOnly: self.context.watchonly || self.account.amp2
         font.pixelSize: 14
         font.weight: 600
         text: UtilJS.accountName(self.account)
@@ -52,7 +52,7 @@ StackViewPage {
                 enabled: !self.context.watchonly
                 spacing: 0
                 GMenu.Item {
-                    enabled: !self.context.watchonly
+                    enabled: !self.context.watchonly && !self.account.amp2
                     icon.source: 'qrc:/svg/wallet-rename.svg'
                     text: qsTrId('id_rename')
                     onClicked: {

@@ -36,6 +36,9 @@ target_sources(${APP_TARGET} PRIVATE
     restorecontroller.h restorecontroller.cpp
     signupcontroller.h signupcontroller.cpp
     watchonlylogincontroller.h watchonlylogincontroller.cpp
+    controllers/createpsetcontroller.h controllers/createpsetcontroller.cpp
+    controllers/amp2signcontroller.h controllers/amp2signcontroller.cpp
+    controllers/lwkamp2accountcontroller.h controllers/lwkamp2accountcontroller.cpp
     controllers/bcurcontroller.h controllers/bcurcontroller.cpp
     controllers/receiveaddresscontroller.h controllers/receiveaddresscontroller.cpp
     controllers/sessioncontroller.h controllers/sessioncontroller.cpp

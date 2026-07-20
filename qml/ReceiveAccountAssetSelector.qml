@@ -190,14 +190,14 @@ StackViewPage {
                             for (const account of UtilJS.accounts(self.context)) {
                                 if (delegate.asset) {
                                     if (delegate.asset.networkKey !== account.network.key) continue
-                                    if (delegate.asset.amp && !account.amp0) continue
+                                    if (delegate.asset.amp && !(account.amp0 || account.amp2)) continue
                                     accounts.push(account)
                                 } else if (self.anyLiquid) {
                                     if (account.network.liquid) {
                                         accounts.push(account)
                                     }
                                 } else if (self.anyAMP) {
-                                    if (account.amp0) {
+                                    if (account.amp0 || account.amp2) {
                                         accounts.push(account)
                                     }
                                 }
@@ -321,7 +321,7 @@ StackViewPage {
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.4
-                    text: UtilJS.networkLabel(button.account.network) + ' / ' + UtilJS.accountLabel(button.account)
+                    text: UtilJS.accountDescription(button.account)
                 }
             }
             HSpacer {

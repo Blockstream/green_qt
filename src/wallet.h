@@ -176,6 +176,11 @@ public:
     bool m_lightning_enabled{false};
     bool m_busy{false};
 
+    // Persisted AMP2 wallet id; non-empty means an AMP2 account was registered
+    // and should be reloaded on login (see Context::amp2AccountController /
+    // LwkAmp2AccountController::deriveAmp2 / LoadController).
+    QString m_amp2_wid;
+
     void save();
 private:
     Context* m_context{nullptr};

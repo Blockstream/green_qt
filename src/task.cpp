@@ -1079,6 +1079,8 @@ void SyncAccountsTask::update()
     if (m_status == Status::Active) {
         for (auto account : session()->context()->getAccounts()) {
             if (account->session() != session()) continue;
+            // AMP2 accounts are lwk-backed and never receive a gdk sync event.
+            if (account->isAmp2()) continue;
             if (!account->synced()) return;
         }
         setStatus(Status::Finished);

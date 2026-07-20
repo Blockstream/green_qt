@@ -270,7 +270,7 @@ StackViewPage {
                     font.weight: 400
                     font.capitalization: Font.AllUppercase
                     color: '#929292'
-                    text: UtilJS.networkLabel(button.account.network) + ' / ' + UtilJS.accountLabel(button.account)
+                    text: UtilJS.accountDescription(button.account)
                     elide: Label.ElideLeft
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
