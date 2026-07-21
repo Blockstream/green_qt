@@ -17,6 +17,8 @@ cd gdk
 git rev-parse HEAD
 git checkout $GDK_COMMIT
 
+export SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
+
 # unset to disable building gdk java support
 unset JAVA_HOME
 # unset because it clashes with gdk build script
