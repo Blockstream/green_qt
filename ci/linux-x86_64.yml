@@ -41,6 +41,8 @@ linux-x86_64:build-appimage:
   before_script:
     - export PATH="/qt/6.11.1/gcc_64/bin:$PREFIX/bin/:$PATH"
     - export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH"
+    - export SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
+    - git ls-files -z | xargs -0 touch -d @$SOURCE_DATE_EPOCH
   after_script:
     - mv build/blockstream .
     - tools/appimage.sh --plugin-qt $CI_PROJECT_DIR
