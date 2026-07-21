@@ -122,6 +122,9 @@ StackViewPage {
                 asset_id = NetworkManager.network('liquid').policyAsset
                 return lnurl_page
             }
+            if (recipient.bip21?.asset_id) {
+                asset_id = recipient.bip21?.asset_id
+            }
             if (recipient.address) {
                 network = recipient.address.network
                 return send_page

@@ -72,7 +72,7 @@ void fill(QVariantMap& result, lwk::LiquidBip21 uri)
     if (uri.satoshi.has_value()) {
         bip21.insert("amount", QString::number(*uri.satoshi));
     }
-    result.insert(bip21);
+    result.insert("bip21", bip21);
 }
 
 void fill(QVariantMap& result, std::shared_ptr<lwk::Payment> payment, const QVariantMap& data)

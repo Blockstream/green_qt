@@ -14,6 +14,7 @@ StackViewPage {
     required property string input
     required property var recipient
     readonly property var amount: ({ satoshi: self.recipient?.bip21?.amount ?? '0' })
+    readonly property bool fixedAmount: self.recipient?.bip21?.amount !== undefined
     property var available: {
         if (controller.coins.length > 0) {
             let satoshi = 0
@@ -180,7 +181,7 @@ StackViewPage {
             Layout.fillWidth: true
             id: amount_field
             // focus: !self.amount
-            readOnly: false
+            readOnly: self.fixedAmount
             convert: controller.recipient.convert
             session: controller.account.session
             error: {
@@ -225,7 +226,7 @@ StackViewPage {
             }
             LinkButton {
                 Layout.alignment: Qt.AlignTop
-                enabled: !controller.recipient.greedy
+                enabled: !self.fixedAmount && !controller.recipient.greedy
                 font.pixelSize: 14
                 font.weight: 600
                 text: qsTrId('id_send_all')
