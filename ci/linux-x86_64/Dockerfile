@@ -94,3 +94,6 @@ COPY --from=gpgme /depends /depends
 COPY --from=leveldb /depends /depends
 COPY --from=lwk /depends /depends
 COPY --from=glsdk /depends /depends
+
+COPY ci/linux-x86_64/download-appimage-binaries.sh .
+RUN ./download-appimage-binaries.sh
