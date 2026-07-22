@@ -336,6 +336,7 @@ MainPage {
 
     WalletsDrawer {
         id: wallets_drawer
+        focus: false
         leftMargin: side_bar.width
         onWalletClicked: (wallet) => {
             wallets_drawer.close()
