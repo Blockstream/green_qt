@@ -44,7 +44,7 @@ signals:
     void suggestionsChanged();
 };
 
-class MnemonicEditorController : public AbstractController
+class MnemonicEditorController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<Word> words READ words CONSTANT)

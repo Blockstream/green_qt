@@ -35,7 +35,6 @@ target_sources(${APP_TARGET} PRIVATE
     restorecontroller.h restorecontroller.cpp
     signupcontroller.h signupcontroller.cpp
     watchonlylogincontroller.cpp
-    controllers/abstractcontroller.h controllers/abstractcontroller.cpp
     controllers/bcurcontroller.h controllers/bcurcontroller.cpp
     controllers/receiveaddresscontroller.cpp
     controllers/sessioncontroller.h controllers/sessioncontroller.cpp

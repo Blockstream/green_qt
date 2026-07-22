@@ -1,11 +1,11 @@
 #ifndef GREEN_CONTROLLER_H
 #define GREEN_CONTROLLER_H
 
-#include "controllers/abstractcontroller.h"
 #include "green.h"
 
 #include <QFutureSynchronizer>
 #include <QQmlEngine>
+#include <QVariantMap>
 
 Q_MOC_INCLUDE("resolver.h")
 Q_MOC_INCLUDE("task.h")
@@ -20,9 +20,11 @@ public:
     QFutureSynchronizer<void> future_synchronizer;
 };
 
-class Controller : public AbstractController
+class Controller : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QVariantMap errors READ errors NOTIFY errorsChanged)
+    Q_PROPERTY(bool noErrors READ noErrors NOTIFY errorsChanged)
     Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     Q_PROPERTY(TaskGroupMonitor* monitor READ monitor NOTIFY monitorChanged)
     Q_DECLARE_PRIVATE(Controller)
@@ -30,6 +32,9 @@ class Controller : public AbstractController
 public:
     explicit Controller(QObject* parent = nullptr);
     ~Controller();
+
+    QVariantMap errors() const { return m_errors; }
+    bool noErrors() const { return m_errors.isEmpty(); }
 
     Context* context() const;
     void setContext(Context* context);
@@ -39,6 +44,7 @@ public:
     void setMonitor(TaskGroupMonitor* monitor);
 
 public slots:
+    void clearErrors();
     void changeSettings(const QJsonObject& data);
     void changeSessionSettings(Session* session, const QJsonObject& data);
     void setSessionRecoveryEmail(Session* session, const QString& email);
@@ -52,8 +58,12 @@ public slots:
 protected:
     explicit Controller(ControllerPrivate* d, QObject* parent = nullptr);
     void waitForFuture(QFuture<void> future);
+    void setError(const QString& key, const QVariant& value);
+    void clearError(const QString& key);
+    bool updateError(const QString& key, const QVariant& value, bool when);
 
 signals:
+    void errorsChanged();
     void contextChanged();
     void monitorChanged();
     void resolver(Resolver* resolver);
@@ -62,6 +72,9 @@ signals:
 
 protected:
     ControllerPrivate* const d_ptr;
+
+private:
+    QVariantMap m_errors;
 };
 
 #endif // GREEN_CONTROLLER_H

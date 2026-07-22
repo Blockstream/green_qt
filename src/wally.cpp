@@ -27,7 +27,7 @@ QSet<QString> g_wordset{g_wordlist.begin(), g_wordlist.end()};
 } // namespace
 
 MnemonicEditorController::MnemonicEditorController(QObject* parent)
-    : AbstractController(parent)
+    : Controller(parent)
 {
     for (int i = 0; i < 27; i++) {
         m_words.append(new Word(this, i));
