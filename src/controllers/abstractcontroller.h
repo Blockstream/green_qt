@@ -1,13 +1,11 @@
 #ifndef GREEN_ABSTRACTCONTROLLER_H
 #define GREEN_ABSTRACTCONTROLLER_H
 
-#include "entity.h"
-
 #include <QVariantMap>
 #include <QObject>
 #include <QQmlEngine>
 
-class AbstractController : public Entity
+class AbstractController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QVariantMap errors READ errors NOTIFY errorsChanged)

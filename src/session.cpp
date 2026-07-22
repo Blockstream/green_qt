@@ -30,7 +30,7 @@ QString ElectrumUrlForNetwork(Network* network)
 }
 
 Session::Session(Network* network, QObject* parent)
-    : Entity(parent)
+    : QObject(parent)
     , m_network(network)
     , m_use_tor(Settings::instance()->useTor())
     , m_use_proxy(Settings::instance()->useProxy())

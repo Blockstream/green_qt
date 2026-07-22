@@ -8,16 +8,15 @@
 
 #include "activity.h"
 #include "connectable.h"
-#include "entity.h"
 
 Q_MOC_INCLUDE("context.h")
 Q_MOC_INCLUDE("network.h")
 
-QT_FORWARD_DECLARE_STRUCT(GA_session)
+struct GA_session;
 
 class AuthHandlerTask;
 
-class Session : public Entity
+class Session : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Context* context READ context CONSTANT)

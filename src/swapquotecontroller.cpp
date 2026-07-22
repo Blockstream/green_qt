@@ -4,6 +4,7 @@
 #include "lwk/lwk.hpp"
 
 #include <QDebug>
+#include <QTimerEvent>
 #include <QtConcurrentRun>
 
 static QVariantMap parseQuote(const lwk::Quote& quote)

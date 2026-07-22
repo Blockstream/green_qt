@@ -18,7 +18,6 @@ target_sources(${APP_TARGET} PRIVATE
     progress.h progress.cpp
     asset.cpp
     address.cpp
-    entity.cpp
     network.cpp
     output.cpp
     payment.h payment.cpp

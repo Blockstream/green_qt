@@ -4,6 +4,7 @@
 #include "swap.h"
 
 #include <QDebug>
+#include <QTimerEvent>
 #include <QtConcurrentRun>
 
 #include <memory>

@@ -1,7 +1,7 @@
 #include "abstractcontroller.h"
 
 AbstractController::AbstractController(QObject* parent)
-    : Entity(parent)
+    : QObject(parent)
 {
 }
 
