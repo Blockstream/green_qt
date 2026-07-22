@@ -347,31 +347,70 @@ struct LoggingImpl
 
 
 namespace uniffi {
-    struct FfiConverterAnyClient;
+    struct FfiConverterAddress;
 } // namespace uniffi
 
-struct AnyClient
+/**
+ * A Liquid address
+ */
+struct Address
 
 
 
 {
-    friend uniffi::FfiConverterAnyClient;
+    friend uniffi::FfiConverterAddress;
 
-    AnyClient() = delete;
+    Address() = delete;
 
-    AnyClient(AnyClient &&) = delete;
+    Address(Address &&) = delete;
 
-    AnyClient &operator=(const AnyClient &) = delete;
-    AnyClient &operator=(AnyClient &&) = delete;
+    Address &operator=(const Address &) = delete;
+    Address &operator=(Address &&) = delete;
 
-    ~AnyClient();
-    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
-    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+    ~Address();
+    /**
+     * Construct an Address object
+     */
+    static std::shared_ptr<Address> init(const std::string &s);
+    /**
+     * Return true if the address is blinded.
+     */
+    bool is_blinded();
+    /**
+     * Returns the network of the address
+     */
+    std::shared_ptr<Network> network();
+    /**
+     * Returns a string of the QR code printable in a terminal environment
+     */
+    std::string qr_code_text();
+    /**
+     * Returns a string encoding an image in a uri
+     *
+     * The string can be open in the browser or be used as `src` field in `img` in HTML
+     *
+     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
+     * and use styling to scale up the image in the browser. eg
+     * `style="image-rendering: pixelated; border: 20px solid white;"`
+     */
+    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
+    /**
+     * Return the script pubkey of the address.
+     */
+    std::shared_ptr<Script> script_pubkey();
+    /**
+     * Return the unconfidential address.
+     */
+    std::shared_ptr<Address> to_unconfidential();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
 
     private:
-    AnyClient(const AnyClient &);
+    Address(const Address &);
 
-    AnyClient(void *);
+    Address(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -471,78 +510,6 @@ struct ForeignStoreLink
 };
 
 
-namespace uniffi {
-    struct FfiConverterAddress;
-} // namespace uniffi
-
-/**
- * A Liquid address
- */
-struct Address
-
-
-
-{
-    friend uniffi::FfiConverterAddress;
-
-    Address() = delete;
-
-    Address(Address &&) = delete;
-
-    Address &operator=(const Address &) = delete;
-    Address &operator=(Address &&) = delete;
-
-    ~Address();
-    /**
-     * Construct an Address object
-     */
-    static std::shared_ptr<Address> init(const std::string &s);
-    /**
-     * Return true if the address is blinded.
-     */
-    bool is_blinded();
-    /**
-     * Returns the network of the address
-     */
-    std::shared_ptr<Network> network();
-    /**
-     * Returns a string of the QR code printable in a terminal environment
-     */
-    std::string qr_code_text();
-    /**
-     * Returns a string encoding an image in a uri
-     *
-     * The string can be open in the browser or be used as `src` field in `img` in HTML
-     *
-     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
-     * and use styling to scale up the image in the browser. eg
-     * `style="image-rendering: pixelated; border: 20px solid white;"`
-     */
-    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
-    /**
-     * Return the script pubkey of the address.
-     */
-    std::shared_ptr<Script> script_pubkey();
-    /**
-     * Return the unconfidential address.
-     */
-    std::shared_ptr<Address> to_unconfidential();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-
-    private:
-    Address(const Address &);
-
-    Address(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
 /**
  * Chain tip metadata included in Waterfalls subscription events.
  */
@@ -562,6 +529,64 @@ struct WaterfallsSubscriptionTip {
 };
 
 
+namespace uniffi {
+    struct FfiConverterAnyClient;
+} // namespace uniffi
+
+struct AnyClient
+
+
+
+{
+    friend uniffi::FfiConverterAnyClient;
+
+    AnyClient() = delete;
+
+    AnyClient(AnyClient &&) = delete;
+
+    AnyClient &operator=(const AnyClient &) = delete;
+    AnyClient &operator=(AnyClient &&) = delete;
+
+    ~AnyClient();
+    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
+    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+    /**
+     * Create a generic client backed by Waterfalls.
+     */
+    static std::shared_ptr<AnyClient> from_waterfalls(const std::shared_ptr<WaterfallsClient> &client);
+
+    private:
+    AnyClient(const AnyClient &);
+
+    AnyClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+/**
+ * A builder for the `EsploraClient`
+ */
+struct EsploraClientBuilder {
+    std::string base_url;
+    std::shared_ptr<Network> network;
+    bool waterfalls = false;
+    std::optional<uint32_t> concurrency = std::nullopt;
+    std::optional<uint8_t> timeout = std::nullopt;
+    bool utxo_only = false;
+    /**
+     * HTTP headers to set on each request, for example to authenticate with a backend
+     */
+    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    /**
+     * Token provider for authenticated Esplora and Waterfalls backends
+     */
+    std::optional<TokenProvider> token_provider = std::nullopt;
+};
+
+
 /**
  * Liquid BIP21 payment details
  */
@@ -578,45 +603,6 @@ struct LiquidBip21 {
      * The amount in satoshis
      */
     std::optional<uint64_t> satoshi;
-};
-
-
-/**
- * A builder for the `BoltzSession`
- */
-struct BoltzSessionBuilder {
-    std::shared_ptr<Network> network;
-    std::shared_ptr<AnyClient> client;
-    std::optional<uint64_t> timeout = std::nullopt;
-    std::shared_ptr<Mnemonic> mnemonic = nullptr;
-    std::shared_ptr<Logging> logging = nullptr;
-    bool polling = false;
-    std::optional<uint64_t> timeout_advance = std::nullopt;
-    std::optional<uint32_t> next_index_to_use = std::nullopt;
-    std::optional<std::string> referral_id = std::nullopt;
-    /**
-     * Optional Boltz API base URL override.
-     *
-     * The caller is responsible for ensuring the provider behind this URL matches `network`.
-     *
-     * If this is used together with `store`, the caller must use a different store per provider.
-     * Persisted swap data is not namespaced by provider, so reusing the same store across
-     * different `api_url` values can mix swaps from different providers.
-     */
-    std::optional<std::string> api_url = std::nullopt;
-    std::optional<std::string> bitcoin_electrum_client_url = std::nullopt;
-    bool random_preimages = false;
-    /**
-     * Optional store for persisting swap data
-     *
-     * When set, swap data will be automatically persisted to the store after creation
-     * and on each state change. This enables automatic restoration of pending swaps.
-     *
-     * The store is not namespaced by provider, so if different `api_url` values are used the
-     * caller must use a different store per provider to avoid mixing swaps from different
-     * providers.
-     */
-    std::shared_ptr<ForeignStoreLink> store = nullptr;
 };
 
 
@@ -656,23 +642,41 @@ struct WaterfallsSubscriptionEvent {
 
 
 /**
- * A builder for the `EsploraClient`
+ * A builder for the `BoltzSession`
  */
-struct EsploraClientBuilder {
-    std::string base_url;
+struct BoltzSessionBuilder {
     std::shared_ptr<Network> network;
-    bool waterfalls = false;
-    std::optional<uint32_t> concurrency = std::nullopt;
-    std::optional<uint8_t> timeout = std::nullopt;
-    bool utxo_only = false;
+    std::shared_ptr<AnyClient> client;
+    std::optional<uint64_t> timeout = std::nullopt;
+    std::shared_ptr<Mnemonic> mnemonic = nullptr;
+    std::shared_ptr<Logging> logging = nullptr;
+    bool polling = false;
+    std::optional<uint64_t> timeout_advance = std::nullopt;
+    std::optional<uint32_t> next_index_to_use = std::nullopt;
+    std::optional<std::string> referral_id = std::nullopt;
     /**
-     * HTTP headers to set on each request, for example to authenticate with a backend
+     * Optional Boltz API base URL override.
+     *
+     * The caller is responsible for ensuring the provider behind this URL matches `network`.
+     *
+     * If this is used together with `store`, the caller must use a different store per provider.
+     * Persisted swap data is not namespaced by provider, so reusing the same store across
+     * different `api_url` values can mix swaps from different providers.
      */
-    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    std::optional<std::string> api_url = std::nullopt;
+    std::optional<std::string> bitcoin_electrum_client_url = std::nullopt;
+    bool random_preimages = false;
     /**
-     * Token provider for authenticated Esplora and Waterfalls backends
+     * Optional store for persisting swap data
+     *
+     * When set, swap data will be automatically persisted to the store after creation
+     * and on each state change. This enables automatic restoration of pending swaps.
+     *
+     * The store is not namespaced by provider, so if different `api_url` values are used the
+     * caller must use a different store per provider to avoid mixing swaps from different
+     * providers.
      */
-    std::optional<TokenProvider> token_provider = std::nullopt;
+    std::shared_ptr<ForeignStoreLink> store = nullptr;
 };
 
 

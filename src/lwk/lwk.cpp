@@ -1167,6 +1167,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_anyclient_from_esplora() != 17175) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_constructor_anyclient_from_waterfalls() != 25626) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_constructor_assetblindingfactor_from_bytes() != 55914) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -2334,6 +2337,12 @@ std::shared_ptr<AnyClient> AnyClient::from_esplora(const std::shared_ptr<Esplora
     return std::shared_ptr<AnyClient>(new AnyClient(uniffi::rust_call(
         uniffi_lwk_fn_constructor_anyclient_from_esplora,
         nullptr, uniffi::FfiConverterEsploraClient::lower(client))));
+}
+
+std::shared_ptr<AnyClient> AnyClient::from_waterfalls(const std::shared_ptr<WaterfallsClient> &client) {
+    return std::shared_ptr<AnyClient>(new AnyClient(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_anyclient_from_waterfalls,
+        nullptr, uniffi::FfiConverterWaterfallsClient::lower(client))));
 }
 
 
