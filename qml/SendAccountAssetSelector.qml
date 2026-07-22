@@ -206,6 +206,7 @@ StackViewPage {
                     wrapMode: Label.Wrap
                 }
                 Label {
+                    font.capitalization: Font.AllUppercase
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.4

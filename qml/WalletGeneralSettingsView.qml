@@ -29,16 +29,6 @@ Pane {
         return result
     }
 
-    readonly property var ampAccounts: {
-        return UtilJS.accounts(self.context)
-            .filter(account => account.amp0)
-    }
-
-    readonly property var amp2Accounts: {
-        return UtilJS.accounts(self.context)
-            .filter(account => account.amp2)
-    }
-
     function updateCurrency(currency) {
         if (currency === self.session.settings.pricing.currency) return
         const exchange = self.session.settings.pricing.exchange
@@ -538,7 +528,9 @@ Pane {
             id: support_box
             Layout.fillWidth: true
             spacing: 20
-            visible: supportId !== ''
+            // AMP account creation can briefly expose the empty Liquid pointer-0
+            // account before hiding it, which would make this row flicker.
+            visible: supportId !== '' && !amp_account_section.creatingAccount
 
             readonly property string supportId: {
                 const ids = UtilJS.accounts(self.context)
@@ -678,152 +670,16 @@ Pane {
             Layout.fillWidth: true
             height: 1
             color: '#262626'
-            visible: amp_box.visible
+            visible: amp_account_section.visible
         }
 
-        // AMP ID
-        RowLayout {
-            id: amp_box
+        AmpAccountSettingsSection {
+            id: amp_account_section
             Layout.fillWidth: true
-            spacing: 20
-            visible: self.ampAccounts.length > 0
-
-            // Left: Label
-            ColumnLayout {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 1
-                Layout.alignment: Qt.AlignTop
-                spacing: 4
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 8
-                    Label {
-                        text: qsTrId('id_amp_account')
-                        font.pixelSize: 14
-                        font.weight: 600
-                        color: '#FFFFFF'
-                    }
-                    LinkButton {
-                        text: qsTrId('id_learn_more')
-                        font.pixelSize: 12
-                        external: true
-                        onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900003418286')
-                    }
-                }
-                Label {
-                    Layout.fillWidth: true
-                    text: 'Share your AMP ID with your security token issuer to receive authorization to move funds'
-                    font.pixelSize: 13
-                    color: '#6F6F6F'
-                    wrapMode: Label.Wrap
-                }
-            }
-
-            // Right: Cards
-            ColumnLayout {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 1
-                Layout.alignment: Qt.AlignTop
-                spacing: 8
-
-                Repeater {
-                    model: self.ampAccounts
-                    delegate: CopyButton {
-                        required property Account modelData
-                        readonly property string ampId: modelData.json.receiving_id
-                        Layout.fillWidth: true
-                        id: amp_account_button
-                        title: UtilJS.accountName(modelData)
-                        subtitle: 'ID: ' + modelData.json.receiving_id
-                        copyText: modelData.json.receiving_id
-                    }
-                }
-            }
-        }
-
-        Rectangle {
-            Layout.fillWidth: true
-            height: 1
-            color: '#262626'
-            visible: amp2_box.visible
-        }
-
-        // AMP2
-        RowLayout {
-            id: amp2_box
-            Layout.fillWidth: true
-            spacing: 20
-            visible: !self.context.mainnet && !self.context.watchonly && !self.context.device
-
-            // Left: Label
-            ColumnLayout {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 1
-                Layout.alignment: Qt.AlignTop
-                spacing: 4
-                Label {
-                    Layout.fillWidth: true
-                    text: 'AMP2 (Testnet)'
-                    font.pixelSize: 14
-                    font.weight: 600
-                    color: '#FFFFFF'
-                }
-                Label {
-                    Layout.fillWidth: true
-                    text: 'Create an AMP2 account to manage AMP2 assets.'
-                    font.pixelSize: 13
-                    color: '#6F6F6F'
-                    wrapMode: Label.Wrap
-                }
-            }
-
-            // Right: Cards / Control
-            ColumnLayout {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 1
-                Layout.alignment: Qt.AlignTop
-                spacing: 8
-
-                Repeater {
-                    model: self.amp2Accounts
-                    delegate: CopyButton {
-                        required property Account modelData
-                        Layout.fillWidth: true
-                        title: UtilJS.accountName(modelData)
-                        subtitle: 'ID: ' + modelData.json.amp2_wid
-                        copyText: modelData.json.amp2_wid
-                    }
-                }
-
-                Item {
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignTop
-                    visible: self.amp2Accounts.length === 0
-                    implicitHeight: create_amp2_button.implicitHeight
-                    GButton {
-                        id: create_amp2_button
-                        large: true
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: 'Create AMP2 Account'
-                        onClicked: {
-                            const network = NetworkManager.network('electrum-testnet-liquid')
-                            const asset = self.context.getOrCreateAsset(network.policyAsset)
-                            const drawer = create_account_drawer.createObject(self, { context: self.context, asset, amp2: true })
-                            drawer.open()
-                        }
-                    }
-                }
-            }
+            context: self.context
         }
 
         VSpacer {
-        }
-    }
-
-    Component {
-        id: create_account_drawer
-        CreateAccountDrawer {
         }
     }
 

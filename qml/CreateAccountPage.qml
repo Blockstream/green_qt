@@ -129,9 +129,8 @@ StackViewPage {
             title: qsTrId('id_amp')
             description: qsTrId('id_account_for_special_assets')
             visible: {
-                if (!amp_button.network.liquid) {
-                    return false
-                }
+                if (!self.context.mainnet) return false
+                if (!amp_button.network.liquid) return false
                 if (!(self.anyLiquid || self.anyAMP || self.asset?.amp || self.advanced && self.asset?.networkKey === 'liquid')) {
                     return false
                 }

@@ -95,7 +95,14 @@ function accountName(account) {
 
 function accountDescription(account) {
     if (!account) return ''
-    return `${networkLabel(account?.network)} / ${accountLabel(account)}`
+    return `${accountPolicyLabel(account)} / ${accountLabel(account)}`
+}
+
+function ampId(account) {
+    if (!account) return ''
+    if (account.amp2) return account.json?.amp2_wid ?? ''
+    if (account.amp0) return account.json?.receiving_id ?? ''
+    return ''
 }
 
 function dynamicScenePosition(item, x, y) {
@@ -171,11 +178,11 @@ function accountLabel (account) {
     switch (account?.type) {
         case '2of2': return qsTrId('id_2of2')
         case '2of3': return qsTrId('id_2of3')
-        case '2of2_no_recovery': return qsTrId('id_amp')
+        case '2of2_no_recovery': return account.network.mainnet ? qsTrId('id_amp') : 'AMP Legacy'
         case 'p2sh-p2wpkh': return qsTrId('id_legacy_segwit')
         case 'p2wpkh': return qsTrId('id_native_segwit')
         case 'p2pkh': return qsTrId('id_legacy')
-        case 'amp2': return 'AMP2'
+        case 'amp2': return qsTrId('id_amp')
         default: return qsTrId('-')
     }
 }
@@ -218,9 +225,11 @@ function assets(context) {
     })
 }
 
-function networkLabel (network) {
-    if (!network) return '-'
-    return network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig')
+function accountPolicyLabel(account) {
+    if (!account) return ''
+    if (account?.amp0 || account?.amp2) return qsTrId('id_multisig')
+    if (!account.network) return '-'
+    return account.network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig')
 }
 
 function networkColor (network) {

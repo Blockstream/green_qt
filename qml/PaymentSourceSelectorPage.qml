@@ -67,6 +67,7 @@ StackViewPage {
                 Label {
                     Layout.fillWidth: true
                     color: '#A0A0A0'
+                    font.capitalization: Font.AllUppercase
                     font.pixelSize: 11
                     font.weight: 400
                     text: button.lightning ? qsTrId('id_lightning') : UtilJS.accountDescription(button.source.account)

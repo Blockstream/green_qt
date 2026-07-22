@@ -171,7 +171,7 @@ function segmentationWalletActive(Settings, context) {
     for (const account of visible_accounts) {
         const key = account.network.liquid ? account.network.policyAsset : 'btc'
         accounts_types.add(account.type)
-        if (Object.values(account.json.satoshi).some(satoshi => satoshi > 0)) {
+        if (account.json.satoshi && Object.values(account.json.satoshi).some(satoshi => satoshi > 0)) {
             accounts_funded ++
         }
     }
@@ -188,4 +188,3 @@ function segmentationSwap(Settings, context, { to, from } = {}) {
     if (from) segmentation.from = from
     return segmentation
 }
-

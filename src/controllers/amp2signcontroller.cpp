@@ -97,9 +97,11 @@ void Amp2SignController::sign()
             auto lwk_mnemonic = lwk::Mnemonic::init(mnemonic.toStdString());
             auto signer = lwk::Signer::init(lwk_mnemonic, network);
 
+            qDebug() << "SIGN";
             auto pset = lwk::Pset::init(pset_base64.toStdString());
             // User signs the asset/L-BTC inputs.
             pset = signer->sign(pset);
+            qDebug() << "COSIGN";
             // AMP2 server cosigns to enforce its authorization rules.
             pset = amp2->cosign(pset);
 
@@ -126,6 +128,12 @@ void Amp2SignController::sign()
         } catch (const lwk::lwk_error::Generic& error) {
             qWarning() << "Amp2SignController::sign: lwk error:" << error.msg;
             result.error = QString::fromStdString(error.msg);
+        } catch (const lwk::lwk_error::Amp2HttpError& error) {
+            qWarning() << "Amp2SignController::sign: amp2 error"
+                       << error.url
+                       << error.status
+                       << (error.body.has_value() ? error.body.value().c_str() : "no body");
+            result.error = "AMP Cosign Error.";
         } catch (...) {
             qWarning() << "Amp2SignController::sign: unexpected error";
             result.error = "Unexpected error signing AMP2 transaction.";

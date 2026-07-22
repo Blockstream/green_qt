@@ -94,6 +94,8 @@ StackViewPage {
         if (recipient.error) {
             if (recipient.error.includes('DNS resolution failed')) {
                 self.error = { code: 'DNS resolution failed', visible: true }
+            } else if (recipient.error.includes('Invalid payment category')) {
+                self.error = { code: 'id_invalid_address', visible: true }
             } else {
                 const code = recipient.error
                     .replace('Reqwest error: ', '')

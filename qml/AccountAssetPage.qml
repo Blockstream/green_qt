@@ -63,10 +63,10 @@ StackViewPage {
                 GMenu.Item {
                     icon.source: 'qrc:/svg2/copy.svg'
                     text: qsTrId('id_copy') + ' ' + qsTrId('id_amp_id')
-                    visible: self.account.amp0
+                    visible: self.account.amp0 || self.account.amp2
                     onClicked: {
                         options_menu.close()
-                        Clipboard.copy(self.account.json.receiving_id)
+                        Clipboard.copy(UtilJS.ampId(self.account))
                     }
                 }
             }

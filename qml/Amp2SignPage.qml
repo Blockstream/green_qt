@@ -93,34 +93,35 @@ StackViewPage {
             Layout.minimumHeight: 5
         }
         RowLayout {
-            Layout.fillWidth: true
             Label {
-                Layout.alignment: Qt.AlignTop
-                Layout.fillWidth: true
                 font.pixelSize: 14
-                font.weight: 600
+                font.weight: 500
                 text: qsTrId('id_network_fee')
             }
-            ColumnLayout {
-                spacing: 2
-                Label {
-                    Layout.alignment: Qt.AlignRight
-                    font.pixelSize: 14
-                    font.weight: 600
-                    text: fee_convert.output.label
-                }
-                Label {
-                    Layout.alignment: Qt.AlignRight
-                    opacity: 0.5
-                    font.pixelSize: 12
-                    text: '~ ' + fee_convert.fiat.label
-                }
+            HSpacer {
+            }
+            Label {
+                font.features: { 'calt': 0, 'zero': 1 }
+                font.pixelSize: 14
+                font.weight: 500
+                text: fee_convert.output.label
+            }
+        }
+        RowLayout {
+            Layout.bottomMargin: 20
+            HSpacer {
+            }
+            Label {
+                font.features: { 'calt': 0, 'zero': 1 }
+                color: '#6F6F6F'
+                font.pixelSize: 12
+                font.weight: 400
+                text: '~ ' + fee_convert.fiat.label
             }
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 200
-            Layout.topMargin: 20
             enabled: !controller.busy
             busy: controller.busy
             text: qsTrId('id_confirm_transaction')

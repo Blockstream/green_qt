@@ -45,6 +45,7 @@ target_sources(${APP_TARGET} PRIVATE
     controllers/signmessagecontroller.h controllers/signmessagecontroller.cpp
     controllers/twofactorcontroller.h controllers/twofactorcontroller.cpp
     controllers/watchonlycontroller.h controllers/watchonlycontroller.cpp
+    recipient.h recipient.cpp
     createtransactioncontroller.h createtransactioncontroller.cpp
     signtransactioncontroller.h signtransactioncontroller.cpp
     airgappedsigncontroller.h airgappedsigncontroller.cpp

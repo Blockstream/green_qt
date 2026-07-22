@@ -245,6 +245,15 @@ void AssetsModel::setMinWeight(int min_weight)
     endFilterChange(Direction::Rows);
 }
 
+void AssetsModel::setShowAmp(bool show_amp)
+{
+    if (m_show_amp == show_amp) return;
+    beginFilterChange();
+    m_show_amp = show_amp;
+    emit showAmpChanged();
+    endFilterChange(Direction::Rows);
+}
+
 void AssetsModel::setShowLightning(bool show_lightning)
 {
     if (m_show_lightning == show_lightning) return;
@@ -258,6 +267,8 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
 {
     const auto index = sourceModel()->index(source_row, 0, source_parent);
     const auto asset = index.data(Qt::UserRole + 1).value<Asset*>();
+
+    if (asset->isAmp() && !m_show_amp) return false;
 
     if (asset->isLightning() && (!m_show_lightning || !m_context || !m_context->lightningEnabled())) {
         return false;

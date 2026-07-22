@@ -138,8 +138,8 @@ ItemDelegate {
                     font.pixelSize: 14
                     font.weight: 400
                     opacity: 0.4
-                    text: delegate.account.json?.receiving_id ?? ''
-                    visible: delegate.account.amp0
+                    text: UtilJS.ampId(delegate.account)
+                    visible: delegate.account.amp0 || delegate.account.amp2
                 }
                 Item {
                     Layout.fillWidth: true
@@ -225,10 +225,10 @@ ItemDelegate {
                                 GMenu.Item {
                                     text: qsTrId('id_copy') + ' ' + qsTrId('id_amp_id')
                                     icon.source: 'qrc:/svg2/copy.svg'
-                                    visible: delegate.account.amp0
+                                    visible: delegate.account.amp0 || delegate.account.amp2
                                     onClicked: {
                                         account_delegate_menu.close()
-                                        Clipboard.copy(delegate.account.json.receiving_id)
+                                        Clipboard.copy(UtilJS.ampId(delegate.account))
                                     }
                                 }
                                 GMenu.Item {

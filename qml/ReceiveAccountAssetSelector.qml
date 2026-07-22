@@ -12,7 +12,31 @@ StackViewPage {
     required property Context context
     property bool anyLiquid: false
     property bool anyAMP: false
+    property bool anyAMPLegacy: false
     readonly property bool supportsLiquid: self.context.sessions.some(session => session.network.liquid)
+    readonly property bool hasAmp0Account: UtilJS.accounts(self.context).some(account => account.amp0)
+    readonly property bool hasAmp2Account: UtilJS.accounts(self.context).some(account => account.amp2)
+    readonly property var ampReceiveOptions: {
+        const result = []
+        if (self.context.mainnet) {
+            // Only AMP0 for mainnet (displayed as AMP)
+            if (self.hasAmp0Account) result.push({ legacy: false, text: 'Any AMP Asset' })
+            return result
+        }
+
+        // Show AMP2 on testnet if user has AMP2 account (displayed as AMP)
+        if (self.hasAmp2Account) result.push({ legacy: false, text: 'Any AMP Asset' })
+        
+        // Show AMP0 on testnet if user has AMP0 account (displayed as AMP Legacy)
+        if (self.hasAmp0Account) result.push({ legacy: true, text: 'Any AMP Legacy Asset' })
+        return result
+    }
+    function accountMatchesAmpSelection(account) {
+        if (!account) return false
+        if (self.anyAMP) return self.context.mainnet ? account.amp0 : account.amp2
+        if (self.anyAMPLegacy) return !self.context.mainnet && account.amp0
+        return false
+    }
     id: self
     title: qsTrId('id_select_account__asset')
     footer: null
@@ -34,6 +58,7 @@ StackViewPage {
                 filter: search_field.text.trim()
                 context: self.context
                 minWeight: search_field.text.trim().length > 0 ? 0 : 1
+                showAmp: self.hasAmp0Account
                 showLightning: true
             }
             spacing: 5
@@ -48,28 +73,35 @@ StackViewPage {
                     enabled: self.supportsLiquid
                     index: -1
                     icon.source: 'qrc:/svg2/liquid_icon.svg'
-                    text: qsTrId('id_receive_any_liquid_asset')
+                    text: 'Any Liquid Asset'
                     highlighted: self.anyLiquid
                     onClicked: {
                         self.anyLiquid = !self.anyLiquid
                         self.anyAMP = false
+                        self.anyAMPLegacy = false
                         list_view.currentIndex = -1
                     }
                 }
-                SelectorDelegate {
-                    Layout.fillWidth: true
-                    Layout.topMargin: 5
-                    amp: true
-                    asset: null
-                    enabled: self.supportsLiquid
-                    index: -1
-                    icon.source: 'qrc:/svg2/amp_icon.svg'
-                    text: qsTrId('id_receive_any_amp_asset')
-                    highlighted: self.anyAMP
-                    onClicked: {
-                        self.anyLiquid = false
-                        self.anyAMP = !self.anyAMP
-                        list_view.currentIndex = -1
+                Repeater {
+                    model: self.ampReceiveOptions
+                    delegate: SelectorDelegate {
+                        required property var modelData
+                        Layout.fillWidth: true
+                        Layout.topMargin: 5
+                        amp: true
+                        asset: null
+                        enabled: self.supportsLiquid
+                        index: -1
+                        icon.source: 'qrc:/svg2/amp_icon.svg'
+                        text: modelData.text
+                        highlighted: modelData.legacy ? self.anyAMPLegacy : self.anyAMP
+                        onClicked: {
+                            const checked = modelData.legacy ? self.anyAMPLegacy : self.anyAMP
+                            self.anyLiquid = false
+                            self.anyAMP = modelData.legacy ? false : !checked
+                            self.anyAMPLegacy = modelData.legacy ? !checked : false
+                            list_view.currentIndex = -1
+                        }
                     }
                 }
             }
@@ -83,6 +115,7 @@ StackViewPage {
                     }
                     self.anyLiquid = false
                     self.anyAMP = false
+                    self.anyAMPLegacy = false
                     list_view.currentIndex = delegate.ListView.isCurrentItem ? -1 : delegate.index
                 }
             }
@@ -147,37 +180,6 @@ StackViewPage {
                     id: collapsible_layout
                     width: parent.width
                     spacing: 0
-                    Pane {
-                        Layout.fillWidth: true
-                        padding: 10
-                        visible: delegate.amp
-                        background: Rectangle {
-                            color: '#00BCFF'
-                            opacity: 0.2
-                        }
-                        contentItem: RowLayout {
-                            spacing: 10
-                            Image {
-                                Layout.alignment: Qt.AlignCenter
-                                source: 'qrc:/svg2/shield_warning.svg'
-                            }
-                            Label {
-                                Layout.preferredWidth: 0
-                                Layout.fillWidth: true
-                                color: '#00BCFF'
-                                font.pixelSize: 12
-                                font.weight: 600
-                                text: {
-                                    if (delegate.asset) {
-                                        return `${delegate.asset.name} is an AMP asset. You need an AMP account in order to receive it.`
-                                    } else {
-                                        return 'You need an AMP account in order to receive AMP assets.'
-                                    }
-                                }
-                                wrapMode: Label.WordWrap
-                            }
-                        }
-                    }
                     Rectangle {
                         width: parent.width
                         height: 2
@@ -196,8 +198,8 @@ StackViewPage {
                                     if (account.network.liquid) {
                                         accounts.push(account)
                                     }
-                                } else if (self.anyAMP) {
-                                    if (account.amp0 || account.amp2) {
+                                } else if (self.anyAMP || self.anyAMPLegacy) {
+                                    if (self.accountMatchesAmpSelection(account)) {
                                         accounts.push(account)
                                     }
                                 }
@@ -215,7 +217,7 @@ StackViewPage {
                     }
                     CreateAccountButton {
                         Layout.fillWidth: true
-                        visible: !self.context.watchonly
+                        visible: !self.context.watchonly && !self.anyAMP && !self.anyAMPLegacy
                         onClicked: {
                             self.pushPage(create_account_page, {
                                 asset: delegate.asset,
@@ -318,6 +320,7 @@ StackViewPage {
                     wrapMode: Label.Wrap
                 }
                 Label {
+                    font.capitalization: Font.AllUppercase
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.4

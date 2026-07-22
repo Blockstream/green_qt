@@ -36,7 +36,7 @@ StackViewPage {
             const is_bitcoin = !is_liquid
             const is_singlesig = account.network.electrum
             const is_multisig = !is_singlesig
-            const is_amp = is_liquid && account.amp0
+            const is_amp = is_liquid && (account.amp0 || account.amp2)
 
             if (is_bitcoin && is_singlesig) return 0
             if (is_bitcoin && is_multisig) return 1

@@ -13,6 +13,7 @@ set(QML_FILES_CORE
     TwoFactorEnableDrawer.qml
     DebugRectangle.qml
     WalletGeneralSettingsView.qml
+    AmpAccountSettingsSection.qml
     EnableLightningDrawer.qml
     WalletsView.qml
     TransactionView.qml
@@ -129,7 +130,6 @@ set(QML_FILES_WORKFLOWS
     DrawerTitle.qml
     FieldTitle.qml
     CreateAccountPage.qml
-    CreateAmp2AccountPage.qml
     SecurityPolicyButton.qml
     WalletHeaderCard.qml
     TotalBalanceCard.qml

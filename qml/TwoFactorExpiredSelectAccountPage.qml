@@ -95,6 +95,7 @@ StackViewPage {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
                         color: '#fff'
+                        font.capitalization: Font.AllUppercase
                         font.pixelSize: 10
                         font.weight: 400
                         opacity: 0.6

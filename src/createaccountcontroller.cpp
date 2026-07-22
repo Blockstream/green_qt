@@ -86,6 +86,7 @@ void CreateAccountController::create()
     auto monitor = new TaskGroupMonitor(this);
     setMonitor(monitor);
     m_error = {};
+    m_account = nullptr;
     emit errorChanged();
 
     if (m_type == "amp2") {
@@ -246,7 +247,7 @@ void CreateAccountController::ensureAccount()
     QString name;
     if (m_type == "2of2") name = "2FA Protected";
     if (m_type == "2of3") name = "2of3 with 2FA";
-    if (m_type == "2of2_no_recovery") name = "AMP Account";
+    if (m_type == "2of2_no_recovery") name = "AMP";
     if (m_type == "p2wpkh") name = "Standard";
     if (m_type == "p2sh-p2wpkh") name = "Legacy SegWit";
     if (m_type == "p2pkh") name = "Legacy";

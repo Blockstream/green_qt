@@ -3,6 +3,7 @@
 
 #include "controller.h"
 #include "green.h"
+#include "recipient.h"
 
 class Account;
 
@@ -10,13 +11,16 @@ class Account;
 // normal CreateTransactionController path can't be used; this runs the lwk
 // wollet sync + TxBuilder flow on a worker thread. The resulting PSET is handed
 // to Amp2SignController to sign, cosign and broadcast.
+//
+// Rebuilds itself whenever an input changes, via the same debounced
+// invalidate()/timerEvent pattern as CreateTransactionController. Building only
+// reads the wollet, which LwkAmp2AccountController keeps synced.
 class CreatePsetController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
-    Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-    Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY amountChanged)
-    Q_PROPERTY(QString assetId READ assetId WRITE setAssetId NOTIFY assetIdChanged)
+    Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
+    Q_PROPERTY(Recipient* recipient READ recipient CONSTANT)
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
     Q_PROPERTY(QString pset READ pset NOTIFY transactionChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
@@ -26,34 +30,35 @@ public:
     CreatePsetController(QObject* parent = nullptr);
     Account* account() const { return m_account; }
     void setAccount(Account* account);
-    QString address() const { return m_address; }
-    void setAddress(const QString& address);
-    QString amount() const { return m_amount; }
-    void setAmount(const QString& amount);
-    QString assetId() const { return m_asset_id; }
-    void setAssetId(const QString& asset_id);
+    Asset* asset() const { return m_asset; }
+    void setAsset(Asset* asset);
+    Recipient* recipient() const { return m_recipient; }
     QJsonObject transaction() const { return m_transaction; }
     QString pset() const { return m_pset; }
     bool busy() const { return m_busy; }
     QString error() const { return m_error; }
 public slots:
+    void invalidate();
     void create();
 signals:
     void accountChanged();
-    void addressChanged();
-    void amountChanged();
-    void assetIdChanged();
+    void assetChanged();
     void transactionChanged();
     void busyChanged();
     void errorChanged();
-    void created();
     void failed(const QString& error);
+protected:
+    void timerEvent(QTimerEvent* event) override;
 private:
     void setBusy(bool busy);
+    // Not setError(): that name would hide Controller's keyed setError().
+    void setErrorMessage(const QString& error);
+    void clearTransaction();
+    int m_update_timer{-1};
+    quint64 m_seq{0};
     Account* m_account{nullptr};
-    QString m_address;
-    QString m_amount;
-    QString m_asset_id;
+    Asset* m_asset{nullptr};
+    Recipient* const m_recipient;
     QJsonObject m_transaction;
     QString m_pset;
     bool m_busy{false};

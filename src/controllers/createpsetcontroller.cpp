@@ -1,7 +1,9 @@
 #include "account.h"
+#include "asset.h"
 #include "context.h"
 #include "controllers/createpsetcontroller.h"
 #include "controllers/lwkamp2accountcontroller.h"
+#include "convert.h"
 #include "lwk/lwk.hpp"
 #include "network.h"
 
@@ -9,7 +11,16 @@
 
 CreatePsetController::CreatePsetController(QObject* parent)
     : Controller(parent)
+    , m_recipient(new Recipient(this))
 {
+    connect(m_recipient, &Recipient::addressChanged, this, &CreatePsetController::invalidate);
+    connect(m_recipient, &Recipient::greedyChanged, this, &CreatePsetController::invalidate);
+    // Deliberately not Recipient::changed: while greedy the amount is an output
+    // of the build rather than an input, so the write-back in create() must not
+    // schedule another build.
+    connect(m_recipient->convert(), &Convert::resultChanged, this, [this] {
+        if (!m_recipient->isGreedy()) invalidate();
+    });
 }
 
 void CreatePsetController::setAccount(Account* account)
@@ -17,27 +28,17 @@ void CreatePsetController::setAccount(Account* account)
     if (m_account == account) return;
     m_account = account;
     emit accountChanged();
+    m_recipient->convert()->setAccount(account);
+    invalidate();
 }
 
-void CreatePsetController::setAddress(const QString& address)
+void CreatePsetController::setAsset(Asset* asset)
 {
-    if (m_address == address) return;
-    m_address = address;
-    emit addressChanged();
-}
-
-void CreatePsetController::setAmount(const QString& amount)
-{
-    if (m_amount == amount) return;
-    m_amount = amount;
-    emit amountChanged();
-}
-
-void CreatePsetController::setAssetId(const QString& asset_id)
-{
-    if (m_asset_id == asset_id) return;
-    m_asset_id = asset_id;
-    emit assetIdChanged();
+    if (m_asset == asset) return;
+    m_asset = asset;
+    emit assetChanged();
+    m_recipient->convert()->setAsset(asset);
+    invalidate();
 }
 
 void CreatePsetController::setBusy(bool busy)
@@ -47,46 +48,89 @@ void CreatePsetController::setBusy(bool busy)
     emit busyChanged();
 }
 
+void CreatePsetController::setErrorMessage(const QString& error)
+{
+    if (m_error == error) return;
+    m_error = error;
+    emit errorChanged();
+}
+
+void CreatePsetController::clearTransaction()
+{
+    if (m_pset.isEmpty() && m_transaction.isEmpty()) return;
+    m_pset.clear();
+    m_transaction = {};
+    emit transactionChanged();
+}
+
+void CreatePsetController::invalidate()
+{
+    // Drop the pset built from the previous inputs straight away, so the UI
+    // can't act on a stale one during the debounce window.
+    clearTransaction();
+    if (m_update_timer != -1) killTimer(m_update_timer);
+    m_update_timer = startTimer(5);
+}
+
+void CreatePsetController::timerEvent(QTimerEvent* event)
+{
+    Controller::timerEvent(event);
+    if (event->timerId() == m_update_timer) {
+        killTimer(m_update_timer);
+        m_update_timer = -1;
+        create();
+    }
+}
+
 void CreatePsetController::create()
 {
-    if (!context() || !m_account) {
-        qWarning() << Q_FUNC_INFO << "missing context or account";
-        return;
-    }
+    // Bump before any early return: whatever is in flight was built from inputs
+    // that no longer apply, so its result must be dropped either way.
+    const auto seq = ++m_seq;
 
     // Clear any error left over from a previous attempt so the QML
     // ErrorPane doesn't keep showing it through this one.
-    m_error.clear();
-    emit errorChanged();
+    setErrorMessage({});
+    clearTransaction();
+
+    const auto address = m_recipient->address().trimmed();
+    const auto greedy = m_recipient->isGreedy();
+    const auto amount = m_recipient->convert()->satoshi().toLongLong();
+
+    // Incomplete input is the normal state while the user is still filling the
+    // form in. Since create() now runs on every change, stay quiet rather than
+    // flashing an error at them.
+    if (!context() || !m_account || address.isEmpty() || (!greedy && amount <= 0)) {
+        setBusy(false);
+        return;
+    }
 
     auto controller = context()->amp2AccountController();
-    if (!controller) {
-        m_error = "AMP2 wallet is not registered.";
-        emit errorChanged();
-        emit failed(m_error);
-        return;
-    }
-
     // Fail unless the account is wollet-backed (i.e. an AMP2 account with its
     // lwk wollet built); the wollet is required to build the spend PSET.
-    auto wollet = controller->wollet();
-    const auto address = m_address.trimmed();
-    const auto amount = m_amount.toLongLong();
-    const auto asset_id = m_asset_id;
-    qDebug() << Q_FUNC_INFO << "building AMP2 send pset to" << address << "amount" << amount << "asset" << asset_id;
+    auto wollet = controller ? controller->wollet() : nullptr;
+    if (!controller || !wollet) {
+        setBusy(false);
+        setErrorMessage("AMP2 wallet is not registered.");
+        emit failed(m_error);
+        return;
+    }
 
-    if (!wollet) {
-        m_error = "AMP2 wallet is not registered.";
-        emit errorChanged();
+    const auto asset_id = m_asset ? m_asset->id() : QString();
+    // An empty asset id means the policy asset, matching the builder call below.
+    const bool policy_asset = asset_id.isEmpty()
+        || asset_id == m_account->network()->policyAsset();
+    if (greedy && !policy_asset) {
+        // lwk can only drain the policy asset; the send all button is hidden
+        // for other assets, so this is a backstop.
+        setBusy(false);
+        setErrorMessage("Send all is only available for L-BTC.");
         emit failed(m_error);
         return;
     }
-    if (address.isEmpty() || amount <= 0) {
-        m_error = "Invalid recipient or amount.";
-        emit errorChanged();
-        emit failed(m_error);
-        return;
-    }
+
+    qDebug() << Q_FUNC_INFO << "building AMP2 send pset to" << address << "amount" << (greedy ? QStringLiteral("all") : QString::number(amount)) << "asset" << asset_id;
+
     auto mutex = controller->mutex();
 
     setBusy(true);
@@ -99,30 +143,23 @@ void CreatePsetController::create()
         qint64 satoshi{0};
     };
 
-    auto future = QtConcurrent::run(controller->threadPool(), [wollet, mutex, address, amount, asset_id, controller]() -> Result {
+    // The wollet is kept synced by LwkAmp2AccountController's own scan, so this
+    // only reads it under the shared mutex; no full_scan here.
+    auto future = QtConcurrent::run(controller->threadPool(), [wollet, mutex, address, amount, greedy, policy_asset, asset_id]() -> Result {
         Result result;
         std::lock_guard<std::mutex> lock(*mutex);
         try {
             // TODO: use the mainnet AMP2 network once mainnet support lands.
             auto network = lwk::Network::testnet();
 
-            // Sync the shared wollet so the builder sees the wallet UTXOs.
-            auto client = controller->getOrCreateWaterfallsClient();
-            if (!client) {
-                result.error = "Unable to reach the Waterfalls service.";
-                return result;
-            }
-            auto update = client->full_scan(wollet);
-            if (update) {
-                wollet->apply_update(update);
-            }
-
             auto lwk_address = lwk::Address::init(address.toStdString());
             auto builder = network->tx_builder();
             // 0.1 sat/vbyte = 100 sat/kvb, the Liquid minimum relay fee.
             builder->fee_rate(100.0f);
-            const auto policy_asset = network->policy_asset();
-            if (asset_id.isEmpty() || asset_id.toStdString() == policy_asset) {
+            if (greedy) {
+                builder->drain_lbtc_wallet();        // select every L-BTC input
+                builder->drain_lbtc_to(lwk_address); // send the excess to the recipient
+            } else if (policy_asset) {
                 builder->add_lbtc_recipient(lwk_address, static_cast<uint64_t>(amount));
             } else {
                 builder->add_recipient(lwk_address, static_cast<uint64_t>(amount), asset_id.toStdString());
@@ -132,8 +169,18 @@ void CreatePsetController::create()
             result.pset = QString::fromStdString(pset->to_string());
 
             const auto details = wollet->pset_details(pset);
-            result.fee = static_cast<qint64>(details->balance()->fee());
-            result.satoshi = amount;
+            const auto balance = details->balance();
+            result.fee = static_cast<qint64>(balance->fee());
+            if (greedy) {
+                // The drained amount isn't known up front, so read it back off
+                // the pset. balances() is the wallet's net delta per asset, so
+                // for a spend it is -(sent + fee).
+                const auto balances = balance->balances();
+                const auto it = balances.find(network->policy_asset());
+                result.satoshi = it == balances.end() ? 0 : -static_cast<qint64>(it->second) - result.fee;
+            } else {
+                result.satoshi = amount;
+            }
             result.ok = true;
         } catch (const lwk::lwk_error::Generic& error) {
             qWarning() << "CreatePsetController::create: lwk error:" << error.msg;
@@ -146,15 +193,23 @@ void CreatePsetController::create()
     });
 
     future.then(this, [=, this](Result result) {
+        // A later create() has superseded this one; its result is what the
+        // inputs now describe, so drop this one entirely.
+        if (seq != m_seq) return;
         setBusy(false);
         if (!result.ok) {
             qDebug() << Q_FUNC_INFO << "failed:" << result.error;
-            m_error = result.error;
-            emit errorChanged();
+            setErrorMessage(result.error);
             emit failed(m_error);
             return;
         }
         qDebug() << Q_FUNC_INFO << "pset created, fee" << result.fee;
+        if (greedy) {
+            // Publish the amount the drain actually resolved to, so the amount
+            // field reflects what is being sent. Safe against a rebuild loop:
+            // the convert is not wired to invalidate() while greedy.
+            m_recipient->convert()->setInput({{ "satoshi", result.satoshi }});
+        }
         m_pset = result.pset;
         m_transaction = QJsonObject{
             { "address", address },
@@ -163,15 +218,13 @@ void CreatePsetController::create()
             { "asset_id", asset_id },
         };
         emit transactionChanged();
-        emit created();
     });
 
-    // The worker captures `controller` (a different QObject, owned by
-    // Context, with no lifetime tie to this one) and dereferences it
-    // (getOrCreateWaterfallsClient()); track the future on both objects so
-    // neither's destructor can free its state out from under the worker —
-    // this controller finishing its own teardown says nothing about whether
-    // `controller` is still alive.
+    // The worker only captures shared_ptrs, but it runs on `controller`'s
+    // thread pool — a different QObject, owned by Context, with no lifetime tie
+    // to this one. Track the future on both so neither destructor can tear down
+    // state the worker is still using; this controller finishing its own
+    // teardown says nothing about whether `controller` is still alive.
     controller->waitForFuture(future);
     waitForFuture(future);
 }

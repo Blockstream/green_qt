@@ -11,6 +11,7 @@ StackViewPage {
     signal assetClicked(asset: Asset)
     required property Context context
     required property Asset asset
+    readonly property bool hasAmp0Account: UtilJS.accounts(self.context).some(account => account.amp0)
 
     id: self
     title: qsTrId('id_select_asset')
@@ -36,12 +37,13 @@ StackViewPage {
                 OptionButton {
                     Layout.topMargin: 5
                     icon.source: 'qrc:/svg2/liquid_icon.svg'
-                    text: qsTrId('id_receive_any_liquid_asset')
+                    text: 'Any Liquid Asset'
                     onClicked: self.anyLiquidClicked()
                 }
                 OptionButton {
                     icon.source: 'qrc:/svg2/amp_icon.svg'
-                    text: qsTrId('id_receive_any_amp_asset')
+                    text: 'Any AMP Asset'
+                    visible: self.context.mainnet && self.hasAmp0Account
                     onClicked: self.anyAMPClicked()
                 }
             }
@@ -62,6 +64,7 @@ StackViewPage {
                 context: self.context
                 filter: search_field.text.trim()
                 minWeight: search_field.text.trim().length === 0 ? 1 : 0
+                showAmp: self.context.mainnet && self.hasAmp0Account
             }
             delegate: AssetDelegate {
             }
