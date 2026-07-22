@@ -13,30 +13,31 @@ target_sources(${APP_TARGET} PRIVATE
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    account.cpp
+    account.h account.cpp
     activity.h activity.cpp
     progress.h progress.cpp
-    asset.cpp
-    address.cpp
-    network.cpp
-    output.cpp
+    asset.h asset.cpp
+    address.h address.cpp
+    connectable.h
+    network.h network.cpp
+    output.h output.cpp
     payment.h payment.cpp
     session.h session.cpp
-    transaction.cpp
-    wallet.cpp
+    transaction.h transaction.cpp
+    wallet.h wallet.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    accountcontroller.cpp
+    accountcontroller.h accountcontroller.cpp
     controller.h controller.cpp
-    createaccountcontroller.cpp
-    loginwithpincontroller.cpp
+    createaccountcontroller.h createaccountcontroller.cpp
+    loginwithpincontroller.h loginwithpincontroller.cpp
     logging.h logging.cpp
     restorecontroller.h restorecontroller.cpp
     signupcontroller.h signupcontroller.cpp
-    watchonlylogincontroller.cpp
+    watchonlylogincontroller.h watchonlylogincontroller.cpp
     controllers/bcurcontroller.h controllers/bcurcontroller.cpp
-    controllers/receiveaddresscontroller.cpp
+    controllers/receiveaddresscontroller.h controllers/receiveaddresscontroller.cpp
     controllers/sessioncontroller.h controllers/sessioncontroller.cpp
     controllers/signmessagecontroller.h controllers/signmessagecontroller.cpp
     controllers/twofactorcontroller.h controllers/twofactorcontroller.cpp
@@ -54,64 +55,64 @@ target_sources(${APP_TARGET} PRIVATE
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    appupdatecontroller.cpp
-    ga.cpp
-    httpmanager.cpp
-    httprequestactivity.cpp
-    activitymanager.cpp
-    analytics.cpp
+    appupdatecontroller.h appupdatecontroller.cpp
+    ga.h ga.cpp
+    httpmanager.h httpmanager.cpp
+    httprequestactivity.h httprequestactivity.cpp
+    activitymanager.h activitymanager.cpp
+    analytics.h analytics.cpp
     buybitcoinquoteservice.h buybitcoinquoteservice.cpp
     chartpriceservice.h chartpriceservice.cpp
-    feeestimates.cpp
-    networkmanager.cpp
+    feeestimates.h feeestimates.cpp
+    networkmanager.h networkmanager.cpp
     breakpad.cpp
     notification.h notification.cpp
     promo.h promo.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    clipboard.cpp
+    clipboard.h clipboard.cpp
     convert.h convert.cpp
-    json.cpp
-    command.cpp
+    json.h json.cpp
+    command.h command.cpp
     task.h task.cpp
     zxing.h zxing.cpp
-    signmessageresolver.cpp
-    resolver.cpp
+    signmessageresolver.h signmessageresolver.cpp
+    resolver.h resolver.cpp
     paymentparser.h paymentparser.cpp
     swap.h swap.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    device.h device.cpp
+    device.h device_p.h device.cpp
     deviceactivities.h deviceactivities.cpp
     devicesession.h devicesession.cpp
-    devicediscoveryagent.cpp
-    devicediscoveryagent_linux.cpp
-    devicediscoveryagent_macos.cpp
-    devicediscoveryagent_win.cpp
-    devicelistmodel.cpp
-    devicemanager.cpp
-    jade/jadeconnection.cpp
-    jade/jadebleimpl.cpp
-    jade/jadeserialimpl.cpp
-    jade/serviceinfo.cpp
-    jade/jadeupdatecontroller.cpp
-    jade/jadedevice.cpp
-    jade/jadedeviceserialportdiscoveryagent.cpp
-    jade/jadelogincontroller.cpp
-    jade/jadeapi.cpp
-    jade/deviceinfo.cpp
+    devicediscoveryagent.h devicediscoveryagent.cpp
+    devicediscoveryagent_linux.h devicediscoveryagent_linux.cpp
+    devicediscoveryagent_macos.h devicediscoveryagent_macos.cpp
+    devicediscoveryagent_win.h devicediscoveryagent_win.cpp
+    devicelistmodel.h devicelistmodel.cpp
+    devicemanager.h devicemanager.cpp
+    jade/jadeconnection.h jade/jadeconnection.cpp
+    jade/jadebleimpl.h jade/jadebleimpl.cpp
+    jade/jadeserialimpl.h jade/jadeserialimpl.cpp
+    jade/serviceinfo.h jade/serviceinfo.cpp
+    jade/jadeupdatecontroller.h jade/jadeupdatecontroller.cpp
+    jade/jadedevice.h jade/jadedevice.cpp
+    jade/jadedeviceserialportdiscoveryagent.h jade/jadedeviceserialportdiscoveryagent.cpp
+    jade/jadelogincontroller.h jade/jadelogincontroller.cpp
+    jade/jadeapi.h jade/jadeapi.cpp
+    jade/deviceinfo.h jade/deviceinfo.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    ledger/ledgerdevice.cpp
-    ledger/ledgergetblindingkeyactivity.cpp
-    ledger/ledgergetblindingnonceactivity.cpp
-    ledger/ledgergetwalletpublickeyactivity.cpp
-    ledger/ledgersignliquidtransactionactivity.cpp
-    ledger/ledgersignmessageactivity.cpp
-    ledger/ledgersigntransactionactivity.cpp
+    ledger/ledgerdevice.h ledger/ledgerdevice.cpp
+    ledger/ledgergetblindingkeyactivity.h ledger/ledgergetblindingkeyactivity.cpp
+    ledger/ledgergetblindingnonceactivity.h ledger/ledgergetblindingnonceactivity.cpp
+    ledger/ledgergetwalletpublickeyactivity.h ledger/ledgergetwalletpublickeyactivity.cpp
+    ledger/ledgersignliquidtransactionactivity.h ledger/ledgersignliquidtransactionactivity.cpp
+    ledger/ledgersignmessageactivity.h ledger/ledgersignmessageactivity.cpp
+    ledger/ledgersigntransactionactivity.h ledger/ledgersigntransactionactivity.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
@@ -139,12 +140,12 @@ target_sources(${APP_TARGET} PRIVATE
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    outputlistmodel.cpp
-    outputlistmodelfilter.cpp
-    walletlistmodel.cpp
-    walletmanager.cpp
+    outputlistmodel.h outputlistmodel.cpp
+    outputlistmodelfilter.h outputlistmodelfilter.cpp
+    walletlistmodel.h walletlistmodel.cpp
+    walletmanager.h walletmanager.cpp
     sessionmanager.h sessionmanager.cpp
-    wally.cpp
+    wally.h wally.cpp
 )
 
 if(UNIX AND NOT APPLE AND NOT WIN32)
