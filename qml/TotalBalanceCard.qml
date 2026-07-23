@@ -15,15 +15,15 @@ WalletHeaderCard {
         let value = 0
 
         for (let index = 0; index < assets.count; index++) {
-            const fiat = assets.objectAt(index).fiat
+            const { fiat } = assets.objectAt(index)
             if (!fiat.available) continue
 
             // Currency is not updated means conversion is still loading
-            if (fiat.currency !== self.currency) {
+            if (self.context.mainnet && fiat.currency !== self.currency) {
                 loading = true
             }
 
-            value += fiat.value
+            value += Number(fiat.value)
         }
 
         return { loading, value }
@@ -63,7 +63,7 @@ WalletHeaderCard {
             topPadding: 4
             font.pixelSize: 22
             font.weight: 600
-            text: UtilJS.incognito(Settings.incognito, UtilJS.formatAmount(self.total.value, self.currency))
+            text: UtilJS.incognito(Settings.incognito, total_convert.fiat.label)
             visible: !self.total.loading
         }
         BusyIndicator {
@@ -86,5 +86,11 @@ WalletHeaderCard {
             asset: delegate.modelData.asset
             input: ({ satoshi: delegate.modelData.satoshi })
         }
+    }
+
+    Convert {
+        id: total_convert
+        context: self.context
+        input: ({ fiat: String(self.total.value) })
     }
 }

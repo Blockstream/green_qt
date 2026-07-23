@@ -253,27 +253,6 @@ function currency(context) {
     return context.primarySession?.settings?.pricing?.currency ?? 'USD'
 }
 
-function formatAmount(amount, currency, options = {}) {
-    const locale = options.locale ?? Qt.locale()
-    const precision = options.precision ?? 2
-
-    const value = Number(amount)
-    if (!isFinite(value)) return currency ? `-/- ${currency}` : ''
-
-    let formatted = locale.toString(value, 'f', precision)
-    const decimalPoint = locale.decimalPoint
-    if (formatted.includes(decimalPoint)) {
-        while (formatted.endsWith('0')) {
-            formatted = formatted.slice(0, -1)
-        }
-        if (formatted.endsWith(decimalPoint)) {
-            formatted = formatted.slice(0, -decimalPoint.length)
-        }
-    }
-
-    return currency ? `${formatted} ${currency}` : formatted
-}
-
 function normalizeUnit(unit) {
     return unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()
 }

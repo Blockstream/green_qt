@@ -446,7 +446,7 @@ void Convert::update()
     if (primary_session && !details.contains("fiat_currency")) {
         const auto settings = primary_session->settings();
         const auto pricing = settings.value("pricing").toObject();
-        const auto currency = mainnet() ? pricing.value("currency").toString() : "FIAT";
+        const auto currency = pricing.value("currency").toString();
         details.insert("fiat_currency", currency);
     }
 
