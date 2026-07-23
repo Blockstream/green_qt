@@ -10,7 +10,6 @@
 #include "session.h"
 #include "task.h"
 #include "wallet.h"
-#include "walletmanager.h"
 
 Controller::Controller(QObject* parent)
     : Controller(new ControllerPrivate, parent)
@@ -199,19 +198,6 @@ void Controller::setSessionRecoveryEmail(Session* session, const QString& email)
     });
     monitor()->add(group);
     dispatcher()->add(group);
-}
-
-void Controller::deleteWallet()
-{
-    Q_D(Controller);
-    auto session = d->context->primarySession();
-
-    auto delete_wallet = new DeleteWalletTask(session);
-    connect(delete_wallet, &Task::finished, this, [=, this] {
-        WalletManager::instance()->removeWallet(d->context->wallet());
-        QTimer::singleShot(500, d->context->wallet(), &Wallet::disconnect);
-    });
-    dispatcher()->add(delete_wallet);
 }
 
 void Controller::disableAllPins()

@@ -1877,17 +1877,6 @@ bool GetAddressesTask::hasMore() const
 }
 
 
-DeleteWalletTask::DeleteWalletTask(Session* session)
-    : AuthHandlerTask(session)
-{
-}
-
-bool DeleteWalletTask::call(GA_session* session, GA_auth_handler** auth_handler)
-{
-    const auto rc = GA_remove_account(session, auth_handler);
-    return rc == GA_OK;
-}
-
 TwoFactorCancelResetTask::TwoFactorCancelResetTask(Session* session)
     : AuthHandlerTask(session)
 {

@@ -27,7 +27,6 @@ set(QML_FILES_CORE
     TwoFactorAuthExpiryDialog.qml
     Tag.qml
     AccountDelegate.qml
-    DeleteWalletDialog.qml
     ChangePinDrawer.qml
     MnemonicView.qml
     TwoFactorLimitDrawer.qml
@@ -38,7 +37,6 @@ set(QML_FILES_CORE
     GSwitch.qml
     VSpacer.qml
     AbstractDialog.qml
-    ControllerDialog.qml
     WizardPage.qml
     Spacer.qml
     AssetDelegate.qml

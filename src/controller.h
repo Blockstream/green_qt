@@ -50,7 +50,6 @@ public slots:
     void changeSettings(const QJsonObject& data);
     void changeSessionSettings(Session* session, const QJsonObject& data);
     void setSessionRecoveryEmail(Session* session, const QString& email);
-    void deleteWallet();
     void disableAllPins();
     void changePin(const QString& pin);
 

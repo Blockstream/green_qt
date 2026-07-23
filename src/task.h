@@ -840,17 +840,6 @@ private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 };
 
-class DeleteWalletTask : public AuthHandlerTask
-{
-    Q_OBJECT
-    QML_ELEMENT
-    QML_UNCREATABLE("")
-public:
-    DeleteWalletTask(Session* session);
-private:
-    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-};
-
 class SignMessageTaskPrivate;
 
 class SignMessageTask : public AuthHandlerTask
