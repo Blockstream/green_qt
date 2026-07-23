@@ -423,6 +423,15 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_issuance_token_satoshi() != 60126) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_issuancerequest_address_asset() != 25936) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_issuancerequest_address_token() != 2681) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_issuancerequest_contract() != 29893) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_lightningpayment_bolt11_invoice() != 47603) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -825,7 +834,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_signer_singlesig_desc() != 29930) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_signer_slip77_master_blinding_key() != 55499) {
+    if (uniffi_lwk_checksum_method_signer_slip77_master_blinding_key() != 6040) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_signer_wpkh_slip77_descriptor() != 50399) {
@@ -865,6 +874,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_add_input_rangeproofs() != 13756) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_txbuilder_add_issuance() != 64235) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_add_lbtc_recipient() != 895) {
@@ -1237,6 +1249,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_foreignstorelink_new() != 29701) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_issuancerequest_new() != 10650) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_lightningpayment_from_bolt11_invoice() != 15133) {
@@ -3996,6 +4011,66 @@ void *Issuance::_uniffi_internal_clone_pointer() const {
 
 
 
+IssuanceRequest::IssuanceRequest(void *ptr): instance(ptr) {}
+
+IssuanceRequest::IssuanceRequest(const IssuanceRequest &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+std::shared_ptr<IssuanceRequest> IssuanceRequest::init(uint64_t satoshi_asset, uint64_t satoshi_token) {
+    return std::shared_ptr<IssuanceRequest>(
+        new IssuanceRequest(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_issuancerequest_new,
+        nullptr, uniffi::FfiConverterUInt64::lower(satoshi_asset), uniffi::FfiConverterUInt64::lower(satoshi_token)))
+    );
+}
+
+void IssuanceRequest::address_asset(const std::shared_ptr<Address> &address) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_issuancerequest_address_asset,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterAddress::lower(address));
+}
+void IssuanceRequest::address_token(const std::shared_ptr<Address> &address) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_issuancerequest_address_token,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterAddress::lower(address));
+}
+void IssuanceRequest::contract(const std::shared_ptr<Contract> &contract) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_issuancerequest_contract,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterContract::lower(contract));
+}
+
+IssuanceRequest::~IssuanceRequest() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_issuancerequest,
+        nullptr,
+        this->instance
+    );
+}
+
+void *IssuanceRequest::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_issuancerequest,
+        nullptr,
+        this->instance
+    );
+}
+
+
+
+
 LightningPayment::LightningPayment(void *ptr): instance(ptr) {}
 
 LightningPayment::LightningPayment(const LightningPayment &other) : instance(nullptr) {
@@ -6212,6 +6287,13 @@ void TxBuilder::add_input_rangeproofs(bool add_rangeproofs) {
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterBool::lower(add_rangeproofs));
 }
+void TxBuilder::add_issuance(const std::shared_ptr<IssuanceRequest> &request) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_txbuilder_add_issuance,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterIssuanceRequest::lower(request));
+}
 void TxBuilder::add_lbtc_recipient(const std::shared_ptr<Address> &address, uint64_t satoshi) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     uniffi::rust_call(
@@ -8342,6 +8424,31 @@ uint64_t FfiConverterIssuance::allocation_size(const std::shared_ptr<Issuance> &
 
 
 
+std::shared_ptr<IssuanceRequest> FfiConverterIssuanceRequest::lift(void *ptr) {
+    return std::shared_ptr<IssuanceRequest>(new IssuanceRequest(ptr));
+}
+
+void *FfiConverterIssuanceRequest::lower(const std::shared_ptr<IssuanceRequest> &obj) {
+    return reinterpret_cast<IssuanceRequest*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<IssuanceRequest> FfiConverterIssuanceRequest::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterIssuanceRequest::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterIssuanceRequest::write(RustStream &stream, const std::shared_ptr<IssuanceRequest> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterIssuanceRequest::lower(obj));
+}
+
+uint64_t FfiConverterIssuanceRequest::allocation_size(const std::shared_ptr<IssuanceRequest> &) {
+    return 8;
+}
+
+
+
 std::shared_ptr<LightningPayment> FfiConverterLightningPayment::lift(void *ptr) {
     return std::shared_ptr<LightningPayment>(new LightningPayment(ptr));
 }
@@ -10093,6 +10200,14 @@ std::shared_ptr<LwkError> FfiConverterLwkError::read(RustStream &stream) {
         var.body = FfiConverterOptionalString::read(stream);
         return std::make_shared<lwk_error::EsploraHttpError>(var);
     }
+    case 10:
+    {
+        lwk_error::Amp2HttpError var;
+        var.url = FfiConverterString::read(stream);
+        var.status = FfiConverterUInt16::read(stream);
+        var.body = FfiConverterOptionalString::read(stream);
+        return std::make_shared<lwk_error::Amp2HttpError>(var);
+    }
     default:
         throw std::runtime_error("Unexpected error variant");
     }
@@ -10160,6 +10275,14 @@ void FfiConverterLwkError::write(RustStream &stream, const LwkError &val) {
         FfiConverterOptionalString::write(stream, var.body);
         break;
     }
+    case 10:
+    {
+        auto var = static_cast<const lwk_error::Amp2HttpError&>(val);
+        FfiConverterString::write(stream, var.url);
+        FfiConverterUInt16::write(stream, var.status);
+        FfiConverterOptionalString::write(stream, var.body);
+        break;
+    }
     }
 }
 
@@ -10219,6 +10342,14 @@ uint64_t FfiConverterLwkError::allocation_size(const LwkError &val) {
     case 9:
     {
         auto var = static_cast<const lwk_error::EsploraHttpError&>(val);
+        return static_cast<uint64_t>(sizeof(int32_t)
+            + FfiConverterString::allocation_size(var.url)
+            + FfiConverterUInt16::allocation_size(var.status)
+            + FfiConverterOptionalString::allocation_size(var.body));
+    }
+    case 10:
+    {
+        auto var = static_cast<const lwk_error::Amp2HttpError&>(val);
         return static_cast<uint64_t>(sizeof(int32_t)
             + FfiConverterString::allocation_size(var.url)
             + FfiConverterUInt16::allocation_size(var.status)

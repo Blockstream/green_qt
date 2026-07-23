@@ -49,6 +49,7 @@ struct ForeignStoreLink;
 struct Invoice;
 struct InvoiceResponse;
 struct Issuance;
+struct IssuanceRequest;
 struct LightningPayment;
 struct LockupResponse;
 struct Logging;
@@ -111,78 +112,165 @@ enum class SwapAsset;
 struct TokenProvider;
 typedef std::string AssetId;
 
+
 namespace uniffi {
-struct FfiConverterTokenProvider;
+    struct FfiConverterAnyClient;
+} // namespace uniffi
+
+struct AnyClient
+
+
+
+{
+    friend uniffi::FfiConverterAnyClient;
+
+    AnyClient() = delete;
+
+    AnyClient(AnyClient &&) = delete;
+
+    AnyClient &operator=(const AnyClient &) = delete;
+    AnyClient &operator=(AnyClient &&) = delete;
+
+    ~AnyClient();
+    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
+    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+    /**
+     * Create a generic client backed by Waterfalls.
+     */
+    static std::shared_ptr<AnyClient> from_waterfalls(const std::shared_ptr<WaterfallsClient> &client);
+
+    private:
+    AnyClient(const AnyClient &);
+
+    AnyClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+
+
+/**
+ * An exported trait for handling logging messages.
+ *
+ * Implement this trait to receive and handle logging messages from the lightning session.
+ */
+struct Logging {
+    virtual ~Logging() {}
+    /**
+     * Log a message with the given level
+     */
+    virtual
+    void log(const LogLevel &level, const std::string &message) = 0;
+};
+
+namespace uniffi {
+    struct UniffiCallbackInterfaceLogging {
+        static void log(uint64_t uniffi_handle,RustBuffer level,RustBuffer message,void * uniffi_out_return,RustCallStatus *out_status);
+
+        static void uniffi_free(uint64_t uniffi_handle);
+        static void init();
+    private:
+        static inline UniffiVTableCallbackInterfaceLogging vtable = UniffiVTableCallbackInterfaceLogging {
+            .log = reinterpret_cast<void *>(&log),
+            .uniffi_free = reinterpret_cast<void *>(&uniffi_free)
+        };
+    };
+}
+
+namespace uniffi {
+    struct FfiConverterLogging;
 } // namespace uniffi
 
 /**
- * Provider of a token for authenticated Esplora and Waterfalls backends.
+ * An exported trait for handling logging messages.
  *
- * Some Esplora servers, particularly enterprise deployments like
- * [Blockstream Enterprise](https://blockstream.info/explorer-api), require authentication for
- * access.
+ * Implement this trait to receive and handle logging messages from the lightning session.
  */
-struct TokenProvider {
-    friend uniffi::FfiConverterTokenProvider;
+struct LoggingImpl
+
+ : public Logging 
+
+{
+    friend uniffi::FfiConverterLogging;
+
+    LoggingImpl() = delete;
+
+    LoggingImpl(LoggingImpl &&) = delete;
+
+    LoggingImpl &operator=(const LoggingImpl &) = delete;
+    LoggingImpl &operator=(LoggingImpl &&) = delete;
+
+    ~LoggingImpl();
     /**
-     * No token is needed
+     * Log a message with the given level
      */
-    struct kNone {
-    };
+    void log(const LogLevel &level, const std::string &message);
+
+    private:
+    LoggingImpl(const LoggingImpl &);
+
+    LoggingImpl(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterMnemonic;
+} // namespace uniffi
+
+/**
+ * Wrapper over [`bip39::Mnemonic`]
+ */
+struct Mnemonic
+
+
+
+{
+    friend uniffi::FfiConverterMnemonic;
+
+    Mnemonic() = delete;
+
+    Mnemonic(Mnemonic &&) = delete;
+
+    Mnemonic &operator=(const Mnemonic &) = delete;
+    Mnemonic &operator=(Mnemonic &&) = delete;
+
+    ~Mnemonic();
     /**
-     * A static token is used as-is for every request
+     * Construct a Mnemonic type
      */
-    struct kStatic {
-        /**
-         * The token value
-         */
-        std::string token;
-    };
+    static std::shared_ptr<Mnemonic> init(const std::string &s);
     /**
-     * An OAuth2 token is obtained from the Blockstream API and refreshed automatically
+     * Creates a Mnemonic from entropy, at least 16 bytes are needed.
      */
-    struct kBlockstream {
-        /**
-         * The url to get the token from
-         */
-        std::string url;
-        /**
-         * The client ID
-         */
-        std::string client_id;
-        /**
-         * The client secret
-         */
-        std::string client_secret;
-    };
-    TokenProvider(kNone variant): variant(variant) {}
-    TokenProvider(kStatic variant): variant(variant) {}
-    TokenProvider(kBlockstream variant): variant(variant) {}
-
-    TokenProvider(const TokenProvider &other): variant(other.variant) {}
-    TokenProvider(TokenProvider &&other): variant(std::move(other.variant)) {}
-
-    TokenProvider &operator=(const TokenProvider &other) {
-        variant = other.variant;
-        return *this;
-    }
-
-    TokenProvider &operator=(TokenProvider &&other) {
-        variant = std::move(other.variant);
-        return *this;
-    }
-
+    static std::shared_ptr<Mnemonic> from_entropy(const std::vector<uint8_t> &b);
     /**
-     * Returns the variant of this enum
+     * Creates a random Mnemonic of given words (12,15,18,21,24)
      */
-    const std::variant<kNone, kStatic, kBlockstream> &get_variant() const {
-        return variant;
-    }
+    static std::shared_ptr<Mnemonic> from_random(uint8_t word_count);
+    /**
+     * Get the number of words in this mnemonic
+     */
+    uint8_t word_count();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
 
-private:
-    std::variant<kNone, kStatic, kBlockstream> variant;
+    private:
+    Mnemonic(const Mnemonic &);
 
-    TokenProvider();
+    Mnemonic(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
 };
 
 
@@ -276,76 +364,6 @@ struct Network
 };
 
 
-
-
-/**
- * An exported trait for handling logging messages.
- *
- * Implement this trait to receive and handle logging messages from the lightning session.
- */
-struct Logging {
-    virtual ~Logging() {}
-    /**
-     * Log a message with the given level
-     */
-    virtual
-    void log(const LogLevel &level, const std::string &message) = 0;
-};
-
-namespace uniffi {
-    struct UniffiCallbackInterfaceLogging {
-        static void log(uint64_t uniffi_handle,RustBuffer level,RustBuffer message,void * uniffi_out_return,RustCallStatus *out_status);
-
-        static void uniffi_free(uint64_t uniffi_handle);
-        static void init();
-    private:
-        static inline UniffiVTableCallbackInterfaceLogging vtable = UniffiVTableCallbackInterfaceLogging {
-            .log = reinterpret_cast<void *>(&log),
-            .uniffi_free = reinterpret_cast<void *>(&uniffi_free)
-        };
-    };
-}
-
-namespace uniffi {
-    struct FfiConverterLogging;
-} // namespace uniffi
-
-/**
- * An exported trait for handling logging messages.
- *
- * Implement this trait to receive and handle logging messages from the lightning session.
- */
-struct LoggingImpl
-
- : public Logging 
-
-{
-    friend uniffi::FfiConverterLogging;
-
-    LoggingImpl() = delete;
-
-    LoggingImpl(LoggingImpl &&) = delete;
-
-    LoggingImpl &operator=(const LoggingImpl &) = delete;
-    LoggingImpl &operator=(LoggingImpl &&) = delete;
-
-    ~LoggingImpl();
-    /**
-     * Log a message with the given level
-     */
-    void log(const LogLevel &level, const std::string &message);
-
-    private:
-    LoggingImpl(const LoggingImpl &);
-
-    LoggingImpl(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
 namespace uniffi {
     struct FfiConverterAddress;
 } // namespace uniffi
@@ -417,58 +435,78 @@ struct Address
     void *instance = nullptr;
 };
 
-
 namespace uniffi {
-    struct FfiConverterMnemonic;
+struct FfiConverterTokenProvider;
 } // namespace uniffi
 
 /**
- * Wrapper over [`bip39::Mnemonic`]
+ * Provider of a token for authenticated Esplora and Waterfalls backends.
+ *
+ * Some Esplora servers, particularly enterprise deployments like
+ * [Blockstream Enterprise](https://blockstream.info/explorer-api), require authentication for
+ * access.
  */
-struct Mnemonic
-
-
-
-{
-    friend uniffi::FfiConverterMnemonic;
-
-    Mnemonic() = delete;
-
-    Mnemonic(Mnemonic &&) = delete;
-
-    Mnemonic &operator=(const Mnemonic &) = delete;
-    Mnemonic &operator=(Mnemonic &&) = delete;
-
-    ~Mnemonic();
+struct TokenProvider {
+    friend uniffi::FfiConverterTokenProvider;
     /**
-     * Construct a Mnemonic type
+     * No token is needed
      */
-    static std::shared_ptr<Mnemonic> init(const std::string &s);
+    struct kNone {
+    };
     /**
-     * Creates a Mnemonic from entropy, at least 16 bytes are needed.
+     * A static token is used as-is for every request
      */
-    static std::shared_ptr<Mnemonic> from_entropy(const std::vector<uint8_t> &b);
+    struct kStatic {
+        /**
+         * The token value
+         */
+        std::string token;
+    };
     /**
-     * Creates a random Mnemonic of given words (12,15,18,21,24)
+     * An OAuth2 token is obtained from the Blockstream API and refreshed automatically
      */
-    static std::shared_ptr<Mnemonic> from_random(uint8_t word_count);
+    struct kBlockstream {
+        /**
+         * The url to get the token from
+         */
+        std::string url;
+        /**
+         * The client ID
+         */
+        std::string client_id;
+        /**
+         * The client secret
+         */
+        std::string client_secret;
+    };
+    TokenProvider(kNone variant): variant(variant) {}
+    TokenProvider(kStatic variant): variant(variant) {}
+    TokenProvider(kBlockstream variant): variant(variant) {}
+
+    TokenProvider(const TokenProvider &other): variant(other.variant) {}
+    TokenProvider(TokenProvider &&other): variant(std::move(other.variant)) {}
+
+    TokenProvider &operator=(const TokenProvider &other) {
+        variant = other.variant;
+        return *this;
+    }
+
+    TokenProvider &operator=(TokenProvider &&other) {
+        variant = std::move(other.variant);
+        return *this;
+    }
+
     /**
-     * Get the number of words in this mnemonic
+     * Returns the variant of this enum
      */
-    uint8_t word_count();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
+    const std::variant<kNone, kStatic, kBlockstream> &get_variant() const {
+        return variant;
+    }
 
-    private:
-    Mnemonic(const Mnemonic &);
+private:
+    std::variant<kNone, kStatic, kBlockstream> variant;
 
-    Mnemonic(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
+    TokenProvider();
 };
 
 
@@ -529,61 +567,18 @@ struct WaterfallsSubscriptionTip {
 };
 
 
-namespace uniffi {
-    struct FfiConverterAnyClient;
-} // namespace uniffi
-
-struct AnyClient
-
-
-
-{
-    friend uniffi::FfiConverterAnyClient;
-
-    AnyClient() = delete;
-
-    AnyClient(AnyClient &&) = delete;
-
-    AnyClient &operator=(const AnyClient &) = delete;
-    AnyClient &operator=(AnyClient &&) = delete;
-
-    ~AnyClient();
-    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
-    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
-    /**
-     * Create a generic client backed by Waterfalls.
-     */
-    static std::shared_ptr<AnyClient> from_waterfalls(const std::shared_ptr<WaterfallsClient> &client);
-
-    private:
-    AnyClient(const AnyClient &);
-
-    AnyClient(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
 /**
- * A builder for the `EsploraClient`
+ * An update received from a Waterfalls descriptor subscription stream.
  */
-struct EsploraClientBuilder {
-    std::string base_url;
-    std::shared_ptr<Network> network;
-    bool waterfalls = false;
-    std::optional<uint32_t> concurrency = std::nullopt;
-    std::optional<uint8_t> timeout = std::nullopt;
-    bool utxo_only = false;
+struct WaterfallsSubscriptionEvent {
     /**
-     * HTTP headers to set on each request, for example to authenticate with a backend
+     * The event kind: `tip`, `mempool`, `block`, or `reorg`.
      */
-    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    std::string kind;
     /**
-     * Token provider for authenticated Esplora and Waterfalls backends
+     * The Waterfalls server tip observed when the event was emitted.
      */
-    std::optional<TokenProvider> token_provider = std::nullopt;
+    std::optional<WaterfallsSubscriptionTip> tip;
 };
 
 
@@ -603,41 +598,6 @@ struct LiquidBip21 {
      * The amount in satoshis
      */
     std::optional<uint64_t> satoshi;
-};
-
-
-/**
- * A builder for the `WaterfallsClient`
- */
-struct WaterfallsClientBuilder {
-    std::string base_url;
-    std::shared_ptr<Network> network;
-    std::optional<uint32_t> concurrency = std::nullopt;
-    std::optional<uint8_t> timeout = std::nullopt;
-    bool utxo_only = false;
-    /**
-     * HTTP headers to set on each request, for example to authenticate with a backend
-     */
-    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
-    /**
-     * Token provider for authenticated Waterfalls backends
-     */
-    std::optional<TokenProvider> token_provider = std::nullopt;
-};
-
-
-/**
- * An update received from a Waterfalls descriptor subscription stream.
- */
-struct WaterfallsSubscriptionEvent {
-    /**
-     * The event kind: `tip`, `mempool`, `block`, or `reorg`.
-     */
-    std::string kind;
-    /**
-     * The Waterfalls server tip observed when the event was emitted.
-     */
-    std::optional<WaterfallsSubscriptionTip> tip;
 };
 
 
@@ -677,6 +637,47 @@ struct BoltzSessionBuilder {
      * providers.
      */
     std::shared_ptr<ForeignStoreLink> store = nullptr;
+};
+
+
+/**
+ * A builder for the `WaterfallsClient`
+ */
+struct WaterfallsClientBuilder {
+    std::string base_url;
+    std::shared_ptr<Network> network;
+    std::optional<uint32_t> concurrency = std::nullopt;
+    std::optional<uint8_t> timeout = std::nullopt;
+    bool utxo_only = false;
+    /**
+     * HTTP headers to set on each request, for example to authenticate with a backend
+     */
+    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    /**
+     * Token provider for authenticated Waterfalls backends
+     */
+    std::optional<TokenProvider> token_provider = std::nullopt;
+};
+
+
+/**
+ * A builder for the `EsploraClient`
+ */
+struct EsploraClientBuilder {
+    std::string base_url;
+    std::shared_ptr<Network> network;
+    bool waterfalls = false;
+    std::optional<uint32_t> concurrency = std::nullopt;
+    std::optional<uint8_t> timeout = std::nullopt;
+    bool utxo_only = false;
+    /**
+     * HTTP headers to set on each request, for example to authenticate with a backend
+     */
+    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    /**
+     * Token provider for authenticated Esplora and Waterfalls backends
+     */
+    std::optional<TokenProvider> token_provider = std::nullopt;
 };
 
 
@@ -2454,6 +2455,61 @@ struct Issuance
 
 
 namespace uniffi {
+    struct FfiConverterIssuanceRequest;
+} // namespace uniffi
+
+/**
+ * Wrapper over [`lwk_wollet::IssuanceRequest`]
+ *
+ * Used to build a request passed to [`TxBuilder::add_issuance()`]
+ */
+struct IssuanceRequest
+
+
+
+{
+    friend uniffi::FfiConverterIssuanceRequest;
+
+    IssuanceRequest() = delete;
+
+    IssuanceRequest(IssuanceRequest &&) = delete;
+
+    IssuanceRequest &operator=(const IssuanceRequest &) = delete;
+    IssuanceRequest &operator=(IssuanceRequest &&) = delete;
+
+    ~IssuanceRequest();
+    /**
+     * Construct a builder for an issuance of `satoshi_asset` asset units and `satoshi_token`
+     * reissuance tokens (at least one of the two must be greater than zero)
+     */
+    static std::shared_ptr<IssuanceRequest> init(uint64_t satoshi_asset, uint64_t satoshi_token);
+    /**
+     * Sets the address receiving the issued asset units; if not called, they are sent
+     * to an address of the wallet generating the issuance
+     */
+    void address_asset(const std::shared_ptr<Address> &address);
+    /**
+     * Sets the address receiving the reissuance tokens; if not called, they are sent
+     * to an address of the wallet generating the issuance
+     */
+    void address_token(const std::shared_ptr<Address> &address);
+    /**
+     * Sets the contract whose metadata will be committed in the generated asset id
+     */
+    void contract(const std::shared_ptr<Contract> &contract);
+
+    private:
+    IssuanceRequest(const IssuanceRequest &);
+
+    IssuanceRequest(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
     struct FfiConverterLightningPayment;
 } // namespace uniffi
 
@@ -3787,7 +3843,7 @@ struct Signer
      */
     std::shared_ptr<WolletDescriptor> singlesig_desc(const Singlesig &script_variant, const DescriptorBlindingKey &blinding_variant);
     /**
-     * Return the signer fingerprint
+     * Return the signer slip77 master blinding key
      */
     std::string slip77_master_blinding_key();
     /**
@@ -3987,6 +4043,15 @@ struct TxBuilder
      * Add input rangeproofs
      */
     void add_input_rangeproofs(bool add_rangeproofs);
+    /**
+     * Issue an asset, or several assets by calling this multiple times in the same transaction
+     *
+     * `request` sets the asset/token amounts, receivers, and contract; see
+     * [`IssuanceRequest`] for details.
+     *
+     * Can't be used if `reissue_asset` has been called
+     */
+    void add_issuance(const std::shared_ptr<IssuanceRequest> &request);
     /**
      * Add a recipient receiving L-BTC
      */
@@ -5392,6 +5457,24 @@ protected:
         return 9;
     }
 };
+
+struct Amp2HttpError: LwkError {
+    std::string url;
+    uint16_t status;
+    std::optional<std::string> body;
+
+    Amp2HttpError() : LwkError("") {}
+    Amp2HttpError(const std::string &what_arg) : LwkError(what_arg) {}
+
+    void throw_underlying() override {
+        throw *this;
+    }
+
+protected:
+    int32_t get_variant_idx() const override {
+        return 10;
+    }
+};
 } // namespace lwk_error
 
 
@@ -5927,6 +6010,16 @@ struct FfiConverterIssuance {
     static std::shared_ptr<Issuance> read(RustStream &);
     static void write(RustStream &, const std::shared_ptr<Issuance> &);
     static uint64_t allocation_size(const std::shared_ptr<Issuance> &);
+private:
+};
+
+
+struct FfiConverterIssuanceRequest {
+    static std::shared_ptr<IssuanceRequest> lift(void *);
+    static void *lower(const std::shared_ptr<IssuanceRequest> &);
+    static std::shared_ptr<IssuanceRequest> read(RustStream &);
+    static void write(RustStream &, const std::shared_ptr<IssuanceRequest> &);
+    static uint64_t allocation_size(const std::shared_ptr<IssuanceRequest> &);
 private:
 };
 
