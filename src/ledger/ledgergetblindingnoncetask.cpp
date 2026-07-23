@@ -1,24 +1,27 @@
 #include "command.h"
 #include "ledgerdevice.h"
-#include "ledgergetblindingnonceactivity.h"
+#include "ledgergetblindingnoncetask.h"
 
 #include <wally_wrapper.h>
 
-LedgerGetBlindingNonceActivity::LedgerGetBlindingNonceActivity(const QByteArray& pubkey, const QByteArray& script, LedgerDevice* device)
-    : GetBlindingNonceActivity(device)
+LedgerGetBlindingNonceTask::LedgerGetBlindingNonceTask(const QByteArray& pubkey, const QByteArray& script, LedgerDevice* device)
+    : DeviceGetBlindingNonceTask(device)
     , m_device(device)
     , m_pubkey(pubkey)
     , m_script(script)
 {
 }
 
-QByteArray LedgerGetBlindingNonceActivity::nonce() const
+QByteArray LedgerGetBlindingNonceTask::nonce() const
 {
     return m_nonce;
 }
 
-void LedgerGetBlindingNonceActivity::exec()
+void LedgerGetBlindingNonceTask::update()
 {
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+
     QByteArray pubkey_uncompressed = QByteArray(EC_PUBLIC_KEY_UNCOMPRESSED_LEN, 0);
     int res = wally_ec_public_key_decompress(
                 (const unsigned char*) m_pubkey.constData(), m_pubkey.size(),
@@ -30,10 +33,10 @@ void LedgerGetBlindingNonceActivity::exec()
         command->deleteLater();
         Q_ASSERT(command->m_response.length() == 32);
         m_nonce = command->m_response;
-        finish();
+        setStatus(Status::Finished);
     });
     connect(command, &Command::error, this, [this, command] {
         command->deleteLater();
-        fail();
+        setStatus(Status::Failed);
     });
 }

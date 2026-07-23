@@ -1,4 +1,3 @@
-#include "activitymanager.h"
 #include "context.h"
 #include "device.h"
 #include "network.h"
@@ -36,20 +35,20 @@ Resolver::Resolver(const QJsonObject& result, AuthHandlerTask* task)
 {
 }
 
-void Resolver::pushActivity(Activity* activity)
+void Resolver::pushDeviceTask(Task* task)
 {
-    Q_ASSERT(!m_activity);
-    m_activity = activity;
-    connect(m_activity, &Activity::destroyed, this, [this] {
-        m_activity = nullptr;
-        emit activityChanged();
+    Q_ASSERT(!m_device_task);
+    m_device_task = task;
+    connect(m_device_task, &QObject::destroyed, this, [this] {
+        m_device_task = nullptr;
+        emit deviceTaskChanged();
     });
-    emit activityChanged();
+    emit deviceTaskChanged();
 }
 
-QString Resolver::getActivityError(Activity* activity, const QString& defaultMessage) const
+QString Resolver::getTaskError(Task* task, const QString& defaultMessage) const
 {
-    const QString error = activity->message().value("message").toString();
+    const QString error = task->error();
     return error.isEmpty() ? defaultMessage : error;
 }
 
@@ -108,17 +107,17 @@ void GetXPubsResolver::resolve()
     }
 
     auto path = m_paths.takeFirst();
-    auto activity = m_device->getWalletPublicKey(m_session->network(), path);
-    connect(activity, &Activity::finished, this, [this, activity] {
-        activity->deleteLater();
-        m_xpubs.append(QString::fromLocal8Bit(activity->publicKey()));
+    auto task = m_device->getWalletPublicKey(m_session->network(), path);
+    connect(task, &Task::finished, this, [this, task] {
+        task->deleteLater();
+        m_xpubs.append(QString::fromLocal8Bit(task->publicKey()));
         resolve();
     });
-    connect(activity, &GetWalletPublicKeyActivity::failed, this, [this, activity] {
-        activity->deleteLater();
-        emit failed(getActivityError(activity, "Failed to get wallet public key"));
+    connect(task, &Task::failed, this, [this, task] {
+        task->deleteLater();
+        emit failed(getTaskError(task, "Failed to get wallet public key"));
     });
-    ActivityManager::instance()->exec(activity);
+    m_device->exec(task);
 }
 
 SignTransactionResolver::SignTransactionResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
@@ -135,11 +134,11 @@ void SignTransactionResolver::resolve()
     const auto transaction_outputs = m_required_data.value("transaction_outputs").toArray();
     const auto signing_transactions = m_required_data.value("signing_transactions").toObject();
 
-    auto activity = device()->signTransaction(m_session->network(), transaction, signing_inputs, transaction_outputs, signing_transactions);
-    connect(activity, &SignTransactionActivity::finished, [this, activity] {
-        activity->deleteLater();
+    auto task = device()->signTransaction(m_session->network(), transaction, signing_inputs, transaction_outputs, signing_transactions);
+    connect(task, &Task::finished, [this, task] {
+        task->deleteLater();
         QJsonArray signatures;
-        for (const auto& signature : activity->signatures()) {
+        for (const auto& signature : task->signatures()) {
             signatures.append(QString::fromLocal8Bit(signature.toHex()));
         }
         QJsonObject data{
@@ -147,18 +146,18 @@ void SignTransactionResolver::resolve()
         };
         if (m_required_data.value("use_ae_protocol").toBool()) {
             QJsonArray signer_commitments;
-            for (const auto& signer_commitment : activity->signerCommitments()) {
+            for (const auto& signer_commitment : task->signerCommitments()) {
                 signer_commitments.append(QString::fromLocal8Bit(signer_commitment.toHex()));
             }
             data["signer_commitments"] = signer_commitments;
         }
         emit resolved(data);
     });
-    connect(activity, &SignTransactionActivity::failed, [this, activity] {
-        activity->deleteLater();
-        emit failed(getActivityError(activity, "Failed to sign transaction"));
+    connect(task, &Task::failed, [this, task] {
+        task->deleteLater();
+        emit failed(getTaskError(task, "Failed to sign transaction"));
     });
-    ActivityManager::instance()->exec(activity);
+    m_device->exec(task);
 }
 
 BlindingKeysResolver::BlindingKeysResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
@@ -175,17 +174,17 @@ void BlindingKeysResolver::resolve()
     }
 
     const auto script = m_scripts.at(m_public_keys.size());
-    auto activity = device()->getBlindingKey(script.toString());
-    connect(activity, &Activity::finished, this, [this, activity] {
-        activity->deleteLater();
-        m_public_keys.append(QString::fromLocal8Bit(activity->publicKey().toHex()));
+    auto task = device()->getBlindingKey(script.toString());
+    connect(task, &Task::finished, this, [this, task] {
+        task->deleteLater();
+        m_public_keys.append(QString::fromLocal8Bit(task->publicKey().toHex()));
         resolve();
     });
-    connect(activity, &Activity::failed, this, [this, activity] {
-        activity->deleteLater();
-        emit failed(getActivityError(activity, "Failed to get blinding key"));
+    connect(task, &Task::failed, this, [this, task] {
+        task->deleteLater();
+        emit failed(getTaskError(task, "Failed to get blinding key"));
     });
-    ActivityManager::instance()->exec(activity);
+    m_device->exec(task);
 }
 
 BlindingNoncesResolver::BlindingNoncesResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
@@ -208,31 +207,31 @@ void BlindingNoncesResolver::resolve()
     const auto pubkey = QByteArray::fromHex(m_public_keys.at(index).toString().toLocal8Bit());
     const auto script = QByteArray::fromHex(m_scripts.at(index).toString().toLocal8Bit());
 
-    auto activity = device()->getBlindingNonce(pubkey, script);
-    connect(activity, &Activity::finished, this, [=, this] {
-        activity->deleteLater();
-        m_nonces.append(QString::fromLocal8Bit(activity->nonce().toHex()));
+    auto task = device()->getBlindingNonce(pubkey, script);
+    connect(task, &Task::finished, this, [=, this] {
+        task->deleteLater();
+        m_nonces.append(QString::fromLocal8Bit(task->nonce().toHex()));
         if (m_blinding_keys_required) {
-            auto activity = device()->getBlindingKey(m_scripts.at(index).toString());
-            connect(activity, &Activity::finished, this, [=, this] {
-                activity->deleteLater();
-                m_blinding_keys.append(QString::fromLocal8Bit(activity->publicKey().toHex()));
+            auto task = device()->getBlindingKey(m_scripts.at(index).toString());
+            connect(task, &Task::finished, this, [=, this] {
+                task->deleteLater();
+                m_blinding_keys.append(QString::fromLocal8Bit(task->publicKey().toHex()));
                 resolve();
             });
-            connect(activity, &Activity::failed, this, [this, activity] {
-                activity->deleteLater();
-                emit failed(getActivityError(activity, "Failed to get blinding key"));
+            connect(task, &Task::failed, this, [this, task] {
+                task->deleteLater();
+                emit failed(getTaskError(task, "Failed to get blinding key"));
             });
-            ActivityManager::instance()->exec(activity);
+            m_device->exec(task);
         } else {
             resolve();
         }
     });
-    connect(activity, &Activity::failed, this, [this, activity] {
-        activity->deleteLater();
-        emit failed(getActivityError(activity, "Failed to get blinding nonce"));
+    connect(task, &Task::failed, this, [this, task] {
+        task->deleteLater();
+        emit failed(getTaskError(task, "Failed to get blinding nonce"));
     });
-    ActivityManager::instance()->exec(activity);
+    m_device->exec(task);
 }
 
 SignLiquidTransactionResolver::SignLiquidTransactionResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
@@ -251,25 +250,16 @@ void SignLiquidTransactionResolver::resolve()
     const auto outputs = m_required_data.value("transaction_outputs").toArray();
     const auto assets = GetAssets(m_session->context(), outputs);
 
-    auto activity = device()->signLiquidTransaction(m_session->network(), transaction, signing_inputs, outputs, assets);
+    auto task = device()->signLiquidTransaction(m_session->network(), transaction, signing_inputs, outputs, assets);
 
-//    connect(command, &SignLiquidTransactionCommand::progressChanged, [this](int count, int total) {
-//       m_progress = qreal(count) / qreal(total);
-//       emit progressChanged(m_progress);
-//    });
-//    connect(command, &SignLiquidTransactionCommand::message, [this](const QJsonObject& message) {
-//        if (m_message == message) return;
-//        m_message = message;
-//        emit messageChanged(m_message);
-//    });
-    connect(activity, &Activity::finished, [this, activity] {
-        activity->deleteLater();
+    connect(task, &Task::finished, [this, task] {
+        task->deleteLater();
         QJsonArray signatures;
         QJsonArray asset_commitments;
         QJsonArray value_commitments;
         QJsonArray abfs;
         QJsonArray vbfs;
-        for (const auto& signature : activity->signatures()) {
+        for (const auto& signature : task->signatures()) {
             signatures.append(QString::fromLocal8Bit(signature.toHex()));
         }
         QJsonObject data{
@@ -278,7 +268,7 @@ void SignLiquidTransactionResolver::resolve()
 
         if (m_required_data.value("use_ae_protocol").toBool()) {
             QJsonArray signer_commitments;
-            for (const auto& signer_commitment : activity->signerCommitments()) {
+            for (const auto& signer_commitment : task->signerCommitments()) {
                 signer_commitments.append(QString::fromLocal8Bit(signer_commitment.toHex()));
             }
             data["signer_commitments"] = signer_commitments;
@@ -286,12 +276,12 @@ void SignLiquidTransactionResolver::resolve()
 
         emit resolved(data);
     });
-    connect(activity, &Activity::failed, this, [this, activity] {
-        activity->deleteLater();
-        emit failed(getActivityError(activity, "Failed to sign liquid transaction"));
+    connect(task, &Task::failed, this, [this, task] {
+        task->deleteLater();
+        emit failed(getTaskError(task, "Failed to sign liquid transaction"));
     });
-    ActivityManager::instance()->exec(activity);
-    pushActivity(activity);
+    m_device->exec(task);
+    pushDeviceTask(task);
 }
 
 GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
@@ -301,19 +291,19 @@ GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Device* device, const
 
 void GetMasterBlindingKeyResolver::resolve()
 {
-    auto activity = device()->getMasterBlindingKey();
-    connect(activity, &Activity::finished, [this, activity] {
-        activity->deleteLater();
+    auto task = device()->getMasterBlindingKey();
+    connect(task, &Task::finished, [this, task] {
+        task->deleteLater();
         emit resolved({
-            { "master_blinding_key", QString::fromLocal8Bit(activity->masterBlindingKey().toHex()) }
+            { "master_blinding_key", QString::fromLocal8Bit(task->masterBlindingKey().toHex()) }
         });
     });
-    connect(activity, &Activity::failed, this, [this, activity] {
-        activity->deleteLater();
-        emit failed(getActivityError(activity, "Failed to get master blinding key"));
+    connect(task, &Task::failed, this, [this, task] {
+        task->deleteLater();
+        emit failed(getTaskError(task, "Failed to get master blinding key"));
     });
-    ActivityManager::instance()->exec(activity);
-    pushActivity(activity);
+    m_device->exec(task);
+    pushDeviceTask(task);
 }
 
 GetBlindingFactorsResolver::GetBlindingFactorsResolver(Device *device, const QJsonObject &result, AuthHandlerTask* task)
@@ -326,17 +316,17 @@ void GetBlindingFactorsResolver::resolve()
     const auto inputs = m_required_data.value("transaction_inputs").toArray();
     const auto outputs = m_required_data.value("transaction_outputs").toArray();
 
-    auto activity = device()->getBlindingFactors(inputs, outputs);
-    connect(activity, &Activity::finished, this, [=, this] {
-        activity->deleteLater();
+    auto task = device()->getBlindingFactors(inputs, outputs);
+    connect(task, &Task::finished, this, [=, this] {
+        task->deleteLater();
 
         QJsonArray assetblinders;
-        for (const auto& b : activity->assetBlinders()) {
+        for (const auto& b : task->assetBlinders()) {
             assetblinders.append(QString::fromLocal8Bit(b.toHex()));
         }
 
         QJsonArray amountblinders;
-        for (const auto& b : activity->amountBlinders()) {
+        for (const auto& b : task->amountBlinders()) {
             amountblinders.append(QString::fromLocal8Bit(b.toHex()));
         }
 
@@ -345,10 +335,10 @@ void GetBlindingFactorsResolver::resolve()
             { "amountblinders", amountblinders }
         });
     });
-    connect(activity, &Activity::failed, this, [this, activity] {
-        activity->deleteLater();
-        emit failed(getActivityError(activity, "Failed to get blinding factors"));
+    connect(task, &Task::failed, this, [this, task] {
+        task->deleteLater();
+        emit failed(getTaskError(task, "Failed to get blinding factors"));
     });
-    ActivityManager::instance()->exec(activity);
-    pushActivity(activity);
+    m_device->exec(task);
+    pushDeviceTask(task);
 }

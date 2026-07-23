@@ -1,12 +1,12 @@
 #include "command.h"
 #include "ledgerdevice.h"
-#include "ledgersigntransactionactivity.h"
+#include "ledgersigntransactiontask.h"
 #include "util.h"
 
 #include <wally_wrapper.h>
 
-LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device)
-    : SignTransactionActivity(device)
+LedgerSignTransactionTask::LedgerSignTransactionTask(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device)
+    : DeviceSignTransactionTask(device)
     , m_device(device)
     , m_transaction(transaction)
     , m_signing_inputs(signing_inputs)
@@ -23,25 +23,28 @@ LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QByteArray& t
     wally_tx_free(tx);
 }
 
-QList<QByteArray> LedgerSignTransactionActivity::signatures() const
+QList<QByteArray> LedgerSignTransactionTask::signatures() const
 {
     return m_signatures.toList();
 }
 
-QList<QByteArray> LedgerSignTransactionActivity::signerCommitments() const
+QList<QByteArray> LedgerSignTransactionTask::signerCommitments() const
 {
     Q_UNREACHABLE();
 }
 
-DeviceCommand *LedgerSignTransactionActivity::exchange(CommandBatch* batch, const QByteArray& data)
+DeviceCommand *LedgerSignTransactionTask::exchange(CommandBatch* batch, const QByteArray& data)
 {
     auto command = new LedgerGenericCommand(m_device, data);
     batch->add(command);
     return command;
 }
 
-void LedgerSignTransactionActivity::exec()
+void LedgerSignTransactionTask::update()
 {
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+
     bool sw = false;
     bool p2sh = false;
     for (const auto i : m_signing_inputs) {
@@ -60,17 +63,17 @@ void LedgerSignTransactionActivity::exec()
 
     connect(batch, &CommandBatch::finished, [this, batch] {
         batch->deleteLater();
-        emit finished();
+        setStatus(Status::Finished);
     });
     connect(batch, &CommandBatch::error, [this, batch] {
         batch->deleteLater();
-        emit fail();
+        setStatus(Status::Failed);
     });
 
     batch->exec();
 }
 
-QByteArray LedgerSignTransactionActivity::outputBytes()
+QByteArray LedgerSignTransactionTask::outputBytes()
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
@@ -87,7 +90,7 @@ QByteArray LedgerSignTransactionActivity::outputBytes()
     return data;
 }
 
-Command* LedgerSignTransactionActivity::finalizeInputFull(const QByteArray &data)
+Command* LedgerSignTransactionTask::finalizeInputFull(const QByteArray &data)
 {
     auto batch = new CommandBatch;
     QList<QByteArray> datas;
@@ -108,7 +111,7 @@ Command* LedgerSignTransactionActivity::finalizeInputFull(const QByteArray &data
     return batch;
 }
 
-Command* LedgerSignTransactionActivity::untrustedHashSign(int index, const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime)
+Command* LedgerSignTransactionTask::untrustedHashSign(int index, const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime)
 {
     const uint8_t sig_hash_type = 1;
     auto batch = new CommandBatch;
@@ -132,7 +135,7 @@ Command* LedgerSignTransactionActivity::untrustedHashSign(int index, const QVect
     return batch;
 }
 
-Command* LedgerSignTransactionActivity::signSW()
+Command* LedgerSignTransactionTask::signSW()
 {
     auto batch = new CommandBatch;
     auto cmd = getHwInputs(true);
@@ -160,7 +163,7 @@ Command* LedgerSignTransactionActivity::signSW()
     return batch;
 }
 
-Command* LedgerSignTransactionActivity::signNonSW()
+Command* LedgerSignTransactionTask::signNonSW()
 {
     auto batch = new CommandBatch;
     auto cmd = getHwInputs(false);
@@ -192,7 +195,7 @@ QByteArray sequenceBytes(const QJsonObject& in)
     return data;
 }
 
-Command* LedgerSignTransactionActivity::getHwInputs(bool segwit)
+Command* LedgerSignTransactionTask::getHwInputs(bool segwit)
 {
     const bool shouldUseTrustedInputForSegwit = true;
     const bool prefer_trusted_inputs = !segwit || shouldUseTrustedInputForSegwit;
@@ -216,7 +219,7 @@ Command* LedgerSignTransactionActivity::getHwInputs(bool segwit)
     return batch;
 }
 
-Command* LedgerSignTransactionActivity::getTrustedInput(const QByteArray& raw, uint32_t index, uint32_t sequence, bool segwit)
+Command* LedgerSignTransactionTask::getTrustedInput(const QByteArray& raw, uint32_t index, uint32_t sequence, bool segwit)
 {
     auto batch = new CommandBatch;
 
@@ -300,7 +303,7 @@ Command* LedgerSignTransactionActivity::getTrustedInput(const QByteArray& raw, u
     return batch;
 }
 
-Command* LedgerSignTransactionActivity::startUntrustedTransaction(uint32_t version, bool new_transaction, size_t index, const QList<Input>& used_inputs, const QByteArray& redeem_script, bool segwit)
+Command* LedgerSignTransactionTask::startUntrustedTransaction(uint32_t version, bool new_transaction, size_t index, const QList<Input>& used_inputs, const QByteArray& redeem_script, bool segwit)
 {
     auto batch = new CommandBatch;
 

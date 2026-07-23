@@ -12,7 +12,6 @@
 
 #include <type_traits>
 
-#include "activitymanager.h"
 #include "context.h"
 #include "device.h"
 #include "ga.h"
@@ -38,8 +37,8 @@ void Wallet::disconnect()
 {
     if (m_context) {
         if (m_context->device()) {
-            auto activity = m_context->device()->logout();
-            if (activity) ActivityManager::instance()->exec(activity);
+            auto task = m_context->device()->logout();
+            if (task) m_context->device()->exec(task);
         }
         m_context->deleteLater();
         setContext(nullptr);

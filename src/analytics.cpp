@@ -242,7 +242,7 @@ void Analytics::start()
             GA_destroy_json(out);
 
             // A request that fails is still GA_OK: gdk reports it as
-            // {"error": ...} with no body, as HttpRequestActivity::hasError()
+            // {"error": ...} with no body, as HttpRequestTask::hasError()
             // reads it. Parsing the missing body is what took the process down,
             // because nlohmann maps JSON_THROW to std::abort() when it does not
             // detect exception support, which is the case on the Windows build.

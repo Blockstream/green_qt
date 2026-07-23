@@ -1,14 +1,13 @@
 #include "ledgerdevice.h"
 
-#include "activitymanager.h"
 #include "command.h"
 #include "device_p.h"
-#include "ledgergetblindingkeyactivity.h"
-#include "ledgergetblindingnonceactivity.h"
-#include "ledgergetwalletpublickeyactivity.h"
-#include "ledgersignliquidtransactionactivity.h"
-#include "ledgersignmessageactivity.h"
-#include "ledgersigntransactionactivity.h"
+#include "ledgergetblindingkeytask.h"
+#include "ledgergetblindingnoncetask.h"
+#include "ledgergetwalletpublickeytask.h"
+#include "ledgersignliquidtransactiontask.h"
+#include "ledgersignmessagetask.h"
+#include "ledgersigntransactiontask.h"
 #include "network.h"
 
 LedgerDevice::LedgerDevice(DevicePrivate* d, QObject* parent)
@@ -19,20 +18,20 @@ LedgerDevice::LedgerDevice(DevicePrivate* d, QObject* parent)
     d->q = this;
 
     QTimer::singleShot(1000, this, [=, this] {
-        auto activity = getApp();
-        QObject::connect(activity, &Activity::finished, this, [=, this] {
-            activity->deleteLater();
+        auto task = getApp();
+        QObject::connect(task, &Task::finished, this, [=, this] {
+            task->deleteLater();
 
-            const auto app_name = activity->name();
-            const auto app_version = activity->version();
+            const auto app_name = task->name();
+            const auto app_version = task->version();
 
             setApp(app_name, app_version);
         });
-        QObject::connect(activity, &Activity::failed, this, [this, activity] {
-            activity->deleteLater();
+        QObject::connect(task, &Task::failed, this, [this, task] {
+            task->deleteLater();
             setState(StateLocked);
         });
-        ActivityManager::instance()->exec(activity);
+        exec(task);
     });
 }
 
@@ -76,57 +75,57 @@ DeviceCommand* LedgerDevice::exchange(const QByteArray& data) {
     return command;
 }
 
-GetWalletPublicKeyActivity *LedgerDevice::getWalletPublicKey(Network* network, const QVector<uint32_t>& path)
+DeviceGetWalletPublicKeyTask *LedgerDevice::getWalletPublicKey(Network* network, const QVector<uint32_t>& path)
 {
-    return new LedgerGetWalletPublicKeyActivity(network, path, this);
+    return new LedgerGetWalletPublicKeyTask(network, path, this);
 }
 
-SignMessageActivity* LedgerDevice::signMessage(const QString& message, const QVector<uint32_t>& path)
+DeviceSignMessageTask* LedgerDevice::signMessage(const QString& message, const QVector<uint32_t>& path)
 {
-    return new LedgerSignMessageActivity(message, path, this);
+    return new LedgerSignMessageTask(message, path, this);
 }
 
-SignMessageActivity* LedgerDevice::signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy)
+DeviceSignMessageTask* LedgerDevice::signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy)
 {
     Q_UNREACHABLE();
 }
 
-SignTransactionActivity* LedgerDevice::signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions)
+DeviceSignTransactionTask* LedgerDevice::signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions)
 {
     Q_UNUSED(network);
-    return new LedgerSignTransactionActivity(transaction, signing_inputs, transaction_outputs, signing_transactions, this);
+    return new LedgerSignTransactionTask(transaction, signing_inputs, transaction_outputs, signing_transactions, this);
 }
 
-SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets)
+DeviceSignLiquidTransactionTask *LedgerDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets)
 {
     Q_UNUSED(assets);
     Q_ASSERT(network->isLiquid() && network->isMainnet());
-    return new LedgerSignLiquidTransactionActivity(transaction, signing_inputs, outputs, this);
+    return new LedgerSignLiquidTransactionTask(transaction, signing_inputs, outputs, this);
 }
 
-GetMasterBlindingKeyActivity *LedgerDevice::getMasterBlindingKey()
+DeviceGetMasterBlindingKeyTask *LedgerDevice::getMasterBlindingKey()
 {
     Q_UNREACHABLE();
 }
 
-GetBlindingFactorsActivity *LedgerDevice::getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs)
+DeviceGetBlindingFactorsTask *LedgerDevice::getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs)
 {
-    return new LedgerGetBlindingFactorsActivity(inputs, outputs, this);
+    return new LedgerGetBlindingFactorsTask(inputs, outputs, this);
 }
 
-LogoutActivity* LedgerDevice::logout()
+DeviceLogoutTask* LedgerDevice::logout()
 {
     return nullptr;
 }
 
-GetBlindingKeyActivity* LedgerDevice::getBlindingKey(const QString& script)
+DeviceGetBlindingKeyTask* LedgerDevice::getBlindingKey(const QString& script)
 {
-    return new LedgerGetBlindingKeyActivity(script, this);
+    return new LedgerGetBlindingKeyTask(script, this);
 }
 
-GetBlindingNonceActivity* LedgerDevice::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
+DeviceGetBlindingNonceTask* LedgerDevice::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
 {
-    return new LedgerGetBlindingNonceActivity(pubkey, script, this);
+    return new LedgerGetBlindingNonceTask(pubkey, script, this);
 }
 
 QByteArray apdu(uint8_t cla, uint8_t ins, uint8_t p1, uint8_t p2, const QByteArray &data)
@@ -157,14 +156,17 @@ QByteArray compressPublicKey(const QByteArray& pubkey)
 }
 
 
-GetFirmwareActivity::GetFirmwareActivity(LedgerDevice* device)
-    : Activity(device)
+GetFirmwareTask::GetFirmwareTask(LedgerDevice* device)
+    : Task(device)
     , m_device(device)
 {
 }
 
-void GetFirmwareActivity::exec()
+void GetFirmwareTask::update()
 {
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+
     auto command = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_FIRMWARE_VERSION, 0x00, 0x00));
     connect(command, &Command::finished, [this, command] {
         command->deleteLater();
@@ -178,32 +180,35 @@ void GetFirmwareActivity::exec()
         //    0x10 : BLE transport and low power extensions supported
         //    0x20 : implementation running on a Trusted Execution Environment
         qDebug() << m_features << m_arch << m_fw_major << m_fw_minor << m_fw_patch << m_loader_major << m_loader_minor;
-        finish();
+        setStatus(Status::Finished);
     });
     connect(command, &Command::error, [this, command] {
         command->deleteLater();
-        fail();
+        setStatus(Status::Failed);
     });
 }
 
-GetAppActivity::GetAppActivity(LedgerDevice* device)
-    : Activity(device)
+GetAppTask::GetAppTask(LedgerDevice* device)
+    : Task(device)
     , m_device(device)
 {
 }
 
-QString GetAppActivity::name() const
+QString GetAppTask::name() const
 {
     return m_name;
 }
 
-QVersionNumber GetAppActivity::version() const
+QVersionNumber GetAppTask::version() const
 {
     return m_version;
 }
 
-void GetAppActivity::exec()
+void GetAppTask::update()
 {
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+
     auto command = m_device->exchange(apdu(BTCHIP_CLA_COMMON_SDK, BTCHIP_INS_GET_APP_NAME_AND_VERSION, 0x00, 0x00));
     connect(command, &Command::finished, [this, command] {
         command->deleteLater();
@@ -228,22 +233,22 @@ void GetAppActivity::exec()
 
         m_version = QVersionNumber::fromString(version_string);
 
-        finish();
+        setStatus(Status::Finished);
     });
     connect(command, &Command::error, [this, command] {
         command->deleteLater();
-        fail();
+        setStatus(Status::Failed);
     });
 }
 
-GetFirmwareActivity *LedgerDevice::getFirmware()
+GetFirmwareTask *LedgerDevice::getFirmware()
 {
-    return new GetFirmwareActivity(this);
+    return new GetFirmwareTask(this);
 }
 
-GetAppActivity* LedgerDevice::getApp()
+GetAppTask* LedgerDevice::getApp()
 {
-    return new GetAppActivity(this);
+    return new GetAppTask(this);
 }
 
 bool LedgerDevice::compatible() const

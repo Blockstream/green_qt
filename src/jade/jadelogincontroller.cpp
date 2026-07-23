@@ -1,4 +1,3 @@
-#include "activitymanager.h"
 #include "context.h"
 #include "jadeapi.h"
 #include "jadedevice.h"
@@ -295,16 +294,6 @@ void JadeUnlockController::unlock()
     monitor()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=, this] {
-//        auto activity = m_device->getMasterBlindingKey();
-//        connect(activity, &Activity::finished, [this, activity] {
-//            activity->deleteLater();
-//            qDebug() << "master_blinding_key" << QString::fromLocal8Bit(activity->masterBlindingKey().toHex());
-//            Q_UNREACHABLE();
-//        });
-//        connect(activity, &Activity::failed, [=, this] {
-//            Q_UNREACHABLE();
-//        });
-//        ActivityManager::instance()->exec(activity);
         emit unlocked(context());
     });
 
@@ -411,7 +400,7 @@ void JadeIdentifyTask::update()
     }
 
     // Guards both branches below: the temporary-keys unlock and the xpub
-    // activity alike go straight through JadeDevice::api(), which is null once
+    // task alike go straight through JadeDevice::api(), which is null once
     // the backend has been torn down under us.
     if (!device->api()) {
         setStatus(Status::Failed);
@@ -444,11 +433,11 @@ void JadeIdentifyTask::update()
 
     setStatus(Status::Active);
 
-    auto activity = device->getWalletPublicKey(network, {});
-    QObject::connect(activity, &Activity::finished, this, [=, this] {
-        activity->deleteLater();
+    auto task = device->getWalletPublicKey(network, {});
+    QObject::connect(task, &Task::finished, this, [=, this] {
+        task->deleteLater();
 
-        const auto master_xpub = activity->publicKey();
+        const auto master_xpub = task->publicKey();
         Q_ASSERT(!master_xpub.isEmpty());
 
         const auto net_params = Json::fromObject({{ "name", network->id() }});
@@ -465,12 +454,12 @@ void JadeIdentifyTask::update()
 
         setStatus(Status::Finished);
     });
-    QObject::connect(activity, &Activity::failed, this, [=, this] {
-        activity->deleteLater();
+    QObject::connect(task, &Task::failed, this, [=, this] {
+        task->deleteLater();
 
         setStatus(Status::Failed);
     });
-    ActivityManager::instance()->exec(activity);
+    device->exec(task);
 }
 
 JadeHttpRequest::JadeHttpRequest(const QJsonObject& params, Session* session)

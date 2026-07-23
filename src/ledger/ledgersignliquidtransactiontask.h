@@ -1,15 +1,15 @@
-#ifndef LEDGERSIGNLIQUIDTRANSACTIONACTIVITY_H
-#define LEDGERSIGNLIQUIDTRANSACTIONACTIVITY_H
+#ifndef LEDGERSIGNLIQUIDTRANSACTIONTASK_H
+#define LEDGERSIGNLIQUIDTRANSACTIONTASK_H
 
 #include "device.h"
 
 class CommandBatch;
 class LedgerDevice;
 
-class LedgerSignLiquidTransactionActivity : public SignLiquidTransactionActivity
+class LedgerSignLiquidTransactionTask : public DeviceSignLiquidTransactionTask
 {
 public:
-    LedgerSignLiquidTransactionActivity(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device);
+    LedgerSignLiquidTransactionTask(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device);
 
     virtual QList<QByteArray> signatures() const override { return m_sigs; }
     virtual QList<QByteArray> signerCommitments() const override { Q_UNREACHABLE(); }
@@ -44,17 +44,17 @@ public:
     int exchange_total{0};
     CommandBatch* m_batch;
 private:
-    void exec() override;
+    void update() override;
 };
 
-class LedgerGetBlindingFactorsActivity : public GetBlindingFactorsActivity
+class LedgerGetBlindingFactorsTask : public DeviceGetBlindingFactorsTask
 {
 public:
-    LedgerGetBlindingFactorsActivity(const QJsonArray& inputs, const QJsonArray& outputs, LedgerDevice* device);
+    LedgerGetBlindingFactorsTask(const QJsonArray& inputs, const QJsonArray& outputs, LedgerDevice* device);
     QList<QByteArray> assetBlinders() const override;
     QList<QByteArray> amountBlinders() const override;
 private:
-    void exec() override;
+    void update() override;
     DeviceCommand *exchange(const QByteArray &data);
 private:
     LedgerDevice* const m_device;
@@ -71,4 +71,4 @@ private:
     DeviceCommand* getBlindingFactor(uint32_t index, uint8_t type);
 };
 
-#endif // LEDGERSIGNLIQUIDTRANSACTIONACTIVITY_H
+#endif // LEDGERSIGNLIQUIDTRANSACTIONTASK_H

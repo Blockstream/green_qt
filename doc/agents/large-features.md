@@ -9,7 +9,7 @@ Large features must be split into reviewable stages. Avoid one broad patch that 
 Prefer this order:
 
 1. Core/domain types, parsing, and data conversion
-2. Task, activity, or controller wiring
+2. Task or controller wiring
 3. Model/state exposure to QML
 4. Minimal UI integration
 5. Edge states, polish, and cleanup
@@ -20,7 +20,7 @@ Each stage should compile on its own where possible. Do not expose unfinished pr
 ## Feature design
 
 - Start from the closest existing flow and copy its shape before adding new patterns. Inspect related transaction, task, controller, model, and QML code first.
-- Keep data flow explicit: backend/domain call, then task or activity, then controller/model, then QML. Do not call wallet backend APIs directly from QML.
+- Keep data flow explicit: backend/domain call, then task, then controller/model, then QML. Do not call wallet backend APIs directly from QML.
 - Add the smallest useful abstraction. Do not create generic frameworks before concrete call sites need them.
 - Keep QObject ownership and lifetimes consistent with nearby code. Be explicit about task ownership, model ownership, and dynamically created QML objects.
 - Preserve wallet and session invariants. Be careful with active sessions, primary session assumptions, network-specific behavior, Liquid vs Bitcoin branching, watch-only wallets, hardware wallets, and authentication flows.

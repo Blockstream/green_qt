@@ -20,6 +20,8 @@
 
 #include <QDebug>
 #include <QFutureSynchronizer>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QMetaEnum>
 #include <QFileInfo>
 #include <QNetworkAccessManager>
@@ -167,6 +169,13 @@ void Task::setError(const QString& error)
     emit errorChanged();
 }
 
+void Task::abort(const QString& error)
+{
+    if (m_status == Status::Finished || m_status == Status::Failed) return;
+    setError(error);
+    setStatus(Status::Failed);
+}
+
 void Task::needs(Task* task)
 {
     m_inputs.insert(task);
@@ -202,8 +211,11 @@ void Task::setStatus(Status status)
     emit statusChanged();
 
     if (m_status == Status::Finished) {
+        m_progress.setValue(m_progress.to());
+        m_progress.setIndeterminate(false);
         emit finished();
     } else if (m_status == Status::Failed) {
+        m_progress.setIndeterminate(false);
         qDebug() << Q_FUNC_INFO << type() << m_error;
         emit failed(m_error);
         // Failing an output can run code that alters the graph, and can destroy
@@ -299,6 +311,15 @@ void TaskDispatcher::remove(TaskGroup* group)
     group->m_dispatcher = nullptr;
     emit groupsChanged();
     dispatch();
+}
+
+void TaskDispatcher::exec(Task* task)
+{
+    auto group = new TaskGroup(this);
+    group->add(task);
+    connect(group, &TaskGroup::finished, group, &QObject::deleteLater);
+    connect(group, &TaskGroup::failed, group, &QObject::deleteLater);
+    add(group);
 }
 
 void TaskDispatcher::dispatch()
@@ -446,6 +467,13 @@ Session* SessionTask::session() const
 {
     Q_D(const SessionTask);
     return d->session;
+}
+
+void SessionTask::setSession(Session* session)
+{
+    Q_D(SessionTask);
+    Q_ASSERT(!d->session);
+    d->session = session;
 }
 
 QString SessionTask::description() const
@@ -2181,10 +2209,98 @@ HttpRequestTask::HttpRequestTask(const QJsonObject& params, Session* session)
     d->params = params;
 }
 
+HttpRequestTask::HttpRequestTask(QObject* parent)
+    : SessionTask(new HttpRequestTaskPrivate, nullptr)
+{
+    setParent(parent);
+}
+
+void HttpRequestTask::setMethod(const QString& method)
+{
+    Q_D(HttpRequestTask);
+    d->params.insert("method", method);
+}
+
+void HttpRequestTask::addUrl(const QString& url)
+{
+    Q_D(HttpRequestTask);
+    auto urls = d->params.value("urls").toArray();
+    urls.append(url);
+    d->params.insert("urls", urls);
+}
+
+void HttpRequestTask::setData(const QJsonValue& data)
+{
+    Q_D(HttpRequestTask);
+    d->params.insert("data", data);
+}
+
+void HttpRequestTask::setAccept(const QString& accept)
+{
+    Q_D(HttpRequestTask);
+    d->params.insert("accept", accept);
+}
+
+void HttpRequestTask::addHeader(const QString& header, const QString& value)
+{
+    Q_D(HttpRequestTask);
+    auto headers = d->params.value("headers").toObject();
+    headers.insert(header, value);
+    d->params.insert("headers", headers);
+}
+
+void HttpRequestTask::setTimeout(int timeout)
+{
+    Q_D(HttpRequestTask);
+    d->params.insert("timeout", timeout);
+}
+
+void HttpRequestTask::addRootCertificate(const QString& root_certificate)
+{
+    Q_D(HttpRequestTask);
+    auto root_certificates = d->params.value("root_certificates").toArray();
+    root_certificates.append(root_certificate);
+    d->params.insert("root_certificates", root_certificates);
+}
+
 QJsonObject HttpRequestTask::response() const
 {
     Q_D(const HttpRequestTask);
     return d->response;
+}
+
+QString HttpRequestTask::contentType() const
+{
+    Q_D(const HttpRequestTask);
+    const auto headers = d->response.value("headers").toObject();
+    return headers["content-type"].toString();
+}
+
+QVariant HttpRequestTask::body() const
+{
+    Q_D(const HttpRequestTask);
+    const auto content_type = contentType();
+    const auto body = d->response.value("body").toString();
+
+    QVariant result = body;
+
+    if (content_type == "application/json") {
+        const auto document = QJsonDocument::fromJson(body.toUtf8());
+        if (document.isObject()) result = document.object();
+        if (document.isArray()) result = document.array();
+    } else if (content_type.startsWith("text/xml")) {
+        result = body;
+    } else {
+        result = body.toUtf8();
+    }
+
+    return result;
+}
+
+bool HttpRequestTask::hasError() const
+{
+    Q_D(const HttpRequestTask);
+    return d->response.contains("error");
 }
 
 void HttpRequestTask::update()
@@ -2192,14 +2308,13 @@ void HttpRequestTask::update()
     Q_D(HttpRequestTask);
     if (status() != Status::Ready) return;
 
-    if (!session()->isConnected()) return;
+    if (!session() || !session()->isConnected()) return;
 
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([params = d->params, ga_session = session()->m_session] {
         GA_json* output = nullptr;
-        const auto params = Json::fromObject(d->params);
-        const auto rc = GA_http_request(session()->m_session, params.get(), &output);
+        const auto rc = GA_http_request(ga_session, Json::fromObject(params).get(), &output);
         if (rc == GA_OK && output) {
             auto res = Json::toObject(output);
             GA_destroy_json(output);
@@ -2210,6 +2325,7 @@ void HttpRequestTask::update()
     });
 
     future.then(this, [=, this](QPair<bool, QJsonObject> result) {
+        if (m_status != Status::Active) return;
         if (result.first) {
             d->response = result.second;
             setStatus(Status::Finished);

@@ -1,6 +1,6 @@
 #include "command.h"
 #include "ledgerdevice.h"
-#include "ledgersignliquidtransactionactivity.h"
+#include "ledgersignliquidtransactiontask.h"
 #include "util.h"
 
 #include <wally_wrapper.h>
@@ -44,8 +44,8 @@ QByteArray sequenceBytes(const QJsonObject& input)
 
 } // namespace
 
-LedgerSignLiquidTransactionActivity::LedgerSignLiquidTransactionActivity(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device)
-    : SignLiquidTransactionActivity(device)
+LedgerSignLiquidTransactionTask::LedgerSignLiquidTransactionTask(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device)
+    : DeviceSignLiquidTransactionTask(device)
     , m_device(device)
     , m_inputs(signing_inputs)
     , m_outputs(outputs)
@@ -57,11 +57,14 @@ LedgerSignLiquidTransactionActivity::LedgerSignLiquidTransactionActivity(const Q
     m_locktime = tx->locktime;
     wally_tx_free(tx);
 
-    connect(m_batch, &Command::error, this, [this] { fail(); });
+    connect(m_batch, &Command::error, this, [this] { setStatus(Status::Failed); });
 }
 
-void LedgerSignLiquidTransactionActivity::exec()
+void LedgerSignLiquidTransactionTask::update()
 {
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+
     exchange_total = 3 + 6 * m_inputs.size() + 5 * m_outputs.size();
     progress()->setTo(exchange_total);
     progress()->setIndeterminate(false);
@@ -90,7 +93,7 @@ void LedgerSignLiquidTransactionActivity::exec()
     m_batch->exec();
 }
 
-void LedgerSignLiquidTransactionActivity::startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray>& inputs, const QList<QByteArray>& sequences, const QByteArray& redeem_script)
+void LedgerSignLiquidTransactionTask::startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray>& inputs, const QList<QByteArray>& sequences, const QByteArray& redeem_script)
 {
     Q_ASSERT(inputs.size() == sequences.size());
     {
@@ -115,7 +118,7 @@ void LedgerSignLiquidTransactionActivity::startUntrustedTransaction(bool new_tra
     }
 }
 
-void LedgerSignLiquidTransactionActivity::getLiquidCommitment(int output_index)
+void LedgerSignLiquidTransactionTask::getLiquidCommitment(int output_index)
 {
     if (output_index == m_outputs.size()) {
         return finalizeLiquidInputFull();
@@ -195,7 +198,7 @@ void LedgerSignLiquidTransactionActivity::getLiquidCommitment(int output_index)
     }
 }
 
-DeviceCommand *LedgerSignLiquidTransactionActivity::exchange(const QByteArray& data)
+DeviceCommand *LedgerSignLiquidTransactionTask::exchange(const QByteArray& data)
 {
     auto command = new LedgerGenericCommand(m_device, data);
     connect(command, &Command::finished, [this] {
@@ -206,7 +209,7 @@ DeviceCommand *LedgerSignLiquidTransactionActivity::exchange(const QByteArray& d
     return command;
 }
 
-QList<QPair<QJsonObject, QByteArray>> LedgerSignLiquidTransactionActivity::outputLiquidBytes()
+QList<QPair<QJsonObject, QByteArray>> LedgerSignLiquidTransactionTask::outputLiquidBytes()
 {
     QList<QPair<QJsonObject,QByteArray>> res;
     {
@@ -270,7 +273,7 @@ QList<QPair<QJsonObject, QByteArray>> LedgerSignLiquidTransactionActivity::outpu
 }
 
 
-void LedgerSignLiquidTransactionActivity::finalizeLiquidInputFull()
+void LedgerSignLiquidTransactionTask::finalizeLiquidInputFull()
 {
     int i = 0;
     m_output_liquid_bytes = outputLiquidBytes();
@@ -344,7 +347,7 @@ void LedgerSignLiquidTransactionActivity::finalizeLiquidInputFull()
                 if (m_sigs.size() == m_hw_inputs.size()) {
                     m_abfs = m_abfs.mid(m_inputs.size());
                     m_vbfs = m_vbfs.mid(m_inputs.size());
-                    finish();
+                    setStatus(Status::Finished);
                 }
             });
         }
@@ -352,19 +355,19 @@ void LedgerSignLiquidTransactionActivity::finalizeLiquidInputFull()
 }
 
 
-LedgerGetBlindingFactorsActivity::LedgerGetBlindingFactorsActivity(const QJsonArray &inputs, const QJsonArray &outputs, LedgerDevice* device)
-    : GetBlindingFactorsActivity(device)
+LedgerGetBlindingFactorsTask::LedgerGetBlindingFactorsTask(const QJsonArray &inputs, const QJsonArray &outputs, LedgerDevice* device)
+    : DeviceGetBlindingFactorsTask(device)
     , m_device(device)
     , m_inputs(inputs)
     , m_outputs(outputs)
     , m_batch(new CommandBatch)
 {
     connect(m_batch, &Command::finished, this, [=, this] {
-        finish();
+        setStatus(Status::Finished);
     });
 }
 
-DeviceCommand *LedgerGetBlindingFactorsActivity::exchange(const QByteArray& data)
+DeviceCommand *LedgerGetBlindingFactorsTask::exchange(const QByteArray& data)
 {
     auto command = new LedgerGenericCommand(m_device, data);
     connect(command, &Command::finished, [this] {
@@ -375,20 +378,21 @@ DeviceCommand *LedgerGetBlindingFactorsActivity::exchange(const QByteArray& data
     return command;
 }
 
-QList<QByteArray> LedgerGetBlindingFactorsActivity::assetBlinders() const
+QList<QByteArray> LedgerGetBlindingFactorsTask::assetBlinders() const
 {
     return m_abfs;
 }
 
-QList<QByteArray> LedgerGetBlindingFactorsActivity::amountBlinders() const
+QList<QByteArray> LedgerGetBlindingFactorsTask::amountBlinders() const
 {
     return m_vbfs;
 }
 
-void LedgerGetBlindingFactorsActivity::exec()
+void LedgerGetBlindingFactorsTask::update()
 {
-//    exchange_total = 3 + 6 * m_inputs.size() + 5 * m_outputs.size();
-//    progress()->setTo(exchange_total);
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+
     progress()->setIndeterminate(false);
 
     for (int i = 0; i < m_inputs.size(); ++i) {
@@ -423,7 +427,7 @@ void LedgerGetBlindingFactorsActivity::exec()
     m_batch->exec();
 }
 
-void LedgerGetBlindingFactorsActivity::startUntrustedTransaction(uint32_t version, bool new_transaction, int input_index, const QList<QByteArray>& inputs, const QList<QByteArray>& sequences, const QByteArray& redeem_script)
+void LedgerGetBlindingFactorsTask::startUntrustedTransaction(uint32_t version, bool new_transaction, int input_index, const QList<QByteArray>& inputs, const QList<QByteArray>& sequences, const QByteArray& redeem_script)
 {
     Q_ASSERT(inputs.size() == sequences.size());
     {
@@ -447,7 +451,7 @@ void LedgerGetBlindingFactorsActivity::startUntrustedTransaction(uint32_t versio
     }
 }
 
-DeviceCommand* LedgerGetBlindingFactorsActivity::getBlindingFactor(uint32_t index, uint8_t type)
+DeviceCommand* LedgerGetBlindingFactorsTask::getBlindingFactor(uint32_t index, uint8_t type)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);

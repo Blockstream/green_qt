@@ -1,8 +1,6 @@
 #include "httpmanager.h"
 
-#include "activitymanager.h"
 #include "green_settings.h"
-#include "httprequestactivity.h"
 #include "networkmanager.h"
 #include "session.h"
 #include "sessionmanager.h"
@@ -46,18 +44,18 @@ HttpManager::HttpManager(QObject* parent)
     });
 }
 
-void HttpManager::exec(SessionActivity* activity)
+void HttpManager::exec(HttpRequestTask* task)
 {
     {
         QMutexLocker locker(&m_mutex);
-        activity->moveToThread(thread());
-        m_queue.enqueue(activity);
-        connect(activity, &Activity::destroyed, this, [=, this] {
+        task->moveToThread(thread());
+        m_queue.enqueue(task);
+        connect(task, &QObject::destroyed, this, [=, this] {
             {
                 QMutexLocker locker(&m_mutex);
-                m_queue.removeAll(activity);
+                m_queue.removeAll(task);
             }
-            if (m_running == activity) {
+            if (m_running == task) {
                 m_running = nullptr;
                 QMetaObject::invokeMethod(this, [=, this] { dispatch(); }, Qt::QueuedConnection);
             }
@@ -104,7 +102,7 @@ void HttpManager::dispatch()
         connect(m_session, &Session::connectedChanged, this, [this] {
             if (m_session && !m_session->isConnected()) {
                 if (m_running) {
-                    m_running->fail();
+                    m_running->abort("disconnected");
                     m_running = nullptr;
                 }
                 drain();
@@ -132,23 +130,23 @@ void HttpManager::dispatch()
     m_running = m_queue.dequeue();
     m_running->setSession(m_session);
 
-    connect(m_running, &Activity::finished, this, [=, this] {
+    connect(m_running, &Task::finished, this, [=, this] {
         m_running = nullptr;
         QMetaObject::invokeMethod(this, [=, this] { dispatch(); }, Qt::QueuedConnection);
     });
 
-    connect(m_running, &Activity::failed, this, [=, this] {
+    connect(m_running, &Task::failed, this, [=, this] {
         m_running = nullptr;
         QMetaObject::invokeMethod(this, [=, this] { dispatch(); }, Qt::QueuedConnection);
     });
 
-    ActivityManager::instance()->exec(m_running);
+    m_dispatcher->exec(m_running);
 }
 
 void HttpManager::drain()
 {
     while (!m_queue.isEmpty()) {
-        auto activity = m_queue.dequeue();
-        activity->fail();
+        auto task = m_queue.dequeue();
+        task->abort("disconnected");
     }
 }

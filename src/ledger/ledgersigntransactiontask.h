@@ -1,5 +1,5 @@
-#ifndef GREEN_LEDGERSIGNTRANSACTIONACTIVITY_H
-#define GREEN_LEDGERSIGNTRANSACTIONACTIVITY_H
+#ifndef GREEN_LEDGERSIGNTRANSACTIONTASK_H
+#define GREEN_LEDGERSIGNTRANSACTIONTASK_H
 
 #include "command.h"
 #include "device.h"
@@ -12,16 +12,16 @@ struct Input {
     bool segwit;
 };
 
-class LedgerSignTransactionActivity : public SignTransactionActivity
+class LedgerSignTransactionTask : public DeviceSignTransactionTask
 {
 public:
-    LedgerSignTransactionActivity(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device);
+    LedgerSignTransactionTask(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device);
     QList<QByteArray> signatures() const override;
     QList<QByteArray> signerCommitments() const override;
     Command *startUntrustedTransaction(uint32_t version, bool new_transaction, size_t index, const QList<Input> &used_inputs, const QByteArray &redeem_script, bool segwit);
     Command *untrustedHashSign(int index, const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime);
 private:
-    void exec() override;
+    void update() override;
 private:
     DeviceCommand* exchange(CommandBatch *batch, const QByteArray& data);
     Command* signSW();
@@ -46,4 +46,4 @@ private:
     QVector<QByteArray> m_signatures;
 };
 
-#endif // GREEN_LEDGERSIGNTRANSACTIONACTIVITY_H
+#endif // GREEN_LEDGERSIGNTRANSACTIONTASK_H

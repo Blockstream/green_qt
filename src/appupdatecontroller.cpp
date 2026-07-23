@@ -1,17 +1,17 @@
 #include "appupdatecontroller.h"
 #include "httpmanager.h"
-#include "httprequestactivity.h"
+#include "task.h"
 #include "util.h"
 
 #include <QTimer>
 
 extern QCommandLineParser g_args;
 
-class CheckForUpdatesActivity : public HttpRequestActivity
+class CheckForUpdatesTask : public HttpRequestTask
 {
 public:
-    CheckForUpdatesActivity(QObject* parent)
-        : HttpRequestActivity(parent)
+    CheckForUpdatesTask(QObject* parent)
+        : HttpRequestTask(parent)
     {
         setMethod("GET");
         const auto channel = g_args.value("channel");
@@ -48,10 +48,10 @@ AppUpdateController::AppUpdateController(QObject *parent)
 
 void AppUpdateController::checkNow()
 {
-    auto activity = new CheckForUpdatesActivity(this);
-    connect(activity, &CheckForUpdatesActivity::finished, this, [=, this] {
-        activity->deleteLater();
-        const auto version = activity->body().toJsonObject().value("version");
+    auto task = new CheckForUpdatesTask(this);
+    connect(task, &Task::finished, this, [=, this] {
+        task->deleteLater();
+        const auto version = task->body().toJsonObject().value("version");
         if (version.isString()) {
             const auto app_version = QVersionNumber::fromString(qApp->applicationVersion());
             const bool update_available = app_version < QVersionNumber::fromString(version.toString());
@@ -68,11 +68,11 @@ void AppUpdateController::checkNow()
             qInfo() << "failed to check new version";
         }
     });
-    connect(activity, &CheckForUpdatesActivity::failed, this, [=, this] {
-        activity->deleteLater();
+    connect(task, &Task::failed, this, [=, this] {
+        task->deleteLater();
         qInfo() << "failed to fetch new version";
     });
-    HttpManager::instance()->exec(activity);
+    HttpManager::instance()->exec(task);
 }
 
 UpdateNotification::UpdateNotification(const QString& version, QObject* parent)

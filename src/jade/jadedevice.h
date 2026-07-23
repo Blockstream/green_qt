@@ -45,16 +45,16 @@ public:
     JadeAPI *api() const { return m_api; }
     void setBackend(JadeAPI* api);
     QJsonObject details() const override;
-    GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
-    SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
-    SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) override;
-    SignTransactionActivity* signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) override;
-    GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
-    GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
-    SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets) override;
-    GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
-    GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) override;
-    LogoutActivity* logout() override;
+    DeviceGetWalletPublicKeyTask* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
+    DeviceSignMessageTask* signMessage(const QString& message, const QVector<uint32_t>& path) override;
+    DeviceSignMessageTask* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) override;
+    DeviceSignTransactionTask* signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) override;
+    DeviceGetBlindingKeyTask* getBlindingKey(const QString& script) override;
+    DeviceGetBlindingNonceTask* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
+    DeviceSignLiquidTransactionTask* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets) override;
+    DeviceGetMasterBlindingKeyTask* getMasterBlindingKey() override;
+    DeviceGetBlindingFactorsTask* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) override;
+    DeviceLogoutTask* logout() override;
     void updateVersionInfo();
     void setVersionInfo(const QVariantMap& version_info);
     QVariantMap versionInfo() const;
@@ -88,21 +88,23 @@ private:
     JadeDevice::State m_state{StateLocked};
 };
 
-class JadeGetMasterBlindingKeyActivity : public GetMasterBlindingKeyActivity
+class JadeGetMasterBlindingKeyTask : public DeviceGetMasterBlindingKeyTask
 {
     Q_OBJECT
     Q_PROPERTY(bool ask READ ask NOTIFY askChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    JadeGetMasterBlindingKeyActivity(JadeDevice* device);
+    JadeGetMasterBlindingKeyTask(JadeDevice* device);
     QByteArray masterBlindingKey() const override { return m_master_blinding_key; }
-    void exec() override;
+    void update() override;
     bool ask() const { return m_ask; }
 public slots:
     void confirm();
 signals:
     void askChanged();
+private:
+    void request();
 private:
     JadeDevice* const m_device;
     QByteArray m_master_blinding_key;

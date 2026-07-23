@@ -8,7 +8,7 @@
 #include <QQueue>
 #include <QTimer>
 
-class SessionActivity;
+class HttpRequestTask;
 
 class HttpManager : public QObject
 {
@@ -17,7 +17,7 @@ class HttpManager : public QObject
 public:
     HttpManager(QObject* parent = nullptr);
     static HttpManager* instance();
-    void exec(SessionActivity* activity);
+    void exec(HttpRequestTask* task);
     Session* session() const { return m_session; }
     void stop();
 signals:
@@ -31,8 +31,8 @@ private:
     Context* m_context{nullptr};
     Session* m_session{nullptr};
     QTimer* m_idle_timer{nullptr};
-    QQueue<SessionActivity*> m_queue;
-    SessionActivity* m_running{nullptr};
+    QQueue<HttpRequestTask*> m_queue;
+    HttpRequestTask* m_running{nullptr};
 };
 
 #endif // GREEN_HTTPMANAGER_H

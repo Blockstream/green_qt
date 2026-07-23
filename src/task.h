@@ -3,6 +3,8 @@
 
 #include "green.h"
 
+#include "progress.h"
+
 #include <QElapsedTimer>
 #include <QFuture>
 #include <QJsonObject>
@@ -27,6 +29,7 @@ public:
     void add(const QString& name, Task* task);
     void add(TaskGroup* group);
     void remove(TaskGroup* group);
+    void exec(Task* task);
 
     bool isBusy() const { return m_busy; }
     void setBusy(bool busy);
@@ -113,6 +116,7 @@ class Task : public QObject
     Q_PROPERTY(QString type READ type CONSTANT)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QString error READ error NOTIFY errorChanged);
+    Q_PROPERTY(Progress* progress READ progress CONSTANT)
     Q_DECLARE_PRIVATE(Task)
     QML_ELEMENT
     QML_UNCREATABLE("")
@@ -133,6 +137,8 @@ public:
     Status status() const { return m_status; }
     QString error() const { return m_error; }
     void setError(const QString &error);
+    Progress* progress() { return &m_progress; }
+    void abort(const QString& error);
     void needs(Task* task);
     Task* then(Task* task);
     void dispatch();
@@ -155,6 +161,7 @@ protected:
     QSet<Task*> m_outputs;
     Status m_status{Status::Ready};
     QString m_error;
+    Progress m_progress;
     QElapsedTimer m_status_timer;
     friend class TaskGroup;
     friend class TaskDispatcher;
@@ -199,6 +206,7 @@ class SessionTask : public Task
 public:
     SessionTask(Session* session);
     Session* session() const;
+    void setSession(Session* session);
     QString description() const override;
 protected:
     SessionTask(SessionTaskPrivate* d, Session* session);
@@ -894,7 +902,18 @@ class HttpRequestTask : public SessionTask
     QML_UNCREATABLE("")
 public:
     HttpRequestTask(const QJsonObject& params, Session* session);
+    explicit HttpRequestTask(QObject* parent = nullptr);
+    void setMethod(const QString& method);
+    void addUrl(const QString& url);
+    void setData(const QJsonValue& data);
+    void setAccept(const QString& accept);
+    void addHeader(const QString& header, const QString& value);
+    void setTimeout(int timeout);
+    void addRootCertificate(const QString& root_certificate);
     QJsonObject response() const;
+    QString contentType() const;
+    QVariant body() const;
+    bool hasError() const;
 private:
     void update() override;
 };

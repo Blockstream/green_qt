@@ -5,9 +5,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ColumnLayout {
-    required property JadeGetMasterBlindingKeyActivity activity
+    required property JadeGetMasterBlindingKeyTask task
     Connections {
-        target: self.activity
+        target: self.task
         function onFinished() {
             self.popPage()
         }
@@ -55,7 +55,7 @@ ColumnLayout {
         onClicked: {
             enabled = false
             busy = true
-            self.activity.confirm()
+            self.task.confirm()
         }
     }
     LinkButton {

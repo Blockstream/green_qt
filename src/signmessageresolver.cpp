@@ -1,6 +1,6 @@
-#include "activitymanager.h"
 #include "device.h"
 #include "resolver.h"
+#include "task.h"
 #include "util.h"
 
 #include <cstdio>
@@ -82,21 +82,21 @@ void SignMessageResolver::resolve()
         return;
     }
 
-    auto activity = m_use_ae_protocol ? m_device->signMessage(m_message, m_path, m_ae_host_commitment, m_ae_host_entropy) : m_device->signMessage(m_message, m_path);
-    connect(activity, &Activity::finished, this, [this, activity] {
-        activity->deleteLater();
+    auto task = m_use_ae_protocol ? m_device->signMessage(m_message, m_path, m_ae_host_commitment, m_ae_host_entropy) : m_device->signMessage(m_message, m_path);
+    connect(task, &Task::finished, this, [this, task] {
+        task->deleteLater();
         QJsonObject data{
-            { "signature", QString::fromLocal8Bit(activity->signature().toHex()) }
+            { "signature", QString::fromLocal8Bit(task->signature().toHex()) }
         };
         if (m_use_ae_protocol) {
-            data["signer_commitment"] = QString::fromLocal8Bit(activity->signerCommitment().toHex());
+            data["signer_commitment"] = QString::fromLocal8Bit(task->signerCommitment().toHex());
         }
         emit resolved(data);
     });
-    connect(activity, &Activity::failed, this, [this, activity] {
-        activity->deleteLater();
-        emit failed(getActivityError(activity, "Failed to sign message"));
+    connect(task, &Task::failed, this, [this, task] {
+        task->deleteLater();
+        emit failed(getTaskError(task, "Failed to sign message"));
     });
-    ActivityManager::instance()->exec(activity);
-    pushActivity(activity);
+    m_device->exec(task);
+    pushDeviceTask(task);
 }

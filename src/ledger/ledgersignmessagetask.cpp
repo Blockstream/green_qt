@@ -1,26 +1,29 @@
 #include "command.h"
 #include "ledgerdevice.h"
-#include "ledgersignmessageactivity.h"
+#include "ledgersignmessagetask.h"
 
-LedgerSignMessageActivity::LedgerSignMessageActivity(const QString& message, const QVector<uint32_t>& path, LedgerDevice* device)
-    : SignMessageActivity(device)
+LedgerSignMessageTask::LedgerSignMessageTask(const QString& message, const QVector<uint32_t>& path, LedgerDevice* device)
+    : DeviceSignMessageTask(device)
     , m_device(device)
     , m_message(message)
     , m_path(path)
 {
 }
 
-QByteArray LedgerSignMessageActivity::signature() const
+QByteArray LedgerSignMessageTask::signature() const
 {
     return m_signature;
 }
 
-void LedgerSignMessageActivity::exec()
+void LedgerSignMessageTask::update()
 {
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+
     prepare();
 }
 
-void LedgerSignMessageActivity::prepare()
+void LedgerSignMessageTask::prepare()
 {
     QByteArray data;
     QDataStream s(&data, QIODevice::WriteOnly);
@@ -35,11 +38,11 @@ void LedgerSignMessageActivity::prepare()
     });
     connect(command, &Command::error, this, [this, command] {
         command->deleteLater();
-        fail();
+        setStatus(Status::Failed);
     });
 }
 
-void LedgerSignMessageActivity::sign()
+void LedgerSignMessageTask::sign()
 {
     QByteArray data;
     QDataStream s(&data, QIODevice::WriteOnly);
@@ -49,10 +52,10 @@ void LedgerSignMessageActivity::sign()
         command->deleteLater();
         m_signature = command->m_response;
         m_signature[0] = 0x30;
-        finish();
+        setStatus(Status::Finished);
     });
     connect(command, &Command::error, this, [this, command] {
         command->deleteLater();
-        fail();
+        setStatus(Status::Failed);
     });
 }

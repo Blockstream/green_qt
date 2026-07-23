@@ -11,7 +11,7 @@ Column {
     spacing: 16
 
     Connections {
-        target: resolver.activity
+        target: resolver.deviceTask
         function onMessageChanged({ index, output } = {}) {
             if (output) {
                 const component = output.is_fee ? review_fee_component : review_output_component
@@ -27,14 +27,14 @@ Column {
         height: 32
     }
     Loader {
-        active: resolver.activity
+        active: resolver.deviceTask
         anchors.horizontalCenter: parent.horizontalCenter
         // TODO failed property removed from resolver
         sourceComponent: ProgressBar {
-            from: resolver.activity.progress.from
-            to: resolver.activity.progress.to
-            value: resolver.activity.progress.value
-            indeterminate: resolver.activity.progress.indeterminate
+            from: resolver.deviceTask.progress.from
+            to: resolver.deviceTask.progress.to
+            value: resolver.deviceTask.progress.value
+            indeterminate: resolver.deviceTask.progress.indeterminate
             Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
         }
         Behavior on opacity { OpacityAnimator {} }

@@ -1,11 +1,13 @@
 #ifndef GREEN_DEVICE_H
 #define GREEN_DEVICE_H
 
+#include "green.h"
+
 #include <QObject>
 #include <QtQml>
 
-#include "deviceactivities.h"
 #include "devicesession.h"
+#include "devicetasks.h"
 
 #define LEDGER_VENDOR_ID 0x2c97
 #define LEDGER_NANOS_ID 0x0001
@@ -54,17 +56,19 @@ public:
     virtual Type type() const = 0;
     virtual QString name() const = 0;
     virtual QJsonObject details() const = 0;
-    virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) = 0;
-    virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) = 0;
-    virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) = 0;
-    virtual SignTransactionActivity* signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) = 0;
-    virtual GetBlindingKeyActivity* getBlindingKey(const QString& script) = 0;
-    virtual GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;
-    virtual SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets) = 0;
-    virtual GetMasterBlindingKeyActivity* getMasterBlindingKey() = 0;
-    virtual GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) = 0;
-    virtual LogoutActivity* logout() = 0;
+    virtual DeviceGetWalletPublicKeyTask* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) = 0;
+    virtual DeviceSignMessageTask* signMessage(const QString& message, const QVector<uint32_t>& path) = 0;
+    virtual DeviceSignMessageTask* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) = 0;
+    virtual DeviceSignTransactionTask* signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) = 0;
+    virtual DeviceGetBlindingKeyTask* getBlindingKey(const QString& script) = 0;
+    virtual DeviceGetBlindingNonceTask* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;
+    virtual DeviceSignLiquidTransactionTask* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets) = 0;
+    virtual DeviceGetMasterBlindingKeyTask* getMasterBlindingKey() = 0;
+    virtual DeviceGetBlindingFactorsTask* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) = 0;
+    virtual DeviceLogoutTask* logout() = 0;
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
+    TaskDispatcher* dispatcher() const { return m_dispatcher; }
+    void exec(Task* task);
     bool isConnected() const { return m_connected; }
     void setConnected(bool connected);
     DeviceSession* session() const { return m_session; }
@@ -81,6 +85,7 @@ signals:
     void sessionChanged();
 private:
     const QString m_uuid;
+    TaskDispatcher* const m_dispatcher;
     bool m_connected{false};
     DeviceSession* m_session{nullptr};
 };

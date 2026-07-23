@@ -38,7 +38,7 @@ QDataStream& operator<<(QDataStream& out, const Varint<uint32_t>& v);
 
 int varIntSize(int i);
 
-class GetFirmwareActivity : public Activity
+class GetFirmwareTask : public Task
 {
     LedgerDevice* const m_device;
     uint8_t m_features;
@@ -49,23 +49,23 @@ class GetFirmwareActivity : public Activity
     uint8_t m_loader_major;
     uint8_t m_loader_minor;
 public:
-    GetFirmwareActivity(LedgerDevice* device);
+    GetFirmwareTask(LedgerDevice* device);
     QVersionNumber version() const { return QVersionNumber{m_fw_major, m_fw_minor, m_fw_patch}; }
 private:
-    void exec() override;
+    void update() override;
 };
 
-class GetAppActivity : public Activity
+class GetAppTask : public Task
 {
     LedgerDevice* const m_device;
     QString m_name;
     QVersionNumber m_version;
 public:
-    GetAppActivity(LedgerDevice* device);
+    GetAppTask(LedgerDevice* device);
     QString name() const;
     QVersionNumber version() const;
 private:
-    void exec() override;
+    void update() override;
 };
 
 class LedgerGenericCommand : public GenericCommand
@@ -105,19 +105,19 @@ public:
 
     DeviceCommand* exchange(const QByteArray& data);
 
-    GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
-    SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
-    SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) override;
-    SignTransactionActivity* signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) override;
-    GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
-    GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
-    SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets) override;
-    GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
-    GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) override;
-    LogoutActivity* logout() override;
+    DeviceGetWalletPublicKeyTask* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
+    DeviceSignMessageTask* signMessage(const QString& message, const QVector<uint32_t>& path) override;
+    DeviceSignMessageTask* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) override;
+    DeviceSignTransactionTask* signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) override;
+    DeviceGetBlindingKeyTask* getBlindingKey(const QString& script) override;
+    DeviceGetBlindingNonceTask* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
+    DeviceSignLiquidTransactionTask* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets) override;
+    DeviceGetMasterBlindingKeyTask* getMasterBlindingKey() override;
+    DeviceGetBlindingFactorsTask* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) override;
+    DeviceLogoutTask* logout() override;
 
-    GetFirmwareActivity* getFirmware();
-    GetAppActivity* getApp();
+    GetFirmwareTask* getFirmware();
+    GetAppTask* getApp();
 
     State state() const { return m_state; }
     void setState(State state);

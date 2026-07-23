@@ -1,17 +1,17 @@
 #include "command.h"
 #include "ledgerdevice.h"
-#include "ledgergetwalletpublickeyactivity.h"
+#include "ledgergetwalletpublickeytask.h"
 #include "network.h"
 
 #include <wally_wrapper.h>
 
-LedgerGetWalletPublicKeyActivity::LedgerGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, LedgerDevice* device)
-    : GetWalletPublicKeyActivity(network, path, device)
+LedgerGetWalletPublicKeyTask::LedgerGetWalletPublicKeyTask(Network* network, const QVector<uint32_t>& path, LedgerDevice* device)
+    : DeviceGetWalletPublicKeyTask(network, path, device)
     , m_device(device)
 {
 }
 
-void LedgerGetWalletPublicKeyActivity::fetch()
+void LedgerGetWalletPublicKeyTask::fetch()
 {
     QByteArray path;
     QDataStream s(&path, QIODevice::WriteOnly);
@@ -46,10 +46,10 @@ void LedgerGetWalletPublicKeyActivity::fetch()
         m_public_key = QByteArray(base58);
 
         wally_free_string(base58);
-        finish();
+        setStatus(Status::Finished);
     });
     connect(cmd, &Command::error, this, [this, cmd] {
         cmd->deleteLater();
-        fail();
+        setStatus(Status::Failed);
     });
 }

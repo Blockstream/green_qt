@@ -6,7 +6,6 @@
 
 #include "green.h"
 
-#include "activity.h"
 #include "connectable.h"
 
 Q_MOC_INCLUDE("context.h")
@@ -102,7 +101,6 @@ signals:
     void transactionEvent(const QJsonObject& event);
     void tickerEvent();
     void subaccountEvent(const QJsonObject& event);
-    void activityCreated(Activity* activity);
     void eventsChanged();
     void blockChanged();
     void settingsChanged();
@@ -149,19 +147,6 @@ public:
     QString m_username;
 
     bool m_is_tor{false};
-};
-
-class SessionActivity : public Activity
-{
-    Q_OBJECT
-    QML_ELEMENT
-    QML_UNCREATABLE("")
-public:
-    SessionActivity(QObject* parent);
-    Session* session() const { return m_session; }
-    void setSession(Session* session);
-private:
-    Session* m_session{nullptr};
 };
 
 #endif // GREEN_SESSION_H

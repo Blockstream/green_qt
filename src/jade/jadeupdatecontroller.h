@@ -1,35 +1,34 @@
 #ifndef GREEN_JADEUPDATECONTROLLER_H
 #define GREEN_JADEUPDATECONTROLLER_H
 
-#include "httprequestactivity.h"
+#include "task.h"
 
 #include <QPointer>
 #include <QtQml>
 #include <QObject>
 
-class Activity;
 class JadeAPI;
 class JadeDevice;
 
-class JadeHttpRequestActivity : public HttpRequestActivity
+class JadeHttpRequestTask : public HttpRequestTask
 {
     Q_OBJECT
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    JadeHttpRequestActivity(const QString& path, QObject* parent);
+    JadeHttpRequestTask(const QString& path, QObject* parent);
 };
 
-class JadeBinaryRequestActivity : public JadeHttpRequestActivity
+class JadeBinaryRequestTask : public JadeHttpRequestTask
 {
     Q_OBJECT
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    JadeBinaryRequestActivity(const QString& path, QObject* parent);
+    JadeBinaryRequestTask(const QString& path, QObject* parent);
 };
 
-class JadeUpdateActivity : public Activity
+class JadeUpdateTask : public Task
 {
     Q_OBJECT
     Q_PROPERTY(JadeDevice* device READ device CONSTANT)
@@ -37,10 +36,10 @@ class JadeUpdateActivity : public Activity
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    JadeUpdateActivity(const QVariantMap& firmware, const QByteArray& data, JadeDevice* device);
+    JadeUpdateTask(const QVariantMap& firmware, const QByteArray& data, JadeDevice* device);
     JadeDevice* device() const { return m_device; }
     QVariantMap firmware() const { return m_firmware; }
-    void exec() override;
+    void update() override;
 signals:
     void cancelled();
     void locked();
@@ -82,10 +81,6 @@ signals:
     void updateStarted();
     void updateCompleted();
     void unlockRequired();
-    void activityCreated(Activity* activity);
-protected:
-    void pushActivity(Activity* activity);
-    void popActivity();
 private:
     JadeDevice* m_device{nullptr};
     QJsonObject m_index;
@@ -132,12 +127,11 @@ signals:
     void updateFinished();
     void updateFailed();
     void unlockRequired();
-    void activityCreated(Activity* activity);
 private:
     void setLocked(bool locked);
     void abortUpdate();
     JadeDevice* m_device{nullptr};
-    QPointer<Activity> m_activity;
+    QPointer<Task> m_task;
     QPointer<JadeDevice> m_completing_device;
     QPointer<JadeAPI> m_completing_api;
     bool m_fetching{false};
@@ -164,7 +158,7 @@ signals:
     void fetchingChanged();
     void indexChanged();
 private:
-    HttpRequestActivity* fetch(const QString& type);
+    HttpRequestTask* fetch(const QString& type);
     bool m_enabled{false};
     int m_fetching{0};
     QJsonObject m_index;

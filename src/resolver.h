@@ -8,11 +8,10 @@
 #include <QObject>
 #include <QQmlEngine>
 
-class Activity;
 class AuthHandlerTask;
 
-Q_MOC_INCLUDE("activity.h")
 Q_MOC_INCLUDE("device.h")
+Q_MOC_INCLUDE("task.h")
 
 class Resolver : public QObject
 {
@@ -20,7 +19,7 @@ class Resolver : public QObject
     Q_PROPERTY(Session* session READ session CONSTANT)
     Q_PROPERTY(AuthHandlerTask* task READ task CONSTANT)
     Q_PROPERTY(QJsonObject result READ result CONSTANT)
-    Q_PROPERTY(Activity* activity READ activity NOTIFY activityChanged)
+    Q_PROPERTY(Task* deviceTask READ deviceTask NOTIFY deviceTaskChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -28,20 +27,20 @@ public:
     AuthHandlerTask* task() const { return m_task; }
     Session* session() const { return m_session; };
     QJsonObject result() const { return m_result; }
-    Activity* activity() const { return m_activity; }
+    Task* deviceTask() const { return m_device_task; }
 public slots:
     virtual void resolve() = 0;
 signals:
     void failed(const QString& error);
     void resolved(const QJsonObject& data);
     void progress(int current, int total);
-    void activityChanged();
+    void deviceTaskChanged();
 protected:
-    void pushActivity(Activity* activity);
-    QString getActivityError(Activity* activity, const QString& defaultMessage) const;
+    void pushDeviceTask(Task* task);
+    QString getTaskError(Task* task, const QString& defaultMessage) const;
     QJsonObject const m_result;
 private:
-    Activity* m_activity{nullptr};
+    Task* m_device_task{nullptr};
 protected:
     AuthHandlerTask* const m_task;
     Session* const m_session;

@@ -26,7 +26,7 @@ QtObject {
     }
     readonly property Resolver resolver: self.task?.resolver ?? null
     readonly property Prompt prompt: self.task?.prompt ?? null
-    readonly property JadeGetMasterBlindingKeyActivity activity: {
+    readonly property JadeGetMasterBlindingKeyTask masterBlindingKeyTask: {
         if (!self.monitor) return null
         const groups = self.monitor.groups
         for (let i = 0; i < groups.length; i++) {
@@ -35,10 +35,10 @@ QtObject {
             for (let j = 0; j < tasks.length; j++) {
                 const task = tasks[j]
                 if (task.status !== Task.Active) continue
-                const activity = task.resolver?.activity
-                if (activity instanceof JadeGetMasterBlindingKeyActivity) {
-                    if (activity.ask) {
-                        return activity
+                const deviceTask = task.resolver?.deviceTask
+                if (deviceTask instanceof JadeGetMasterBlindingKeyTask) {
+                    if (deviceTask.ask) {
+                        return deviceTask
                     }
                 }
             }
@@ -47,9 +47,9 @@ QtObject {
     }
     property string title: ''
 
-    onActivityChanged: {
-        if (self.activity) {
-            self.target.push(jade_get_master_blinding_key_dialog, { activity: self.activity })
+    onMasterBlindingKeyTaskChanged: {
+        if (self.masterBlindingKeyTask) {
+            self.target.push(jade_get_master_blinding_key_dialog, { task: self.masterBlindingKeyTask })
         }
     }
 

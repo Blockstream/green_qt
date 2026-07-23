@@ -4,11 +4,18 @@
 
 #include "command.h"
 #include "network.h"
+#include "task.h"
 
 Device::Device(QObject* parent)
     : QObject(parent)
     , m_uuid(QUuid::createUuid().toString(QUuid::WithoutBraces))
+    , m_dispatcher(new TaskDispatcher(this))
 {
+}
+
+void Device::exec(Task* task)
+{
+    m_dispatcher->exec(task);
 }
 
 Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id)

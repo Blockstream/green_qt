@@ -10,11 +10,10 @@
 
 namespace {
 
-bool checkDeviceConnected(JadeDevice* device, Activity* activity)
+bool checkDeviceConnected(JadeDevice* device, Task* task)
 {
     if (!device || !device->isConnected()) {
-        activity->setMessage({{"message", "Device not connected"}});
-        activity->fail();
+        task->abort("Device not connected");
         return false;
     }
     return true;
@@ -39,12 +38,12 @@ constexpr int JADE_MAX_ASSET_CONTRACT_SIZE = 700;
 
 } // namespace
 
-class JadeGetWalletPublicKeyActivity : public GetWalletPublicKeyActivity
+class JadeGetWalletPublicKeyTask : public DeviceGetWalletPublicKeyTask
 {
     JadeDevice* const m_device;
 public:
-    JadeGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, JadeDevice* device)
-        : GetWalletPublicKeyActivity(network, path, device)
+    JadeGetWalletPublicKeyTask(Network* network, const QVector<uint32_t>& path, JadeDevice* device)
+        : DeviceGetWalletPublicKeyTask(network, path, device)
         , m_device(device)
     {}
     void fetch() override
@@ -52,15 +51,18 @@ public:
         if (!checkDeviceConnected(m_device, this)) return;
 
         m_device->api()->getXpub(m_network->canonicalId(), m_path, [this](const QVariantMap& msg) {
-            if (msg.contains("error")) return fail();
+            if (msg.contains("error")) {
+                setStatus(Status::Failed);
+                return;
+            }
             Q_ASSERT(msg.contains("result") && msg["result"].typeId() == QMetaType::QString);
             m_public_key = msg["result"].toString().toLocal8Bit();
-            finish();
+            setStatus(Status::Finished);
         });
     }
 };
 
-class JadeSignMessageActivity : public SignMessageActivity
+class JadeSignMessageTask : public DeviceSignMessageTask
 {
     JadeDevice* const m_device;
     const QString m_message;
@@ -70,8 +72,8 @@ class JadeSignMessageActivity : public SignMessageActivity
     QByteArray m_signature;
     QByteArray m_signer_commitment;
 public:
-    JadeSignMessageActivity(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, JadeDevice* device)
-        : SignMessageActivity(device)
+    JadeSignMessageTask(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, JadeDevice* device)
+        : DeviceSignMessageTask(device)
         , m_device(device)
         , m_message(message)
         , m_path(path)
@@ -86,14 +88,17 @@ public:
     {
         return m_signer_commitment;
     }
-    virtual void exec() override
+    void update() override
     {
+        if (m_status != Status::Ready) return;
+        setStatus(Status::Active);
+
         if (!checkDeviceConnected(m_device, this)) return;
 
         m_device->api()->signMessage(m_path, m_message, m_ae_host_commitment, m_ae_host_entropy, [this](const QVariantMap& result) {
             if (result.contains("error")) {
-                qDebug() << "JadeSignMessageActivity" << result;
-                fail();
+                qDebug() << "JadeSignMessageTask" << result;
+                setStatus(Status::Failed);
                 return;
             }
 
@@ -105,14 +110,14 @@ public:
             wally_ec_sig_to_der((const unsigned char*) sig.constData(), sig.size(), (unsigned char*) xxx.data(), EC_SIGNATURE_DER_MAX_LEN, &yyy);
             m_signature = QByteArray(xxx.constData(), yyy);
             m_signer_commitment = result["signer_commitment"].toByteArray();
-            finish();
+            setStatus(Status::Finished);
         });
     }
 };
 
 #include "util.h"
 
-class JadeSignTransactionActivity : public SignTransactionActivity
+class JadeSignTransactionTask : public DeviceSignTransactionTask
 {
     JadeDevice* const m_device;
     Network* const m_network;
@@ -123,8 +128,8 @@ class JadeSignTransactionActivity : public SignTransactionActivity
     QList<QByteArray> m_signatures;
     QList<QByteArray> m_signer_commitments;
 public:
-    JadeSignTransactionActivity(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, JadeDevice* device)
-        : SignTransactionActivity(device)
+    JadeSignTransactionTask(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, JadeDevice* device)
+        : DeviceSignTransactionTask(device)
         , m_device(device)
         , m_network(network)
         , m_transaction(transaction)
@@ -145,8 +150,11 @@ public:
         return path;
     }
 
-    void exec() override
+    void update() override
     {
+        if (m_status != Status::Ready) return;
+        setStatus(Status::Active);
+
         QVariantList inputs;
         QVariantList change;
 
@@ -206,22 +214,22 @@ public:
                 for (const auto& c : result["result"].toMap()["signer_commitments"].toList()) {
                     m_signer_commitments.append(c.toByteArray());
                 }
-                finish();
+                setStatus(Status::Finished);
             } else {
-                fail();
+                setStatus(Status::Failed);
             }
         });
     }
 };
 
-class JadeGetBlindingKeyActivity : public GetBlindingKeyActivity
+class JadeGetBlindingKeyTask : public DeviceGetBlindingKeyTask
 {
     JadeDevice* const m_device;
     const QString m_script;
     QByteArray m_public_key;
 public:
-    JadeGetBlindingKeyActivity(const QString& script, JadeDevice* device)
-        : GetBlindingKeyActivity(device)
+    JadeGetBlindingKeyTask(const QString& script, JadeDevice* device)
+        : DeviceGetBlindingKeyTask(device)
         , m_device(device)
         , m_script(script)
     {
@@ -230,32 +238,35 @@ public:
     {
         return m_public_key;
     }
-    void exec() override
+    void update() override
     {
+        if (m_status != Status::Ready) return;
+        setStatus(Status::Active);
+
         if (!checkDeviceConnected(m_device, this)) return;
 
-        // TODO: the following QByteArray::fromHex should be done in resolver (and refactor ledger activity)
+        // TODO: the following QByteArray::fromHex should be done in resolver (and refactor ledger task)
         const auto script = QByteArray::fromHex(m_script.toLocal8Bit());
         m_device->api()->getBlindingKey(script, [this](const QVariantMap& msg) {
             if (msg.contains("error") || !msg.contains("result") || msg["result"].typeId() != QMetaType::QByteArray) {
-                fail();
+                setStatus(Status::Failed);
                 return;
             }
             m_public_key = msg["result"].toByteArray();
-            finish();
+            setStatus(Status::Finished);
         });
     }
 };
 
-class JadeGetBlindingNonceActivity : public GetBlindingNonceActivity
+class JadeGetBlindingNonceTask : public DeviceGetBlindingNonceTask
 {
     JadeDevice* const m_device;
     const QByteArray m_pubkey;
     const QByteArray m_script;
     QByteArray m_nonce;
 public:
-    JadeGetBlindingNonceActivity(const QByteArray& pubkey, const QByteArray& script, JadeDevice* device)
-        : GetBlindingNonceActivity(device)
+    JadeGetBlindingNonceTask(const QByteArray& pubkey, const QByteArray& script, JadeDevice* device)
+        : DeviceGetBlindingNonceTask(device)
         , m_device(device)
         , m_pubkey(pubkey)
         , m_script(script)
@@ -265,22 +276,25 @@ public:
     {
         return m_nonce;
     }
-    void exec() override
+    void update() override
     {
+        if (m_status != Status::Ready) return;
+        setStatus(Status::Active);
+
         if (!checkDeviceConnected(m_device, this)) return;
 
         m_device->api()->getSharedNonce(m_script, m_pubkey, [this](const QVariantMap& msg) {
             if (msg.contains("error") || !msg.contains("result") || msg["result"].typeId() != QMetaType::QByteArray) {
-                fail();
+                setStatus(Status::Failed);
                 return;
             }
             m_nonce = msg["result"].toByteArray();
-            finish();
+            setStatus(Status::Finished);
         });
     }
 };
 
-class JadeSignLiquidTransactionActivity : public SignLiquidTransactionActivity
+class JadeSignLiquidTransactionTask : public DeviceSignLiquidTransactionTask
 {
     Network* const m_network;
     JadeDevice* const m_device;
@@ -307,8 +321,8 @@ private:
         return path;
     }
 public:
-    JadeSignLiquidTransactionActivity(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets, JadeDevice* device)
-        : SignLiquidTransactionActivity(device)
+    JadeSignLiquidTransactionTask(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets, JadeDevice* device)
+        : DeviceSignLiquidTransactionTask(device)
         , m_network(network)
         , m_device(device)
         , m_transaction(transaction)
@@ -319,8 +333,11 @@ public:
     }
     QList<QByteArray> signatures() const override { return m_signatures; };
     QList<QByteArray> signerCommitments() const override { return m_signer_commitments; }
-    void exec() override
+    void update() override
     {
+        if (m_status != Status::Ready) return;
+        setStatus(Status::Active);
+
         for (const auto value : m_signing_inputs) {
             const auto input = value.toObject();
             const auto address_type = input.value("address_type").toString();
@@ -410,7 +427,7 @@ public:
             qDebug() << msg;
             if (handleError(msg)) return;
             if (!msg.contains("result")) {
-                fail();
+                setStatus(Status::Failed);
                 return;
             }
             progress()->incrementValue();
@@ -434,32 +451,39 @@ public:
                     m_amount_blinders.append(commitment["vbf"].toByteArray());
                 }
             }
-            finish();
+            setStatus(Status::Finished);
         });
     }
     bool handleError(const QVariantMap& msg)
     {
         if (!msg.contains("error")) return false;
         Q_ASSERT(msg["error"].typeId() == QMetaType::QVariantMap);
-        setMessage(QJsonObject::fromVariantMap(msg["error"].toMap()));
-        fail();
+        abort(msg["error"].toMap().value("message").toString());
         return true;
     }
 };
 
-JadeGetMasterBlindingKeyActivity::JadeGetMasterBlindingKeyActivity(JadeDevice* device)
-    : GetMasterBlindingKeyActivity(device)
+JadeGetMasterBlindingKeyTask::JadeGetMasterBlindingKeyTask(JadeDevice* device)
+    : DeviceGetMasterBlindingKeyTask(device)
     , m_device(device)
 {
 }
-void JadeGetMasterBlindingKeyActivity::exec()
+
+void JadeGetMasterBlindingKeyTask::update()
+{
+    if (m_status != Status::Ready) return;
+    setStatus(Status::Active);
+    request();
+}
+
+void JadeGetMasterBlindingKeyTask::request()
 {
     if (!checkDeviceConnected(m_device, this)) return;
 
     m_device->api()->getMasterBlindingKey(m_only_if_silent, [=, this](const QVariantMap& msg) {
         if (msg.contains("result")) {
             m_master_blinding_key = msg["result"].toByteArray();
-            finish();
+            setStatus(Status::Finished);
             return;
         }
         auto error = msg["error"].toMap();
@@ -468,21 +492,21 @@ void JadeGetMasterBlindingKeyActivity::exec()
                 m_ask = true;
                 emit askChanged();
             } else {
-                finish();
+                setStatus(Status::Finished);
             }
             return;
         }
-        fail();
+        setStatus(Status::Failed);
     });
 }
 
-void JadeGetMasterBlindingKeyActivity::confirm()
+void JadeGetMasterBlindingKeyTask::confirm()
 {
     m_only_if_silent = false;
-    exec();
+    request();
 }
 
-class JadeGetBlindingFactorsActivity : public GetBlindingFactorsActivity
+class JadeGetBlindingFactorsTask : public DeviceGetBlindingFactorsTask
 {
     JadeDevice* const m_device;
     QJsonArray m_inputs;
@@ -491,15 +515,18 @@ class JadeGetBlindingFactorsActivity : public GetBlindingFactorsActivity
     QList<QByteArray> m_asset_blinders;
     QList<QByteArray> m_amount_blinders;
 public:
-    JadeGetBlindingFactorsActivity(const QJsonArray& inputs, const QJsonArray& outputs, JadeDevice* device)
-        : GetBlindingFactorsActivity(device)
+    JadeGetBlindingFactorsTask(const QJsonArray& inputs, const QJsonArray& outputs, JadeDevice* device)
+        : DeviceGetBlindingFactorsTask(device)
         , m_device(device)
         , m_inputs(inputs)
         , m_outputs(outputs)
     {
     }
-    void exec() override
+    void update() override
     {
+        if (m_status != Status::Ready) return;
+        setStatus(Status::Active);
+
         if (!checkDeviceConnected(m_device, this)) return;
 
         QByteArray txhashes;
@@ -526,7 +553,7 @@ public:
     void processOutput(qsizetype index)
     {
         if (index == m_outputs.size()) {
-            finish();
+            setStatus(Status::Finished);
             return;
         }
 
@@ -540,24 +567,24 @@ public:
 
         auto api = m_device->api();
         if (!api) {
-            fail();
+            setStatus(Status::Failed);
             return;
         }
         api->getBlindingFactor(m_hash_prevouts, index, "ASSET", [=, this](const QVariantMap& msg) {
             if (msg.contains("error") || !msg.contains("result")) {
-                fail();
+                setStatus(Status::Failed);
                 return;
             }
             m_asset_blinders.append(msg.value("result").toByteArray());
             QMetaObject::invokeMethod(this, [=, this] {
                 auto api = m_device->api();
                 if (!api) {
-                    fail();
+                    setStatus(Status::Failed);
                     return;
                 }
                 api->getBlindingFactor(m_hash_prevouts, index, "VALUE", [=, this](const QVariantMap& msg) {
                     if (msg.contains("error") || !msg.contains("result")) {
-                        fail();
+                        setStatus(Status::Failed);
                         return;
                     }
                     m_amount_blinders.append(msg.value("result").toByteArray());
@@ -579,24 +606,27 @@ public:
 };
 
 
-class JadeLogoutActivity : public LogoutActivity
+class JadeLogoutTask : public DeviceLogoutTask
 {
     JadeDevice* const m_device;
 public:
-    JadeLogoutActivity(JadeDevice* device)
-        : LogoutActivity(device)
+    JadeLogoutTask(JadeDevice* device)
+        : DeviceLogoutTask(device)
         , m_device(device)
     {
     }
-    void exec() override
+    void update() override
     {
+        if (m_status != Status::Ready) return;
+        setStatus(Status::Active);
+
         auto backend = m_device->api();
         if (backend) {
             backend->logout([this](const QVariantMap& msg) {
-                finish();
+                setStatus(Status::Finished);
             });
         } else {
-            finish();
+            setStatus(Status::Finished);
         }
     }
 };
@@ -617,56 +647,56 @@ QJsonObject JadeDevice::details() const
     return {{"type", "jade"}, {"version", version()}, {"name", name()}, {"board", board_type}};
 }
 
-GetWalletPublicKeyActivity *JadeDevice::getWalletPublicKey(Network *network, const QVector<uint32_t>& path)
+DeviceGetWalletPublicKeyTask *JadeDevice::getWalletPublicKey(Network *network, const QVector<uint32_t>& path)
 {
-    return new JadeGetWalletPublicKeyActivity(network, path, this);
+    return new JadeGetWalletPublicKeyTask(network, path, this);
 }
 
-SignMessageActivity *JadeDevice::signMessage(const QString &message, const QVector<uint32_t> &path)
+DeviceSignMessageTask *JadeDevice::signMessage(const QString &message, const QVector<uint32_t> &path)
 {
     Q_UNUSED(message);
     Q_UNUSED(path);
     Q_UNREACHABLE();
 }
 
-SignMessageActivity *JadeDevice::signMessage(const QString &message, const QVector<uint32_t> &path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy)
+DeviceSignMessageTask *JadeDevice::signMessage(const QString &message, const QVector<uint32_t> &path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy)
 {
-    return new JadeSignMessageActivity(message, path, ae_host_commitment, ae_host_entropy, this);
+    return new JadeSignMessageTask(message, path, ae_host_commitment, ae_host_entropy, this);
 }
 
-SignTransactionActivity *JadeDevice::signTransaction(Network* network, const QByteArray &transaction, const QJsonArray &signing_inputs, const QJsonArray &transaction_outputs, const QJsonObject &signing_transactions)
+DeviceSignTransactionTask *JadeDevice::signTransaction(Network* network, const QByteArray &transaction, const QJsonArray &signing_inputs, const QJsonArray &transaction_outputs, const QJsonObject &signing_transactions)
 {
-    return new JadeSignTransactionActivity(network, transaction, signing_inputs, transaction_outputs, signing_transactions, this);
+    return new JadeSignTransactionTask(network, transaction, signing_inputs, transaction_outputs, signing_transactions, this);
 }
 
-GetBlindingKeyActivity *JadeDevice::getBlindingKey(const QString& script)
+DeviceGetBlindingKeyTask *JadeDevice::getBlindingKey(const QString& script)
 {
-    return new JadeGetBlindingKeyActivity(script, this);
+    return new JadeGetBlindingKeyTask(script, this);
 }
 
-GetBlindingNonceActivity *JadeDevice::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
+DeviceGetBlindingNonceTask *JadeDevice::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
 {
-    return new JadeGetBlindingNonceActivity(pubkey, script, this);
+    return new JadeGetBlindingNonceTask(pubkey, script, this);
 }
 
-SignLiquidTransactionActivity *JadeDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets)
+DeviceSignLiquidTransactionTask *JadeDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets)
 {
-    return new JadeSignLiquidTransactionActivity(network, transaction, signing_inputs, outputs, assets, this);
+    return new JadeSignLiquidTransactionTask(network, transaction, signing_inputs, outputs, assets, this);
 }
 
-GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()
+DeviceGetMasterBlindingKeyTask *JadeDevice::getMasterBlindingKey()
 {
-    return new JadeGetMasterBlindingKeyActivity(this);
+    return new JadeGetMasterBlindingKeyTask(this);
 }
 
-GetBlindingFactorsActivity* JadeDevice::getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs)
+DeviceGetBlindingFactorsTask* JadeDevice::getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs)
 {
-    return new JadeGetBlindingFactorsActivity(inputs, outputs, this);
+    return new JadeGetBlindingFactorsTask(inputs, outputs, this);
 }
 
-LogoutActivity *JadeDevice::logout()
+DeviceLogoutTask *JadeDevice::logout()
 {
-    return new JadeLogoutActivity(this);
+    return new JadeLogoutTask(this);
 }
 
 void JadeDevice::updateVersionInfo()

@@ -10,7 +10,6 @@ target_sources(blockstream_core PRIVATE
 )
 
 target_sources(blockstream_core PRIVATE
-    activity.h activity.cpp
     progress.h progress.cpp
     connectable.h
     network.h network.cpp
@@ -53,8 +52,6 @@ target_sources(blockstream_core PRIVATE
     appupdatecontroller.h appupdatecontroller.cpp
     ga.h ga.cpp
     httpmanager.h httpmanager.cpp
-    httprequestactivity.h httprequestactivity.cpp
-    activitymanager.h activitymanager.cpp
     analytics.h analytics.cpp
     buybitcoinquoteservice.h buybitcoinquoteservice.cpp
     chartpriceservice.h chartpriceservice.cpp
@@ -79,8 +76,8 @@ target_sources(blockstream_core PRIVATE
 
 target_sources(blockstream_core PRIVATE
     device.h device_p.h device.cpp
-    deviceactivities.h deviceactivities.cpp
     devicesession.h devicesession.cpp
+    devicetasks.h devicetasks.cpp
     devicediscoveryagent.h devicediscoveryagent.cpp
     devicediscoveryagent_linux.h devicediscoveryagent_linux.cpp
     devicediscoveryagent_macos.h devicediscoveryagent_macos.cpp
@@ -101,12 +98,12 @@ target_sources(blockstream_core PRIVATE
 
 target_sources(blockstream_core PRIVATE
     ledger/ledgerdevice.h ledger/ledgerdevice.cpp
-    ledger/ledgergetblindingkeyactivity.h ledger/ledgergetblindingkeyactivity.cpp
-    ledger/ledgergetblindingnonceactivity.h ledger/ledgergetblindingnonceactivity.cpp
-    ledger/ledgergetwalletpublickeyactivity.h ledger/ledgergetwalletpublickeyactivity.cpp
-    ledger/ledgersignliquidtransactionactivity.h ledger/ledgersignliquidtransactionactivity.cpp
-    ledger/ledgersignmessageactivity.h ledger/ledgersignmessageactivity.cpp
-    ledger/ledgersigntransactionactivity.h ledger/ledgersigntransactionactivity.cpp
+    ledger/ledgergetblindingkeytask.h ledger/ledgergetblindingkeytask.cpp
+    ledger/ledgergetblindingnoncetask.h ledger/ledgergetblindingnoncetask.cpp
+    ledger/ledgergetwalletpublickeytask.h ledger/ledgergetwalletpublickeytask.cpp
+    ledger/ledgersignliquidtransactiontask.h ledger/ledgersignliquidtransactiontask.cpp
+    ledger/ledgersignmessagetask.h ledger/ledgersignmessagetask.cpp
+    ledger/ledgersigntransactiontask.h ledger/ledgersigntransactiontask.cpp
 )
 
 target_sources(blockstream_core PRIVATE

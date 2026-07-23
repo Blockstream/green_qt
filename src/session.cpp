@@ -312,17 +312,6 @@ void Session::update()
     }
 }
 
-SessionActivity::SessionActivity(QObject* parent)
-    : Activity(parent)
-{
-}
-
-void SessionActivity::setSession(Session* session)
-{
-    Q_ASSERT(!m_session);
-    m_session = session;
-}
-
 bool Session::eventFilter(QObject *object, QEvent *event)
 {
     switch (event->type()) {
