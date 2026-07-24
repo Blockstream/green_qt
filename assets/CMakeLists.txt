@@ -18,7 +18,6 @@ qt_add_resources(${APP_TARGET} "images"
         svg/2fa_general.svg
         svg/2fa_phone.svg
         svg/2fa_sms.svg
-        svg/2fa_telegram.svg
         svg/about.svg
         svg/abstract_background.svg
         svg/account.svg
@@ -123,7 +122,6 @@ qt_add_resources(${APP_TARGET} "images"
         png/jade2_card.png
 
         png/2fa_u2f.png
-        png/2fa_telegram.png
 
         png/jade_genuine.png
 

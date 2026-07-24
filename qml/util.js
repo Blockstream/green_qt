@@ -325,7 +325,6 @@ function twoFactorMethodLabel(method)
         gauth: 'id_authenticator_app',
         phone: 'id_phone_call',
         sms: 'id_sms',
-        telegram: 'id_telegram',
     }
     return qsTrId(labels[method])
 }

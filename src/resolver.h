@@ -53,8 +53,6 @@ class TwoFactorResolver : public Resolver
     Q_PROPERTY(QString method READ method CONSTANT)
     Q_PROPERTY(int attemptsRemaining READ attemptsRemaining NOTIFY attemptsRemainingChanged)
     Q_PROPERTY(QString code READ code WRITE setCode NOTIFY codeChanged)
-    Q_PROPERTY(QString telegramBrowserUrl READ telegramBrowserUrl CONSTANT)
-    Q_PROPERTY(QString telegramAppUrl READ telegramAppUrl CONSTANT)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -65,8 +63,6 @@ public:
     void setCode(const QString& code);
     void resolve() override;
     void retry(const QJsonObject& result);
-    QString telegramBrowserUrl() const;
-    QString telegramAppUrl() const;
 signals:
     void invalidCode();
     void codeChanged(const QString& code);

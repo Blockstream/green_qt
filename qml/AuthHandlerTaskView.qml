@@ -50,12 +50,6 @@ StackLayout {
         }
     }
     AnimLoader {
-        active: self.authResult?.status === 'resolve_code' && self.authResult?.method === 'telegram'
-        animated: true
-        sourceComponent: ResolveTwoFactorCodeView {
-        }
-    }
-    AnimLoader {
         active: self.authResult?.status === 'error'
         animated: true
         sourceComponent: ErrorView {
@@ -129,31 +123,6 @@ StackLayout {
                 font.pixelSize: 14
             }
         }
-        Loader {
-            Layout.alignment: Qt.AlignCenter
-            active: self.authResult?.method === 'telegram'
-            visible: active
-            sourceComponent: RowLayout {
-                readonly property url browser: self.authResult?.auth_data?.telegram_url
-                readonly property url app: self.authResult?.auth_data?.telegram_url?.replace('https://t.me/', 'tg://resolve?domain=')?.replace('?start=', '&start=')
-                spacing: constants.s1
-                ColumnLayout {
-                    GButton {
-                        Layout.fillWidth: true
-                        text: 'Open in Browser'
-                        onClicked: Qt.openUrlExternally(browser)
-                    }
-                    GButton {
-                        Layout.fillWidth: true
-                        text: 'Open Telegram'
-                        onClicked: Qt.openUrlExternally(app)
-                    }
-                }
-                QRCode {
-                    text: app
-                }
-            }
-        }
         PinView {
             Layout.alignment: Qt.AlignCenter
             id: keypad
@@ -167,7 +136,7 @@ StackLayout {
         }
         Loader {
             Layout.alignment: Qt.AlignCenter
-            active: self.authResult?.method !== 'gauth' && self.authResult?.method !== 'telegram'
+            active: self.authResult?.method !== 'gauth'
             visible: active
             opacity: (self.authResult?.attempts_remaining ?? 3) < 3 ? 1 : 0
             sourceComponent: Label {

@@ -33,7 +33,6 @@ StackViewPage {
             text: switch (self.method) {
                 case 'gauth': return qsTrId('id_scan_the_qr_code_in_google')
                 case 'email': return qsTrId('id_enter_your_email_address')
-                case 'telegram': return qsTrId('id_enter_telegram_username_or_number')
             }
             wrapMode: Text.WordWrap
         }
@@ -43,7 +42,6 @@ StackViewPage {
             focus: true
             horizontalAlignment: TextInput.AlignHCenter
             selectByMouse: true
-            text: self.method === 'telegram' ? '@' : ''
             onAccepted: change_action.trigger()
             onTextEdited: controller.clearErrors()
             Layout.fillWidth: true

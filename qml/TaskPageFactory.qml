@@ -313,32 +313,7 @@ QtObject {
             }
             Loader {
                 Layout.alignment: Qt.AlignCenter
-                active: view.prompt.result.method === 'telegram'
-                visible: active
-                sourceComponent: RowLayout {
-                    readonly property url browser: view.prompt.result.auth_data.telegram_url
-                    readonly property url app: view.prompt.result.auth_data.telegram_url.replace('https://t.me/', 'tg://resolve?domain=').replace('?start=', '&start=')
-                    spacing: constants.s1
-                    ColumnLayout {
-                        GButton {
-                            Layout.fillWidth: true
-                            text: 'Open in Browser'
-                            onClicked: Qt.openUrlExternally(browser)
-                        }
-                        GButton {
-                            Layout.fillWidth: true
-                            text: 'Open Telegram'
-                            onClicked: Qt.openUrlExternally(app)
-                        }
-                    }
-                    QRCode {
-                        text: app
-                    }
-                }
-            }
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                active: view.prompt.result.method !== 'gauth' && view.prompt.result.method !== 'telegram'
+                active: view.prompt.result.method !== 'gauth'
                 visible: active
                 opacity: view.prompt.result.attempts_remaining < 3 ? 1 : 0
                 sourceComponent: Label {

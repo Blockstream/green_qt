@@ -92,7 +92,6 @@ Page {
                                     case 'sms': return true
                                     case 'phone': return true
                                     case 'gauth': return true
-                                    case 'telegram': return true
                                     default: return false
                                 }
                             })
