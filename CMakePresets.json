@@ -43,7 +43,8 @@
         "GREEN_BUILD_ID": "$env{GREEN_BUILD_ID}",
         "GREEN_LOG_FILE": "$env{CI_COMMIT_BRANCH}",
         "ENABLE_SENTRY": "ON",
-        "SENTRY_KEY": "$env{SENTRY_KEY}"
+        "SENTRY_KEY": "$env{SENTRY_KEY}",
+        "SENTRY_PROJECT": "$env{SENTRY_PROJECT}"
       }
     },
     {
@@ -53,7 +54,6 @@
       "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/bld",
       "cacheVariables": {
-        "ENABLE_SENTRY": "OFF",
         "CMAKE_CXX_FLAGS": "/FS"
       }
     }

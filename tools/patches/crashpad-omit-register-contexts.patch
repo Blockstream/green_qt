@@ -1,0 +1,141 @@
+Do not write register contexts into minidumps.
+
+Every thread record and the exception stream carry that thread's CPU context.
+On x86-64 a context is the general-purpose registers plus the 512-byte legacy
+FXSAVE area (XMM0-15), and more where XSTATE is enabled. Registers hold
+pointers into, and fragments of, whatever the thread last touched, so on a
+wallet they can carry key material that a crypto routine or a memcpy left
+behind. The dump already carries no process memory, which leaves the contexts
+as the only place a secret can still land.
+
+Contexts enter the dump from two writers, and both have to stop producing
+them:
+
+  MinidumpThreadWriter       every thread's MINIDUMP_THREAD.ThreadContext
+  MinidumpExceptionWriter    the crashing thread's context, in
+                             MINIDUMP_EXCEPTION_STREAM.ThreadContext
+
+Not calling SetContext() is not enough on its own: both Freeze() methods
+CHECK(context_), which is fatal in a release build, so the handler would abort
+and write nothing at all. The checks go, and Freeze() and Children() take the
+context only if there is one. SetContext() itself stays, so a caller that does
+supply a context is still served.
+
+The records holding the location descriptors are value-initialised, so a
+context-less thread serialises as {DataSize: 0, Rva: 0} -- how the minidump
+format spells "absent", not a malformed file.
+
+Backtraces are unaffected. They are walked at snapshot time from live memory
+and written to kMinidumpStreamTypeSentryStackTraces by
+MinidumpStacktraceListWriter under CRASHPAD_ENABLE_STACKTRACE=ON, never from
+these contexts. The exception record (code, flags, faulting address and its
+parameters), the module list, thread names and system info are all still
+written. What is lost is the register view in a report.
+
+The thread writer hunks assume crashpad-omit-process-memory.patch has already
+removed the stack block. buildsentry.sh applies the patches in glob order and
+omit-process-memory sorts first, so this holds.
+
+tools/check-minidump.py asserts the result: every thread's context and the
+exception stream's context are zero length.
+
+Applies to sentry-native's external/crashpad submodule; see tools/buildsentry.sh
+and ci/x64-windows/sentry.bat.
+
+diff --git a/minidump/minidump_exception_writer.cc b/minidump/minidump_exception_writer.cc
+index cd3a139d..fa3fd237 100644
+--- a/minidump/minidump_exception_writer.cc
++++ b/minidump/minidump_exception_writer.cc
+@@ -52,10 +52,6 @@ void MinidumpExceptionWriter::InitializeFromSnapshot(
+   SetExceptionFlags(exception_snapshot->ExceptionInfo());
+   SetExceptionAddress(exception_snapshot->ExceptionAddress());
+   SetExceptionInformation(exception_snapshot->Codes());
+-
+-  std::unique_ptr<MinidumpContextWriter> context =
+-      MinidumpContextWriter::CreateFromSnapshot(exception_snapshot->Context());
+-  SetContext(std::move(context));
+ }
+
+ void MinidumpExceptionWriter::SetContext(
+@@ -88,13 +84,14 @@ void MinidumpExceptionWriter::SetExceptionInformation(
+
+ bool MinidumpExceptionWriter::Freeze() {
+   DCHECK_EQ(state(), kStateMutable);
+-  CHECK(context_);
+
+   if (!MinidumpStreamWriter::Freeze()) {
+     return false;
+   }
+
+-  context_->RegisterLocationDescriptor(&exception_.ThreadContext);
++  if (context_) {
++    context_->RegisterLocationDescriptor(&exception_.ThreadContext);
++  }
+
+   return true;
+ }
+@@ -107,10 +104,11 @@ size_t MinidumpExceptionWriter::SizeOfObject() {
+
+ std::vector<internal::MinidumpWritable*> MinidumpExceptionWriter::Children() {
+   DCHECK_GE(state(), kStateFrozen);
+-  DCHECK(context_);
+
+   std::vector<MinidumpWritable*> children;
+-  children.push_back(context_.get());
++  if (context_) {
++    children.push_back(context_.get());
++  }
+
+   return children;
+ }
+diff --git a/minidump/minidump_thread_writer.cc b/minidump/minidump_thread_writer.cc
+index 05839d62..2b6b07e6 100644
+--- a/minidump/minidump_thread_writer.cc
++++ b/minidump/minidump_thread_writer.cc
+@@ -48,10 +48,6 @@ void MinidumpThreadWriter::InitializeFromSnapshot(
+   SetSuspendCount(thread_snapshot->SuspendCount());
+   SetPriority(thread_snapshot->Priority());
+   SetTEB(thread_snapshot->ThreadSpecificDataAddress());
+-
+-  std::unique_ptr<MinidumpContextWriter> context =
+-      MinidumpContextWriter::CreateFromSnapshot(thread_snapshot->Context());
+-  SetContext(std::move(context));
+ }
+
+ const MINIDUMP_THREAD* MinidumpThreadWriter::MinidumpThread() const {
+@@ -76,7 +72,6 @@ void MinidumpThreadWriter::SetContext(
+
+ bool MinidumpThreadWriter::Freeze() {
+   DCHECK_EQ(state(), kStateMutable);
+-  CHECK(context_);
+
+   if (!MinidumpWritable::Freeze()) {
+     return false;
+@@ -86,7 +81,9 @@ bool MinidumpThreadWriter::Freeze() {
+     stack_->RegisterMemoryDescriptor(&thread_.Stack);
+   }
+
+-  context_->RegisterLocationDescriptor(&thread_.ThreadContext);
++  if (context_) {
++    context_->RegisterLocationDescriptor(&thread_.ThreadContext);
++  }
+
+   return true;
+ }
+@@ -102,13 +99,14 @@ size_t MinidumpThreadWriter::SizeOfObject() {
+
+ std::vector<internal::MinidumpWritable*> MinidumpThreadWriter::Children() {
+   DCHECK_GE(state(), kStateFrozen);
+-  DCHECK(context_);
+
+   std::vector<MinidumpWritable*> children;
+   if (stack_) {
+     children.push_back(stack_.get());
+   }
+-  children.push_back(context_.get());
++  if (context_) {
++    children.push_back(context_.get());
++  }
+
+   return children;
+ }

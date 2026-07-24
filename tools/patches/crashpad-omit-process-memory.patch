@@ -1,0 +1,95 @@
+Do not write process memory into minidumps.
+
+Crashpad captures every thread's stack plus the "extra memory" the snapshot
+classes ask for. On a wallet those regions can hold secrets (mnemonics, PINs,
+passwords, private keys), and the minidump is uploaded to Sentry, so we strip
+them at the source instead of relying on server-side scrubbing. Every source
+has to go or the dump still carries memory:
+
+  ThreadSnapshot::Stack()            each thread's stack
+  ThreadSnapshot::ExtraMemory()      per-thread extras
+  ProcessSnapshot::ExtraMemory()     process-wide extras (on Windows, the PEB
+                                     and each module's ExtraMemoryRanges)
+  ExceptionSnapshot::ExtraMemory()   on Linux and Windows, memory that the
+                                     crashing thread's registers point at
+  ModuleSnapshot::CustomMinidumpStreams()
+                                     arbitrary process memory that any linked
+                                     module can register through
+                                     CrashpadInfo::AddUserDataMinidumpStream
+
+Thread records, register contexts and module lists are still written. The
+Sentry stack-trace stream (kMinidumpStreamTypeSentryStackTraces) is added
+directly by MinidumpFileWriter under CRASHPAD_ENABLE_STACKTRACE=ON, not through
+CustomMinidumpStreams, so backtraces are unaffected by any of this.
+
+tools/check-minidump.py asserts the result: a dump built with this patch has
+zero-length thread stacks and an empty memory list.
+
+Applies to sentry-native's external/crashpad submodule; see tools/buildsentry.sh
+and ci/x64-windows/sentry.bat.
+
+diff --git a/minidump/minidump_file_writer.cc b/minidump/minidump_file_writer.cc
+index 47235c70..9515cd3f 100644
+--- a/minidump/minidump_file_writer.cc
++++ b/minidump/minidump_file_writer.cc
+@@ -181,30 +181,6 @@ void MinidumpFileWriter::InitializeFromSnapshot(
+     DCHECK(add_stream_result);
+   }
+ 
+-  memory_list->AddFromSnapshot(process_snapshot->ExtraMemory());
+-  if (exception_snapshot) {
+-    memory_list->AddFromSnapshot(exception_snapshot->ExtraMemory());
+-  }
+-
+-  // These user streams must be added last. Otherwise, a user stream with the
+-  // same type as a well-known stream could preempt the well-known stream. As it
+-  // stands now, earlier-discovered user streams can still preempt
+-  // later-discovered ones. The well-known memory list stream is added after
+-  // these user streams, but only with a check here to avoid adding a user
+-  // stream that would preempt the memory list stream.
+-  for (const auto& module : process_snapshot->Modules()) {
+-    for (const UserMinidumpStream* stream : module->CustomMinidumpStreams()) {
+-      if (stream->stream_type() == kMinidumpStreamTypeMemoryList) {
+-        LOG(WARNING) << "discarding duplicate stream of type "
+-                     << stream->stream_type();
+-        continue;
+-      }
+-      auto user_stream = std::make_unique<MinidumpUserStreamWriter>();
+-      user_stream->InitializeFromSnapshot(stream);
+-      AddStream(std::move(user_stream));
+-    }
+-  }
+-
+   // The memory list stream should be added last. This keeps the “extra memory”
+   // at the end so that if the minidump file is truncated, other, more critical
+   // data is more likely to be preserved. Note that non-“extra” memory regions
+diff --git a/minidump/minidump_thread_writer.cc b/minidump/minidump_thread_writer.cc
+index b7aa889a..05839d62 100644
+--- a/minidump/minidump_thread_writer.cc
++++ b/minidump/minidump_thread_writer.cc
+@@ -49,13 +49,6 @@ void MinidumpThreadWriter::InitializeFromSnapshot(
+   SetPriority(thread_snapshot->Priority());
+   SetTEB(thread_snapshot->ThreadSpecificDataAddress());
+ 
+-  const MemorySnapshot* stack_snapshot = thread_snapshot->Stack();
+-  if (stack_snapshot && stack_snapshot->Size() > 0) {
+-    std::unique_ptr<SnapshotMinidumpMemoryWriter> stack(
+-        new SnapshotMinidumpMemoryWriter(stack_snapshot));
+-    SetStack(std::move(stack));
+-  }
+-
+   std::unique_ptr<MinidumpContextWriter> context =
+       MinidumpContextWriter::CreateFromSnapshot(thread_snapshot->Context());
+   SetContext(std::move(context));
+@@ -152,11 +145,6 @@ void MinidumpThreadListWriter::InitializeFromSnapshot(
+     thread->InitializeFromSnapshot(thread_snapshot, thread_id_map);
+     AddThread(std::move(thread));
+   }
+-
+-  // Do this in a separate loop to keep the thread stacks earlier in the dump,
+-  // and together.
+-  for (const ThreadSnapshot* thread_snapshot : thread_snapshots)
+-    memory_list_writer_->AddFromSnapshot(thread_snapshot->ExtraMemory());
+ }
+ 
+ void MinidumpThreadListWriter::SetMemoryListWriter(

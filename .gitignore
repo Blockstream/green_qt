@@ -170,3 +170,8 @@ qt-everywhere-src-*
 
 # Pinned sentry-cli downloaded by tools/ci/sentry-upload.sh
 /sentry-cli
+# sentry-native local crash database (created at runtime)
+.sentry-native/
+
+# staged into the windows docker build context by ci/windows-x86_64.yml
+ci/x64-windows/patches/

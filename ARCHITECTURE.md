@@ -8,28 +8,26 @@ Used dependencies in alphabetic order:
 
 | Dependency | Usage |
 | - | - |
-| [Breakpad](https://chromium.googlesource.com/breakpad/breakpad/) | Process minidump files |
 | [Countly](https://github.com/Countly/countly-sdk-cpp) | Track analytics |
-| [Crashpad](https://chromium.googlesource.com/crashpad/crashpad/+/HEAD/README.md) | Handle crashes and minidump creation |
 | [GDK](https://gdk.readthedocs.io) | Green Development Kit
 [libserialport](https://sigrok.org/wiki/Libserialport) | Enumerate serial port devices |
 | [Qt](https://qt.io) | Cross plaform development framework |
+| [sentry-native](https://github.com/getsentry/sentry-native) | Capture and report crashes (Crashpad backend) |
 | [ZXing](https://github.com/zxing-cpp/zxing-cpp) | Encode and decode QR Codes |
 
 ### Multiprocess
 
-When the application is started, 3 processes are launched:
+When the application is started, the following processes are launched:
 - watchdog: this is the first and is responsible for starting the user interface and restarting after a crash;
 - user interface: the main process, responsible for the application window, interacting with hardware devices, etc;
-- crash handler: responsible for creating the minidump file in a safe way.
+- crash handler: the `crashpad_handler` executable bundled by sentry-native, spawned by the user interface process to capture crashes in a safe way.
 
-All behaviors are implemented in the same binary:
+The watchdog and user interface behaviors are implemented in the same binary:
 - user interface: runs when `--ui` argument is set;
-- crash handler: runs when `--database` argument is set;
-- watchdog: runs when none above the above is set.
+- watchdog: runs otherwise.
 
 ### Crash Reports
 
-The application integrates [Crashpad](https://chromium.googlesource.com/crashpad/crashpad/+/HEAD/README.md) for crash-reporting support. The minidump file (OS-agnostic snapshot of the crashed process) is stored locally until it is processed, then it is removed from the filesystem.
+The application integrates [sentry-native](https://github.com/getsentry/sentry-native) (with its Crashpad backend) for crash-reporting support. On a crash, the bundled `crashpad_handler` captures a minidump and the sentry-native SDK reports it to Blockstream's self-hosted Sentry server.
 
-Usually a Crashpad integration uploads the minidump to a server for remote processing, but this has privacy and security implications, thus uploading minidumps is not implemented. For this reason, the application integrates [Breakpad](https://chromium.googlesource.com/breakpad/breakpad/) to process minidumps locally. The result is a stack trace of the crashed thread, which is then reported to Blockstream incident server.
+Because a wallet's memory and registers can hold secrets, Crashpad is patched (see `tools/patches`, applied when it is built) so that an uploaded minidump carries no process memory and no register state, and names no local account in module paths. Stack traces survive that stripping: they are walked at capture time and travel in sentry-native's own client-side stack-trace stream. `tools/check-minidump.py` verifies a dump.

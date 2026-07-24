@@ -1,7 +1,7 @@
 option(ENABLE_SENTRY "Enable crash reports with sentry" OFF)
 
-if(ENABLE_SENTRY AND NOT SENTRY_KEY)
-    message(FATAL_ERROR "ENABLE_SENTRY is ON but SENTRY_KEY is missing or empty")
+if(ENABLE_SENTRY AND (NOT SENTRY_KEY OR NOT SENTRY_PROJECT))
+    message(FATAL_ERROR "ENABLE_SENTRY is ON but SENTRY_KEY/SENTRY_PROJECT is missing or empty")
 endif()
 
 set(APP_TARGET ${BLOCKSTREAM_PROJECT_NAME})
@@ -21,4 +21,3 @@ if(NOT GREEN_ENV)
 endif()
 
 configure_file("${CMAKE_SOURCE_DIR}/installer.iss.in" "${CMAKE_BINARY_DIR}/installer.iss" @ONLY)
-

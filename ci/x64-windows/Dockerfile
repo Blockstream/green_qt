@@ -70,6 +70,10 @@ RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\V
 COPY zxing.bat .
 RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" x64 && zxing.bat"
 
+COPY patches\ C:\patches
+COPY sentry.bat .
+RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" x64 && sentry.bat"
+
 COPY hidapi.bat .
 RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" x64 && hidapi.bat"
 

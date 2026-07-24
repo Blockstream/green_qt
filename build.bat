@@ -25,4 +25,10 @@ C:\qt\6.11.1\msvc2022_64\bin\windeployqt.exe --qmldir C:\src\qml C:\src\bld\RelW
 copy C:\depends\windows-x86_64\bin\libgreen_gdk.dll C:\src\bld\RelWithDebInfo\ || exit /b !errorlevel!
 copy C:\depends\windows-x86_64\bin\libserialport-0.dll C:\src\bld\RelWithDebInfo\ || exit /b !errorlevel!
 
+REM sentry-native crashpad backend handler + WER module, shipped next to blockstream.exe.
+REM crashpad_wer.dll lets crashpad capture fast-fail/non-SEH crashes (abort, heap
+REM corruption, 0xC0000409); sentry-native auto-registers it from the handler's dir.
+copy C:\deps\bin\crashpad_handler.exe C:\src\bld\RelWithDebInfo\ || exit /b !errorlevel!
+copy C:\deps\bin\crashpad_wer.dll C:\src\bld\RelWithDebInfo\ || exit /b !errorlevel!
+
 endlocal

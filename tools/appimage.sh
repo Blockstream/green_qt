@@ -31,7 +31,13 @@ export APPIMAGE_EXTRACT_AND_RUN=1
 
 cp /linuxdeploy-x86_64.AppImage .
 
-env TARGET_APPIMAGE=linuxdeploy-x86_64.AppImage ./linuxdeploy-x86_64.AppImage --desktop-file=$SOURCE_PATH/blockstream.desktop --appdir=blockstream.AppDir --executable=blockstream --icon-file=$SOURCE_PATH/assets/icons/linux_production.png
+env TARGET_APPIMAGE=linuxdeploy-x86_64.AppImage ./linuxdeploy-x86_64.AppImage --desktop-file=$SOURCE_PATH/blockstream.desktop --appdir=blockstream.AppDir --executable=blockstream --executable="$PREFIX/bin/crashpad_handler" --icon-file=$SOURCE_PATH/assets/icons/linux_production.png
+
+# crashpad's Linux uploader dlopen()s libcurl.so.4 at runtime to POST minidumps.
+# It's not a NEEDED dependency, so linuxdeploy doesn't bundle it; ship the shared
+# libcurl next to crashpad_handler so the handler can load it (resolved via the
+# handler's $ORIGIN RUNPATH).
+cp -a "$PREFIX"/lib/libcurl.so* blockstream.AppDir/usr/bin/
 
 if $PLUGIN_QT; then
     cp /linuxdeploy-plugin-qt-x86_64.AppImage .

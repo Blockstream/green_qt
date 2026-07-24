@@ -30,8 +30,7 @@ macos-x86_64:depends:
     - tools/buildhidapi.sh
     - tools/buildcountly.sh
     - tools/buildzxing.sh
-    - tools/buildbreakpad.sh
-    - tools/buildcrashpad.sh
+    - tools/buildsentry.sh
     - tools/buildgpgme.sh
     - tools/buildleveldb.sh
     - tools/buildlwk.sh
@@ -59,6 +58,7 @@ macos-x86_64:build:
       policy: pull
   after_script:
     - $HOME/qt-install/6.11.1/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
+    - cp "$PREFIX/bin/crashpad_handler" build/Blockstream.app/Contents/MacOS/
     - rm -rf build/Blockstream.app/Contents/MacOS/Blockstream.dSYM
     - mkdir macos-x86_64
     - mv build/Blockstream.app macos-x86_64

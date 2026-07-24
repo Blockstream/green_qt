@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QCameraDevice>
 #include <QCommandLineParser>
+#include <QFile>
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QIcon>
@@ -92,10 +93,7 @@ extern QString g_data_location;
 QCommandLineParser g_args;
 
 #ifdef ENABLE_SENTRY
-#include <crash_report_database.h>
-#include <crashpad_client.h>
-#include <handler/handler_main.h>
-#include <settings.h>
+#include <sentry.h>
 #endif
 
 static QString GraphicsAPIToString(QSGRendererInterface::GraphicsApi api) {
@@ -130,7 +128,6 @@ public:
 };
 
 int watchdog_handler(Application& app);
-int crash_handler(Application& app, int argc, char *argv[]);
 int ui_handler(Application& app, int argc, char *argv[]);
 
 int main(int argc, char *argv[])
@@ -160,13 +157,6 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("jade", "Configure Jade.", "enabled|disabled", "enabled"));
     g_args.addOption(QCommandLineOption("updatecheckperiod", "Update check Period.", "seconds", "3600"));
-    // crashpad arguments
-    g_args.addOption(QCommandLineOption("database", "", "path"));
-    g_args.addOption(QCommandLineOption("handshake-fd", "", "fd"));
-    g_args.addOption(QCommandLineOption("initial-client-data", "", "data"));
-    g_args.addOption(QCommandLineOption("initial-client-fd", "", "fd"));
-    g_args.addOption(QCommandLineOption("metrics-dir", "", "path"));
-    g_args.addOption(QCommandLineOption("shared-client-connection"));
     const bool is_production = QStringLiteral("Production") == GREEN_ENV;
     if (!is_production) {
         g_args.addOption(QCommandLineOption("mock-send", "Sending a transaction appears to succeed in the GUI but the transaction is not broadcasted to the network"));
@@ -195,20 +185,9 @@ int main(int argc, char *argv[])
         if (arg.startsWith("--ui")) {
             return ui_handler(app, argc, argv);
         }
-#ifdef ENABLE_SENTRY
-        if (arg.startsWith("--database")) {
-            return crash_handler(app, argc, argv);
-        }
-#endif
     }
     return watchdog_handler(app);
 }
-
-#ifdef ENABLE_SENTRY
-int crash_handler(Application& app, int argc, char *argv[]) {
-    return crashpad::HandlerMain(argc, argv, nullptr);
-}
-#endif
 
 int watchdog_handler(Application& app)
 {
@@ -260,7 +239,7 @@ int watchdog_handler(Application& app)
     });
 
     start_ui(args, 5);
-    
+
     return 0;
 }
 
@@ -337,38 +316,58 @@ int ui_handler(Application& app, int argc, char *argv[]) {
 #endif
 
 #ifdef ENABLE_SENTRY
-#ifdef Q_OS_WIN
-    base::FilePath database(GetDataDir("crashpad").toStdWString());
-    base::FilePath handler(app.arguments().first().toStdWString());
-#else
-    base::FilePath database(GetDataDir("crashpad").toStdString());
-    base::FilePath handler(app.arguments().constFirst().toStdString());
-#endif
-    const std::string url;
-    std::map<std::string, std::string> annotations = {};
-    std::vector<std::string> arguments = {};
-    std::unique_ptr<crashpad::CrashReportDatabase> db =
-        crashpad::CrashReportDatabase::Initialize(database);
+    sentry_options_t* sentry_options = sentry_options_new();
+    sentry_options_set_dsn(sentry_options, "https://" SENTRY_KEY "@sentry.blockstream.io/" SENTRY_PROJECT);
+    sentry_options_set_release(sentry_options, "green@" GREEN_VERSION);
+    sentry_options_set_environment(sentry_options, GREEN_ENV);
 
-    if (db != nullptr && db->GetSettings() != nullptr) {
-        db->GetSettings()->SetUploadsEnabled(false);
+    const QString sentry_database = GetDataDir("sentry");
+    QString crashpad_handler = QCoreApplication::applicationDirPath()
+#ifdef Q_OS_WIN
+        + "/crashpad_handler.exe";
+#else
+        + "/crashpad_handler";
+#endif
+
+#ifdef Q_OS_LINUX
+    // Inside a FUSE-mounted AppImage the squashfs mount is unmounted when the
+    // process tree exits, pulling crashpad_handler and its dlopen'd libcurl.so.4
+    // out from under the in-progress minidump upload (leaving the dump stuck in
+    // "pending"). Stage the handler and libcurl onto persistent storage so the
+    // upload survives the mount going away.
+    if (qEnvironmentVariableIsSet("APPDIR")) {
+        const QString staging = GetDataDir("crashpad");
+        const QString app_dir = QCoreApplication::applicationDirPath();
+        for (const auto& name : { QStringLiteral("crashpad_handler"), QStringLiteral("libcurl.so.4") }) {
+            const QString dst = staging + "/" + name;
+            QFile::remove(dst);
+            if (QFile::copy(app_dir + "/" + name, dst)) {
+                QFile::setPermissions(dst,
+                    QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner |
+                    QFileDevice::ReadGroup | QFileDevice::ExeGroup |
+                    QFileDevice::ReadOther | QFileDevice::ExeOther);
+            } else {
+                qWarning() << "Failed to stage" << name << "for crashpad";
+            }
+        }
+        // crashpad_handler dlopen()s libcurl.so.4 from its own dir ($ORIGIN).
+        crashpad_handler = staging + "/crashpad_handler";
+    }
+#endif
+
+#ifdef Q_OS_WIN
+    sentry_options_set_database_pathw(sentry_options, reinterpret_cast<const wchar_t*>(sentry_database.utf16()));
+    sentry_options_set_handler_pathw(sentry_options, reinterpret_cast<const wchar_t*>(crashpad_handler.utf16()));
+#else
+    sentry_options_set_database_path(sentry_options, sentry_database.toUtf8().constData());
+    sentry_options_set_handler_path(sentry_options, crashpad_handler.toUtf8().constData());
+#endif
+
+    if (sentry_init(sentry_options) != 0) {
+        qWarning() << "Failed to initialize sentry-native";
     }
 
-    crashpad::CrashpadClient client;
-    std::string http_proxy;
-    bool restartable = true;
-    bool asynchronous_start = false;
-    bool success = client.StartHandler(
-        handler,
-        database,
-        database,
-        url,
-        http_proxy,
-        annotations,
-        arguments,
-        restartable,
-        asynchronous_start);
-    if (!success) return 1;
+    auto sentryClose = qScopeGuard([] { sentry_close(); });
 #endif // ENABLE_SENTRY
 
     auto video_inputs = QMediaDevices::videoInputs();

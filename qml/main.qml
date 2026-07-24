@@ -100,9 +100,6 @@ ApplicationWindow {
     Connections {
         enabled: app_page.status === Loader.Ready
         target: app_page.item?.StackView ?? null
-        function onActivated() {
-            controller.reportCrashes()
-        }
         function onDeactivated() {
             app_page.active = false
         }

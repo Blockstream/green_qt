@@ -1,0 +1,4 @@
+# Patches are applied to third-party sources that are themselves checked out
+# with LF (crashpad pins *.cc to eol=lf), so they must not pick up CRLF from a
+# Windows checkout or `git apply` fails to match context. See ci/x64-windows.
+*.patch text eol=lf

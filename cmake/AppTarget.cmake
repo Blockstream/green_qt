@@ -103,37 +103,12 @@ else()
 endif()
 
 if(ENABLE_SENTRY)
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(BREAKPAD REQUIRED breakpad)
-
-    find_library(LIBBREAKPAD_LIB NAMES libbreakpad.a REQUIRED)
-    find_library(LIBDISASM_LIB NAMES libdisasm.a REQUIRED)
-
     target_compile_definitions(${APP_TARGET} PRIVATE ENABLE_SENTRY)
 
-    if (UNIX AND NOT APPLE)
-      find_package(CURL REQUIRED)
-    endif()
-
-    find_package(crashpad CONFIG REQUIRED)
-
-    get_target_property(CRASHPAD_INCLUDE crashpad::client INTERFACE_INCLUDE_DIRECTORIES)
-
-    target_include_directories(${APP_TARGET} PRIVATE
-      ${CRASHPAD_INCLUDE}
-      ${CRASHPAD_INCLUDE}/..
-      ${BREAKPAD_INCLUDE_DIRS}
-    )
-    target_link_libraries(${APP_TARGET} PRIVATE
-        crashpad::client
-        crashpad::handler
-        crashpad::minidump
-        crashpad::snapshot
-        crashpad::tools
-        crashpad::util
-        crashpad::zlib
-        ${LIBBREAKPAD_LIB} ${LIBDISASM_LIB}
-    )
+    # sentry-native bundles its own crashpad backend; linking sentry::sentry
+    # pulls in crashpad and the rest of its transitive dependencies.
+    find_package(sentry CONFIG REQUIRED)
+    target_link_libraries(${APP_TARGET} PRIVATE sentry::sentry)
 
     # Avoid linking to llvm@16 libunwind.1.dylib
     if (APPLE)

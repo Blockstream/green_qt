@@ -62,7 +62,6 @@ target_sources(${APP_TARGET} PRIVATE
     chartpriceservice.h chartpriceservice.cpp
     feeestimates.h feeestimates.cpp
     networkmanager.h networkmanager.cpp
-    breakpad.cpp
     notification.h notification.cpp
     promo.h promo.cpp
 )

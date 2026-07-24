@@ -51,18 +51,15 @@ FROM base AS libserialport
 COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
 RUN tools/buildlibserialport.sh --disable-shared
 
-FROM base AS crashpad
+FROM base AS sentry
 COPY --from=gdk /build/gdk/build-gcc/external_deps/ /depends/linux-x86_64/
 ENV OPENSSL_ROOT_DIR=$PREFIX
 COPY tools/buildlibcurl.sh tools/
 RUN tools/buildlibcurl.sh
 ENV CMAKE_PREFIX_PATH=$PREFIX
-COPY tools/buildcrashpad.sh tools/
-RUN tools/buildcrashpad.sh
-
-FROM base AS breakpad
-COPY tools/buildbreakpad.sh tools/
-RUN tools/buildbreakpad.sh
+COPY tools/patches/ tools/patches/
+COPY tools/buildsentry.sh tools/
+RUN tools/buildsentry.sh
 
 FROM base AS gpgme
 COPY tools/buildgpgme.sh tools/
@@ -87,8 +84,7 @@ COPY --from=zxing /depends /depends
 COPY --from=gdk /depends /depends
 COPY --from=kdsa /depends /depends
 COPY --from=libserialport /depends /depends
-COPY --from=crashpad /depends /depends
-COPY --from=breakpad /depends /depends
+COPY --from=sentry /depends /depends
 COPY --from=gpgme /depends /depends
 COPY --from=leveldb /depends /depends
 COPY --from=lwk /depends /depends

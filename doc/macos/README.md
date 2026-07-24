@@ -100,8 +100,7 @@ If you prefer to build dependencies manually instead of using `./doc/macos/build
 rm -rf "$PREFIX"
 
 tools/buildgdk.sh --static
-tools/buildbreakpad.sh
-tools/buildcrashpad.sh
+tools/buildsentry.sh
 tools/buildgpgme.sh
 tools/buildlibusb.sh
 tools/buildhidapi.sh

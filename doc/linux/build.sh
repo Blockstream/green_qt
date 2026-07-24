@@ -171,8 +171,7 @@ if [[ "$LAST_STEP" -lt $STEP_DEPS ]]; then
     rm -rf build/libserialport-src build/libserialport-bld
 
     ./tools/buildgdk.sh --static || fail "buildgdk.sh failed"
-    ./tools/buildbreakpad.sh || fail "buildbreakpad.sh failed"
-    ./tools/buildcrashpad.sh || fail "buildcrashpad.sh failed"
+    ./tools/buildsentry.sh || fail "buildsentry.sh failed"
     ./tools/buildgpgme.sh || fail "buildgpgme.sh failed"
     ./tools/buildlibusb.sh || fail "buildlibusb.sh failed"
     ./tools/buildhidapi.sh || fail "buildhidapi.sh failed"

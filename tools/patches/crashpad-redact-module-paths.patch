@@ -1,0 +1,125 @@
+Redact the user's home directory from module paths in minidumps.
+
+The module list names every loaded module by full path, and on a developer or
+end-user machine most of those paths sit under the account's home directory, so
+an uploaded minidump identifies the local user. Crashpad's handler writes the
+dump in its own process and uploads it directly, so there is no client-side
+sentry-native hook that could rewrite it -- the redaction has to happen here.
+
+The component following a path component named "Users" or "home" is replaced
+with "<user>". Both / and \ count as separators, so one implementation covers
+macOS, Linux and Windows with no conditional compilation. Paths outside a home
+directory, such as /System, /usr/lib and C:\Windows, are left alone, and the
+rest of the path is kept so a report still shows where a module was loaded from.
+
+Two writers emit module names and both are redacted:
+
+  MinidumpModuleWriter::SetName            the module list
+  MinidumpUnloadedModuleWriter::SetName    the unloaded module list, which
+                                           crashpad populates on Windows
+
+Redacting inside SetName rather than at the InitializeFromSnapshot call sites
+covers every caller. Symbolication is unaffected: Sentry matches debug files by
+debug ID, and the CodeView records already carry bare basenames.
+
+tools/check-minidump.py asserts the result: it fails on any home directory path
+in a dump whose user component is not the placeholder.
+
+Applies to sentry-native's external/crashpad submodule; see tools/buildsentry.sh
+and ci/x64-windows/sentry.bat.
+
+diff --git a/minidump/minidump_module_writer.cc b/minidump/minidump_module_writer.cc
+index 1287a6de..b584f7f3 100644
+--- a/minidump/minidump_module_writer.cc
++++ b/minidump/minidump_module_writer.cc
+@@ -305,7 +305,7 @@ void MinidumpModuleWriter::SetName(const std::string& name) {
+   if (!name_) {
+     name_.reset(new internal::MinidumpUTF16StringWriter());
+   }
+-  name_->SetUTF8(name);
++  name_->SetUTF8(internal::MinidumpWriterUtil::RedactUserFromPath(name));
+ }
+ 
+ void MinidumpModuleWriter::SetCodeViewRecord(
+diff --git a/minidump/minidump_unloaded_module_writer.cc b/minidump/minidump_unloaded_module_writer.cc
+index c7bf3452..02e26dad 100644
+--- a/minidump/minidump_unloaded_module_writer.cc
++++ b/minidump/minidump_unloaded_module_writer.cc
+@@ -58,7 +58,7 @@ void MinidumpUnloadedModuleWriter::SetName(const std::string& name) {
+   if (!name_) {
+     name_.reset(new internal::MinidumpUTF16StringWriter());
+   }
+-  name_->SetUTF8(name);
++  name_->SetUTF8(internal::MinidumpWriterUtil::RedactUserFromPath(name));
+ }
+ 
+ void MinidumpUnloadedModuleWriter::SetTimestamp(time_t timestamp) {
+diff --git a/minidump/minidump_writer_util.cc b/minidump/minidump_writer_util.cc
+index 2d0455d6..f6bbb434 100644
+--- a/minidump/minidump_writer_util.cc
++++ b/minidump/minidump_writer_util.cc
+@@ -57,5 +57,39 @@ void MinidumpWriterUtil::AssignUTF8ToUTF16(char16_t* destination,
+   c16lcpy(destination, source_utf16.c_str(), destination_size);
+ }
+ 
++// static
++std::string MinidumpWriterUtil::RedactUserFromPath(const std::string& path) {
++  static constexpr char kPlaceholder[] = "<user>";
++
++  size_t component_start = 0;
++  bool after_home_root = false;
++
++  for (size_t i = 0; i <= path.size(); ++i) {
++    if (i != path.size() && path[i] != '/' && path[i] != '\\') {
++      continue;
++    }
++
++    // Skip empty components, so that doubled separators do not lose track of
++    // the home root.
++    if (i > component_start) {
++      if (after_home_root) {
++        return path.substr(0, component_start) + kPlaceholder + path.substr(i);
++      }
++
++      std::string component = path.substr(component_start, i - component_start);
++      for (size_t j = 0; j < component.size(); ++j) {
++        if (component[j] >= 'A' && component[j] <= 'Z') {
++          component[j] = static_cast<char>(component[j] - 'A' + 'a');
++        }
++      }
++      after_home_root = component == "users" || component == "home";
++    }
++
++    component_start = i + 1;
++  }
++
++  return path;
++}
++
+ }  // namespace internal
+ }  // namespace crashpad
+diff --git a/minidump/minidump_writer_util.h b/minidump/minidump_writer_util.h
+index 21d31f00..d6b97c6f 100644
+--- a/minidump/minidump_writer_util.h
++++ b/minidump/minidump_writer_util.h
+@@ -81,6 +81,20 @@ class MinidumpWriterUtil final {
+   static void AssignUTF8ToUTF16(char16_t* destination,
+                                 size_t destination_size,
+                                 const std::string& source);
++
++  //! \brief Replaces the user component of a home directory path with a
++  //!     placeholder, so that an uploaded minidump does not identify the local
++  //!     account.
++  //!
++  //! The component following a path component named `Users` or `home`, matched
++  //! without regard to case, is replaced with `<user>`. Both `/` and `\` are
++  //! treated as separators, so a single implementation covers every platform.
++  //!
++  //! \param[in] path The path to redact.
++  //!
++  //! \return \a path with the user component replaced, or \a path unchanged if
++  //!     it does not lie under a home directory.
++  static std::string RedactUserFromPath(const std::string& path);
+ };
+ 
+ }  // namespace internal

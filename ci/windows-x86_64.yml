@@ -51,6 +51,8 @@ windows-x86_64:build-image:
   script:
     - xcopy depends ci\x64-windows\depends /E /I /H /Y
     - dir ci\x64-windows\depends
+    # docker build context is ci\x64-windows, so stage the patches there
+    - xcopy tools\patches ci\x64-windows\patches /E /I /H /Y
     - docker pull "${env:GAR}/green_qt/x64-windows:latest"
     - docker build ci\x64-windows --build-arg "QT_INSTALLER_JWT_TOKEN=${env:QT_INSTALLER_JWT_TOKEN}" -t "${env:GAR}/green_qt/x64-windows:${env:CI_COMMIT_SHA}" -t "${env:GAR}/green_qt/x64-windows:latest"
     - docker push "${env:GAR}/green_qt/x64-windows:${env:CI_COMMIT_SHA}"
@@ -70,6 +72,8 @@ windows-x86_64:build:
   script:
     - if (-not (docker image inspect $env:IMAGE 2>$null)) { docker pull $env:IMAGE }
     - docker run --rm -v "${env:CI_PROJECT_DIR}:C:\src" -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY $env:IMAGE cmd /c C:\src\build.bat
+    - curl.exe -fsSL "https://release-registry.services.sentry.io/apps/sentry-cli/latest?response=download&arch=x86_64&platform=Windows&package=sentry-cli" -o sentry-cli.exe
+    - .\sentry-cli.exe --url https://sentry.blockstream.io debug-files upload --org $SENTRY_ORG --project $SENTRY_PROJECT --auth-token=$SENTRY_AUTH_TOKEN --log-level=$SENTRY_LOG_LEVEL bld\RelWithDebInfo
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
@@ -102,6 +106,20 @@ windows-x86_64:sign:
       -password="$SSL_COM_PASSWORD"
       -totp_secret="$SSL_COM_TOTP_SECRET"
       -input_file_path=bld/RelWithDebInfo/blockstream.exe
+      -override;
+      bash CodeSignTool.sh sign
+      -credential_id="$SSL_COM_CREDENTIAL_ID"
+      -username="$SSL_COM_USERNAME"
+      -password="$SSL_COM_PASSWORD"
+      -totp_secret="$SSL_COM_TOTP_SECRET"
+      -input_file_path=bld/RelWithDebInfo/crashpad_handler.exe
+      -override;
+      bash CodeSignTool.sh sign
+      -credential_id="$SSL_COM_CREDENTIAL_ID"
+      -username="$SSL_COM_USERNAME"
+      -password="$SSL_COM_PASSWORD"
+      -totp_secret="$SSL_COM_TOTP_SECRET"
+      -input_file_path=bld/RelWithDebInfo/crashpad_wer.dll
       -override;
       find bld -type f \( -iname "*.exe" -o -iname "*.dll" \) -exec echo bash CodeSignTool.sh sign
       -credential_id="$SSL_COM_CREDENTIAL_ID"

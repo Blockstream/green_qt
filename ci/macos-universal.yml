@@ -14,6 +14,7 @@ macos-universal:build:
     - mkdir macos-universal
     - cp -R macos-x86_64/Blockstream.app macos-universal/
     - lipo -create -output macos-universal/Blockstream.app/Contents/MacOS/Blockstream macos-arm64/Blockstream.app/Contents/MacOS/Blockstream macos-x86_64/Blockstream.app/Contents/MacOS/Blockstream
+    - lipo -create -output macos-universal/Blockstream.app/Contents/MacOS/crashpad_handler macos-arm64/Blockstream.app/Contents/MacOS/crashpad_handler macos-x86_64/Blockstream.app/Contents/MacOS/crashpad_handler
     - lipo -create -output macos-universal/Blockstream.app/Contents/Frameworks/liblwk.dylib macos-arm64/Blockstream.app/Contents/Frameworks/liblwk.dylib macos-x86_64/Blockstream.app/Contents/Frameworks/liblwk.dylib
     - lipo -create -output macos-universal/Blockstream.app/Contents/Frameworks/libglsdk.dylib macos-arm64/Blockstream.app/Contents/Frameworks/libglsdk.dylib macos-x86_64/Blockstream.app/Contents/Frameworks/libglsdk.dylib
 
