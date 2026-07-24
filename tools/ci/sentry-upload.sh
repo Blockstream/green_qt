@@ -3,9 +3,10 @@ set -eo pipefail
 
 # Pinned sentry-cli release. To bump: change SENTRY_CLI_VERSION, then update every
 # checksum below with the output of
-#   for a in Darwin-arm64 Darwin-x86_64 Linux-x86_64 Linux-aarch64 Windows-x86_64.exe; do
+#   for a in Darwin-arm64 Darwin-x86_64 Linux-x86_64 Linux-aarch64; do
 #     curl -sL "https://github.com/getsentry/sentry-cli/releases/download/$VERSION/sentry-cli-$a" | shasum -a 256
 #   done
+# Windows is pinned separately in tools/ci/sentry-upload.ps1 — bump it too.
 SENTRY_CLI_VERSION="3.6.2"
 
 case "$(uname -s)-$(uname -m)" in
@@ -24,10 +25,6 @@ case "$(uname -s)-$(uname -m)" in
     Linux-aarch64 | Linux-arm64)
         SENTRY_CLI_ASSET="sentry-cli-Linux-aarch64"
         SENTRY_CLI_SHA256="ff112ecf694b7d6b3629a6228ed4e3f7a0d51401bdf48a5051a79d8749dccd06"
-        ;;
-    MINGW*-x86_64 | MSYS*-x86_64 | CYGWIN*-x86_64)
-        SENTRY_CLI_ASSET="sentry-cli-Windows-x86_64.exe"
-        SENTRY_CLI_SHA256="5c90cb0045cef3d3c36113c2aa21a7dcae11627d2d6e3098b679dea5b6681be3"
         ;;
     *)
         echo "sentry-cli: unsupported platform $(uname -s)-$(uname -m)" >&2

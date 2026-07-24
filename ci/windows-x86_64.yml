@@ -71,15 +71,24 @@ windows-x86_64:build:
     IMAGE: $GAR/green_qt/x64-windows@sha256:3952e77eacbdd2e9b7a2b2b9cf3df4d5e20c7e4761254253cc48008a19a489c3
   script:
     - if (-not (docker image inspect $env:IMAGE 2>$null)) { docker pull $env:IMAGE }
-    - docker run --rm -v "${env:CI_PROJECT_DIR}:C:\src" -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY $env:IMAGE cmd /c C:\src\build.bat
-    - curl.exe -fsSL "https://release-registry.services.sentry.io/apps/sentry-cli/latest?response=download&arch=x86_64&platform=Windows&package=sentry-cli" -o sentry-cli.exe
-    - .\sentry-cli.exe --url https://sentry.blockstream.io debug-files upload --org $SENTRY_ORG --project $SENTRY_PROJECT --auth-token=$SENTRY_AUTH_TOKEN --log-level=$SENTRY_LOG_LEVEL bld\RelWithDebInfo
+    - docker run --rm -v "${env:CI_PROJECT_DIR}:C:\src" -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY -e SENTRY_PROJECT $env:IMAGE cmd /c C:\src\build.bat
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
       - bld/installer.iss
       - bld/RelWithDebInfo
+
+windows-x86_64:symbols:
+  extends: .upload-symbols
+  tags:
+    - windows
+  # The repository is needed for tools/ci/sentry-upload.ps1, so no GIT_STRATEGY: none here.
+  needs:
+    - job: windows-x86_64:build
+      artifacts: true
+  script:
+    - pwsh -NoProfile -File tools/ci/sentry-upload.ps1 bld\RelWithDebInfo
 
 windows-x86_64:sign:
   extends: .gar_wif

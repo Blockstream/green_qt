@@ -18,6 +18,7 @@ stages:
   - lint
   - depends
   - build
+  - symbols
   - test
   - staple
   - installer
@@ -36,7 +37,19 @@ sast:
   stage: build
   script:
     - tools/ci/build.sh
-    - tools/ci/sentry-upload.sh
+
+.upload-symbols:
+  stage: symbols
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^release_.*$/'
+      when: on_success
+    - when: manual
+
+.upload-symbols:unix:
+  extends: .upload-symbols
+  script:
+    - tools/ci/sentry-upload.sh "$SYMBOLS_PATH"
 
 include:
   - component: $CI_SERVER_FQDN/infrastructure/devops/gitlab-components/gcp-wif-auth/gcp-auth@0.0.3

@@ -60,7 +60,8 @@ macos-arm64:build:
   after_script:
     - $HOME/qt-install/6.11.1/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
     - cp "$PREFIX/bin/crashpad_handler" build/Blockstream.app/Contents/MacOS/
-    - rm -rf build/Blockstream.app/Contents/MacOS/Blockstream.dSYM
+    # keep the .dSYM (dsymutil output) for the symbols upload job instead of deleting it
+    - mkdir -p symbols && mv build/Blockstream.app/Contents/MacOS/Blockstream.dSYM symbols/
     - mkdir macos-arm64
     - mv build/Blockstream.app macos-arm64
   artifacts:
@@ -68,6 +69,17 @@ macos-arm64:build:
     expire_in: 1 week
     paths:
       - macos-arm64/Blockstream.app
+      - symbols/
+
+macos-arm64:symbols:
+  extends:
+    - .macos-arm64
+    - .upload-symbols:unix
+  needs:
+    - job: macos-arm64:build
+      artifacts: true
+  variables:
+    SYMBOLS_PATH: symbols
 
 macos-arm64:staple:
   extends:
