@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 set PATH=%PATH%;C:\cargo\bin
 
 set LWK_REPO=https://github.com/Blockstream/lwk
-set LWK_COMMIT=1f4b5773eaa7413731532170ff1c385525f488d3
+set LWK_COMMIT=d60c12aaeb3240422c3aef2c9929b592f052eef7
 set TARGET=x86_64-pc-windows-msvc
 
 git clone --recurse-submodules --quiet %LWK_REPO% lwk-src

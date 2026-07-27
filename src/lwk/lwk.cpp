@@ -432,6 +432,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_issuancerequest_contract() != 29893) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_issuancerequest_pin_input() != 8104) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_lightningpayment_bolt11_invoice() != 47603) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -786,6 +789,12 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_recipient_vout() != 24321) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_reissuancerequest_asset_receiver() != 37925) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_reissuancerequest_issuance_tx() != 50808) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_script_bytes() != 57904) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -876,13 +885,16 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_txbuilder_add_input_rangeproofs() != 13756) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txbuilder_add_issuance() != 64235) {
+    if (uniffi_lwk_checksum_method_txbuilder_add_issuance() != 23898) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_add_lbtc_recipient() != 895) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_add_recipient() != 56700) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_txbuilder_add_reissuance() != 18219) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_drain_lbtc_to() != 34381) {
@@ -900,7 +912,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_txbuilder_finish_for_amp0() != 46241) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txbuilder_issue_asset() != 48258) {
+    if (uniffi_lwk_checksum_method_txbuilder_issue_asset() != 14875) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_liquidex_make() != 30487) {
@@ -909,7 +921,10 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_txbuilder_liquidex_take() != 7163) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txbuilder_reissue_asset() != 28240) {
+    if (uniffi_lwk_checksum_method_txbuilder_reissue_asset() != 6751) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_txbuilder_set_inputs_order() != 55920) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_set_wallet_utxos() != 53946) {
@@ -1140,6 +1155,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_wolletdescriptor_derive_blinding_key() != 27121) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_wolletdescriptor_dwid() != 63811) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_wolletdescriptor_is_amp0() != 49462) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -1312,6 +1330,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_pset_new() != 61694) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_reissuancerequest_new() != 17967) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_script_empty() != 47087) {
@@ -4051,6 +4072,13 @@ void IssuanceRequest::contract(const std::shared_ptr<Contract> &contract) {
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterContract::lower(contract));
 }
+void IssuanceRequest::pin_input(const std::shared_ptr<OutPoint> &input) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_issuancerequest_pin_input,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterOutPoint::lower(input));
+}
 
 IssuanceRequest::~IssuanceRequest() {
     uniffi::rust_call(
@@ -5801,6 +5829,59 @@ void *Recipient::_uniffi_internal_clone_pointer() const {
 
 
 
+ReissuanceRequest::ReissuanceRequest(void *ptr): instance(ptr) {}
+
+ReissuanceRequest::ReissuanceRequest(const ReissuanceRequest &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+std::shared_ptr<ReissuanceRequest> ReissuanceRequest::init(const AssetId &asset_to_reissue, uint64_t satoshi_to_reissue) {
+    return std::shared_ptr<ReissuanceRequest>(
+        new ReissuanceRequest(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_reissuancerequest_new,
+        nullptr, uniffi::FfiConverterTypeAssetId::lower(asset_to_reissue), uniffi::FfiConverterUInt64::lower(satoshi_to_reissue)))
+    );
+}
+
+void ReissuanceRequest::asset_receiver(const std::shared_ptr<Address> &address) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_reissuancerequest_asset_receiver,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterAddress::lower(address));
+}
+void ReissuanceRequest::issuance_tx(const std::shared_ptr<Transaction> &tx) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_reissuancerequest_issuance_tx,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterTransaction::lower(tx));
+}
+
+ReissuanceRequest::~ReissuanceRequest() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_reissuancerequest,
+        nullptr,
+        this->instance
+    );
+}
+
+void *ReissuanceRequest::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_reissuancerequest,
+        nullptr,
+        this->instance
+    );
+}
+
+
+
+
 Script::Script(void *ptr): instance(ptr) {}
 
 Script::Script(const Script &other) : instance(nullptr) {
@@ -6308,6 +6389,13 @@ void TxBuilder::add_recipient(const std::shared_ptr<Address> &address, uint64_t 
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterAddress::lower(address), uniffi::FfiConverterUInt64::lower(satoshi), uniffi::FfiConverterTypeAssetId::lower(asset));
 }
+void TxBuilder::add_reissuance(const std::shared_ptr<ReissuanceRequest> &request) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_txbuilder_add_reissuance,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterReissuanceRequest::lower(request));
+}
 void TxBuilder::drain_lbtc_to(const std::shared_ptr<Address> &address) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     uniffi::rust_call(
@@ -6370,6 +6458,13 @@ void TxBuilder::reissue_asset(const AssetId &asset_to_reissue, uint64_t satoshi_
         uniffi_lwk_fn_method_txbuilder_reissue_asset,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterTypeAssetId::lower(asset_to_reissue), uniffi::FfiConverterUInt64::lower(satoshi_to_reissue), uniffi::FfiConverterOptionalAddress::lower(asset_receiver), uniffi::FfiConverterOptionalTransaction::lower(issuance_tx));
+}
+void TxBuilder::set_inputs_order(const std::vector<std::shared_ptr<OutPoint>> &inputs_order) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_txbuilder_set_inputs_order,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterSequenceOutPoint::lower(inputs_order));
 }
 void TxBuilder::set_wallet_utxos(const std::vector<std::shared_ptr<OutPoint>> &utxos) {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -7562,6 +7657,13 @@ std::shared_ptr<SecretKey> WolletDescriptor::derive_blinding_key(const std::shar
         uniffi_lwk_fn_method_wolletdescriptor_derive_blinding_key,
         nullptr,
         ptr, uniffi::FfiConverterScript::lower(script_pubkey)));
+}
+std::string WolletDescriptor::dwid(const std::shared_ptr<Network> &network) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_wolletdescriptor_dwid,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterNetwork::lower(network)));
 }
 bool WolletDescriptor::is_amp0() {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -8970,6 +9072,31 @@ void FfiConverterRecipient::write(RustStream &stream, const std::shared_ptr<Reci
 }
 
 uint64_t FfiConverterRecipient::allocation_size(const std::shared_ptr<Recipient> &) {
+    return 8;
+}
+
+
+
+std::shared_ptr<ReissuanceRequest> FfiConverterReissuanceRequest::lift(void *ptr) {
+    return std::shared_ptr<ReissuanceRequest>(new ReissuanceRequest(ptr));
+}
+
+void *FfiConverterReissuanceRequest::lower(const std::shared_ptr<ReissuanceRequest> &obj) {
+    return reinterpret_cast<ReissuanceRequest*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<ReissuanceRequest> FfiConverterReissuanceRequest::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterReissuanceRequest::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterReissuanceRequest::write(RustStream &stream, const std::shared_ptr<ReissuanceRequest> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterReissuanceRequest::lower(obj));
+}
+
+uint64_t FfiConverterReissuanceRequest::allocation_size(const std::shared_ptr<ReissuanceRequest> &) {
     return 8;
 }
 
