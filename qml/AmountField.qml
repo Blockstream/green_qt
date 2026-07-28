@@ -17,20 +17,27 @@ TTextField {
     property bool embed: false
     property real spacing: 4
 
+    function testnetUnit(unit) {
+        if (unit === 'BTC' || unit === 'btc') return 'TEST';
+        if (unit === 'mBTC' || unit === 'mbtc') return 'mTEST';
+        if (unit === '\u00B5BTC' || unit === '\u00B5btc' || unit === 'ubtc') return '\u00B5TEST';
+        if (unit === 'bits') return 'bTEST';
+        if (unit === 'sats') return 'sTEST';
+    }
+    function displayLabel(unit) {
+        const prefix = self.session?.network.liquid ? 'L' : ''
+        const mainnet = self.session?.context.mainnet ?? true
+        return prefix + (mainnet ? unit : testnetUnit(unit))
+    }
+
     readonly property var unitOptions: {
-        const labelPrefix = self.session?.network.liquid ? 'L' : ''
         const btcOptions = ['BTC', 'mBTC', '\u00B5BTC', 'sats']
-            .map(value => ({ value, label: labelPrefix + value }))
+            .map(unit => ({ value: unit, label: displayLabel(unit) }))
 
-        const convertUnit = self.convert.output.unit || self.unit
-        if (!convertUnit) return btcOptions
-
-        const isBtcUnit = !!btcOptions.find(option =>
-            option.value === convertUnit || option.label === convertUnit
-        )
+        const isBtcUnit = !!btcOptions.find(({ label }) => label === self.convert.output.unit)
         
         // Show only asset unit for non-Bitcoin assets, show all units for Bitcoin
-        return isBtcUnit ? btcOptions : [{ value: convertUnit, label: convertUnit }]
+        return isBtcUnit ? btcOptions : [{ value: self.convert.output.unit, label: self.convert.output.unit }]
     }
 
     property alias leftItem: left_loader.sourceComponent

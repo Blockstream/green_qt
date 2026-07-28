@@ -267,7 +267,6 @@ static QString mainnetUnit(const QString& unit)
     if (unit == "\u00B5BTC" || unit == "\u00B5btc" || unit == "ubtc") return "\u00B5BTC";
     if (unit == "bits") return "bits";
     if (unit == "sats") return "sats";
-    if (unit == "sats") return "sats";
     Q_UNREACHABLE();
 }
 
@@ -277,7 +276,6 @@ static QString testnetUnit(const QString& unit)
     if (unit == "mBTC" || unit == "mbtc") return "mTEST";
     if (unit == "\u00B5BTC" || unit == "\u00B5btc" || unit == "ubtc") return "\u00B5TEST";
     if (unit == "bits") return "bTEST";
-    if (unit == "sats") return "sTEST";
     if (unit == "sats") return "sTEST";
     Q_UNREACHABLE();
 }
