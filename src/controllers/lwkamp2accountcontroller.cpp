@@ -176,8 +176,12 @@ std::shared_ptr<lwk::WaterfallsClient> LwkAmp2AccountController::getOrCreateWate
         try {
             // TODO: use the mainnet AMP2 network/waterfalls endpoint once mainnet support lands.
             auto network = lwk::Network::testnet();
-            const std::string waterfalls_url = "https://waterfalls.liquidwebwallet.org/liquidtestnet/api";
-            d->waterfalls_client = lwk::WaterfallsClient::init(waterfalls_url, network);
+            const std::string waterfalls_url = "https://waterfalls-elements-testnet.esplora.staging.blockstream.io:17771";
+            d->waterfalls_client = lwk::WaterfallsClient::from_builder({
+                .base_url = waterfalls_url,
+                .network = network,
+                .concurrency = 4
+            });
         } catch (const lwk::lwk_error::Generic& error) {
             qWarning() << Q_FUNC_INFO << "waterfalls client init error:" << error.msg;
         } catch (...) {
