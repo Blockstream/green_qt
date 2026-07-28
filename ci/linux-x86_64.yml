@@ -33,10 +33,6 @@ linux-x86_64:test:
       -e CI_PROJECT_DIR
       -e CTEST_JUNIT_FILE
       -e SENTRY_KEY
-      -e SENTRY_ORG
-      -e SENTRY_PROJECT
-      -e SENTRY_AUTH_TOKEN
-      -e SENTRY_LOG_LEVEL
       "$LINUX_IMAGE"
       bash -lc 'export PATH="/qt/6.11.1/gcc_64/bin:$PREFIX/bin:$PATH";
       export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH";
@@ -76,6 +72,7 @@ linux-x86_64:build-appimage:
       export SOURCE_DATE_EPOCH=$(git log -1 --format=%ct);
       git ls-files -z | xargs -0 touch -d @$SOURCE_DATE_EPOCH;
       tools/ci/build.sh;
+      tools/ci/sentry-upload.sh;
       mv build/blockstream .;
       tools/appimage.sh --plugin-qt "$CI_PROJECT_DIR";
       mkdir linux-x86_64;

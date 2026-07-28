@@ -36,6 +36,7 @@ sast:
   stage: build
   script:
     - tools/ci/build.sh
+    - tools/ci/sentry-upload.sh
 
 include:
   - component: $CI_SERVER_FQDN/infrastructure/devops/gitlab-components/gcp-wif-auth/gcp-auth@0.0.3
