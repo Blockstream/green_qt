@@ -1,7 +1,7 @@
 windows-x86_64:build-gdk:
   extends: .docker_build
   variables:
-    IMAGE: $CI_REGISTRY_IMAGE/windows-x86_64
+    IMAGE: $GAR/green_qt/windows-x86_64
     DOCKER_FILE: ci/windows-x86_64/Dockerfile
   script:
     - docker pull ${IMAGE}:latest || true
@@ -22,7 +22,15 @@ windows-x86_64:build-gdk:
       - depends
       - docker-build.log
 
+.windows_gar_wif:
+  extends:
+    - .gcp_wif_variables
+    - .gcp_wif_id_token
+  before_script:
+    - pwsh -NoProfile -File tools/ci/gcp-wif-docker-login.ps1
+
 windows-x86_64:build-image:
+  extends: .windows_gar_wif
   stage: depends
   image: docker:27
   retry:
@@ -43,13 +51,13 @@ windows-x86_64:build-image:
   script:
     - xcopy depends ci\x64-windows\depends /E /I /H /Y
     - dir ci\x64-windows\depends
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker pull ${CI_REGISTRY_IMAGE}/x64-windows:latest
-    - docker build ci\x64-windows --build-arg QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN} -t ${CI_REGISTRY_IMAGE}/x64-windows:${CI_COMMIT_SHA} -t ${CI_REGISTRY_IMAGE}/x64-windows:latest
-    - docker push ${CI_REGISTRY_IMAGE}/x64-windows:${CI_COMMIT_SHA}
-    - docker push ${CI_REGISTRY_IMAGE}/x64-windows:latest
+    - docker pull "${env:GAR}/green_qt/x64-windows:latest"
+    - docker build ci\x64-windows --build-arg "QT_INSTALLER_JWT_TOKEN=${env:QT_INSTALLER_JWT_TOKEN}" -t "${env:GAR}/green_qt/x64-windows:${env:CI_COMMIT_SHA}" -t "${env:GAR}/green_qt/x64-windows:latest"
+    - docker push "${env:GAR}/green_qt/x64-windows:${env:CI_COMMIT_SHA}"
+    - docker push "${env:GAR}/green_qt/x64-windows:latest"
 
 windows-x86_64:build:
+  extends: .windows_gar_wif
   stage: build
   tags:
     - windows
@@ -58,11 +66,10 @@ windows-x86_64:build:
     DOCKER_DRIVER: null
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
-    IMAGE: $CI_REGISTRY_IMAGE/x64-windows@sha256:5786e7357c009f4ae62352db6860765ab346227ad5cc6e3c2c4b454a83e1fc59
+    IMAGE: $GAR/green_qt/x64-windows@sha256:3952e77eacbdd2e9b7a2b2b9cf3df4d5e20c7e4761254253cc48008a19a489c3
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker image inspect $IMAGE || docker pull $IMAGE
-    - docker run --rm -v ${CI_PROJECT_DIR}:C:\src -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY $IMAGE cmd /c C:\src\build.bat
+    - if (-not (docker image inspect $env:IMAGE 2>$null)) { docker pull $env:IMAGE }
+    - docker run --rm -v "${env:CI_PROJECT_DIR}:C:\src" -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY $env:IMAGE cmd /c C:\src\build.bat
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
@@ -71,32 +78,38 @@ windows-x86_64:build:
       - bld/RelWithDebInfo
 
 windows-x86_64:sign:
-  image:
-    name: $CI_REGISTRY_IMAGE/codesigntool:latest
-    pull_policy: always
+  extends: .gar_wif
   variables:
     GIT_STRATEGY: none
   tags:
-    - k8s
+    - cloud
   needs:
     - windows-x86_64:build
   script:
-    - |
-      bash CodeSignTool.sh sign \
-      -credential_id="$SSL_COM_CREDENTIAL_ID" \
-      -username="$SSL_COM_USERNAME" \
-      -password="$SSL_COM_PASSWORD" \
-      -totp_secret="$SSL_COM_TOTP_SECRET" \
-      -input_file_path=bld/RelWithDebInfo/blockstream.exe \
-      -override
-    - |
-      find bld -type f \( -iname "*.exe" -o -iname "*.dll" \) -exec echo bash CodeSignTool.sh sign \
-        -credential_id="$SSL_COM_CREDENTIAL_ID" \
-        -username="$SSL_COM_USERNAME" \
-        -password="$SSL_COM_PASSWORD" \
-        -totp_secret="$SSL_COM_TOTP_SECRET" \
-        -input_file_path={} \
-        -override \;
+    - docker pull "$GAR/green_qt/codesigntool:latest"
+    - >-
+      docker run --rm
+      -v "$CI_PROJECT_DIR:$CI_PROJECT_DIR"
+      -w "$CI_PROJECT_DIR"
+      -e SSL_COM_CREDENTIAL_ID
+      -e SSL_COM_USERNAME
+      -e SSL_COM_PASSWORD
+      -e SSL_COM_TOTP_SECRET
+      "$GAR/green_qt/codesigntool:latest"
+      bash -lc 'bash CodeSignTool.sh sign
+      -credential_id="$SSL_COM_CREDENTIAL_ID"
+      -username="$SSL_COM_USERNAME"
+      -password="$SSL_COM_PASSWORD"
+      -totp_secret="$SSL_COM_TOTP_SECRET"
+      -input_file_path=bld/RelWithDebInfo/blockstream.exe
+      -override;
+      find bld -type f \( -iname "*.exe" -o -iname "*.dll" \) -exec echo bash CodeSignTool.sh sign
+      -credential_id="$SSL_COM_CREDENTIAL_ID"
+      -username="$SSL_COM_USERNAME"
+      -password="$SSL_COM_PASSWORD"
+      -totp_secret="$SSL_COM_TOTP_SECRET"
+      -input_file_path={}
+      -override \;'
   stage: staple
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
@@ -127,13 +140,11 @@ windows-x86_64:installer:
     - mv bld/RelWithDebInfo/Setup.exe .
 
 .windows:sign:
-  image:
-    name: $CI_REGISTRY_IMAGE/codesigntool:latest
-    pull_policy: always
+  extends: .gar_wif
   variables:
     GIT_STRATEGY: none
   tags:
-    - k8s
+    - cloud
   retry:
     max: 2
     when:
@@ -141,15 +152,27 @@ windows-x86_64:installer:
       - unknown_failure
       - stuck_or_timeout_failure
   script:
-    - mkdir -p signed
-    - bash CodeSignTool.sh sign
+    - docker pull "$GAR/green_qt/codesigntool:latest"
+    - >-
+      docker run --rm
+      -v "$CI_PROJECT_DIR:$CI_PROJECT_DIR"
+      -w "$CI_PROJECT_DIR"
+      -e SSL_COM_CREDENTIAL_ID
+      -e SSL_COM_USERNAME
+      -e SSL_COM_PASSWORD
+      -e SSL_COM_TOTP_SECRET
+      -e INPUT_FILE
+      -e OUTPUT_FILE
+      "$GAR/green_qt/codesigntool:latest"
+      bash -lc 'mkdir -p signed;
+      bash CodeSignTool.sh sign
       -credential_id="$SSL_COM_CREDENTIAL_ID"
-      -username=$SSL_COM_USERNAME
+      -username="$SSL_COM_USERNAME"
       -password="$SSL_COM_PASSWORD"
       -totp_secret="$SSL_COM_TOTP_SECRET"
       -output_dir_path=signed
-      -input_file_path="$INPUT_FILE"
-    - mv "signed/$INPUT_FILE" "$OUTPUT_FILE"
+      -input_file_path="$INPUT_FILE";
+      mv "signed/$INPUT_FILE" "$OUTPUT_FILE"'
 
 windows-x86_64:sign-installer:
   extends: .windows:sign

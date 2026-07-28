@@ -1,4 +1,21 @@
+.gar_wif:
+  extends:
+    - .gcp_wif_variables
+    - .gcp_wif_id_token
+  image: blockstream/gcloud-docker:502.0.0-27.3
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - test -n "$GAR" && test -n "$GAR_SERVICE_ACCOUNT_EMAIL"
+    - !reference [.gcp_wif_login_script]
+    - gcloud auth configure-docker "${GAR%%/*}" --quiet
+
 .docker_build_base:
+  extends: .gar_wif
   needs: []
   retry:
     max: 2
@@ -7,24 +24,19 @@
       - unknown_failure
       - stuck_or_timeout_failure
   stage: depends
-  services:
-    - docker:23-dind
   tags:
     - cloud
 
 docker_codesigntool:
-  image: blockstream/gcloud-docker-tf:1.1.7
   extends: .docker_build_base
   script:
     - docker build
       --network=host
-      --cache-from=$CI_REGISTRY_IMAGE/codesigntool:latest
-      -t $CI_REGISTRY_IMAGE/codesigntool:latest
+      --cache-from=$GAR/green_qt/codesigntool:latest
+      -t $GAR/green_qt/codesigntool:latest
       -f ci/codesigntool/Dockerfile
       .
-    - docker push $CI_REGISTRY_IMAGE/codesigntool:latest
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker push $GAR/green_qt/codesigntool:latest
   rules:
     - changes:
         - ci/codesigntool/**/*
@@ -41,7 +53,6 @@ docker_codesigntool:
     DOCKER_FILE: Dockerfile
     DOCKER_PATH: .
     DOCKER_TLS_CERTDIR: ""
-  image: docker:23
   script:
     - docker pull ${IMAGE}:latest || true
     - >

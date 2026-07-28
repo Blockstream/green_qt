@@ -21,13 +21,20 @@ cpplint:
     - ./tools/lint/cpplint.sh
 
 qmllint:
-  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:c9d4c4202b3e9341203e686aaf9efadf691e6729a061025da416e68b62d8389c
+  extends: .gar_wif
   tags:
-    - k8s
+    - cloud
   stage: lint
   allow_failure: true
-  before_script:
-    - export PATH="/qt/6.11.1/gcc_64/bin:${PATH}"
-    - qmllint --version
+  variables:
+    LINUX_IMAGE: $GAR/green_qt/linux-x86_64@sha256:c9d4c4202b3e9341203e686aaf9efadf691e6729a061025da416e68b62d8389c
   script:
-    - ./tools/lint/qmllint.sh
+    - docker pull "$LINUX_IMAGE"
+    - >-
+      docker run --rm
+      -v "$CI_PROJECT_DIR:$CI_PROJECT_DIR"
+      -w "$CI_PROJECT_DIR"
+      "$LINUX_IMAGE"
+      bash -lc 'export PATH="/qt/6.11.1/gcc_64/bin:$PATH";
+      qmllint --version;
+      tools/lint/qmllint.sh'

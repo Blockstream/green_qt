@@ -33,27 +33,32 @@ package:build:
     - windows-x86_64:sign-installer
 
 .publish:
+  extends:
+    - .gcp_wif_variables
+    - .gcp_wif_id_token
   tags:
     - ga
   stage: package
   when: manual
   needs:
     - package:build
-  image: glregistry.blockstream.io/blockstream/p/gcloud-docker:tf0.15.4
+  image: blockstream/gcloud-docker:502.0.0-27.3
+  variables:
+    WIF_SERVICE_ACCOUNT_EMAIL: $UPDATE_SERVER_SERVICE_ACCOUNT_EMAIL
+  before_script:
+    - !reference [.gcp_wif_login_script]
   script:
     - tar zxvf package.tar.gz
     - cd dist
     - ../tools/publish.sh
 
 package:publish-rc:
-  extends:
-    - .publish
+  extends: .publish
   variables:
     CHANNEL: rc
 
 package:publish-latest:
-  extends:
-    - .publish
+  extends: .publish
   variables:
     CHANNEL: latest
   only:

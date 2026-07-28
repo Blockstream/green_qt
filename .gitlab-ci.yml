@@ -6,6 +6,8 @@ default:
       - unknown_failure
       - stuck_or_timeout_failure
 
+# Required project/group CI variables (values are configuration, not credentials):
+# GAR, GAR_SERVICE_ACCOUNT_EMAIL, UPDATE_SERVER_SERVICE_ACCOUNT_EMAIL.
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -33,19 +35,13 @@ sast:
 .build:
   stage: build
   script:
-    - export GREEN_ENV=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "Production" || echo "Testing")
-    - export GREEN_BUILD_ID=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "" || echo "-$CI_COMMIT_SHORT_SHA")
-    - qt-cmake --preset ci
-    - cmake --build build --parallel 4
-    - curl -sL https://sentry.io/get-cli | INSTALL_DIR=$PWD sh
-    - |
-      ./sentry-cli --url https://sentry.blockstream.io debug-files upload \
-        --org $SENTRY_ORG \
-        --project $SENTRY_PROJECT \
-        --auth-token=$SENTRY_AUTH_TOKEN \
-        --log-level=$SENTRY_LOG_LEVEL build
+    - tools/ci/build.sh
 
 include:
+  - component: $CI_SERVER_FQDN/infrastructure/devops/gitlab-components/gcp-wif-auth/gcp-auth@0.0.3
+    inputs:
+      service_account_email: $GAR_SERVICE_ACCOUNT_EMAIL
+      disable_auth_job: true
   - local: ci/docker.yaml
   - local: ci/lint.yml
   - local: ci/linux-x86_64.yml

@@ -1,16 +1,16 @@
 linux-x86_64:build-image:
   extends: .docker_build
   variables:
-    IMAGE: $CI_REGISTRY_IMAGE/linux-x86_64
+    IMAGE: $GAR/green_qt/linux-x86_64
     DOCKER_FILE: ci/linux-x86_64/Dockerfile
     DOCKER_BUILD_ARGS: --build-arg QT_INSTALLER_JWT_TOKEN=${QT_INSTALLER_JWT_TOKEN}
 
 .linux-x86_64:
-  image: $CI_REGISTRY_IMAGE/linux-x86_64@sha256:debffbd1554695249fdc15f2100fb771b11a600fdc53d31e7035401c568b72a6
-  extends:
-    - .build
+  extends: .gar_wif
   tags:
     - cloud
+  variables:
+    LINUX_IMAGE: $GAR/green_qt/linux-x86_64@sha256:e7c31e0cd3e4603dbdc6053a36aeb8037085a9e5565f46e2f7bdeefe98e3bf1c
 
 linux-x86_64:test:
   stage: test
@@ -21,11 +21,27 @@ linux-x86_64:test:
       artifacts: false
   variables:
     CTEST_JUNIT_FILE: "$CI_PROJECT_DIR/build/ctest-junit.xml"
-  before_script:
-    - export PATH="/qt/6.11.1/gcc_64/bin:$PREFIX/bin/:$PATH"
-    - export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH"
   script:
-    - bash tools/test.sh all
+    - docker pull "$LINUX_IMAGE"
+    - >-
+      docker run --rm
+      -v "$CI_PROJECT_DIR:$CI_PROJECT_DIR"
+      -w "$CI_PROJECT_DIR"
+      -e CI_COMMIT_REF_NAME
+      -e CI_COMMIT_SHORT_SHA
+      -e CI_COMMIT_BRANCH
+      -e CI_PROJECT_DIR
+      -e CTEST_JUNIT_FILE
+      -e SENTRY_KEY
+      -e SENTRY_ORG
+      -e SENTRY_PROJECT
+      -e SENTRY_AUTH_TOKEN
+      -e SENTRY_LOG_LEVEL
+      "$LINUX_IMAGE"
+      bash -lc 'export PATH="/qt/6.11.1/gcc_64/bin:$PREFIX/bin:$PATH";
+      export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH";
+      tools/ci/build.sh;
+      tools/test.sh all'
   artifacts:
     when: always
     reports:
@@ -36,18 +52,34 @@ linux-x86_64:test:
 linux-x86_64:build-appimage:
   extends:
     - .linux-x86_64
+  stage: build
   variables:
     AFTER_SCRIPT_IGNORE_ERRORS: "false"
-  before_script:
-    - export PATH="/qt/6.11.1/gcc_64/bin:$PREFIX/bin/:$PATH"
-    - export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH"
-    - export SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
-    - git ls-files -z | xargs -0 touch -d @$SOURCE_DATE_EPOCH
-  after_script:
-    - mv build/blockstream .
-    - tools/appimage.sh --plugin-qt $CI_PROJECT_DIR
-    - mkdir linux-x86_64
-    - mv Blockstream-x86_64.AppImage linux-x86_64/
+  script:
+    - docker pull "$LINUX_IMAGE"
+    - >-
+      docker run --rm
+      -v "$CI_PROJECT_DIR:$CI_PROJECT_DIR"
+      -w "$CI_PROJECT_DIR"
+      -e CI_COMMIT_REF_NAME
+      -e CI_COMMIT_SHORT_SHA
+      -e CI_COMMIT_BRANCH
+      -e CI_PROJECT_DIR
+      -e SENTRY_KEY
+      -e SENTRY_ORG
+      -e SENTRY_PROJECT
+      -e SENTRY_AUTH_TOKEN
+      -e SENTRY_LOG_LEVEL
+      "$LINUX_IMAGE"
+      bash -lc 'export PATH="/qt/6.11.1/gcc_64/bin:$PREFIX/bin:$PATH";
+      export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH";
+      export SOURCE_DATE_EPOCH=$(git log -1 --format=%ct);
+      git ls-files -z | xargs -0 touch -d @$SOURCE_DATE_EPOCH;
+      tools/ci/build.sh;
+      mv build/blockstream .;
+      tools/appimage.sh --plugin-qt "$CI_PROJECT_DIR";
+      mkdir linux-x86_64;
+      mv Blockstream-x86_64.AppImage linux-x86_64/'
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
