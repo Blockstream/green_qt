@@ -80,7 +80,7 @@ TextField {
             radius: self.dotSize / 2
             anchors.centerIn: parent
             visible: digit.index < self.pin.length
-            color: self.activeFocus ? '#00BCFF' : '#333'
+            color: self.enabled && self.activeFocus ? '#00BCFF' : '#333'
         }
     }
 }

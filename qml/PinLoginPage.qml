@@ -22,7 +22,7 @@ StackViewPage {
     }
     StackView.onActivating: {
         pin_field.clear()
-        pin_field.enabled = true
+        pin_field.enabled = self.wallet.login.attempts > 0
         pin_field.forceActiveFocus()
     }
     id: self
@@ -135,6 +135,7 @@ StackViewPage {
                 Layout.topMargin: 10
                 id: pin_field
                 focus: true
+                enabled: self.wallet.login.attempts > 0
                 onPinEntered: (pin) => {
                     error_badge.clear()
                     pin_field.enabled = false
@@ -166,7 +167,7 @@ StackViewPage {
             }
             PinPadButton {
                 Layout.alignment: Qt.AlignCenter
-                enabled: pin_field.enabled
+                enabled: self.wallet.login.attempts > 0 && pin_field.enabled
                 target: pin_field
             }
             RowLayout {
