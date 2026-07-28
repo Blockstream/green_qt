@@ -1,18 +1,7 @@
 #!/bin/bash
 set -exo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-
-if [ -f /tools/breakpad.patch ]; then
-    BREAKPAD_PATCH=/tools/breakpad.patch
-elif [ -f "$REPO_ROOT/tools/breakpad.patch" ]; then
-    BREAKPAD_PATCH="$REPO_ROOT/tools/breakpad.patch"
-elif [ -f "$SCRIPT_DIR/breakpad.patch" ]; then
-    BREAKPAD_PATCH="$SCRIPT_DIR/breakpad.patch"
-else
-    BREAKPAD_PATCH=
-fi
+COMMIT=69e9aada412e81575a95d0d94f4592fe1b8dfc15
 
 mkdir -p build && cd build && rm -rf depot_tools
 
@@ -24,11 +13,8 @@ rm -rf breakpad && mkdir -p breakpad && cd breakpad
 
 fetch breakpad
 
-if [ "$HOST" = "linux" ]; then
-    if [ -n "$BREAKPAD_PATCH" ]; then
-        (cd src && git apply "$BREAKPAD_PATCH")
-    fi
-fi
+(cd src && git rev-parse HEAD)
+gclient sync --revision src@$COMMIT
 
 mkdir build && cd build
 
