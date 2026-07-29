@@ -172,12 +172,13 @@ void CreatePsetController::create()
             const auto balance = details->balance();
             result.fee = static_cast<qint64>(balance->fee());
             if (greedy) {
-                // The drained amount isn't known up front, so read it back off
-                // the pset. balances() is the wallet's net delta per asset, so
-                // for a spend it is -(sent + fee).
-                const auto balances = balance->balances();
-                const auto it = balances.find(network->policy_asset());
-                result.satoshi = it == balances.end() ? 0 : -static_cast<qint64>(it->second) - result.fee;
+                for (const auto& output : pset->outputs()) {
+                    if (!output->asset().has_value() || !output->amount().has_value()) continue;
+                    if (output->asset().value() != network->policy_asset()) continue;
+                    if (output->amount().value() == result.fee) continue;
+                    result.satoshi = output->amount().value();
+                    break;
+                }
             } else {
                 result.satoshi = amount;
             }
