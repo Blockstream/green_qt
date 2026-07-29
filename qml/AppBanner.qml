@@ -120,7 +120,7 @@ Collapsible {
                 color: '#FFFFFF'
                 font.pixelSize: 13
                 font.weight: 700
-                text: 'Some accounts can not be logged in due to network issues. Please try again later.'
+                text: qsTrId('id_network_issues_detected_you_may')
                 wrapMode: Label.WordWrap
             }
             PrimaryButton {
@@ -281,7 +281,7 @@ Collapsible {
                     color: '#000'
                     font.pixelSize: 14
                     font.weight: 600
-                    text: qsTrId('There is a newer version of Blockstream App available')
+                    text: qsTrId('There is a newer version of Blockstream app available')
                     wrapMode: Label.WordWrap
                 }
                 PrimaryButton {

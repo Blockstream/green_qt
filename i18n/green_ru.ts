@@ -769,7 +769,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green поддерживает как Bitcoin, так и Liquid Network.</translation>
+        <translation>Blockstream app поддерживает как Bitcoin, так и Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2511,7 +2511,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>Если вы согласитесь, Green будет собирать ограниченные данные об использовании для оптимизации пользовательского опыта. Никакая конфиденциальная информация о пользователе или кошельке не собирается.</translation>
+        <translation>Если вы согласитесь, Blockstream app будет собирать ограниченные данные об использовании для оптимизации пользовательского опыта. Никакая конфиденциальная информация о пользователе или кошельке не собирается.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3356,6 +3356,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Network fees</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>Сетевой монитор</translation>
     </message>
@@ -4170,7 +4174,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Выкупите свои депонированные средства без подписи Blockstream Green по истечении заранее определенного периода времени.</translation>
+        <translation>Выкупите свои депонированные средства без подписи Blockstream app по истечении заранее определенного периода времени.</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4338,7 +4342,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Восстановить Green-кошелек</translation>
+        <translation>Восстановить Blockstream-кошелек</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>

@@ -48,7 +48,7 @@ AbstractDialog {
                     onClicked: stack_view.push(servers_validation_page)
                 }
                 SwitchButton {
-                    text: 'Help Blockstream App Improve'
+                    text: 'Help Blockstream app improve'
                     checked: Settings.analytics === 'enabled'
                     onClicked: Settings.analytics = Settings.analytics === 'enabled' ? 'disabled' : 'enabled'
                 }

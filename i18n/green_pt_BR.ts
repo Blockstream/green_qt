@@ -769,7 +769,7 @@ Você pode escolher entre um aplicativo autenticador, e-mail, SMS ou chamada tel
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>A Blockstream Green suporta carteiras da rede Bitcoin e da rede Liquid.</translation>
+        <translation>O Blockstream app suporta carteiras da rede Bitcoin e da rede Liquid.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2435,7 +2435,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_home</source>
-        <translation>Green</translation>
+        <translation>Início</translation>
     </message>
     <message>
         <source>id_hour</source>
@@ -2511,7 +2511,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>Se você concordar, a Green coletará alguns dados de uso para otimizar a experiência do usuário. Nenhuma informação sensível de usuário ou carteira é coletada.</translation>
+        <translation>Se você concordar, o Blockstream app coletará alguns dados de uso para otimizar a experiência do usuário. Nenhuma informação sensível de usuário ou carteira é coletada.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3356,6 +3356,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Taxa paga</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>Monitor de rede</translation>
     </message>
@@ -4170,7 +4174,7 @@ Tente restaurar manualmente sua carteira.</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Resgate seus fundos sem precisar da assinatura da Blockstream Green após um período de tempo predefinido.</translation>
+        <translation>Resgate seus fundos sem precisar da assinatura do Blockstream app após um período de tempo predefinido.</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4338,7 +4342,7 @@ Tente restaurar manualmente sua carteira.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Restaurar carteira Green</translation>
+        <translation>Restaurar carteira Blockstream</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>
@@ -4718,7 +4722,7 @@ Este endereço pode ser usado apenas uma vez.</translation>
     </message>
     <message>
         <source>id_set_up_an_email_to_get</source>
-        <translation>Insira um endereço de e-mail para receber o pacote de recuperação. Esse pacote é criptografado e servirá para recuperar seus bitcoins caso a Blockstream Green deixe de existir. Este botão estará inativo se você já tiver selecionado a opção de receber notificações de transações na aba GERAL.</translation>
+        <translation>Insira um endereço de e-mail para receber o pacote de recuperação. Esse pacote é criptografado e servirá para recuperar seus bitcoins caso o Blockstream app deixe de existir. Este botão estará inativo se você já tiver selecionado a opção de receber notificações de transações na aba GERAL.</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>

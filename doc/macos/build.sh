@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Automated build script for Blockstream Green on macOS.
+# Automated build script for Blockstream app on macOS.
 #
 # Prerequisites (install manually if missing):
 #   - Xcode command line tools: xcode-select --install

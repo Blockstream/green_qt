@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Automated build script for Blockstream Green on Linux.
+# Automated build script for Blockstream app on Linux.
 #
 # Prerequisites (install manually if missing):
 #   - Ubuntu 22.04+ or compatible distro

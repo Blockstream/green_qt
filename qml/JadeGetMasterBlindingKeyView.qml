@@ -32,7 +32,7 @@ ColumnLayout {
         font.weight: 790
         horizontalAlignment: Label.AlignHCenter
         wrapMode: Label.WordWrap
-        text: 'Green needs the master blinding key from Jade'
+        text: 'Blockstream app needs the master blinding key from Jade'
     }
     Label {
         Layout.alignment: Qt.AlignCenter

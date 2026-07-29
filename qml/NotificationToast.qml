@@ -424,7 +424,7 @@ ColumnLayout {
                     color: toast.textColor
                     font.pixelSize: 13
                     font.weight: 700
-                    text: 'Some accounts can not be logged in due to network issues. Please try again later.'
+                    text: qsTrId('id_network_issues_detected_you_may')
                     wrapMode: Label.WordWrap
                 }
 

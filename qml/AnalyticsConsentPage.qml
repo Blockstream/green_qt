@@ -32,7 +32,7 @@ MainPage {
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
             lineHeight: 1.25
-            text: qsTrId('id_if_you_agree_green_will_collect').replace('Green', 'Blockstream')
+            text: qsTrId('id_if_you_agree_green_will_collect')
             wrapMode: Label.WordWrap
         }
         ColumnLayout {

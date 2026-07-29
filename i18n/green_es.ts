@@ -769,7 +769,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green es compatible con Bitcoin y Liquid Network.</translation>
+        <translation>Blockstream app es compatible con Bitcoin y Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2511,7 +2511,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>Si esta de acuerdo, Green recopilará datos de uso limitados para optimizar la experiencia de usuario. No se recopila información confidencial de usuario o cartera</translation>
+        <translation>Si esta de acuerdo, Blockstream app recopilará datos de uso limitados para optimizar la experiencia de usuario. No se recopila información confidencial de usuario o cartera</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3356,6 +3356,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Network fees</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>Monitor de red</translation>
     </message>
@@ -4170,7 +4174,7 @@ Intente restaurar su cartera de forma manual.</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Extraiga los fondos que depositó sin una firma de Blockstream Green al cabo de un plazo predefinido.</translation>
+        <translation>Extraiga los fondos que depositó sin una firma de Blockstream app al cabo de un plazo predefinido.</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4338,7 +4342,7 @@ Intente restaurar su cartera de forma manual.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Restaurar Green Wallet</translation>
+        <translation>Restaurar Blockstream Wallet</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>

@@ -769,7 +769,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream GreenはBitcoinとLiquid Networkの両方に対応しています。</translation>
+        <translation>Blockstream appはBitcoinとLiquid Networkの両方に対応しています。</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2511,7 +2511,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>同意するとGreenはユーザー体験向上のために限られた範囲内で利用データを収集します。機密性の高いユーザーやウォレットについてのデータは収集しません。</translation>
+        <translation>同意するとBlockstream appはユーザー体験向上のために限られた範囲内で利用データを収集します。機密性の高いユーザーやウォレットについてのデータは収集しません。</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3357,6 +3357,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Network fees</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>ネットワーク・モニター</translation>
     </message>
@@ -4171,7 +4175,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Blockstream Greenによる署名なしでも事前に指定した時間経過後に資金を引き出せるようにする。</translation>
+        <translation>Blockstream appによる署名なしでも事前に指定した時間経過後に資金を引き出せるようにする。</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4339,7 +4343,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Greenウォレットの復元</translation>
+        <translation>Blockstreamウォレットの復元</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>

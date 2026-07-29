@@ -771,7 +771,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green est compatible avec le réseau Bitcoin et le réseau Liquid.</translation>
+        <translation>Blockstream app est compatible avec le réseau Bitcoin et le réseau Liquid.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2513,7 +2513,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>Si vous êtes d&apos;accord, Green recueillera des données d&apos;utilisation limitées afin d&apos;optimiser l&apos;expérience de l&apos;utilisateur. Aucune information sensible sur l&apos;utilisateur ou le portefeuille n&apos;est collectée.</translation>
+        <translation>Si vous êtes d&apos;accord, Blockstream app recueillera des données d&apos;utilisation limitées afin d&apos;optimiser l&apos;expérience de l&apos;utilisateur. Aucune information sensible sur l&apos;utilisateur ou le portefeuille n&apos;est collectée.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3358,6 +3358,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Network fees</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>Contrôle du réseau</translation>
     </message>
@@ -4172,7 +4176,7 @@ Essayez de restaurer manuellement votre portefeuille.</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Remboursez vos fonds déposés sans la signature de Blockstream Green après une période prédéfinie.</translation>
+        <translation>Remboursez vos fonds déposés sans la signature de Blockstream app après une période prédéfinie.</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4340,7 +4344,7 @@ Essayez de restaurer manuellement votre portefeuille.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Restaurer un portefeuille Green</translation>
+        <translation>Restaurer un portefeuille Blockstream</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>

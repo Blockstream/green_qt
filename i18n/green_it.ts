@@ -769,7 +769,7 @@ Scegli il tuo metodo 2FA preferito tra app authenticator, email, SMS o chiamata.
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green supporta Bitcoin e Liquid Network.</translation>
+        <translation>Blockstream app supporta Bitcoin e Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2511,7 +2511,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>Se accetti, Green raccoglierà alcuni dati per migliorare l&apos;esperienza. Non verranno raccolti dati sensibili o informazioni sul wallet.</translation>
+        <translation>Se accetti, Blockstream app raccoglierà alcuni dati per migliorare l&apos;esperienza. Non verranno raccolti dati sensibili o informazioni sul wallet.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3356,6 +3356,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Network fees</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>Network Monitor</translation>
     </message>
@@ -4170,7 +4174,7 @@ Tenta un ripristino manuale.</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Recupera i fondi che hai depositato senza il bisogno della firma Blockstream Green dopo un periodo di tempo prestabilito.</translation>
+        <translation>Recupera i fondi che hai depositato senza il bisogno della firma Blockstream app dopo un periodo di tempo prestabilito.</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4338,7 +4342,7 @@ Tenta un ripristino manuale.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Ripristina Wallet Green</translation>
+        <translation>Ripristina Wallet Blockstream</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>

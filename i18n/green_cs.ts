@@ -769,7 +769,7 @@ Můžete si vybrat oblíbenou metodu 2FA z aplikace autentizátoru, e-mailu, SMS
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green podporuje Bitcoin i Liquid Network.</translation>
+        <translation>Blockstream app podporuje Bitcoin i Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2511,7 +2511,7 @@ Mohou být použity standardní poplatky za zprávy a data.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>Pokud souhlasíte, bude Green shromažďovat omezené údaje o používání za účelem optimalizace uživatelského prostředí. Nebudou shromažďovány žádné citlivé údaje o uživateli nebo peněžence.</translation>
+        <translation>Pokud souhlasíte, bude Blockstream app shromažďovat omezené údaje o používání za účelem optimalizace uživatelského prostředí. Nebudou shromažďovány žádné citlivé údaje o uživateli nebo peněžence.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3356,6 +3356,10 @@ Nedělejte si starosti s žádnými novými zálohami, vaše stávající záloh
         <translation>Síťové poplatky</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>Sledování sítě</translation>
     </message>
@@ -4170,7 +4174,7 @@ Zkuste peněženku obnovit ručně.</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Vyberte své uložené prostředky bez podpisu Blockstream Green po předem definované době.</translation>
+        <translation>Vyberte své uložené prostředky bez podpisu Blockstream app po předem definované době.</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4338,7 +4342,7 @@ Zkuste peněženku obnovit ručně.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Obnovit Green peněženku</translation>
+        <translation>Obnovit Blockstream peněženku</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>

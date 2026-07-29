@@ -1,4 +1,4 @@
-## Building Blockstream Green for Windows
+## Building the Blockstream app for Windows
 
 **Important:** The Windows build is split into two phases. **You must build GDK (and libserialport) first on Linux with MinGW** — they are cross-compiled and cannot be built natively on Windows for this project. The rest of the build (application, Countly, ZXing, hidapi, leveldb, LWK, GLSDK, etc.) is done on Windows with MSVC and Qt.
 

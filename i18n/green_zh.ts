@@ -769,7 +769,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green钱包支持比特币和液态网络。</translation>
+        <translation>Blockstream app钱包支持比特币和液态网络。</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2511,7 +2511,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>如果您同意，Green钱包将收集有限的使用数据以优化用户体验。不会收集敏感的用户信息或钱包信息。</translation>
+        <translation>如果您同意，Blockstream app钱包将收集有限的使用数据以优化用户体验。不会收集敏感的用户信息或钱包信息。</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3356,6 +3356,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Network fees</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>网络监视器</translation>
     </message>
@@ -4170,7 +4174,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>预先设定的时间之后，在不用Blockstream Green的签名的情况下赎回你的资金。</translation>
+        <translation>预先设定的时间之后，在不用Blockstream app的签名的情况下赎回你的资金。</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4338,7 +4342,7 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>恢复Green钱包</translation>
+        <translation>恢复Blockstream钱包</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>

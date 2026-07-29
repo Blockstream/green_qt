@@ -1,6 +1,6 @@
 # Architecture
 
-This document contais some implemention details of Blockstream Green for desktop.
+This document contains implementation details for the desktop Blockstream app.
 
 ### Dependencies
 

@@ -1,4 +1,4 @@
-# Agent instructions: Blockstream Green Qt
+# Agent instructions for the Blockstream app Qt project
 
 ## Audience
 

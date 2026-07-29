@@ -29,7 +29,7 @@ StackViewPage {
             text: {
                 const wallet = self.session.context.wallet
                 const name = wallet.name
-                const label = name + ' @ Green ' + session.network.displayName
+                const label = name + ' @ Blockstream app ' + session.network.displayName
                 const secret = self.session.config.gauth.data.split('=')[1]
                 return 'otpauth://totp/' + escape(label) + '?secret=' + secret
             }

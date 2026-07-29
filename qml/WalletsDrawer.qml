@@ -32,7 +32,7 @@ AbstractDrawer {
                 text: qsTrId('id_digital_wallets')
             }
             Hint {
-                text: 'Your wallets with keys persisted on the Green app will appear here.'
+                text: 'Your wallets with keys persisted on the Blockstream app will appear here.'
                 visible: sww_repeater.count === 0
             }
             Repeater {

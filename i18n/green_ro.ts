@@ -770,7 +770,7 @@ You can choose your favourite 2FA method among an authenticator app, email, SMS 
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green supports both Bitcoin and the Liquid Network.</translation>
+        <translation>Blockstream app supports both Bitcoin and the Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -2511,7 +2511,7 @@ Standard messages and data rates may apply.</translation>
     </message>
     <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>If you agree, Green will collect limited usage data to optimize the user experience. No sensitive user or wallet info is collected.</translation>
+        <translation>If you agree, Blockstream app will collect limited usage data to optimize the user experience. No sensitive user or wallet info is collected.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -3356,6 +3356,10 @@ Don&apos;t worry about any new backups, your existing recovery phrase backup wil
         <translation>Network fees</translation>
     </message>
     <message>
+        <source>id_network_issues_detected_you_may</source>
+        <translation>Network issues detected. You may not be able to log into some wallets. Please try again or come back later.</translation>
+    </message>
+    <message>
         <source>id_network_monitor</source>
         <translation>Monitorizare Rețea</translation>
     </message>
@@ -4170,7 +4174,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Revendicați fondurile depuse fără a avea nevoie de o semnătură prin Blockstream Green după o perioadă de timp pre-definită.</translation>
+        <translation>Revendicați fondurile depuse fără a avea nevoie de o semnătură prin Blockstream app după o perioadă de timp pre-definită.</translation>
     </message>
     <message>
         <source>id_redeposit</source>
@@ -4338,7 +4342,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Recuperare portofel Green</translation>
+        <translation>Recuperare portofel Blockstream</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>
