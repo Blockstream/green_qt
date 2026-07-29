@@ -163,8 +163,9 @@ AbstractDrawer {
             contentItem: RowLayout {
                 ColumnLayout {
                     RowLayout {
-                        Image {
-                            source: 'qrc:/000000/24/list-checks.svg'
+                        ColorIcon {
+                            color: '#000000'
+                            source: 'qrc:/icons/list-checks.svg'
                         }
                         Label {
                             Layout.fillWidth: true

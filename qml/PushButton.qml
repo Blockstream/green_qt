@@ -20,6 +20,7 @@ AbstractButton {
     bottomPadding: 12
     opacity: self.enabled ? 1 : 0.4
     spacing: 10
+    icon.color: 'transparent'
     background: Item {
         Rectangle {
             anchors.fill: parent
@@ -42,10 +43,13 @@ AbstractButton {
         spacing: image.visible ? self.spacing : 0
         HSpacer {
         }
-        Image {
+        ColorIcon {
             id: image
+            color: self.icon.color
             source: self.icon.source
             visible: image.status === Image.Ready
+            Layout.preferredWidth: self.icon.width > 0 ? self.icon.width : implicitWidth
+            Layout.preferredHeight: self.icon.height > 0 ? self.icon.height : implicitHeight
         }
         Label {
             font: self.font

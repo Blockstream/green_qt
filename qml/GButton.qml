@@ -24,6 +24,7 @@ Button {
     font.pixelSize: self.large ? 14 : 12
     icon.width: self.large ? 16 : 12
     icon.height: self.large ? 16 : 12
+    icon.color: 'transparent'
     font.bold: true
     font.weight: 600
     topPadding: self.large ? 10 : 6
@@ -45,8 +46,9 @@ Button {
     contentItem: RowLayout {
         spacing: self.padding
         opacity: self.enabled ? 1 : 0.5
-        Image {
+        ColorIcon {
             visible: status === Image.Ready
+            color: self.icon.color
             source: self.icon.source
             Layout.preferredWidth: self.icon.width
             Layout.preferredHeight: self.icon.height

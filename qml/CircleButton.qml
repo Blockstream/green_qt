@@ -6,6 +6,7 @@ AbstractButton {
     id: self
     focusPolicy: Qt.StrongFocus
     opacity: self.enabled ? 1 : 0.6
+    icon.color: 'transparent'
     background: Item {
         Rectangle {
             border.width: 2
@@ -16,7 +17,8 @@ AbstractButton {
             anchors.margins: -8
         }
     }
-    contentItem: Image {
+    contentItem: ColorIcon {
+        color: self.icon.color
         source: self.icon.source
     }
 }

@@ -45,7 +45,8 @@ StackViewPage {
         }
         PrimaryButton {
             Layout.fillWidth: true
-            icon.source: copy_timer.running ? 'qrc:/000000/24/check.svg' : 'qrc:/000000/24/clipboard.svg'
+            icon.source: copy_timer.running ? 'qrc:/icons/check.svg' : 'qrc:/icons/clipboard.svg'
+            icon.color: '#000000'
             text: copy_timer.running ? 'Copied' : 'Copy Invoice'
             onClicked: {
                 Clipboard.copy(self.invoiceUri)
@@ -136,7 +137,8 @@ StackViewPage {
                 bottomPadding: 10
                 font.pixelSize: 14
                 fillColor: qr_button.hovered ? '#062F4A' : 'transparent'
-                icon.source: 'qrc:/00bcff/20/magnifying-glass-plus.svg'
+                icon.source: 'qrc:/icons/magnifying-glass-plus.svg'
+                icon.color: '#00BCFF'
                 textColor: '#00BCFF'
                 text: 'Enlarge QR'
                 onClicked: self.StackView.view.push(qrcode_page)

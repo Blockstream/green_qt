@@ -185,7 +185,8 @@ Pane {
                 shortcut: 'Ctrl+,'
                 onTriggered: self.preferencesClicked()
             }
-            icon.source: 'qrc:/a0a0a0/24/faders-horizontal.svg'
+            icon.source: 'qrc:/icons/faders-horizontal.svg'
+            icon.color: '#A0A0A0'
             isCurrent: self.currentView === SideBar.View.Preferences
             text: qsTrId('id_app_settings')
         }
@@ -231,6 +232,7 @@ Pane {
         id: button
         clip: true
         focusPolicy: Qt.ClickFocus
+        icon.color: 'transparent'
         bottomPadding: 12
         leftPadding: 24
         rightPadding: 24
@@ -272,7 +274,8 @@ Pane {
             HSpacer {
                 Layout.maximumWidth: 12
             }
-            Image {
+            ColorIcon {
+                color: button.icon.color
                 source: button.icon.source
             }
             Label {

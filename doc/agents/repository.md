@@ -7,33 +7,41 @@ Where things live and how to gate debug behavior. Part of the repository agent i
 - **src/**: C++ source files (*.cpp, *.h)
 - **qml/**: QML files (*.qml) and JavaScript (*.js)
 - **assets/**: Icons, images, fonts
-  - **svg/**, **svg2/**, **svg3/**: Legacy themed SVG trees (still registered in `assets/CMakeLists.txt`)
-  - **flags/**: Country flag SVGs
-  - **fonts/**: TTF fonts
-  - **png/**, **pdf/**, **icons/**, **installer/**: Other static assets
+    - **icons/**: App branding icons plus monochrome UI glyphs (`*.svg`) tinted at runtime
+    - **svg/**, **svg2/**, **svg3/**: Legacy themed SVG trees (still registered in `assets/CMakeLists.txt`)
+    - **flags/**: Country flag SVGs
+    - **fonts/**: TTF fonts
+    - **png/**, **pdf/**, **installer/**: Other static assets
 
-### Color-keyed icons (`assets/<color>/<size>/`)
+### Monochrome UI icons (`assets/icons/*.svg`)
 
-Newer UI icons live under a path shaped like **`assets/<hex-color>/<pixel-size>/<name>.svg`**:
+UI glyphs are stored **once** as white (`#FFFFFF`) SVGs under `assets/icons/`. Tint and display size are QML concerns — do **not** add color- or size-keyed folders like `assets/<hex>/<size>/`.
 
 ```text
-assets/fafafa/20/arrows-down-up.svg
-assets/a0a0a0/24/faders-horizontal.svg
-assets/ffffff/16/note.svg
-assets/000000/24/list-checks.svg
+assets/icons/arrows-down-up.svg
+assets/icons/clipboard.svg
+assets/icons/note.svg
 ```
 
-- **`<color>`** — Lowercase hex **without** `#` (e.g. `fafafa`, `a0a0a0`, `ffffff`, `000000`), matching the intended stroke/fill on dark UI.
-- **`<size>`** — Nominal icon size in pixels (`16`, `20`, `24`, …).
-- **`<name>.svg`** — File name; use the same name when the same glyph exists in another color/size.
-
-In QML, reference them via the Qt resource prefix (files are registered from `assets/` with `BASE .`):
+In QML, load via `ColorIcon` (standalone) or `icon.source` + `icon.color` on buttons that forward color through `ColorIcon`:
 
 ```qml
-icon.source: 'qrc:/fafafa/20/arrows-down-up.svg'
+ColorIcon {
+    source: 'qrc:/icons/list-checks.svg'
+    color: '#000000'
+    width: 24
+    height: 24
+}
+
+PrimaryButton {
+    icon.source: 'qrc:/icons/clipboard.svg'
+    icon.color: '#000000'
+}
 ```
 
-When adding or renaming a file under a color/size folder, **append it to the `FILES` list** in [assets/CMakeLists.txt](../../assets/CMakeLists.txt) inside the `qt_add_resources(..., "images")` block, or the icon will not ship in the build.
+`ColorIcon` colorizes only when `color.a > 0`. Leave `icon.color` as `'transparent'` (the default on project buttons) to keep multi-color / legacy assets unchanged.
+
+When adding or renaming a file under `assets/icons/`, **append it to the `FILES` list** in [assets/CMakeLists.txt](../../assets/CMakeLists.txt) inside the `qt_add_resources(..., "images")` block, or the icon will not ship in the build. Multi-color brand art (Jade, logos, watermarks, flags) stays in the legacy trees and should not be colorized.
 
 ## Testing considerations
 

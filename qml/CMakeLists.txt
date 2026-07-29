@@ -104,6 +104,7 @@ set(QML_FILES_WORKFLOWS
     SetRecoveryEmailDialog.qml
     LedgerSignTransactionView.qml
     AssetIcon.qml
+    ColorIcon.qml
     ProviderIcon.qml
     AuthHandlerTaskView.qml
     GetCredentialsView.qml

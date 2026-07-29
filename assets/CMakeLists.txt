@@ -532,23 +532,19 @@ qt_add_resources(${APP_TARGET} "images"
         svg/send-white.svg
         svg/receive-white.svg
 
-        000000/24/arrows-down-up.svg
-        000000/24/check.svg
-        000000/24/clipboard.svg
-        000000/24/list-checks.svg
-
-        00bcff/20/magnifying-glass-plus.svg
-
-        a0a0a0/24/bolt.svg
-        a0a0a0/24/coins.svg
-        a0a0a0/24/faders-horizontal.svg
-        a0a0a0/24/globe.svg
-
-        fafafa/20/arrows-down-up.svg
-        fafafa/20/coin-vertical.svg
-        ffffff/16/note.svg
-        ffffff/24/note.svg
-        ffffff/24/hourglass-high.svg
+        icons/arrows-down-up.svg
+        icons/bolt.svg
+        icons/cards.svg
+        icons/check.svg
+        icons/clipboard.svg
+        icons/coin-vertical.svg
+        icons/coins.svg
+        icons/faders-horizontal.svg
+        icons/globe.svg
+        icons/hourglass-high.svg
+        icons/list-checks.svg
+        icons/magnifying-glass-plus.svg
+        icons/note.svg
 )
 
 qt_add_resources(${APP_TARGET} "fonts"

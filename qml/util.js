@@ -333,7 +333,7 @@ function transactionTypeLabel(transaction) {
 
 function transactionIcon(type, confirmations)
 {
-    return confirmations > 0 ? `qrc:/svg2/tx-${type}.svg` : 'qrc:/ffffff/24/hourglass-high.svg'
+    return confirmations > 0 ? `qrc:/svg2/tx-${type}.svg` : 'qrc:/icons/hourglass-high.svg'
 }
 
 function twoFactorMethodLabel(method)

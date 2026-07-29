@@ -139,15 +139,18 @@ WalletDrawer {
                             spacing: 12
 
                             FeatureRow {
-                                icon: 'qrc:/a0a0a0/24/coins.svg'
+                                icon: 'qrc:/icons/coins.svg'
+                                iconColor: '#A0A0A0'
                                 text: 'Low Fees'
                             }
                             FeatureRow {
-                                icon: 'qrc:/a0a0a0/24/bolt.svg'
+                                icon: 'qrc:/icons/bolt.svg'
+                                iconColor: '#A0A0A0'
                                 text: 'Instant Transactions'
                             }
                             FeatureRow {
-                                icon: 'qrc:/a0a0a0/24/globe.svg'
+                                icon: 'qrc:/icons/globe.svg'
+                                iconColor: '#A0A0A0'
                                 text: 'Global, Permissionless Payments'
                             }
                         }
@@ -230,14 +233,15 @@ WalletDrawer {
     }
     component FeatureRow: RowLayout {
         required property string icon
+        property color iconColor: 'transparent'
         required property string text
         id: feature_row
         spacing: 8
-        Image {
+        ColorIcon {
             Layout.preferredWidth: 20
             Layout.preferredHeight: 20
-            fillMode: Image.PreserveAspectFit
-            source: icon
+            color: feature_row.iconColor
+            source: feature_row.icon
         }
         Label {
             color: '#FAFAFA'

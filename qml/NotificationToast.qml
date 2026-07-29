@@ -381,8 +381,9 @@ ColumnLayout {
         backgroundColor: '#FF746C'
         textColor: '#000000'
         contentItem: RowLayout {
-            Image {
-                source: 'qrc:/000000/24/list-checks.svg'
+            ColorIcon {
+                color: '#000000'
+                source: 'qrc:/icons/list-checks.svg'
             }
             Label {
                 Layout.fillWidth: true

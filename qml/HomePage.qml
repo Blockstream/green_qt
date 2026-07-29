@@ -312,8 +312,9 @@ Page {
             }
             HSpacer {
             }
-            Image {
-                source: 'qrc:/ffffff/16/note.svg'
+            ColorIcon {
+                color: '#FFFFFF'
+                source: 'qrc:/icons/note.svg'
                 visible: delegate.transaction.memo?.length > 0
             }
             TransactionAmounts {

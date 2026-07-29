@@ -116,7 +116,8 @@ StackViewPage {
                     Layout.topMargin: -14
                     Layout.bottomMargin: -14
                     id: invert_button
-                    icon.source: 'qrc:/fafafa/20/arrows-down-up.svg'
+                    icon.source: 'qrc:/icons/arrows-down-up.svg'
+                    icon.color: '#FAFAFA'
                     padding: 5
                     z: 1
                     background: Rectangle {

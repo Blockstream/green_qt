@@ -121,7 +121,8 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     enabled: !self.account.network.liquid && self.asset.key === 'btc'
-                    icon.source: 'qrc:/fafafa/20/coin-vertical.svg'
+                    icon.source: 'qrc:/icons/coin-vertical.svg'
+                    icon.color: '#FAFAFA'
                     text: qsTrId('id_buy')
                     visible: self.context.mainnet
                     onClicked: {
@@ -151,7 +152,8 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     enabled: !self.context.watchonly
-                    icon.source: 'qrc:/fafafa/20/arrows-down-up.svg'
+                    icon.source: 'qrc:/icons/arrows-down-up.svg'
+                    icon.color: '#FAFAFA'
                     text: qsTrId('id_swap')
                     visible: self.context.mainnet && self.asset.policy
                     onClicked: {
@@ -212,9 +214,10 @@ StackViewPage {
         bottomPadding: 20
         contentItem: ColumnLayout {
             spacing: 10
-            Image {
+            ColorIcon {
                 Layout.alignment: Qt.AlignCenter
                 id: image
+                color: button.icon.color
                 source: button.icon.source
             }
             Label {

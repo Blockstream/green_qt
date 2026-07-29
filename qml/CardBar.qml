@@ -184,7 +184,8 @@ Pane {
                     id: swap_action_tile
                     enabled: !self.context.watchonly && !self.context.wallet.login.device
                     text: qsTrId('id_swap')
-                    icon.source: 'qrc:/fafafa/20/arrows-down-up.svg'
+                    icon.source: 'qrc:/icons/arrows-down-up.svg'
+                    icon.color: '#FAFAFA'
                     onClicked: {
                         more_menu.close()
                         more_btn.onSwapClicked()
@@ -213,6 +214,7 @@ Pane {
         rightPadding: 8
         topPadding: 16
         bottomPadding: 16
+        icon.color: 'transparent'
         background: Rectangle {
             color: '#181818'
             border.width: 1
@@ -227,12 +229,12 @@ Pane {
         }
         contentItem: ColumnLayout {
             spacing: 4
-            Image {
+            ColorIcon {
                 Layout.preferredHeight: 20
                 Layout.preferredWidth: 20
                 Layout.alignment: Qt.AlignHCenter
+                color: tile.icon.color
                 source: tile.icon.source
-                fillMode: Image.PreserveAspectFit
                 opacity: tile.enabled ? 1 : 0.25
             }
             Label {
