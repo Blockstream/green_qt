@@ -1,5 +1,5 @@
 set(BLOCKSTREAM_PROJECT_NAME "blockstream")
-set(BLOCKSTREAM_VERSION "3.4.1")
+set(BLOCKSTREAM_VERSION "3.5.0")
 set(BLOCKSTREAM_DISPLAY_NAME "Blockstream")
 set(BLOCKSTREAM_VENDOR "Blockstream")
 set(BLOCKSTREAM_DESCRIPTION "Non-custodial Bitcoin wallet desktop application")

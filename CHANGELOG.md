@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.0] - 2026-08-10
+### Added
+- Lightning Network support (Beta): enable a Lightning node from wallet settings, with dedicated send and receive pages (mainnet software wallets only, excluding BIP39 wallets)
+- AMP2 accounts, unified with AMP0 accounts in the wallet UI (testnet only)
+- Jade QR Connect for connecting and unlocking Jade over QR codes
+- Airgapped signing with Jade on watch-only wallets
+
+### Changed
+- Temporarily disabled new swaps (Bitcoin/Liquid, and Liquid Bitcoin via Lightning) due to a service interruption; existing funds are unaffected
+- Migrated crash reporting from Crashpad to sentry-native, and disabled Sentry automatic session tracking
+- macOS disk images now contain only the native architecture
+- Windows wallet libraries are now code signed
+- Updated references from Green to Blockstream across the app and translations
+- Restored legacy multisig nLockTime and recovery email flows
+- Auto select asset and account in the receive flow
+- Updated transaction completed and failed pages
+- Disabled archiving for non-empty accounts and single account wallets
+- Disabled the PIN field when no login attempts remain
+- Show testnet unit labels in amount fields
+- Use the converted fiat currency in the unit menu
+- Supplement existing Jade entropy with additional host entropy
+- Configure builds with CMake presets
+- Updated GDK to 0.77.7
+- Updated LWK to 0.18.3
+- Updated zxing-cpp
+
+### Removed
+- Telegram 2FA
+- Delete wallet dialog
+
+### Fixed
+- Total balance fiat conversion on testnet
+- Send flow for BIP21 recipients
+- Balance refresh after payment
+- Focus after switching wallet
+- Lightning payments denominated in millisatoshi
+- Greedy spend amount now read from PSET outputs
+- Jade firmware update offering an already-installed version
+- Jade firmware update prompt while the device state is unsaved
+- Crash on exit when using Tor
+- Crash when Countly is unavailable, with graceful handling of network issues
+
 ## [3.4.1] - 2026-06-17
 ### Added
 - BOLT12 offer description support
