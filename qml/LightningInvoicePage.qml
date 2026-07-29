@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
+
 StackViewPage {
     required property Context context
     required property string invoice
@@ -48,6 +50,9 @@ StackViewPage {
             onClicked: {
                 Clipboard.copy(self.invoiceUri)
                 copy_timer.restart()
+                if (self.asset.lightning) {
+                    Analytics.recordEvent('receive_address', AnalyticsJS.segmentationLightningReceiveAddress(Settings, self.context))
+                }
             }
             Timer {
                 id: copy_timer

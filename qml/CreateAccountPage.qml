@@ -5,6 +5,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 
+import "analytics.js" as AnalyticsJS
+
 StackViewPage {
     signal created(account: Account)
     required property Context context
@@ -190,7 +192,10 @@ StackViewPage {
                 type: page.type
                 recoveryMnemonic: page.mnemonic
                 recoveryXpub: page.xpub
-                onCreated: (account) => self.created(account)
+                onCreated: (account) => {
+                    Analytics.recordEvent('account_create', AnalyticsJS.segmentationSubAccount(Settings, account))
+                    self.created(account)
+                }
                 onFailed: (error) => self.replacePage(error_page, { error })
             }
 

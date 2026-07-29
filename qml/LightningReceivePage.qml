@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
+
 StackViewPage {
     required property Context context
     
@@ -53,6 +55,7 @@ StackViewPage {
             if (self.invoicePushed || controller.invoice.length === 0) return
 
             self.invoicePushed = true
+            Analytics.recordEvent('invoice_create', AnalyticsJS.segmentationLightning(Settings, self.context))
             self.StackView.view.push(lightning_invoice_page, {
                 invoice: controller.invoice,
                 amountSats: Number(controller.satoshi),

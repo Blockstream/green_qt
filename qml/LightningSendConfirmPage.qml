@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
+
 StackViewPage {
     required property Context context
     required property LightningSendController controller
@@ -26,16 +28,24 @@ StackViewPage {
         busy: self.controller.busy
         enabled: self.controller.canPay
         text: qsTrId('id_send')
-        onClicked: self.controller.pay()
+        onClicked: {
+            Analytics.recordEvent('send_attempt', AnalyticsJS.segmentationLightningTransaction(Settings, self.context))
+            self.controller.pay()
+        }
     }
 
     Connections {
         target: self.controller
         function onPaid() {
             Settings.registerEvent({ invoice: self.controller.input })
+            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationLightningTransaction(Settings, self.context))
             self.pushPage(transaction_completed_page)
         }
         function onFailed(error) {
+            const segmentation = AnalyticsJS.segmentationLightningTransaction(Settings, self.context)
+            segmentation.error = error
+            segmentation.node_id = self.context.lightningNodeInfo?.id ?? ''
+            Analytics.recordEvent('failed_transaction', segmentation)
             self.pushPage(transaction_failed_page, { error })
         }
     }

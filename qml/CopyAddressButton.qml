@@ -4,6 +4,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
+    signal copied()
+
     property string content: self.text
     id: self
     padding: 10
@@ -43,6 +45,7 @@ AbstractButton {
     onClicked: {
         Clipboard.copy(self.content)
         timer.restart()
+        self.copied()
     }
     Timer {
         id: timer

@@ -1,7 +1,10 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+
+import "analytics.js" as AnalyticsJS
 
 WalletDrawer {
     property string error: ''
@@ -19,7 +22,10 @@ WalletDrawer {
     Connections {
         target: controller.monitor
         function onAllFinishedOrFailed() {
-            if (!self.error) self.close();
+            if (!self.error) {
+                Analytics.recordEvent('account_create', AnalyticsJS.segmentationLightning(Settings, self.context))
+                self.close()
+            }
         }
     }
 
@@ -27,6 +33,7 @@ WalletDrawer {
         target: controller
         function onFailed(error) {
             self.error = error
+            Analytics.recordEvent('enable_failed')
         }
     }
 
@@ -45,6 +52,7 @@ WalletDrawer {
                     text: 'Enable Lightning'
                     onClicked: {
                         self.error = ''
+                        Analytics.recordEvent('enable_start')
                         controller.enable()
                     }
                 }

@@ -144,15 +144,35 @@ function segmentationWalletLogin(Settings, context, { method }) {
 
 function segmentationSubAccount(Settings, account) {
     const segmentation = segmentationSession(Settings, account.context)
+    segmentation.account_type = account.type
     return segmentation
 }
 
-function segmentationReceiveAddress(Settings, account, type) {
+function segmentationLightning(Settings, context, { invoice_type } = {}) {
+    const segmentation = segmentationSession(Settings, context)
+    segmentation.account_type = 'lightning'
+    if (invoice_type) segmentation.invoice_type = invoice_type
+    return segmentation
+}
+
+function segmentationReceiveAddress(Settings, account, type, { method = 'copy' } = {}) {
     const segmentation = segmentationSubAccount(Settings, account)
     segmentation.type = type
     segmentation.media = 'text'
-    segmentation.method = 'copy'
+    segmentation.method = method
     return segmentation
+}
+
+function segmentationLightningReceiveAddress(Settings, context, { method = 'copy' } = {}) {
+    const segmentation = segmentationLightning(Settings, context)
+    segmentation.type = 'invoice'
+    segmentation.media = 'text'
+    segmentation.method = method
+    return segmentation
+}
+
+function segmentationLightningTransaction(Settings, context) {
+    return segmentationLightning(Settings, context, { invoice_type: 'bolt11' })
 }
 
 function segmentationTransaction(Settings, account, { address_input, transaction_type, with_memo }) {

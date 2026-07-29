@@ -382,6 +382,10 @@ StackViewPage {
                         Layout.preferredWidth: 0
                         content: controller.uri
                         text: qsTrId('id_copy_address')
+                        onCopied: {
+                            const type = controller.uri.includes(':') ? 'uri' : 'address'
+                            Analytics.recordEvent('receive_address', AnalyticsJS.segmentationReceiveAddress(Settings, controller.account, type))
+                        }
                     }
                 }
             }

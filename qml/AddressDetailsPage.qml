@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
+
 StackViewPage {
     required property Context context
     required property Address address
@@ -13,6 +15,7 @@ StackViewPage {
         spacing: 20
         ShareButton {
             url: self.address.url
+            onShared: Analytics.recordEvent('receive_address', AnalyticsJS.segmentationReceiveAddress(Settings, self.address.account, 'uri', { method: 'share' }))
         }
         CloseButton {
             onClicked: self.closeClicked()
@@ -63,6 +66,7 @@ StackViewPage {
                     Layout.alignment: Qt.AlignCenter
                     content: self.address.address
                     text: qsTrId('id_copy_address')
+                    onCopied: Analytics.recordEvent('receive_address', AnalyticsJS.segmentationReceiveAddress(Settings, self.address.account, 'address'))
                 }
             }
         }
