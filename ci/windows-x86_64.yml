@@ -96,7 +96,7 @@ windows-x86_64:sign:
       -e SSL_COM_PASSWORD
       -e SSL_COM_TOTP_SECRET
       "$GAR/green_qt/codesigntool:latest"
-      bash -lc 'bash CodeSignTool.sh sign
+      bash -c 'set -e; bash CodeSignTool.sh sign
       -credential_id="$SSL_COM_CREDENTIAL_ID"
       -username="$SSL_COM_USERNAME"
       -password="$SSL_COM_PASSWORD"
@@ -164,7 +164,7 @@ windows-x86_64:installer:
       -e INPUT_FILE
       -e OUTPUT_FILE
       "$GAR/green_qt/codesigntool:latest"
-      bash -lc 'mkdir -p signed;
+      bash -c 'set -e; mkdir -p signed;
       bash CodeSignTool.sh sign
       -credential_id="$SSL_COM_CREDENTIAL_ID"
       -username="$SSL_COM_USERNAME"
