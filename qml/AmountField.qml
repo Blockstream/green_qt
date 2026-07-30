@@ -170,8 +170,6 @@ TTextField {
         topPadding: 0
         anchors.right: parent.right
         anchors.rightMargin: self.embed ? 0 : 16
-        //anchors.verticalCenter: parent.verticalCenter
-        //anchors.verticalCenterOffset: self.convert.fiat.available ? -2 : 3
         anchors.bottom: self.baseline
         anchors.bottomMargin: -4.5
         enabled: self.dynamic && (self.convert.fiat.available ?? false)
@@ -210,7 +208,7 @@ TTextField {
             GMenu.Item {
                 enabled: self.convert.fiat.available
                 hideIcon: true
-                text: self.session?.settings?.pricing?.currency ?? ''
+                text: self.convert.fiat?.currency ?? ''
                 onClicked: {
                     unit_menu.close()
                     self.setFiat()
