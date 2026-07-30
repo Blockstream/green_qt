@@ -54,10 +54,6 @@ public:
 };
 
 namespace {
-// TODO CHANGE BLINDING KEY: shared placeholder, matches green_android until
-// AMP2 derives a per-wallet blinding key.
-const char* kAmp2BlindingKey = "slip77(0684e43749a3a3eb0362dcef8c66994bd51d33f8ce6b055126a800a626fc0d67)";
-
 // Sleeps up to total_ms, waking early (in step_ms increments) if `stopped`
 // flips true, so shutdown doesn't have to wait out a long backoff.
 void SleepUnlessStopped(const std::atomic<bool>& stopped, int total_ms)
@@ -154,7 +150,7 @@ LwkAmp2AccountController::Amp2Derivation LwkAmp2AccountController::deriveAmp2() 
         const std::string url = "https://amp.enterprise.blockstream.com";
 
         result.amp2 = lwk::Amp2::init(server_key, url);
-        result.amp2_desc = result.amp2->descriptor_from_str(user_xpub, kAmp2BlindingKey);
+        result.amp2_desc = result.amp2->descriptor_from_str(user_xpub, signer->slip77_master_blinding_key());
         result.descriptor = QString::fromStdString(result.amp2_desc->descriptor()->to_string());
         // Build the wollet here (network-free); the caller sets it on the
         // controller via start() and triggers the full scan.
