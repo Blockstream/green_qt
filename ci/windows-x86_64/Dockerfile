@@ -18,7 +18,7 @@ RUN install -d $PREFIX/bin
 RUN install build/gdk/build-windows-mingw-w64/src/libgreen_gdk.dll $PREFIX/bin
 RUN cd $PREFIX/bin && gendef libgreen_gdk.dll
 
-FROM base as libserialport
+FROM base AS libserialport
 COPY tools/buildlibserialport.sh tools/buildlibserialport.sh tools/
 RUN tools/buildlibserialport.sh
 RUN apt install -yqq mingw-w64-tools
