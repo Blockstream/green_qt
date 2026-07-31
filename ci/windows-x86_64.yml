@@ -1,4 +1,10 @@
-windows-x86_64:build-gdk:
+# Cross-compiles GDK and libserialport for Windows with MinGW. Nothing needs this job:
+# windows-x86_64:build-image takes the same tree from windows-x86_64:depends instead, so
+# the Windows image can be rebuilt without recompiling GDK.
+# To bump GDK: edit GDK_COMMIT in tools/buildgdk.sh, run this job, then set IMAGE in
+# windows-x86_64:depends to the digest pushed here (same @sha256: pinning convention as
+# ci/linux-x86_64.yml and ci/lint.yml).
+windows-x86_64:build-with-mingw:
   extends: .docker_build
   variables:
     IMAGE: $GAR/green_qt/windows-x86_64
@@ -10,17 +16,37 @@ windows-x86_64:build-gdk:
       --cache-from ${IMAGE}:latest -t ${IMAGE}:$CI_COMMIT_SHA -t ${IMAGE}:latest
       -f ${DOCKER_FILE} . --progress=plain &>docker-build.log
     - tail -n 1000 docker-build.log
-    - id=$(docker create ${IMAGE}:$CI_COMMIT_SHA)
+    - docker push ${IMAGE}:${CI_COMMIT_SHA}
+    - if [ "${CI_COMMIT_BRANCH}" == "${CI_DEFAULT_BRANCH}" ]; then docker push ${IMAGE}:latest; fi
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    paths:
+      - docker-build.log
+
+# Extracts the MinGW-built GDK/libserialport tree from the last published windows-x86_64
+# image, so windows-x86_64:build-image gets its depends without a GDK rebuild. Runs on a
+# linux runner: the windows runner's docker daemon is in windows-container mode and cannot
+# create a container from this image.
+windows-x86_64:depends:
+  extends: .gar_wif
+  stage: depends
+  needs: []
+  when: manual
+  tags:
+    - cloud
+  variables:
+    IMAGE: $GAR/green_qt/windows-x86_64@sha256:8f4414361ecde588abf69f9a81bfcac69a369cd0ec53f31e8f2f38bf68e6c36b
+  script:
+    - docker pull "$IMAGE"
+    - id=$(docker create "$IMAGE")
     - docker cp $id:/depends depends
     - docker rm $id
-    - docker push ${IMAGE}:${CI_COMMIT_SHA}
-    - if [ ${CI_COMMIT_BRANCH} == "master" ]; then docker push ${IMAGE}:latest; fi
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     paths:
       - depends
-      - docker-build.log
 
 .windows_gar_wif:
   extends:
@@ -45,7 +71,7 @@ windows-x86_64:build-image:
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
   needs:
-    - windows-x86_64:build-gdk
+    - windows-x86_64:depends
   tags:
     - windows
   script:
