@@ -9,6 +9,9 @@
 #include <QStringList>
 #include <QUrl>
 
+Q_MOC_INCLUDE("account.h")
+Q_MOC_INCLUDE("transaction.h")
+
 class AirgappedSignController : public Controller
 {
     Q_OBJECT

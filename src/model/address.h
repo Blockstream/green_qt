@@ -7,6 +7,9 @@
 #include <QObject>
 #include <QtQml>
 
+Q_MOC_INCLUDE("account.h")
+Q_MOC_INCLUDE("context.h")
+
 class Account;
 
 class Address : public QObject

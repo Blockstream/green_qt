@@ -5,26 +5,26 @@ target_sources(${APP_TARGET} PRIVATE
     main.cpp
     application.h application.cpp
     applicationcontroller.h applicationcontroller.cpp
-    context.h context.cpp
-    contextmodel.h contextmodel.cpp
-    limitmodel.h limitmodel.cpp
     green.h
     green_settings.h green_settings.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    account.h account.cpp
+    model/account.h model/account.cpp
     activity.h activity.cpp
     progress.h progress.cpp
-    asset.h asset.cpp
-    address.h address.cpp
+    model/asset.h model/asset.cpp
+    model/address.h model/address.cpp
+    model/context.h model/context.cpp
+    model/contextmodel.h model/contextmodel.cpp
+    model/limitmodel.h model/limitmodel.cpp
     connectable.h
     network.h network.cpp
-    output.h output.cpp
+    model/output.h model/output.cpp
     payment.h payment.cpp
     session.h session.cpp
-    transaction.h transaction.cpp
-    wallet.h wallet.cpp
+    model/transaction.h model/transaction.cpp
+    model/wallet.h model/wallet.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
@@ -146,8 +146,8 @@ target_sources(${APP_TARGET} PRIVATE
 target_sources(${APP_TARGET} PRIVATE
     outputlistmodel.h outputlistmodel.cpp
     outputlistmodelfilter.h outputlistmodelfilter.cpp
-    walletlistmodel.h walletlistmodel.cpp
-    walletmanager.h walletmanager.cpp
+    model/walletlistmodel.h model/walletlistmodel.cpp
+    model/walletmanager.h model/walletmanager.cpp
     sessionmanager.h sessionmanager.cpp
     wally.h wally.cpp
 )

@@ -4,6 +4,8 @@
 #include "controller.h"
 #include "swap.h"
 
+Q_MOC_INCLUDE("address.h")
+
 class Address;
 class ChainSwapControllerPrivate;
 

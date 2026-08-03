@@ -5,6 +5,8 @@
 #include "green.h"
 #include "recipient.h"
 
+Q_MOC_INCLUDE("asset.h")
+
 class Account;
 
 // Builds an AMP2 spend PSET via lwk. AMP2 accounts have no gdk session, so the

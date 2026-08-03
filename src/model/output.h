@@ -9,7 +9,6 @@ class Account;
 class AccountTransaction;
 class Asset;
 class Context;
-class Session;
 
 class Output : public QObject
 {
@@ -30,7 +29,6 @@ class Output : public QObject
 public:
     explicit Output(const QJsonObject& data, Account* account);
     Account* account() const { return m_account; }
-    Session* session() const;
     Asset* asset() const { return m_asset; }
     QString address() const { return m_address; }
     void setAddress(const QString& address);

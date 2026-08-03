@@ -11,6 +11,8 @@
 #include "green.h"
 #include "lwk/lwk.hpp"
 
+Q_MOC_INCLUDE("transaction.h")
+
 class Swap : public ContextTransaction
 {
     Q_OBJECT

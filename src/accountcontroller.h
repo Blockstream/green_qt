@@ -3,6 +3,8 @@
 
 #include "controller.h"
 
+Q_MOC_INCLUDE("account.h")
+
 class Account;
 
 class AccountController : public Controller
