@@ -82,6 +82,7 @@ macos-x86_64:staple:
       optional: true
   script:
     - mv macos-x86_64/Blockstream.app Blockstream.app
+    - tools/macos-thin.sh Blockstream.app x86_64
     - tools/macos-staple.sh Blockstream.app
     - tools/packdmg.sh Blockstream.app
     - tools/macos-staple.sh Blockstream.dmg
