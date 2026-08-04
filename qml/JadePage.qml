@@ -85,6 +85,10 @@ StackViewPage {
         if (!self.ready) return
         if (self.genuineCheckDialog) return
         if (firmware_controller.fetching) return
+        if (self.device.state === JadeDevice.StateUnsaved) {
+            skipFirmwareUpdate()
+            return
+        }
         console.log('can push view: stack view empty, device ready, no genuine check dialog, not fetching fws')
         if (['JADE_V2', 'JADE_V2C'].includes(self.device.versionInfo.BOARD_TYPE)) {
             if (!self.skipGenuineCheck) {
@@ -270,7 +274,7 @@ StackViewPage {
             device: self.device
             latestFirmware: self.latestFirmware
             onUpdateClicked: stack_view.replace(null, basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
-            onSetupFinished: (context) => stack_view.replace(null, login_view, { context, device: self.device }, StackView.PushTransition)
+            onSetupFinished: (context) => stack_view.clear()
         }
     }
 
