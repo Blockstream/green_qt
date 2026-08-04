@@ -16,6 +16,8 @@
 #include "jadebleimpl.h"
 #include "jadeserialimpl.h"
 
+#include <gdk.h>
+
 // Useful for sending null values in tx-signing calls
 QVariant JadeAPI::NULL_CHANGE_ENTRY;
 QVariantMap JadeAPI::NULL_COMMITMENT_ENTRY;
@@ -375,6 +377,25 @@ int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const H
     const QCborMap request = getRequest(id, "auth_user", params);
     enqueue(request);
     return id;
+}
+
+void JadeAPI::authUserWithEntropy(const QString &network, const ResponseHandler &cb, const HttpRequestProxy& request_proxy)
+{
+    QByteArray entropy(32, Qt::Uninitialized);
+    const auto rc = GA_get_random_bytes(32, (unsigned char*) entropy.data(), 32);
+
+    if (rc != GA_OK) {
+        QTimer::singleShot(0, [=] { cb({{ "error", "failed to get random bytes" }}); });
+        return;
+    }
+
+    addEntropy(entropy, [=, this](const QVariantMap& msg) {
+        if (msg.contains("result") && msg["result"].toBool()) {
+            authUser(network, cb, request_proxy);
+        } else {
+            cb({{ "error", "failed add entropy" }});
+        }
+    });
 }
 
 int JadeAPI::logout(const ResponseHandler &cb)

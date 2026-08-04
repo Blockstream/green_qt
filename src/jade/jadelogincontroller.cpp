@@ -192,7 +192,7 @@ void JadeSetupTask::update()
     setStatus(Status::Active);
     device->setUnlocking(true);
 
-    device->api()->authUser(network->canonicalId(), [=, this](const QVariantMap& msg) {
+    device->api()->authUserWithEntropy(network->canonicalId(), [=, this](const QVariantMap& msg) {
         device->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
             qDebug() << Q_FUNC_INFO;
@@ -332,7 +332,7 @@ void JadeUnlockTask::update()
         setStatus(Status::Failed);
     }, Qt::SingleShotConnection);
 
-    device->api()->authUser(network->canonicalId(), [=, this](const QVariantMap& msg) {
+    device->api()->authUserWithEntropy(network->canonicalId(), [=, this](const QVariantMap& msg) {
         if (m_status != Status::Active) return;
         device->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
@@ -371,7 +371,7 @@ void JadeIdentifyTask::update()
 
     if (device->state() == JadeDevice::StateLocked) return;
     if (device->state() == JadeDevice::StateTemporary) {
-        device->api()->authUser(network->canonicalId(), [=, this](const QVariantMap& msg) {
+        device->api()->authUserWithEntropy(network->canonicalId(), [=, this](const QVariantMap& msg) {
             qDebug() << Q_FUNC_INFO;
             device->updateVersionInfo();
         }, [=, this](JadeAPI& jade, int id, const QJsonObject& req) {

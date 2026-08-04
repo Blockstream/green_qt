@@ -53,7 +53,7 @@ void JadeUnlockActivity::exec()
     auto backend = m_device->api();
     if (!backend) return;
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
-    backend->authUser(nets == "TEST" ? "testnet" : "mainnet", [this](const QVariantMap& msg) {
+    backend->authUserWithEntropy(nets == "TEST" ? "testnet" : "mainnet", [this](const QVariantMap& msg) {
         if (msg.contains("result") && msg["result"] == true) {
             finish();
         } else {
