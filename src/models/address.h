@@ -1,5 +1,5 @@
-#ifndef GREEN_ADDRESS_H
-#define GREEN_ADDRESS_H
+#ifndef BLOCKSTREAM_ADDRESS_H
+#define BLOCKSTREAM_ADDRESS_H
 
 #include "green.h"
 
@@ -52,4 +52,4 @@ public:
     bool m_verified{false};
 };
 
-#endif // GREEN_ADDRESS_H
+#endif // BLOCKSTREAM_ADDRESS_H

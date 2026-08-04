@@ -1,5 +1,5 @@
-#ifndef GREEN_WALLET_H
-#define GREEN_WALLET_H
+#ifndef BLOCKSTREAM_WALLET_H
+#define BLOCKSTREAM_WALLET_H
 
 #include "green.h"
 
@@ -186,4 +186,4 @@ private:
     Context* m_context{nullptr};
 };
 
-#endif // GREEN_WALLET_H
+#endif // BLOCKSTREAM_WALLET_H

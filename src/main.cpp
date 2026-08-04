@@ -26,7 +26,7 @@
 #include "analytics.h"
 #include "application.h"
 #include "applicationcontroller.h"
-#include "asset.h"
+#include "assetmanager.h"
 #include "clipboard.h"
 #include "config.h"
 #include "context.h"

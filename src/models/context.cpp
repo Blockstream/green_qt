@@ -2,6 +2,7 @@
 #include "address.h"
 #include "appupdatecontroller.h"
 #include "asset.h"
+#include "assetmanager.h"
 #include "bip85.h"
 #include "context.h"
 #include "controllers/lwkamp2accountcontroller.h"

@@ -1,5 +1,5 @@
-#ifndef GREEN_OUTPUT_H
-#define GREEN_OUTPUT_H
+#ifndef BLOCKSTREAM_OUTPUT_H
+#define BLOCKSTREAM_OUTPUT_H
 
 #include <QJsonObject>
 #include <QObject>
@@ -83,4 +83,4 @@ public:
     AccountTransaction* m_spending_transaction{nullptr};
 };
 
-#endif // GREEN_OUTPUT_H
+#endif // BLOCKSTREAM_OUTPUT_H

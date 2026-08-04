@@ -1,5 +1,5 @@
-#ifndef GREEN_TRANSACTION_H
-#define GREEN_TRANSACTION_H
+#ifndef BLOCKSTREAM_TRANSACTION_H
+#define BLOCKSTREAM_TRANSACTION_H
 
 #include "context.h"
 #include "green.h"
@@ -125,4 +125,4 @@ private:
     QJsonObject m_data;
 };
 
-#endif // GREEN_TRANSACTION_H
+#endif // BLOCKSTREAM_TRANSACTION_H

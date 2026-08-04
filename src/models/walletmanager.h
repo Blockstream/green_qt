@@ -1,5 +1,5 @@
-#ifndef GREEN_WALLETMANAGER_H
-#define GREEN_WALLETMANAGER_H
+#ifndef BLOCKSTREAM_WALLETMANAGER_H
+#define BLOCKSTREAM_WALLETMANAGER_H
 
 #include <QJsonObject>
 #include <QObject>
@@ -57,4 +57,4 @@ public:
     QString m_open_url;
 };
 
-#endif // GREEN_WALLETMANAGER_H
+#endif // BLOCKSTREAM_WALLETMANAGER_H

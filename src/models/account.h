@@ -1,5 +1,5 @@
-#ifndef GREEN_ACCOUNT_H
-#define GREEN_ACCOUNT_H
+#ifndef BLOCKSTREAM_ACCOUNT_H
+#define BLOCKSTREAM_ACCOUNT_H
 
 #include "green.h"
 
@@ -106,4 +106,4 @@ private:
     QStringList m_dangling_transactions;
 };
 
-#endif // GREEN_ACCOUNT_H
+#endif // BLOCKSTREAM_ACCOUNT_H

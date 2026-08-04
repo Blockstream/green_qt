@@ -1,14 +1,15 @@
-#ifndef GREEN_ASSET_H
-#define GREEN_ASSET_H
+#ifndef BLOCKSTREAM_ASSET_H
+#define BLOCKSTREAM_ASSET_H
 
 #include "green.h"
 
 #include <QJsonObject>
 #include <QObject>
 #include <QQmlEngine>
-#include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QString>
+
+constexpr auto kLightningAssetId = "lnbtc";
 
 class Asset : public QObject
 {
@@ -91,62 +92,4 @@ private:
     QString m_key;
 };
 
-class AssetManager : public QObject
-{
-    Q_OBJECT
-public:
-    explicit AssetManager();
-    virtual ~AssetManager();
-
-    static AssetManager* instance();
-
-    static AssetManager* create(QQmlEngine*, QJSEngine*);
-
-    QStandardItemModel* model() const { return m_model; }
-
-    Q_INVOKABLE Asset* assetWithId(const QString& deployment, const QString& id);
-
-private:
-    QMap<QPair<QString, QString>, Asset*> m_assets;
-    QStandardItemModel* const m_model;
-};
-
-class AssetsModel : public QSortFilterProxyModel
-{
-    Q_OBJECT
-    Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
-    Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
-    Q_PROPERTY(int minWeight READ minWeight WRITE setMinWeight NOTIFY minWeightChanged)
-    Q_PROPERTY(bool showAmp READ showAmp WRITE setShowAmp NOTIFY showAmpChanged)
-    Q_PROPERTY(bool showLightning READ showLightning WRITE setShowLightning NOTIFY showLightningChanged)
-    QML_ELEMENT
-public:
-    AssetsModel(QObject* parent = nullptr);
-    QString filter() const { return m_filter; }
-    void setFilter(const QString& filter);
-    Context* context() const { return m_context; }
-    void setContext(Context* context);
-    int minWeight() const { return m_min_weight; }
-    void setMinWeight(int min_weight);
-    bool showAmp() const { return m_show_amp; }
-    void setShowAmp(bool show_amp);
-    bool showLightning() const { return m_show_lightning; }
-    void setShowLightning(bool show_lightning);
-signals:
-    void filterChanged();
-    void contextChanged();
-    void minWeightChanged();
-    void showAmpChanged();
-    void showLightningChanged();
-protected:
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
-private:
-    QString m_filter;
-    Context* m_context{nullptr};
-    int m_min_weight{0};
-    bool m_show_amp{true};
-    bool m_show_lightning{false};
-};
-
-#endif // GREEN_ASSET_H
+#endif // BLOCKSTREAM_ASSET_H

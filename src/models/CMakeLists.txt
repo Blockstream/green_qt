@@ -2,6 +2,8 @@ target_sources(${APP_TARGET} PRIVATE
     account.h account.cpp
     address.h address.cpp
     asset.h asset.cpp
+    assetmanager.h assetmanager.cpp
+    assetsmodel.h assetsmodel.cpp
     context.h context.cpp
     contextmodel.h contextmodel.cpp
     limitmodel.h limitmodel.cpp

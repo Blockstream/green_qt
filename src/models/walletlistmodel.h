@@ -1,5 +1,5 @@
-#ifndef GREEN_WALLETLISTMODEL_H
-#define GREEN_WALLETLISTMODEL_H
+#ifndef BLOCKSTREAM_WALLETLISTMODEL_H
+#define BLOCKSTREAM_WALLETLISTMODEL_H
 
 #include <QMap>
 #include <QSortFilterProxyModel>
@@ -49,4 +49,4 @@ private:
     Filter m_filter_device_details{Filter::Any};
 };
 
-#endif // GREEN_WALLETLISTMODEL_H
+#endif // BLOCKSTREAM_WALLETLISTMODEL_H
