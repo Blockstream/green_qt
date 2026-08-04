@@ -166,11 +166,13 @@ int JadeAPI::registerResponseHandler(const ResponseHandler &cb, int timeout) {
 // Invoke client callback for request/response when received
 void JadeAPI::callResponseHandler(const QVariantMap &msg)
 {
+    const auto id = msg["id"].toString().toInt();
+    const auto method = msg["method"].toString();
+
     m_idle_timer.restart();
 
     // Get the id from the message
     Q_ASSERT(msg["id"].isValid() && msg["id"].toString().toInt() > 0);
-    const int id = msg["id"].toString().toInt();
 
     // qDebug() << "JadeAPI::callResponseHandler() called for message id" << id;
 
@@ -188,7 +190,7 @@ void JadeAPI::callResponseHandler(const QVariantMap &msg)
     try {
         handler(msg);
     } catch(...) {
-        qWarning() << "JadeAPI::callResponseHandler() - Error in client handler for" << msg;
+        qWarning() << "JadeAPI::callResponseHandler() - Error in client handler for" << id << method;
     }
 }
 
@@ -266,10 +268,11 @@ void JadeAPI::enqueue(const QCborMap &msg)
 
 void JadeAPI::send(const QCborMap &msg)
 {
-    // qInfo() << "JadeAPI::sendToJade() - Sending message ->" << Qt::endl << msg;
+    const auto id = msg["id"].toString().toInt();
+    const auto method = msg["method"].toString();
+    // qInfo() << "JadeAPI::sendToJade() - Sending message ->" << id << method;
     Q_ASSERT(m_jade);
     m_jade->send(msg);
-    int id = msg["id"].toString().toInt();
     int timeout = m_msg_timeout.value(id, 0);
     m_msg_inflight.insert(id);
     if (timeout > 0) QTimer::singleShot(timeout, this, [=, this] {
@@ -280,7 +283,7 @@ void JadeAPI::send(const QCborMap &msg)
         try {
             handler({{ "error", error }});
         } catch(...) {
-            qWarning() << "JadeAPI::callResponseHandler() - Error in client handler for" << msg;
+            qWarning() << "JadeAPI::callResponseHandler() - Error in client handler for" << id << method;
         }
         m_msg_inflight.remove(id);
         drain();
