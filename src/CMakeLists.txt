@@ -1,6 +1,8 @@
 add_subdirectory(core)
 target_link_libraries(${APP_TARGET} PRIVATE blockstream_core)
 
+add_subdirectory(models)
+
 target_sources(${APP_TARGET} PRIVATE
     main.cpp
     application.h application.cpp
@@ -10,21 +12,12 @@ target_sources(${APP_TARGET} PRIVATE
 )
 
 target_sources(${APP_TARGET} PRIVATE
-    model/account.h model/account.cpp
     activity.h activity.cpp
     progress.h progress.cpp
-    model/asset.h model/asset.cpp
-    model/address.h model/address.cpp
-    model/context.h model/context.cpp
-    model/contextmodel.h model/contextmodel.cpp
-    model/limitmodel.h model/limitmodel.cpp
     connectable.h
     network.h network.cpp
-    model/output.h model/output.cpp
     payment.h payment.cpp
     session.h session.cpp
-    model/transaction.h model/transaction.cpp
-    model/wallet.h model/wallet.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
@@ -146,8 +139,6 @@ target_sources(${APP_TARGET} PRIVATE
 target_sources(${APP_TARGET} PRIVATE
     outputlistmodel.h outputlistmodel.cpp
     outputlistmodelfilter.h outputlistmodelfilter.cpp
-    model/walletlistmodel.h model/walletlistmodel.cpp
-    model/walletmanager.h model/walletmanager.cpp
     sessionmanager.h sessionmanager.cpp
     wally.h wally.cpp
 )

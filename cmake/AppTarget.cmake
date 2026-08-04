@@ -172,7 +172,6 @@ endif()
 set(APP_PRIVATE_INCLUDE_DIRS
     src
     src/jade
-    src/model
     src/resolvers
     src/controllers
     src/ledger
