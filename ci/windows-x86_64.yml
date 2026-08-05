@@ -120,7 +120,7 @@ windows-x86_64:sign:
 
 windows-x86_64:installer:
   image:
-    name: amake/innosetup
+    name: amake/innosetup@sha256:e003376ba818547275fe10c95e2a29be0f2d12d45e9eb8f205b6672dc5685bb1
     entrypoint: [""]
   stage: installer
   tags:
