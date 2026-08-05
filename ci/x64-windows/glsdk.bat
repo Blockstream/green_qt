@@ -5,12 +5,14 @@ set PATH=%PATH%;C:\cargo\bin
 
 set GLSDK_REPO=https://github.com/Blockstream/greenlight
 set GLSDK_BRANCH=gl-sdk-v0.4.0
+set GLSDK_COMMIT=c804a01e6f47e1201cfd107f9100704252443a44
 set TARGET=x86_64-pc-windows-msvc
 
 git clone --recurse-submodules --quiet --depth 1 --branch %GLSDK_BRANCH% %GLSDK_REPO% glsdk-src
 
 cd glsdk-src
 git rev-parse HEAD
+git checkout %GLSDK_COMMIT% || exit /b 1
 
 cargo build --target %TARGET% --release -p gl-sdk || exit /b 1
 

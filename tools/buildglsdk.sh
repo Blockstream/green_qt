@@ -3,6 +3,7 @@ set -eo pipefail
 
 REPO=https://github.com/Blockstream/greenlight
 BRANCH=gl-sdk-v0.4.0
+COMMIT=c804a01e6f47e1201cfd107f9100704252443a44
 
 PROJECT_ROOT=$(pwd)
 BUILD_DIR="${BUILD_DIR:-build/glsdk-src}"
@@ -51,6 +52,8 @@ else
 fi
 
 cd "$BUILD_DIR"
+
+git checkout "$COMMIT"
 
 echo "Building gl-sdk with BUILD_DIR='$BUILD_DIR', HOST='$HOST', PREFIX='$PREFIX'..."
 if [ "$HOST" = "windows" ]; then
