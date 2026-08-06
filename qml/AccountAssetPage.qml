@@ -155,7 +155,11 @@ StackViewPage {
                     text: qsTrId('id_swap')
                     visible: self.context.mainnet && self.asset.policy
                     onClicked: {
-                        self.pushPage(chain_swap_create_page)
+                        if (UtilJS.isSwapAvailable('bitcoin', 'liquid')) {
+                            self.pushPage(chain_swap_create_page)
+                        } else {
+                            self.pushPage(swaps_unavailable_page)
+                        }
                     }
                 }
             }
@@ -271,6 +275,13 @@ StackViewPage {
             sendAccount: self.account
             sendNetworkKey: self.account.network.liquid ? 'liquid' : 'bitcoin'
             receiveNetworkKey: self.account.network.liquid ? 'bitcoin' : 'liquid'
+            onCloseClicked: self.closeClicked()
+        }
+    }
+
+    Component {
+        id: swaps_unavailable_page
+        SwapsUnavailablePage {
             onCloseClicked: self.closeClicked()
         }
     }

@@ -306,6 +306,7 @@ set(QML_FILES_FEATURES
     RecipientPage.qml
     SubmarineSwapPage.qml
     SwapDrawer.qml
+    SwapsUnavailablePage.qml
     ChainSwapCreatePage.qml
     ChainSwapReviewPage.qml
     TwoFactorUndoResetDrawer.qml

@@ -494,6 +494,21 @@ function swapNetworkType(network) {
     return null
 }
 
+// Swap creation availability is gated per direction so submarine, reverse, and
+// chain swaps can be re-enabled independently.
+function isSwapAvailable(from, to) {
+    const isChainSwap = (from === 'bitcoin' && to === 'liquid') || (from === 'liquid' && to === 'bitcoin')
+    const isSubmarineSwap = from === 'liquid' && to === 'lightning'
+    const isReverseSwap = from === 'lightning' && to === 'liquid'
+
+    if (isChainSwap) return false
+    if (isSubmarineSwap) return false
+    if (isReverseSwap) return false
+
+    // false by default to avoid accidental exposure of other swaps (e.g. BTC <> LN)
+    return false
+}
+
 function canAirgapSend(context) {
     if (!context?.watchonly || !context.wallet) return false
     const login = context.wallet.login

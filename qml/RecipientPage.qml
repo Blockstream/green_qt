@@ -17,6 +17,11 @@ StackViewPage {
     property var assets
     property var error: null
     readonly property bool closeBlocked: lightning_send_controller.busy
+    readonly property bool submarineSwapAvailable: UtilJS.isSwapAvailable('liquid', 'lightning')
+    readonly property string liquidLightningDisabledError: 'Paying Lightning invoices with Liquid Bitcoin is temporarily disabled.'
+    readonly property bool isLiquidAssetSend: {
+        return !!self.account?.network?.liquid && self.asset?.id === self.account.network.policyAsset
+    }
 
     function updateLightningInvoice(recipient) {
         if (!self.context.mainnet) {
@@ -35,6 +40,10 @@ StackViewPage {
             self.error = { code: 'Invoice already paid.', visible: true }
             return
         }
+        if (self.isLiquidAssetSend && !self.submarineSwapAvailable) {
+            self.error = { code: self.liquidLightningDisabledError, visible: true }
+            return
+        }
 
         lightning_send_controller.input = recipient.input
         lightning_send_controller.invoice = recipient.invoice.invoice ?? recipient.input
@@ -47,11 +56,25 @@ StackViewPage {
             return
         }
 
-        if (lightning_send_controller.sources.length > 1) {
+        const sources = lightning_send_controller.sources
+        const ln_source = sources.find(s => s.type === PaymentSource.Lightning)
+        const liquid_source = sources.find(s => s.type === PaymentSource.GdkAccount)
+
+        if (!self.submarineSwapAvailable) {
+            if (ln_source) {
+                self.error = null
+                return self.pushPaymentSource(ln_source)
+            }
+
+            if (liquid_source) {
+                self.error = { code: self.liquidLightningDisabledError, visible: true }
+                return
+            }
+        }
+
+        if (sources.length > 1) {
             self.error = null
-            return self.pushPage(payment_source_selector_page, {
-                sources: lightning_send_controller.sources
-            })
+            return self.pushPage(payment_source_selector_page, { sources })
         }
 
         if (!lightning_send_controller.selectedSource) {
@@ -106,6 +129,21 @@ StackViewPage {
 
         if (recipient.invoice) {
             return self.updateLightningInvoice(recipient)
+        }
+
+        if (recipient.bip353 || recipient.bolt12 || recipient.lnurl) {
+            if (self.lightningOnly) {
+                self.error = {
+                    code: 'BIP-353 / BOLT12 / LNURL payments are only available for Liquid Bitcoin',
+                    visible: true
+                }
+                return
+            }
+
+            if (!self.submarineSwapAvailable) {
+                self.error = { code: self.liquidLightningDisabledError, visible: true }
+                return
+            }
         }
 
         self.page = (() => {

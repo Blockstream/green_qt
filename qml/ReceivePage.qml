@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 StackViewPage {
     required property Account account
@@ -13,6 +14,8 @@ StackViewPage {
     property bool readonly: false
     property bool invoice: false
     readonly property bool lightningEnabled: self.context.mainnet && !self.context.watchonly && !controller.context.wallet.login.device && self.account.network.liquid && self.asset.id === self.account.network.policyAsset
+    readonly property bool liquidLightningReceiveAvailable: UtilJS.isSwapAvailable('lightning', 'liquid')
+    readonly property bool showLightningInvoiceForm: self.invoice && self.liquidLightningReceiveAvailable
     readonly property string qrcode: controller.uri
     property bool lockAssetAndAccount: false
     property bool invoicePushed: false
@@ -30,7 +33,7 @@ StackViewPage {
         })
     }
     readonly property var error: {
-        if (!self.invoice) return null
+        if (!self.showLightningInvoiceForm) return null
         if (amount_field.text.length === 0) return { code: 'invalid', visible: false }
         const amount = Number(controller.convert.result?.satoshi ?? 0)
         let value = Number(quote_controller.quote?.min ?? 100)
@@ -59,7 +62,7 @@ StackViewPage {
         receiveNetworkKey: 'liquid'
     }
     Connections {
-        enabled: self.invoice
+        enabled: self.showLightningInvoiceForm
         target: amount_field.convert
         function onResultChanged() {
             quote_controller.send(amount_field.convert.result?.satoshi ?? 0)
@@ -73,7 +76,7 @@ StackViewPage {
         satoshi: quote_controller.quote?.send_amount ?? ''
     }
     Connections {
-        enabled: self.invoice
+        enabled: self.showLightningInvoiceForm
         target: invoice_controller
         function onSwapChanged() {
             if (!invoice_controller.swap) {
@@ -129,7 +132,7 @@ StackViewPage {
             busy: invoice_controller.busy
             enabled: !confirm_button.busy && !self.error
             text: qsTrId('id_create_invoice')
-            visible: self.invoice
+            visible: self.showLightningInvoiceForm
             onClicked: {
                 if (invoice_controller.swap) {
                     self.openLightningInvoice()
@@ -222,9 +225,69 @@ StackViewPage {
                         }))
                         self.invoice = true
                         self.invoicePushed = false
-                        amount_field.visible = true
                         amount_field.clearText()
-                        amount_field.forceActiveFocus()
+                        if (self.liquidLightningReceiveAvailable) {
+                            amount_field.visible = true
+                            amount_field.forceActiveFocus()
+                        } else {
+                            amount_field.visible = false
+                        }
+                    }
+                }
+            }
+        }
+        Pane {
+            Layout.fillWidth: true
+            Layout.topMargin: 10
+            leftPadding: 16
+            rightPadding: 16
+            topPadding: 12
+            bottomPadding: 12
+            visible: self.invoice && !self.liquidLightningReceiveAvailable
+            background: Rectangle {
+                color: '#062F4A'
+                border.color: '#004A70'
+                border.width: 1
+                radius: 8
+            }
+            contentItem: RowLayout {
+                spacing: 12
+                Item {
+                    Layout.preferredWidth: 24
+                    Layout.preferredHeight: 40
+                    Layout.alignment: Qt.AlignTop
+                    Image {
+                        anchors.centerIn: parent
+                        source: 'qrc:/svg2/info_fill_blue.svg'
+                        width: 24
+                        height: 24
+                    }
+                }
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 4
+                    Label {
+                        Layout.fillWidth: true
+                        color: '#FFFFFF'
+                        font.pixelSize: 16
+                        font.weight: 600
+                        text: 'Lightning Unavailable'
+                        wrapMode: Label.WordWrap
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        color: '#A0A0A0'
+                        font.pixelSize: 14
+                        lineHeight: 20
+                        lineHeightMode: Text.FixedHeight
+                        text: 'Receiving Lightning payments as Liquid Bitcoin is temporarily disabled.'
+                        wrapMode: Label.WordWrap
+                    }
+                    LinkButton {
+                        Layout.topMargin: 4
+                        external: true
+                        text: qsTrId('id_learn_more')
+                        onClicked: Qt.openUrlExternally('https://help.blockstream.com/blockstream-app/faqs/why-are-swaps-unavailable')
                     }
                 }
             }
@@ -293,7 +356,7 @@ StackViewPage {
             font.pixelSize: 12
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
-            visible: self.invoice && !self.error
+            visible: self.showLightningInvoiceForm && !self.error
             text: 'Amount to receive: ' + (amount_field.fiat ? amount_to_receive.fiat.label : amount_to_receive.output.label)
             wrapMode: Label.WordWrap
         }
@@ -400,7 +463,7 @@ StackViewPage {
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
             text: 'You will receive Liquid Bitcoin via Lightning invoice.'
-            visible: self.invoice
+            visible: self.showLightningInvoiceForm
             wrapMode: Label.WordWrap
         }
     }
