@@ -167,3 +167,6 @@ qt-everywhere-src-*
 .qmlls.ini
 # Build script state files (resume tracking)
 .build_state_*
+
+# Pinned sentry-cli downloaded by tools/ci/sentry-upload.sh
+/sentry-cli
