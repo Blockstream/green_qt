@@ -47,6 +47,10 @@ Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppName}.exe"; Tasks: des
 [Registry]
 Root: HKLM; Subkey: "Software\{#PreviousAppName}"; Flags: deletekey
 Root: HKLM; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{3AD17C10-A864-47AB-895F-FA44CA654295}_is1"; Flags: deletekey
+; sentry-native's crashpad backend registers crashpad_wer.dll as a WER runtime-exception
+; helper on every run and never unregisters it. Drop our value on uninstall; the key
+; itself is shared with other applications, so it must be left in place.
+Root: HKCU; Subkey: "Software\Microsoft\Windows\Windows Error Reporting\RuntimeExceptionHelperModules"; ValueType: none; ValueName: "{app}\crashpad_wer.dll"; Flags: uninsdeletevalue
 
 [InstallDelete]
 Type: files; Name: "{group}\{#PreviousAppName}.lnk"
