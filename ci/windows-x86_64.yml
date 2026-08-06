@@ -117,52 +117,16 @@ windows-x86_64:symbols:
     - pwsh -NoProfile -File tools/ci/sentry-upload.ps1 bld\RelWithDebInfo
 
 windows-x86_64:sign:
-  extends: .gar_wif
-  variables:
-    GIT_STRATEGY: none
-  tags:
-    - cloud
+  extends: .windows:sign
   needs:
     - windows-x86_64:build
-  script:
-    - docker pull "$GAR/green_qt/codesigntool:latest"
-    - >-
-      docker run --rm
-      -v "$CI_PROJECT_DIR:$CI_PROJECT_DIR"
-      -w "$CI_PROJECT_DIR"
-      -e SSL_COM_CREDENTIAL_ID
-      -e SSL_COM_USERNAME
-      -e SSL_COM_PASSWORD
-      -e SSL_COM_TOTP_SECRET
-      "$GAR/green_qt/codesigntool:latest"
-      bash -c 'set -e; bash CodeSignTool.sh sign
-      -credential_id="$SSL_COM_CREDENTIAL_ID"
-      -username="$SSL_COM_USERNAME"
-      -password="$SSL_COM_PASSWORD"
-      -totp_secret="$SSL_COM_TOTP_SECRET"
-      -input_file_path=bld/RelWithDebInfo/blockstream.exe
-      -override;
-      bash CodeSignTool.sh sign
-      -credential_id="$SSL_COM_CREDENTIAL_ID"
-      -username="$SSL_COM_USERNAME"
-      -password="$SSL_COM_PASSWORD"
-      -totp_secret="$SSL_COM_TOTP_SECRET"
-      -input_file_path=bld/RelWithDebInfo/crashpad_handler.exe
-      -override;
-      bash CodeSignTool.sh sign
-      -credential_id="$SSL_COM_CREDENTIAL_ID"
-      -username="$SSL_COM_USERNAME"
-      -password="$SSL_COM_PASSWORD"
-      -totp_secret="$SSL_COM_TOTP_SECRET"
-      -input_file_path=bld/RelWithDebInfo/crashpad_wer.dll
-      -override;
-      find bld -type f \( -iname "*.exe" -o -iname "*.dll" \) -exec echo bash CodeSignTool.sh sign
-      -credential_id="$SSL_COM_CREDENTIAL_ID"
-      -username="$SSL_COM_USERNAME"
-      -password="$SSL_COM_PASSWORD"
-      -totp_secret="$SSL_COM_TOTP_SECRET"
-      -input_file_path={}
-      -override \;'
+  variables:
+    INPUT_FILES: >-
+      bld/RelWithDebInfo/blockstream.exe
+      bld/RelWithDebInfo/crashpad_handler.exe
+      bld/RelWithDebInfo/crashpad_wer.dll
+      bld/RelWithDebInfo/libgreen_gdk.dll
+      bld/RelWithDebInfo/libserialport-0.dll
   stage: staple
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
@@ -183,14 +147,14 @@ windows-x86_64:installer:
     expire_in: 1 week
     when: always
     paths:
-      - Setup.exe
+      - BlockstreamSetup-x86_64.exe
   needs:
     - windows-x86_64:sign
   script:
     - mv bld/installer.iss bld/RelWithDebInfo/
     - cp assets/installer/* bld/RelWithDebInfo/
     - iscc bld/RelWithDebInfo/installer.iss
-    - mv bld/RelWithDebInfo/Setup.exe .
+    - mv bld/RelWithDebInfo/Setup.exe BlockstreamSetup-x86_64.exe
 
 .windows:sign:
   extends: .gar_wif
@@ -214,18 +178,20 @@ windows-x86_64:installer:
       -e SSL_COM_USERNAME
       -e SSL_COM_PASSWORD
       -e SSL_COM_TOTP_SECRET
-      -e INPUT_FILE
-      -e OUTPUT_FILE
-      "$GAR/green_qt/codesigntool:latest"
-      bash -c 'set -e; mkdir -p signed;
+      -e INPUT_FILES
+      "$GAR/green_qt/codesigntool@sha256:fe8852ba0f2ca61ed4fcc2aaa5b1569c2cf2432839aa9743297b464610f035eb"
+      bash -c 'set -e;
+      for f in $INPUT_FILES; do
+      test -f "$f" || { echo "expected to sign $f but it does not exist"; exit 1; };
+      echo "Signing $f";
       bash CodeSignTool.sh sign
       -credential_id="$SSL_COM_CREDENTIAL_ID"
       -username="$SSL_COM_USERNAME"
       -password="$SSL_COM_PASSWORD"
       -totp_secret="$SSL_COM_TOTP_SECRET"
-      -output_dir_path=signed
-      -input_file_path="$INPUT_FILE";
-      mv "signed/$INPUT_FILE" "$OUTPUT_FILE"'
+      -input_file_path="$f"
+      -override;
+      done'
 
 windows-x86_64:sign-installer:
   extends: .windows:sign
@@ -233,11 +199,10 @@ windows-x86_64:sign-installer:
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
-    when: always
+    when: on_success
     paths:
-      - BlockstreamSetup.exe
+      - BlockstreamSetup-x86_64.exe
   needs:
     - windows-x86_64:installer
   variables:
-    INPUT_FILE: Setup.exe
-    OUTPUT_FILE: BlockstreamSetup.exe
+    INPUT_FILES: BlockstreamSetup-x86_64.exe
