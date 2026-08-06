@@ -178,6 +178,13 @@ int main(int argc, char *argv[])
 
     qInstallMessageHandler(logMessageHandler);
 
+    // Legacy crashpad database from releases before the sentry-native migration.
+    // sentry-native uses GetDataDir("sentry") now. Must stay above the AppImage
+    // crashpad_handler staging in ui_handler(), which reuses this directory name.
+    if (!RemoveDataDir("crashpad")) {
+        qWarning() << "Failed to remove legacy crashpad directory";
+    }
+
     // only change app name after setting g_data_location
     QCoreApplication::setApplicationName("Blockstream");
 
@@ -336,6 +343,8 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     // "pending"). Stage the handler and libcurl onto persistent storage so the
     // upload survives the mount going away.
     if (qEnvironmentVariableIsSet("APPDIR")) {
+        // Same directory name as the legacy crashpad database, which main()
+        // removes before we get here.
         const QString staging = GetDataDir("crashpad");
         const QString app_dir = QCoreApplication::applicationDirPath();
         for (const auto& name : { QStringLiteral("crashpad_handler"), QStringLiteral("libcurl.so.4") }) {

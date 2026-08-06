@@ -28,6 +28,14 @@ bool ExistsDataDir(const QString& context)
     return dir.exists();
 }
 
+bool RemoveDataDir(const QString& context)
+{
+    Q_ASSERT(!g_data_location.isEmpty());
+    QDir dir(g_data_location + QDir::separator() + context);
+    if (!dir.exists()) return true;
+    return dir.removeRecursively();
+}
+
 QString GetDataDir(const QString& context)
 {
     Q_ASSERT(!g_data_location.isEmpty());
