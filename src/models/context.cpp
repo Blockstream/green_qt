@@ -362,7 +362,6 @@ Asset* Context::getOrCreateAsset(const QString& id)
 
 Account* Context::getOrCreateAccount(Network* network, quint32 pointer)
 {
-    qDebug() << Q_FUNC_INFO << network->id() << pointer;
     Account* account = m_accounts_by_pointer.value({ network, pointer });
     if (!account) {
         account = new Account(network, pointer, this);
@@ -375,7 +374,6 @@ Account* Context::getOrCreateAccount(Network* network, quint32 pointer)
 
 Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
 {
-    qDebug() << Q_FUNC_INFO << network->id() << data;
     Q_ASSERT(data.contains("pointer"));
     const quint32 pointer = data.value("pointer").toInteger();
     auto account = getOrCreateAccount(network, pointer);
