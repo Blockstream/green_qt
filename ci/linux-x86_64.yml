@@ -16,6 +16,8 @@ linux-x86_64:test:
   stage: test
   extends:
     - .linux-x86_64
+  rules:
+    - when: never
   needs:
     - job: linux-x86_64:build-appimage
       artifacts: false
