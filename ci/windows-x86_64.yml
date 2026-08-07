@@ -205,7 +205,7 @@ windows-x86_64:installer:
       - unknown_failure
       - stuck_or_timeout_failure
   script:
-    - docker pull "$GAR/green_qt/codesigntool:latest"
+    - docker pull "$GAR/green_qt/codesigntool@sha256:fe8852ba0f2ca61ed4fcc2aaa5b1569c2cf2432839aa9743297b464610f035eb"
     - >-
       docker run --rm
       -v "$CI_PROJECT_DIR:$CI_PROJECT_DIR"
