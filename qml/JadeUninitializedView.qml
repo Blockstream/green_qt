@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 VFlickable {
@@ -29,7 +30,10 @@ VFlickable {
             const dialog = http_request_dialog.createObject(self, { request, context: null })
             dialog.open()
         }
-        onSetupFinished: (context) => self.setupFinished(context)
+        onSetupFinished: (context) => {
+            Analytics.recordEvent('jade_initialize', AnalyticsJS.segmentationSession(Settings, context))
+            self.setupFinished(context)
+        }
     }
     SwipeView {
         Layout.alignment: Qt.AlignCenter
