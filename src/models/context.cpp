@@ -334,6 +334,8 @@ void Context::setWatchonly(bool watchonly)
 
 QStringList Context::lightningMnemonic() const
 {
+    if (m_bip39) return {};
+
     const auto source_mnemonic = m_mnemonic.join(' ');
     if (source_mnemonic.trimmed().isEmpty()) return {};
 
@@ -513,7 +515,7 @@ QJsonObject Context::lightningNodeInfo() const
 
 bool Context::lightningEnabled() const
 {
-    return isMainnet() && !m_watchonly && !m_device && m_wallet && m_wallet->lightningEnabled();
+    return !m_bip39 && isMainnet() && !m_watchonly && !m_device && m_wallet && m_wallet->lightningEnabled();
 }
 
 void Context::updateLightningEnabled(bool was_enabled)
