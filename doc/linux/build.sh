@@ -116,6 +116,10 @@ if [[ "$LAST_STEP" -lt $STEP_PREREQS ]]; then
         fi
     done
 
+    if ! pkg-config --exists libunwind-ptrace; then
+        fail "Missing libunwind-ptrace. Install: sudo apt install libunwind-dev (Fedora/RHEL: sudo dnf install libunwind-devel)"
+    fi
+
     if ! command -v rustc &>/dev/null; then
         fail "Rust not found. Install via: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
     fi

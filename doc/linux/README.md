@@ -12,7 +12,7 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
 
 ### Prerequisites (manual setup)
 
-- **Distro**: Ubuntu 22.04+ (or compatible). On Fedora/RHEL use `dnf install libcap-devel` (and the dnf equivalent of the packages below).
+- **Distro**: Ubuntu 22.04+ (or compatible). On Fedora/RHEL use `dnf install libcap-devel libunwind-devel` (and the dnf equivalent of the packages below).
 - **Packages** (roughly matching `ci/linux-x86_64/setup.sh`):
 
   ```bash
@@ -21,7 +21,7 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
     build-essential clang llvm-dev cmake ninja-build git python3 python3-venv python3-pip pkg-config \
     protobuf-compiler \
     libgl1-mesa-dev libfontconfig1-dev libfreetype6-dev \
-    libcap-dev \
+    libcap-dev libunwind-dev \
     libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev \
     libxcb1-dev libxkbcommon-dev libx11-xcb-dev libxcb-glx0-dev libxkbcommon-x11-dev \
     libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev \
