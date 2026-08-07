@@ -327,6 +327,7 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     sentry_options_set_dsn(sentry_options, "https://" SENTRY_KEY "@sentry.blockstream.io/" SENTRY_PROJECT);
     sentry_options_set_release(sentry_options, "green@" GREEN_VERSION);
     sentry_options_set_environment(sentry_options, GREEN_ENV);
+    sentry_options_set_auto_session_tracking(sentry_options, 0);
 
     const QString sentry_database = GetDataDir("sentry");
     QString crashpad_handler = QCoreApplication::applicationDirPath()
