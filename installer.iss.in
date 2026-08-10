@@ -13,8 +13,8 @@ AppPublisher={#AppPublisher}
 AppPublisherURL={#AppURL}
 AppSupportURL={#AppURL}
 AppUpdatesURL={#AppURL}
-DefaultDirName={pf}\{#AppPublisher}\{#AppName}
-UninstallFilesDir={pf}\{#AppPublisher}\{#AppName}
+DefaultDirName={commonpf}\{#AppPublisher}\{#AppName}
+UninstallFilesDir={commonpf}\{#AppPublisher}\{#AppName}
 UninstallDisplayIcon={app}\{#AppName}.exe
 DefaultGroupName={#AppPublisher}
 OutputDir=.
@@ -23,7 +23,11 @@ Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=true
 PrivilegesRequired=admin
-ArchitecturesInstallIn64BitMode=x64
+; Per-user areas are used deliberately and only ever to delete: the HKCU entry removes the
+; crashpad_wer.dll value that the app registers at runtime, and {userdesktop} removes a shortcut a
+; previous installer may have created in the same elevation context. Nothing per-user is created.
+UsedUserAreasWarning=no
+ArchitecturesInstallIn64BitMode=x64compatible
 CloseApplications=force
 DisableWelcomePage=no
 WizardImageFile=wizard.bmp
@@ -49,17 +53,18 @@ Root: HKLM; Subkey: "Software\{#PreviousAppName}"; Flags: deletekey
 Root: HKLM; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{3AD17C10-A864-47AB-895F-FA44CA654295}_is1"; Flags: deletekey
 ; sentry-native's crashpad backend registers crashpad_wer.dll as a WER runtime-exception
 ; helper on every run and never unregisters it. Drop our value on uninstall; the key
-; itself is shared with other applications, so it must be left in place.
-Root: HKCU; Subkey: "Software\Microsoft\Windows\Windows Error Reporting\RuntimeExceptionHelperModules"; ValueType: none; ValueName: "{app}\crashpad_wer.dll"; Flags: uninsdeletevalue
+; itself is shared with other applications, so it must be left in place. dontcreatekey keeps
+; this entry delete-only, so nothing is written to a per-user hive at install time.
+Root: HKCU; Subkey: "Software\Microsoft\Windows\Windows Error Reporting\RuntimeExceptionHelperModules"; ValueType: none; ValueName: "{app}\crashpad_wer.dll"; Flags: dontcreatekey uninsdeletevalue
 
 [InstallDelete]
 Type: files; Name: "{group}\{#PreviousAppName}.lnk"
 Type: files; Name: "{group}\Uninstall {#PreviousAppName}.lnk"
 Type: files; Name: "{userdesktop}\{#PreviousAppName}.lnk"
 Type: files; Name: "{commondesktop}\{#PreviousAppName}.lnk"
-Type: filesandordirs; Name: "{pf32}\{#AppPublisher}\{#PreviousAppName}"
-Type: filesandordirs; Name: "{pf64}\{#AppPublisher}\{#PreviousAppName}"
-Type: filesandordirs; Name: "{pf}\{#AppPublisher}\{#PreviousAppName}"
+Type: filesandordirs; Name: "{commonpf32}\{#AppPublisher}\{#PreviousAppName}"
+Type: filesandordirs; Name: "{commonpf64}\{#AppPublisher}\{#PreviousAppName}"
+Type: filesandordirs; Name: "{commonpf}\{#AppPublisher}\{#PreviousAppName}"
 
 [Messages]
 WelcomeLabel1=Before we start
