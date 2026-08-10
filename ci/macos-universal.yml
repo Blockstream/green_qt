@@ -12,7 +12,7 @@ macos-universal:build:
     - macos-x86_64:build
   script:
     - mkdir macos-universal
-    - cp -R macos-x86_64/Blockstream.app macos-universal/
+    - ditto --norsrc --noextattr --noacl macos-x86_64/Blockstream.app macos-universal/Blockstream.app
     - lipo -create -output macos-universal/Blockstream.app/Contents/MacOS/Blockstream macos-arm64/Blockstream.app/Contents/MacOS/Blockstream macos-x86_64/Blockstream.app/Contents/MacOS/Blockstream
     - lipo -create -output macos-universal/Blockstream.app/Contents/MacOS/crashpad_handler macos-arm64/Blockstream.app/Contents/MacOS/crashpad_handler macos-x86_64/Blockstream.app/Contents/MacOS/crashpad_handler
     - lipo -create -output macos-universal/Blockstream.app/Contents/Frameworks/liblwk.dylib macos-arm64/Blockstream.app/Contents/Frameworks/liblwk.dylib macos-x86_64/Blockstream.app/Contents/Frameworks/liblwk.dylib

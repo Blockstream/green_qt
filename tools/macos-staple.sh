@@ -5,6 +5,10 @@ FILE=$1
 TEAM_ID=D9W37S9468
 ENTITLEMENTS=$([[ $CI_COMMIT_REF_NAME = release_* ]] && echo "entitlements.plist" || echo "entitlements_debug.plist")
 
+# resource forks and Finder info cannot be sealed, and codesign --strict rejects them.
+# Clear them here, while $FILE is still unsigned, whatever route it took to this runner.
+xattr -cr "$FILE"
+
 codesign \
   --verbose=4 \
   --options runtime \
