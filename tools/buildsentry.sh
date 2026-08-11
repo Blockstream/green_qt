@@ -14,8 +14,8 @@ case "${HOST:-}" in
 esac
 
 SENTRY_REPO=https://github.com/getsentry/sentry-native
-SENTRY_TAG=0.15.4
-SENTRY_COMMIT=a1827544e2da7e50517615003288c25380f8d457
+SENTRY_TAG=0.16.2
+SENTRY_COMMIT=724479b549a299ea8363994306b36a00c754fcba
 
 PATCHES=$(cd "$(dirname "$0")/patches" && pwd)
 

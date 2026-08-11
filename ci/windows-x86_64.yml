@@ -94,7 +94,7 @@ windows-x86_64:build:
     DOCKER_DRIVER: null
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
-    IMAGE: $GAR/green_qt/x64-windows@sha256:869ec7c23561a07243df039cdd2eae2b0866de0b16860c7347820dfb5da75632
+    IMAGE: $GAR/green_qt/x64-windows@sha256:4e0be1c04dfcc4c6c68c25ea977e570852e645fb9a6740fb4fa986fdbbfa72ad
   script:
     - if (-not (docker image inspect $env:IMAGE 2>$null)) { docker pull $env:IMAGE }
     - docker run --rm -v "${env:CI_PROJECT_DIR}:C:\src" -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY -e SENTRY_PROJECT $env:IMAGE cmd /c C:\src\build.bat
