@@ -10,6 +10,7 @@
 
 #include <QCryptographicHash>
 #include <QFile>
+#include <QPointer>
 
 #include <gdk.h>
 
@@ -289,7 +290,7 @@ void JadeFirmwareCheckController::check()
     emit firmwareAvailableChanged();
 }
 
-static QMap<QString, HttpRequestActivity*> g_jade_firmware_requests;
+static QMap<QString, QPointer<HttpRequestActivity>> g_jade_firmware_requests;
 static QMap<QString, QJsonObject> g_jade_firmware_results;
 
 JadeFirmwareController::JadeFirmwareController(QObject* parent)
@@ -329,16 +330,21 @@ HttpRequestActivity* JadeFirmwareController::fetch(const QString& type)
 {
     auto req = g_jade_firmware_requests.value(type);
     if (req) return req;
-    req = new HttpRequestActivity(this);
+    // The request is shared by every controller checking the same firmware type,
+    // so it is owned by the HttpManager rather than by whichever controller
+    // happens to request it first.
+    req = new HttpRequestActivity(HttpManager::instance());
     g_jade_firmware_requests.insert(type, req);
     req->setMethod("GET");
     req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_HTTPS, type));
     req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_ONION, type));
-    connect(req, &HttpRequestActivity::finished, this, [=, this] {
+    connect(req, &HttpRequestActivity::finished, req, [=] {
         g_jade_firmware_requests.remove(type);
+        req->deleteLater();
     });
-    connect(req, &HttpRequestActivity::failed, this, [=, this] {
+    connect(req, &HttpRequestActivity::failed, req, [=] {
         g_jade_firmware_requests.remove(type);
+        req->deleteLater();
     });
     HttpManager::instance()->exec(req);
     return req;
