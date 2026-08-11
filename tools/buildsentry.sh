@@ -1,18 +1,6 @@
 #!/bin/bash
 set -exo pipefail
 
-# Linux Crashpad stacktraces require libunwind-ptrace (Debian/Ubuntu: libunwind-dev,
-# Fedora/RHEL: libunwind-devel). See doc/linux/README.md and ci/linux-x86_64/setup.sh.
-case "${HOST:-}" in
-    windows|macos) ;;
-    *)
-        if [[ "$(uname -s)" == "Linux" ]] && ! pkg-config --exists libunwind-ptrace; then
-            echo "Missing libunwind-ptrace. Install libunwind-dev (Debian/Ubuntu) or libunwind-devel (Fedora/RHEL)." >&2
-            exit 1
-        fi
-        ;;
-esac
-
 SENTRY_REPO=https://github.com/getsentry/sentry-native
 SENTRY_TAG=0.16.2
 SENTRY_COMMIT=724479b549a299ea8363994306b36a00c754fcba
