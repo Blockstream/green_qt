@@ -34,9 +34,10 @@ void SentryInit()
     // Inside a FUSE-mounted AppImage the squashfs mount is unmounted when the
     // process tree exits, pulling crashpad_handler and its dlopen'd libcurl.so.4
     // out from under the in-progress minidump upload (leaving the dump stuck in
-    // "pending"). Stage the handler and libcurl onto persistent storage so the
-    // upload survives the mount going away.
-    if (qEnvironmentVariableIsSet("APPDIR")) {
+    // "pending"). In a Flatpak built from the AppImage the sandbox filesystem is
+    // read-only, causing the same symptom. Stage the handler and libcurl onto
+    // persistent storage so the upload survives in both cases.
+    if (qEnvironmentVariableIsSet("APPDIR") || IsRunningAsFlatpak()) {
         // Same directory name as the legacy crashpad database removed above.
         const QString staging = GetDataDir("crashpad");
         const QString app_dir = QCoreApplication::applicationDirPath();

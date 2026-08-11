@@ -3,6 +3,7 @@
 
 #include <QCryptographicHash>
 #include <QDir>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QUrl>
 
@@ -169,6 +170,16 @@ QString GetPlatformName()
     if (name == "macos") return name;
     if (name == "windows") return name;
     return "linux";
+}
+
+bool IsRunningAsFlatpak()
+{
+#ifdef Q_OS_LINUX
+    return QFileInfo::exists(QStringLiteral("/.flatpak-info")) &&
+           qEnvironmentVariableIsSet("FLATPAK_ID");
+#else
+    return false;
+#endif
 }
 
 void ShowApplication()

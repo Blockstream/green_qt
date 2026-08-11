@@ -1,21 +1,11 @@
 #include "appupdatecontroller.h"
 #include "httpmanager.h"
 #include "httprequestactivity.h"
+#include "util.h"
 
-#include <QFileInfo>
 #include <QTimer>
 
 extern QCommandLineParser g_args;
-
-static bool IsRunningAsFlatpak()
-{
-#ifdef Q_OS_LINUX
-    return QFileInfo::exists(QStringLiteral("/.flatpak-info")) &&
-           qEnvironmentVariableIsSet("FLATPAK_ID");
-#else
-    return false;
-#endif
-}
 
 class CheckForUpdatesActivity : public HttpRequestActivity
 {

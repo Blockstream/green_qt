@@ -31,6 +31,8 @@ bool IsSupportedPaymentUrl(const QString& url);
 
 QString GetPlatformName();
 
+bool IsRunningAsFlatpak();
+
 void ShowApplication();
 
 #endif // BLOCKSTREAM_CORE_UTIL_H
