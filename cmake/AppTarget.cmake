@@ -109,14 +109,6 @@ if(ENABLE_SENTRY)
     # pulls in crashpad and the rest of its transitive dependencies.
     find_package(sentry CONFIG REQUIRED)
     target_link_libraries(${APP_TARGET} PRIVATE sentry::sentry)
-
-    # Avoid linking to llvm@16 libunwind.1.dylib
-    if (APPLE)
-        find_library(LIBUNWIND_LIB NAMES libunwind.a)
-        if (LIBUNWIND_LIB)
-            target_link_libraries(${APP_TARGET} PRIVATE ${LIBUNWIND_LIB})
-        endif()
-    endif()
 endif()
 
 if (WIN32)

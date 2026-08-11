@@ -43,3 +43,18 @@ qt-cmake -S sentry-native-src -B sentry-native-bld \
 cmake --build sentry-native-bld --config RelWithDebInfo
 
 cmake --install sentry-native-bld --strip --prefix $PREFIX
+
+# CRASHPAD_ENABLE_STACKTRACE makes crashpad install its vendored LLVM libunwind
+# (macOS only). The handler needs just the remote unwinding API (unw_*) to walk
+# the crashed task; the level-1 EH ABI in the same archive (_Unwind_Resume,
+# _Unwind_RaiseException) gets pulled onto the app's link line by
+# crashpad_snapshot and replaces the system unwinder, which aborts on every C++
+# throw. Drop those members so the app keeps unwinding via libunwind.dylib.
+UNWIND_LIB="$PREFIX/lib/libunwind.a"
+if [ -f "$UNWIND_LIB" ]; then
+    EH_MEMBERS=$(ar t "$UNWIND_LIB" | grep -E '^(UnwindLevel1(-gcc-ext)?\.c|Unwind-sjlj\.c|Unwind-EHABI\.cpp|Unwind-seh\.cpp)\.o$' || true)
+    if [ -n "$EH_MEMBERS" ]; then
+        ar d "$UNWIND_LIB" $EH_MEMBERS
+        ranlib "$UNWIND_LIB"
+    fi
+fi
