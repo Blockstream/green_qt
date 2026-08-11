@@ -2,7 +2,7 @@
 set -eo pipefail
 
 TOP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
-VERSION=$(grep -Eo 'project\(.*VERSION [0-9]+\.[0-9]+\.[0-9]+' $TOP_DIR/CMakeLists.txt | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+VERSION=$(grep -Eo 'set\(BLOCKSTREAM_VERSION "[0-9]+\.[0-9]+\.[0-9]+"' $TOP_DIR/cmake/ProjectMeta.cmake | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
 
 if [[ -z "$CHANNEL" ]]; then
     echo "Must set CHANNEL environment variable" 1>&2

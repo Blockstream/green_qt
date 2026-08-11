@@ -17,12 +17,12 @@ if __name__ == '__main__':
     next_version = Version.parse(args.version)
     print(next_version)
 
-    with open('CMakeLists.txt') as file:
-        cmake = file.read()
+    with open('cmake/ProjectMeta.cmake') as file:
+        meta = file.read()
 
-    for line in cmake.splitlines():
-        if line.startswith('project'):
-            current_version = Version.parse(line.split(' ')[2])
+    for line in meta.splitlines():
+        if line.startswith('set(BLOCKSTREAM_VERSION'):
+            current_version = Version.parse(re.search(r'"([^"]+)"', line).group(1))
             break
 
     assert current_version < next_version
@@ -35,10 +35,10 @@ if __name__ == '__main__':
     repo.git.add('CHANGELOG.md')
     repo.git.commit('-m', 'app: close version {} in changelog'.format(current_version))
 
-    with open('CMakeLists.txt', 'w') as file:
-        file.write(cmake.replace(str(current_version), str(next_version)))
+    with open('cmake/ProjectMeta.cmake', 'w') as file:
+        file.write(meta.replace(str(current_version), str(next_version)))
 
-    repo.git.add('CMakeLists.txt')
+    repo.git.add('cmake/ProjectMeta.cmake')
     repo.git.commit('-m', 'app: bump to version {}'.format(next_version))
 
     print('version updated', current_version, '->', next_version)
