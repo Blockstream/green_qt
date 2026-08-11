@@ -559,6 +559,7 @@ int ui_handler(Application& app, int argc, char *argv[]) {
 
     analytics.stop();
     http_manager.stop();
+    context_manager.exit();
     session_manager.exit();
 
     return ret;

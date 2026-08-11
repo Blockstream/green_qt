@@ -971,6 +971,20 @@ ContextManager *ContextManager::instance()
     return g_context_manager;
 }
 
+void ContextManager::exit()
+{
+    // Contexts hold raw pointers to their sessions and release them from their
+    // destructor, so they must be destroyed before SessionManager::exit() frees
+    // the sessions. Contexts are usually torn down with deleteLater(), which
+    // never runs once the event loop has stopped, so destroy them explicitly.
+    if (!m_contexts.isEmpty()) {
+        qDebug() << Q_FUNC_INFO << "total contexts:" << m_contexts.count();
+        while (!m_contexts.isEmpty()) {
+            delete m_contexts.takeFirst();
+        }
+    }
+}
+
 Context* ContextManager::create(const QString& deployment, bool bip39)
 {
     auto context = new Context(deployment, bip39, this);

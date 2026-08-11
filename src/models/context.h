@@ -257,6 +257,7 @@ public:
     ~ContextManager();
     static ContextManager* instance();
     Context* create(const QString& deployment, bool bip39);
+    void exit();
 private:
     QList<Context*> m_contexts;
 };
