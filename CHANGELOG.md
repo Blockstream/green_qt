@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.1] - 2026-08-13
+### Changed
+- Updated sentry-native to 0.16.2
+- Log generic Boltz errors to help diagnose swap failures
+
+### Fixed
+- Crash on exit when a wallet is logged in
+- Crashes from the analytics session being released mid request and at shutdown
+- Crashes during Jade login when callbacks outlived their controller
+- Crash when checking Jade firmware with a stale request
+- Crashes from dangling edges in the task graph, and from tasks destroyed by siblings
+- Camera crashes when leaving the QR scanner or when devices are plugged and unplugged
+
 ## [3.5.0] - 2026-08-10
 ### Added
 - Lightning Network support (Beta): enable a Lightning node from wallet settings, with dedicated send and receive pages (mainnet software wallets only, excluding BIP39 wallets)
