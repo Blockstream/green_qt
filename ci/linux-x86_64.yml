@@ -86,9 +86,19 @@ linux-x86_64:build-appimage:
 linux-x86_64:symbols:
   extends:
     - .linux-x86_64
-    - .upload-symbols:unix
+    - .upload-symbols
   needs:
     - job: linux-x86_64:build-appimage
       artifacts: true
-  variables:
-    SYMBOLS_PATH: symbols
+  script:
+    - tools/ci/sentry-upload.sh symbols
+    # symbols/ only carries the unstripped blockstream binary. Qt and the other
+    # bundled libraries ship inside the AppImage, and without their unwind info
+    # Sentry can neither walk nor symbolicate the Qt frames of a Linux minidump,
+    # so extract and upload those too. Extracting the AppImage instead of keeping
+    # a copy of the AppDir in the build artifacts keeps every pipeline's artifacts
+    # small; running it after the binary upload keeps that upload unaffected if
+    # extraction ever breaks.
+    - chmod +x linux-x86_64/Blockstream-x86_64.AppImage
+    - (cd linux-x86_64 && ./Blockstream-x86_64.AppImage --appimage-extract > /dev/null)
+    - tools/ci/sentry-upload.sh linux-x86_64/squashfs-root/usr
