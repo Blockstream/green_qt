@@ -210,7 +210,10 @@ Item {
         }
         MediaDevices {
             id: media_devices
-            onVideoInputsChanged: self.cameraDevice = media_devices.defaultVideoInput
+            // Deferred: this signal comes from the device monitor's own socket
+            // notifier, and rebuilding the capture graph from inside that
+            // emission tears down objects while they are still emitting.
+            onVideoInputsChanged: Qt.callLater(() => self.cameraDevice = media_devices.defaultVideoInput)
         }
         GMenu {
             id: devices_menu
