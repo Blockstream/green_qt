@@ -18,6 +18,7 @@
 
 #include <QByteArray>
 #include <QCryptographicHash>
+#include <QPointer>
 #include <QRandomGenerator>
 #include <QtConcurrentRun>
 
@@ -117,6 +118,7 @@ void AllowHost(const QStringList& hosts)
 
 JadeHttpRequest *JadeController::handleHttpRequest(const QJsonObject& params)
 {
+    if (!context()) return nullptr;
     auto session = context()->getOrCreateSession(m_network);
     auto request = new JadeHttpRequest(params, session);
     if (IsHostAllowed(request->hosts())) {
@@ -192,24 +194,36 @@ void JadeSetupTask::update()
     setStatus(Status::Active);
     device->setUnlocking(true);
 
-    device->api()->authUserWithEntropy(network->canonicalId(), [=, this](const QVariantMap& msg) {
-        device->setUnlocking(false);
+    // JadeAPI keeps these callbacks for as long as the request is outstanding
+    // and outlives both this task and its controller, so the device can answer
+    // after the setup page is gone. Guard everything they touch.
+    QPointer<JadeSetupTask> self(this);
+    QPointer<JadeSetupController> controller(m_controller);
+    QPointer<JadeDevice> jade(device);
+
+    device->api()->authUserWithEntropy(network->canonicalId(), [=](const QVariantMap& msg) {
+        if (!self) return;
+        if (jade) jade->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
             qDebug() << Q_FUNC_INFO;
-            device->updateVersionInfo();
-            setStatus(Status::Finished);
+            if (jade) jade->updateVersionInfo();
+            self->setStatus(Status::Finished);
         } else {
             qDebug() << "INVALID PIN";
-            setStatus(Status::Failed);
+            self->setStatus(Status::Failed);
             // TODO
             // emit invalidPin();
             // update();
         }
-    }, [=, this](JadeAPI& /*jade*/, int id, const QJsonObject& req) {
-        QMetaObject::invokeMethod(m_controller, [=, this] {
-            auto request = m_controller->handleHttpRequest(req.value("params").toObject());
-            QObject::connect(request, &JadeHttpRequest::finished, [=, this](const QJsonObject& res) {
-                m_controller->device()->api()->handleHttpResponse(id, req, res.value("body"));
+    }, [=](JadeAPI& /*jade*/, int id, const QJsonObject& req) {
+        if (!controller) return;
+        QMetaObject::invokeMethod(controller, [=] {
+            if (!controller) return;
+            auto request = controller->handleHttpRequest(req.value("params").toObject());
+            if (!request) return;
+            QObject::connect(request, &JadeHttpRequest::finished, controller, [=](const QJsonObject& res) {
+                if (!jade || !jade->api()) return;
+                jade->api()->handleHttpResponse(id, req, res.value("body"));
             });
         }, Qt::QueuedConnection);
     });
@@ -332,20 +346,31 @@ void JadeUnlockTask::update()
         setStatus(Status::Failed);
     }, Qt::SingleShotConnection);
 
-    device->api()->authUserWithEntropy(network->canonicalId(), [=, this](const QVariantMap& msg) {
-        if (m_status != Status::Active) return;
-        device->setUnlocking(false);
+    // JadeAPI keeps these callbacks for as long as the request is outstanding
+    // and outlives both this task and its controller, so the device can answer
+    // after the unlock page is gone. Guard everything they touch.
+    QPointer<JadeUnlockTask> self(this);
+    QPointer<JadeUnlockController> controller(m_controller);
+    QPointer<JadeDevice> jade(device);
+
+    device->api()->authUserWithEntropy(network->canonicalId(), [=](const QVariantMap& msg) {
+        if (!self || self->m_status != Status::Active) return;
+        if (jade) jade->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
-            setStatus(Status::Finished);
+            self->setStatus(Status::Finished);
         } else {
             qDebug() << "INVALID PIN";
-            setStatus(Status::Failed);
+            self->setStatus(Status::Failed);
         }
-    }, [=, this](JadeAPI& jade, int id, const QJsonObject& req) {
-        QMetaObject::invokeMethod(m_controller, [=, this] {
-            auto request = m_controller->handleHttpRequest(req.value("params").toObject());
-            QObject::connect(request, &JadeHttpRequest::finished, [=, this](const QJsonObject& res) {
-                m_controller->device()->api()->handleHttpResponse(id, req, res.value("body"));
+    }, [=](JadeAPI& /*jade*/, int id, const QJsonObject& req) {
+        if (!controller) return;
+        QMetaObject::invokeMethod(controller, [=] {
+            if (!controller) return;
+            auto request = controller->handleHttpRequest(req.value("params").toObject());
+            if (!request) return;
+            QObject::connect(request, &JadeHttpRequest::finished, controller, [=](const QJsonObject& res) {
+                if (!jade || !jade->api()) return;
+                jade->api()->handleHttpResponse(id, req, res.value("body"));
             });
         }, Qt::QueuedConnection);
     });
@@ -364,9 +389,12 @@ void JadeIdentifyTask::update()
     const auto device = m_controller->device();
     if (!device) return;
 
+    const auto context = m_controller->context();
+    if (!context) return;
+
     const auto nets = device->versionInfo().value("JADE_NETWORKS").toString();
     const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
-    const auto network = m_controller->context()->primaryNetwork();
+    const auto network = context->primaryNetwork();
     if (!network) return;
 
     if (device->state() == JadeDevice::StateLocked) return;
@@ -378,8 +406,6 @@ void JadeIdentifyTask::update()
         });
         return;
     };
-
-    auto context = m_controller->context();
 
     setStatus(Status::Active);
 
@@ -491,6 +517,7 @@ void JadeQRController::processJadePin(const QJsonObject& result)
 
     m_network = context()->primaryNetwork();
     auto request = handleHttpRequest(params);
+    if (!request) return;
     QObject::connect(request, &JadeHttpRequest::finished, this, [=, this](const QJsonObject& res) {
         const auto params = res.value("body").toObject();
         QJsonObject data{

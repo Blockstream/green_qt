@@ -4,6 +4,7 @@
 #include "green.h"
 
 #include <QFutureSynchronizer>
+#include <QPointer>
 #include <QQmlEngine>
 #include <QVariantMap>
 
@@ -15,7 +16,11 @@ class ControllerPrivate
 {
 public:
     virtual ~ControllerPrivate() = default;
-    Context* context{nullptr};
+    // Contexts are deleted by whoever owns them, e.g. Wallet::setContext() or a
+    // login controller replacing the one it created, without telling the other
+    // controllers pointing at the same context. Hold a guarded pointer so those
+    // end up with a null context rather than a dangling one.
+    QPointer<Context> context;
     TaskGroupMonitor* monitor{nullptr};
     QFutureSynchronizer<void> future_synchronizer;
 };
