@@ -19,6 +19,7 @@ public:
     void setTor(const QJsonObject& tor);
     Session* create(Network* network);
     void release(Session* session);
+    void abandon(Session* session);
     Session* torSession() const { return m_tor_session; }
     void exit();
 signals:

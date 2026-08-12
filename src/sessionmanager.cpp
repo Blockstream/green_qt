@@ -58,6 +58,21 @@ void SessionManager::release(Session* session)
     m_garbage.append(session);
 }
 
+void SessionManager::abandon(Session* session)
+{
+    Q_ASSERT(session);
+    qWarning() << Q_FUNC_INFO << "leaking session still in use" << session;
+
+    // Gives up ownership of a session that is still used by a thread we cannot
+    // wait for. The gdk session is deliberately left alive and leaked, because
+    // destroying it under an in flight call is what takes the process down.
+    m_sessions.removeOne(session);
+    m_garbage.removeOne(session);
+    // Sessions are children of the manager, so clear the parent as well or
+    // ~QObject destroys it anyway.
+    session->setParent(nullptr);
+}
+
 void SessionManager::exit()
 {
     while (!m_sessions.isEmpty()) {

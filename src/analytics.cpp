@@ -1,6 +1,7 @@
 #include "analytics.h"
 
 #include <QCryptographicHash>
+#include <QDeadlineTimer>
 #include <QDebug>
 #include <QFile>
 #include <QGuiApplication>
@@ -14,9 +15,12 @@
 #include <QThread>
 #include <QTimer>
 #include <QUuid>
+#include <QWaitCondition>
 
 #include <algorithm>
 
+#include <chrono>
+#include <functional>
 #include <map>
 #include <memory>
 #include <string>
@@ -40,7 +44,7 @@ class AnalyticsPrivate : public QObject
 {
     Analytics* const q;
 public:
-    AnalyticsPrivate(Analytics* const q) : q(q) {
+    AnalyticsPrivate(Analytics* const q) : q(q), owner(q) {
         QSettings analytics(GetDataFile("app", "analytics.ini"), QSettings::IniFormat);
 
         device_id = analytics.value("device_id").toString();
@@ -80,16 +84,25 @@ public:
     //
     // `session` is therefore only reachable through acquireSession(), which
     // counts the requests using it. Releasing a session that is still in use is
-    // deferred to the request that finishes last.
+    // deferred to the request that finishes last, or to shutdownSessions() when
+    // the application is going away and there is no later request to defer to.
     void createSession();
     bool isSessionConnected();
     Session* acquireSession();
     void releaseSession(Session* used);
     void retireSession();
+    void releaseRetiredSession(Session* retired);
+    void shutdownSessions();
+    void postToOwner(std::function<void()> fn);
 private:
     QMutex session_mutex;
+    QWaitCondition session_released; // signalled when a use count drops to zero
+    bool session_shutdown{false};    // set once by shutdownSessions(), never cleared
     Session* session{nullptr};
     QHash<Session*, int> session_uses;
+    QList<Session*> retired_sessions; // retired while still in use
+    QMutex owner_mutex;
+    Analytics* owner{nullptr};       // cleared by shutdownSessions(), before ~Analytics
 };
 
 static Analytics* g_analytics_instance{nullptr};
@@ -164,7 +177,7 @@ void Analytics::start()
     });
 
     countly.setRemoteConfigCallback([=, this](bool success) {
-        QMetaObject::invokeMethod(this, [=, this] {
+        d->postToOwner([=, this] {
             handleRemoteConfigUpdate(success);
         });
     });
@@ -174,7 +187,7 @@ void Analytics::start()
 
         SessionRef session(d);
         if (!session) {
-            QMetaObject::invokeMethod(this, [=, this] {
+            d->postToOwner([d = d] {
                 d->createSession();
             });
             return res;
@@ -266,6 +279,9 @@ void Analytics::start()
 void Analytics::stop()
 {
     d->stop(Qt::BlockingQueuedConnection);
+    // Drain the requests still using the session before SessionManager::exit()
+    // gets to delete it.
+    d->shutdownSessions();
 }
 
 void Analytics::handleRemoteConfigUpdate(bool success)
@@ -377,6 +393,7 @@ void AnalyticsPrivate::restart()
 void AnalyticsPrivate::createSession()
 {
     QMutexLocker locker(&session_mutex);
+    if (session_shutdown) return;
     if (session) return;
     qDebug() << "analytics: create session";
     const auto network = NetworkManager::instance()->network("electrum-mainnet");
@@ -394,7 +411,7 @@ bool AnalyticsPrivate::isSessionConnected()
 Session* AnalyticsPrivate::acquireSession()
 {
     QMutexLocker locker(&session_mutex);
-    if (!session) return nullptr;
+    if (session_shutdown || !session) return nullptr;
     session_uses[session] += 1;
     return session;
 }
@@ -407,13 +424,14 @@ void AnalyticsPrivate::releaseSession(Session* used)
     if (i == session_uses.end()) return;
     if (--i.value() > 0) return;
     session_uses.erase(i);
+    session_released.wakeAll();
+    // The application is going away, shutdownSessions() releases it.
+    if (session_shutdown) return;
     // Still the current session, keep it for the next request.
     if (used == session) return;
     locker.unlock();
     // retireSession() left the session to whichever request finished last.
-    QMetaObject::invokeMethod(this, [=, this] {
-        SessionManager::instance()->release(used);
-    });
+    releaseRetiredSession(used);
 }
 
 void AnalyticsPrivate::retireSession()
@@ -422,10 +440,86 @@ void AnalyticsPrivate::retireSession()
     const auto retired = session;
     session = nullptr;
     if (!retired) return;
+    retired_sessions.append(retired);
     // Requests are still using it, the last one out releases it.
     if (session_uses.contains(retired)) return;
     locker.unlock();
-    SessionManager::instance()->release(retired);
+    releaseRetiredSession(retired);
+}
+
+void AnalyticsPrivate::releaseRetiredSession(Session* retired)
+{
+    // SessionManager mutates its session lists and destroys the gdk session, so
+    // sessions are handed back on the thread it lives on. The session stays in
+    // retired_sessions until that actually happens: on shutdown the event loop
+    // is already stopped and shutdownSessions() has to release it instead.
+    postToOwner([this, retired] {
+        {
+            QMutexLocker locker(&session_mutex);
+            if (!retired_sessions.removeOne(retired)) return;
+        }
+        SessionManager::instance()->release(retired);
+    });
+}
+
+void AnalyticsPrivate::shutdownSessions()
+{
+    Q_ASSERT(QThread::currentThread() == q->thread());
+
+    QList<Session*> sessions;
+    QList<Session*> in_use;
+    {
+        QMutexLocker locker(&session_mutex);
+        // No request can take a reference from here on.
+        const bool drain = !session_shutdown;
+        session_shutdown = true;
+
+        // Countly's detached remote config threads are never joined and may be
+        // inside GA_http_request. Wait for them to drop their references before
+        // anything tears the sessions down.
+        if (drain) {
+            QDeadlineTimer deadline(std::chrono::seconds(15));
+            while (!session_uses.isEmpty()) {
+                if (!session_released.wait(&session_mutex, deadline)) {
+                    qWarning() << "analytics: requests still in flight after"
+                               << "15s, abandoning the sessions they use";
+                    break;
+                }
+            }
+        }
+
+        sessions = std::move(retired_sessions);
+        retired_sessions.clear();
+        if (session) sessions.append(session);
+        session = nullptr;
+        // Empty unless the drain timed out. A session cannot become used again,
+        // so a stale entry only means leaking one that just became free.
+        in_use = session_uses.keys();
+    }
+
+    const auto manager = SessionManager::instance();
+    for (const auto s : sessions) {
+        if (in_use.contains(s)) {
+            manager->abandon(s);
+        } else {
+            manager->release(s);
+        }
+    }
+
+    QMutexLocker locker(&owner_mutex);
+    // Nothing reaches Analytics after this, it is about to be destroyed.
+    owner = nullptr;
+}
+
+void AnalyticsPrivate::postToOwner(std::function<void()> fn)
+{
+    // Countly's threads can outlive Analytics, so anything posted back to it is
+    // serialised with shutdownSessions(), which clears owner before ~Analytics.
+    // Posting under the mutex is what makes it safe, and it is always a post so
+    // that no caller ends up running fn while holding the mutex.
+    QMutexLocker locker(&owner_mutex);
+    if (!owner) return;
+    QMetaObject::invokeMethod(owner, std::move(fn), Qt::QueuedConnection);
 }
 
 void AnalyticsPrivate::reset()
@@ -446,9 +540,15 @@ void AnalyticsPrivate::reset()
 Analytics::~Analytics()
 {
     d->stop(Qt::BlockingQueuedConnection);
+    // No-op when stop() already ran, but the early exit paths in ui_handler skip
+    // it, and nothing may reference this instance once the destructor returns.
+    d->shutdownSessions();
     d->thread.quit();
     d->thread.wait();
-    delete d;
+    // `d` is deliberately not deleted. The Countly HTTP client closure holds it,
+    // and both Countly's threads and the Countly singleton itself outlive main().
+    // Its thread is joined and its sessions are gone, so all a late callback can
+    // do is take the mutex and get a null session back.
     g_analytics_instance = nullptr;
 }
 
