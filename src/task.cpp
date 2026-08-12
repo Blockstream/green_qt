@@ -118,6 +118,15 @@ Task::~Task()
     // Drain any in-flight workers before destroying the private (and any
     // resources it owns, e.g. AuthHandlerTaskPrivate::auth_handler).
     d->future_synchronizer.waitForFinished();
+    // Tasks reference each other through raw pointers and are not necessarily
+    // destroyed together, so drop the edges pointing back at this task. Left
+    // behind, they are walked by setStatus() and TaskGroup::update().
+    for (auto task : m_inputs) {
+        task->m_outputs.remove(this);
+    }
+    for (auto task : m_outputs) {
+        task->m_inputs.remove(this);
+    }
     if (m_group) {
         m_group->remove(this);
     }
@@ -196,7 +205,10 @@ void Task::setStatus(Status status)
     } else if (m_status == Status::Failed) {
         qDebug() << Q_FUNC_INFO << type() << m_error;
         emit failed(m_error);
-        for (auto task : m_outputs) {
+        // Failing an output can run code that alters the graph, so iterate a
+        // copy, as TaskGroup::update() does.
+        const QList<Task*> outputs(m_outputs.begin(), m_outputs.end());
+        for (auto task : outputs) {
             task->setStatus(Status::Failed);
         }
     }
