@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QFile>
 #include <QGuiApplication>
+#include <QHash>
+#include <QMutex>
 #include <QRandomGenerator>
 #include <QScreen>
 #include <QSettings>
@@ -18,6 +20,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include <countly/countly.hpp>
 
@@ -54,7 +57,6 @@ public:
         timestamp_offset = std::chrono::seconds(to);
     }
     TaskDispatcher* dispatcher{nullptr};
-    Session* session{nullptr};
     std::atomic_bool active{false};
     QString device_id;
     std::chrono::seconds timestamp_offset{0};
@@ -70,11 +72,45 @@ public:
     void restart();
     void reset();
     void updateCustomUserDetails();
+
+    // The Countly HTTP client runs on Countly's own threads: its update loop
+    // and the detached threads it spawns for remote config fetches. Those
+    // threads outlive stop(), which used to release the session from under an
+    // in-flight GA_http_request, destroying the GDK session mid call.
+    //
+    // `session` is therefore only reachable through acquireSession(), which
+    // counts the requests using it. Releasing a session that is still in use is
+    // deferred to the request that finishes last.
+    void createSession();
+    bool isSessionConnected();
+    Session* acquireSession();
+    void releaseSession(Session* used);
+    void retireSession();
+private:
+    QMutex session_mutex;
+    Session* session{nullptr};
+    QHash<Session*, int> session_uses;
 };
 
 static Analytics* g_analytics_instance{nullptr};
 
 namespace {
+// Holds a reference to the analytics session for the duration of a Countly
+// HTTP request, so that it stays alive and active until the request is done.
+class SessionRef
+{
+public:
+    explicit SessionRef(AnalyticsPrivate* d) : m_d(d), m_session(d->acquireSession()) {}
+    ~SessionRef() { if (m_session) m_d->releaseSession(m_session); }
+    SessionRef(const SessionRef&) = delete;
+    SessionRef& operator=(const SessionRef&) = delete;
+    explicit operator bool() const { return m_session != nullptr; }
+    Session* operator->() const { return m_session; }
+private:
+    AnalyticsPrivate* const m_d;
+    Session* const m_session;
+};
+
 inline constexpr char COUNTLY_HOST[] = "https://countly.blockstream.com";
 inline constexpr char COUNTLY_TOR_ENDPOINT[] = "http://greciphd2z3eo6bpnvd6mctxgfs4sslx4hyvgoiew4suoxgoquzl72yd.onion";
 inline constexpr char COUNTLY_APP_KEY_DEV[] = "cb8e449057253add71d2f9b65e5f66f73c073e63";
@@ -136,18 +172,15 @@ void Analytics::start()
     countly.setHTTPClient([=, this](bool use_post, const std::string& path, const std::string& data) {
         cly::HTTPResponse res{false, {}};
 
-        if (!d->session) {
+        SessionRef session(d);
+        if (!session) {
             QMetaObject::invokeMethod(this, [=, this] {
-                qDebug() << "analytics: create session";
-                const auto network = NetworkManager::instance()->network("electrum-mainnet");
-                d->session = SessionManager::instance()->create(network);
-                d->session->setActive(true);
-                d->dispatcher->add(new ConnectTask(d->session));
+                d->createSession();
             });
             return res;
         }
 
-        if (!d->session->isConnected()) {
+        if (!session->isConnected()) {
             return res;
         }
 
@@ -190,17 +223,25 @@ void Analytics::start()
         }
 
         GA_json* out = nullptr;
-        const auto rc = GA_http_request(d->session->m_session, Json::fromObject(req).get(), &out);
+        const auto rc = GA_http_request(session->m_session, Json::fromObject(req).get(), &out);
         if (rc == GA_OK && out) {
-            auto reply = Json::toObject(out);
-
-            try {
-                res.data = nlohmann::json::parse(reply.value("body").toString().toStdString());
-                res.success = true;
-            } catch (...) {
-            }
-
+            const auto reply = Json::toObject(out);
             GA_destroy_json(out);
+
+            // A request that fails is still GA_OK: gdk reports it as
+            // {"error": ...} with no body, as HttpRequestActivity::hasError()
+            // reads it. Parsing the missing body is what took the process down,
+            // because nlohmann maps JSON_THROW to std::abort() when it does not
+            // detect exception support, which is the case on the Windows build.
+            // Skip those, and parse with allow_exceptions off so that a body
+            // that is not JSON is just a failed request too.
+            if (!reply.contains("error")) {
+                auto body = nlohmann::json::parse(reply.value("body").toString().toStdString(), nullptr, false);
+                if (!body.is_discarded()) {
+                    res.data = std::move(body);
+                    res.success = true;
+                }
+            }
         }
 
         return res;
@@ -244,7 +285,7 @@ void Analytics::handleRemoteConfigUpdate(bool success)
         return;
     }
 
-    if (!d->session || !d->session->isConnected()) {
+    if (!d->isSessionConnected()) {
         QTimer::singleShot(1000, this, [=, this] {
             cly::Countly::getInstance().updateRemoteConfig();
         });
@@ -323,10 +364,7 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
     QMetaObject::invokeMethod(this, [=, this] {
         auto& countly = cly::Countly::getInstance();
         countly.stop();
-        if (session) {
-            SessionManager::instance()->release(session);
-            session = nullptr;
-        }
+        retireSession();
     }, type);
 }
 
@@ -334,6 +372,60 @@ void AnalyticsPrivate::restart()
 {
     stop();
     start();
+}
+
+void AnalyticsPrivate::createSession()
+{
+    QMutexLocker locker(&session_mutex);
+    if (session) return;
+    qDebug() << "analytics: create session";
+    const auto network = NetworkManager::instance()->network("electrum-mainnet");
+    session = SessionManager::instance()->create(network);
+    session->setActive(true);
+    dispatcher->add(new ConnectTask(session));
+}
+
+bool AnalyticsPrivate::isSessionConnected()
+{
+    QMutexLocker locker(&session_mutex);
+    return session && session->isConnected();
+}
+
+Session* AnalyticsPrivate::acquireSession()
+{
+    QMutexLocker locker(&session_mutex);
+    if (!session) return nullptr;
+    session_uses[session] += 1;
+    return session;
+}
+
+void AnalyticsPrivate::releaseSession(Session* used)
+{
+    QMutexLocker locker(&session_mutex);
+    const auto i = session_uses.find(used);
+    Q_ASSERT(i != session_uses.end());
+    if (i == session_uses.end()) return;
+    if (--i.value() > 0) return;
+    session_uses.erase(i);
+    // Still the current session, keep it for the next request.
+    if (used == session) return;
+    locker.unlock();
+    // retireSession() left the session to whichever request finished last.
+    QMetaObject::invokeMethod(this, [=, this] {
+        SessionManager::instance()->release(used);
+    });
+}
+
+void AnalyticsPrivate::retireSession()
+{
+    QMutexLocker locker(&session_mutex);
+    const auto retired = session;
+    session = nullptr;
+    if (!retired) return;
+    // Requests are still using it, the last one out releases it.
+    if (session_uses.contains(retired)) return;
+    locker.unlock();
+    SessionManager::instance()->release(retired);
 }
 
 void AnalyticsPrivate::reset()
