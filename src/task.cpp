@@ -23,6 +23,7 @@
 #include <QMetaEnum>
 #include <QFileInfo>
 #include <QNetworkAccessManager>
+#include <QPointer>
 #include <QString>
 #include <QTimer>
 #include <QTimerEvent>
@@ -205,11 +206,14 @@ void Task::setStatus(Status status)
     } else if (m_status == Status::Failed) {
         qDebug() << Q_FUNC_INFO << type() << m_error;
         emit failed(m_error);
-        // Failing an output can run code that alters the graph, so iterate a
-        // copy, as TaskGroup::update() does.
-        const QList<Task*> outputs(m_outputs.begin(), m_outputs.end());
+        // Failing an output can run code that alters the graph, and can destroy
+        // sibling outputs, so iterate a snapshot of guarded pointers and skip
+        // whatever went away, as TaskGroup::update() does.
+        QList<QPointer<Task>> outputs;
+        outputs.reserve(m_outputs.size());
+        for (auto task : m_outputs) outputs.append(task);
         for (auto task : outputs) {
-            task->setStatus(Status::Failed);
+            if (task) task->setStatus(Status::Failed);
         }
     }
 
@@ -320,9 +324,14 @@ void TaskGroup::update()
     bool any_failed = false;
     bool all_finished = true;
 
-    QList<Task*> tasks(m_tasks.begin(), m_tasks.end());
+    // Failing or updating a task can run code that destroys other tasks in this
+    // group, so hold guarded pointers and skip whatever went away.
+    QList<QPointer<Task>> tasks;
+    tasks.reserve(m_tasks.size());
+    for (auto task : m_tasks) tasks.append(task);
 
     for (auto task : tasks) {
+        if (!task) continue;
         if (task->m_status == Task::Status::Failed) {
             any_failed = true;
         }
@@ -341,7 +350,7 @@ void TaskGroup::update()
 
     if (any_failed) {
         for (auto task : tasks) {
-            task->setStatus(Task::Status::Failed);
+            if (task) task->setStatus(Task::Status::Failed);
         }
         setStatus(Status::Failed);
         return;
@@ -352,6 +361,7 @@ void TaskGroup::update()
     }
 
     for (auto task : tasks) {
+        if (!task) continue;
         bool update = task->m_status == Task::Status::Ready || task->m_status == Task::Status::Active;
         if (update) {
             for (auto dependency : task->m_inputs) {
