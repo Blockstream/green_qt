@@ -35,6 +35,14 @@ Item {
 
     Component.onCompleted: self.start()
 
+    // Tear the capture graph down deterministically: the loaders hosting this
+    // view are deactivated while the camera is still running, and the V4L2
+    // notifier delivering frames outlives the video sink it pushes them into.
+    Component.onDestruction: {
+        detector.videoSink = null
+        camera.active = false
+    }
+
     MediaDevices {
         id: media_devices
     }
