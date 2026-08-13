@@ -156,7 +156,7 @@ void BoltzCreateSessionTask::update()
 
             return result;
         } catch(const lwk::lwk_error::Generic& error) {
-            qDebug() << Q_FUNC_INFO << "generic error";
+            qDebug() << Q_FUNC_INFO << "generic error" << error.msg.c_str();
             return {};
         } catch (...) {
             qDebug() << Q_FUNC_INFO << "unexpected error";

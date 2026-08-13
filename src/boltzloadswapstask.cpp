@@ -89,7 +89,7 @@ void BoltzLoadSwapsTask::update()
                 load(swap_id, true);
             }
         } catch (const lwk::lwk_error::Generic& error) {
-            qDebug() << Q_FUNC_INFO << "generic error";
+            qDebug() << Q_FUNC_INFO << "generic error" << error.msg.c_str();
         } catch (...) {
             qDebug() << Q_FUNC_INFO << "unexpected error";
         }
