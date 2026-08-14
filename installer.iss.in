@@ -81,6 +81,9 @@ Filename: "{tmp}\vc_redist.x64.exe"; \
 const
   WM_CLOSE = 16;
 
+var
+  VCRedistInstallAttempted: Boolean;
+
 function InitializeSetup : Boolean;
 var winHwnd: Longint;
     strProg: string;
@@ -113,18 +116,39 @@ begin
   end;
 end;
 
-function NeedVCRedist64(): Boolean;
+// The app is built with the VS 2022 17.10 toolset or later, where std::mutex has a constexpr
+// constructor that leaves the mutex zero initialized for the runtime to set up on first use.
+// Runtimes older than 14.40 do not do that: they read the never initialized critical section
+// pointer and the app dies with an access violation on its very first std::mutex lock, before
+// the event loop starts. Check the runtime the app will actually load rather than the
+// VisualStudio\14.0\VC\Runtimes\x64 registry values, so that a redistributable which is
+// registered but whose files are still pending a reboot is not mistaken for a usable one.
+function MSVCP140VersionBelowMinimum(): Boolean;
 var
-  Installed: Cardinal;
-  Minor: Cardinal;
+  Path: string;
+  VersionMS, VersionLS: Cardinal;
+  Major, Minor: Cardinal;
 begin
   Result := True;
-  if not RegQueryDWordValue(HKLM,
-    'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64',
-    'Installed', Installed) then Exit;
-  if Installed <> 1 then Exit;
-  if not RegQueryDWordValue(HKLM,
-    'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64',
-    'Minor', Minor) then Exit;
-  Result := (Minor < 30);
+  Path := ExpandConstant('{sys}\MSVCP140.dll');
+  if not FileExists(Path) then Exit;
+  if not GetVersionNumbers(Path, VersionMS, VersionLS) then Exit;
+  Major := VersionMS shr 16;
+  Minor := VersionMS and $FFFF;
+  Log('MSVCP140.dll version: ' + IntToStr(Major) + '.' + IntToStr(Minor));
+  Result := (Major < 14) or ((Major = 14) and (Minor < 40));
+end;
+
+function NeedVCRedist64(): Boolean;
+begin
+  Result := MSVCP140VersionBelowMinimum();
+  if Result then VCRedistInstallAttempted := True;
+end;
+
+function NeedRestart(): Boolean;
+begin
+  // The redistributable cannot replace an MSVCP140.dll that other running processes have
+  // loaded; it then only lands on the next boot. Ask for that reboot instead of leaving the
+  // user with an app that crashes on startup.
+  Result := VCRedistInstallAttempted and MSVCP140VersionBelowMinimum();
 end;
