@@ -3,6 +3,7 @@
 
 #include <QByteArray>
 #include <QString>
+#include <QVariantMap>
 
 #include <cstdint>
 #include <memory>
@@ -54,6 +55,23 @@ struct LightningParsedInvoice {
     std::optional<quint64> amount_msat;
     quint64 expiry{0};
     quint64 timestamp{0};
+};
+
+struct LightningLnurlPayRequest {
+    QString callback;
+    quint64 min_sendable_msat{0};
+    quint64 max_sendable_msat{0};
+    quint64 comment_allowed{0};
+    QString description;
+    QString metadata;
+    QString lnurl;
+    QString domain;
+    QString image;
+};
+
+struct LightningLnurlPayResult {
+    QString payment_preimage;
+    QVariantMap success_action;
 };
 
 struct LightningPayment {
@@ -117,6 +135,8 @@ public:
     LightningValueResult<LightningNodeInfo> refreshNodeInfo(const std::shared_ptr<glsdk::Node>& node);
     LightningValueResult<std::vector<LightningPayment>> listPayments(const std::shared_ptr<glsdk::Node>& node) const;
     LightningValueResult<LightningParsedInvoice> parseInvoice(const QString& input) const;
+    LightningValueResult<LightningLnurlPayRequest> resolveLnurlPay(const QString& input) const;
+    LightningValueResult<LightningLnurlPayResult> lnurlPay(const std::shared_ptr<glsdk::Node>& node, const LightningLnurlPayRequest& request, quint64 amount_msat, const QString& comment) const;
     LightningValueResult<LightningReceiveResponse> createInvoice(const std::shared_ptr<glsdk::Node>& node, quint64 amount_msat, const QString& description);
     LightningValueResult<LightningSendResponse> sendPayment(const std::shared_ptr<glsdk::Node>& node, const QString& bolt11, const std::optional<quint64>& amount_msat);
 

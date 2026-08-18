@@ -150,8 +150,13 @@ QString LightningSendController::error() const
         return amountless() ? QString() : QStringLiteral("Invoice amount is missing");
     }
 
-    if (m_selected_source && *payment_amount > static_cast<quint64>(m_selected_source->maxPayable())) {
-        return QStringLiteral("id_insufficient_funds");
+    if (m_selected_source) {
+        if (*payment_amount > static_cast<quint64>(m_selected_source->balance())) {
+            return QStringLiteral("id_insufficient_funds");
+        }
+        if (*payment_amount > static_cast<quint64>(m_selected_source->maxPayable())) {
+            return QStringLiteral("id_amount_above_maximum_allowed");
+        }
     }
 
     if (m_sources.isEmpty()) {
@@ -231,6 +236,20 @@ void LightningSendController::refresh()
     update();
 }
 
+void LightningSendController::refreshAvailableSources()
+{
+    clearSources();
+    if (!context()) {
+        emit updated();
+        return;
+    }
+
+    appendLiquidSources(std::nullopt);
+    appendLightningSource(std::nullopt);
+    selectDefaultSource();
+    emit updated();
+}
+
 std::optional<quint64> LightningSendController::amount() const
 {
     if (m_parsed_invoice && m_parsed_invoice->amount_msat) return LightningMsatToDisplaySatoshi(m_parsed_invoice->amount_msat);
@@ -288,36 +307,37 @@ void LightningSendController::update()
     emit updated();
 }
 
-void LightningSendController::buildSources()
+void LightningSendController::appendLiquidSources(const std::optional<quint64> payment_amount)
 {
-    if (!context() || !m_parsed_invoice) return;
+    if (!context() || m_lightning_only) return;
 
-    const auto payment_amount = amount();
+    const auto accounts = context()->getAccounts();
+    for (auto account : accounts) {
+        if (!account || account->isHidden() || !account->network()->isLiquid()) continue;
+
+        const auto balance = AccountPolicyBalance(account);
+        if (balance == 0) continue;
+        if (payment_amount && *payment_amount > balance) continue;
+
+        auto asset = context()->getOrCreateAsset(account->network()->policyAsset());
+        m_sources.append(new PaymentSource(PaymentSource::Type::GdkAccount, account, asset, static_cast<qint64>(balance), static_cast<qint64>(balance), this));
+    }
+}
+
+void LightningSendController::appendLightningSource(const std::optional<quint64> payment_amount)
+{
+    if (!context() || !context()->lightningEnabled()) return;
+
     auto lightning_asset = context()->getOrCreateAsset(QStringLiteral("lnbtc"));
+    const auto max_payable = NodeInfoValue(context(), QStringLiteral("max_payable"));
+    const auto balance = NodeInfoValue(context(), QStringLiteral("channel_balance"));
+    if (payment_amount && *payment_amount > max_payable) return;
 
-    // Include Liquid accounts to perform Liquid -> Lightning swaps
-    if (!m_lightning_only && payment_amount && !amountless()) {
-        const auto accounts = context()->getAccounts();
-        for (auto account : accounts) {
-            if (!account || account->isHidden() || !account->network()->isLiquid()) continue;
+    m_sources.append(new PaymentSource(PaymentSource::Type::Lightning, nullptr, lightning_asset, static_cast<qint64>(balance), static_cast<qint64>(max_payable), this));
+}
 
-            const auto balance = AccountPolicyBalance(account);
-            if (*payment_amount > balance) continue;
-
-            auto asset = context()->getOrCreateAsset(account->network()->policyAsset());
-            m_sources.append(new PaymentSource(PaymentSource::Type::GdkAccount, account, asset, static_cast<qint64>(balance), static_cast<qint64>(balance), this));
-        }
-    }
-
-    if (context()->lightningEnabled()) {
-        const auto max_payable = NodeInfoValue(context(), QStringLiteral("max_payable"));
-        const auto balance = NodeInfoValue(context(), QStringLiteral("channel_balance"));
-        if (!payment_amount || amountless() || *payment_amount <= max_payable) {
-            m_sources.append(new PaymentSource(PaymentSource::Type::Lightning, nullptr, lightning_asset, static_cast<qint64>(balance), static_cast<qint64>(max_payable), this));
-        }
-    }
-
-    // Select the Lightning source if lightningOnly
+void LightningSendController::selectDefaultSource()
+{
     if (m_lightning_only) {
         for (auto source : m_sources) {
             if (source->type() == PaymentSource::Type::Lightning) {
@@ -328,8 +348,27 @@ void LightningSendController::buildSources()
         return;
     }
 
-    // Select the first source automatically if there is only one source available
     if (m_sources.size() == 1) {
         m_selected_source = m_sources.first();
     }
+}
+
+void LightningSendController::buildSources()
+{
+    if (!context() || !m_parsed_invoice) return;
+
+    const auto payment_amount = amount();
+
+    // Include Liquid accounts to perform Liquid -> Lightning swaps
+    if (payment_amount && !amountless()) {
+        appendLiquidSources(payment_amount);
+    }
+
+    if (amountless() || !payment_amount) {
+        appendLightningSource(std::nullopt);
+    } else {
+        appendLightningSource(payment_amount);
+    }
+
+    selectDefaultSource();
 }

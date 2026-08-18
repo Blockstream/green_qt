@@ -97,7 +97,7 @@ StackViewPage {
     Connections {
         target: amount_convert
         function onResultChanged() {
-            controller.satoshi = amount_convert.result?.satoshi ?? ''
+            controller.satoshi = amount_field.text.length > 0 ? (amount_convert.result?.satoshi ?? '') : ''
         }
     }
 

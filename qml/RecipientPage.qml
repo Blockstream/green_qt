@@ -16,7 +16,7 @@ StackViewPage {
     property list<Account> accounts
     property var assets
     property var error: null
-    readonly property bool closeBlocked: lightning_send_controller.busy
+    readonly property bool closeBlocked: lightning_send_controller.busy || lightning_lnurl_controller.busy
     readonly property bool submarineSwapAvailable: UtilJS.isSwapAvailable('liquid', 'lightning')
     readonly property string liquidLightningDisabledError: 'Paying Lightning invoices with Liquid Bitcoin is temporarily disabled.'
     readonly property bool isLiquidAssetSend: {
@@ -111,19 +111,76 @@ StackViewPage {
         })
     }
 
+    function pushNativeLnurl() {
+        lightning_lnurl_controller.input = recipient_field.recipient.input ?? recipient_field.input
+        self.error = null
+        return self.pushPage(lightning_lnurl_page)
+    }
+
+    function pushLnurlSource(source) {
+        if (source.type === PaymentSource.Lightning) {
+            return self.pushNativeLnurl()
+        }
+
+        self.error = null
+        return self.pushPage(lnurl_page, {
+            account: source.account,
+            asset: source.asset,
+            input: recipient_field.input,
+            recipient: recipient_field.recipient
+        })
+    }
+
+    function updateLnurl(recipient) {
+        if (recipient.lnurl?.tag && recipient.lnurl.tag !== 'payRequest') {
+            self.error = { code: 'id_invalid_address', visible: true }
+            return true
+        }
+
+        if (self.lightningOnly) {
+            self.pushNativeLnurl()
+            return true
+        }
+
+        if (self.isLiquidAssetSend) {
+            if (!self.submarineSwapAvailable) {
+                self.error = { code: self.liquidLightningDisabledError, visible: true }
+                return true
+            }
+            return false
+        }
+
+        lightning_send_controller.refreshAvailableSources()
+        const sources = lightning_send_controller.sources
+        const ln_source = sources.find(s => s.type === PaymentSource.Lightning)
+        const liquid_source = sources.find(s => s.type === PaymentSource.GdkAccount)
+        const liquid_available = !!liquid_source && self.submarineSwapAvailable
+
+        if (ln_source) {
+            if (liquid_available) {
+                self.error = null
+                self.pushPage(payment_source_selector_page, { sources, lnurlSelection: true })
+            } else {
+                self.pushNativeLnurl()
+            }
+            return true
+        }
+
+        if (liquid_available) return false
+
+        self.error = {
+            code: lightning_send_controller.error
+                || (liquid_source ? self.liquidLightningDisabledError : 'id_insufficient_funds'),
+            visible: true
+        }
+        return true
+    }
+
     function update(recipient) {
         let asset, asset_id, error, network
 
         if (recipient.error) {
-            if (recipient.error.includes('DNS resolution failed')) {
-                self.error = { code: 'DNS resolution failed', visible: true }
-            } else if (recipient.error.includes('Invalid payment category')) {
-                self.error = { code: 'id_invalid_address', visible: true }
-            } else {
-                const code = recipient.error
-                    .replace('Reqwest error: ', '')
-                self.error = { code, visible: true }
-            }
+            self.error = { code: 'id_invalid_address', visible: true }
             return
         }
 
@@ -131,7 +188,11 @@ StackViewPage {
             return self.updateLightningInvoice(recipient)
         }
 
-        if (recipient.bip353 || recipient.bolt12 || recipient.lnurl) {
+        if (recipient.lnurl) {
+            if (self.updateLnurl(recipient)) return
+        }
+
+        if (recipient.bip353 || recipient.bolt12) {
             if (self.lightningOnly) {
                 self.error = {
                     code: 'BIP-353 / BOLT12 / LNURL payments are only available for Liquid Bitcoin',
@@ -282,6 +343,10 @@ StackViewPage {
         context: self.context
         lightningOnly: self.lightningOnly
     }
+    LightningLnurlController {
+        id: lightning_lnurl_controller
+        context: self.context
+    }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
         spacing: 5
@@ -410,10 +475,32 @@ StackViewPage {
     Component {
         id: payment_source_selector_page
         PaymentSourceSelectorPage {
+            property bool lnurlSelection: false
             context: self.context
             onSourceClicked: (source) => {
-                self.pushPaymentSource(source)
+                if (lnurlSelection) {
+                    self.pushLnurlSource(source)
+                } else {
+                    self.pushPaymentSource(source)
+                }
             }
+            onCloseClicked: self.closeClicked()
+        }
+    }
+    Component {
+        id: lightning_lnurl_page
+        LightningLnurlPage {
+            context: self.context
+            controller: lightning_lnurl_controller
+            onNextClicked: self.pushPage(lightning_lnurl_confirm_page)
+            onCloseClicked: self.closeClicked()
+        }
+    }
+    Component {
+        id: lightning_lnurl_confirm_page
+        LightningLnurlConfirmPage {
+            context: self.context
+            controller: lightning_lnurl_controller
             onCloseClicked: self.closeClicked()
         }
     }

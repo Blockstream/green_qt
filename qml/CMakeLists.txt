@@ -288,6 +288,8 @@ set(QML_FILES_FEATURES
     LightningReceivePage.qml
     LightningInvoicePage.qml
     LightningAmountlessPage.qml
+    LightningLnurlPage.qml
+    LightningLnurlConfirmPage.qml
     LightningSendConfirmPage.qml
     LightningTransactionDetailsPage.qml
     LightningTransactionPage.qml

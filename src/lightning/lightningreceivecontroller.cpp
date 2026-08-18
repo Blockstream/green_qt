@@ -60,8 +60,10 @@ QString LightningReceiveController::error() const
 {
     if (!m_error.isEmpty()) return m_error;
 
+    // Empty field: no validation yet. Explicit 0 must still fail the minimum check.
+    if (m_satoshi.trimmed().isEmpty()) return {};
+
     const auto amount_satoshi = amount();
-    if (amount_satoshi == 0) return {};
     if (m_max_satoshi && amount_satoshi > *m_max_satoshi) return QStringLiteral("maximum");
 
     const auto inbound_liquidity = InboundLiquidity(context());
@@ -89,10 +91,10 @@ QString LightningReceiveController::validationState() const
 {
     if (!m_error.isEmpty()) return QStringLiteral("error");
 
-    const auto amount_satoshi = amount();
-    if (amount_satoshi == 0) return {};
+    if (m_satoshi.trimmed().isEmpty()) return {};
     if (!error().isEmpty()) return QStringLiteral("error");
 
+    const auto amount_satoshi = amount();
     const auto inbound_liquidity = InboundLiquidity(context());
     const auto needs_funding = inbound_liquidity <= 0 || amount_satoshi > inbound_liquidity;
     if (m_recommended_satoshi && needs_funding && amount_satoshi < *m_recommended_satoshi) {

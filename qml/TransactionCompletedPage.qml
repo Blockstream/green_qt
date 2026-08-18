@@ -8,6 +8,8 @@ StackViewPage {
     id: self
     property AccountTransaction transaction
     property string message: qsTrId('id_successfully_sent_your_funds')
+    property string successActionMessage: ''
+    property string successActionUrl: ''
     // Overridable: a caller that knows the txhash but may lack the
     // AccountTransaction (e.g. Amp2SignPage when the post-broadcast refresh
     // scan failed) can pass it directly so the txid pane still shows.
@@ -32,6 +34,14 @@ StackViewPage {
             text: qsTrId('id_view_in_explorer')
             visible: self.explorerUrl.length > 0
             onClicked: Qt.openUrlExternally(self.explorerUrl)
+        }
+        LinkButton {
+            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 16
+            external: true
+            text: self.successActionUrl
+            visible: self.successActionUrl.length > 0
+            onClicked: Qt.openUrlExternally(self.successActionUrl)
         }
     }
     contentItem: ColumnLayout {
@@ -59,6 +69,17 @@ StackViewPage {
                 horizontalAlignment: Label.AlignHCenter
                 text: self.message
                 visible: self.message.length > 0
+                wrapMode: Label.WordWrap
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.topMargin: 8
+                color: '#FFFFFF'
+                font.pixelSize: 14
+                font.weight: 400
+                horizontalAlignment: Label.AlignHCenter
+                text: self.successActionMessage
+                visible: self.successActionMessage.length > 0
                 wrapMode: Label.WordWrap
             }
         }

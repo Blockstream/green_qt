@@ -54,6 +54,8 @@ public:
     QFuture<LightningCreateInvoiceResult> createInvoice(quint64 satoshi, const QString& description) const;
     QFuture<LightningValueResult<LightningSendResponse>> sendPayment(const QString& invoice, std::optional<quint64> amount_msat);
     LightningValueResult<LightningParsedInvoice> parseInvoice(const QString& input) const;
+    QFuture<LightningValueResult<LightningLnurlPayRequest>> resolveLnurlPay(const QString& input) const;
+    QFuture<LightningValueResult<LightningLnurlPayResult>> lnurlPay(const LightningLnurlPayRequest& request, quint64 amount_msat, const QString& comment);
     void disconnectNode();
     void refreshNodeInfo();
     void refreshPayments();

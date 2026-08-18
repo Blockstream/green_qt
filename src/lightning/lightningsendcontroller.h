@@ -94,6 +94,7 @@ public:
 public slots:
     void pay();
     void refresh();
+    void refreshAvailableSources();
 
 signals:
     void updated();
@@ -107,6 +108,9 @@ private:
     void setError(const QString& error);
     void update();
     void buildSources();
+    void appendLiquidSources(std::optional<quint64> payment_amount);
+    void appendLightningSource(std::optional<quint64> payment_amount);
+    void selectDefaultSource();
 
 private:
     QString m_invoice;

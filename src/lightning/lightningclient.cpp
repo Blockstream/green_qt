@@ -1,6 +1,7 @@
 #include "config.h"
 #include "glsdk.hpp"
 #include "lightningclient.h"
+#include "lightninglnurl.h"
 #include "util.h"
 
 #include <QByteArray>
@@ -8,6 +9,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QLoggingCategory>
+#include <QVariantMap>
 
 #include <exception>
 #include <memory>
@@ -189,6 +191,35 @@ LightningNodeInfo ToLightningNodeInfo(const glsdk::NodeState& node_state)
     return info;
 }
 
+QVariantMap ToSuccessAction(const glsdk::SuccessActionProcessed& action)
+{
+    const auto& variant = action.get_variant();
+    if (std::holds_alternative<glsdk::SuccessActionProcessed::kMessage>(variant)) {
+        const auto& message = std::get<glsdk::SuccessActionProcessed::kMessage>(variant);
+        return {
+            { QStringLiteral("type"), QStringLiteral("message") },
+            { QStringLiteral("message"), QString::fromStdString(message.message) },
+        };
+    }
+    if (std::holds_alternative<glsdk::SuccessActionProcessed::kUrl>(variant)) {
+        const auto& url = std::get<glsdk::SuccessActionProcessed::kUrl>(variant);
+        return {
+            { QStringLiteral("type"), QStringLiteral("url") },
+            { QStringLiteral("description"), QString::fromStdString(url.description) },
+            { QStringLiteral("url"), QString::fromStdString(url.url) },
+        };
+    }
+    if (std::holds_alternative<glsdk::SuccessActionProcessed::kAes>(variant)) {
+        const auto& aes = std::get<glsdk::SuccessActionProcessed::kAes>(variant);
+        return {
+            { QStringLiteral("type"), QStringLiteral("aes") },
+            { QStringLiteral("description"), QString::fromStdString(aes.description) },
+            { QStringLiteral("plaintext"), QString::fromStdString(aes.plaintext) },
+        };
+    }
+    return {};
+}
+
 }
 
 LightningClient::LightningClient()
@@ -266,6 +297,95 @@ LightningValueResult<LightningParsedInvoice> LightningClient::parseInvoice(const
         }
 
         return { std::nullopt, QStringLiteral("Input is not a valid lightning invoice") };
+    } catch (...) {
+        return { std::nullopt, CurrentGlsdkExceptionMessage() };
+    }
+}
+
+LightningValueResult<LightningLnurlPayRequest> LightningClient::resolveLnurlPay(const QString& input) const
+{
+    if (input.trimmed().isEmpty()) {
+        return { std::nullopt, QStringLiteral("Input is not a valid LNURL pay request") };
+    }
+
+    try {
+        const auto resolved = glsdk::resolve_input(input.toStdString());
+        const auto& variant = resolved.get_variant();
+        if (std::holds_alternative<glsdk::ResolvedInput::kLnUrlWithdraw>(variant)) {
+            return { std::nullopt, QStringLiteral("LNURL-withdraw is not supported for send") };
+        }
+        if (!std::holds_alternative<glsdk::ResolvedInput::kLnUrlPay>(variant)) {
+            return { std::nullopt, QStringLiteral("Input is not a valid LNURL pay request") };
+        }
+
+        const auto& data = std::get<glsdk::ResolvedInput::kLnUrlPay>(variant).data;
+        const auto metadata = ParseLightningLnurlMetadata(QString::fromStdString(data.metadata));
+        const auto lnurl = QString::fromStdString(data.lnurl);
+        const auto callback = QString::fromStdString(data.callback);
+        const auto description = data.description.empty() ? metadata.description : QString::fromStdString(data.description);
+
+        return { LightningLnurlPayRequest{
+            callback,
+            data.min_sendable,
+            data.max_sendable,
+            data.comment_allowed,
+            description,
+            QString::fromStdString(data.metadata),
+            lnurl,
+            LightningLnurlDomain(lnurl, callback),
+            metadata.image,
+        }, {} };
+    } catch (...) {
+        return { std::nullopt, CurrentGlsdkExceptionMessage() };
+    }
+}
+
+LightningValueResult<LightningLnurlPayResult> LightningClient::lnurlPay(const std::shared_ptr<glsdk::Node>& node, const LightningLnurlPayRequest& request, const quint64 amount_msat, const QString& comment) const
+{
+    if (!node) return { std::nullopt, QStringLiteral("GL-SDK node is not connected") };
+    if (amount_msat == 0) {
+        return { std::nullopt, QStringLiteral("Invoice amount is missing") };
+    }
+    if (request.callback.isEmpty() || request.lnurl.isEmpty()) {
+        return { std::nullopt, QStringLiteral("Input is not a valid LNURL pay request") };
+    }
+
+    try {
+        glsdk::LnUrlPayRequestData data;
+        data.callback = request.callback.toStdString();
+        data.min_sendable = request.min_sendable_msat;
+        data.max_sendable = request.max_sendable_msat;
+        data.metadata = request.metadata.toStdString();
+        data.comment_allowed = request.comment_allowed;
+        data.description = request.description.toStdString();
+        data.lnurl = request.lnurl.toStdString();
+
+        glsdk::LnUrlPayRequest pay_request;
+        pay_request.data = data;
+        pay_request.amount_msat = amount_msat;
+        if (!comment.isEmpty()) {
+            pay_request.comment = comment.toStdString();
+        }
+        pay_request.validate_success_action_url = true;
+
+        const auto result = node->lnurl_pay(pay_request);
+        const auto& variant = result.get_variant();
+        if (std::holds_alternative<glsdk::LnUrlPayResult::kEndpointError>(variant)) {
+            const auto reason = QString::fromStdString(std::get<glsdk::LnUrlPayResult::kEndpointError>(variant).data.reason).trimmed();
+            return { std::nullopt, reason.isEmpty() ? QStringLiteral("LNURL request failed") : reason };
+        }
+        if (std::holds_alternative<glsdk::LnUrlPayResult::kPayError>(variant)) {
+            const auto reason = QString::fromStdString(std::get<glsdk::LnUrlPayResult::kPayError>(variant).data.reason).trimmed();
+            return { std::nullopt, reason.isEmpty() ? QStringLiteral("Payment failed") : reason };
+        }
+
+        const auto& success = std::get<glsdk::LnUrlPayResult::kEndpointSuccess>(variant).data;
+        LightningLnurlPayResult pay_result;
+        pay_result.payment_preimage = QString::fromStdString(success.payment_preimage);
+        if (success.success_action) {
+            pay_result.success_action = ToSuccessAction(*success.success_action);
+        }
+        return { pay_result, {} };
     } catch (...) {
         return { std::nullopt, CurrentGlsdkExceptionMessage() };
     }

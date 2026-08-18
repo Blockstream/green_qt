@@ -302,6 +302,50 @@ LightningValueResult<LightningParsedInvoice> LightningSession::parseInvoice(cons
     return m_client->parseInvoice(input);
 }
 
+QFuture<LightningValueResult<LightningLnurlPayRequest>> LightningSession::resolveLnurlPay(const QString& input) const
+{
+    if (QThread::currentThread() != thread()) {
+        QFuture<LightningValueResult<LightningLnurlPayRequest>> future;
+        QMetaObject::invokeMethod(const_cast<LightningSession*>(this), [this, input, &future] {
+            future = resolveLnurlPay(input);
+        }, Qt::BlockingQueuedConnection);
+        return future;
+    }
+
+    const auto client = m_client;
+    return QtConcurrent::run([client, input] {
+        return client->resolveLnurlPay(input);
+    });
+}
+
+QFuture<LightningValueResult<LightningLnurlPayResult>> LightningSession::lnurlPay(const LightningLnurlPayRequest& request, const quint64 amount_msat, const QString& comment)
+{
+    if (QThread::currentThread() != thread()) {
+        QFuture<LightningValueResult<LightningLnurlPayResult>> future;
+        QMetaObject::invokeMethod(this, [this, request, amount_msat, comment, &future] {
+            future = lnurlPay(request, amount_msat, comment);
+        }, Qt::BlockingQueuedConnection);
+        return future;
+    }
+
+    const auto client = m_client;
+    const auto node = m_node;
+    const auto mutex = m_node_operation_mutex;
+    const auto node_generation = m_node_generation;
+
+    auto future = QtConcurrent::run([client, node, mutex, request, amount_msat, comment] {
+        QMutexLocker locker(mutex.get());
+        return client->lnurlPay(node, request, amount_msat, comment);
+    });
+
+    return future.then(this, [=, this](LightningValueResult<LightningLnurlPayResult> result) {
+        if (m_node == node && m_node_generation == node_generation && result) {
+            refreshAfterPayment();
+        }
+        return result;
+    });
+}
+
 bool LightningSession::beginConnect()
 {
     if (m_state != State::Disconnected && m_state != State::Failed) return false;
