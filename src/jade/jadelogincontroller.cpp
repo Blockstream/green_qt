@@ -19,7 +19,6 @@
 #include <QByteArray>
 #include <QCryptographicHash>
 #include <QPointer>
-#include <QRandomGenerator>
 #include <QtConcurrentRun>
 
 namespace {
@@ -551,7 +550,11 @@ void JadeGenuineCheckController::genuineCheck()
     if (!m_device->api()) return;
 
     QByteArray challenge(32, Qt::Uninitialized);
-    QRandomGenerator::global()->generate(challenge.begin(), challenge.end());
+    const auto rc = GA_get_random_bytes(32, (unsigned char*) challenge.data(), 32);
+    if (rc != GA_OK) {
+        emit failed();
+        return;
+    }
 
     if (!context()) {
         setContext(ContextManager::instance()->create("mainnet", false));
