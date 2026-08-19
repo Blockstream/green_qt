@@ -135,20 +135,10 @@ void MnemonicEditorController::update()
     if (!valid) return setValid(false);
 
     const auto m = mnemonic().join(" ").toUtf8();
-    const auto p = m_passphrase.toUtf8();
 
     struct words* ws;
     bip39_get_wordlist(nullptr, &ws);
     int rc = bip39_mnemonic_validate(ws, m.data());
-    if (rc != WALLY_OK) {
-        setError("mnemonic", "invalid");
-        setValid(false);
-        return;
-    }
-
-    unsigned char bytes[BIP39_SEED_LEN_512];
-    size_t len;
-    rc = bip39_mnemonic_to_seed(m.data(), m_mnemonic_size == 27 ? p.data() : nullptr, bytes, BIP39_SEED_LEN_512, &len);
     if (rc != WALLY_OK) {
         setError("mnemonic", "invalid");
         setValid(false);
