@@ -43,6 +43,9 @@ public:
     bool isIdle() const;
     bool isBusy() const;
 
+    // Fail every registered response handler (e.g. after disconnect or OTA abort).
+    void failPendingRequests();
+
     // Function which must be called whenever an http-request response is received.
     // (If caller sets their own HttpRequestProxy, it should call this when the response is received.)
     void handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonValue &httpResponse);
@@ -147,6 +150,9 @@ private:
 
     // Records activity on the connection. Safe to call from any thread.
     void restartIdleTimer();
+
+    // Whether a response handler is still registered for id. Safe to call from any thread.
+    bool hasResponseHandler(int id) const;
 
     // Client call response handlers for async response
     int registerResponseHandler(const ResponseHandler &cb, int timeout = 0);

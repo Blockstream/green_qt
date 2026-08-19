@@ -3,10 +3,12 @@
 
 #include "httprequestactivity.h"
 
+#include <QPointer>
 #include <QtQml>
 #include <QObject>
 
 class Activity;
+class JadeAPI;
 class JadeDevice;
 
 class JadeHttpRequestActivity : public HttpRequestActivity
@@ -122,6 +124,7 @@ class JadeFirmwareUpdateController : public QObject
     QML_ELEMENT
 public:
     explicit JadeFirmwareUpdateController(QObject* parent = nullptr);
+    ~JadeFirmwareUpdateController() override;
     JadeDevice* device() const { return m_device; }
     void setDevice(JadeDevice* device);
     QVariantMap firmware() const { return m_firmware; }
@@ -146,10 +149,16 @@ signals:
     void unlockRequired();
     void activityCreated(Activity* activity);
 private:
+    void setLocked(bool locked);
+    void abortUpdate();
     JadeDevice* m_device{nullptr};
+    QPointer<Activity> m_activity;
+    QPointer<JadeDevice> m_completing_device;
+    QPointer<JadeAPI> m_completing_api;
     bool m_fetching{false};
     bool m_updating{false};
     bool m_started{false};
+    bool m_completing{false};
     float m_progress{0};
     QVariantMap m_firmware;
 };

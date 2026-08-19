@@ -72,14 +72,16 @@ JadeAPI::JadeAPI(JadeConnection *connection, QObject *parent)
             this, &JadeAPI::onOpenError);
     connect(m_jade, &JadeConnection::onConnected,
             this, &JadeAPI::onConnected);
-    connect(m_jade, &JadeConnection::onDisconnected,
-            this, &JadeAPI::onDisconnected);
+    connect(m_jade, &JadeConnection::onDisconnected, this, [this] {
+        emit onDisconnected();
+        failPendingRequests();
+    });
 }
 
 JadeAPI::~JadeAPI()
 {
-    // Disconnect the underlying connection's signals
     disconnect(m_jade, nullptr, this, nullptr);
+    failPendingRequests();
 }
 
 bool JadeAPI::relaxWrite() const
@@ -106,6 +108,44 @@ void JadeAPI::connectDevice()
 void JadeAPI::disconnectDevice()
 {
     m_jade->disconnectDevice();
+}
+
+void JadeAPI::failPendingRequests()
+{
+    QMap<int, ResponseHandler> handlers;
+    {
+        QMutexLocker locker(&m_mutex);
+        handlers = m_responseHandlers;
+        m_responseHandlers.clear();
+        m_request_proxy.clear();
+        m_msg_timeout.clear();
+    }
+
+    // See enqueue() - the send state is only ever touched on the JadeAPI thread.
+    const auto clear_transport = [this] {
+        m_msg_queue.clear();
+        m_msg_inflight.clear();
+    };
+    if (QThread::currentThread() == thread()) {
+        clear_transport();
+    } else {
+        QMetaObject::invokeMethod(this, clear_transport, Qt::BlockingQueuedConnection);
+    }
+
+    const QVariantMap error = {{ "error", QVariantMap{{ "message", "disconnected" }} }};
+    for (const auto& handler : handlers) {
+        try {
+            handler(error);
+        } catch (...) {
+            qWarning() << "JadeAPI::failPendingRequests() - Error in client handler";
+        }
+    }
+}
+
+bool JadeAPI::hasResponseHandler(int id) const
+{
+    QMutexLocker locker(&m_mutex);
+    return m_responseHandlers.contains(id);
 }
 
 bool JadeAPI::isIdle() const
@@ -299,6 +339,10 @@ void JadeAPI::enqueue(const QCborMap &msg)
 
     restartIdleTimer();
 
+    // failPendingRequests() may have cleared the handler between register and enqueue.
+    // Do not queue/send orphaned ids - they would block drain() forever.
+    if (!hasResponseHandler(msg["id"].toString().toInt())) return;
+
     if (m_msg_inflight.isEmpty() && m_msg_queue.empty()) {
          // Nothing in progress, nothing queued: can send immediately
         send(msg);
@@ -319,15 +363,22 @@ void JadeAPI::send(const QCborMap &msg)
     const auto method = msg["method"].toString();
     // qInfo() << "JadeAPI::sendToJade() - Sending message ->" << id << method;
     Q_ASSERT(m_jade);
-    m_jade->send(msg);
+
     int timeout;
     {
+        // Same race as enqueue: never mark in-flight without a live handler.
         // Consume the timeout - the request is sent once, and leaving the entry
         // behind would grow the map for the lifetime of the connection.
         QMutexLocker locker(&m_mutex);
+        if (!m_responseHandlers.contains(id)) return;
         timeout = m_msg_timeout.take(id);
     }
+    // Mark in-flight before writing: the write is synchronous and a failed one
+    // disconnects from inside m_jade->send(), which settles this request via
+    // failPendingRequests(). Inserting afterwards would resurrect the id with no
+    // handler left to clear it, and drain() would never send anything again.
     m_msg_inflight.insert(id);
+    m_jade->send(msg);
     if (timeout > 0) QTimer::singleShot(timeout, this, [=, this] {
         // Get (ie. remove) the response handler for that id from the map of registered handlers
         ResponseHandler handler;
@@ -350,9 +401,18 @@ void JadeAPI::send(const QCborMap &msg)
 
 void JadeAPI::drain()
 {
-    if (!m_msg_inflight.isEmpty()) return;
-    if (m_msg_queue.isEmpty()) return;
-    send(m_msg_queue.dequeue());
+    if (QThread::currentThread() != thread()) {
+        QMetaObject::invokeMethod(this, &JadeAPI::drain, Qt::QueuedConnection);
+        return;
+    }
+
+    while (m_msg_inflight.isEmpty() && !m_msg_queue.isEmpty()) {
+        const QCborMap msg = m_msg_queue.dequeue();
+        // Skip requests failPendingRequests() has already settled
+        if (!hasResponseHandler(msg["id"].toString().toInt())) continue;
+        send(msg);
+        return;
+    }
 }
 
 /*

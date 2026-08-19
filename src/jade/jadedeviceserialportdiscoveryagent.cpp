@@ -81,11 +81,15 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
 void JadeDeviceSerialPortDiscoveryAgent::scan()
 {
     for (auto backend : m_backends.values()) {
-        if (backend->m_locked) {
+        if (!backend->m_locked) continue;
+        // Keep skipping while OTA is using a live connection. If the device
+        // was unplugged, drop the lock so a later reconnect can be discovered.
+        if (backend->isConnected()) {
             qDebug() << Q_FUNC_INFO << "skip 10s due to OTA";
             QTimer::singleShot(10000, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
             return;
         }
+        backend->m_locked = false;
     }
 
     QtConcurrent::run([=, this] {

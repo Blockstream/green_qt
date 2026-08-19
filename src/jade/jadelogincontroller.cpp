@@ -424,11 +424,17 @@ void JadeIdentifyTask::update()
 
     if (device->state() == JadeDevice::StateLocked) return;
     if (device->state() == JadeDevice::StateTemporary) {
-        device->api()->authUserWithEntropy(network->canonicalId(), [=, this](const QVariantMap& msg) {
+        QPointer<JadeIdentifyTask> self(this);
+        QPointer<JadeDevice> jade(device);
+        device->api()->authUserWithEntropy(network->canonicalId(), [=](const QVariantMap& msg) {
+            if (!self) return;
+            if (msg.contains("error") || !(msg.contains("result") && msg["result"] == true)) {
+                self->setStatus(Status::Failed);
+                return;
+            }
             qDebug() << Q_FUNC_INFO;
-            device->updateVersionInfo();
-        }, [=, this](JadeAPI& jade, int id, const QJsonObject& req) {
-        });
+            if (jade) jade->updateVersionInfo();
+        }, [](JadeAPI&, int, const QJsonObject&) {});
         return;
     };
 
@@ -595,7 +601,9 @@ void JadeGenuineCheckController::genuineCheck()
         m_session = context()->getOrCreateSession(network);
     }
 
-    m_device->api()->signAttestation(challenge, [=, this](const QVariantMap& msg) {
+    QPointer<JadeGenuineCheckController> self(this);
+    m_device->api()->signAttestation(challenge, [=](const QVariantMap& msg) {
+        if (!self) return;
         if (msg.contains("result")) {
             const auto result = msg.value("result").toMap();
 
@@ -603,17 +611,17 @@ void JadeGenuineCheckController::genuineCheck()
             const auto pubkey_pem = result.value("pubkey_pem").toString();
             const auto signature = result.value("signature").toByteArray();
 
-            auto group = new TaskGroup(this);
+            auto group = new TaskGroup(self.data());
 
-            group->add(new ConnectTask(m_session));
-            group->add(new RSAVerifyTask(pubkey_pem, challenge, signature, m_session));
-            group->add(new RSAVerifyTask(g_ext_pubkey_pem, pubkey_pem.toUtf8(), ext_signature, m_session));
+            group->add(new ConnectTask(self->m_session));
+            group->add(new RSAVerifyTask(pubkey_pem, challenge, signature, self->m_session));
+            group->add(new RSAVerifyTask(g_ext_pubkey_pem, pubkey_pem.toUtf8(), ext_signature, self->m_session));
 
-            connect(group, &TaskGroup::finished, this, &JadeGenuineCheckController::success);
-            connect(group, &TaskGroup::failed, this, &JadeGenuineCheckController::failed);
+            connect(group, &TaskGroup::finished, self.data(), &JadeGenuineCheckController::success);
+            connect(group, &TaskGroup::failed, self.data(), &JadeGenuineCheckController::failed);
 
-            monitor()->add(group);
-            dispatcher()->add(group);
+            self->monitor()->add(group);
+            self->dispatcher()->add(group);
 
             return;
         }
@@ -623,17 +631,17 @@ void JadeGenuineCheckController::genuineCheck()
             const auto code = error.value("code").toLongLong();
 
             if (code == -32000) {
-                emit cancelled();
+                emit self->cancelled();
                 return;
             }
 
             if (code == -32603) {
-                emit unsupported();
+                emit self->unsupported();
                 return;
             }
         }
 
         qDebug() << Q_FUNC_INFO << msg;
-        emit failed();
+        emit self->failed();
     });
 }
