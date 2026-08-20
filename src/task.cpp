@@ -1967,7 +1967,7 @@ void ConnectTask::update()
             auto tor_session = SessionManager::instance()->torSession();
             if (tor_session != session()) {
                 const auto tag = tor_session->events().value("tor").toObject().value("tag").toString();
-                if (tag != "done") {
+                if (tag != "done" && !tor_session->isConnected()) {
                     qDebug() << Q_FUNC_INFO << session()->network()->id() << "wait for tor session";
                     return;
                 }
