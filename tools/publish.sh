@@ -10,18 +10,26 @@ if [[ -z "$CHANNEL" ]]; then
     exit 1
 fi
 
-echo Publishing version $VERSION to channel $CHANNEL
+if [[ -z "$GCLOUD_BUCKET" ]]; then
+    echo "Must set GCLOUD_BUCKET environment variable" 1>&2
+    exit 1
+fi
+
+DEST_BASE="gs://${GCLOUD_BUCKET}/desktop"
+DEST_VERSION="${DEST_BASE}/${CHANNEL}/${VERSION}"
+
+echo "Publishing version ${VERSION} to channel ${CHANNEL}"
 
 cp ../tools/templates/channel.json ${CHANNEL}.json
 
 sed -i -e "s/CHANNEL_STRING/${CHANNEL}/g" ${CHANNEL}.json
 sed -i -e "s/VERSION_STRING/${VERSION}/g" ${CHANNEL}.json
 
-gsutil -h "Cache-Control: no-store" cp ${CHANNEL}.json gs://${GCLOUD_BUCKET}/desktop/
+gcloud storage cp --cache-control="no-store" "${CHANNEL}.json" "${DEST_BASE}/"
 
-gsutil cp SHA256SUMS.asc gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp Blockstream-x86_64.AppImage gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp Blockstream-universal.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp Blockstream-arm64.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp Blockstream-x86_64.dmg gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
-gsutil cp BlockstreamSetup-x86_64.exe gs://${GCLOUD_BUCKET}/desktop/${CHANNEL}/${VERSION}/
+gcloud storage cp SHA256SUMS.asc "${DEST_VERSION}/"
+gcloud storage cp Blockstream-x86_64.AppImage "${DEST_VERSION}/"
+gcloud storage cp Blockstream-universal.dmg "${DEST_VERSION}/"
+gcloud storage cp Blockstream-arm64.dmg "${DEST_VERSION}/"
+gcloud storage cp Blockstream-x86_64.dmg "${DEST_VERSION}/"
+gcloud storage cp BlockstreamSetup-x86_64.exe "${DEST_VERSION}/"
