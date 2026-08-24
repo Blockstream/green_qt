@@ -10,7 +10,7 @@ linux-x86_64:build-image:
   tags:
     - cloud
   variables:
-    LINUX_IMAGE: $GAR/green_qt/linux-x86_64@sha256:5301f57211fb2ae3f0bcfefdb566e9df18acec7a7045866f48718a3e01b4f23d
+    LINUX_IMAGE: $GAR/green_qt/linux-x86_64@sha256:3d0c8ad314409a34e66898859bda1f43a6d7e5178f68286ff0b830553934c1fc
 
 linux-x86_64:test:
   stage: test
