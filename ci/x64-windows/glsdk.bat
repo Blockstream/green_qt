@@ -36,4 +36,9 @@ copy %RELEASE_DIR%\glsdk.dll.lib %PREFIX%\bin\
 :: Print the native system libs needed to statically link glsdk.lib.
 cargo rustc --release -p gl-sdk --target %TARGET% --crate-type staticlib -- --print native-static-libs
 
+:: Same MAX_PATH limit on ImportLayer as in lwk.bat -- see the comment there.
+cd \
+rmdir /s /q C:\glsdk-src
+rmdir /s /q C:\cargo\registry
+
 endlocal

@@ -18,6 +18,10 @@ cmake -S leveldb-src -B leveldb-bld ^
 
 cmake --build leveldb-bld --config Release
 
-cmake --install leveldb-bld --strip --prefix %PREFIX%
+cmake --install leveldb-bld --strip --prefix %PREFIX% || exit /b 1
+
+:: Keep the layer small -- nothing after this step needs the source or build tree.
+rmdir /s /q leveldb-src
+rmdir /s /q leveldb-bld
 
 endlocal

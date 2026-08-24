@@ -21,6 +21,10 @@ cmake -S countly-src -B countly-bld ^
 
 cmake --build countly-bld --config Release
 
-cmake --install countly-bld --strip --prefix %PREFIX%
+cmake --install countly-bld --strip --prefix %PREFIX% || exit /b 1
+
+:: Keep the layer small -- nothing after this step needs the source or build tree.
+rmdir /s /q countly-src
+rmdir /s /q countly-bld
 
 endlocal

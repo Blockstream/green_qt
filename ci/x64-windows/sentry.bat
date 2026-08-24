@@ -31,6 +31,10 @@ call \qt\6.11.1\msvc2022_64\bin\qt-cmake -S sentry-native-src -B sentry-native-b
 
 cmake --build sentry-native-bld --config RelWithDebInfo
 
-cmake --install sentry-native-bld --strip --prefix %PREFIX% --config RelWithDebInfo
+cmake --install sentry-native-bld --strip --prefix %PREFIX% --config RelWithDebInfo || exit /b 1
+
+:: Keep the layer small -- nothing after this step needs the source or build tree.
+rmdir /s /q sentry-native-src
+rmdir /s /q sentry-native-bld
 
 endlocal

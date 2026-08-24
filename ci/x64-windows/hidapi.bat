@@ -21,6 +21,11 @@ cmake -S hidapi-%FILENAME% -B hidapi-bld ^
 
 cmake --build hidapi-bld --config Release
 
-cmake --install hidapi-bld --strip --prefix %PREFIX%
+cmake --install hidapi-bld --strip --prefix %PREFIX% || exit /b 1
+
+:: Keep the layer small -- nothing after this step needs the source or build tree.
+del /q %ARCHIVE%
+rmdir /s /q hidapi-%FILENAME%
+rmdir /s /q hidapi-bld
 
 endlocal

@@ -22,6 +22,10 @@ cmake -S zxing-cpp-src -B zxing-cpp-bld ^
 
 cmake --build zxing-cpp-bld --config Release
 
-cmake --install zxing-cpp-bld --strip --prefix %PREFIX%
+cmake --install zxing-cpp-bld --strip --prefix %PREFIX% || exit /b 1
+
+:: Keep the layer small -- nothing after this step needs the source or build tree.
+rmdir /s /q zxing-cpp-src
+rmdir /s /q zxing-cpp-bld
 
 endlocal

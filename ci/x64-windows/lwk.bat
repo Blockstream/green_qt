@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 set PATH=%PATH%;C:\cargo\bin
 
 set LWK_REPO=https://github.com/Blockstream/lwk
-set LWK_COMMIT=d60c12aaeb3240422c3aef2c9929b592f052eef7
+set LWK_COMMIT=f3b10f522c0aa334b637fa9bc9a50f8beed860f7
 set TARGET=x86_64-pc-windows-msvc
 
 git clone --recurse-submodules --quiet %LWK_REPO% lwk-src
@@ -35,5 +35,15 @@ copy %RELEASE_DIR%\lwk.dll.lib %PREFIX%\bin\
 
 :: Print the native system libs needed to statically link lwk.lib.
 cargo rustc --release -p lwk_bindings --target %TARGET% --crate-type staticlib -- --print native-static-libs
+
+:: Docker's Windows graphdriver re-creates every path in this layer under
+:: C:\ProgramData\Docker\windowsfilter\<64-hex-id>\Files\ -- about 106 characters of
+:: prefix -- and ImportLayer is still bound by MAX_PATH (260). The cargo target tree and
+:: the extracted crate sources are by far the deepest paths here. Nothing after this step
+:: needs any of it, so the whole lot goes before the layer is committed -- including the
+:: download cache, so glsdk.bat re-downloads its crates rather than shipping them here.
+cd \
+rmdir /s /q C:\lwk-src
+rmdir /s /q C:\cargo\registry
 
 endlocal

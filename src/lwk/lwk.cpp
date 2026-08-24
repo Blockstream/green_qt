@@ -21,9 +21,6 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_func_derive_token_id() != 30312) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_func_get_path() != 14693) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
     if (uniffi_lwk_checksum_func_is_provably_segwit() != 18100) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -94,6 +91,18 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_amp2_descriptor_from_str() != 47737) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_amp2_elip153_from_signer() != 1406) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_amp2_elip153_from_str() != 43116) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_amp2_elip153_user_path() != 17407) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_amp2_elip153_view_path() != 63960) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_amp2_register_wallet() != 64376) {
@@ -240,6 +249,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_boltzsession_invoice() != 64828) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_boltzsession_is_lockup_unspent() != 38106) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_boltzsession_lbtc_to_btc() != 24979) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -312,6 +324,21 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_currencycode_name() != 27063) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_customelementsnetworkbuilder_build() != 37373) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_customelementsnetworkbuilder_with_genesis_hash() != 3891) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_customelementsnetworkbuilder_with_parent_genesis_hash() != 57958) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_customelementsnetworkbuilder_with_policy_asset() != 42805) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_derivationpath_to_vec() != 25747) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_electrumclient_broadcast() != 47006) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -322,6 +349,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_electrumclient_get_tx() != 33161) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_electrumclient_has_txs() != 53069) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_electrumclient_ping() != 58048) {
@@ -337,6 +367,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_esploraclient_full_scan_to_index() != 5341) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_esploraclient_has_txs() != 53120) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_esploraclient_tip() != 31289) {
@@ -423,10 +456,10 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_issuance_token_satoshi() != 60126) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_issuancerequest_address_asset() != 25936) {
+    if (uniffi_lwk_checksum_method_issuancerequest_add_asset_output() != 62532) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_issuancerequest_address_token() != 2681) {
+    if (uniffi_lwk_checksum_method_issuancerequest_add_token_output() != 1657) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_issuancerequest_contract() != 29893) {
@@ -483,6 +516,9 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_lockupresponse_fee() != 33238) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_lockupresponse_is_lockup_unspent() != 37255) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_lockupresponse_lockup_address() != 49127) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -505,6 +541,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_logging_log() != 50033) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_lwktestenv_amp2_url() != 23056) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_lwktestenv_electrum_url() != 44900) {
@@ -555,10 +594,16 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_network_default_esplora_client() != 60328) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_network_genesis_block_hash() != 65413) {
+    if (uniffi_lwk_checksum_method_network_genesis_block_hash() != 60558) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_network_genesis_hash() != 54960) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_network_is_mainnet() != 10603) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_network_parent_genesis_hash() != 25305) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_network_policy_asset() != 61911) {
@@ -747,7 +792,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_psetinput_redeem_script() != 62835) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_psetinput_sighash() != 46072) {
+    if (uniffi_lwk_checksum_method_psetinput_sighash() != 13879) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_psetoutput_amount() != 6432) {
@@ -789,10 +834,10 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_recipient_vout() != 24321) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_reissuancerequest_asset_receiver() != 37925) {
+    if (uniffi_lwk_checksum_method_reissuancerequest_add_asset_output() != 9922) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_reissuancerequest_issuance_tx() != 50808) {
+    if (uniffi_lwk_checksum_method_reissuancerequest_issuance_tx() != 62641) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_script_bytes() != 57904) {
@@ -832,6 +877,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_signer_keyorigin_xpub() != 48213) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_signer_keyorigin_xpub_from_path() != 46810) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_signer_mnemonic() != 41786) {
@@ -885,19 +933,25 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_txbuilder_add_input_rangeproofs() != 13756) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txbuilder_add_issuance() != 23898) {
+    if (uniffi_lwk_checksum_method_txbuilder_add_issuance() != 59375) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_add_lbtc_recipient() != 895) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_txbuilder_add_op_return() != 55242) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_txbuilder_add_recipient() != 56700) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_txbuilder_add_reissuance() != 18219) {
+    if (uniffi_lwk_checksum_method_txbuilder_add_reissuance() != 26747) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_drain_lbtc_to() != 34381) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_txbuilder_drain_lbtc_to_explicit() != 51529) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_drain_lbtc_wallet() != 46356) {
@@ -1066,6 +1120,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_waterfallsclient_full_scan_to_index() != 12641) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_waterfallsclient_has_txs() != 30365) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_waterfallsclient_subscribe() != 62222) {
@@ -1245,6 +1302,21 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_currencycode_new() != 9828) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_constructor_customelementsnetworkbuilder_new() != 38068) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_derivationpath_from_account() != 35229) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_derivationpath_from_vec() != 4058) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_derivationpath_new() != 44555) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_electrumclient_from_builder() != 14213) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_constructor_electrumclient_from_url() != 21158) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -1269,7 +1341,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_foreignstorelink_new() != 29701) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_constructor_issuancerequest_new() != 10650) {
+    if (uniffi_lwk_checksum_constructor_issuancerequest_new() != 39872) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_lightningpayment_from_bolt11_invoice() != 15133) {
@@ -1282,6 +1354,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_lwktestenv_new() != 2775) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_lwktestenv_new_with_amp2() != 20610) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_lwkteststore_new() != 48161) {
@@ -1332,7 +1407,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_pset_new() != 61694) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_constructor_reissuancerequest_new() != 17967) {
+    if (uniffi_lwk_checksum_constructor_reissuancerequest_new() != 40886) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_script_empty() != 47087) {
@@ -2273,6 +2348,34 @@ std::shared_ptr<Amp2Descriptor> Amp2::descriptor_from_str(const std::string &key
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterString::lower(keyorigin_xpub), uniffi::FfiConverterString::lower(descriptor_blinding_key)));
 }
+std::shared_ptr<Amp2Descriptor> Amp2::elip153_from_signer(const std::shared_ptr<Signer> &signer, uint32_t account) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterAmp2Descriptor::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_amp2_elip153_from_signer,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterSigner::lower(signer), uniffi::FfiConverterUInt32::lower(account)));
+}
+std::shared_ptr<Amp2Descriptor> Amp2::elip153_from_str(const std::string &user_keyorigin_xpub, const std::string &view_keyorigin_xpub) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterAmp2Descriptor::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_amp2_elip153_from_str,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterString::lower(user_keyorigin_xpub), uniffi::FfiConverterString::lower(view_keyorigin_xpub)));
+}
+std::shared_ptr<DerivationPath> Amp2::elip153_user_path(uint32_t account) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterDerivationPath::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_amp2_elip153_user_path,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterUInt32::lower(account)));
+}
+std::shared_ptr<DerivationPath> Amp2::elip153_view_path(uint32_t account) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterDerivationPath::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_amp2_elip153_view_path,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterUInt32::lower(account)));
+}
 std::string Amp2::register_wallet(const std::shared_ptr<Amp2Descriptor> &desc) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterString::lift(uniffi::rust_call(
@@ -3094,6 +3197,13 @@ std::shared_ptr<InvoiceResponse> BoltzSession::invoice(uint64_t amount, std::opt
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterUInt64::lower(amount), uniffi::FfiConverterOptionalString::lower(description), uniffi::FfiConverterAddress::lower(claim_address), uniffi::FfiConverterOptionalWebHook::lower(webhook)));
 }
+bool BoltzSession::is_lockup_unspent(const std::string &data) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_boltzsession_is_lockup_unspent,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterString::lower(data)));
+}
 std::shared_ptr<LockupResponse> BoltzSession::lbtc_to_btc(uint64_t amount, const std::shared_ptr<Address> &refund_address, const std::shared_ptr<BitcoinAddress> &claim_address, std::shared_ptr<WebHook> webhook) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterLockupResponse::lift(uniffi::rust_call(
@@ -3398,6 +3508,139 @@ uint64_t CurrencyCode::hash() const {
 
 
 
+CustomElementsNetworkBuilder::CustomElementsNetworkBuilder(void *ptr): instance(ptr) {}
+
+CustomElementsNetworkBuilder::CustomElementsNetworkBuilder(const CustomElementsNetworkBuilder &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+std::shared_ptr<CustomElementsNetworkBuilder> CustomElementsNetworkBuilder::init() {
+    return std::shared_ptr<CustomElementsNetworkBuilder>(
+        new CustomElementsNetworkBuilder(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_customelementsnetworkbuilder_new,
+        nullptr))
+    );
+}
+
+std::shared_ptr<Network> CustomElementsNetworkBuilder::build() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterNetwork::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_customelementsnetworkbuilder_build,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+void CustomElementsNetworkBuilder::with_genesis_hash(const std::string &genesis_hash) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_customelementsnetworkbuilder_with_genesis_hash,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterString::lower(genesis_hash));
+}
+void CustomElementsNetworkBuilder::with_parent_genesis_hash(const std::string &parent_genesis_hash) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_customelementsnetworkbuilder_with_parent_genesis_hash,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterString::lower(parent_genesis_hash));
+}
+void CustomElementsNetworkBuilder::with_policy_asset(const AssetId &policy_asset) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_customelementsnetworkbuilder_with_policy_asset,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterTypeAssetId::lower(policy_asset));
+}
+
+CustomElementsNetworkBuilder::~CustomElementsNetworkBuilder() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_customelementsnetworkbuilder,
+        nullptr,
+        this->instance
+    );
+}
+
+void *CustomElementsNetworkBuilder::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_customelementsnetworkbuilder,
+        nullptr,
+        this->instance
+    );
+}
+
+
+
+
+DerivationPath::DerivationPath(void *ptr): instance(ptr) {}
+
+DerivationPath::DerivationPath(const DerivationPath &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+std::shared_ptr<DerivationPath> DerivationPath::init(const std::string &path) {
+    return std::shared_ptr<DerivationPath>(
+        new DerivationPath(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_derivationpath_new,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(path)))
+    );
+}
+
+std::shared_ptr<DerivationPath> DerivationPath::from_account(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num) {
+    return std::shared_ptr<DerivationPath>(new DerivationPath(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_derivationpath_from_account,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterNetwork::lower(network), uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num))));
+}
+
+std::shared_ptr<DerivationPath> DerivationPath::from_vec(const std::vector<uint32_t> &path) {
+    return std::shared_ptr<DerivationPath>(new DerivationPath(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_derivationpath_from_vec,
+        nullptr, uniffi::FfiConverterSequenceUInt32::lower(path))));
+}
+
+std::vector<uint32_t> DerivationPath::to_vec() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterSequenceUInt32::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_derivationpath_to_vec,
+        nullptr,
+        ptr));
+}
+
+DerivationPath::~DerivationPath() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_derivationpath,
+        nullptr,
+        this->instance
+    );
+}
+
+void *DerivationPath::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_derivationpath,
+        nullptr,
+        this->instance
+    );
+}
+
+std::string DerivationPath::to_string() const {
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_derivationpath_uniffi_trait_display,
+        nullptr,
+        this->_uniffi_internal_clone_pointer()));
+}
+
+
+
+
+
 ElectrumClient::ElectrumClient(void *ptr): instance(ptr) {}
 
 ElectrumClient::ElectrumClient(const ElectrumClient &other) : instance(nullptr) {
@@ -3415,6 +3658,12 @@ std::shared_ptr<ElectrumClient> ElectrumClient::init(const std::string &electrum
         uniffi_lwk_fn_constructor_electrumclient_new,
         uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(electrum_url), uniffi::FfiConverterBool::lower(tls), uniffi::FfiConverterBool::lower(validate_domain)))
     );
+}
+
+std::shared_ptr<ElectrumClient> ElectrumClient::from_builder(const ElectrumClientBuilder &builder) {
+    return std::shared_ptr<ElectrumClient>(new ElectrumClient(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_electrumclient_from_builder,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterTypeElectrumClientBuilder::lower(builder))));
 }
 
 std::shared_ptr<ElectrumClient> ElectrumClient::from_url(const std::string &electrum_url) {
@@ -3450,6 +3699,13 @@ std::shared_ptr<Transaction> ElectrumClient::get_tx(const std::shared_ptr<Txid> 
         uniffi_lwk_fn_method_electrumclient_get_tx,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterTxid::lower(txid)));
+}
+bool ElectrumClient::has_txs(const std::shared_ptr<WolletDescriptor> &descriptor, std::optional<uint32_t> gap_limit) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_electrumclient_has_txs,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterWolletDescriptor::lower(descriptor), uniffi::FfiConverterOptionalUInt32::lower(gap_limit)));
 }
 void ElectrumClient::ping() {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -3536,6 +3792,13 @@ std::shared_ptr<Update> EsploraClient::full_scan_to_index(const std::shared_ptr<
         uniffi_lwk_fn_method_esploraclient_full_scan_to_index,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterWollet::lower(wollet), uniffi::FfiConverterUInt32::lower(index)));
+}
+bool EsploraClient::has_txs(const std::shared_ptr<WolletDescriptor> &descriptor, std::optional<uint32_t> gap_limit) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_esploraclient_has_txs,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterWolletDescriptor::lower(descriptor), uniffi::FfiConverterOptionalUInt32::lower(gap_limit)));
 }
 std::shared_ptr<BlockHeader> EsploraClient::tip() {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -4051,19 +4314,19 @@ std::shared_ptr<IssuanceRequest> IssuanceRequest::init(uint64_t satoshi_asset, u
     );
 }
 
-void IssuanceRequest::address_asset(const std::shared_ptr<Address> &address) {
+void IssuanceRequest::add_asset_output(uint64_t satoshi, std::shared_ptr<Address> address) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     uniffi::rust_call(
-        uniffi_lwk_fn_method_issuancerequest_address_asset,
+        uniffi_lwk_fn_method_issuancerequest_add_asset_output,
         uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterAddress::lower(address));
+        ptr, uniffi::FfiConverterUInt64::lower(satoshi), uniffi::FfiConverterOptionalAddress::lower(address));
 }
-void IssuanceRequest::address_token(const std::shared_ptr<Address> &address) {
+void IssuanceRequest::add_token_output(uint64_t satoshi, std::shared_ptr<Address> address) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     uniffi::rust_call(
-        uniffi_lwk_fn_method_issuancerequest_address_token,
+        uniffi_lwk_fn_method_issuancerequest_add_token_output,
         uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterAddress::lower(address));
+        ptr, uniffi::FfiConverterUInt64::lower(satoshi), uniffi::FfiConverterOptionalAddress::lower(address));
 }
 void IssuanceRequest::contract(const std::shared_ptr<Contract> &contract) {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -4267,6 +4530,13 @@ std::optional<uint64_t> LockupResponse::fee() {
         uniffi::FfiConverterLwkError::lift,
         ptr));
 }
+bool LockupResponse::is_lockup_unspent() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_lockupresponse_is_lockup_unspent,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
 std::string LockupResponse::lockup_address() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterString::lift(uniffi::rust_call(
@@ -4461,6 +4731,19 @@ std::shared_ptr<LwkTestEnv> LwkTestEnv::init() {
     );
 }
 
+std::shared_ptr<LwkTestEnv> LwkTestEnv::new_with_amp2() {
+    return std::shared_ptr<LwkTestEnv>(new LwkTestEnv(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_lwktestenv_new_with_amp2,
+        nullptr)));
+}
+
+std::string LwkTestEnv::amp2_url() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_lwktestenv_amp2_url,
+        nullptr,
+        ptr));
+}
 std::string LwkTestEnv::electrum_url() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterString::lift(uniffi::rust_call(
@@ -4733,10 +5016,24 @@ std::string Network::genesis_block_hash() {
         nullptr,
         ptr));
 }
+std::string Network::genesis_hash() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_network_genesis_hash,
+        nullptr,
+        ptr));
+}
 bool Network::is_mainnet() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterBool::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_network_is_mainnet,
+        nullptr,
+        ptr));
+}
+std::string Network::parent_genesis_hash() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_network_parent_genesis_hash,
         nullptr,
         ptr));
 }
@@ -5587,9 +5884,9 @@ std::shared_ptr<Script> PsetInput::redeem_script() {
         nullptr,
         ptr));
 }
-uint32_t PsetInput::sighash() {
+std::optional<uint32_t> PsetInput::sighash() {
     auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterUInt32::lift(uniffi::rust_call(
+    return uniffi::FfiConverterOptionalUInt32::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_psetinput_sighash,
         nullptr,
         ptr));
@@ -5848,12 +6145,12 @@ std::shared_ptr<ReissuanceRequest> ReissuanceRequest::init(const AssetId &asset_
     );
 }
 
-void ReissuanceRequest::asset_receiver(const std::shared_ptr<Address> &address) {
+void ReissuanceRequest::add_asset_output(uint64_t satoshi, std::shared_ptr<Address> address) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     uniffi::rust_call(
-        uniffi_lwk_fn_method_reissuancerequest_asset_receiver,
+        uniffi_lwk_fn_method_reissuancerequest_add_asset_output,
         uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterAddress::lower(address));
+        ptr, uniffi::FfiConverterUInt64::lower(satoshi), uniffi::FfiConverterOptionalAddress::lower(address));
 }
 void ReissuanceRequest::issuance_tx(const std::shared_ptr<Transaction> &tx) {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -6111,6 +6408,13 @@ std::string Signer::keyorigin_xpub(const std::shared_ptr<Bip> &bip) {
         uniffi_lwk_fn_method_signer_keyorigin_xpub,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterBip::lower(bip)));
+}
+std::string Signer::keyorigin_xpub_from_path(const std::shared_ptr<DerivationPath> &path) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_signer_keyorigin_xpub_from_path,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterDerivationPath::lower(path)));
 }
 std::shared_ptr<Mnemonic> Signer::mnemonic() {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -6382,6 +6686,13 @@ void TxBuilder::add_lbtc_recipient(const std::shared_ptr<Address> &address, uint
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterAddress::lower(address), uniffi::FfiConverterUInt64::lower(satoshi));
 }
+void TxBuilder::add_op_return(const std::vector<uint8_t> &data) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_txbuilder_add_op_return,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterBytes::lower(data));
+}
 void TxBuilder::add_recipient(const std::shared_ptr<Address> &address, uint64_t satoshi, const AssetId &asset) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     uniffi::rust_call(
@@ -6400,6 +6711,13 @@ void TxBuilder::drain_lbtc_to(const std::shared_ptr<Address> &address) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     uniffi::rust_call(
         uniffi_lwk_fn_method_txbuilder_drain_lbtc_to,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterAddress::lower(address));
+}
+void TxBuilder::drain_lbtc_to_explicit(const std::shared_ptr<Address> &address) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_txbuilder_drain_lbtc_to_explicit,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterAddress::lower(address));
 }
@@ -7256,6 +7574,13 @@ std::shared_ptr<Update> WaterfallsClient::full_scan_to_index(const std::shared_p
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterWollet::lower(wollet), uniffi::FfiConverterUInt32::lower(index)));
 }
+bool WaterfallsClient::has_txs(const std::shared_ptr<WolletDescriptor> &descriptor, std::optional<uint32_t> gap_limit) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsclient_has_txs,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterWolletDescriptor::lower(descriptor), uniffi::FfiConverterOptionalUInt32::lower(gap_limit)));
+}
 std::shared_ptr<WaterfallsSubscription> WaterfallsClient::subscribe(const std::shared_ptr<WolletDescriptor> &descriptor) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterWaterfallsSubscription::lift(uniffi::rust_call(
@@ -7716,6 +8041,7 @@ std::string WolletDescriptor::to_string() const {
         nullptr,
         this->_uniffi_internal_clone_pointer()));
 }
+
 
 
 
@@ -8320,6 +8646,56 @@ void FfiConverterCurrencyCode::write(RustStream &stream, const std::shared_ptr<C
 }
 
 uint64_t FfiConverterCurrencyCode::allocation_size(const std::shared_ptr<CurrencyCode> &) {
+    return 8;
+}
+
+
+
+std::shared_ptr<CustomElementsNetworkBuilder> FfiConverterCustomElementsNetworkBuilder::lift(void *ptr) {
+    return std::shared_ptr<CustomElementsNetworkBuilder>(new CustomElementsNetworkBuilder(ptr));
+}
+
+void *FfiConverterCustomElementsNetworkBuilder::lower(const std::shared_ptr<CustomElementsNetworkBuilder> &obj) {
+    return reinterpret_cast<CustomElementsNetworkBuilder*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<CustomElementsNetworkBuilder> FfiConverterCustomElementsNetworkBuilder::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterCustomElementsNetworkBuilder::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterCustomElementsNetworkBuilder::write(RustStream &stream, const std::shared_ptr<CustomElementsNetworkBuilder> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterCustomElementsNetworkBuilder::lower(obj));
+}
+
+uint64_t FfiConverterCustomElementsNetworkBuilder::allocation_size(const std::shared_ptr<CustomElementsNetworkBuilder> &) {
+    return 8;
+}
+
+
+
+std::shared_ptr<DerivationPath> FfiConverterDerivationPath::lift(void *ptr) {
+    return std::shared_ptr<DerivationPath>(new DerivationPath(ptr));
+}
+
+void *FfiConverterDerivationPath::lower(const std::shared_ptr<DerivationPath> &obj) {
+    return reinterpret_cast<DerivationPath*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<DerivationPath> FfiConverterDerivationPath::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterDerivationPath::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterDerivationPath::write(RustStream &stream, const std::shared_ptr<DerivationPath> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterDerivationPath::lower(obj));
+}
+
+uint64_t FfiConverterDerivationPath::allocation_size(const std::shared_ptr<DerivationPath> &) {
     return 8;
 }
 
@@ -9719,6 +10095,51 @@ uint64_t FfiConverterTypeBoltzSessionBuilder::allocation_size(const BoltzSession
         FfiConverterOptionalString::allocation_size(val.bitcoin_electrum_client_url) +
         FfiConverterBool::allocation_size(val.random_preimages) +
         FfiConverterOptionalForeignStoreLink::allocation_size(val.store);
+    
+}
+
+
+ElectrumClientBuilder FfiConverterTypeElectrumClientBuilder::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterTypeElectrumClientBuilder::read(stream);
+
+    rustbuffer_free(buf);
+
+    return std::move(ret);
+}
+
+RustBuffer FfiConverterTypeElectrumClientBuilder::lower(const ElectrumClientBuilder &val) {
+    auto buf = rustbuffer_alloc(allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterTypeElectrumClientBuilder::write(stream, val);
+
+    return std::move(buf);
+}
+
+ElectrumClientBuilder FfiConverterTypeElectrumClientBuilder::read(RustStream &stream) {
+    return {
+        FfiConverterString::read(stream),
+        FfiConverterOptionalUInt8::read(stream),
+        FfiConverterOptionalTokenProvider::read(stream),
+        FfiConverterBool::read(stream)
+    };
+}
+
+void FfiConverterTypeElectrumClientBuilder::write(RustStream &stream, const ElectrumClientBuilder &val) {
+    FfiConverterString::write(stream, val.url);
+    FfiConverterOptionalUInt8::write(stream, val.timeout);
+    FfiConverterOptionalTokenProvider::write(stream, val.token_provider);
+    FfiConverterBool::write(stream, val.allow_plaintext_with_token);
+}
+
+uint64_t FfiConverterTypeElectrumClientBuilder::allocation_size(const ElectrumClientBuilder &val) {
+    
+    return 
+        FfiConverterString::allocation_size(val.url) +
+        FfiConverterOptionalUInt8::allocation_size(val.timeout) +
+        FfiConverterOptionalTokenProvider::allocation_size(val.token_provider) +
+        FfiConverterBool::allocation_size(val.allow_plaintext_with_token);
     
 }
 
@@ -13369,15 +13790,6 @@ AssetId derive_token_id(const std::shared_ptr<TxIn> &txin, const std::shared_ptr
         uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterTxIn::lower(txin), uniffi::FfiConverterContract::lower(contract));
 
     return uniffi::FfiConverterTypeAssetId::lift(ret);
-}
-
-
-std::vector<uint32_t> get_path(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num) {
-    auto ret = uniffi::rust_call(
-        uniffi_lwk_fn_func_get_path,
-        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterNetwork::lower(network), uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num));
-
-    return uniffi::FfiConverterSequenceUInt32::lift(ret);
 }
 
 
