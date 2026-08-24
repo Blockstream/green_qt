@@ -73,12 +73,23 @@ macos-x86_64:build:
 macos-x86_64:symbols:
   extends:
     - .macos-x86_64
-    - .upload-symbols:unix
+    - .upload-symbols
   needs:
     - job: macos-x86_64:build
       artifacts: true
-  variables:
-    SYMBOLS_PATH: symbols
+  script:
+    - tools/ci/sentry-upload.sh symbols
+    # symbols/ only carries the app's own dSYM. Qt and the other bundled libraries ship
+    # inside Blockstream.app, and without their debug info Sentry can neither walk nor
+    # symbolicate the Qt frames of a macOS minidump: the leaf frame resolves to whatever
+    # exported symbol happens to be nearest, which also splits one crash across several
+    # issues. Scanning the whole bundle rather than Contents/Frameworks alone covers the
+    # Mach-O binaries macdeployqt writes elsewhere too - the plugins under Contents/PlugIns,
+    # the cocoa platform plugin among them, and the QML module plugins under
+    # Contents/Resources - and keeps working if a future macdeployqt moves things again;
+    # sentry-cli walks the tree and skips whatever is not an object file. Running it after
+    # the dSYM upload keeps that upload unaffected if scanning the bundle ever breaks.
+    - tools/ci/sentry-upload.sh macos-x86_64/Blockstream.app/Contents
 
 macos-x86_64:staple:
   extends:
