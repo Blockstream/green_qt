@@ -42,7 +42,7 @@ package:build:
   when: manual
   needs:
     - package:build
-  image: blockstream/gcloud-docker:502.0.0-27.3
+  image: harbor.blockstream.io/google/blockstream/public/gcloud-docker:27.3-504.0.1
   variables:
     WIF_SERVICE_ACCOUNT_EMAIL: $UPDATE_SERVER_SERVICE_ACCOUNT_EMAIL
   before_script:
