@@ -129,8 +129,10 @@ static void hid_report_callback(void *context, IOReturn result, void *sender, IO
     if (report_id == 0) {
         auto agent = static_cast<DeviceDiscoveryAgentPrivate*>(context);
         auto handle = static_cast<IOHIDDeviceRef>(sender);
-        Q_ASSERT(agent->m_devices.contains(handle));
-        auto device = agent->m_devices[handle];
+        // A report can still arrive for a device we no longer track, e.g. one being torn
+        // down. operator[] would insert a null entry and we would dereference it.
+        auto device = agent->m_devices.value(handle);
+        if (!device) return;
         device->inputReport(QByteArray(reinterpret_cast<const char*>(report), report_length));
     } else {
         qDebug() << __PRETTY_FUNCTION__ << "report_id:" << report_id;
@@ -204,7 +206,9 @@ void DevicePrivateImpl::exchange(DeviceCommand* command)
 void DevicePrivateImpl::inputReport(const QByteArray& data)
 {
     //qDebug() << "read hid" << data.toHex();
-    Q_ASSERT(!queue.empty());
+    // The device can send a report with no command in flight. head() on an empty queue is
+    // undefined behaviour, and Q_ASSERT is compiled out of release builds.
+    if (queue.empty()) return;
     QDataStream stream(data);
     auto command = queue.head();
     int r = command->readHIDReport(q, stream);
