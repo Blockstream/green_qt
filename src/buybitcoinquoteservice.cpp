@@ -193,7 +193,7 @@ void BuyBitcoinQuoteService::onReplyFinished()
     // as the server might have returned an error message in JSON format
     QJsonParseError parseError;
     QJsonObject json;
-    
+
     if (!data.isEmpty()) {
         json = QJsonDocument::fromJson(data, &parseError).object();
     }
@@ -204,20 +204,20 @@ void BuyBitcoinQuoteService::onReplyFinished()
         // Extract only the message field, ignoring any errors array
         QJsonValue messageValue = json.value("message");
         QString message;
-        
+
         if (messageValue.isString()) {
             message = messageValue.toString().trimmed();
         }
-        
+
         m_best_destination_amount = 0.0;
-        
+
         // Clean up the message - remove any trailing "errors:" or error array text
         // Sometimes the message might contain additional formatting we don't want
         // Handle variations like "errors:", "Errors:", "ERRORS:", "errors :", etc.
         QRegularExpression errorsPattern(R"(\s*[Ee]rrors?\s*:.*)", QRegularExpression::CaseInsensitiveOption);
         message.remove(errorsPattern);
         message = message.trimmed();
-        
+
         // Also check for common patterns that might indicate array serialization
         // Remove things like "[...]" that might appear at the end
         if (message.endsWith(']')) {
@@ -226,7 +226,7 @@ void BuyBitcoinQuoteService::onReplyFinished()
                 message = message.left(lastBracket).trimmed();
             }
         }
-        
+
         m_error = message.isEmpty() ? "Request failed" : message;
         emit errorChanged();
         emit quoteChanged();
@@ -287,17 +287,17 @@ void BuyBitcoinQuoteService::onReplyFinished()
     double bestAmount = 0.0;
     QString bestProvider;
     QVariantMap bestQuote;
-    
+
     for (const auto& quoteValue : quotesArray) {
         const auto quote = quoteValue.toObject();
         const double destinationAmount = quote.value("destinationAmount").toDouble();
-        
+
         // Store each quote with only the fields we need
         QVariantMap quoteMap;
         quoteMap["serviceProvider"] = quote.value("serviceProvider").toString();
         quoteMap["destinationAmount"] = destinationAmount;
         allQuotes.append(quoteMap);
-        
+
         // Track the best quote
         if (destinationAmount > bestAmount) {
             bestAmount = destinationAmount;
@@ -307,12 +307,12 @@ void BuyBitcoinQuoteService::onReplyFinished()
     }
 
     m_all_quotes = allQuotes;
-    
+
     // Sort all quotes by destinationAmount (descending)
     sortQuotes();
     m_best_destination_amount = bestAmount;
     m_best_service_provider = bestProvider;
-    
+
     // Update selected quote: keep previous provider if still available,
     // otherwise fall back to the best quote
     // If we have a preferred provider from transactions, try to use it first
@@ -362,7 +362,7 @@ void BuyBitcoinQuoteService::onReplyFinished()
             m_selected_quote.clear();
         }
     }
-    
+
     if (!m_error.isEmpty()) {
         m_error = QString();
         emit errorChanged();
@@ -483,7 +483,7 @@ void BuyBitcoinQuoteService::onWidgetReplyFinished()
     // Parse JSON response
     QJsonParseError parseError;
     QJsonObject json;
-    
+
     if (!data.isEmpty()) {
         json = QJsonDocument::fromJson(data, &parseError).object();
     }
@@ -586,14 +586,14 @@ void BuyBitcoinQuoteService::updateBuyDefaultValues()
     } else if (m_buy_default_values.isArray()) {
         currentJson = QJsonDocument(m_buy_default_values.toArray()).toJson(QJsonDocument::Compact);
     }
-    
+
     QByteArray newJson;
     if (newValue.isObject()) {
         newJson = QJsonDocument(newValue.toObject()).toJson(QJsonDocument::Compact);
     } else if (newValue.isArray()) {
         newJson = QJsonDocument(newValue.toArray()).toJson(QJsonDocument::Compact);
     }
-    
+
     if (currentJson != newJson) {
         m_buy_default_values = newValue;
         emit buyDefaultValuesChanged();
@@ -617,63 +617,63 @@ void BuyBitcoinQuoteService::onTransactionsReplyFinished()
 
     QString preferredProvider;
     QStringList recentlyUsedProviders;
-    
+
     QJsonParseError parseError;
     QJsonObject json;
-    
+
     if (!data.isEmpty() && error == QNetworkReply::NoError) {
         qDebug() << Q_FUNC_INFO << qPrintable(QJsonDocument::fromJson(data).toJson());
         Q_UNREACHABLE();
 
         json = QJsonDocument::fromJson(data, &parseError).object();
-        
+
         if (parseError.error == QJsonParseError::NoError) {
             // Find the most recent SETTLED transaction and collect all SETTLED providers
             const auto transactionsArray = json.value("transactions").toArray();
             QDateTime mostRecentDate;
             QString mostRecentProvider;
             QSet<QString> providersSet;
-            
+
             for (const auto& transactionValue : transactionsArray) {
                 const auto transaction = transactionValue.toObject();
                 const QString status = transaction.value("status").toString();
-                
+
                 if (status == "SETTLED") {
                     const QString provider = transaction.value("serviceProvider").toString();
                     if (!provider.isEmpty()) {
                         providersSet.insert(provider);
                     }
-                    
+
                     const QString createdAt = transaction.value("createdAt").toString();
                     QDateTime transactionDate = QDateTime::fromString(createdAt, Qt::ISODate);
-                    
+
                     if (transactionDate.isValid() && (mostRecentDate.isNull() || transactionDate > mostRecentDate)) {
                         mostRecentDate = transactionDate;
                         mostRecentProvider = provider;
                     }
                 }
             }
-            
+
             preferredProvider = mostRecentProvider;
             recentlyUsedProviders = QStringList(providersSet.begin(), providersSet.end());
         }
     }
-    
+
     // Store preferred provider (will be used when quotes are fetched)
     m_preferred_provider = preferredProvider;
-    
+
     // Update recently used providers list
     if (m_recently_used_providers != recentlyUsedProviders) {
         m_recently_used_providers = recentlyUsedProviders;
         emit recentlyUsedProvidersChanged();
-        
+
         // Re-sort quotes if they're already loaded
         if (!m_all_quotes.isEmpty()) {
             sortQuotes();
             emit quoteChanged();
         }
     }
-    
+
     // Now fetch the quotes with the stored parameters
     fetchQuote(m_pending_country_code, m_pending_source_amount, m_pending_source_currency_code, m_pending_wallet_address);
 }
@@ -683,7 +683,7 @@ void BuyBitcoinQuoteService::sortQuotes()
     if (m_all_quotes.isEmpty()) {
         return;
     }
-    
+
     // Sort all quotes by destinationAmount (descending)
     std::sort(m_all_quotes.begin(), m_all_quotes.end(), [](const QVariant& a, const QVariant& b) {
         const double amountA = a.toMap().value("destinationAmount").toDouble();
@@ -717,7 +717,13 @@ void PaymentSyncController::sync()
         return;
     }
 
-    auto task = new LoadPaymentsTask(qmlEngine(this)->networkAccessManager(), context());
+    // Reached from a timer, so the engine can already be gone by the time this runs.
+    const auto engine = qmlEngine(this);
+    if (!engine) {
+        return;
+    }
+
+    auto task = new LoadPaymentsTask(engine->networkAccessManager(), context());
     connect(task, &Task::finished, this, [=, this] {
         for (const auto payment : context()->m_payments.values()) {
             payment->refresh();
