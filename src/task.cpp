@@ -1076,6 +1076,13 @@ void LoadAccountsTask::handleDone(const QJsonObject& result)
     const auto subaccounts = result.value("result").toObject().value("subaccounts").toArray();
     auto context = session()->context();
     auto network = session()->network();
+    // The session can be detached from its context before the call completes, and then
+    // there is nowhere to put the accounts: getOrCreateAccount() would run against a null
+    // Context and fault on its account map.
+    if (!context) {
+        setStatus(Status::Failed);
+        return;
+    }
     for (auto value : subaccounts) {
         d->accounts.append(context->getOrCreateAccount(network, value.toObject()));
     }
