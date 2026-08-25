@@ -3,9 +3,9 @@
 
 #include <QElapsedTimer>
 #include <QMap>
+#include <QMutex>
 #include <QObject>
 #include <QQueue>
-#include <QRandomGenerator>
 #include <QSet>
 
 #include "jadeconnection.h"
@@ -145,8 +145,8 @@ private:
     // Private ctor
     JadeAPI(JadeConnection* connection, QObject *parent);
 
-    // Helper to get a new random id
-    int getNewId();
+    // Records activity on the connection. Safe to call from any thread.
+    void restartIdleTimer();
 
     // Client call response handlers for async response
     int registerResponseHandler(const ResponseHandler &cb, int timeout = 0);
@@ -168,11 +168,17 @@ private:
     void send(const QCborMap &msg);
     void drain();
 
+    // Guards every member below it, up to m_msg_timeout. Requests are
+    // registered from client threads while responses and timeouts are
+    // processed on the JadeAPI thread, so all of that state is shared.
+    // Never held while a client callback is invoked.
+    mutable QMutex m_mutex;
+
     // Used to measure elapsed time since last activity
     QElapsedTimer m_idle_timer;
 
     // id generator for Jade messages
-    QRandomGenerator            m_idgen;
+    int m_next_id{1};
 
     // Map of functions to use to make http requests
     QMap<int, HttpRequestProxy> m_request_proxy;
@@ -180,8 +186,12 @@ private:
     // Map of registered response handlers awaiting response
     QMap<int, ResponseHandler>  m_responseHandlers;
     QMap<int, int>              m_msg_timeout;
+
     // Underlying connection - lifetime managed by QObject hierarchy
     JadeConnection              *m_jade;
+
+    // Send state - only ever touched on the JadeAPI thread, as enqueue()
+    // and send() bounce themselves there when called from another thread.
     QQueue<QCborMap> m_msg_queue;
     QSet<int> m_msg_inflight;
 

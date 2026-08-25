@@ -1,5 +1,7 @@
 #include "jadeapi.h"
 
+#include <climits>
+
 #include <QCborArray>
 #include <QCborMap>
 #include <QCborValue>
@@ -9,6 +11,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMutexLocker>
 #include <QThread>
 #include <QTimer>
 #include <QVariant>
@@ -55,7 +58,6 @@ JadeAPI::JadeAPI(const QBluetoothDeviceInfo& deviceInfo, QObject *parent)
 // Private ctor
 JadeAPI::JadeAPI(JadeConnection *connection, QObject *parent)
     : QObject(parent),
-      m_idgen(QRandomGenerator::securelySeeded()),
       m_responseHandlers(),
       m_jade(connection)
 {
@@ -108,19 +110,27 @@ void JadeAPI::disconnectDevice()
 
 bool JadeAPI::isIdle() const
 {
+    QMutexLocker locker(&m_mutex);
     return !m_idle_timer.isValid() || m_idle_timer.elapsed() > 30000;
 }
 
 bool JadeAPI::isBusy() const
 {
+    QMutexLocker locker(&m_mutex);
     return !m_responseHandlers.isEmpty();
+}
+
+void JadeAPI::restartIdleTimer()
+{
+    QMutexLocker locker(&m_mutex);
+    m_idle_timer.restart();
 }
 
 // Handle result of an http-request.
 // MUST be called when an http-request response is received.
 void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonValue &httpResponse)
 {
-    m_idle_timer.restart();
+    restartIdleTimer();
 
     // qDebug() << "JadeAPI::handleHttpResponse() called for" << id << "with response data" << httpResponse;
 
@@ -137,24 +147,32 @@ void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, c
     // Forward http-response back to 'on-reply' function in Jade using the above response handler
     const QString on_reply = httpRequest["on-reply"].toString();
     const QCborMap newRequest = getRequest(newId, on_reply, httpResponse.isObject() ? QCborMap::fromJsonObject(httpResponse.toObject()) : QCborValue());
-    m_request_proxy[newId] = m_request_proxy[id];
+    {
+        // Carry the caller's request proxy over to the follow-up id. Use value()
+        // rather than operator[], which would insert an empty proxy for an id
+        // that never had one - and an empty proxy throws when later invoked.
+        QMutexLocker locker(&m_mutex);
+        const auto proxy = m_request_proxy.value(id);
+        if (proxy) m_request_proxy.insert(newId, proxy);
+    }
     send(newRequest);
 }
 
-inline int JadeAPI::getNewId() {
-    return m_idgen.bounded(10000,100000);
-}
-
-// Register callback for request/response when received
+// Register callback for request/response when received.
+// Called from client threads as well as from response handlers running on the
+// JadeAPI thread, so handing out an id and claiming it must be one atomic step:
+// otherwise two callers can settle on the same id and one handler is lost.
 int JadeAPI::registerResponseHandler(const ResponseHandler &cb, int timeout) {
     Q_ASSERT(cb);
     Q_ASSERT(timeout >= 0);
 
-    // Get a new id not currently present in the map
-    int id = getNewId();
-    for (int i = 0; i < 5 && m_responseHandlers.contains(id); ++i) {
-        id = getNewId();
-    }
+    QMutexLocker locker(&m_mutex);
+
+    // Ids run sequentially rather than randomly, so they cannot collide and no
+    // retry loop is needed. Wrap short of 0, which is reserved for 'no id'.
+    const int id = m_next_id;
+    m_next_id = m_next_id == INT_MAX ? 1 : m_next_id + 1;
+    Q_ASSERT(!m_responseHandlers.contains(id));
 
     // Insert the callback keyed by id
     // qDebug() << "JadeAPI::registerResponseHandler() - Registering response handler with id" << id;
@@ -171,16 +189,23 @@ void JadeAPI::callResponseHandler(const QVariantMap &msg)
     const auto id = msg["id"].toString().toInt();
     const auto method = msg["method"].toString();
 
-    m_idle_timer.restart();
+    restartIdleTimer();
 
     // Get the id from the message
     Q_ASSERT(msg["id"].isValid() && msg["id"].toString().toInt() > 0);
 
     // qDebug() << "JadeAPI::callResponseHandler() called for message id" << id;
 
-    // Get (ie. remove) the response handler for that id from the map of registered handlers
-    const ResponseHandler handler = m_responseHandlers.take(id);
-    m_request_proxy.remove(id);
+    // Get (ie. remove) the response handler for that id from the map of registered handlers.
+    // The handler is invoked with the lock released: it commonly registers and
+    // sends the next request of a multi-step exchange.
+    ResponseHandler handler;
+    {
+        QMutexLocker locker(&m_mutex);
+        handler = m_responseHandlers.take(id);
+        m_request_proxy.remove(id);
+        m_msg_timeout.remove(id);
+    }
     if (!handler)
     {
         // qWarning() << "JadeAPI::callResponseHandler() - Message ignored - no handler found for id" << msg;
@@ -199,7 +224,7 @@ void JadeAPI::callResponseHandler(const QVariantMap &msg)
 // Forward the message to the handler indicated by id, copying the map to update the id if necessary
 void JadeAPI::forwardToResponseHandler(const int targetId, const QVariantMap &msg)
 {
-    m_idle_timer.restart();
+    restartIdleTimer();
 
     if (msg.contains("id") && msg["id"] == targetId)
     {
@@ -218,7 +243,7 @@ void JadeAPI::forwardToResponseHandler(const int targetId, const QVariantMap &ms
 // The callback function invoked when a (complete) cbor message is received over the wrapped connection
 void JadeAPI::processResponseMessage(const QCborMap &msg)
 {
-    m_idle_timer.restart();
+    restartIdleTimer();
 
     // qInfo() << "JadeAPI::processResponseMessage() received <-" << Qt::endl << msg;
 
@@ -237,13 +262,19 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
         Q_ASSERT(msg["result"]["http_request"].isMap());
         const QCborMap httpRequest = msg["result"]["http_request"].toMap();
 
-        if (!m_request_proxy.contains(id)) {
+        HttpRequestProxy proxy;
+        {
+            QMutexLocker locker(&m_mutex);
+            proxy = m_request_proxy.value(id);
+        }
+
+        if (!proxy) {
             handleHttpResponse(id, httpRequest.toJsonObject(), QJsonValue::Null);
         } else {
             // Make http-request.
             // NOTE: when http request returns, JadeAPI::handleHttpResponse() should be called, which
             // should result in another call to Jade, and ultimately this function being called again.
-            m_request_proxy[id](*this, id, httpRequest.toJsonObject());
+            proxy(*this, id, httpRequest.toJsonObject());
         }
     }
     else
@@ -258,7 +289,15 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
 
 void JadeAPI::enqueue(const QCborMap &msg)
 {
-    m_idle_timer.restart();
+    // The send queue, the in-flight set, the connection and the timeout timers
+    // all belong to the JadeAPI thread. Callers registering a request from
+    // another thread hand the message over instead of touching them directly.
+    if (QThread::currentThread() != thread()) {
+        QMetaObject::invokeMethod(this, [=, this] { enqueue(msg); }, Qt::QueuedConnection);
+        return;
+    }
+
+    restartIdleTimer();
 
     if (m_msg_inflight.isEmpty() && m_msg_queue.empty()) {
          // Nothing in progress, nothing queued: can send immediately
@@ -270,16 +309,33 @@ void JadeAPI::enqueue(const QCborMap &msg)
 
 void JadeAPI::send(const QCborMap &msg)
 {
+    // See enqueue() - the send path only runs on the JadeAPI thread
+    if (QThread::currentThread() != thread()) {
+        QMetaObject::invokeMethod(this, [=, this] { send(msg); }, Qt::QueuedConnection);
+        return;
+    }
+
     const auto id = msg["id"].toString().toInt();
     const auto method = msg["method"].toString();
     // qInfo() << "JadeAPI::sendToJade() - Sending message ->" << id << method;
     Q_ASSERT(m_jade);
     m_jade->send(msg);
-    int timeout = m_msg_timeout.value(id, 0);
+    int timeout;
+    {
+        // Consume the timeout - the request is sent once, and leaving the entry
+        // behind would grow the map for the lifetime of the connection.
+        QMutexLocker locker(&m_mutex);
+        timeout = m_msg_timeout.take(id);
+    }
     m_msg_inflight.insert(id);
     if (timeout > 0) QTimer::singleShot(timeout, this, [=, this] {
         // Get (ie. remove) the response handler for that id from the map of registered handlers
-        const ResponseHandler handler = m_responseHandlers.take(id);
+        ResponseHandler handler;
+        {
+            QMutexLocker locker(&m_mutex);
+            handler = m_responseHandlers.take(id);
+            m_request_proxy.remove(id);
+        }
         if (!handler) return;
         QVariantMap error = {{ "message", "timeout" }};
         try {
@@ -370,7 +426,10 @@ int JadeAPI::addEntropy(const QByteArray &entropy, const ResponseHandler &cb)
 int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const HttpRequestProxy& request_proxy)
 {
     const int id = registerResponseHandler(cb);
-    m_request_proxy[id] = request_proxy;
+    {
+        QMutexLocker locker(&m_mutex);
+        m_request_proxy.insert(id, request_proxy);
+    }
 
     const qint64 now_epoch_secs = QDateTime::currentSecsSinceEpoch();
     const QCborMap params = { {"network", network}, {"epoch", now_epoch_secs } };
