@@ -85,36 +85,12 @@ StackViewPage {
             visible: !self.anyAMP && !self.asset?.amp && self.advanced
         }
         MultisigButton {
-            id: multisig_2of2_button
-            type: '2of2'
-            tag: qsTrId('id_2of2')
-            title: qsTrId('id_2fa_protected')
-            description: qsTrId('id_quick_setup_2fa_account_ideal')
-            visible: {
-                if (!((self.asset && !self.asset.amp || self.anyLiquid) && !self.hasLiquidExpectAMP)) {
-                    return false
-                }
-                if (multisig_2of2_button.network.liquid) {
-                    return self.hasMultisigLiquidExceptAMP
-                }
-                return self.hasMultisigBitcoin
-            }
-        }
-        MultisigButton {
             id: multisig_2of3_button
             type: '2of3'
             tag: qsTrId('id_2of3')
             title: qsTrId('id_2of3_with_2fa')
             description: qsTrId('id_permanent_2fa_account_ideal_for')
-            visible: {
-                if (!(!self.anyAMP && (self.anyLiquid || self.advanced && self.asset?.networkKey !== 'liquid' && self.asset?.networkKey !== 'testnet-liquid') && !self.asset?.amp)) {
-                    return false
-                }
-                if (multisig_2of3_button.network.liquid) {
-                    return self.hasMultisigLiquidExceptAMP
-                }
-                return self.hasMultisigBitcoin
-            }
+            visible: !self.anyAMP && !self.asset?.amp && !(multisig_2of3_button.network?.liquid ?? true)
             action: Action {
                 onTriggered: {
                     self.pushPage(select_recovery_key_page, {
@@ -123,6 +99,13 @@ StackViewPage {
                     })
                 }
             }
+        }
+        MultisigButton {
+            type: '2of2'
+            tag: qsTrId('id_2of2')
+            title: qsTrId('id_2fa_protected')
+            description: qsTrId('id_quick_setup_2fa_account_ideal')
+            visible: self.asset && !self.asset.amp || self.anyLiquid
         }
         MultisigButton {
             id: amp_button
@@ -158,7 +141,6 @@ StackViewPage {
         VSpacer {
         }
     }
-    readonly property bool hasMultisigBitcoin: self.context.accounts.some(account => !account.network.electrum && !account.network.liquid)
     readonly property bool hasMultisigLiquidExceptAMP: self.context.accounts.some(account => !account.network.electrum && account.network.liquid && !account.amp0 && (account.pointer > 0 || !account.hidden))
     readonly property bool hasMultisigLiquidAMP: self.context.accounts.some(account => !account.network.electrum && account.network.liquid && account.amp0)
 
