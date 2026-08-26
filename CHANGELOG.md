@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.3] - 2026-08-26
+### Changed
+- Updated GDK to 0.77.9
+- Updated LWK to 0.19.0
+- The Windows installer now requires the VC++ 2015-2022 runtime 14.40 or later
+- Use GDK to generate the Jade genuine check challenge
+
+### Fixed
+- Login hanging while waiting for an already connected Tor session
+- Crash when loading accounts without a session context
+- Crash when syncing payments without a QML engine
+- Crashes on macOS from unchecked HID reports
+- Crashes from concurrent Jade requests
+
 ## [3.5.2] - 2026-08-19
 ### Changed
 - Improve swap data loading and error handling
