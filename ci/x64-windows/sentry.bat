@@ -20,7 +20,7 @@ for %%p in (%PATCHES%\*.patch) do (
     git -C sentry-native-src\external\crashpad apply --ignore-whitespace "%%p" || exit /b 1
 )
 
-call \qt\6.11.1\msvc2022_64\bin\qt-cmake -S sentry-native-src -B sentry-native-bld ^
+call \qt\6.11.2\msvc2022_64\bin\qt-cmake -S sentry-native-src -B sentry-native-bld ^
     -DCMAKE_BUILD_TYPE=RelWithDebInfo ^
     -DSENTRY_BACKEND=crashpad ^
     -DCRASHPAD_ENABLE_STACKTRACE=ON ^

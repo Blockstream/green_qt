@@ -63,12 +63,12 @@ export CMAKE_INSTALL_PREFIX="$PREFIX"
 
 You can reuse this layout for local builds.
 
-### Install Qt 6.11.1 (Qt Online Installer)
+### Install Qt 6.11.2 (Qt Online Installer)
 
 **Important**: You must install Qt from the online installer, not from source. QtWebEngine (required by the application) cannot be built statically and must come from the Qt online installer. Since QtWebEngine requires the full Qt installation, you need to install the entire Qt from the online installer.
 
 1. Download the Qt online installer from `https://www.qt.io/download-qt-installer`
-2. Install **Qt 6.11.1** for Linux (x86_64), including:
+2. Install **Qt 6.11.2** for Linux (x86_64), including:
    - Qt Quick / Qt Quick Controls 2
    - Qt Widgets / Qt Quick Widgets
    - Qt XML / Qt Core5Compat
@@ -82,7 +82,7 @@ You can reuse this layout for local builds.
 3. Set the Qt installation path and update your environment (adjust the path to match your installation):
 
    ```bash
-   export QT_ROOT="$HOME/Qt/6.11.1/gcc_64"
+   export QT_ROOT="$HOME/Qt/6.11.2/gcc_64"
    export PATH="$QT_ROOT/bin:$PREFIX/bin:$PATH"
    export CMAKE_PREFIX_PATH="$QT_ROOT:$PREFIX"
    ```

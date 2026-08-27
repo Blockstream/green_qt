@@ -16,11 +16,11 @@ if /i "%CI_COMMIT_REF_NAME:~0,8%"=="release_" (
 )
 
 cd /d C:\src || exit /b !errorlevel!
-call C:\qt\6.11.1\msvc2022_64\bin\qt-cmake --preset ci-windows || exit /b !errorlevel!
+call C:\qt\6.11.2\msvc2022_64\bin\qt-cmake --preset ci-windows || exit /b !errorlevel!
 
 cmake --build C:\src\bld --config RelWithDebInfo --parallel 4 || exit /b !errorlevel!
 
-C:\qt\6.11.1\msvc2022_64\bin\windeployqt.exe --qmldir C:\src\qml C:\src\bld\RelWithDebInfo\blockstream.exe || exit /b !errorlevel!
+C:\qt\6.11.2\msvc2022_64\bin\windeployqt.exe --qmldir C:\src\qml C:\src\bld\RelWithDebInfo\blockstream.exe || exit /b !errorlevel!
 
 copy C:\depends\windows-x86_64\bin\libgreen_gdk.dll C:\src\bld\RelWithDebInfo\ || exit /b !errorlevel!
 copy C:\depends\windows-x86_64\bin\libserialport-0.dll C:\src\bld\RelWithDebInfo\ || exit /b !errorlevel!

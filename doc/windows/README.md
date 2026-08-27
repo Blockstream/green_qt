@@ -276,7 +276,7 @@ Copy the **entire** `$PREFIX` tree to your Windows machine so that Phase 2 can u
   - C++ build tools
   - CMake
   - Ninja
-- **Qt 6.11.1** (or the version used in CI) for MSVC 2022 64-bit, e.g. installed under `C:\qt\6.11.1\msvc2022_64`.
+- **Qt 6.11.2** (or the version used in CI) for MSVC 2022 64-bit, e.g. installed under `C:\qt\6.11.2\msvc2022_64`.
 - **Git** and **7-Zip** (e.g. via Chocolatey), for cloning and extracting sources.
 - **Rust** via `rustup` for the native LWK and GLSDK steps:
   - Default toolchain: `1.88.0`
@@ -304,7 +304,7 @@ set PREFIX=C:\deps
 Then run (from a directory where you have the repo and where the scripts can clone dependencies):
 
 - **Countly:** `ci\x64-windows\countly.bat`
-- **KDSingleApplication:** `ci\x64-windows\kdsingleapplication.bat` (expects Qt at `\qt\6.11.1\msvc2022_64`; adjust if your Qt path is different)
+- **KDSingleApplication:** `ci\x64-windows\kdsingleapplication.bat` (expects Qt at `\qt\6.11.2\msvc2022_64`; adjust if your Qt path is different)
 - **ZXing:** `ci\x64-windows\zxing.bat`
 - **hidapi:** `ci\x64-windows\hidapi.bat`
 - **leveldb:** `ci\x64-windows\leveldb.bat`
@@ -329,7 +329,7 @@ come from the `dev-windows` preset in [`CMakePresets.json`](../../CMakePresets.j
 use a different VS or Qt path, adjust the next lines accordingly:
 
 ```bat
-call C:\qt\6.11.1\msvc2022_64\bin\qt-cmake --preset dev-windows
+call C:\qt\6.11.2\msvc2022_64\bin\qt-cmake --preset dev-windows
 
 cmake --build bld --config RelWithDebInfo
 ```
@@ -345,7 +345,7 @@ For a production-style build (e.g. release), override the preset on the command 
 After a successful build:
 
 ```bat
-C:\qt\6.11.1\msvc2022_64\bin\windeployqt.exe --qmldir qml bld\RelWithDebInfo\blockstream.exe
+C:\qt\6.11.2\msvc2022_64\bin\windeployqt.exe --qmldir qml bld\RelWithDebInfo\blockstream.exe
 
 copy C:\depends\windows-x86_64\bin\libgreen_gdk.dll bld\RelWithDebInfo\
 copy C:\depends\windows-x86_64\bin\libserialport-0.dll bld\RelWithDebInfo\

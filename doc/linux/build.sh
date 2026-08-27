@@ -6,7 +6,7 @@
 #   - Ubuntu 22.04+ or compatible distro
 #   - System packages (see doc/linux/README.md)
 #   - Rust: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-#   - Qt 6.11.1: from https://www.qt.io/download-qt-installer
+#   - Qt 6.11.2: from https://www.qt.io/download-qt-installer
 #
 
 set -e
@@ -68,13 +68,13 @@ read_progress() {
 # Ensure Qt is available when resuming
 ensure_qt() {
     if [[ -z "${QT_ROOT:-}" || ! -f "$QT_ROOT/bin/qmake" ]]; then
-        for q in "$HOME/Qt/6.11.1/gcc_64"; do
+        for q in "$HOME/Qt/6.11.2/gcc_64"; do
             if [[ -d "$q" && -f "$q/bin/qmake" ]]; then
                 export QT_ROOT="$q"
                 return
             fi
         done
-        fail "Qt 6.11.1 not found. Set QT_ROOT or install Qt from https://www.qt.io/download-qt-installer"
+        fail "Qt 6.11.2 not found. Set QT_ROOT or install Qt from https://www.qt.io/download-qt-installer"
     fi
 }
 

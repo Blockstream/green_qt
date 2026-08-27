@@ -16,7 +16,7 @@ if errorlevel 1 (
 
 7z x %ARCHIVE% -so | 7z x -si -ttar
 
-call \qt\6.11.1\msvc2022_64\bin\qt-cmake -S %FILENAME% -B kdsingleapplication-bld ^
+call \qt\6.11.2\msvc2022_64\bin\qt-cmake -S %FILENAME% -B kdsingleapplication-bld ^
     -DBUILD_SHARED_LIBS=OFF ^
     -DKDSingleApplication_STATIC=true ^
     -DKDSingleApplication_TESTS=false ^

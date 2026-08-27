@@ -9,7 +9,7 @@
   before_script:
     - export BREW_PREFIX="/opt/homebrew"
     - export PATH="$PREFIX/bin:$PATH"
-    - export PATH="$HOME/qt-install/6.11.1/macos/bin/:$PATH"
+    - export PATH="$HOME/qt-install/6.11.2/macos/bin/:$PATH"
     - export CMAKE_PREFIX_PATH="$PREFIX/lib/aarch64-apple-darwin:$PREFIX/lib/cmake"
   tags:
     - macos-arm64
@@ -58,7 +58,7 @@ macos-arm64:build:
         - depends/
       policy: pull
   after_script:
-    - $HOME/qt-install/6.11.1/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
+    - $HOME/qt-install/6.11.2/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
     - cp "$PREFIX/bin/crashpad_handler" build/Blockstream.app/Contents/MacOS/
     # keep the .dSYM (dsymutil output) for the symbols upload job instead of deleting it
     - mkdir -p symbols && mv build/Blockstream.app/Contents/MacOS/Blockstream.dSYM symbols/

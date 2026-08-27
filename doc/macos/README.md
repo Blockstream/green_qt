@@ -72,18 +72,18 @@ Pick the target architecture:
 3. Note the install prefix; for example:
 
    ```bash
-   export QT_ROOT="$HOME/Qt/6.11.1/macos"
+   export QT_ROOT="$HOME/Qt/6.11.2/macos"
    ```
 
 #### macOS 26 (Sequoia) notes
 
-- **Qt version on macOS 26**: Building with Qt **6.11.1** on macOS 26 can fail with a link error:
+- **Qt version on macOS 26**: Building with Qt **6.11.2** on macOS 26 can fail with a link error:
 
   ```text
   ld: framework 'AGL' not found
   ```
 
-  Upgrading Qt to **6.11.1** (or newer in the 6.11 series) resolves this issue.
+  Upgrading Qt to **6.11.2** (or newer in the 6.11 series) resolves this issue.
 
 Ensure Qt is on `PATH` and in `CMAKE_PREFIX_PATH`:
 

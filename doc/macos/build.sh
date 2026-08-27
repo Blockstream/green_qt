@@ -7,7 +7,7 @@
 #   - Homebrew: https://brew.sh
 #   - Bash 4+: brew install bash
 #   - Build tools: brew install cmake ninja python git pkg-config protobuf
-#   - Qt 6.11.1: from https://www.qt.io/download-qt-installer
+#   - Qt 6.11.2: from https://www.qt.io/download-qt-installer
 #
 
 set -e
@@ -120,7 +120,7 @@ if [[ "$LAST_STEP" -lt $STEP_PREREQS ]]; then
     # Qt check - user must set QT_ROOT
     if [[ -z "$QT_ROOT" ]]; then
         # Try common locations
-        for q in "$HOME/Qt/6.11.1/macos"; do
+        for q in "$HOME/Qt/6.11.2/macos"; do
             if [[ -d "$q" && -f "$q/bin/qmake" ]]; then
                 export QT_ROOT="$q"
                 break
@@ -128,7 +128,7 @@ if [[ "$LAST_STEP" -lt $STEP_PREREQS ]]; then
         done
     fi
     if [[ -z "$QT_ROOT" || ! -f "$QT_ROOT/bin/qmake" ]]; then
-        fail "Qt 6.11 not found. Install Qt from https://www.qt.io/download-qt-installer and set QT_ROOT, e.g.: export QT_ROOT=\$HOME/Qt/6.11.1/macos"
+        fail "Qt 6.11 not found. Install Qt from https://www.qt.io/download-qt-installer and set QT_ROOT, e.g.: export QT_ROOT=\$HOME/Qt/6.11.2/macos"
     fi
     echo "  Qt found: $QT_ROOT"
 
@@ -138,7 +138,7 @@ fi
 # Ensure QT_ROOT is available when resuming (set in step 1, but we may have started fresh)
 ensure_qt() {
     if [[ -z "${QT_ROOT:-}" || ! -f "$QT_ROOT/bin/qmake" ]]; then
-        for q in "$HOME/Qt/6.11.1/macos"; do
+        for q in "$HOME/Qt/6.11.2/macos"; do
             if [[ -d "$q" && -f "$q/bin/qmake" ]]; then
                 export QT_ROOT="$q"
                 return
