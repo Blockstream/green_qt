@@ -145,15 +145,29 @@ function segmentationWalletLogin(context, { method }) {
     return segmentation
 }
 
+function accountNetwork(account) {
+    if (!account) return undefined
+    if (account.amp2) {
+        return account.context.mainnet ? 'liquid-amp2' : 'testnet-liquid-amp2'
+    }
+    const network = account.network
+    if (network.electrum) {
+        return network.id
+    }
+    return 'legacy-' + network.id
+}
+
 function segmentationSubAccount(account) {
     const segmentation = segmentationSession(account.context)
     segmentation.account_type = account.type
+    segmentation.account_network = accountNetwork(account)
     return segmentation
 }
 
 function segmentationLightning(context, { invoice_type } = {}) {
     const segmentation = segmentationSession(context)
     segmentation.account_type = 'lightning'
+    segmentation.account_network = context.mainnet ? 'greenlight-mainnet' : 'greenlight-testnet'
     if (invoice_type) segmentation.invoice_type = invoice_type
     return segmentation
 }

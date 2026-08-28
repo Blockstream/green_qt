@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "util.js" as UtilJS
+import "analytics.js" as AnalyticsJS
 
 RowLayout {
     required property Context context
@@ -48,9 +49,10 @@ RowLayout {
     CreateAccountController {
         id: controller
         context: self.context
-        onCreated: {
+        onCreated: (account) => {
             self.creatingType = ''
             error_badge.clear()
+            Analytics.recordEvent('account_create', AnalyticsJS.segmentationSubAccount(Settings, account))
         }
         onFailed: (error) => {
             self.creatingType = ''
