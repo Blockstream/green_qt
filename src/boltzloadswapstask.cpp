@@ -4,9 +4,11 @@
 #include "lwk/lwk.hpp"
 #include "swap.h"
 
+#include <chrono>
 #include <exception>
 #include <memory>
 #include <string>
+#include <thread>
 #include <typeinfo>
 #include <utility>
 #include <vector>
@@ -47,12 +49,28 @@ void BoltzLoadSwapsTask::update()
     auto future = QtConcurrent::run([=, this]() -> Result {
         Result result;
 
-        auto advance = [](const auto& response) {
-            try {
-                response->advance();
-            } catch (const lwk::lwk_error::NoBoltzUpdate&) {
-                // The initial websocket update may not have arrived yet. Keep the restored
-                // response so Swap::sync() can retry it.
+        auto advance = [](const auto& response, const std::string& swap_id) {
+            constexpr auto timeout = std::chrono::seconds(2);
+            constexpr auto retry_interval = std::chrono::milliseconds(50);
+            const auto deadline = std::chrono::steady_clock::now() + timeout;
+            bool received_update{false};
+
+            while (true) {
+                try {
+                    const auto state = response->advance();
+                    received_update = true;
+                    if (state != lwk::PaymentState::kContinue) return;
+                } catch (const lwk::lwk_error::NoBoltzUpdate&) {
+                    // Each restored response receives updates for every subscribed swap through
+                    // the same bounded channel. Wait for its initial update before restoring the
+                    // next swap, otherwise later subscriptions can overwrite that update.
+                    if (received_update) return;
+                    if (std::chrono::steady_clock::now() >= deadline) {
+                        qWarning() << Q_FUNC_INFO << "initial update timed out for swap" << swap_id.c_str();
+                        return;
+                    }
+                    std::this_thread::sleep_for(retry_interval);
+                }
             }
         };
 
@@ -71,15 +89,15 @@ void BoltzLoadSwapsTask::update()
                 if (type == "submarine") {
                     auto invoice = swap_data.value("bolt11_invoice").toString();
                     auto prepare_pay_response = session->restore_prepare_pay(*data);
-                    if (!completed) advance(prepare_pay_response);
+                    if (!completed) advance(prepare_pay_response, swap_id);
                     result.prepare_pay_responses.push_back(std::make_pair(invoice, prepare_pay_response));
                 } else if (type == "chain") {
                     auto lockup_response = session->restore_lockup(*data);
-                    if (!completed) advance(lockup_response);
+                    if (!completed) advance(lockup_response, swap_id);
                     result.lockup_responses.push_back(lockup_response);
                 } else if (type == "reverse") {
                     auto invoice_response = session->restore_invoice(*data);
-                    if (!completed) advance(invoice_response);
+                    if (!completed) advance(invoice_response, swap_id);
                     result.invoice_responses.push_back(invoice_response);
                 } else {
                     qWarning() << Q_FUNC_INFO << "unexpected swap type" << swap_id.c_str() << qPrintable(type);
