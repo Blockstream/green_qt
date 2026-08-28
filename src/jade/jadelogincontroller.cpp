@@ -190,8 +190,23 @@ void JadeSetupTask::update()
     auto network = m_controller->network();
     if (!network) return;
 
+    // The device outlives its backend: the discovery agent clears the backend
+    // when the serial port goes away but leaves the device - and its last known
+    // state - in place, so a stale UNINIT/UNSAVED can get us this far with
+    // nothing to talk to.
+    if (!device->api()) {
+        setStatus(Status::Failed);
+        return;
+    }
+
     setStatus(Status::Active);
     device->setUnlocking(true);
+
+    connect(m_controller, &JadeController::disconnected, this, [=, this] {
+        if (m_status != Status::Active) return;
+        device->setUnlocking(false);
+        setStatus(Status::Failed);
+    }, Qt::SingleShotConnection);
 
     // JadeAPI keeps these callbacks for as long as the request is outstanding
     // and outlives both this task and its controller, so the device can answer
@@ -386,7 +401,18 @@ void JadeIdentifyTask::update()
     if (m_status != Status::Ready) return;
 
     const auto device = m_controller->device();
-    if (!device) return;
+    if (!device) {
+        setStatus(Status::Failed);
+        return;
+    }
+
+    // Guards both branches below: the temporary-keys unlock and the xpub
+    // activity alike go straight through JadeDevice::api(), which is null once
+    // the backend has been torn down under us.
+    if (!device->api()) {
+        setStatus(Status::Failed);
+        return;
+    }
 
     const auto context = m_controller->context();
     if (!context) return;
