@@ -44,8 +44,20 @@ void RestoreController::restore(const QString& deployment)
     Q_ASSERT(!m_wallet || m_wallet->deployment() == deployment);
     setContext(ContextManager::instance()->create(deployment, false));
 
+    m_primary_login_succeeded = false;
+    m_restore_error.clear();
+
     auto monitor = new TaskGroupMonitor(this);
     connect(monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=, this] {
+        if (!m_primary_login_succeeded || !m_restore_error.isEmpty()) {
+            if (context()) {
+                context()->deleteLater();
+                setContext(nullptr);
+            }
+            emit restoreFailed(m_restore_error.isEmpty() ? QStringLiteral("id_login_failed") : m_restore_error);
+            return;
+        }
+
         if (m_wallet) {
             if (m_wallet->xpubHashId() == context()->xpubHashId()) {
                 context()->setWallet(m_wallet);
@@ -61,22 +73,22 @@ void RestoreController::restore(const QString& deployment)
             }
         }
 
-        Wallet* wallet = nullptr;
+        Wallet* existing = nullptr;
         for (auto w : WalletManager::instance()->getWallets()) {
             if (qobject_cast<PinData*>(w->login()) && w->xpubHashId() == context()->xpubHashId()) {
-                m_wallet = w;
+                existing = w;
                 break;
             }
         }
 
-        if (wallet) {
+        if (existing) {
             context()->deleteLater();
             setContext(nullptr);
-            emit alreadyRestored(wallet);
+            emit alreadyRestored(existing);
             return;
         }
 
-        wallet = WalletManager::instance()->createWallet();
+        auto wallet = WalletManager::instance()->createWallet();
         wallet->setName(WalletManager::instance()->newWalletName());
         wallet->setXPubHashId(context()->xpubHashId());
         wallet->m_deployment = context()->deployment();
@@ -118,6 +130,18 @@ TaskGroup* RestoreController::check(Network* network)
     login->then(get_credentials);
 
     if (network == context()->primaryNetwork()) {
+        connect(login, &Task::finished, this, [=, this] {
+            m_primary_login_succeeded = true;
+        });
+        connect(login, &Task::failed, this, [=, this](const QString& error) {
+            m_restore_error = error;
+        });
+        connect(get_credentials, &Task::failed, this, [=, this](const QString& error) {
+            if (m_restore_error.isEmpty()) {
+                m_restore_error = error;
+            }
+        });
+
         auto connect_lightning = new LightningConnectNodeTask(context());
         group->add(connect_lightning);
         get_credentials->then(connect_lightning);

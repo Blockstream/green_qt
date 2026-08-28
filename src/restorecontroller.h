@@ -35,12 +35,15 @@ signals:
     void restoreFinished(Context* context);
     void alreadyRestored(Wallet* wallet);
     void mismatch();
+    void restoreFailed(const QString& error);
 private:
     QStringList m_mnemonic;
     QString m_password;
     Wallet* m_wallet{nullptr};
     TaskGroup* check(Network* network);
     QList<Account*> m_accounts;
+    bool m_primary_login_succeeded{false};
+    QString m_restore_error;
 };
 
 #endif // GREEN_RESTORECONTROLLER_H
