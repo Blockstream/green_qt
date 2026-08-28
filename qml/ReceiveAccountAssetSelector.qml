@@ -14,6 +14,7 @@ StackViewPage {
     property bool anyAMP: false
     property bool anyAMPLegacy: false
     readonly property bool supportsLiquid: self.context.sessions.some(session => session.network.liquid)
+    readonly property bool hasLiquidAccounts: UtilJS.accounts(self.context).some(account => account.network.liquid)
     readonly property bool hasAmp0Account: UtilJS.accounts(self.context).some(account => account.amp0)
     readonly property bool hasAmp2Account: UtilJS.accounts(self.context).some(account => account.amp2)
     readonly property var ampReceiveOptions: {
@@ -58,8 +59,8 @@ StackViewPage {
                 filter: search_field.text.trim()
                 context: self.context
                 minWeight: search_field.text.trim().length > 0 ? 0 : 1
-                showAmp: self.hasAmp0Account
                 showLightning: true
+                requireCompatibleAccount: true
             }
             spacing: 5
             footer: ColumnLayout {
@@ -70,7 +71,7 @@ StackViewPage {
                     Layout.topMargin: 5
                     amp: false
                     asset: null
-                    enabled: self.supportsLiquid
+                    visible: self.supportsLiquid && self.hasLiquidAccounts
                     index: -1
                     icon.source: 'qrc:/svg2/liquid_icon.svg'
                     text: 'Any Liquid Asset'
@@ -192,7 +193,7 @@ StackViewPage {
                             for (const account of UtilJS.accounts(self.context)) {
                                 if (delegate.asset) {
                                     if (delegate.asset.networkKey !== account.network.key) continue
-                                    if (delegate.asset.amp && !(account.amp0 || account.amp2)) continue
+                                    if (delegate.asset.amp && !account.amp0) continue
                                     accounts.push(account)
                                 } else if (self.anyLiquid) {
                                     if (account.network.liquid) {
@@ -213,17 +214,6 @@ StackViewPage {
                             asset: delegate.asset
                             account: button.modelData
                             onSelected: (account, asset) => self.selected(button.account, button.asset)
-                        }
-                    }
-                    CreateAccountButton {
-                        Layout.fillWidth: true
-                        visible: !self.context.watchonly && !self.anyAMP && !self.anyAMPLegacy
-                        onClicked: {
-                            self.pushPage(create_account_page, {
-                                asset: delegate.asset,
-                                anyLiquid: self.anyLiquid,
-                                anyAMP: self.anyAMP,
-                            })
                         }
                     }
                 }
@@ -333,36 +323,6 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/svg2/next_arrow.svg'
             }
-        }
-    }
-
-    component CreateAccountButton: AbstractButton {
-        background: null
-        padding: 10
-        contentItem: RowLayout {
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 14
-                font.weight: 500
-                text: qsTrId('id_create_new_account')
-            }
-            HSpacer {
-            }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/next_arrow.svg'
-            }
-        }
-    }
-
-    Component {
-        id: create_account_page
-        CreateAccountPage {
-            id: page
-            context: self.context
-            editableAsset: false
-            onCloseClicked: self.closeClicked()
-            onCreated: (account) => self.selected(account, page.asset)
         }
     }
 }

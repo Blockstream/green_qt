@@ -1,6 +1,7 @@
 #include "asset.h"
 #include "assetmanager.h"
 #include "assetsmodel.h"
+#include "account.h"
 #include "context.h"
 #include "device.h"
 #include "network.h"
@@ -27,9 +28,41 @@ void AssetsModel::setFilter(const QString& filter)
 void AssetsModel::setContext(Context* context)
 {
     if (m_context == context) return;
+    if (m_context) {
+        disconnect(m_context, &Context::accountsChanged, this, nullptr);
+        disconnect(m_context, &Context::lightningEnabledChanged, this, nullptr);
+        for (auto account : m_context->getAccounts()) {
+            disconnect(account, nullptr, this, nullptr);
+        }
+    }
     beginFilterChange();
     m_context = context;
+    if (m_context) {
+        connect(m_context, &Context::accountsChanged, this, [=, this] {
+            connectAccounts();
+            refilter();
+        });
+        connect(m_context, &Context::lightningEnabledChanged, this, [=, this] {
+            refilter();
+        });
+        connectAccounts();
+    }
     emit contextChanged();
+    endFilterChange(Direction::Rows);
+}
+
+void AssetsModel::connectAccounts()
+{
+    if (!m_context) return;
+    for (auto account : m_context->getAccounts()) {
+        connect(account, &Account::hiddenChanged, this, &AssetsModel::refilter, Qt::UniqueConnection);
+        connect(account, &Account::typeChanged, this, &AssetsModel::refilter, Qt::UniqueConnection);
+    }
+}
+
+void AssetsModel::refilter()
+{
+    beginFilterChange();
     endFilterChange(Direction::Rows);
 }
 
@@ -57,6 +90,15 @@ void AssetsModel::setShowLightning(bool show_lightning)
     beginFilterChange();
     m_show_lightning = show_lightning;
     emit showLightningChanged();
+    endFilterChange(Direction::Rows);
+}
+
+void AssetsModel::setRequireCompatibleAccount(bool require_compatible_account)
+{
+    if (m_require_compatible_account == require_compatible_account) return;
+    beginFilterChange();
+    m_require_compatible_account = require_compatible_account;
+    emit requireCompatibleAccountChanged();
     endFilterChange(Direction::Rows);
 }
 
@@ -101,6 +143,18 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
         const auto watchonly_data = qobject_cast<WatchonlyData*>(m_context->wallet()->login());
         if (watchonly_data && watchonly_data->network()->key() != asset->networkKey()) {
             return false;
+        }
+
+        if (m_require_compatible_account && !asset->isLightning()) {
+            bool has_compatible_account = false;
+            for (auto account : m_context->getAccounts()) {
+                if (account->isHidden()) continue;
+                if (account->network()->key() != asset->networkKey()) continue;
+                if (asset->isAmp() && !account->isAmp0()) continue;
+                has_compatible_account = true;
+                break;
+            }
+            if (!has_compatible_account) return false;
         }
     }
 
