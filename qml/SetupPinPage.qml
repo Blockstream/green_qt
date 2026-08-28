@@ -135,14 +135,9 @@ StackViewPage {
         Item {
             Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(left_item) - UtilJS.effectiveWidth(right_item), 0)
         }
-        LinkButton {
-            Layout.alignment: Qt.AlignBottom
+        Item {
+            Layout.alignment: Qt.AlignCenter
             id: right_item
-            text: qsTrId('id_skip')
-            visible: false
-            // TODO: this button allows temporary login
-            // visible: !self.pin
-            onClicked: self.finished(self.context)
         }
     }
 }

@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 MainPage {
@@ -165,7 +166,7 @@ MainPage {
         RegisterPage {
             onRegisterFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.push(setup_pin_page, { context })
+                stack_view.push(setup_pin_page, { context, create: true })
             }
         }
     }
@@ -173,7 +174,16 @@ MainPage {
     Component {
         id: setup_pin_page
         SetupPinPage {
-            onFinished: (context) => stack_view.push(wallet_created_page, { context })
+            required property bool create
+            id: page
+            onFinished: (context) => {
+                if (page.create) {
+                    Analytics.recordEvent('wallet_create', AnalyticsJS.segmentationSession(Settings, context))
+                    Settings.acceptTermsOfService()
+                    Settings.registerEvent({ walletId: context.xpubHashId, status: 'pending', type: 'wallet_backup' })
+                }
+                stack_view.push(wallet_created_page, { context })
+            }
             onCloseClicked: {
                 self.closeWallet(self.wallet)
                 WalletManager.removeWallet(self.wallet)
@@ -202,7 +212,7 @@ MainPage {
         RestoreCheckPage {
             onRestoreFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.push(setup_pin_page, { context })
+                stack_view.push(setup_pin_page, { context, create: false })
             }
             onAlreadyRestored: (wallet) => stack_view.replace(already_restored_page, { wallet })
             onMismatch: stack_view.pop()

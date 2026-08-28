@@ -4,7 +4,9 @@
 
 function segmentationNetwork(context) {
     const segmentation = {
+        security: 'singlesig',
         segment: 'Desktop',
+        wallet_networks: context.mainnet ? 'mainnet' : 'testnet'
     }
     if (!context) return segmentation
 
