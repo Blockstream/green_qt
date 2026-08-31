@@ -74,7 +74,7 @@ void BoltzLoadSwapsTask::update()
             }
         };
 
-        auto load = [&](const std::string& swap_id, bool completed) {
+        auto load = [&](const std::string& swap_id) {
             try {
                 auto data = session->get_swap_data(swap_id);
                 if (!data) return;
@@ -89,15 +89,15 @@ void BoltzLoadSwapsTask::update()
                 if (type == "submarine") {
                     auto invoice = swap_data.value("bolt11_invoice").toString();
                     auto prepare_pay_response = session->restore_prepare_pay(*data);
-                    if (!completed) advance(prepare_pay_response, swap_id);
+                    advance(prepare_pay_response, swap_id);
                     result.prepare_pay_responses.push_back(std::make_pair(invoice, prepare_pay_response));
                 } else if (type == "chain") {
                     auto lockup_response = session->restore_lockup(*data);
-                    if (!completed) advance(lockup_response, swap_id);
+                    advance(lockup_response, swap_id);
                     result.lockup_responses.push_back(lockup_response);
                 } else if (type == "reverse") {
                     auto invoice_response = session->restore_invoice(*data);
-                    if (!completed) advance(invoice_response, swap_id);
+                    advance(invoice_response, swap_id);
                     result.invoice_responses.push_back(invoice_response);
                 } else {
                     qWarning() << Q_FUNC_INFO << "unexpected swap type" << swap_id.c_str() << qPrintable(type);
@@ -115,10 +115,7 @@ void BoltzLoadSwapsTask::update()
 
         try {
             for (const auto& swap_id : session->pending_swap_ids()) {
-                load(swap_id, false);
-            }
-            for (const auto& swap_id : session->completed_swap_ids()) {
-                load(swap_id, true);
+                load(swap_id);
             }
         } catch (const lwk::lwk_error::Generic& error) {
             qDebug() << Q_FUNC_INFO << "generic error" << error.msg.c_str();
