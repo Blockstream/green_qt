@@ -72,11 +72,17 @@ if [ "$HOST" = "windows" ]; then
 
     LIBPATH="target/x86_64-pc-windows-gnu/release/glsdk.dll"
 elif [ "$HOST" = "macos" ]; then
-    cargo build --release -p gl-sdk
+    if [ "${ARCH:-$(uname -m)}" = "x86_64" ] && [ "$(uname -m)" = "arm64" ]; then
+        cargo build --target x86_64-apple-darwin --release -p gl-sdk
+        GLSDK_DYLIB=target/x86_64-apple-darwin/release/libglsdk.dylib
+    else
+        cargo build --release -p gl-sdk
+        GLSDK_DYLIB=target/release/libglsdk.dylib
+    fi
     install -d $PREFIX/lib
-    install target/release/libglsdk.dylib $PREFIX/lib
+    install "$GLSDK_DYLIB" $PREFIX/lib/libglsdk.dylib
     install_name_tool -id @rpath/libglsdk.dylib $PREFIX/lib/libglsdk.dylib
-    LIBPATH="target/release/libglsdk.dylib"
+    LIBPATH="$GLSDK_DYLIB"
 elif [ "$HOST" = "linux" ]; then
     cargo build --release -p gl-sdk
     install -d $PREFIX/lib

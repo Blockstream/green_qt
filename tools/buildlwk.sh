@@ -21,9 +21,15 @@ if [ "$HOST" = "windows" ]; then
     install lwk.dll $PREFIX/bin
     install lwk.def $PREFIX/bin
 elif [ "$HOST" = "macos" ]; then
-    cargo build --release -p lwk_bindings
+    if [ "${ARCH:-$(uname -m)}" = "x86_64" ] && [ "$(uname -m)" = "arm64" ]; then
+        cargo build --target x86_64-apple-darwin --release -p lwk_bindings
+        LWK_DYLIB=target/x86_64-apple-darwin/release/liblwk.dylib
+    else
+        cargo build --release -p lwk_bindings
+        LWK_DYLIB=target/release/liblwk.dylib
+    fi
     install -d $PREFIX/lib
-    install target/release/liblwk.dylib $PREFIX/lib
+    install "$LWK_DYLIB" $PREFIX/lib/liblwk.dylib
     install_name_tool -id @rpath/liblwk.dylib $PREFIX/lib/liblwk.dylib
 else
     cargo build --release -p lwk_bindings

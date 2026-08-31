@@ -57,6 +57,19 @@ Pick the target architecture:
   export gdk_ROOT="$PREFIX/lib/x86_64-apple-darwin/gdk"
   ```
 
+  To **cross-build x86_64 on Apple Silicon** (same approach as CI), also set:
+
+  ```bash
+  export GDK_MACOS_TARGET_ARCH=x86_64
+  export CMAKE_TOOLCHAIN_FILE="$PWD/cmake/macos-x86_64-cross.cmake"
+  export CMAKE_OSX_ARCHITECTURES=x86_64
+  source tools/ci/macos-x86_64-cross-env.sh
+  ```
+
+  Use a universal (or x86_64) Qt install. Install the Rust target with
+  `rustup target add x86_64-apple-darwin` (and for lwk’s pinned toolchain,
+  `--toolchain 1.85.0-aarch64-apple-darwin` as well).
+
 ### Install Qt 6.11 (Qt online installer)
 
 1. Download the Qt online installer from `https://www.qt.io/download-qt-installer`.

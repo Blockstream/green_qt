@@ -7,21 +7,22 @@
     PKG_CONFIG_PATH: "$PREFIX/lib/pkgconfig"
     CMAKE_INSTALL_PREFIX: "$PREFIX"
   before_script:
-    - export BREW_PREFIX="/usr/local"
+    - export BREW_PREFIX="/opt/homebrew"
     - export PATH="$PREFIX/bin:$PATH"
     - export PATH="$HOME/qt-install/6.11.2/macos/bin/:$PATH"
     - export CMAKE_PREFIX_PATH="$PREFIX/lib/x86_64-apple-darwin:$PREFIX/lib/cmake"
+    - source tools/ci/macos-x86_64-cross-env.sh
   tags:
-    - macos-x86_64
+    - macos-arm64
 
 macos-x86_64:depends:
   stage: depends
   extends:
     - .macos-x86_64
   cache:
-    - key: macos_x86_64
+    - key: macos_x86_64_cross
       paths:
-        - depends/
+        - depends/macos-x86_64/
       policy: push
   script:
     - tools/buildkdsingleapplication.sh
@@ -35,15 +36,6 @@ macos-x86_64:depends:
     - tools/buildleveldb.sh
     - tools/buildlwk.sh
     - tools/buildglsdk.sh --verbose
-    - export LLVM_PATH="$BREW_PREFIX/opt/llvm@17"
-    - export PATH="$LLVM_PATH/bin:$PATH"
-    - export CC="$LLVM_PATH/bin/clang"
-    - export CXX="$LLVM_PATH/bin/clang++"
-    - export LDFLAGS="-L$LLVM_PATH/lib"
-    - export CPPFLAGS="-I$LLVM_PATH/include"
-    - export CMAKE_PREFIX_PATH="$LLVM_PATH"
-    - export CMAKE_C_COMPILER="$LLVM_PATH/bin/clang"
-    - export CMAKE_CXX_COMPILER="$LLVM_PATH/bin/clang++"
     - tools/buildgdk.sh --static
   when: manual
 
@@ -52,9 +44,9 @@ macos-x86_64:build:
     - .build
     - .macos-x86_64
   cache:
-    - key: macos_x86_64
+    - key: macos_x86_64_cross
       paths:
-        - depends/
+        - depends/macos-x86_64/
       policy: pull
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^release_.*$/'

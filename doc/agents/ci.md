@@ -24,6 +24,19 @@ Keep **OS-specific CI files in sync** when a change applies to more than one var
 
 Example: adding a dependency build step on macOS usually means adding the same `tools/build*.sh` invocation to **both** `macos-x86_64:depends` and `macos-arm64:depends` (only `PREFIX`, `ARCH`, brew paths, and cache keys differ).
 
+### macOS x86_64 cross-build on arm64
+
+`macos-x86_64:*` jobs run on the **`macos-arm64`** runner and cross-compile Intel artifacts (`cmake/macos-x86_64-cross.cmake`, `tools/ci/macos-x86_64-cross-env.sh`).
+
+Depends caches must stay separate:
+
+| Job family | Cache key | Cache path |
+|------------|-----------|------------|
+| `macos-arm64:*` | `macos_arm64` | `depends/macos-arm64/` |
+| `macos-x86_64:*` | `macos_x86_64_cross` | `depends/macos-x86_64/` |
+
+Do **not** share cache keys between arches. After changing how x86_64 deps are built, bump the x86_64 cache key (or clear the cache) and re-run `macos-x86_64:depends` once.
+
 ## When you change builds
 
 If you change **how** the project is built (new dependency script, new CMake option, new test step, different `qt-cmake` flags, CI job script, …):

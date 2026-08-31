@@ -21,7 +21,7 @@ macos-arm64:depends:
   cache:
     - key: macos_arm64
       paths:
-        - depends/
+        - depends/macos-arm64/
       policy: push
   script:
     - export
@@ -55,7 +55,7 @@ macos-arm64:build:
   cache:
     - key: macos_arm64
       paths:
-        - depends/
+        - depends/macos-arm64/
       policy: pull
   after_script:
     - $HOME/qt-install/6.11.2/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
