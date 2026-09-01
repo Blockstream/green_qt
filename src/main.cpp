@@ -45,6 +45,7 @@
 #include "sessionmanager.h"
 #include "util.h"
 #include "walletmanager.h"
+#include "watchdog.h"
 #include "zxing.h"
 
 #include <KDSingleApplication>
@@ -234,8 +235,11 @@ int watchdog_handler(Application& app)
             QObject::connect(&process, &QProcess::finished, &loop, &QEventLoop::quit);
             process.start(app.arguments().constFirst(), args);
             loop.exec();
-            QTextStream(&file) << Q_FUNC_INFO << process.exitStatus();
-            if (process.exitStatus() == QProcess::NormalExit) break;
+            const auto exit_status = process.exitStatus();
+            const auto exit_code = process.exitCode();
+            QTextStream(&file) << Q_FUNC_INFO << ' ' << DescribeUiExit(exit_status, exit_code) << Qt::endl;
+            // only bring the UI back when it crashed, not when it was terminated on purpose
+            if (!ShouldRestartUi(exit_status, exit_code)) break;
         }
     };
 

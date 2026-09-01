@@ -9,6 +9,7 @@ target_sources(${APP_TARGET} PRIVATE
     applicationcontroller.h applicationcontroller.cpp
     green.h
     green_settings.h green_settings.cpp
+    watchdog.h watchdog.cpp
 )
 
 target_sources(${APP_TARGET} PRIVATE
