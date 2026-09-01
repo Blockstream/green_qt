@@ -48,4 +48,4 @@ Read our article on how to [verify signatures for new software releases](https:/
 
 ## License
 
-Blockstream is released under the terms of the GNU General Public License. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/GPL-3.0
+Blockstream is released under the terms of the GNU General Public License. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/GPL-3.0.
