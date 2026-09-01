@@ -34,13 +34,13 @@ Windows:
 
 ## Translations
 
-You can help translate this app [here](https://www.transifex.com/blockstream/blockstream-green/)
+You can help translate this app [here](https://www.transifex.com/blockstream/blockstream-green/).
 
 ## Support
 
 Need help?
 
-Visit the [Blockstream Help Center](https://help.blockstream.com/)
+Visit the [Blockstream Help Center](https://help.blockstream.com/).
 
 ## Verifying releases
 
