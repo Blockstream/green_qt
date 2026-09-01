@@ -90,7 +90,7 @@ StackViewPage {
             tag: qsTrId('id_2of3')
             title: qsTrId('id_2of3_with_2fa')
             description: qsTrId('id_permanent_2fa_account_ideal_for')
-            visible: !self.anyAMP && !self.asset?.amp && !(multisig_2of3_button.network?.liquid ?? true)
+            visible: self.asset?.id === 'btc'
             action: Action {
                 onTriggered: {
                     self.pushPage(select_recovery_key_page, {
@@ -107,42 +107,9 @@ StackViewPage {
             description: qsTrId('id_quick_setup_2fa_account_ideal')
             visible: self.asset && !self.asset.amp || self.anyLiquid
         }
-        MultisigButton {
-            id: amp_button
-            type: '2of2_no_recovery'
-            tag: qsTrId('id_amp')
-            title: qsTrId('id_amp')
-            description: qsTrId('id_account_for_special_assets')
-            visible: {
-                if (!self.context.mainnet) return false
-                if (!amp_button.network.liquid) return false
-                if (!(self.anyLiquid || self.anyAMP || self.asset?.amp || self.advanced && self.asset?.networkKey === 'liquid')) {
-                    return false
-                }
-                return self.hasMultisigLiquidExceptAMP || !self.hasMultisigLiquidAMP
-            }
-        }
-        Label {
-            Layout.topMargin: 10
-            text: 'AMP Account already exists.'
-            visible: {
-                if (amp_button.visible) {
-                    return false
-                }
-                if (!amp_button.network.liquid) {
-                    return false
-                }
-                if (!(self.anyAMP || self.asset?.amp)) {
-                    return false
-                }
-                return self.hasMultisigLiquidAMP
-            }
-        }
         VSpacer {
         }
     }
-    readonly property bool hasMultisigLiquidExceptAMP: self.context.accounts.some(account => !account.network.electrum && account.network.liquid && !account.amp0 && (account.pointer > 0 || !account.hidden))
-    readonly property bool hasMultisigLiquidAMP: self.context.accounts.some(account => !account.network.electrum && account.network.liquid && account.amp0)
 
     footerItem: RowLayout {
         HSpacer {
