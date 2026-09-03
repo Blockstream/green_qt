@@ -13,6 +13,7 @@ TTextField {
 
     property bool fiat: false
     property bool dynamic: true
+    property bool syncFocusedInput: false
     property string unit: self.session?.unit ?? ''
     property bool embed: false
     property real spacing: 4
@@ -106,7 +107,7 @@ TTextField {
             self.clear()
         }
         function onOutputChanged() {
-            if ((self.readOnly || !self.activeFocus) && (!self.fiat || !self.convert.fiat.available) && Object.keys(self.convert.input).length > 0) {
+            if ((self.readOnly || self.syncFocusedInput || !self.activeFocus) && (!self.fiat || !self.convert.fiat.available) && Object.keys(self.convert.input).length > 0) {
                 const amount = self.convert.output.amount
                 if (self.text !== '' || amount !== '0') {
                     self.text = amount
@@ -114,7 +115,7 @@ TTextField {
             }
         }
         function onFiatChanged() {
-            if ((self.readOnly || !self.activeFocus) && self.fiat && self.convert.fiat.available) {
+            if ((self.readOnly || self.syncFocusedInput || !self.activeFocus) && self.fiat && self.convert.fiat.available) {
                 const amount = self.convert.fiat.amount
                 if (self.text !== '' || amount !== '0') {
                     self.text = amount

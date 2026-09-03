@@ -148,6 +148,15 @@ qt_add_resources(${APP_TARGET} "images"
         svg2/close.svg
         svg2/close_black.svg
         svg2/coin_selection.svg
+        svg2/caret-right.svg
+        svg2/check-coin.svg
+        svg2/funnel-x.svg
+        svg2/empty.svg
+        svg2/timer.svg
+        svg2/dust.svg
+        svg2/arrows-clockwise.svg
+        svg2/funnel.svg
+        svg2/sort-ascending.svg
         svg2/copy.svg
         svg2/copy-green.svg
         svg2/copy2.svg

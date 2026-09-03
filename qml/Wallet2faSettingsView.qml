@@ -51,7 +51,7 @@ Page {
         }
         OutputListModelFilter {
             id: pre_csv_outputs
-            filter: "!csv"
+            activeFilters: ['legacy_recovery']
             model: OutputListModel {
                 account: view.mainAccount
             }

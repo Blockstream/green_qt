@@ -3,49 +3,16 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
     required property Context context
     required property Account account
-    property bool readonly
-    property Asset asset
-    property url url
-    property AccountTransaction transaction
-    property var available: {
-        if (controller.coins.length > 0) {
-            let satoshi = 0
-            for (const output of controller.coins) {
-                satoshi += output.data.satoshi
-            }
-            return { satoshi: String(satoshi) }
-        } else {
-            return { satoshi: String(controller.account.json.satoshi[controller.asset?.key ?? 'btc']) }
-        }
-    }
-    readonly property bool bumpRedeposit: controller.previousTransaction?.type === AccountTransaction.Redeposit
-    function pushSelectCoinsPage() {
-        self.pushPage(select_coins_page, {
-            account: controller.account,
-            asset: controller.asset,
-            coins: controller.coins,
-            unit: amount_field.unit,
-        })
-    }
-    function pushSelectFeePage() {
-        self.pushPage(select_fee_page, {
-            account: controller.account,
-            unit: amount_field.unit,
-            size: controller.transaction?.transaction_vsize ?? 0,
-            previousTransaction: controller.previousTransaction
-        })
-    }
-    Component.onCompleted: {
-        if (self.url) {
-            controller.recipient.address = self.url
-        }
-    }
+    required property Asset asset
+    required property AccountTransaction transaction
+
+    readonly property bool bumpRedeposit: self.transaction?.type === AccountTransaction.Redeposit
+    readonly property bool coinSelectionSupported: controller.asset?.id === controller.account?.network.policyAsset
 
     FeeEstimates {
         id: estimates
@@ -60,13 +27,8 @@ StackViewPage {
         previousTransaction: self.transaction
         recipient.convert.unit: controller.account.session.unit
     }
-    AnalyticsView {
-        name: 'Send'
-        active: self.StackView.visible
-        segmentation: AnalyticsJS.segmentationSubAccount(controller.account)
-    }
     id: self
-    title: qsTrId('id_send')
+    title: qsTrId('id_increase_fee')
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }
@@ -86,88 +48,27 @@ StackViewPage {
         }
         AccountAssetField {
             Layout.fillWidth: true
-            id: account_asset_field
             account: controller.account
             asset: controller.asset
-            readonly: self.readonly || !!self.transaction
-            onClicked: {
-                if (!account_asset_field.readonly) {
-                    self.pushPage(account_asset_selector, {
-                        context: controller.context
-                    })
-                }
-            }
-        }
-        FieldTitle {
-            text: qsTrId('id_manual_coin_selection')
-            visible: controller.coins.length > 0
-        }
-        AbstractButton {
-            Layout.fillWidth: true
-            padding: 20
-            visible: controller.coins.length > 0
-            background: Rectangle {
-                radius: 5
-                color: '#181818'
-            }
-            contentItem: RowLayout {
-                spacing: 10
-                Convert {
-                    id: convert
-                    account: controller.account
-                    asset: controller.asset
-                    input: self.available
-                    unit: amount_field.unit
-                }
-                CircleButton {
-                    Layout.alignment: Qt.AlignCenter
-                    icon.source: 'qrc:/svg2/x-circle.svg'
-                    onClicked: controller.coins = []
-                }
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: true
-                    color: '#FFF'
-                    font.pixelSize: 16
-                    font.weight: 400
-                    text: controller.coins.length + ' coins'
-                }
-                ColumnLayout {
-                    Label {
-                        Layout.alignment: Qt.AlignRight
-                        color: '#FFF'
-                        font.pixelSize: 12
-                        font.weight: 400
-                        text: convert.output.label
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignRight
-                        color: '#6F6F6F'
-                        font.pixelSize: 12
-                        font.weight: 400
-                        text: convert.fiat.label
-                    }
-                }
-                CircleButton {
-                    Layout.alignment: Qt.AlignCenter
-                    icon.source: 'qrc:/svg2/edit.svg'
-                    onClicked: self.pushSelectCoinsPage()
-                }
-            }
-            onClicked: self.pushSelectCoinsPage()
+            readonly: true
         }
         FieldTitle {
             text: qsTrId('id_address')
             visible: !self.bumpRedeposit
         }
-        AddressField {
+        AddressLabel {
             Layout.fillWidth: true
-            id: address_field
-            text: controller.recipient.address
-            onTextEdited: controller.recipient.address = address_field.text
-            onCleared: controller.recipient.address = ''
-            onCodeScanned: (code) => controller.recipient.address = code
-            focus: true
+            address: controller.recipient.address
+            visible: !self.bumpRedeposit
+            padding: 20
+            background: Rectangle {
+                color: '#181818'
+                radius: 5
+            }
+        }
+        ErrorPane {
+            Layout.topMargin: -15
+            visible: !self.bumpRedeposit
             error: {
                 if (controller.recipient.address === '') return
                 const error = controller.transaction?.error
@@ -175,14 +76,6 @@ StackViewPage {
                 if (error === 'id_nonconfidential_addresses_not') return error
                 if (error === 'id_assets_cannot_be_used_on_bitcoin') return error
             }
-            readOnly: !!self.transaction
-            visible: !self.bumpRedeposit
-        }
-        ErrorPane {
-            Layout.topMargin: -15
-            Layout.bottomMargin: 15
-            error: address_field.error
-            visible: !self.bumpRedeposit
         }
         FieldTitle {
             text: qsTrId('id_amount')
@@ -191,11 +84,12 @@ StackViewPage {
         AmountField {
             Layout.fillWidth: true
             id: amount_field
-            readOnly: !!controller.previousTransaction
+            visible: !self.bumpRedeposit
+            readOnly: true
             convert: controller.recipient.convert
             session: controller.account.session
             error: {
-                if (amount_field.text.length === 0 && !controller.recipient.greedy) return
+                if (amount_field.text.length === 0) return
                 const error = controller.transaction?.error
                 if (error === 'id_insufficient_funds') return error
                 if (error === 'id_invalid_amount') {
@@ -208,42 +102,64 @@ StackViewPage {
                     return error
                 }
             }
-            visible: !self.bumpRedeposit
-            onCleared: controller.recipient.greedy = false
-            onTextEdited: controller.recipient.greedy = false
         }
         ErrorPane {
             Layout.topMargin: -15
             Layout.bottomMargin: 15
-            error: amount_field.text.length > 0 || controller.recipient.greedy ? amount_field.error : null
             visible: !self.bumpRedeposit
-        }
-        Convert {
-            id: available_convert
-            account: controller.account
-            asset: controller.asset
-            input: self.available
-            unit: controller.recipient.convert.unit
+            error: amount_field.text.length > 0 ? amount_field.error : null
         }
         RowLayout {
-            spacing: 10
-            visible: !controller.previousTransaction
-            Label {
-                Layout.fillWidth: true
-                font.features: { 'calt': 0, 'zero': 1 }
-                font.pixelSize: 14
-                font.weight: 500
-                opacity: 0.4
-                text: qsTrId('id_available') + ' ' + (amount_field.fiat ? '~ ' + available_convert.fiat.label : available_convert.output.label)
-                visible: !amount_field.fiat || available_convert.fiat.available
+            Layout.fillWidth: true
+            spacing: 8
+
+            HSpacer {
             }
-            LinkButton {
-                Layout.alignment: Qt.AlignTop
-                enabled: !controller.recipient.greedy
-                font.pixelSize: 14
-                font.weight: 600
-                text: qsTrId('id_send_all')
-                onClicked: controller.recipient.greedy = true
+
+            AbstractButton {
+                id: coins_button
+                padding: 4
+                visible: self.coinSelectionSupported
+                background: Item {
+                    Rectangle {
+                        anchors.fill: parent
+                        color: '#FFFFFF'
+                        opacity: 0.1
+                        radius: 4
+                        visible: coins_button.hovered
+                    }
+                    Rectangle {
+                        anchors.fill: parent
+                        border.color: '#00BCFF'
+                        border.width: 2
+                        color: 'transparent'
+                        radius: 4
+                        visible: coins_button.visualFocus
+                    }
+                }
+                contentItem: RowLayout {
+                    spacing: 2
+                    Label {
+                        color: controller.coins.length > 0 ? '#FFFFFF' : '#929292'
+                        font.pixelSize: 14
+                        font.weight: 500
+                        text: controller.coins.length === 0
+                            ? 'Additional coins'
+                            : controller.coins.length + ' ' + (controller.coins.length === 1 ? 'Additional Coin' : 'Additional Coins')
+                    }
+                    Image {
+                        Layout.alignment: Qt.AlignCenter
+                        source: 'qrc:/svg2/caret-right.svg'
+                    }
+                }
+                onClicked: {
+                    self.pushPage(select_coins_page, {
+                        account: controller.account,
+                        asset: controller.asset,
+                        coins: controller.coins,
+                        unit: amount_field.unit,
+                    })
+                }
             }
         }
         VSpacer {
@@ -254,7 +170,7 @@ StackViewPage {
         Convert {
             id: previous_fee_convert
             account: controller.account
-            input: ({ satoshi: String(controller.previousTransaction?.data?.fee ?? 0) })
+            input: ({ satoshi: String(self.transaction?.data?.fee ?? 0) })
             unit: controller.account.session.unit
         }
         Convert {
@@ -280,7 +196,6 @@ StackViewPage {
             }
         }
         RowLayout {
-            visible: !!controller.previousTransaction
             Label {
                 font.pixelSize: 14
                 font.weight: 500
@@ -297,7 +212,6 @@ StackViewPage {
         }
         RowLayout {
             Layout.bottomMargin: 20
-            visible: !!controller.previousTransaction
             HSpacer {
             }
             Label {
@@ -336,7 +250,13 @@ StackViewPage {
             LinkButton {
                 text: qsTrId('id_change_speed')
                 visible: !controller.account.network.liquid
-                onClicked: self.pushSelectFeePage()
+                onClicked: {
+                    self.pushPage(select_fee_page, {
+                        account: controller.account,
+                        unit: amount_field.unit,
+                        size: controller.transaction?.transaction_vsize ?? 0,
+                    })
+                }
             }
             HSpacer {
             }
@@ -348,12 +268,6 @@ StackViewPage {
                 text: '~ ' + fee_convert.fiat.label
             }
         }
-        LinkButton {
-            Layout.bottomMargin: 20
-            enabled: controller.asset?.id === controller.account.network.policyAsset
-            text: qsTrId('id_manual_coin_selection')
-            onClicked: self.pushSelectCoinsPage()
-        }
         PrimaryButton {
             Layout.fillWidth: true
             enabled: controller.monitor.idle && (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
@@ -361,14 +275,11 @@ StackViewPage {
             text: qsTrId('id_next')
             onClicked: {
                 self.pushPage(send_confirm_page, {
-                    context: self.context,
-                    account: controller.account,
-                    asset: controller.asset,
                     recipient: controller.recipient,
                     transaction: controller.transaction,
                     fiat: amount_field.fiat,
                     unit: amount_field.unit,
-                    address_input: address_field.address_input,
+                    address_input: '',
                     bumpRedeposit: self.bumpRedeposit,
                 })
             }
@@ -376,29 +287,20 @@ StackViewPage {
     }
 
     Component {
-        id: account_asset_selector
-        SendAccountAssetSelector {
-            onSelected: (account, asset) => {
-                self.popPage()
-                controller.account = account
-                controller.asset = asset
-                controller.coins = []
-                amount_field.fiat = false
-                amount_field.clearText()
-            }
-        }
-    }
-
-    Component {
         id: send_confirm_page
         SendConfirmPage {
+            account: controller.account
+            asset: controller.asset
+            context: self.context
             onCloseClicked: self.closeClicked()
         }
     }
 
     Component {
         id: select_coins_page
-        SelectCoinsView {
+        CoinSelectionPage {
+            additionalCoins: true
+            onCloseClicked: self.closeClicked()
             onCoinsSelected: (coins) => {
                 self.popPage()
                 controller.coins = coins
@@ -409,6 +311,7 @@ StackViewPage {
     Component {
         id: select_fee_page
         SelectFeePage {
+            previousTransaction: self.transaction
             onCloseClicked: self.closeClicked()
             onFeeRateSelected: (fee_rate) => {
                 controller.feeRate = fee_rate

@@ -89,6 +89,12 @@ function formatTransactionTimestamp(transaction, locale) {
     return new Date(transaction.data.created_at_ts / 1000).toLocaleString(locale.dateTimeFormat(0)) //Locale.LongFormat))
 }
 
+function shortenOutpoint(txhash, index) {
+    txhash = txhash ?? ''
+    if (txhash.length <= 12) return txhash + ':' + index
+    return txhash.slice(0, 4) + '\u2026' + txhash.slice(-4) + ':' + index
+}
+
 function accountName(account) {
     if (!account) return ''
     if (account.name !== '') return account.name

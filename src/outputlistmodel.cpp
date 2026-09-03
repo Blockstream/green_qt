@@ -23,6 +23,9 @@ void OutputListModel::setAccount(Account* account)
 
     if (m_account) {
         beginResetModel();
+        for (auto output : m_outputs) {
+            disconnect(output, &Output::expiredChanged, this, nullptr);
+        }
         m_outputs.clear();
         endResetModel();
     }
@@ -61,31 +64,61 @@ void OutputListModel::setAccount(Account* account)
     }
 }
 
+void OutputListModel::setAllCoins(bool all_coins)
+{
+    if (m_all_coins == all_coins) return;
+    m_all_coins = all_coins;
+    emit allCoinsChanged();
+    fetch();
+}
+
 void OutputListModel::fetch()
 {
     if (!m_account) return;
     if (m_fetching) return;
 
-    auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, m_account);
+    auto get_unspent_outputs = new GetUnspentOutputsTask(0, m_all_coins, m_account);
+
+    if (!m_error.isEmpty()) {
+        m_error.clear();
+        emit errorChanged();
+    }
 
     connect(get_unspent_outputs, &Task::finished, this, [=, this] {
         beginResetModel();
+        for (auto output : m_outputs) {
+            disconnect(output, &Output::expiredChanged, this, nullptr);
+        }
         m_outputs.clear();
         for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {
             for (const QJsonValue& asset_value : assets_values.toArray()) {
                 auto output = account()->getOrCreateOutput(asset_value.toObject());
                 m_outputs.append(output);
+                connect(output, &Output::expiredChanged, this, [this, output] {
+                    const auto row = m_outputs.indexOf(output);
+                    if (row < 0) return;
+                    const auto model_index = index(row, 0);
+                    emit dataChanged(model_index, model_index);
+                });
             }
         }
         endResetModel();
         m_fetching = false;
+        get_unspent_outputs->deleteLater();
         emit fetchingChanged();
     });
 
-    m_dispatcher->add(get_unspent_outputs);
+    connect(get_unspent_outputs, &Task::failed, this, [=, this](const QString& error) {
+        m_error = error;
+        m_fetching = false;
+        get_unspent_outputs->deleteLater();
+        emit errorChanged();
+        emit fetchingChanged();
+    });
 
     m_fetching = true;
     emit fetchingChanged();
+    m_dispatcher->add(get_unspent_outputs);
 }
 
 void OutputListModel::update()

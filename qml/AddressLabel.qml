@@ -11,7 +11,7 @@ Label {
     TapHandler {
         onTapped: {
             timer.restart()
-            Clipboard.copy(self.address.address)
+            Clipboard.copy(self.address instanceof Address ? self.address.address : self.address ?? '')
         }
     }
     HoverHandler {

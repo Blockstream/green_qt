@@ -422,7 +422,7 @@ Pane {
                         onVisibleChanged: recovery_email_rows.updateVisibleRows()
                         OutputListModelFilter {
                             id: pre_csv_outputs
-                            filter: "!csv"
+                            activeFilters: ['legacy_recovery']
                             model: OutputListModel {
                                 account: recovery_session_row.mainAccount
                             }

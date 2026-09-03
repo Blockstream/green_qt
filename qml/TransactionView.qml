@@ -607,8 +607,7 @@ StackViewPage {
 
     Component {
         id: rbf_page
-        SendPage {
-            title: qsTrId('id_increase_fee')
+        IncreaseFeePage {
             context: self.transaction.account.context
             account: self.transaction.account
             asset: self.context.getOrCreateAsset(network.policyAsset)

@@ -8,13 +8,19 @@ ComboBox {
     id: self
     
     property real maxPopupHeight: 300
+    property string iconRole
+    property string checkedRole
+    property url triggerIconSource
+    property Component triggerContent
+    property real triggerXPadding: xPadding
+    property real triggerYPadding: yPadding
     readonly property real xPadding: 12
     readonly property real yPadding: 8
     
-    leftPadding: xPadding
-    rightPadding: xPadding
-    topPadding: yPadding
-    bottomPadding: yPadding
+    leftPadding: triggerXPadding
+    rightPadding: triggerXPadding
+    topPadding: triggerYPadding
+    bottomPadding: triggerYPadding
     
     // Disable default indicator to use custom one in contentItem
     indicator: Item {}
@@ -26,18 +32,27 @@ ComboBox {
         visible: self.hovered || self.popup.visible
     }
     
-    contentItem: RowLayout {
-        spacing: 4
-        opacity: 0.7
-        Label {
-            Layout.fillWidth: true
-            text: self.displayText
-            color: '#FFFFFF'
-            font: self.font
-        }
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/svg2/caret-down-white.svg'
+    contentItem: Loader {
+        sourceComponent: self.triggerContent ?? default_trigger
+    }
+
+    Component {
+        id: default_trigger
+        RowLayout {
+            spacing: 4
+            opacity: 0.7
+            Label {
+                Layout.fillWidth: true
+                text: self.displayText
+                color: '#FFFFFF'
+                font: self.font
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: String(self.triggerIconSource).length > 0
+                    ? self.triggerIconSource
+                    : 'qrc:/svg2/caret-down-white.svg'
+            }
         }
     }
     
@@ -62,6 +77,16 @@ ComboBox {
         
         contentItem: RowLayout {
             spacing: 12
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                Layout.preferredHeight: 24
+                Layout.preferredWidth: 24
+                fillMode: Image.PreserveAspectFit
+                source: self.iconRole && delegateItem.modelData
+                    ? delegateItem.modelData[self.iconRole] ?? ''
+                    : ''
+                visible: String(source).length > 0
+            }
             Label {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignCenter
@@ -78,7 +103,9 @@ ComboBox {
                 Layout.maximumWidth: 16
                 Layout.maximumHeight: 16
                 source: 'qrc:/svg2/check.svg'
-                opacity: self.currentIndex === delegateItem.index ? 1 : 0
+                opacity: self.checkedRole && delegateItem.modelData
+                    ? (delegateItem.modelData[self.checkedRole] ? 1 : 0)
+                    : (self.currentIndex === delegateItem.index ? 1 : 0)
             }
         }
     }

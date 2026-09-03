@@ -122,6 +122,10 @@ void CreateTransactionController::update()
             }
             qDebug() << utxos;
             details["utxos"] = QJsonObject{{ m_asset->id(), utxos }};
+            if (!m_previous_transaction && !utxos.isEmpty()) {
+                details["utxo_strategy"] = "manual";
+                details["transaction_inputs"] = utxos;
+            }
         }
 
         if (m_previous_transaction) {
@@ -214,7 +218,7 @@ void CreateTransactionController::setTransaction(const QJsonObject& transaction)
                 const auto satoshi = addressee.value("satoshi").toInteger();
                 m_recipient->convert()->setInput({{ "satoshi", satoshi }});
             }
-        } else if (m_previous_transaction || addressee.value("is_greedy").toBool()) {
+        } else if (m_previous_transaction || (error.isEmpty() && addressee.value("is_greedy").toBool())) {
             const auto address = addressee.value("address").toString();
             const auto satoshi = addressee.value("satoshi").toInteger();
             m_recipient->setAddress(address);

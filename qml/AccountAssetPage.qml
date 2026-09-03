@@ -248,16 +248,6 @@ StackViewPage {
         }
     }
 
-    // Component {
-    //     id: send_page
-    //     SendPage {
-    //         context: self.context
-    //         account: self.account
-    //         asset: self.asset
-    //         readonly: true
-    //         onCloseClicked: self.closeClicked()
-    //     }
-    // }
     Component {
         id: recipient_page
         RecipientPage {

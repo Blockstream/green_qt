@@ -69,7 +69,6 @@ set(QML_FILES_CORE
     ScannerPopup.qml
     DeviceImage.qml
     DeviceBadge.qml
-    SelectCoinsView.qml
     TwoFactorDisableDrawer.qml
     TransactionDelegate.qml
     AnalyticsConsentPage.qml
@@ -97,6 +96,9 @@ set(QML_FILES_WORKFLOWS
     Constants.qml
     SettingsBox.qml
     CoinDelegate.qml
+    CoinSelectionDelegate.qml
+    CoinSelectionPage.qml
+    CoinDetailsPage.qml
     MainPage.qml
     OverviewPage.qml
     SetRecoveryEmailDialog.qml
@@ -184,8 +186,8 @@ set(QML_FILES_DEVICES
     JadeFirmwareConfigSelector.qml
     ArchivedAccountsDrawer.qml
     JadeNotificationDialog.qml
-    SendPage.qml
     SendConfirmPage.qml
+    IncreaseFeePage.qml
     AirgappedUnlockPage.qml
     AirgappedExportPage.qml
     AirgappedImportPage.qml

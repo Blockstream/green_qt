@@ -14,15 +14,24 @@ StackViewPage {
     required property var recipient
     readonly property var amount: ({ satoshi: self.recipient?.bip21?.amount ?? '0' })
     readonly property bool fixedAmount: self.recipient?.bip21?.amount !== undefined
-    property var available: {
-        if (controller.coins.length > 0) {
+    readonly property bool coinSelectionSupported: controller.asset?.id === controller.account?.network.policyAsset
+    property var available:  self.grossForCoins(controller.coins)
+    function grossForCoins(coins) {
+        if (coins.length > 0) {
             let satoshi = 0
-            for (const output of controller.coins) {
-                satoshi += output.data.satoshi
-            }
+            for (const output of coins) satoshi += Number(output.data.satoshi ?? 0)
             return { satoshi: String(satoshi) }
+        }
+        return { satoshi: String(controller.account.json.satoshi[controller.asset?.key ?? 'btc'] ?? 0) }
+    }
+    function toggleMax() {
+        if (self.fixedAmount) return
+        if (controller.recipient.greedy) {
+            controller.recipient.greedy = false
+            amount_field.clearText()
         } else {
-            return { satoshi: String(controller.account.json.satoshi[controller.asset?.key ?? 'btc']) }
+            controller.recipient.convert.input = self.grossForCoins(controller.coins)
+            controller.recipient.greedy = true
         }
     }
     function pushSelectCoinsPage() {
@@ -94,64 +103,6 @@ StackViewPage {
             }
         }
         FieldTitle {
-            text: qsTrId('id_manual_coin_selection')
-            visible: controller.coins.length > 0
-        }
-        AbstractButton {
-            Layout.fillWidth: true
-            padding: 20
-            visible: controller.coins.length > 0
-            background: Rectangle {
-                radius: 5
-                color: '#181818'
-            }
-            contentItem: RowLayout {
-                spacing: 10
-                Convert {
-                    id: convert
-                    account: controller.account
-                    asset: controller.asset
-                    input: self.available
-                    unit: amount_field.unit
-                }
-                CircleButton {
-                    Layout.alignment: Qt.AlignCenter
-                    icon.source: 'qrc:/svg2/x-circle.svg'
-                    onClicked: controller.coins = []
-                }
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: true
-                    color: '#FFF'
-                    font.pixelSize: 16
-                    font.weight: 400
-                    text: controller.coins.length + ' coins'
-                }
-                ColumnLayout {
-                    Label {
-                        Layout.alignment: Qt.AlignRight
-                        color: '#FFF'
-                        font.pixelSize: 12
-                        font.weight: 400
-                        text: convert.output.label
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignRight
-                        color: '#6F6F6F'
-                        font.pixelSize: 12
-                        font.weight: 400
-                        text: convert.fiat.label
-                    }
-                }
-                CircleButton {
-                    Layout.alignment: Qt.AlignCenter
-                    icon.source: 'qrc:/svg2/edit.svg'
-                    onClicked: self.pushSelectCoinsPage()
-                }
-            }
-            onClicked: self.pushSelectCoinsPage()
-        }
-        FieldTitle {
             text: qsTrId('id_address')
         }
         AddressLabel {
@@ -181,6 +132,7 @@ StackViewPage {
             id: amount_field
             // focus: !self.amount
             readOnly: self.fixedAmount
+            syncFocusedInput: controller.recipient.greedy
             convert: controller.recipient.convert
             session: controller.account.session
             error: {
@@ -210,26 +162,67 @@ StackViewPage {
             account: controller.account
             asset: controller.asset
             input: self.available
-            unit: controller.recipient.convert.unit
+            unit: amount_field.unit
         }
         RowLayout {
-            spacing: 10
-            Label {
-                Layout.fillWidth: true
-                font.features: { 'calt': 0, 'zero': 1 }
-                font.pixelSize: 14
-                font.weight: 500
-                opacity: 0.4
-                text: qsTrId('id_available') + ' ' + (amount_field.fiat ? '~ ' + available_convert.fiat.label : available_convert.output.label)
-                visible: !amount_field.fiat || available_convert.fiat.available
+            Layout.fillWidth: true
+            spacing: 8
+
+            InlineButton {
+                id: available_button
+                enabled: !self.fixedAmount
+                contentItem: RowLayout {
+                    spacing: 4
+
+                    Label {
+                        color: '#929292'
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 14
+                        font.weight: 500
+                        text: qsTrId('id_available')
+                    }
+
+                    Label {
+                        color: Qt.lighter('#00BCFF', available_button.enabled && available_button.hovered ? 1.1 : 1)
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 14
+                        font.weight: 500
+                        text: amount_field.fiat && available_convert.fiat.available
+                            ? '~ ' + available_convert.fiat.label
+                            : available_convert.output.label
+                    }
+                    Image {
+                        Layout.preferredWidth: 16
+                        Layout.preferredHeight: 16
+                        source: 'qrc:/svg2/check-green.svg'
+                        visible: controller.recipient.greedy
+                    }
+                }
+                onClicked: self.toggleMax()
             }
-            LinkButton {
-                Layout.alignment: Qt.AlignTop
-                enabled: !self.fixedAmount && !controller.recipient.greedy
-                font.pixelSize: 14
-                font.weight: 600
-                text: qsTrId('id_send_all')
-                onClicked: controller.recipient.greedy = true
+
+            HSpacer {
+            }
+
+            InlineButton {
+                id: coins_button
+                visible: self.coinSelectionSupported
+                contentItem: RowLayout {
+                    spacing: 2
+                    Label {
+                        color: controller.coins.length > 0 ? '#FFFFFF' : '#929292'
+                        font.pixelSize: 14
+                        font.weight: 500
+                        text: controller.coins.length === 0
+                            ? 'All coins'
+                            : controller.coins.length + ' ' + (controller.coins.length === 1 ? 'Coin' : 'Coins')
+                    }
+                    Image {
+                        Layout.alignment: Qt.AlignCenter
+                        source: 'qrc:/svg2/caret-right.svg'
+                    }
+                }
+                onClicked: self.pushSelectCoinsPage()
             }
         }
         VSpacer {
@@ -299,12 +292,6 @@ StackViewPage {
                 text: '~ ' + fee_convert.fiat.label
             }
         }
-        LinkButton {
-            Layout.bottomMargin: 20
-            enabled: controller.asset?.id === controller.account.network.policyAsset
-            text: qsTrId('id_manual_coin_selection')
-            onClicked: self.pushSelectCoinsPage()
-        }
         PrimaryButton {
             Layout.fillWidth: true
             enabled: controller.monitor.idle && (controller.transaction?.transaction?.length ?? 0) > 0 && (controller.transaction?.error?.length ?? 0) === 0
@@ -320,6 +307,28 @@ StackViewPage {
                     address_input: self.input,
                     bumpRedeposit: false,
                 })
+            }
+        }
+    }
+
+    component InlineButton: AbstractButton {
+        id: button
+        padding: 4
+        background: Item {
+            Rectangle {
+                anchors.fill: parent
+                color: '#FFFFFF'
+                opacity: 0.1
+                radius: 4
+                visible: button.hovered
+            }
+            Rectangle {
+                anchors.fill: parent
+                border.color: '#00BCFF'
+                border.width: 2
+                color: 'transparent'
+                radius: 4
+                visible: button.visualFocus
             }
         }
     }
@@ -351,9 +360,13 @@ StackViewPage {
 
     Component {
         id: select_coins_page
-        SelectCoinsView {
+        CoinSelectionPage {
+            onCloseClicked: self.closeClicked()
             onCoinsSelected: (coins) => {
                 self.popPage()
+                if (controller.recipient.greedy) {
+                    controller.recipient.convert.input = self.grossForCoins(coins)
+                }
                 controller.coins = coins
             }
         }
@@ -365,6 +378,9 @@ StackViewPage {
             previousTransaction: null
             onCloseClicked: self.closeClicked()
             onFeeRateSelected: (fee_rate) => {
+                if (controller.recipient.greedy) {
+                    controller.recipient.convert.input = self.grossForCoins(controller.coins)
+                }
                 controller.feeRate = fee_rate
                 self.popPage()
             }

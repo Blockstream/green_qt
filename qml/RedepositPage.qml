@@ -10,14 +10,6 @@ StackViewPage {
     required property Context context
     required property Account account
 
-    function pushSelectCoinsPage() {
-        self.pushPage(select_coins_page, {
-            account: controller.account,
-            asset: controller.asset,
-            coins: controller.coins,
-            unit: amount_field.unit,
-        })
-    }
     function pushSelectFeePage() {
         self.pushPage(select_fee_page, {
             account: controller.account,
@@ -152,16 +144,6 @@ StackViewPage {
         id: redeposit_confirm_page
         RedepositConfirmPage {
             onCloseClicked: self.closeClicked()
-        }
-    }
-
-    Component {
-        id: select_coins_page
-        SelectCoinsView {
-            onCoinsSelected: (coins) => {
-                self.popPage()
-                controller.coins = coins
-            }
         }
     }
 

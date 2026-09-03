@@ -340,15 +340,6 @@ StackViewPage {
         }
     }
     Component {
-        id: select_coins_page
-        SelectCoinsView {
-            onCoinsSelected: (coins) => {
-                self.popPage()
-                controller.coins = coins
-            }
-        }
-    }
-    Component {
         id: chain_swap_review_page
         ChainSwapReviewPage {
             context: self.context
