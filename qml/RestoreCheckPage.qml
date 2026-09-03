@@ -8,6 +8,7 @@ StackViewPage {
     signal restoreFinished(Context context)
     signal alreadyRestored(Wallet wallet)
     signal mismatch()
+    signal restoreFailed(string error)
     property Wallet wallet
     required property var mnemonic
     required property string password
@@ -19,7 +20,7 @@ StackViewPage {
         onRestoreFinished: (context) => self.restoreFinished(context)
         onAlreadyRestored: (wallet) => self.alreadyRestored(wallet)
         onMismatch: self.mismatch()
-        onRestoreFailed: (error) => self.replacePage(error_page, { error })
+        onRestoreFailed: (error) => self.restoreFailed(error)
     }
     StackView.onActivated: {
         if (self.wallet) {
@@ -55,14 +56,6 @@ StackViewPage {
         DeploymentDialog {
             onCancel: self.popPage()
             onDeploymentSelected: (deployment) => controller.restore(deployment)
-        }
-    }
-
-    Component {
-        id: error_page
-        ErrorPage {
-            title: self.title
-            onCloseClicked: self.popPage()
         }
     }
 }

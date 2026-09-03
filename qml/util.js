@@ -13,6 +13,9 @@ function formatError(error) {
         if (lower.includes('assertion failure') && lower.includes('ga_psbt')) {
             return 'The signed PSBT is invalid or corrupted.'
         }
+        if (lower.includes('invalid checksum') || (lower.includes('assertion failure') && lower.includes('utils.cpp'))) {
+            return qsTrId('id_login_failed')
+        }
         if (lower.includes('could not finalize')) {
             return 'The PSBT could not be finalized.'
         }

@@ -206,6 +206,13 @@ MainPage {
             }
             onAlreadyRestored: (wallet) => stack_view.replace(already_restored_page, { wallet })
             onMismatch: stack_view.pop()
+            onRestoreFailed: (error) => stack_view.replace(restore_error_page, { error })
+        }
+    }
+
+    Component {
+        id: restore_error_page
+        ErrorPage {
         }
     }
 

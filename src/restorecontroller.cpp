@@ -50,11 +50,14 @@ void RestoreController::restore(const QString& deployment)
     auto monitor = new TaskGroupMonitor(this);
     connect(monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=, this] {
         if (!m_primary_login_succeeded || !m_restore_error.isEmpty()) {
+            if (!m_restore_error.isEmpty()) {
+                qWarning() << "Restore failed:" << m_restore_error;
+            }
             if (context()) {
                 context()->deleteLater();
                 setContext(nullptr);
             }
-            emit restoreFailed(m_restore_error.isEmpty() ? QStringLiteral("id_login_failed") : m_restore_error);
+            emit restoreFailed(QStringLiteral("id_login_failed"));
             return;
         }
 
