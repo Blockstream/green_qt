@@ -364,6 +364,10 @@ void AnalyticsPrivate::start()
         if (!started) {
             countly.start(is_production ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
             started = true;
+        } else {
+            // stop() ends the Countly session; restart it so later recordEvent
+            // calls (e.g. after analytics consent) are attached to an active session.
+            countly.beginSession();
         }
 
         QMetaObject::invokeMethod(q, [=, this] {
