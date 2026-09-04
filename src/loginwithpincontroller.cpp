@@ -332,7 +332,6 @@ void LoadController::load()
         loadNetwork(group, network);
     }
     connectLightningNode(group);
-    createBoltzSession(group);
 
     monitor()->add(group);
     dispatcher()->add(group);
@@ -420,13 +419,6 @@ void LoadController::connectLightningNode(TaskGroup* group)
     group->add(new LightningConnectNodeTask(context()));
 }
 
-void LoadController::createBoltzSession(TaskGroup* group)
-{
-    if (context()->isMainnet() && !context()->isWatchonly() && !qobject_cast<DeviceData*>(context()->wallet()->login())) {
-        group->add(new BoltzCreateSessionTask(context()));
-    }
-}
-
 void LoadController::loginNetwork(Network* network)
 {
     auto group = new TaskGroup(this);
@@ -481,7 +473,12 @@ void BackgroundLoadController::load()
 
 void BackgroundLoadController::loadSwaps(TaskGroup* group)
 {
-    group->add(new BoltzLoadSwapsTask(context()));
+    auto create_session = new BoltzCreateSessionTask(context());
+    group->add(create_session);
+
+    auto task = new BoltzLoadSwapsTask(context());
+    task->needs(create_session);
+    group->add(task);
 }
 
 void BackgroundLoadController::loadPayments(TaskGroup* group)

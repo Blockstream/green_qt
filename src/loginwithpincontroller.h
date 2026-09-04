@@ -53,7 +53,6 @@ signals:
 private:
     void loadNetwork(TaskGroup* group, Network* network);
     void connectLightningNode(TaskGroup* group);
-    void createBoltzSession(TaskGroup* group);
     void loginNetwork(Network* network);
     void loadAmp2();
 };
