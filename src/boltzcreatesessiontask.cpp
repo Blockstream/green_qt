@@ -139,6 +139,7 @@ void BoltzCreateSessionTask::update()
             result.session = lwk::BoltzSession::from_builder({
                 .network = network,
                 .client = lwk::AnyClient::from_electrum(network->default_electrum_client()),
+                .timeout = 30,
                 .mnemonic = mnemonic,
                 .logging = std::make_shared<Logger>(),
                 .polling = true,
