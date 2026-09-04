@@ -1,12 +1,13 @@
 .pragma library
 
+.import Blockstream.Green.Core as Core
 .import "util.js" as UtilJS
 
 function segmentationNetwork(context) {
     const segmentation = {
         security: 'singlesig',
         segment: 'Desktop',
-        wallet_networks: context.mainnet ? 'mainnet' : 'testnet'
+        wallet_networks: context ? context.mainnet ? 'mainnet' : 'testnet' : null
     }
     if (!context) return segmentation
 
@@ -69,10 +70,10 @@ function segmentationOnBoard({ flow, network, security }) {
 function segmentationSession(Settings, context) {
     const segmentation = segmentationNetwork(context)
     const app_settings = []
-    if (Settings.useTor) app_settings.push('tor')
-    if (Settings.useProxy) app_settings.push('proxy')
-    if (Settings.enableTestnet) app_settings.push('testnet')
-    if (Settings.usePersonalNode) app_settings.push('electrum_server')
+    if (Core.Settings.useTor) app_settings.push('tor')
+    if (Core.Settings.useProxy) app_settings.push('proxy')
+    if (Core.Settings.enableTestnet) app_settings.push('testnet')
+    if (Core.Settings.usePersonalNode) app_settings.push('electrum_server')
     segmentation.app_settings = app_settings.join(',')
     if (context?.device) {
         const device = context.device
@@ -116,10 +117,10 @@ function segmentationFirmwareUpdate(Settings, device, firmware) {
         selected_version: firmware.version,
     }
     const app_settings = []
-    if (Settings.useTor) app_settings.push('tor')
-    if (Settings.useProxy) app_settings.push('proxy')
-    if (Settings.enableTestnet) app_settings.push('testnet')
-    if (Settings.usePersonalNode) app_settings.push('electrum_server')
+    if (Core.Settings.useTor) app_settings.push('tor')
+    if (Core.Settings.useProxy) app_settings.push('proxy')
+    if (Core.Settings.enableTestnet) app_settings.push('testnet')
+    if (Core.Settings.usePersonalNode) app_settings.push('electrum_server')
     segmentation.app_settings = app_settings.join(',')
     if (device.type === 1) {
         segmentation.brand = 'Blockstream'
