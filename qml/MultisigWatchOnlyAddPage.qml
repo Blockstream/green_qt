@@ -17,7 +17,7 @@ StackViewPage {
     AnalyticsView {
         active: true
         name: 'OnBoardWatchOnlyCredentials'
-        segmentation: AnalyticsJS.segmentationSession(Settings, controller.context)
+        segmentation: AnalyticsJS.segmentationSession(controller.context)
     }
     WatchOnlyLoginController {
         id: controller
@@ -28,7 +28,7 @@ StackViewPage {
         onLoginFinished: {
             self.loginFinished(controller.context)
             if (controller.persist) {
-                Analytics.recordEvent('wallet_restore_watch_only', AnalyticsJS.segmentationSession(Settings, controller.context))
+                Analytics.recordEvent('wallet_restore_watch_only', AnalyticsJS.segmentationSession(controller.context))
             }
         }
         onLoginFailed: error => {

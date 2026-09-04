@@ -128,7 +128,7 @@ Pane {
         onClicked: more_menu.visible ? more_menu.close() : more_menu.open()
 
         function onSwapClicked() {
-            Analytics.recordEvent('swap_entry', AnalyticsJS.segmentationSession(Settings, self.context))
+            Analytics.recordEvent('swap_entry', AnalyticsJS.segmentationSession(self.context))
             self.swapClicked()
         }
 

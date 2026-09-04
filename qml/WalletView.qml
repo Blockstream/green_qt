@@ -178,7 +178,7 @@ MainPage {
             id: page
             onFinished: (context) => {
                 if (page.create) {
-                    Analytics.recordEvent('wallet_create', AnalyticsJS.segmentationSession(Settings, context))
+                    Analytics.recordEvent('wallet_create', AnalyticsJS.segmentationSession(context))
                     Settings.acceptTermsOfService()
                     Settings.registerEvent({ walletId: context.xpubHashId, status: 'pending', type: 'wallet_backup' })
                 }

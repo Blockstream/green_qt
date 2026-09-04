@@ -23,7 +23,7 @@ StackViewPage {
     AnalyticsView {
         name: 'Send'
         active: self.StackView.visible
-        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
     id: self
     title: qsTrId('id_redeposit')

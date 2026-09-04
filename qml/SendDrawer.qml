@@ -28,7 +28,7 @@ WalletDrawer {
     AnalyticsView {
         name: 'Send'
         active: true
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.context)
+        segmentation: AnalyticsJS.segmentationSession(self.context)
     }
     onClosed: {
         if (self.url && stack_view.currentItem instanceof RecipientPage) {

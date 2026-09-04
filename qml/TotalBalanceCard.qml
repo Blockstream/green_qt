@@ -49,7 +49,7 @@ WalletHeaderCard {
             onClicked: {
                 Settings.toggleIncognito()
                 if (Settings.incognito) {
-                    Analytics.recordEvent('hide_amount', AnalyticsJS.segmentationSession(Settings, self.context))
+                    Analytics.recordEvent('hide_amount', AnalyticsJS.segmentationSession(self.context))
                 }
             }
         }

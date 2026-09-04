@@ -62,7 +62,7 @@ StackViewPage {
     AnalyticsView {
         name: 'Swap'
         active: true
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.context)
+        segmentation: AnalyticsJS.segmentationSession(self.context)
     }
     id: self
     title: qsTrId('id_details')
@@ -205,7 +205,7 @@ StackViewPage {
         enabled: !self.error && Number(controller.quote?.receive_amount) > 0
         text: qsTrId('id_next')
         onClicked: {
-            Analytics.recordEvent('swap_initiate', AnalyticsJS.segmentationSwap(Settings, self.context, { 
+            Analytics.recordEvent('swap_initiate', AnalyticsJS.segmentationSwap(self.context, { 
                 from: UtilJS.swapNetworkType(send_field.account.network), 
                 to: UtilJS.swapNetworkType(receive_field.account.network)
             }))

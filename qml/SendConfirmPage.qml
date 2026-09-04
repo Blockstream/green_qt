@@ -40,19 +40,19 @@ StackViewPage {
         transaction: self.transaction
         memo: note_text_area.text
         onTransactionCompleted: transaction => {
-            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(Settings, self.account, {
+            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(self.account, {
                 address_input: self.address_input,
                 transaction_type: self.transaction.previous_transaction ? 'bump' : 'send',
                 with_memo: controller.memo.length > 0,
             }))
             if (self.recipient.greedy) {
-                Analytics.recordEvent('account_emptied', AnalyticsJS.segmentationWalletActive(Settings, self.context))
+                Analytics.recordEvent('account_emptied', AnalyticsJS.segmentationWalletActive(self.context))
             }
             // TODO: should replace but we must cut dependency to the current view
             self.pushPage(transaction_completed_page, { transaction })
         }
         onFailed: (error) => {
-            const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
+            const segmentation = AnalyticsJS.segmentationSubAccount(self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
             self.pushPage(transaction_failed_page, { error })
@@ -74,7 +74,7 @@ StackViewPage {
     AnalyticsView {
         name: 'SendConfirm'
         active: self.StackView.visible
-        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
     id: self
     title: qsTrId('id_confirm_transaction')

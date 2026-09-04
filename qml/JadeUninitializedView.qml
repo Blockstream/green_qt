@@ -31,7 +31,7 @@ VFlickable {
             dialog.open()
         }
         onSetupFinished: (context) => {
-            Analytics.recordEvent('jade_initialize', AnalyticsJS.segmentationSession(Settings, context))
+            Analytics.recordEvent('jade_initialize', AnalyticsJS.segmentationSession(context))
             self.setupFinished(context)
         }
     }

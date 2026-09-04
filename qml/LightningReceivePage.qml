@@ -55,7 +55,7 @@ StackViewPage {
             if (self.invoicePushed || controller.invoice.length === 0) return
 
             self.invoicePushed = true
-            Analytics.recordEvent('invoice_create', AnalyticsJS.segmentationLightning(Settings, self.context))
+            Analytics.recordEvent('invoice_create', AnalyticsJS.segmentationLightning(self.context))
             self.StackView.view.push(lightning_invoice_page, {
                 invoice: controller.invoice,
                 amountSats: Number(controller.satoshi),

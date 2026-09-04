@@ -115,7 +115,7 @@ Page {
 
     StackView.onActivated: {
         self.forceActiveFocus()
-        Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(Settings, self.context))
+        Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(self.context))
         self.context.checkAndAddBackupWarningNotification()
         background_load_controller.load()
     }

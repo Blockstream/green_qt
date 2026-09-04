@@ -67,7 +67,7 @@ function segmentationOnBoard({ flow, network, security }) {
     return segmentation
 }
 
-function segmentationSession(Settings, context) {
+function segmentationSession(context) {
     const segmentation = segmentationNetwork(context)
     const app_settings = []
     if (Core.Settings.useTor) app_settings.push('tor')
@@ -101,14 +101,14 @@ function segmentationSession(Settings, context) {
     return segmentation
 }
 
-function segmentationPromo(Settings, context, promo, screen) {
-    const segmentation = segmentationSession(Settings, context)
+function segmentationPromo(context, promo, screen) {
+    const segmentation = segmentationSession(context)
     segmentation.promo_id = promo.id
     segmentation.screen = screen
     return segmentation
 }
 
-function segmentationFirmwareUpdate(Settings, device, firmware) {
+function segmentationFirmwareUpdate(device, firmware) {
     const segmentation = {
         segment: 'Desktop',
         selected_config: firmware.config,
@@ -133,61 +133,61 @@ function segmentationFirmwareUpdate(Settings, device, firmware) {
     return segmentation
 }
 
-function segmentationShareTransaction(Settings, account, { method = 'copy' } = {}) {
-    const segmentation = segmentationSession(Settings, account.context)
+function segmentationShareTransaction(account, { method = 'copy' } = {}) {
+    const segmentation = segmentationSession(account.context)
     segmentation.method = method
     return segmentation;
 }
 
-function segmentationWalletLogin(Settings, context, { method }) {
-    const segmentation = segmentationSession(Settings, context)
+function segmentationWalletLogin(context, { method }) {
+    const segmentation = segmentationSession(context)
     segmentation.method = method
     return segmentation
 }
 
-function segmentationSubAccount(Settings, account) {
-    const segmentation = segmentationSession(Settings, account.context)
+function segmentationSubAccount(account) {
+    const segmentation = segmentationSession(account.context)
     segmentation.account_type = account.type
     return segmentation
 }
 
-function segmentationLightning(Settings, context, { invoice_type } = {}) {
-    const segmentation = segmentationSession(Settings, context)
+function segmentationLightning(context, { invoice_type } = {}) {
+    const segmentation = segmentationSession(context)
     segmentation.account_type = 'lightning'
     if (invoice_type) segmentation.invoice_type = invoice_type
     return segmentation
 }
 
-function segmentationReceiveAddress(Settings, account, type, { method = 'copy' } = {}) {
-    const segmentation = segmentationSubAccount(Settings, account)
+function segmentationReceiveAddress(account, type, { method = 'copy' } = {}) {
+    const segmentation = segmentationSubAccount(account)
     segmentation.type = type
     segmentation.media = 'text'
     segmentation.method = method
     return segmentation
 }
 
-function segmentationLightningReceiveAddress(Settings, context, { method = 'copy' } = {}) {
-    const segmentation = segmentationLightning(Settings, context)
+function segmentationLightningReceiveAddress(context, { method = 'copy' } = {}) {
+    const segmentation = segmentationLightning(context)
     segmentation.type = 'invoice'
     segmentation.media = 'text'
     segmentation.method = method
     return segmentation
 }
 
-function segmentationLightningTransaction(Settings, context) {
-    return segmentationLightning(Settings, context, { invoice_type: 'bolt11' })
+function segmentationLightningTransaction(context) {
+    return segmentationLightning(context, { invoice_type: 'bolt11' })
 }
 
-function segmentationTransaction(Settings, account, { address_input, transaction_type, with_memo }) {
-    const segmentation = segmentationSubAccount(Settings, account)
+function segmentationTransaction(account, { address_input, transaction_type, with_memo }) {
+    const segmentation = segmentationSubAccount(account)
     segmentation.address_input = address_input // [paste, scan, bip21]
     segmentation.transaction_type = transaction_type // [send, sweep, bump]
     segmentation.with_memo = with_memo
     return segmentation
 }
 
-function segmentationWalletActive(Settings, context) {
-    const segmentation = segmentationSession(Settings, context)
+function segmentationWalletActive(context) {
+    const segmentation = segmentationSession(context)
     let accounts_funded = 0
     const visible_accounts = UtilJS.accounts(context)
     const accounts_types = new Set
@@ -205,8 +205,8 @@ function segmentationWalletActive(Settings, context) {
     return segmentation
 }
 
-function segmentationSwap(Settings, context, { to, from } = {}) {
-    const segmentation = segmentationSession(Settings, context)
+function segmentationSwap(context, { to, from } = {}) {
+    const segmentation = segmentationSession(context)
     if (to) segmentation.to = to
     if (from) segmentation.from = from
     return segmentation

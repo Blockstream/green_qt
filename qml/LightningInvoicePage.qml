@@ -51,7 +51,7 @@ StackViewPage {
                 Clipboard.copy(self.invoiceUri)
                 copy_timer.restart()
                 if (self.asset.lightning) {
-                    Analytics.recordEvent('receive_address', AnalyticsJS.segmentationLightningReceiveAddress(Settings, self.context))
+                    Analytics.recordEvent('receive_address', AnalyticsJS.segmentationLightningReceiveAddress(self.context))
                 }
             }
             Timer {

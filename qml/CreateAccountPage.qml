@@ -193,7 +193,7 @@ StackViewPage {
                 recoveryMnemonic: page.mnemonic
                 recoveryXpub: page.xpub
                 onCreated: (account) => {
-                    Analytics.recordEvent('account_create', AnalyticsJS.segmentationSubAccount(Settings, account))
+                    Analytics.recordEvent('account_create', AnalyticsJS.segmentationSubAccount(account))
                     self.created(account)
                 }
                 onFailed: (error) => self.replacePage(error_page, { error })

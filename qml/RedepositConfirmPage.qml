@@ -25,7 +25,7 @@ StackViewPage {
         transaction: self.transaction
         memo: note_text_area.text
         onTransactionCompleted: transaction => {
-            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(Settings, self.account, {
+            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(self.account, {
                 transaction_type: 'redeposit',
                 with_memo: controller.memo.length > 0,
             }))
@@ -33,7 +33,7 @@ StackViewPage {
             self.pushPage(transaction_completed_page, { transaction })
         }
         onFailed: (error) => {
-            const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
+            const segmentation = AnalyticsJS.segmentationSubAccount(self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
             self.pushPage(transaction_failed_page, { error })
@@ -42,7 +42,7 @@ StackViewPage {
     AnalyticsView {
         name: 'SendConfirm'
         active: self.StackView.visible
-        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
     id: self
     title: qsTrId('id_confirm_transaction')
@@ -124,7 +124,7 @@ StackViewPage {
                             text: qsTrId('id_verify_on_device')
                             onClicked: {
                                 self.pushPage(jade_verify_page, { context: self.context, address: delegate.address })
-                                Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, self.account))
+                                Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(self.account))
                             }
                         }
                     }

@@ -20,7 +20,7 @@ WalletDrawer {
     AnalyticsView {
         active: self.opened
         name: 'WalletSettingsChangePIN'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.context)
+        segmentation: AnalyticsJS.segmentationSession(self.context)
     }
 
     TaskPageFactory {

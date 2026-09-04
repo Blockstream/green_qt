@@ -123,7 +123,7 @@ StackViewPage {
             visible: controller.context.wallet.login.device?.type === 'jade'
             onClicked: {
                 self.pushPage(jade_verify_page, { context: self.context, address: controller.address })
-                Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, controller.account))
+                Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(controller.account))
             }
         }
         PrimaryButton {
@@ -138,7 +138,7 @@ StackViewPage {
                     self.openLightningInvoice()
                     return
                 }
-                Analytics.recordEvent('swap_receive', AnalyticsJS.segmentationSwap(Settings, self.context, {
+                Analytics.recordEvent('swap_receive', AnalyticsJS.segmentationSwap(self.context, {
                     from: 'lightning',
                     to: 'liquid'
                 }))
@@ -219,7 +219,7 @@ StackViewPage {
                     text: 'Lightning'
                     checked: self.invoice
                     onClicked: {
-                        Analytics.recordEvent('swap_toggle', AnalyticsJS.segmentationSwap(Settings, self.context, {
+                        Analytics.recordEvent('swap_toggle', AnalyticsJS.segmentationSwap(self.context, {
                             from: 'lightning',
                             to: 'liquid'
                         }))
@@ -447,7 +447,7 @@ StackViewPage {
                         text: qsTrId('id_copy_address')
                         onCopied: {
                             const type = controller.uri.includes(':') ? 'uri' : 'address'
-                            Analytics.recordEvent('receive_address', AnalyticsJS.segmentationReceiveAddress(Settings, controller.account, type))
+                            Analytics.recordEvent('receive_address', AnalyticsJS.segmentationReceiveAddress(controller.account, type))
                         }
                     }
                 }

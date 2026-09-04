@@ -20,7 +20,7 @@ GFlickable {
     AnalyticsView {
         active: true
         name: 'VerifyTransaction'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.resolver.session.context)
+        segmentation: AnalyticsJS.segmentationSession(self.resolver.session.context)
     }
 
     ColumnLayout {

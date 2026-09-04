@@ -55,7 +55,7 @@ StackViewPage {
         transaction: controller.transaction
         onTransactionCompleted: transaction => {
             submarine_controller.setLockupTransaction(transaction.chainTransaction)
-            Analytics.recordEvent('swap_send', AnalyticsJS.segmentationSwap(Settings, self.context, {
+            Analytics.recordEvent('swap_send', AnalyticsJS.segmentationSwap(self.context, {
                 from: UtilJS.swapNetworkType(self.account.network),
                 to: 'lightning'
             }))
@@ -63,7 +63,7 @@ StackViewPage {
             self.pushPage(complete_page, { swap: submarine_controller.swap, transaction })
         }
         onFailed: (error) => {
-            const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
+            const segmentation = AnalyticsJS.segmentationSubAccount(self.account)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
             self.pushPage(failed_page, { error })

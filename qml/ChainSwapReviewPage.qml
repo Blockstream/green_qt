@@ -57,14 +57,14 @@ StackViewPage {
         transaction: create_transaction_controller.transaction
         onTransactionCompleted: transaction => {
             chain_swap_controller.setLockupTransaction(transaction.chainTransaction)
-            Analytics.recordEvent('swap_internal', AnalyticsJS.segmentationSwap(Settings, self.context, { 
+            Analytics.recordEvent('swap_internal', AnalyticsJS.segmentationSwap(self.context, { 
                 from: UtilJS.swapNetworkType(self.sendAccount.network),
                 to: UtilJS.swapNetworkType(self.receiveAccount.network)
             }))
             self.pushPage(transaction_completed_page, { transaction })
         }
         onFailed: (error) => {
-            const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.sendAccount)
+            const segmentation = AnalyticsJS.segmentationSubAccount(self.sendAccount)
             segmentation.error = error
             Analytics.recordEvent('failed_transaction', segmentation)
             self.pushPage(transaction_failed_page, { error })

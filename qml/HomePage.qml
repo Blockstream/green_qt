@@ -156,10 +156,10 @@ Page {
                         const promo = card.promo
                         const screen = 'WalletOverview'
                         if (card.promo.data.is_small) {
-                            Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
+                            Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(context, promo, screen))
                             Qt.openUrlExternally(card.promo.data.link)
                         } else {
-                            Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(Settings, context, promo, screen))
+                            Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(context, promo, screen))
                             promo_drawer.createObject(self, { context, promo, screen }).open()
                         }
                     }

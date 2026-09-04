@@ -115,7 +115,7 @@ ItemDelegate {
             onEditingFinished: {
                 if (name_field.enabled) {
                     if (controller.setAccountName(delegate.account, name_field.text)) {
-                        Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(Settings, delegate.account))
+                        Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(delegate.account))
                     }
                 }
             }

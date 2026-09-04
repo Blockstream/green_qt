@@ -28,7 +28,7 @@ StackViewPage {
         onEditingFinished: {
             if (name_field.enabled) {
                 if (controller.setAccountName(self.account, name_field.text)) {
-                    Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(Settings, self.account))
+                    Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(self.account))
                 }
             }
             name_field.nextItemInFocusChain().forceActiveFocus()

@@ -18,7 +18,7 @@ StackViewPage {
     AnalyticsView {
         name: 'Login'
         active: UtilJS.effectiveVisible(self)
-        segmentation: AnalyticsJS.segmentationSession(Settings, null)
+        segmentation: AnalyticsJS.segmentationSession(null)
     }
     WatchOnlyLoginController {
         id: controller

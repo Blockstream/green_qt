@@ -180,6 +180,6 @@ StackViewPage {
     AnalyticsView {
         active: self.visible
         name: 'SelectUTXO'
-        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
 }

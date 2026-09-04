@@ -76,7 +76,7 @@ AbstractDrawer {
                 Layout.rightMargin: 20
                 text: self.promo.data.cta_large
                 onClicked: {
-                    Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(Settings, self.context, self.promo, self.screen))
+                    Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(self.context, self.promo, self.screen))
                     Qt.openUrlExternally(self.promo.data.link)
                     self.close()
                 }

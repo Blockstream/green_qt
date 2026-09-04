@@ -16,7 +16,7 @@ Dialog {
         Qt.openUrlExternally(url);
     }
     Component.onCompleted: {
-        Analytics.recordEvent('custom_pin_server_warning', AnalyticsJS.segmentationSession(Settings, self.context))
+        Analytics.recordEvent('custom_pin_server_warning', AnalyticsJS.segmentationSession(self.context))
     }
     onClosed: self.destroy()
     id: self
@@ -211,7 +211,7 @@ Dialog {
                 text: 'Allow Non-Default Connection'
                 busy: self.request.busy
                 onClicked: {
-                    Analytics.recordEvent('custom_pin_server_connect', AnalyticsJS.segmentationSession(Settings, self.context))
+                    Analytics.recordEvent('custom_pin_server_connect', AnalyticsJS.segmentationSession(self.context))
                     self.request.accept(remember_checkbox.checked)
                     self.accept()
                 }

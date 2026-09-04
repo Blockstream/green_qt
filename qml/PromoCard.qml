@@ -13,7 +13,7 @@ Loader {
     required property Promo promo
     id: self
     Component.onCompleted: {
-        Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(Settings, null, self.promo, self.screen))
+        Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(null, self.promo, self.screen))
     }
     sourceComponent: {
         switch (self.promo.data?.layout_small ?? 0) {
@@ -29,7 +29,7 @@ Loader {
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(Settings, null, self.promo, self.screen))
+            Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(null, self.promo, self.screen))
             self.promo.dismiss()
         }
     }

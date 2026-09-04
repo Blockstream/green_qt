@@ -36,7 +36,7 @@ WalletDrawer {
     AnalyticsView {
         active: self.opened
         name: 'WalletSettings2FASetup'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.context)
+        segmentation: AnalyticsJS.segmentationSession(self.context)
     }
 
     contentItem: GStackView {

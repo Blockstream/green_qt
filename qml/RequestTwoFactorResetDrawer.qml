@@ -18,7 +18,7 @@ WalletDrawer {
     AnalyticsView {
         active: self.visible
         name: 'WalletSettings2FAReset'
-        segmentation: AnalyticsJS.segmentationSession(Settings, controller.context)
+        segmentation: AnalyticsJS.segmentationSession(controller.context)
     }
     SessionController {
         id: controller

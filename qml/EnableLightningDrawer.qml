@@ -23,7 +23,7 @@ WalletDrawer {
         target: controller.monitor
         function onAllFinishedOrFailed() {
             if (!self.error) {
-                Analytics.recordEvent('account_create', AnalyticsJS.segmentationLightning(Settings, self.context))
+                Analytics.recordEvent('account_create', AnalyticsJS.segmentationLightning(self.context))
                 self.close()
             }
         }

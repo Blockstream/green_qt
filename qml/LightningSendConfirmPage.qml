@@ -29,7 +29,7 @@ StackViewPage {
         enabled: self.controller.canPay
         text: qsTrId('id_send')
         onClicked: {
-            Analytics.recordEvent('send_attempt', AnalyticsJS.segmentationLightningTransaction(Settings, self.context))
+            Analytics.recordEvent('send_attempt', AnalyticsJS.segmentationLightningTransaction(self.context))
             self.controller.pay()
         }
     }
@@ -38,11 +38,11 @@ StackViewPage {
         target: self.controller
         function onPaid() {
             Settings.registerEvent({ invoice: self.controller.input })
-            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationLightningTransaction(Settings, self.context))
+            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationLightningTransaction(self.context))
             self.pushPage(transaction_completed_page)
         }
         function onFailed(error) {
-            const segmentation = AnalyticsJS.segmentationLightningTransaction(Settings, self.context)
+            const segmentation = AnalyticsJS.segmentationLightningTransaction(self.context)
             segmentation.error = error
             segmentation.node_id = self.context.lightningNodeInfo?.id ?? ''
             Analytics.recordEvent('failed_transaction', segmentation)

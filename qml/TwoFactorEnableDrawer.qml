@@ -22,7 +22,7 @@ WalletDrawer {
     AnalyticsView {
         active: true
         name: 'WalletSettings2FASetup'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.context)
+        segmentation: AnalyticsJS.segmentationSession(self.context)
     }
 
     TwoFactorController {

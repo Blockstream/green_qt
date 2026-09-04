@@ -58,7 +58,7 @@ StackViewPage {
     AnalyticsView {
         name: 'Send'
         active: self.StackView.visible
-        segmentation: AnalyticsJS.segmentationSubAccount(Settings, controller.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(controller.account)
     }
     StackView.onActivated: amount_field.forceActiveFocus()
     id: self

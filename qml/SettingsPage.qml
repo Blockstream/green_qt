@@ -36,7 +36,7 @@ Page {
         id: analytics_view
         active: UtilJS.effectiveVisible(self)
         name: 'WalletSettingsGeneral'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.context)
+        segmentation: AnalyticsJS.segmentationSession(self.context)
     }
 
     contentItem: RowLayout {
