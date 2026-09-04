@@ -9,6 +9,8 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 StackViewPage {
+    signal loginStarted()
+    signal loginStopped()
     signal loginFinished(Context context)
     required property Network network
     AnalyticsView {
@@ -27,6 +29,7 @@ StackViewPage {
             }
         }
         onLoginFailed: (error) => {
+            self.loginStopped()
             if (error === 'decode' || error === 'too short') {
                 error = 'id_invalid_xpub'
             }
@@ -92,6 +95,7 @@ StackViewPage {
                     enabled: controller.monitor?.idle ?? true
                     onTriggered: {
                         onTextEdited: error_badge.clear()
+                        self.loginStarted()
                         if (selector.index === 0) {
                             controller.loginExtendedPublicKeys(keys_field.text)
                         } else {

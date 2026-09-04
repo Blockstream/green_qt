@@ -8,6 +8,8 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal loginStarted()
+    signal loginStopped()
     signal loginFinished(Context context)
     signal removeClicked()
     required property Wallet wallet
@@ -28,6 +30,7 @@ StackViewPage {
             self.loginFinished(controller.context)
         }
         onLoginFailed: error => {
+            self.loginStopped()
             self.contentItem.enabled = true
             password_field.clear()
             password_field.forceActiveFocus()
@@ -40,6 +43,7 @@ StackViewPage {
         onTriggered: {
             error_badge.clear()
             self.contentItem.enabled = false
+            self.loginStarted()
             controller.login()
         }
     }

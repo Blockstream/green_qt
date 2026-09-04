@@ -20,6 +20,7 @@ void SignupController::setMnemonic(const QStringList& mnemonic)
 
 void SignupController::signup(const QString& deployment)
 {
+    setNetworkLoginActive(false);
     const QJsonObject credentials({
         { "mnemonic", m_mnemonic.join(' ') },
         { "password", QString() }
@@ -42,6 +43,14 @@ void SignupController::signup(const QString& deployment)
     auto get_credentials = new GetCredentialsTask(session);
     auto connect_lightning = new LightningConnectNodeTask(context());
 
+    connect(mnemonic_login, &Task::statusChanged, this, [=, this] {
+        if (mnemonic_login->status() == Task::Status::Active) {
+            setNetworkLoginActive(true);
+        } else if (mnemonic_login->status() == Task::Status::Finished || mnemonic_login->status() == Task::Status::Failed) {
+            setNetworkLoginActive(false);
+        }
+    });
+
     group->add(connect_session);
     group->add(register_user);
     group->add(mnemonic_login);
@@ -58,6 +67,13 @@ void SignupController::signup(const QString& deployment)
     persist_wallet->needs(get_credentials);
 
     dispatcher()->add(group);
+}
+
+void SignupController::setNetworkLoginActive(bool active)
+{
+    if (m_network_login_active == active) return;
+    m_network_login_active = active;
+    emit networkLoginActiveChanged();
 }
 
 void SignupController::setWallet(Wallet *wallet)

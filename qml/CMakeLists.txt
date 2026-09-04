@@ -157,6 +157,7 @@ set(QML_FILES_DEVICES
     MnemonicBackupPage.qml
     MnemonicCheckPage.qml
     WalletView.qml
+    LoggingInPage.qml
     PinField.qml
     PinLoginPage.qml
     LoadingPage.qml

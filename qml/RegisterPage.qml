@@ -5,13 +5,22 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
+    signal loginStarted()
+    signal loginStopped()
     signal registerFinished(Context context)
     required property var mnemonic
+    property bool signupStarted: false
+    function startSignup(deployment) {
+        if (self.signupStarted) return
+        self.signupStarted = true
+        controller.signup(deployment)
+    }
     StackView.onActivated: {
+        if (self.signupStarted) return
         if (Settings.enableTestnet) {
             deployment_dialog.createObject(self).open()
         } else {
-            controller.signup('mainnet')
+            self.startSignup('mainnet')
         }
     }
     id: self
@@ -21,6 +30,13 @@ StackViewPage {
     SignupController {
         id: controller
         mnemonic: self.mnemonic
+        onNetworkLoginActiveChanged: {
+            if (controller.networkLoginActive) {
+                self.loginStarted()
+            } else {
+                self.loginStopped()
+            }
+        }
         onRegisterFinished: (context) => {
             self.registerFinished(context)
         }
@@ -44,7 +60,7 @@ StackViewPage {
         id: deployment_dialog
         DeploymentDialog {
             onCancel: self.popPage()
-            onDeploymentSelected: (deployment) => controller.signup(deployment)
+            onDeploymentSelected: (deployment) => self.startSignup(deployment)
         }
     }
 }

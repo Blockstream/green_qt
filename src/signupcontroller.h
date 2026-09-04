@@ -14,6 +14,7 @@ class SignupController : public Controller
     Q_OBJECT
     Q_PROPERTY(QStringList mnemonic READ mnemonic WRITE setMnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
+    Q_PROPERTY(bool networkLoginActive READ networkLoginActive NOTIFY networkLoginActiveChanged)
     QML_ELEMENT
 public:
     explicit SignupController(QObject* parent = nullptr);
@@ -28,11 +29,13 @@ public:
 
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
+    bool networkLoginActive() const { return m_network_login_active; }
 
 public slots:
     void signup(const QString& deployment);
 
 signals:
+    void networkLoginActiveChanged();
     void networkChanged();
     void walletChanged();
     void mnemonicSizeChanged();
@@ -40,9 +43,11 @@ signals:
     void registerFinished(Context* context);
 
 private:
+    void setNetworkLoginActive(bool active);
     Network* m_network{nullptr};
     QStringList m_mnemonic;
     bool m_active{false};
+    bool m_network_login_active{false};
     Wallet* m_wallet{nullptr};
 };
 

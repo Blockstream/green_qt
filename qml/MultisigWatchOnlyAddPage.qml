@@ -7,6 +7,8 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 StackViewPage {
+    signal loginStarted()
+    signal loginStopped()
     signal loginFinished(Context context)
     required property Network network
     StackView.onActivating: {
@@ -32,6 +34,7 @@ StackViewPage {
             }
         }
         onLoginFailed: error => {
+            self.loginStopped()
             self.contentItem.enabled = true
             password_field.clear()
             password_field.forceActiveFocus()
@@ -44,6 +47,7 @@ StackViewPage {
         onTriggered: {
             error_badge.clear()
             self.contentItem.enabled = false
+            self.loginStarted()
             controller.login()
         }
     }

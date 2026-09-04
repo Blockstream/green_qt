@@ -24,6 +24,17 @@ MainPage {
         }
     }
 
+    function showLoggingInPage() {
+        if (stack_view.currentItem instanceof LoggingInPage) return
+        const title = stack_view.currentItem?.title || self.wallet?.name || ''
+        stack_view.push(logging_in_page, { title }, StackView.Immediate)
+    }
+
+    function hideLoggingInPage() {
+        if (!(stack_view.currentItem instanceof LoggingInPage)) return
+        stack_view.pop(StackView.Immediate)
+    }
+
     function openJadeDetailsDrawer() {
         const drawer = jade_details_drawer.createObject(self, { device: self.device })
         drawer.open()
@@ -88,7 +99,7 @@ MainPage {
             onLoginFinished: (context) => {
                 wallet_created_page
                 self.wallet = context.wallet
-                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+                stack_view.replace(null, loading_page, { context }, StackView.Immediate)
             }
             onFirmwareUpdated: stack_view.pop()
             onCloseClicked: self.closeDevice(self.device)
@@ -101,7 +112,7 @@ MainPage {
         LedgerPage {
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+                stack_view.replace(null, loading_page, { context }, StackView.Immediate)
             }
             onLoginFailed: stack_view.pop()
         }
@@ -147,9 +158,11 @@ MainPage {
     Component {
         id: jade_qr_connect_page
         JadeQrConnectPage {
+            onLoginStarted: self.showLoggingInPage()
+            onLoginStopped: self.hideLoggingInPage()
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.push(loading_page, { context })
+                stack_view.replace(loading_page, { context }, StackView.Immediate)
             }
         }
     }
@@ -164,6 +177,8 @@ MainPage {
     Component {
         id: register_page
         RegisterPage {
+            onLoginStarted: self.showLoggingInPage()
+            onLoginStopped: self.hideLoggingInPage()
             onRegisterFinished: (context) => {
                 self.wallet = context.wallet
                 stack_view.push(setup_pin_page, { context, create: true })
@@ -256,9 +271,11 @@ MainPage {
     Component {
         id: singlesig_watch_only_add_page
         SinglesigWatchOnlyAddPage {
+            onLoginStarted: self.showLoggingInPage()
+            onLoginStopped: self.hideLoggingInPage()
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.push(loading_page, { context })
+                stack_view.replace(loading_page, { context }, StackView.Immediate)
             }
         }
     }
@@ -274,9 +291,11 @@ MainPage {
     Component {
         id: multisig_watch_only_add_page
         MultisigWatchOnlyAddPage {
+            onLoginStarted: self.showLoggingInPage()
+            onLoginStopped: self.hideLoggingInPage()
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+                stack_view.replace(null, loading_page, { context }, StackView.Immediate)
             }
         }
     }
@@ -284,9 +303,11 @@ MainPage {
     Component {
         id: watch_only_login_page
         WatchOnlyLoginPage {
+            onLoginStarted: self.showLoggingInPage()
+            onLoginStopped: self.hideLoggingInPage()
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+                stack_view.replace(null, loading_page, { context }, StackView.Immediate)
             }
             onRemoveClicked: self.removeWallet(self.wallet)
             onCloseClicked: self.closeWallet(self.wallet)
@@ -296,12 +317,20 @@ MainPage {
     Component {
         id: pin_login_page
         PinLoginPage {
+            onLoginStarted: self.showLoggingInPage()
+            onLoginStopped: self.hideLoggingInPage()
             onLoginFinished: (context) => {
-                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+                stack_view.replace(null, loading_page, { context }, StackView.Immediate)
             }
             onRestoreClicked: stack_view.replace(restore_wallet_page, { wallet: self.wallet })
             onRemoveClicked: self.removeWallet(self.wallet)
             onCloseClicked: self.closeWallet(self.wallet)
+        }
+    }
+
+    Component {
+        id: logging_in_page
+        LoggingInPage {
         }
     }
 

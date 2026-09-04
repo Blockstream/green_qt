@@ -8,10 +8,13 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal loginStarted()
+    signal loginStopped()
     signal loginFinished(Context context)
     signal restoreClicked()
     signal removeClicked()
     required property Wallet wallet
+    property bool initialActivationHandled: false
     readonly property bool connecting: {
         const session = controller.context?.sessions[0]
         if (!session) return false
@@ -29,6 +32,9 @@ StackViewPage {
     padding: flickable.clipping ? 10 : 60
     title: self.wallet.name
     StackView.onActivated: {
+        // Returning from a failed login must preserve the selected passphrase.
+        if (self.initialActivationHandled) return
+        self.initialActivationHandled = true
         if (self.wallet.login.passphrase) {
             const dialog = passphrase_dialog.createObject(self)
             dialog.open()
@@ -49,6 +55,7 @@ StackViewPage {
         }
         onLoginFinished: context => self.loginFinished(context)
         onLoginFailed: error => {
+            self.loginStopped()
             if (error) error_badge.raise(error)
             pin_field.clear()
             pin_field.enabled = true
@@ -139,6 +146,7 @@ StackViewPage {
                 onPinEntered: (pin) => {
                     error_badge.clear()
                     pin_field.enabled = false
+                    self.loginStarted()
                     controller.loginWithPin(pin)
                 }
             }

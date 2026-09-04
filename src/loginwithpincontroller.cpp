@@ -220,6 +220,7 @@ void LoginController::login(LoginTask* login_task, const QString& passphrase)
 
     login(group, login_task);
 
+    monitor()->add(group);
     dispatcher()->add(group);
 
     connect(group, &TaskGroup::failed, this, [=, this] {

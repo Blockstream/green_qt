@@ -8,6 +8,8 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal loginStarted()
+    signal loginStopped()
     signal loginFinished(Context context)
 
     // Switches between the instructions view and the QR scanner view
@@ -31,6 +33,7 @@ StackViewPage {
             self.loginFinished(controller.context)
         }
         onLoginFailed: (error) => {
+            self.loginStopped()
             self.busy = false
             self.scanning = false
             if (error === 'decode' || error === 'too short') {
@@ -43,6 +46,7 @@ StackViewPage {
     function startLogin(text) {
         if (self.busy || !text) return
         self.busy = true
+        self.loginStarted()
         controller.network = NetworkManager.network(UtilJS.networkFromDescriptor(text))
         controller.loginDescriptors(text)
     }

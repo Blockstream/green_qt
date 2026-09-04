@@ -2,16 +2,21 @@ import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
-VFlickable {
+LoggingInPage {
     signal loginFinished(Context context)
     signal loginFailed()
     required property Context context
     required property Device device
-    StackView.onActivated: controller.loginWithDevice(self.device)
+    property bool loginSubmitted: false
+    StackView.onActivated: {
+        if (self.loginSubmitted) return
+        self.loginSubmitted = true
+        controller.loginWithDevice(self.device)
+    }
     id: self
-    spacing: 20
+    header: null
+    padding: 0
     LoginController {
         id: controller
         context: self.context
@@ -22,18 +27,5 @@ VFlickable {
         title: self.title ?? ''
         monitor: controller.monitor
         target: self.StackView.view
-    }
-    BusyIndicator {
-        Layout.alignment: Qt.AlignCenter
-    }
-    Label {
-        Layout.fillWidth: true
-        Layout.preferredWidth: 0
-        color: '#FFFFFF'
-        font.pixelSize: 22
-        font.weight: 600
-        horizontalAlignment: Label.AlignHCenter
-        text: qsTrId('id_logging_in')
-        wrapMode: Label.WordWrap
     }
 }
