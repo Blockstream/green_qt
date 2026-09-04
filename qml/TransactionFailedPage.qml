@@ -9,7 +9,10 @@ import "util.js" as UtilJS
 StackViewPage {
     id: self
     required property var error
-    readonly property string errorText: UtilJS.formatError(self.error)
+    property bool hideErrorDetails: false
+    readonly property string errorText: self.hideErrorDetails
+        ? 'Your transaction could not reach the network. Please try again.'
+        : UtilJS.formatError(self.error)
     leftItem: Item {}
     centerItem: Item {}
     rightItem: CloseButton {

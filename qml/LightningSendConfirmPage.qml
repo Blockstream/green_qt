@@ -137,6 +137,7 @@ StackViewPage {
     Component {
         id: transaction_failed_page
         TransactionFailedPage {
+            hideErrorDetails: true
             onCloseClicked: self.closeClicked()
         }
     }
