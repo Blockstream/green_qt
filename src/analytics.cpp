@@ -235,6 +235,8 @@ void Analytics::start()
             req.insert("urls", urls);
         }
 
+        req.insert("accept", "base64");
+
         GA_json* out = nullptr;
         const auto rc = GA_http_request(session->m_session, Json::fromObject(req).get(), &out);
         if (rc == GA_OK && out) {
@@ -249,10 +251,14 @@ void Analytics::start()
             // Skip those, and parse with allow_exceptions off so that a body
             // that is not JSON is just a failed request too.
             if (!reply.contains("error")) {
-                auto body = nlohmann::json::parse(reply.value("body").toString().toStdString(), nullptr, false);
-                if (!body.is_discarded()) {
-                    res.data = std::move(body);
-                    res.success = true;
+                const auto body = QByteArray::fromBase64Encoding(
+                    reply.value("body").toString().toLatin1(), QByteArray::AbortOnBase64DecodingErrors);
+                if (body) {
+                    auto data = nlohmann::json::parse(body.decoded.toStdString(), nullptr, false);
+                    if (!data.is_discarded()) {
+                        res.data = std::move(data);
+                        res.success = true;
+                    }
                 }
             }
         }
