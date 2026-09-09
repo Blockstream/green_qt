@@ -2197,10 +2197,10 @@ void HttpRequestTask::update()
     setStatus(Status::Active);
 
     auto future = QtConcurrent::run([=, this] {
-        GA_json* output;
+        GA_json* output = nullptr;
         const auto params = Json::fromObject(d->params);
         const auto rc = GA_http_request(session()->m_session, params.get(), &output);
-        if (rc == GA_OK) {
+        if (rc == GA_OK && output) {
             auto res = Json::toObject(output);
             GA_destroy_json(output);
             return qMakePair(true, res);
