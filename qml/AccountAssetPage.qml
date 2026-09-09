@@ -93,7 +93,7 @@ StackViewPage {
                 id: convert
                 account: self.account
                 asset: self.asset
-                input: ({ satoshi: self.account.json.satoshi[self.asset.id] })
+                input: ({ satoshi: self.account.json.satoshi?.[self.asset.id] ?? 0 })
                 unit: UtilJS.unit(self.context)
             }
             Label {
