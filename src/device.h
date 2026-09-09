@@ -11,6 +11,7 @@
 #define LEDGER_NANOS_ID 0x0001
 #define LEDGER_NANOX_ID 0x0004
 
+class Asset;
 class Device;
 class DeviceCommand;
 class Network;
@@ -59,7 +60,7 @@ public:
     virtual SignTransactionActivity* signTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) = 0;
     virtual GetBlindingKeyActivity* getBlindingKey(const QString& script) = 0;
     virtual GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;
-    virtual SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
+    virtual SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets) = 0;
     virtual GetMasterBlindingKeyActivity* getMasterBlindingKey() = 0;
     virtual GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) = 0;
     virtual LogoutActivity* logout() = 0;

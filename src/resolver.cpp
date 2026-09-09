@@ -1,10 +1,32 @@
 #include "activitymanager.h"
+#include "context.h"
 #include "device.h"
 #include "network.h"
 #include "resolver.h"
 #include "session.h"
 #include "task.h"
 #include "util.h"
+
+#include <QSet>
+
+namespace {
+
+QList<Asset*> GetAssets(Context* context, const QJsonArray& outputs)
+{
+    if (!context) return {};
+    QList<Asset*> assets;
+    QSet<QString> asset_ids;
+    for (const auto value : outputs) {
+        const auto asset_id = value.toObject().value("asset_id").toString();
+        if (asset_id.isEmpty()) continue;
+        if (asset_ids.contains(asset_id)) continue;
+        asset_ids.insert(asset_id);
+        assets.append(context->getOrCreateAsset(asset_id));
+    }
+    return assets;
+}
+
+}
 
 Resolver::Resolver(const QJsonObject& result, AuthHandlerTask* task)
     : QObject(task)
@@ -227,8 +249,9 @@ void SignLiquidTransactionResolver::resolve()
     const auto transaction = ParseByteArray(m_required_data.value("transaction"));
     const auto signing_inputs = m_required_data.value("transaction_inputs").toArray();
     const auto outputs = m_required_data.value("transaction_outputs").toArray();
+    const auto assets = GetAssets(m_session->context(), outputs);
 
-    auto activity = device()->signLiquidTransaction(m_session->network(), transaction, signing_inputs, outputs);
+    auto activity = device()->signLiquidTransaction(m_session->network(), transaction, signing_inputs, outputs, assets);
 
 //    connect(command, &SignLiquidTransactionCommand::progressChanged, [this](int count, int total) {
 //       m_progress = qreal(count) / qreal(total);

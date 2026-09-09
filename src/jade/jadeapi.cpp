@@ -945,7 +945,7 @@ int JadeAPI::getCommitments(const QByteArray& assetId, const qint64 value, const
 }
 
 // Sign a liquid tx - based on / shares much with signTx() above.
-int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const ResponseHandler &cb)
+int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const QVariantList &assetInfo, const ResponseHandler &cb)
 {
     // Protocol:
     // We send one message per input (which includes host-commitment *but
@@ -963,12 +963,15 @@ int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const Q
     const int tmpId = registerResponseHandler(makeSignTxInitialCallback(id, inputs));
 
     // Initiate signing process, and return the exposed id
-    const QCborMap params = { {"network", network},
-                              {"use_ae_signatures", true},
-                              {"txn", txn},
-                              {"num_inputs", inputs.size()},
-                              {"trusted_commitments", QCborArray::fromVariantList(commitments)},
-                              {"change", QCborArray::fromVariantList(change)} };
+    QCborMap params = { {"network", network},
+                        {"use_ae_signatures", true},
+                        {"txn", txn},
+                        {"num_inputs", inputs.size()},
+                        {"trusted_commitments", QCborArray::fromVariantList(commitments)},
+                        {"change", QCborArray::fromVariantList(change)} };
+    if (!assetInfo.isEmpty()) {
+        params.insert(QCborValue("asset_info"), QCborArray::fromVariantList(assetInfo));
+    }
     const QCborMap request = getRequest(tmpId, "sign_liquid_tx", params);
     enqueue(request);
     return id;

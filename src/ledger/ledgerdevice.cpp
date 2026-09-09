@@ -97,8 +97,9 @@ SignTransactionActivity* LedgerDevice::signTransaction(Network* network, const Q
     return new LedgerSignTransactionActivity(transaction, signing_inputs, transaction_outputs, signing_transactions, this);
 }
 
-SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs)
+SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets)
 {
+    Q_UNUSED(assets);
     Q_ASSERT(network->isLiquid() && network->isMainnet());
     return new LedgerSignLiquidTransactionActivity(transaction, signing_inputs, outputs, this);
 }

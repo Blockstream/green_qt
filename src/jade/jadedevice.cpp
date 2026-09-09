@@ -1,9 +1,11 @@
 #include "jadedevice.h"
+#include "asset.h"
 #include "jadeapi.h"
 #include "network.h"
 
 #include <wally_wrapper.h>
 
+#include <QJsonDocument>
 #include <QVersionNumber>
 
 namespace {
@@ -30,6 +32,10 @@ bool IsSegwitAddressType(const QString& addr_type)
 }
 
 const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{1, 0, 40};
+
+// Jade renders the asset contract into a 768 byte buffer before hashing it, and
+// a single oversized entry rejects the whole signing request
+constexpr int JADE_MAX_ASSET_CONTRACT_SIZE = 700;
 
 } // namespace
 
@@ -281,6 +287,7 @@ class JadeSignLiquidTransactionActivity : public SignLiquidTransactionActivity
     const QByteArray m_transaction;
     const QJsonArray m_signing_inputs;
     const QJsonArray m_outputs;
+    const QList<Asset*> m_assets;
 
     QVariantList m_inputs;
     QVariantList m_change;
@@ -300,13 +307,14 @@ private:
         return path;
     }
 public:
-    JadeSignLiquidTransactionActivity(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, JadeDevice* device)
+    JadeSignLiquidTransactionActivity(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets, JadeDevice* device)
         : SignLiquidTransactionActivity(device)
         , m_network(network)
         , m_device(device)
         , m_transaction(transaction)
         , m_signing_inputs(signing_inputs)
         , m_outputs(outputs)
+        , m_assets(assets)
     {
     }
     QList<QByteArray> signatures() const override { return m_signatures; };
@@ -368,12 +376,37 @@ public:
             }
         }
 
+        const auto policy_asset = m_network->policyAsset();
+        QVariantList asset_info;
+        for (auto asset : m_assets) {
+            // Jade has the policy asset information built in
+            if (asset->id() == policy_asset) continue;
+            const auto data = asset->data();
+            const auto contract = data.value("contract").toObject();
+            const auto issuance_prevout = data.value("issuance_prevout").toObject();
+            if (contract.isEmpty()) continue;
+            if (!issuance_prevout.contains("txid") || !issuance_prevout.contains("vout")) continue;
+            if (QJsonDocument(contract).toJson(QJsonDocument::Compact).size() > JADE_MAX_ASSET_CONTRACT_SIZE) continue;
+            // The registry entry is passed on as a QJsonObject so that it reaches
+            // Jade with its keys in the alphabetical order the asset contract hash
+            // is computed over, and with its numbers kept as integers. Jade
+            // re-computes the asset id from the contract and the issuance prevout.
+            asset_info.append(QVariant::fromValue(QJsonObject{
+                { "asset_id", asset->id() },
+                { "contract", contract },
+                { "issuance_prevout", QJsonObject{
+                    { "txid", issuance_prevout.value("txid") },
+                    { "vout", issuance_prevout.value("vout") },
+                }},
+            }));
+        }
+
         progress()->setIndeterminate(false);
         progress()->setTo(m_outputs.size() + 1 + 1 + m_inputs.size());
 
         if (!checkDeviceConnected(m_device, this)) return;
 
-        m_device->api()->signLiquidTx(m_network->canonicalId(), m_transaction, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
+        m_device->api()->signLiquidTx(m_network->canonicalId(), m_transaction, m_inputs, m_trusted_commitments, m_change, asset_info, [this](const QVariantMap& msg) {
             qDebug() << msg;
             if (handleError(msg)) return;
             if (!msg.contains("result")) {
@@ -616,9 +649,9 @@ GetBlindingNonceActivity *JadeDevice::getBlindingNonce(const QByteArray& pubkey,
     return new JadeGetBlindingNonceActivity(pubkey, script, this);
 }
 
-SignLiquidTransactionActivity *JadeDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs)
+SignLiquidTransactionActivity *JadeDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, const QList<Asset*>& assets)
 {
-    return new JadeSignLiquidTransactionActivity(network, transaction, signing_inputs, outputs, this);
+    return new JadeSignLiquidTransactionActivity(network, transaction, signing_inputs, outputs, assets, this);
 }
 
 GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()

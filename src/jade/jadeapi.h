@@ -131,7 +131,12 @@ public:
     int getCommitments(const QByteArray& assetId, const qint64 value, const QByteArray &hashPrevouts, const quint32 outputIndex, const QByteArray& vbf, const ResponseHandler &cb);
 
     // Sign a liquid txn
-    int signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const ResponseHandler &cb);
+    // `assetInfo` is optional asset-registry metadata (one entry per relevant
+    //   non-policy asset) which Jade uses to display a ticker and to scale the
+    //   amount by the asset precision.  Each entry must hold the complete
+    //   registry `contract` object and its `issuance_prevout`, as Jade
+    //   re-computes and verifies the asset-id from them.
+    int signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const QVariantList &assetInfo, const ResponseHandler &cb);
 
     // Get master [un-]blinding key for wallet
     int getMasterBlindingKey(bool only_if_silent, const ResponseHandler &cb);
