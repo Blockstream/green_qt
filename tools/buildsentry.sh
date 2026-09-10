@@ -2,8 +2,8 @@
 set -exo pipefail
 
 SENTRY_REPO=https://github.com/getsentry/sentry-native
-SENTRY_TAG=0.16.2
-SENTRY_COMMIT=724479b549a299ea8363994306b36a00c754fcba
+SENTRY_TAG=0.16.8
+SENTRY_COMMIT=d5677deb89ae24c14821f4217e50100f96bca3c7
 
 PATCHES=$(cd "$(dirname "$0")/patches" && pwd)
 
