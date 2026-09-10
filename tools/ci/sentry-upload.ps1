@@ -8,9 +8,9 @@ $ProgressPreference = "SilentlyContinue"
 # tools/ci/sentry-upload.sh. To bump: change $SentryCliVersion, then update the
 # checksum below with the output of
 #   curl -sL "https://github.com/getsentry/sentry-cli/releases/download/$VERSION/sentry-cli-Windows-x86_64.exe" | shasum -a 256
-$SentryCliVersion = "3.6.2"
+$SentryCliVersion = "3.7.0"
 $SentryCliAsset = "sentry-cli-Windows-x86_64.exe"
-$SentryCliSha256 = "5c90cb0045cef3d3c36113c2aa21a7dcae11627d2d6e3098b679dea5b6681be3"
+$SentryCliSha256 = "8643986aec8d8cf8d69cd476d67427578e5dbbda378eba506d199681082abe5a"
 
 function Get-Sha256($path) {
     (Get-FileHash -Algorithm SHA256 -Path $path).Hash.ToLower()

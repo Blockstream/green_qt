@@ -7,24 +7,24 @@ set -eo pipefail
 #     curl -sL "https://github.com/getsentry/sentry-cli/releases/download/$VERSION/sentry-cli-$a" | shasum -a 256
 #   done
 # Windows is pinned separately in tools/ci/sentry-upload.ps1 — bump it too.
-SENTRY_CLI_VERSION="3.6.2"
+SENTRY_CLI_VERSION="3.7.0"
 
 case "$(uname -s)-$(uname -m)" in
     Darwin-arm64)
         SENTRY_CLI_ASSET="sentry-cli-Darwin-arm64"
-        SENTRY_CLI_SHA256="5a497deb1e388cc6445c09ddd6d2da4fc2aae8295405d6393c2e0ee635ca3687"
+        SENTRY_CLI_SHA256="c66564094fbe56ee3b359f7574541f858b8d1df0328a0a759da972fbf1886048"
         ;;
     Darwin-x86_64)
         SENTRY_CLI_ASSET="sentry-cli-Darwin-x86_64"
-        SENTRY_CLI_SHA256="efe0a5289cdd0ea8ff727b1228a1bea6c840f2da38152e8f9f5ced05bd6659cd"
+        SENTRY_CLI_SHA256="fcd74786b4d95c6b7531662607897aadd5ab5d64c5d0468a6f4bd97ad04bedb8"
         ;;
     Linux-x86_64)
         SENTRY_CLI_ASSET="sentry-cli-Linux-x86_64"
-        SENTRY_CLI_SHA256="3a4bbf2c0d06378d4e59b337647483751a0a2b1603db5fd4991847d0cfd6478c"
+        SENTRY_CLI_SHA256="cec71d46a7cc394c94b6e75f1601985c710d457376c546ef3975567b3671563b"
         ;;
     Linux-aarch64 | Linux-arm64)
         SENTRY_CLI_ASSET="sentry-cli-Linux-aarch64"
-        SENTRY_CLI_SHA256="ff112ecf694b7d6b3629a6228ed4e3f7a0d51401bdf48a5051a79d8749dccd06"
+        SENTRY_CLI_SHA256="69cc0e951f663a332fd3bb3069e443cb3748abbfce497ae2caac6d5a9ec7ae65"
         ;;
     *)
         echo "sentry-cli: unsupported platform $(uname -s)-$(uname -m)" >&2
