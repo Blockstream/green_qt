@@ -4,6 +4,10 @@
 #include <QDebug>
 #include <QEvent>
 
+#ifdef ENABLE_SENTRY
+#include <sentry.h>
+#endif
+
 ApplicationController::ApplicationController(QObject* parent)
     : QObject(parent)
 {
@@ -32,11 +36,13 @@ void ApplicationController::quit()
 void ApplicationController::triggerCrash()
 {
     qDebug() << Q_FUNC_INFO;
-    // Force a real access violation so crashpad captures a complete, valid
-    // minidump on every platform. abort() is a fast-fail on Windows whose
-    // (often truncated) dump self-hosted Sentry rejects as "Invalid Minidump".
+#ifdef ENABLE_SENTRY
+    sentry_crash();
+#else
+    // Without sentry, force an access violation so the action still crashes.
     volatile int* p = nullptr;
     *p = 0;
+#endif
 }
 
 bool ApplicationController::eventFilter(QObject* obj, QEvent* event)
