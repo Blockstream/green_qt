@@ -501,7 +501,7 @@ int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const H
 void JadeAPI::authUserWithEntropy(const QString &network, const ResponseHandler &cb, const HttpRequestProxy& request_proxy)
 {
     QByteArray entropy(32, Qt::Uninitialized);
-    const auto rc = GA_get_random_bytes(32, (unsigned char*) entropy.data(), 32);
+    const auto rc = GA_get_random_bytes((unsigned char*) entropy.data(), 32);
 
     if (rc != GA_OK) {
         QTimer::singleShot(0, [=] { cb({{ "error", "failed to get random bytes" }}); });

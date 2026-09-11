@@ -582,7 +582,7 @@ void JadeGenuineCheckController::genuineCheck()
     if (!m_device->api()) return;
 
     QByteArray challenge(32, Qt::Uninitialized);
-    const auto rc = GA_get_random_bytes(32, (unsigned char*) challenge.data(), 32);
+    const auto rc = GA_get_random_bytes((unsigned char*) challenge.data(), 32);
     if (rc != GA_OK) {
         emit failed();
         return;
