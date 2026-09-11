@@ -2,7 +2,7 @@
 set -eo pipefail
 
 curl -sL -o linuxdeploy-x86_64.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-echo "421ca71d5c69ea97c6309276232990d43df1dcece0edfaa26bbf926ff96ed12e  linuxdeploy-x86_64.AppImage" | sha256sum --check
+echo "36a2d7e274d12e1050d0e9ecfe11d339ed54720b2bec464c286d53f8b07f5c62  linuxdeploy-x86_64.AppImage" | sha256sum --check
 chmod +x linuxdeploy-x86_64.AppImage
 
 curl -sL -o linuxdeploy-plugin-qt-x86_64.AppImage https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
