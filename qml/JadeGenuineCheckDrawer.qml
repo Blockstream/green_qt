@@ -24,7 +24,7 @@ AbstractDrawer {
         id: controller
         device: self.device
         onSuccess: stack_view.push(success_view)
-        onFailed: self.skip()
+        onFailed: stack_view.replace(null, diy_view, StackView.PushTransition)
         onUnsupported: stack_view.replace(null, diy_view, StackView.PushTransition)
         onCancelled: stack_view.replace(null, cancelled_view, StackView.PushTransition)
         onDisconnected: self.abort()

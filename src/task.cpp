@@ -2315,6 +2315,18 @@ bool RSAVerifyTask::call(GA_session* session, GA_auth_handler** auth_handler)
     return rc == GA_OK;
 }
 
+void RSAVerifyTask::handleDone(const QJsonObject& result)
+{
+    const auto verify = result.value("result").toObject();
+    if (verify.value("result").toBool()) {
+        setResult(result);
+        setStatus(Status::Finished);
+    } else {
+        setError(verify.value("error").toString());
+        setStatus(Status::Failed);
+    }
+}
+
 LoadPaymentsTask::LoadPaymentsTask(QNetworkAccessManager *net, Context *context)
     : ContextTask(new LoadPaymentsTaskPrivate, context)
 {
