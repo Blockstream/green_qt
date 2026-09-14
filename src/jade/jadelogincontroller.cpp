@@ -77,6 +77,7 @@ bool IsHostAllowed(const QSet<QByteArray>& allowed, const QString& host)
 {
     if (host == "jadepin.blockstream.com") return true;
     if (host == "j8d.io") return true;
+    if (host == "mrrxtq6tjpbnbm7vh5jt6mpjctn7ggyfy5wegvbeff3x7jrznqawlmid.onion") return true;
     QCryptographicHash hash(QCryptographicHash::Sha256);
     hash.addData(host.toUtf8());
     return allowed.contains(hash.result());
@@ -84,13 +85,16 @@ bool IsHostAllowed(const QSet<QByteArray>& allowed, const QString& host)
 
 bool IsHostAllowed(const QStringList& hosts)
 {
+    if (hosts.isEmpty()) {
+        return false;
+    }
     const auto allowed = AllowedHosts();
     for (const auto host : hosts) {
-        if (IsHostAllowed(allowed, host)) {
-            return true;
+        if (!IsHostAllowed(allowed, host)) {
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 void AllowHost(QSet<QByteArray>& allowed, const QString& host)
