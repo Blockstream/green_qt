@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.6.0] - 2026-09-21
+### Added
+- Pay Lightning addresses and LNURL pay requests from the Lightning send flow
+- Dedicated login progress page, with a status-page link when login takes longer than expected
+- Configurable Electrum server gap limit in app preferences
+
+### Changed
+- Updated GDK to 0.78.0
+- Redesigned manual coin selection, with a dedicated coin details page
+- Restored 2of2 and 2of3 account creation, with 2of3 limited to Bitcoin
+- Removed account creation from the receive flow
+- Send Liquid asset registry information to Jade when signing
+
+### Fixed
+- Lightning send failures reported without a human-readable error
+- Jade login and firmware updates when the device disconnects or has pending requests
+- Heap corruption when GDK fails to convert JSON to a string
+- The app restarting after the UI was terminated on purpose
+- Account balance shown while the account is still loading
+- Restore hanging when mnemonic login fails, and unusable buttons after a restore error
+- Wallet and account creation analytics events
+- Analytics sessions not restarting after analytics consent is enabled
+- Jade HTTP proxy host validation for empty or partially unapproved host lists
+- Improved Jade genuine-check failure handling
+
 ## [3.5.4] - 2026-08-31
 ### Changed
 - Updated Qt to 6.11.2
