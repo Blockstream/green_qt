@@ -276,21 +276,21 @@ Page {
             onGenuine: {
                 if (Settings.rememberDevices) {
                     const efusemac = self.context.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent({ efusemac, result: 'genuine', type: 'jade_genuine_check' })
+                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'genuine'))
                 }
                 drawer.close()
             }
             onDiy: {
                 if (Settings.rememberDevices) {
                     const efusemac = self.context.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent({ efusemac, result: 'diy', type: 'jade_genuine_check' })
+                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'diy'))
                 }
                 drawer.close()
             }
             onSkip: {
                 if (Settings.rememberDevices) {
                     const efusemac = self.context.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent({ efusemac, result: 'skip', type: 'jade_genuine_check' })
+                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'skip'))
                 }
                 drawer.close()
             }

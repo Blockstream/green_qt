@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 StackViewPage {
     signal loginFinished(Context context)
     signal firmwareUpdated()
@@ -93,9 +95,9 @@ StackViewPage {
         if (['JADE_V2', 'JADE_V2C'].includes(self.device.versionInfo.BOARD_TYPE)) {
             if (!self.skipGenuineCheck) {
                 const efusemac = self.device.versionInfo.EFUSEMAC
-                const check_genuine = Settings.isEventRegistered({ efusemac, result: 'genuine', type: 'jade_genuine_check' })
-                const check_diy = Settings.isEventRegistered({ efusemac, result: 'diy', type: 'jade_genuine_check' })
-                const check_skip = Settings.isEventRegistered({ efusemac, result: 'skip', type: 'jade_genuine_check' })
+                const check_genuine = Settings.isEventRegistered(UtilJS.jadeGenuineCheckEvent(efusemac, 'genuine'))
+                const check_diy = Settings.isEventRegistered(UtilJS.jadeGenuineCheckEvent(efusemac, 'diy'))
+                const check_skip = Settings.isEventRegistered(UtilJS.jadeGenuineCheckEvent(efusemac, 'skip'))
                 if (!check_genuine && !check_diy && !check_skip) {
                     self.openGenuineCheckDialog()
                     return
@@ -144,7 +146,7 @@ StackViewPage {
     function registerEvent(result) {
         if (Settings.rememberDevices) {
             const efusemac = self.device.versionInfo.EFUSEMAC
-            Settings.registerEvent({ efusemac, result, type: 'jade_genuine_check' })
+            Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, result))
         }
         self.skipGenuineCheck = true
     }

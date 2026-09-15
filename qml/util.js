@@ -458,6 +458,9 @@ function isJadeV2(boardType) {
     return boardType?.startsWith('JADE_V2') ?? false
 }
 
+function jadeGenuineCheckEvent(efusemac, result) {
+    return { efusemac, result, type: 'jade_genuine_check', version: 2 }
+}
 
 function jadeImage(device, index) {
     const type = device.versionInfo?.BOARD_TYPE

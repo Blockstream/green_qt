@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 Page {
     required property Context context
     property bool backupCompleted: !Settings.isEventRegistered({ walletId: self.context.xpubHashId, status: 'pending', type: 'wallet_backup' })
@@ -601,21 +603,21 @@ Page {
             onGenuine: {
                 if (Settings.rememberDevices && drawer.device) {
                     const efusemac = drawer.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent({ efusemac, result: 'genuine', type: 'jade_genuine_check' })
+                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'genuine'))
                 }
                 drawer.close()
             }
             onDiy: {
                 if (Settings.rememberDevices && drawer.device) {
                     const efusemac = drawer.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent({ efusemac, result: 'diy', type: 'jade_genuine_check' })
+                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'diy'))
                 }
                 drawer.close()
             }
             onSkip: {
                 if (Settings.rememberDevices && drawer.device) {
                     const efusemac = drawer.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent({ efusemac, result: 'skip', type: 'jade_genuine_check' })
+                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'skip'))
                 }
                 drawer.close()
             }
