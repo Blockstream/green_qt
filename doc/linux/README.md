@@ -34,12 +34,15 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
     libtool autoconf libcurl4-openssl-dev libclang-dev libssl-dev
   ```
 
-- **Rust**: Required for GDK build. Install via rustup:
+- **Rust**: Required for the Rust dependencies. Match the toolchains in
+  [`ci/linux-x86_64/setup.sh`](../../ci/linux-x86_64/setup.sh), which installs
+  1.85.0 and 1.88.0 and selects 1.88.0 as the default:
 
   ```bash
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
   . "$HOME/.cargo/env"
-  rustup install 1.81.0
+  rustup toolchain install 1.85.0 1.88.0
+  rustup default 1.88.0
   ```
 
 ### Clone the repository
