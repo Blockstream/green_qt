@@ -34,13 +34,23 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
     libtool autoconf libcurl4-openssl-dev libclang-dev libssl-dev
   ```
 
-- **Rust**: Required for GDK build. Install via rustup:
+- **Rust**: `1.88.0` is the default toolchain used to build GDK and GLSDK, and
+  `1.85.0` is the extra toolchain used in LWK (pinned by its
+  `rust-toolchain.toml`). This matches
+  [`ci/linux-x86_64/setup.sh`](../../ci/linux-x86_64/setup.sh). Install via
+  rustup:
 
   ```bash
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.88.0
   . "$HOME/.cargo/env"
-  rustup install 1.81.0
+  rustup toolchain install 1.85.0 1.88.0
   ```
+
+  The first command sets (or updates) your default toolchain to `1.88.0`, which
+  matches Linux CI and the Windows setup guide. To keep an existing default,
+  pass `--no-update-default-toolchain` as well, and run `rustup override set
+  1.88.0` from the clone created below so 1.88.0 is used for this repository
+  only.
 
 ### Clone the repository
 
