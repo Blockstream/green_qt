@@ -4,7 +4,7 @@ target_sources(${APP_TARGET} PRIVATE
     asset.h asset.cpp
     assetmanager.h assetmanager.cpp
     assetsmodel.h assetsmodel.cpp
-    context.h context.cpp
+    context.h context_p.h context.cpp
     contextmodel.h contextmodel.cpp
     limitmodel.h limitmodel.cpp
     output.h output.cpp

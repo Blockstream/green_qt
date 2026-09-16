@@ -5,6 +5,7 @@
 #include "assetmanager.h"
 #include "bip85.h"
 #include "context.h"
+#include "context_p.h"
 #include "controllers/lwkamp2accountcontroller.h"
 #include "device.h"
 #include "green_settings.h"
@@ -69,43 +70,58 @@ void fetchTransactions(TaskGroup* group, Account* account, int page, int size);
 
 Context::Context(const QString& deployment, bool bip39, QObject* parent)
     : QObject(parent)
-    , m_deployment(deployment)
-    , m_bip39(bip39)
-    , m_dispatcher(new TaskDispatcher(this))
-    , m_transaction_model(new QStandardItemModel(this))
-    , m_address_model(new QStandardItemModel(this))
-    , m_coin_model(new QStandardItemModel(this))
-    , m_payment_model(new QStandardItemModel(this))
+    , d_ptr(new ContextPrivate(this, deployment, bip39))
 {
     Q_ASSERT(deployment == "mainnet" || deployment == "testnet" || deployment == "development");
-
-    m_transaction_model->setItemRoleNames({{ Qt::UserRole, "transaction" }});
-    m_address_model->setItemRoleNames({{ Qt::UserRole, "address" }});
-    m_coin_model->setItemRoleNames({{ Qt::UserRole, "output" }});
-    m_payment_model->setItemRoleNames({{ Qt::UserRole, "payment" }});
 }
 
 Context::~Context()
 {
+    Q_D(Context);
+
     releaseLightningSession();
 
-    for (auto session : m_sessions_list) {
+    for (auto session : d->sessions_list) {
         SessionManager::instance()->release(session);
         session->setContext(nullptr);
         session->setActive(false);
     }
+
+    delete d_ptr;
+}
+
+QString Context::deployment() const
+{
+    Q_D(const Context);
+    return d->deployment;
+}
+
+bool Context::isMainnet() const
+{
+    Q_D(const Context);
+    return d->deployment == "mainnet";
+}
+
+bool Context::bip39() const
+{
+    Q_D(const Context);
+    return d->bip39;
 }
 
 void Context::setSkipLoadAccounts(bool skip_load_accounts)
 {
-    m_skip_load_accounts = skip_load_accounts;
+    Q_D(Context);
+
+    d->skip_load_accounts = skip_load_accounts;
 }
 
 TaskGroup* Context::cleanAccounts()
 {
+    Q_D(Context);
+
     auto group = new TaskGroup(this);
-    if (m_watchonly) return group;
-    for (auto account : m_accounts) {
+    if (d->watchonly) return group;
+    for (auto account : d->accounts) {
         if (account->pointer() > 0) {
             continue;
         }
@@ -130,27 +146,32 @@ TaskGroup* Context::cleanAccounts()
     return group;
 }
 
+Wallet *Context::wallet() const
+{
+    Q_D(const Context);
+    return d->wallet;
+}
+
 void Context::setWallet(Wallet* wallet)
 {
-    if (m_wallet == wallet) return;
+    Q_D(Context);
+
+    if (d->wallet == wallet) return;
     const auto was_lightning_enabled = lightningEnabled();
-    if (m_wallet) {
-        disconnect(m_wallet, &Wallet::lightningEnabledChanged, this, nullptr);
+    if (d->wallet) {
+        disconnect(d->wallet, &Wallet::lightningEnabledChanged, this, nullptr);
     }
-    m_wallet = wallet;
+    d->wallet = wallet;
     emit walletChanged();
-    if (m_wallet) {
-        connect(m_wallet, &Wallet::lightningEnabledChanged, this, [this] {
+    if (d->wallet) {
+        connect(d->wallet, &Wallet::lightningEnabledChanged, this, [this] {
             if (!lightningEnabled()) {
                 releaseLightningSession();
             }
             emit lightningEnabledChanged();
         });
-        if (!m_bip39 && !m_xpub_hash_id.isEmpty()) {
-            m_wallet->setXPubHashId(m_xpub_hash_id);
-        }
-        if (m_device) {
-            // m_wallet->updateDeviceDetails(m_device->details());
+        if (!d->bip39 && !d->xpub_hash_id.isEmpty()) {
+            d->wallet->setXPubHashId(d->xpub_hash_id);
         }
     }
     updateLightningEnabled(was_lightning_enabled);
@@ -158,21 +179,23 @@ void Context::setWallet(Wallet* wallet)
 
 Session* Context::getOrCreateSession(Network* network)
 {
+    Q_D(Context);
+
     if (!network) return nullptr;
 
-    auto session = m_sessions.value(network);
+    auto session = d->sessions.value(network);
     if (!session) {
         session = SessionManager::instance()->create(network);
         session->setContext(this);
         session->setActive(true);
         connect(session, &Session::autoLogoutTriggered, this, [=, this] {
-            if (m_wallet && !qobject_cast<DeviceData*>(m_wallet->login())) {
+            if (d->wallet && !qobject_cast<DeviceData*>(d->wallet->login())) {
                 emit autoLogout();
             }
         });
         connect(session, &Session::blockEvent, this, [=, this](const QJsonObject& event) {
             auto group = new TaskGroup(this);
-            for (auto account : m_accounts) {
+            for (auto account : d->accounts) {
                 if (account->isAmp2()) continue;
 
                 if (account->session() == session) {
@@ -198,7 +221,7 @@ Session* Context::getOrCreateSession(Network* network)
             auto event_type = event.value("event_type").toString();
             if (event_type == "new") {
                 auto account = getOrCreateAccount(session->network(), pointer);
-            } else if (event_type == "synced" && !m_skip_load_accounts) {
+            } else if (event_type == "synced" && !d->skip_load_accounts) {
                 auto account = getOrCreateAccount(session->network(), pointer);
                 if (!account->synced()) {
                     account->setSynced(true);
@@ -219,7 +242,7 @@ Session* Context::getOrCreateSession(Network* network)
         });
         connect(session, &Session::configChanged, this, [=, this] {
             TwoFactorResetNotification* two_factor_reset_notification = nullptr;
-            for (auto notification : m_notifications) {
+            for (auto notification : d->notifications) {
                 two_factor_reset_notification = qobject_cast<TwoFactorResetNotification*>(notification);
                 if (two_factor_reset_notification) {
                     if (two_factor_reset_notification->network() == session->network()) {
@@ -239,8 +262,8 @@ Session* Context::getOrCreateSession(Network* network)
                 }
             }
         });
-        m_sessions.insert(network, session);
-        m_sessions_list.append(session);
+        d->sessions.insert(network, session);
+        d->sessions_list.append(session);
         emit sessionsChanged();
     }
     return session;
@@ -248,8 +271,10 @@ Session* Context::getOrCreateSession(Network* network)
 
 Session* Context::primarySession()
 {
-    if (m_sessions_list.size() > 0) {
-        return m_sessions_list.first();
+    Q_D(Context);
+
+    if (d->sessions_list.size() > 0) {
+        return d->sessions_list.first();
     } else {
         auto network = primaryNetwork();
         auto session = getOrCreateSession(network);
@@ -259,34 +284,41 @@ Session* Context::primarySession()
 
 void Context::releaseSession(Session* session)
 {
-    qDebug() << Q_FUNC_INFO << session->network()->id();
+    Q_D(Context);
 
-    for (auto account : m_accounts) {
+    for (auto account : d->accounts) {
         if (account->session() == session) {
             qWarning() << Q_FUNC_INFO << "should remove account" << account->network()->id() << account->pointer();
         }
     }
-    m_sessions.take(session->network());
-    m_sessions_list.removeOne(session);
+    d->sessions.take(session->network());
+    d->sessions_list.removeOne(session);
     emit sessionsChanged();
 
     SessionManager::instance()->release(session);
 }
 
+Device* Context::device() const
+{
+    Q_D(const Context);
+    return d->device;
+}
+
 void Context::setDevice(Device* device)
 {
-    if (m_device == device) return;
+    Q_D(Context);
+    if (d->device == device) return;
     const auto was_lightning_enabled = lightningEnabled();
-    m_device = device;
-    if (m_device) {
-        QObject::connect(m_device, &QObject::destroyed, this, [=, this] {
+    d->device = device;
+    if (d->device) {
+        QObject::connect(d->device, &QObject::destroyed, this, [=, this] {
             setDevice(nullptr);
         });
-        if (m_wallet) {
-            auto device_data = qobject_cast<DeviceData*>(m_wallet->login());
+        if (d->wallet) {
+            auto device_data = qobject_cast<DeviceData*>(d->wallet->login());
             if (device_data) {
-                device_data->setDevice(m_device->details());
-                m_wallet->save();
+                device_data->setDevice(d->device->details());
+                d->wallet->save();
             }
         }
     }
@@ -294,19 +326,35 @@ void Context::setDevice(Device* device)
     updateLightningEnabled(was_lightning_enabled);
 }
 
+bool Context::remember() const
+{
+    Q_D(const Context);
+    return d->remember;
+}
+
 void Context::setRemember(bool remember)
 {
-    if (m_remember == remember) return;
-    m_remember = remember;
+    Q_D(Context);
+
+    if (d->remember == remember) return;
+    d->remember = remember;
     emit rememberChanged();
+}
+
+QJsonObject Context::credentials() const
+{
+    Q_D(const Context);
+    return d->credentials;
 }
 
 void Context::setCredentials(const QJsonObject &credentials)
 {
-    if (m_credentials == credentials) return;
+    Q_D(Context);
+
+    if (d->credentials == credentials) return;
     const auto mnemonic = credentials.value("mnemonic").toString().split(" ");
-    const auto mnemonic_changed = m_mnemonic != mnemonic;
-    m_credentials = credentials;
+    const auto mnemonic_changed = d->mnemonic != mnemonic;
+    d->credentials = credentials;
     emit credentialsChanged();
     setMnemonic(mnemonic);
     if (!mnemonic_changed) {
@@ -314,42 +362,74 @@ void Context::setCredentials(const QJsonObject &credentials)
     }
 }
 
+QStringList Context::mnemonic() const
+{
+    Q_D(const Context);
+    return d->mnemonic;
+}
+
 void Context::setMnemonic(const QStringList& mnemonic)
 {
-    if (m_mnemonic == mnemonic) return;
-    Q_ASSERT(m_mnemonic.isEmpty());
-    m_mnemonic = mnemonic;
+    Q_D(Context);
+
+    if (d->mnemonic == mnemonic) return;
+    Q_ASSERT(d->mnemonic.isEmpty());
+    d->mnemonic = mnemonic;
     emit mnemonicChanged();
     emit lightningMnemonicChanged();
 }
 
+bool Context::isWatchonly() const
+{
+    Q_D(const Context);
+    return d->watchonly;
+}
+
 void Context::setWatchonly(bool watchonly)
 {
-    if (m_watchonly == watchonly) return;
+    Q_D(Context);
+
+    if (d->watchonly == watchonly) return;
     const auto was_lightning_enabled = lightningEnabled();
-    m_watchonly = watchonly;
+    d->watchonly = watchonly;
     emit watchonlyChanged();
     updateLightningEnabled(was_lightning_enabled);
 }
 
 QStringList Context::lightningMnemonic() const
 {
-    if (m_bip39) return {};
+    Q_D(const Context);
 
-    const auto source_mnemonic = m_mnemonic.join(' ');
+    if (d->bip39) return {};
+
+    const auto source_mnemonic = d->mnemonic.join(' ');
     if (source_mnemonic.trimmed().isEmpty()) return {};
 
-    const auto source_passphrase = m_credentials.value("bip39_passphrase").toString();
+    const auto source_passphrase = d->credentials.value("bip39_passphrase").toString();
     const auto lightning_mnemonic = DeriveBip85Mnemonic(isMainnet(), source_mnemonic, source_passphrase, 0);
     if (lightning_mnemonic.isEmpty()) return {};
 
     return lightning_mnemonic.split(' ', Qt::SkipEmptyParts);
 }
 
+QList<Session*> Context::getSessions() const
+{
+    Q_D(const Context);
+    return d->sessions.values();
+}
+
+QList<Account*> Context::getAccounts() const
+{
+    Q_D(const Context);
+    return d->accounts;
+}
+
 QList<Network*> Context::getActiveNetworks() const
 {
+    Q_D(const Context);
+
     QList<Network*> networks;
-    for (auto session : m_sessions_list) {
+    for (auto session : d->sessions_list) {
         if (session->isConnected() && session->m_ready) {
             networks.append(session->network());
         }
@@ -359,16 +439,19 @@ QList<Network*> Context::getActiveNetworks() const
 
 Asset* Context::getOrCreateAsset(const QString& id)
 {
-    return AssetManager::instance()->assetWithId(m_deployment, id);
+    Q_D(Context);
+    return AssetManager::instance()->assetWithId(d->deployment, id);
 }
 
 Account* Context::getOrCreateAccount(Network* network, quint32 pointer)
 {
-    Account* account = m_accounts_by_pointer.value({ network, pointer });
+    Q_D(Context);
+
+    Account* account = d->accounts_by_pointer.value({ network, pointer });
     if (!account) {
         account = new Account(network, pointer, this);
-        m_accounts_by_pointer.insert({ network, pointer }, account);
-        m_accounts.append(account);
+        d->accounts_by_pointer.insert({ network, pointer }, account);
+        d->accounts.append(account);
         emit accountsChanged();
     }
     return account;
@@ -385,11 +468,14 @@ Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
 
 Account* Context::getAccountByPointer(Network* network, int pointer) const
 {
-    return m_accounts_by_pointer.value({ network, pointer });
+    Q_D(const Context);
+
+    return d->accounts_by_pointer.value({ network, pointer });
 }
 
 Account* Context::getOrCreateAmp2Account(Network* network)
 {
+    Q_D(Context);
     // AMP2 has no gdk subaccount, so reserve a synthetic pointer that gdk never
     // allocates to track the account alongside the gdk ones. The lwk wollet
     // lives on LwkAmp2AccountController, not the Account, so the generic path
@@ -400,49 +486,56 @@ Account* Context::getOrCreateAmp2Account(Network* network)
         { "type", "amp2" },
         { "name", "AMP Liquid" },
         { "hidden", false },
-        { "amp2_wid", m_wallet ? m_wallet->m_amp2_wid : QString() },
+        { "amp2_wid", d->wallet ? d->wallet->m_amp2_wid : QString() },
     });
 }
 
 LwkAmp2AccountController* Context::amp2AccountController()
 {
-    if (!m_wallet || m_wallet->m_amp2_wid.isEmpty()) return nullptr;
+    Q_D(Context);
+    if (!d->wallet || d->wallet->m_amp2_wid.isEmpty()) return nullptr;
 
-    if (!m_amp2_account_controller) {
-        m_amp2_account_controller = new LwkAmp2AccountController(this);
-        m_amp2_account_controller->setContext(this);
+    if (!d->amp2_account_controller) {
+        d->amp2_account_controller = new LwkAmp2AccountController(this);
+        d->amp2_account_controller->setContext(this);
     }
 
-    return m_amp2_account_controller;
+    return d->amp2_account_controller;
 }
 
 ChainTransaction* Context::getOrCreateChainTransaction(const QString &hash)
 {
-    auto chain_transaction = m_chain_transactions.value(hash);
+    Q_D(Context);
+
+    auto chain_transaction = d->chain_transactions.value(hash);
     if (!chain_transaction) {
         chain_transaction = new ChainTransaction(hash, this);
-        m_chain_transactions.insert(hash, chain_transaction);
+        d->chain_transactions.insert(hash, chain_transaction);
     }
     return chain_transaction;
 }
 
 QList<ContextTransaction*> Context::getTransaction(const QString &hash) const
 {
-    return m_transaction_map.values(hash);
+    Q_D(const Context);
+
+    return d->transaction_map.values(hash);
 }
 
 void Context::updateLightningTransactions(const std::vector<LightningPayment>& payments)
 {
-    auto dangling_transactions = m_lightning_transactions.keys();
+    Q_D(Context);
+
+    auto dangling_transactions = d->lightning_transactions.keys();
 
     for (const auto& payment : payments) {
         const auto id = payment.id;
         if (id.isEmpty()) continue;
 
-        auto transaction = m_lightning_transactions.value(id);
+        auto transaction = d->lightning_transactions.value(id);
         if (!transaction) {
             transaction = new LightningTransaction(id, this);
-            m_lightning_transactions.insert(id, transaction);
+            d->lightning_transactions.insert(id, transaction);
         }
 
         transaction->updateFromPayment(payment);
@@ -452,7 +545,7 @@ void Context::updateLightningTransactions(const std::vector<LightningPayment>& p
 
     while (!dangling_transactions.isEmpty()) {
         const auto id = dangling_transactions.takeFirst();
-        auto transaction = m_lightning_transactions.take(id);
+        auto transaction = d->lightning_transactions.take(id);
         if (!transaction) continue;
         removeTransaction(transaction);
         transaction->deleteLater();
@@ -461,8 +554,16 @@ void Context::updateLightningTransactions(const std::vector<LightningPayment>& p
     emit transactionUpdated();
 }
 
+QStandardItemModel* Context::paymentModel() const
+{
+    Q_D(const Context);
+    return d->payment_model;
+}
+
 Payment* Context::getOrCreatePayment(const QString &id)
 {
+    Q_D(Context);
+
     auto payment = m_payments.value(id);
     if (!payment) {
         payment = new Payment(this);
@@ -475,47 +576,67 @@ Payment* Context::getOrCreatePayment(const QString &id)
             item->setData(payment->updatedAt(), Qt::UserRole + 1);
         });
 
-        m_payment_item.insert(payment, item);
-        m_payment_model->appendRow(item);
+        d->payment_item.insert(payment, item);
+        d->payment_model->appendRow(item);
     }
     return payment;
 }
 
+TaskDispatcher *Context::dispatcher() const
+{
+    Q_D(const Context);
+    return d->dispatcher;
+}
+
+QString Context::xpubHashId() const
+{
+    Q_D(const Context);
+    return d->xpub_hash_id;
+}
+
 void Context::setXPubHashId(const QString& xpub_hash_id)
 {
-    if (m_xpub_hash_id == xpub_hash_id) return;
-    Q_ASSERT(m_xpub_hash_id.isEmpty());
-    m_xpub_hash_id = xpub_hash_id;
-    if (!m_bip39 && m_wallet) {
-        m_wallet->setXPubHashId(xpub_hash_id);
+    Q_D(Context);
+
+    if (d->xpub_hash_id == xpub_hash_id) return;
+    Q_ASSERT(d->xpub_hash_id.isEmpty());
+    d->xpub_hash_id = xpub_hash_id;
+    if (!d->bip39 && d->wallet) {
+        d->wallet->setXPubHashId(xpub_hash_id);
     }
     emit xpubHashIdChanged();
 }
 
 LightningSession* Context::lightningSession()
 {
-    if (m_xpub_hash_id.isEmpty()) return nullptr;
+    Q_D(Context);
 
-    if (!m_lightning_session) {
-        m_lightning_session = new LightningSession(this);
-        connect(m_lightning_session, &LightningSession::nodeInfoChanged, this, &Context::lightningNodeInfoChanged);
-        connect(m_lightning_session, &LightningSession::paymentsUpdated, this, [this](const std::vector<LightningPayment>& payments) {
+    if (d->xpub_hash_id.isEmpty()) return nullptr;
+
+    if (!d->lightning_session) {
+        d->lightning_session = new LightningSession(this);
+        connect(d->lightning_session, &LightningSession::nodeInfoChanged, this, &Context::lightningNodeInfoChanged);
+        connect(d->lightning_session, &LightningSession::paymentsUpdated, this, [this](const std::vector<LightningPayment>& payments) {
             updateLightningTransactions(payments);
         });
         emit lightningSessionChanged();
     }
 
-    return m_lightning_session;
+    return d->lightning_session;
 }
 
 QJsonObject Context::lightningNodeInfo() const
 {
-    return m_lightning_session ? m_lightning_session->nodeInfo() : QJsonObject{};
+    Q_D(const Context);
+
+    return d->lightning_session ? d->lightning_session->nodeInfo() : QJsonObject{};
 }
 
 bool Context::lightningEnabled() const
 {
-    return !m_bip39 && isMainnet() && !m_watchonly && !m_device && m_wallet && m_wallet->lightningEnabled();
+    Q_D(const Context);
+
+    return !d->bip39 && isMainnet() && !d->watchonly && !d->device && d->wallet && d->wallet->lightningEnabled();
 }
 
 void Context::updateLightningEnabled(bool was_enabled)
@@ -530,24 +651,27 @@ void Context::updateLightningEnabled(bool was_enabled)
 
 void Context::setLightningEnabled(bool enabled)
 {
-    if (!m_wallet || m_wallet->lightningEnabled() == enabled) return;
-    m_wallet->setLightningEnabled(enabled);
+    Q_D(Context);
+    if (!d->wallet || d->wallet->lightningEnabled() == enabled) return;
+    d->wallet->setLightningEnabled(enabled);
 }
 
 void Context::releaseLightningSession()
 {
-    if (!m_lightning_session) return;
+    Q_D(Context);
 
-    auto session = m_lightning_session;
-    m_lightning_session = nullptr;
+    if (!d->lightning_session) return;
+
+    auto session = d->lightning_session;
+    d->lightning_session = nullptr;
     session->disconnectNode();
     delete session;
 
     emit lightningSessionChanged();
     emit lightningNodeInfoChanged();
 
-    const auto transactions = m_lightning_transactions.values();
-    m_lightning_transactions.clear();
+    const auto transactions = d->lightning_transactions.values();
+    d->lightning_transactions.clear();
     for (auto transaction : transactions) {
         removeTransaction(transaction);
         transaction->deleteLater();
@@ -555,14 +679,24 @@ void Context::releaseLightningSession()
     emit transactionUpdated();
 }
 
+QList<Notification*> Context::getNotifications() const
+{
+    Q_D(const Context);
+    return d->notifications;
+}
+
 QQmlListProperty<Notification> Context::notifications()
 {
-    return { this, &m_notifications };
+    Q_D(Context);
+
+    return { this, &d->notifications };
 }
 
 void Context::addNotification(Notification* notification)
 {
-    m_notifications.append(notification);
+    Q_D(Context);
+
+    d->notifications.append(notification);
     emit notificationsChanged();
     emit notificationAdded(notification);
     connect(notification, &Notification::triggered, this, [=, this] {
@@ -572,16 +706,19 @@ void Context::addNotification(Notification* notification)
 
 void Context::removeNotification(Notification* notification)
 {
+    Q_D(Context);
+
     emit notificationRemoved(notification);
-    m_notifications.removeOne(notification);
+    d->notifications.removeOne(notification);
     emit notificationsChanged();
 }
 
 Network *Context::primaryNetwork()
 {
-    for (auto network : NetworkManager::instance()->networkForDeployment(m_deployment)) {
-        if (m_device) {
-            if (m_device->supportsNetwork(network)) return network;
+    Q_D(Context);
+    for (auto network : NetworkManager::instance()->networkForDeployment(d->deployment)) {
+        if (d->device) {
+            if (d->device->supportsNetwork(network)) return network;
         } else {
             return network;
         }
@@ -692,20 +829,21 @@ void Context::addTestUpdateNotification()
 
 void Context::checkAndAddBackupWarningNotification()
 {
-    if (!m_wallet || !qobject_cast<PinData*>(m_wallet->login())) {
+    Q_D(Context);
+    if (!d->wallet || !qobject_cast<PinData*>(d->wallet->login())) {
         return;
     }
 
     auto settings = Settings::instance();
     const auto event = QJsonObject{
-        { "walletId", m_xpub_hash_id },
+        { "walletId", d->xpub_hash_id },
         { "status", "pending" },
         { "type", "wallet_backup" }
     };
     const bool event_registered = settings->isEventRegistered(event);
 
     BackupNotification* backup_notification{nullptr};
-    for (auto notification : m_notifications) {
+    for (auto notification : d->notifications) {
         backup_notification = qobject_cast<BackupNotification*>(notification);
         if (backup_notification) break;
     }
@@ -721,6 +859,8 @@ void Context::checkAndAddBackupWarningNotification()
 
 void Context::loadNetwork(TaskGroup *group, Network *network)
 {
+    Q_D(Context);
+
     auto session = getOrCreateSession(network);
     if (!session->m_ready) {
         Q_UNREACHABLE();
@@ -733,7 +873,7 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
 
-    if (m_skip_load_accounts) {
+    if (d->skip_load_accounts) {
         createStandardAccount(group, network);
         return;
     }
@@ -805,18 +945,20 @@ QJsonObject device_details_from_device(Device* device);
 
 void Context::loginNetwork(TaskGroup *group, Network *network)
 {
+    Q_D(Context);
+
     auto session = getOrCreateSession(network);
     auto connect_session = new ConnectTask(10000, session);
     LoginTask* login{nullptr};
 
-    if (m_device) {
-        login = new LoginTask(device_details_from_device(m_device), session);
-    } else if (m_credentials.contains("mnemonic")) {
-        login = new LoginTask(m_credentials, {}, session);
+    if (d->device) {
+        login = new LoginTask(device_details_from_device(d->device), session);
+    } else if (d->credentials.contains("mnemonic")) {
+        login = new LoginTask(d->credentials, {}, session);
     }
 
-    if (network->isLiquid() && !m_assets_loaded) {
-        m_assets_loaded = true;
+    if (network->isLiquid() && !d->assets_loaded) {
+        d->assets_loaded = true;
         auto load_assets = new LoadAssetsTask(false, session);
         connect_session->then(load_assets);
         load_assets->then(login);
@@ -828,11 +970,11 @@ void Context::loginNetwork(TaskGroup *group, Network *network)
             // TODO
             // setError("session", "id_connection_failed");
             releaseSession(session);
-            if (!m_outage_notification) {
-                m_outage_notification = new OutageNotification(this);
-                addNotification(m_outage_notification);
+            if (!d->outage_notification) {
+                d->outage_notification = new OutageNotification(this);
+                addNotification(d->outage_notification);
             }
-            m_outage_notification->add(network);
+            d->outage_notification->add(network);
         }
     });
 
@@ -844,12 +986,12 @@ void Context::loginNetwork(TaskGroup *group, Network *network)
     }
 
     connect(login, &Task::finished, this, [=, this] {
-        if (m_outage_notification) {
-            m_outage_notification->remove(network);
-            if (m_outage_notification->isEmpty()) {
-                removeNotification(m_outage_notification);
-                // TODO m_outage_notification->deleteLater();
-                m_outage_notification = nullptr;
+        if (d->outage_notification) {
+            d->outage_notification->remove(network);
+            if (d->outage_notification->isEmpty()) {
+                removeNotification(d->outage_notification);
+                // TODO d->outage_notification->deleteLater();
+                d->outage_notification = nullptr;
             }
         }
         loadNetwork(group, network);
@@ -866,9 +1008,11 @@ void Context::loginNetwork(TaskGroup *group, Network *network)
 
 void Context::refreshAccounts()
 {
+    Q_D(Context);
+
     auto group = new TaskGroup(this);
     group->setName("id_loading_accounts");
-    for (auto session : m_sessions_list) {
+    for (auto session : d->sessions_list) {
         auto load_accounts = new LoadAccountsTask(!isWatchonly(), session);
         connect(load_accounts, &Task::finished, this, [=, this] {
             for (auto account : load_accounts->accounts()) {
@@ -877,21 +1021,29 @@ void Context::refreshAccounts()
         });
         group->add(load_accounts);
     }
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
     connect(group, &TaskGroup::finished, group, &QObject::deleteLater);
+}
+
+QStandardItemModel* Context::transactionModel() const
+{
+    Q_D(const Context);
+    return d->transaction_model;
 }
 
 void Context::addTransaction(ContextTransaction* transaction)
 {
-    auto item = m_transaction_item.value(transaction);
+    Q_D(Context);
+
+    auto item = d->transaction_item.value(transaction);
 
     if (!item) {
-        m_transaction_map.insert(transaction->id(), transaction);
+        d->transaction_map.insert(transaction->id(), transaction);
 
         item = new QStandardItem;
         item->setData(QVariant::fromValue(transaction), Qt::UserRole);
-        m_transaction_item.insert(transaction, item);
-        m_transaction_model->appendRow(item);
+        d->transaction_item.insert(transaction, item);
+        d->transaction_model->appendRow(item);
     }
 
     item->setData(QVariant::fromValue(transaction->timestamp()), Qt::UserRole + 1);
@@ -899,40 +1051,58 @@ void Context::addTransaction(ContextTransaction* transaction)
 
 void Context::removeTransaction(ContextTransaction* transaction)
 {
-    auto item = m_transaction_item.take(transaction);
-    m_transaction_map.remove(transaction->id(), transaction);
+    Q_D(Context);
+
+    auto item = d->transaction_item.take(transaction);
+    d->transaction_map.remove(transaction->id(), transaction);
 
     if (item) {
-        m_transaction_model->removeRow(item->row());
+        d->transaction_model->removeRow(item->row());
     }
+}
+
+QStandardItemModel* Context::addressModel() const
+{
+    Q_D(const Context);
+    return d->address_model;
 }
 
 Address* Context::getOrCreateAddress(const QString& value)
 {
-    Address* address = m_address_map.value(value);
+    Q_D(Context);
+
+    Address* address = d->address_map.value(value);
     if (address) return address;
 
     address = new Address(this, value);
-    m_address_map.insert(value, address);
+    d->address_map.insert(value, address);
 
     auto item = new QStandardItem;
     item->setData(QVariant::fromValue(address), Qt::UserRole);
     item->setData(value, Qt::UserRole + 1);
-    m_address_item.insert(address, item);
-    m_address_model->appendRow(item);
+    d->address_item.insert(address, item);
+    d->address_model->appendRow(item);
 
     return address;
 }
 
+QStandardItemModel* Context::coinModel() const
+{
+    Q_D(const Context);
+    return d->coin_model;
+}
+
 void Context::addCoin(Output* coin)
 {
-    auto item = m_coin_item.value(coin);
+    Q_D(Context);
+
+    auto item = d->coin_item.value(coin);
 
     if (!item) {
         item = new QStandardItem;
         item->setData(QVariant::fromValue(coin), Qt::UserRole);
-        m_coin_item.insert(coin, item);
-        m_coin_model->appendRow(item);
+        d->coin_item.insert(coin, item);
+        d->coin_model->appendRow(item);
     }
 
     auto block_height = coin->data().value("block_height").toInt();
@@ -941,12 +1111,16 @@ void Context::addCoin(Output* coin)
 
 QQmlListProperty<Account> Context::accounts()
 {
-    return { this, &m_accounts };
+    Q_D(Context);
+
+    return { this, &d->accounts };
 }
 
 QQmlListProperty<Session> Context::sessions()
 {
-    return { this, &m_sessions_list };
+    Q_D(Context);
+
+    return { this, &d->sessions_list };
 }
 
 static ContextManager* g_context_manager{nullptr};

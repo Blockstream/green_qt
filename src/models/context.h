@@ -41,6 +41,7 @@ protected:
     const QString m_id;
 };
 
+class ContextPrivate;
 class Context : public QObject
 {
     Q_OBJECT
@@ -63,45 +64,46 @@ class Context : public QObject
     Q_PROPERTY(QJsonObject lightningNodeInfo READ lightningNodeInfo NOTIFY lightningNodeInfoChanged)
     Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(QQmlListProperty<Notification> notifications READ notifications NOTIFY notificationsChanged)
+    Q_DECLARE_PRIVATE(Context)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     Context(const QString& deployment, bool bip39, QObject* parent);
     ~Context();
 
-    QString deployment() const { return m_deployment; }
-    bool isMainnet() const { return m_deployment == "mainnet"; }
-    bool bip39() const { return m_bip39; }
+    QString deployment() const;
+    bool isMainnet() const;
+    bool bip39() const;
 
     void setSkipLoadAccounts(bool skip_load_accounts);
 
     TaskGroup* cleanAccounts();
 
-    Wallet* wallet() const { return m_wallet; }
+    Wallet* wallet() const;
     void setWallet(Wallet* wallet);
 
     Q_INVOKABLE Session* getOrCreateSession(Network* network);
     Session* primarySession();
     void releaseSession(Session *session);
 
-    Device* device() const { return m_device; }
+    Device* device() const;
     void setDevice(Device* device);
 
-    bool remember() const { return m_remember; }
+    bool remember() const;
     void setRemember(bool remember);
 
-    QJsonObject credentials() const { return m_credentials; }
+    QJsonObject credentials() const;
     void setCredentials(const QJsonObject& credentials);
 
-    QStringList mnemonic() const { return m_mnemonic; }
+    QStringList mnemonic() const;
     void setMnemonic(const QStringList& mnemonic);
 
-    bool isWatchonly() const { return m_watchonly; }
+    bool isWatchonly() const;
     void setWatchonly(bool watchonly);
 
     QList<Network*> getActiveNetworks() const;
-    QList<Session*> getSessions() const { return m_sessions.values(); }
-    QList<Account*> getAccounts() const { return m_accounts; }
+    QList<Session*> getSessions() const;
+    QList<Account*> getAccounts() const;
 
     QQmlListProperty<Session> sessions();
     QQmlListProperty<Account> accounts();
@@ -124,9 +126,9 @@ public:
     Address* getOrCreateAddress(const QString& address);
     Payment* getOrCreatePayment(const QString& id);
 
-    TaskDispatcher* dispatcher() const { return m_dispatcher; }
+    TaskDispatcher* dispatcher() const;
 
-    QString xpubHashId() const { return m_xpub_hash_id; }
+    QString xpubHashId() const;
     void setXPubHashId(const QString& xpub_hash_id);
 
     bool lightningEnabled() const;
@@ -136,7 +138,7 @@ public:
     LightningSession* lightningSession();
     QJsonObject lightningNodeInfo() const;
 
-    QList<Notification*> getNotifications() const { return m_notifications; }
+    QList<Notification*> getNotifications() const;
     QQmlListProperty<Notification> notifications();
     void addNotification(Notification* notification);
     Q_INVOKABLE void removeNotification(Notification* notification);
@@ -189,65 +191,30 @@ private:
     void updateLightningEnabled(bool was_enabled);
     void updateLightningTransactions(const std::vector<LightningPayment>& payments);
 
-    const QString m_deployment;
-    const bool m_bip39;
-    bool m_skip_load_accounts{false};
-    Wallet* m_wallet{nullptr};
-    Device* m_device{nullptr};
-    bool m_remember{true};
-    QString m_xpub_hash_id;
-    QJsonObject m_credentials;
-    QStringList m_mnemonic;
-    QMap<Network*, Session*> m_sessions;
-    QList<Session*> m_sessions_list;
-    bool m_watchonly{false};
-
-    QList<Notification*> m_notifications;
-    OutageNotification* m_outage_notification{nullptr};
-    bool m_assets_loaded{false};
+    ContextPrivate* const d_ptr;
 
 public:
     QMap<QString, Asset*> m_assets;
-    QList<Account*> m_accounts;
-    QMap<QPair<Network*, quint32>, Account*> m_accounts_by_pointer;
-
-    TaskDispatcher* const m_dispatcher;
 
     QJsonObject m_hw_device;
 
-    QMap<QString, ChainTransaction*> m_chain_transactions;
-    QMap<QString, LightningTransaction*> m_lightning_transactions;
-    QMap<ContextTransaction*, QStandardItem*> m_transaction_item;
-    QMultiMap<QString, ContextTransaction*> m_transaction_map;
-    QStandardItemModel* const m_transaction_model;
     void addTransaction(ContextTransaction* transaction);
     void removeTransaction(ContextTransaction* transaction);
-    QStandardItemModel* transactionModel() const { return m_transaction_model; }
+    QStandardItemModel* transactionModel() const;
 
-    QMap<Address*, QStandardItem*> m_address_item;
-    QMap<QString, Address*> m_address_map;
-    QStandardItemModel* const m_address_model;
-    QStandardItemModel* addressModel() const { return m_address_model; }
+    QStandardItemModel* addressModel() const;
 
-    QMap<Output*, QStandardItem*> m_coin_item;
-    QStandardItemModel* const m_coin_model;
     void addCoin(Output* coin);
-    QStandardItemModel* coinModel() const { return m_coin_model; }
+    QStandardItemModel* coinModel() const;
 
     QMap<QString, Payment*> m_payments;
-    QMap<Payment*, QStandardItem*> m_payment_item;
-    QStandardItemModel* const m_payment_model;
-    QStandardItemModel* paymentModel() const { return m_payment_model; }
+    QStandardItemModel* paymentModel() const;
 
     void addSwap(Swap* swap);
     void removeSwap(Swap* swap);
     std::shared_ptr<lwk::BoltzSession> m_boltz_session;
     QJsonObject m_boltz_swaps_infos;
     QList<Swap*> m_swaps;
-
-    LightningSession* m_lightning_session{nullptr};
-
-    LwkAmp2AccountController* m_amp2_account_controller{nullptr};
 };
 
 class ContextManager : public QObject
