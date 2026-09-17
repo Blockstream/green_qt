@@ -714,7 +714,6 @@ JadeDevice::State JadeDeviceGetState(const QVariantMap& version_info)
 void JadeDevice::setVersionInfo(const QVariantMap& version_info)
 {
     if (m_version_info == version_info) return;
-    qDebug() << Q_FUNC_INFO << "before: " << m_version_info << "after:" << version_info;
     m_version_info = version_info;
     emit versionInfoChanged();
     setState(JadeDeviceGetState(m_version_info));
