@@ -40,6 +40,7 @@ StackViewPage {
             Layout.maximumWidth: 300
             id: data_field
             focus: true
+            inputMethodHints: self.method === 'email' ? (Qt.ImhEmailCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText) : Qt.ImhNone
             horizontalAlignment: TextInput.AlignHCenter
             selectByMouse: true
             onAccepted: change_action.trigger()

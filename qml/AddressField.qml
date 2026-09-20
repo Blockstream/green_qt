@@ -11,6 +11,7 @@ TTextField {
     bottomPadding: 18
     leftPadding: !self.readOnly && self.text.length > 0 ? 60 : 18
     rightPadding: (options_layout.visible ? options_layout.width + 10 : 0) + 18
+    inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
     CircleButton {
         focusPolicy: Qt.NoFocus
         anchors.verticalCenter: parent.verticalCenter

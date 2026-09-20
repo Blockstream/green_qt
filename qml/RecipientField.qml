@@ -12,6 +12,7 @@ GTextArea {
     focus: true
     rightPadding: 15
     bottomPadding: 50
+    inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
     RecipientParser {
         id: parser
         input: field.text.trim()

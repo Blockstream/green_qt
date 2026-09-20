@@ -207,6 +207,7 @@ StackViewPage {
         bottomPadding: 14
         leftPadding: 15
         rightPadding: 15 + options_layout.width + 10
+        inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
         font.pixelSize: 14
         font.weight: 500
         wrapMode: TextEdit.Wrap

@@ -53,6 +53,7 @@ WalletDrawer {
                                 text: Math.round(self.session.settings.nlocktime / 144 || 0)
                                 Layout.preferredHeight: 52
                                 validator: IntValidator { bottom: 1; top: 200000 / 144; }
+                                inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
                                     if (activeFocus) nlocktime_blocks.text = Math.round(text * 144)
                                 }
@@ -68,6 +69,7 @@ WalletDrawer {
                                 text: self.session.settings.nlocktime || 0
                                 Layout.preferredHeight: 52
                                 validator: IntValidator { bottom: 144; top: 200000; }
+                                inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
                                     if (activeFocus) nlocktime_days.text = Math.round(text / 144)
                                 }

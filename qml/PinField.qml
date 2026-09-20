@@ -43,6 +43,7 @@ TextField {
     activeFocusOnTab: true
     bottomPadding: 0
     echoMode: TextField.NoEcho
+    inputMethodHints: Qt.ImhDigitsOnly | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
     leftPadding: 0
     opacity: self.enabled ? 1 : 0.4
     rightPadding: 0

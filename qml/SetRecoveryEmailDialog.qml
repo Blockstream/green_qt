@@ -45,6 +45,7 @@ WalletDrawer {
                             id: email_field
                             Layout.fillWidth: true
                             Layout.preferredHeight: 52
+                            inputMethodHints: Qt.ImhEmailCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                             placeholderText: qsTrId('id_enter_your_email_address')
                         }
                         FixedErrorBadge {

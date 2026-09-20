@@ -60,6 +60,7 @@ WalletDrawer {
             TTextField {
                 Layout.fillWidth: true
                 id: username_field
+                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                 text: self.session.username
                 validator: FieldValidator {
                 }
@@ -75,6 +76,7 @@ WalletDrawer {
                 Layout.fillWidth: true
                 id: password_field
                 echoMode: TextField.Password
+                inputMethodHints: Qt.ImhSensitiveData | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                 validator: FieldValidator {
                 }
                 onTextEdited: {

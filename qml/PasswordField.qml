@@ -4,6 +4,7 @@ import QtQuick.Controls
 TextField {
     id: self
     echoMode: TextField.Password
+    inputMethodHints: Qt.ImhSensitiveData | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
     topPadding: 14
     bottomPadding: 13
     leftPadding: 15

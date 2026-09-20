@@ -14,6 +14,7 @@ TextField {
     font.pixelSize: 14
     font.weight: 500
     wrapMode: TextEdit.Wrap
+    inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
     background: Rectangle {
         color: Qt.lighter('#262626', self.hovered ? 1.2 : 1)
         radius: 5

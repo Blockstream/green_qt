@@ -17,6 +17,7 @@ TTextField {
     }
     id: self
     leftPadding: country_button.width + 15
+    inputMethodHints: Qt.ImhDialableCharactersOnly
     Countries {
         id: countries
     }

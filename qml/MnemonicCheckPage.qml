@@ -101,6 +101,7 @@ StackViewPage {
                     bottomInset: 0
                     leftPadding: 50
                     rightPadding: 40
+                    inputMethodHints: Qt.ImhSensitiveData | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                     font.pixelSize: 14
                     font.weight: 400
                     focus: !parent.collapsed && !parent.match

@@ -46,6 +46,7 @@ WalletDrawer {
                 TTextField {
                     Layout.fillWidth: true
                     id: email_field
+                    inputMethodHints: Qt.ImhEmailCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                     onAccepted: next_action.trigger()
                 }
                 PrimaryButton {

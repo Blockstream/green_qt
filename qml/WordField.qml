@@ -45,6 +45,7 @@ TextField {
     }
 
     enabled: word.enabled
+    inputMethodHints: Qt.ImhSensitiveData | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
     leftPadding: 40
     rightPadding: 10
     topPadding: 10

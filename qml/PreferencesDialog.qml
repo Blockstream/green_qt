@@ -294,6 +294,7 @@ AbstractDialog {
                     TTextField {
                         Layout.fillWidth: true
                         enabled: Settings.useProxy
+                        inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                         text: Settings.proxyHost
                         onEditingFinished: {
                             Settings.proxyHost = text
@@ -301,6 +302,7 @@ AbstractDialog {
                     }
                     TTextField {
                         enabled: Settings.useProxy
+                        inputMethodHints: Qt.ImhDigitsOnly
                         text: Settings.proxyPort
                         onEditingFinished: {
                             Settings.proxyPort = text
@@ -346,6 +348,7 @@ AbstractDialog {
                         TTextField {
                             Layout.fillWidth: true
                             enabled: Settings.usePersonalNode
+                            inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                             text: Settings.bitcoinElectrumUrl
                             onTextChanged: Settings.bitcoinElectrumUrl = text
                         }
@@ -358,6 +361,7 @@ AbstractDialog {
                             Layout.fillWidth: true
                             enabled: Settings.usePersonalNode
                             visible: Settings.enableTestnet
+                            inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                             text: Settings.testnetElectrumUrl
                             onTextChanged: Settings.testnetElectrumUrl = text
                         }
@@ -368,6 +372,7 @@ AbstractDialog {
                         TTextField {
                             Layout.fillWidth: true
                             enabled: Settings.usePersonalNode
+                            inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                             text: Settings.liquidElectrumUrl
                             onTextChanged: Settings.liquidElectrumUrl = text
                         }
@@ -380,6 +385,7 @@ AbstractDialog {
                             Layout.fillWidth: true
                             enabled: Settings.usePersonalNode
                             visible: Settings.enableTestnet
+                            inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                             text: Settings.liquidTestnetElectrumUrl
                             onTextChanged: Settings.liquidTestnetElectrumUrl = text
                         }
@@ -399,6 +405,7 @@ AbstractDialog {
                     Layout.fillWidth: true
                     id: gap_limit_field
                     error: !acceptableInput
+                    inputMethodHints: Qt.ImhDigitsOnly
                     text: Settings.gapLimit
                     validator: IntValidator {
                         bottom: 1

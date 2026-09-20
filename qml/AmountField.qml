@@ -145,6 +145,7 @@ TTextField {
     }
     validator: AmountValidator {
     }
+    inputMethodHints: Qt.ImhFormattedNumbersOnly
     horizontalAlignment: TextInput.AlignHCenter
     font.pixelSize: 24
     font.weight: 500
