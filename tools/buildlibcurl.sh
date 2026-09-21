@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-COMMIT=400fffa90f30c7a2dc762fa33009d24851bd2016 # curl-8_17_0
+COMMIT=01346829096c61b372692f6dc43ffa778c6caccd # curl-8_22_0
 
 mkdir -p build && cd build
 
