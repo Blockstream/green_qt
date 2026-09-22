@@ -1,6 +1,6 @@
 configure_file(config.h.in "${CMAKE_CURRENT_BINARY_DIR}/config.h" @ONLY)
 
-add_library(blockstream_core STATIC
+target_sources(blockstream_core PRIVATE
     bip85.h bip85.cpp
     profile.h profile.cpp
     util.h util.cpp

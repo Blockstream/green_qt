@@ -1,4 +1,4 @@
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     account.h account.cpp
     address.h address.cpp
     asset.h asset.cpp
@@ -13,5 +13,3 @@ target_sources(${APP_TARGET} PRIVATE
     walletlistmodel.h walletlistmodel.cpp
     walletmanager.h walletmanager.cpp
 )
-
-target_include_directories(${APP_TARGET} PRIVATE .)

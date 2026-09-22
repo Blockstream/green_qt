@@ -134,5 +134,5 @@ void LightningLnurlTest::userFacingErrorPassthrough()
     QCOMPARE(LightningLnurlUserFacingError(QStringLiteral("Payment failed")), QStringLiteral("Payment failed"));
 }
 
-QTEST_MAIN(LightningLnurlTest)
+QTEST_GUILESS_MAIN(LightningLnurlTest)
 #include "tst_lightninglnurl.moc"

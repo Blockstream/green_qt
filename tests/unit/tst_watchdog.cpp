@@ -98,5 +98,5 @@ void WatchdogTest::crashedProcessIsRestarted()
 
 #endif
 
-QTEST_MAIN(WatchdogTest)
+QTEST_GUILESS_MAIN(WatchdogTest)
 #include "tst_watchdog.moc"

@@ -330,7 +330,7 @@ set(QML_FILES
 
 if (GREEN_NO_RESOURCES)
     set(QML_FILES_2)
-    target_compile_definitions(${APP_TARGET} PRIVATE SOURCE_DIR=${CMAKE_SOURCE_DIR})
+    target_compile_definitions(blockstream_core PUBLIC SOURCE_DIR=${CMAKE_SOURCE_DIR})
 else()
     set(QML_FILES_2 ${QML_FILES})
 endif()

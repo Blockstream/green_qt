@@ -17,9 +17,11 @@ include(cmake/AppOptions.cmake)
 include(cmake/AppDependencies.cmake)
 include(cmake/PlatformConfig.cmake)
 
+qt_add_library(blockstream_core STATIC)
 qt_add_executable(${APP_TARGET} WIN32 MACOSX_BUNDLE)
 
 add_subdirectory(src)
+include(cmake/AppLib.cmake)
 include(cmake/AppTarget.cmake)
 
 add_subdirectory(qml)

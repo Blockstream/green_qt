@@ -1,10 +1,11 @@
 add_subdirectory(core)
-target_link_libraries(${APP_TARGET} PRIVATE blockstream_core)
-
 add_subdirectory(models)
 
 target_sources(${APP_TARGET} PRIVATE
     main.cpp
+)
+
+target_sources(blockstream_core PRIVATE
     application.h application.cpp
     applicationcontroller.h applicationcontroller.cpp
     green.h
@@ -12,7 +13,7 @@ target_sources(${APP_TARGET} PRIVATE
     watchdog.h watchdog.cpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     activity.h activity.cpp
     progress.h progress.cpp
     connectable.h
@@ -21,7 +22,7 @@ target_sources(${APP_TARGET} PRIVATE
     session.h session.cpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     accountcontroller.h accountcontroller.cpp
     controller.h controller.cpp
     createaccountcontroller.h createaccountcontroller.cpp
@@ -52,7 +53,7 @@ target_sources(${APP_TARGET} PRIVATE
     chainswapcontroller.h chainswapcontroller.cpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     appupdatecontroller.h appupdatecontroller.cpp
     ga.h ga.cpp
     httpmanager.h httpmanager.cpp
@@ -67,7 +68,7 @@ target_sources(${APP_TARGET} PRIVATE
     promo.h promo.cpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     clipboard.h clipboard.cpp
     convert.h convert.cpp
     json.h json.cpp
@@ -80,7 +81,7 @@ target_sources(${APP_TARGET} PRIVATE
     swap.h swap.cpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     device.h device_p.h device.cpp
     deviceactivities.h deviceactivities.cpp
     devicesession.h devicesession.cpp
@@ -102,7 +103,7 @@ target_sources(${APP_TARGET} PRIVATE
     jade/deviceinfo.h jade/deviceinfo.cpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     ledger/ledgerdevice.h ledger/ledgerdevice.cpp
     ledger/ledgergetblindingkeyactivity.h ledger/ledgergetblindingkeyactivity.cpp
     ledger/ledgergetblindingnonceactivity.h ledger/ledgergetblindingnonceactivity.cpp
@@ -112,7 +113,7 @@ target_sources(${APP_TARGET} PRIVATE
     ledger/ledgersigntransactionactivity.h ledger/ledgersigntransactionactivity.cpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     lwk/lwk.cpp
     lwk/lwk.hpp
     lwk/lwk_scaffolding.hpp
@@ -120,13 +121,13 @@ target_sources(${APP_TARGET} PRIVATE
     boltzloadswapstask.h boltzloadswapstask.cpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     glsdk/glsdk.cpp
     glsdk/glsdk.hpp
     glsdk/glsdk_scaffolding.hpp
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     lightning/lightningclient.cpp lightning/lightningclient.h
     lightning/lightningenablecontroller.cpp lightning/lightningenablecontroller.h
     lightning/lightninglnurl.cpp lightning/lightninglnurl.h
@@ -138,7 +139,7 @@ target_sources(${APP_TARGET} PRIVATE
     lightning/lightningutil.h
 )
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_core PRIVATE
     outputlistmodel.h outputlistmodel.cpp
     outputlistmodelfilter.h outputlistmodelfilter.cpp
     sessionmanager.h sessionmanager.cpp
@@ -146,5 +147,5 @@ target_sources(${APP_TARGET} PRIVATE
 )
 
 if(UNIX AND NOT APPLE AND NOT WIN32)
-    target_sources(${APP_TARGET} PRIVATE glibc_compat.cpp)
+    target_sources(blockstream_core PRIVATE glibc_compat.cpp)
 endif()
