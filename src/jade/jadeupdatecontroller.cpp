@@ -44,35 +44,6 @@ JadeBinaryRequestActivity::JadeBinaryRequestActivity(const QString& path, QObjec
     setAccept("base64");
 }
 
-JadeUnlockActivity::JadeUnlockActivity(JadeDevice* device, QObject* parent)
-    : SessionActivity(parent)
-    , m_device(device)
-{
-}
-
-void JadeUnlockActivity::exec()
-{
-    auto backend = m_device->api();
-    if (!backend) return;
-    const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
-    backend->authUserWithEntropy(nets == "TEST" ? "testnet" : "mainnet", [this](const QVariantMap& msg) {
-        if (msg.contains("result") && msg["result"] == true) {
-            finish();
-        } else {
-            fail();
-        }
-    }, [=, this](JadeAPI& jade, int id, const QJsonObject& req) {
-        const auto params = Json::fromObject(req.value("params").toObject());
-        GA_json* output = nullptr;
-        const auto rc = GA_http_request(session()->m_session, params.get(), &output);
-        if (rc != GA_OK || !output) return;
-        const auto res = Json::toObject(output);
-        GA_destroy_json(output);
-        if (!jade.isConnected()) return;
-        jade.handleHttpResponse(id, req, res.value("body"));
-    });
-}
-
 JadeUpdateActivity::JadeUpdateActivity(const QVariantMap& firmware, const QByteArray& data, JadeDevice* device)
     : Activity(device)
     , m_device(device)

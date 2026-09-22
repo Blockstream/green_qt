@@ -29,21 +29,6 @@ public:
     JadeBinaryRequestActivity(const QString& path, QObject* parent);
 };
 
-class JadeUnlockActivity : public SessionActivity
-{
-    Q_OBJECT
-    Q_PROPERTY(JadeDevice* device READ device CONSTANT)
-    QML_ELEMENT
-    QML_UNCREATABLE("")
-public:
-    JadeUnlockActivity(JadeDevice* device, QObject* parent);
-    JadeDevice* device() const { return m_device; }
-private:
-    void exec() override;
-private:
-    JadeDevice* const m_device;
-};
-
 class JadeUpdateActivity : public Activity
 {
     Q_OBJECT
