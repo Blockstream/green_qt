@@ -30,7 +30,10 @@ bool Application::event(QEvent* event)
 {
     if (event->type() == QEvent::FileOpen) {
         auto open_event = static_cast<QFileOpenEvent*>(event);
-        emit fileOpenEventReceived(open_event->url().toString());
+        const auto url = open_event->url().toString();
+        if (IsSupportedPaymentUrl(url)) {
+            emit fileOpenEventReceived(url);
+        }
     }
     return QApplication::event(event);
 }

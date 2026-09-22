@@ -262,13 +262,7 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     ContextManager context_manager;
 
     if (g_args.positionalArguments().size() > 0) {
-        const auto uri = g_args.positionalArguments().first();
-        const auto url = QUrl::fromUserInput(uri);
-        const auto scheme = url.scheme();
-        bool is_supported_scheme = scheme == "bitcoin" || scheme == "liquidnetwork" || scheme == "lightning";
-        if (is_supported_scheme) {
-            wallet_manager.setOpenUrl(uri);
-        }
+        wallet_manager.setOpenUrl(g_args.positionalArguments().first());
     }
 
     if (!kdsa.isPrimaryInstance()) {

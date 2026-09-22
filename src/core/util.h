@@ -27,6 +27,8 @@ QString Sha256(const QJsonObject& value);
 
 QString GetHardwareModel();
 
+bool IsSupportedPaymentUrl(const QString& url);
+
 QString GetPlatformName();
 
 void ShowApplication();

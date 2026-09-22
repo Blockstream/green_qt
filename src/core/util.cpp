@@ -4,6 +4,7 @@
 #include <QCryptographicHash>
 #include <QDir>
 #include <QJsonDocument>
+#include <QUrl>
 
 #ifdef Q_OS_MACOS
 #include <sys/sysctl.h>
@@ -154,6 +155,12 @@ QString GetHardwareModel()
         hardware_model = hardware_model.trimmed();
     }
     return hardware_model;
+}
+
+bool IsSupportedPaymentUrl(const QString& url)
+{
+    const auto scheme = QUrl::fromUserInput(url).scheme();
+    return scheme == "bitcoin" || scheme == "liquidnetwork" || scheme == "lightning";
 }
 
 QString GetPlatformName()

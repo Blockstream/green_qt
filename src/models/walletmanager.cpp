@@ -45,6 +45,8 @@ void WalletManager::clearOpenUrl()
 
 void WalletManager::setOpenUrl(const QString& open_url)
 {
+    // reject unsupported schemes, the url can come from untrusted sources such as the single instance ipc socket
+    if (!open_url.isEmpty() && !IsSupportedPaymentUrl(open_url)) return;
     if (m_open_url == open_url) return;
     m_open_url = open_url;
     emit openUrlChanged();
