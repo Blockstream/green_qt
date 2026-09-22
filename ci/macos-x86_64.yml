@@ -56,6 +56,11 @@ macos-x86_64:build:
       paths:
         - depends/
       policy: pull
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^release_.*$/'
+      when: on_success
+    - when: manual
+      allow_failure: true
   after_script:
     - $HOME/qt-install/6.11.2/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
     - cp "$PREFIX/bin/crashpad_handler" build/Blockstream.app/Contents/MacOS/

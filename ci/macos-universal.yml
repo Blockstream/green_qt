@@ -2,6 +2,11 @@ macos-universal:build:
   tags:
     - osxsigner
   stage: build
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^release_.*$/'
+      when: on_success
+    - when: manual
+      allow_failure: true
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
