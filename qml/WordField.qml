@@ -108,65 +108,68 @@ TextField {
         y: scenePosition.y + self.height + constants.s1
         parent: Overlay.overlay
         topPadding: 20
-        background: Shape {
-            layer.samples: 4
-            ShapePath {
-                strokeColor: constants.c200
-                strokeWidth: 1
-                fillColor: constants.c400
-                startX: 4
-                startY: 8
-                PathLine {
-                    x: popup.width / 2 - 8
-                    y: 8
-                }
-                PathLine {
-                    x: popup.width / 2
-                    y: 0
-                }
-                PathLine {
-                    x: popup.width / 2 + 8
-                    y: 8
-                }
-                PathAngleArc {
-                    moveToStart: false
-                    radiusX: 4
-                    radiusY: 4
-                    centerX: popup.width - 4
-                    centerY: 8 + 4
-                    startAngle: -90
-                    sweepAngle: 90
-                }
-                PathAngleArc {
-                    moveToStart: false
-                    radiusX: 4
-                    radiusY: 4
-                    centerX: popup.width - 4
-                    centerY: popup.height - 4
-                    startAngle: 0
-                    sweepAngle: 90
-                }
-                PathAngleArc {
-                    moveToStart: false
-                    radiusX: 4
-                    radiusY: 4
-                    centerX: 4
-                    centerY: popup.height - 4
-                    startAngle: 90
-                    sweepAngle: 90
-                }
-                PathAngleArc {
-                    moveToStart: false
-                    radiusX: 4
-                    radiusY: 4
-                    centerX: 4
-                    centerY: 8 + 4
-                    startAngle: 180
-                    sweepAngle: 90
+        background: Item {
+            Shape {
+                anchors.fill: parent
+                id: shape
+                layer.samples: 4
+                ShapePath {
+                    strokeColor: constants.c200
+                    strokeWidth: 1
+                    fillColor: constants.c400
+                    startX: 4
+                    startY: 8
+                    PathLine {
+                        x: shape.width / 2 - 8
+                        y: 8
+                    }
+                    PathLine {
+                        x: shape.width / 2
+                        y: 0
+                    }
+                    PathLine {
+                        x: shape.width / 2 + 8
+                        y: 8
+                    }
+                    PathAngleArc {
+                        moveToStart: false
+                        radiusX: 4
+                        radiusY: 4
+                        centerX: shape.width - 4
+                        centerY: 8 + 4
+                        startAngle: -90
+                        sweepAngle: 90
+                    }
+                    PathAngleArc {
+                        moveToStart: false
+                        radiusX: 4
+                        radiusY: 4
+                        centerX: shape.width - 4
+                        centerY: shape.height - 4
+                        startAngle: 0
+                        sweepAngle: 90
+                    }
+                    PathAngleArc {
+                        moveToStart: false
+                        radiusX: 4
+                        radiusY: 4
+                        centerX: 4
+                        centerY: shape.height - 4
+                        startAngle: 90
+                        sweepAngle: 90
+                    }
+                    PathAngleArc {
+                        moveToStart: false
+                        radiusX: 4
+                        radiusY: 4
+                        centerX: 4
+                        centerY: 8 + 4
+                        startAngle: 180
+                        sweepAngle: 90
+                    }
                 }
             }
         }
-
         contentItem: Flickable {
             id: flickable
             clip: true
