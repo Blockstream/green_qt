@@ -98,13 +98,6 @@ int main(int argc, char *argv[])
 
     qInstallMessageHandler(logMessageHandler);
 
-    // Legacy crashpad database from releases before the sentry-native migration.
-    // sentry-native uses GetDataDir("sentry") now. Must stay above the AppImage
-    // crashpad_handler staging in ui_handler(), which reuses this directory name.
-    if (!RemoveDataDir("crashpad")) {
-        qWarning() << "Failed to remove legacy crashpad directory";
-    }
-
     // only change app name after setting g_data_location
     QCoreApplication::setApplicationName("Blockstream");
 
