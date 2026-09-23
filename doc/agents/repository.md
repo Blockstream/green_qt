@@ -4,8 +4,17 @@ Where things live and how to gate debug behavior. Part of the repository agent i
 
 ## File organization
 
-- **src/**: C++ source files (*.cpp, *.h)
+- **src/**: C++ sources built into the `blockstream_core` static library, which also backs the `Blockstream.Green` QML module
+    - **controllers/**, **models/**, **core/**: Grouped controllers, models and core helpers
+    - **jade/**, **ledger/**, **lightning/**, **lwk/**, **glsdk/**: Device and protocol integrations
+- **app/**: The `blockstream_app` executable target
+    - **src/**: Entry point and process setup (`main.cpp`, `ui.cpp`, `sentry.cpp`, `watchdog.cpp`)
+    - `Info.plist.in`, `production.rc`, `production.icns`, `production.ico`: Platform bundle metadata and app icons
 - **qml/**: QML files (*.qml) and JavaScript (*.js)
+- **cmake/**: Build modules (`AppLib.cmake`, `QmlModule.cmake`, `Platform*.cmake`, dependency finders)
+- **i18n/**: Translation sources (`green_*.ts`)
+- **tests/unit/**: Qt Test suites (`tst_*.cpp`) registered with CTest
+- **tools/**: Dependency build scripts, packaging, `lint/` and `test.sh`
 - **assets/**: Icons, images, fonts
     - **icons/**: App branding icons plus monochrome UI glyphs (`*.svg`) tinted at runtime
     - **svg/**, **svg2/**, **svg3/**: Legacy themed SVG trees (still registered in `assets/CMakeLists.txt`)
@@ -52,10 +61,10 @@ When adding or renaming a file under `assets/icons/`, **append it to the `FILES`
 ## Build and review checks
 
 - Keep commit subjects compatible with commitlint: the subject must start with an uppercase letter, for example `ui: Add receive warning`.
-- For C++ changes, run `./tools/lint/cpplint.sh` when feasible.
-- For added or removed QML files, update the QML registration/build lists such as `qml.cmake` and `qml/CMakeLists.txt`.
-- For CMake/source-list changes, update the closest relevant `CMakeLists.txt` in the same patch.
-- For behavior changes, run the narrowest relevant build or test target available in the checkout and mention the command in the handoff.
+- For C++ changes, run `./tools/lint/cpplint.sh` when feasible; for QML/JS changes, `./tools/lint/qmllint.sh`.
+- For added or removed QML files, update the file list in `qml/CMakeLists.txt`.
+- For added or removed C++ files, update the `target_sources` of the closest `CMakeLists.txt` (`src/`, its subfolders, or `app/src/` for the executable).
+- For behavior changes, run the narrowest relevant build or test target available in the checkout and mention the command in the handoff. Unit tests run with `./tools/test.sh all` or `./tools/test.sh one <suite_regex>`.
 
 ## Commit
 
