@@ -1,7 +1,7 @@
 add_subdirectory(core)
 add_subdirectory(models)
 
-target_sources(${APP_TARGET} PRIVATE
+target_sources(blockstream_app PRIVATE
     main.cpp
 )
 

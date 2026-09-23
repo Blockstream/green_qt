@@ -1,4 +1,4 @@
-qt_add_resources(${APP_TARGET} "qtquickcontrols2"
+qt_add_resources(blockstream_app "qtquickcontrols2"
     PREFIX "/"
     BASE .
     FILES
