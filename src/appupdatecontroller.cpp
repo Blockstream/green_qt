@@ -2,9 +2,20 @@
 #include "httpmanager.h"
 #include "httprequestactivity.h"
 
+#include <QFileInfo>
 #include <QTimer>
 
 extern QCommandLineParser g_args;
+
+static bool IsRunningAsFlatpak()
+{
+#ifdef Q_OS_LINUX
+    return QFileInfo::exists(QStringLiteral("/.flatpak-info")) &&
+           qEnvironmentVariableIsSet("FLATPAK_ID");
+#else
+    return false;
+#endif
+}
 
 class CheckForUpdatesActivity : public HttpRequestActivity
 {
@@ -30,6 +41,11 @@ AppUpdateController::AppUpdateController(QObject *parent)
     : QObject(parent)
     , m_timer(new QTimer(this))
 {
+    if (IsRunningAsFlatpak()) {
+        qInfo() << "in-app check for update disabled in flatpak";
+        return;
+    }
+
     connect(m_timer, &QTimer::timeout, this, &AppUpdateController::checkNow);
 
     const auto period = g_args.value("updatecheckperiod").toInt();
