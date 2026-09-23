@@ -60,7 +60,7 @@ When adding or renaming a file under `assets/icons/`, **append it to the `FILES`
 
 ## Build and review checks
 
-- Keep commit subjects compatible with commitlint: the subject must start with an uppercase letter, for example `ui: Add receive warning`.
+- Keep commit subjects compatible with commitlint: use a capitalized imperative subject with no scope prefix, for example `Add receive warning`.
 - For C++ changes, run `./tools/lint/cpplint.sh` when feasible; for QML/JS changes, `./tools/lint/qmllint.sh`.
 - For added or removed QML files, update the file list in `qml/CMakeLists.txt`.
 - For added or removed C++ files, update the `target_sources` of the closest `CMakeLists.txt` (`src/`, its subfolders, or `app/src/` for the executable).
