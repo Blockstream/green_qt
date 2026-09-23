@@ -326,6 +326,18 @@ void Context::setDevice(Device* device)
     updateLightningEnabled(was_lightning_enabled);
 }
 
+QJsonObject Context::deviceDetails() const
+{
+    Q_D(const Context);
+    return d->device_details;
+}
+
+void Context::setDeviceDetails(const QJsonObject& device_details)
+{
+    Q_D(Context);
+    d->device_details = device_details;
+}
+
 bool Context::remember() const
 {
     Q_D(const Context);

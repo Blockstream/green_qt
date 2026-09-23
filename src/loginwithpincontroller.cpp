@@ -151,7 +151,7 @@ void LoginController::loginWithDevice(Device* device)
     auto login_task = new LoginTask(hw_device, session);
 
     connect(login_task, &Task::finished, this, [=, this] {
-        context()->m_hw_device = hw_device;
+        context()->setDeviceDetails(hw_device);
 
         device->createSession(context()->xpubHashId());
 

@@ -32,6 +32,7 @@ public:
     bool watchonly{false};
     bool assets_loaded{false};
     QString xpub_hash_id;
+    QJsonObject device_details;
     QJsonObject credentials;
     QStringList mnemonic;
     QMap<Network*, Session*> sessions;

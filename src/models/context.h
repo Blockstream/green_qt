@@ -89,6 +89,9 @@ public:
     Device* device() const;
     void setDevice(Device* device);
 
+    QJsonObject deviceDetails() const;
+    void setDeviceDetails(const QJsonObject& device_details);
+
     bool remember() const;
     void setRemember(bool remember);
 
@@ -194,10 +197,6 @@ private:
     ContextPrivate* const d_ptr;
 
 public:
-    QMap<QString, Asset*> m_assets;
-
-    QJsonObject m_hw_device;
-
     void addTransaction(ContextTransaction* transaction);
     void removeTransaction(ContextTransaction* transaction);
     QStandardItemModel* transactionModel() const;

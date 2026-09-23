@@ -207,7 +207,7 @@ AuthHandlerTask* Session::registerUser()
 {
     Q_ASSERT(m_context);
     if (m_context->device()) {
-        return new RegisterUserTask({}, m_context->m_hw_device, this);
+        return new RegisterUserTask({}, m_context->deviceDetails(), this);
     } else {
         return new RegisterUserTask(m_context->credentials(), {}, this);
     }
@@ -217,7 +217,7 @@ AuthHandlerTask* Session::login()
 {
     Q_ASSERT(m_context);
     if (m_context->device()) {
-        return new LoginTask(QJsonObject{}, m_context->m_hw_device, this);
+        return new LoginTask(QJsonObject{}, m_context->deviceDetails(), this);
     } else {
         return new LoginTask(m_context->credentials(), {}, this);
     }
