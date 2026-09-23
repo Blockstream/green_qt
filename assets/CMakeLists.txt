@@ -1,4 +1,4 @@
-qt_add_resources(blockstream_app "images"
+qt_add_resources(blockstream_core "images"
     PREFIX "/"
     BASE .
     FILES
@@ -547,7 +547,7 @@ qt_add_resources(blockstream_app "images"
         icons/note.svg
 )
 
-qt_add_resources(blockstream_app "fonts"
+qt_add_resources(blockstream_core "fonts"
     PREFIX "/"
     BASE .
     FILES

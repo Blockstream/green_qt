@@ -17,9 +17,8 @@ set(TS_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/green_zh.ts
 )
 
-qt_add_translations(blockstream_app
-    IMMEDIATE_CALL
-    SOURCE_TARGETS blockstream_core blockstream_app
+qt_add_translations(blockstream_core
+    SOURCE_TARGETS blockstream_core
     TS_FILES ${TS_FILES}
     QM_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
     RESOURCE_PREFIX "/i18n"

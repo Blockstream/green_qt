@@ -1,10 +1,6 @@
 add_subdirectory(core)
 add_subdirectory(models)
 
-target_sources(blockstream_app PRIVATE
-    main.cpp
-)
-
 target_sources(blockstream_core PRIVATE
     application.h application.cpp
     applicationcontroller.h applicationcontroller.cpp

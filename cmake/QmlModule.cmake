@@ -2,7 +2,7 @@ qt_policy(SET QTP0004 NEW)
 
 # The module is backed by the blockstream_core static library, because qmltyperegistrar
 # reads the metatypes of whichever target compiled the QML_ELEMENT headers. Qt generates
-# a static plugin for it, which the executable links (see AppTarget.cmake).
+# a static plugin for it, which the executable links (see app/CMakeLists.txt).
 qt_add_qml_module(blockstream_core
     URI Blockstream.Green
     VERSION 1.0
