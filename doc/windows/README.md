@@ -334,6 +334,8 @@ call C:\qt\6.11.2\msvc2022_64\bin\qt-cmake --preset dev-windows
 cmake --build bld --config RelWithDebInfo
 ```
 
+Analytics needs the Countly development app key; `set COUNTLY_APP_KEY_DEV=...` before configuring, otherwise analytics is disabled.
+
 For a production-style build (e.g. release), override the preset on the command line:
 
 ```bat

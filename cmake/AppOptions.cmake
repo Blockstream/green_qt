@@ -18,4 +18,13 @@ if(NOT GREEN_ENV)
     set(GREEN_LOG_FILE dev)
 endif()
 
+if(GREEN_ENV STREQUAL "Production")
+    if(NOT COUNTLY_APP_KEY_PROD)
+        message(FATAL_ERROR "COUNTLY_APP_KEY_PROD is missing or empty")
+    endif()
+    set(COUNTLY_APP_KEY "${COUNTLY_APP_KEY_PROD}")
+else()
+    set(COUNTLY_APP_KEY "${COUNTLY_APP_KEY_DEV}")
+endif()
+
 configure_file("${CMAKE_SOURCE_DIR}/installer.iss.in" "${CMAKE_BINARY_DIR}/installer.iss" @ONLY)

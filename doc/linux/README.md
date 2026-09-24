@@ -129,6 +129,8 @@ For a **RelWithDebInfo** build, configure with the `dev` preset (defined in
 qt-cmake --preset dev
 ```
 
+Analytics needs the Countly development app key; export `COUNTLY_APP_KEY_DEV` before configuring, otherwise analytics is disabled.
+
 If CMake cannot locate gdk via `CMAKE_PREFIX_PATH`, point it at the config explicitly:
 
 ```bash

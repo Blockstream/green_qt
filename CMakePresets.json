@@ -21,7 +21,8 @@
         "GREEN_ENV": "Development",
         "GREEN_BUILD_ID": "-dev",
         "GREEN_LOG_FILE": "dev",
-        "ENABLE_SENTRY": "OFF"
+        "ENABLE_SENTRY": "OFF",
+        "COUNTLY_APP_KEY_DEV": "$env{COUNTLY_APP_KEY_DEV}"
       }
     },
     {
@@ -44,7 +45,9 @@
         "GREEN_LOG_FILE": "$env{CI_COMMIT_BRANCH}",
         "ENABLE_SENTRY": "ON",
         "SENTRY_KEY": "$env{SENTRY_KEY}",
-        "SENTRY_PROJECT": "$env{SENTRY_PROJECT}"
+        "SENTRY_PROJECT": "$env{SENTRY_PROJECT}",
+        "COUNTLY_APP_KEY_DEV": "$env{COUNTLY_APP_KEY_DEV}",
+        "COUNTLY_APP_KEY_PROD": "$env{COUNTLY_APP_KEY_PROD}"
       }
     },
     {

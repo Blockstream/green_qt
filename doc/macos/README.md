@@ -146,6 +146,8 @@ Now configure a **RelWithDebInfo** build with the `dev` preset (defined in
 qt-cmake --preset dev
 ```
 
+Analytics needs the Countly development app key; export `COUNTLY_APP_KEY_DEV` before configuring, otherwise analytics is disabled.
+
 Build:
 
 ```bash

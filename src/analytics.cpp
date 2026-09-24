@@ -126,8 +126,6 @@ private:
 
 inline constexpr char COUNTLY_HOST[] = "https://countly.blockstream.com";
 inline constexpr char COUNTLY_TOR_ENDPOINT[] = "http://greciphd2z3eo6bpnvd6mctxgfs4sslx4hyvgoiew4suoxgoquzl72yd.onion";
-inline constexpr char COUNTLY_APP_KEY_DEV[] = "cb8e449057253add71d2f9b65e5f66f73c073e63";
-inline constexpr char COUNTLY_APP_KEY_REL[] = "351d316234a4a83169fecd7e760ef64bfd638d21";
 
 std::map<std::string, std::string> QVariantMapToStdMap(const QVariantMap& in)
 {
@@ -361,14 +359,14 @@ void AnalyticsPrivate::updateCustomUserDetails()
 
 void AnalyticsPrivate::start()
 {
+    if (QLatin1StringView(COUNTLY_APP_KEY).isEmpty()) return;
     QMetaObject::invokeMethod(this, [=, this] {
-        const bool is_production = QStringLiteral("Production") == GREEN_ENV;
         auto& countly = cly::Countly::getInstance();
         countly.setDeviceID(device_id.toStdString(), false);
         countly.setTimestampOffset(timestamp_offset);
         static bool started = false;
         if (!started) {
-            countly.start(is_production ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
+            countly.start(COUNTLY_APP_KEY, COUNTLY_HOST, 443, true);
             started = true;
         } else {
             // stop() ends the Countly session; restart it so later recordEvent
