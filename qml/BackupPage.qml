@@ -19,10 +19,8 @@ MnemonicWarningsPage {
         MnemonicBackupPage {
             columns: 2
             context: self.context
-            rightItem: CloseButton {
-                onClicked: self.closeClicked()
-            }
             onSelected: (mnemonic) => self.pushPage(mnemonic_check_page, { mnemonic })
+            onCloseClicked: self.closeClicked()
         }
     }
 

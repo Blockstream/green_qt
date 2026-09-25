@@ -25,6 +25,9 @@ StackViewPage {
             text: qsTrId('id_make_sure_to_be_in_a_private')
         }
     }
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
+    }
     contentItem: VFlickable {
         Label {
             Layout.alignment: Qt.AlignCenter
