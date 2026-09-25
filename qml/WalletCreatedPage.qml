@@ -8,12 +8,13 @@ StackViewPage {
     signal continueClicked()
     required property Context context
     id: self
-    padding: 60
+    footer: null
     header: null
+    padding: 60
     contentItem: ColumnLayout {
         VSpacer {
         }
-         MultiImage {
+        MultiImage {
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: 295
             Layout.preferredWidth: 311
