@@ -1241,10 +1241,23 @@ QString LoadAssetsTask::description() const
 
 void LoadAssetsTask::update()
 {
-    Q_D(LoadAssetsTask);
+    auto context = session()->context();
+
+    if (!context) {
+        setStatus(Status::Failed);
+        return;
+    }
+
     if (m_status != Status::Ready) return;
 
     if (!session()->network()->isLiquid()) {
+        setStatus(Status::Finished);
+        return;
+    }
+
+    Q_D(LoadAssetsTask);
+
+    if (context->assetsLoaded() && !d->refresh) {
         setStatus(Status::Finished);
         return;
     }
@@ -1255,7 +1268,6 @@ void LoadAssetsTask::update()
         if (d->refresh) {
             const auto params = Json::fromObject({{ "assets", true }, { "icons", true }});
             const auto rc = GA_refresh_assets(session()->m_session, params.get());
-            qDebug() << Q_FUNC_INFO << "REFRESH" << rc;
             if (rc != GA_OK) return false;
         }
 
@@ -1264,7 +1276,6 @@ void LoadAssetsTask::update()
         {
             const auto params = Json::fromObject({{ "category", "all" }});
             const auto err = GA_get_assets(session()->m_session, params.get(), &output);
-            qDebug() << Q_FUNC_INFO << "GET" << err;
             if (err != GA_OK) return false;
         }
 
@@ -1291,7 +1302,14 @@ void LoadAssetsTask::update()
     });
 
     future.then(this, [=, this](bool ok) {
-        setStatus(ok ? Status::Finished : Status::Failed);
+        if (ok) {
+            if (session() && session()->context()) {
+                session()->context()->setAssetsLoaded();
+            }
+            setStatus(Status::Finished);
+        } else {
+            setStatus(Status::Failed);
+        }
     });
 
     waitForFuture(future);

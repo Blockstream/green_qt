@@ -644,6 +644,18 @@ QJsonObject Context::lightningNodeInfo() const
     return d->lightning_session ? d->lightning_session->nodeInfo() : QJsonObject{};
 }
 
+bool Context::assetsLoaded() const
+{
+    Q_D(const Context);
+    return d->assets_loaded;
+}
+
+void Context::setAssetsLoaded()
+{
+    Q_D(Context);
+    d->assets_loaded = true;
+}
+
 bool Context::lightningEnabled() const
 {
     Q_D(const Context);
@@ -969,13 +981,10 @@ void Context::loginNetwork(TaskGroup *group, Network *network)
         login = new LoginTask(d->credentials, {}, session);
     }
 
-    if (network->isLiquid() && !d->assets_loaded) {
-        d->assets_loaded = true;
-        auto load_assets = new LoadAssetsTask(false, session);
-        connect_session->then(load_assets);
-        load_assets->then(login);
-        group->add(load_assets);
-    }
+    auto load_assets = new LoadAssetsTask(false, session);
+    connect_session->then(load_assets);
+    load_assets->then(login);
+    group->add(load_assets);
 
     connect(connect_session, &Task::failed, this, [=, this](const QString& error) {
         if (error == "timeout error") {

@@ -253,9 +253,11 @@ void LoginController::login(TaskGroup* group, LoginTask* login_task)
     auto session = context()->primarySession();
     auto connect_session = new ConnectTask(session);
     auto get_credentials = new GetCredentialsTask(session);
+    auto load_assets = new LoadAssetsTask(false, session);
 
     connect_session->then(login_task);
     login_task->then(get_credentials);
+    login_task->then(load_assets);
 
     connect(connect_session, &Task::failed, this, [=, this](const QString& error) {
         if (error == "timeout error") {
@@ -266,6 +268,7 @@ void LoginController::login(TaskGroup* group, LoginTask* login_task)
     group->add(connect_session);
     group->add(login_task);
     group->add(get_credentials);
+    group->add(load_assets);
 }
 
 
