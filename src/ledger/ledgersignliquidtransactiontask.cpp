@@ -42,6 +42,20 @@ QByteArray sequenceBytes(const QJsonObject& input)
     return data;
 }
 
+// Ledger Liquid app shows p2wpkh outputs as base58 confidential addresses with version 0x00
+QString ledgerDisplayAddress(const QByteArray& scriptpubkey, const QByteArray& blinding_key)
+{
+    size_t type;
+    if (wally_scriptpubkey_get_type((const unsigned char*) scriptpubkey.constData(), scriptpubkey.size(), &type) != WALLY_OK) return {};
+    if (type != WALLY_SCRIPT_TYPE_P2WPKH || blinding_key.size() != EC_PUBLIC_KEY_LEN) return {};
+    const auto data = QByteArray(1, WALLY_CA_PREFIX_LIQUID) + QByteArray(1, 0x00) + blinding_key + scriptpubkey.mid(2);
+    char* output = nullptr;
+    if (wally_base58_from_bytes((const unsigned char*) data.constData(), data.size(), BASE58_FLAG_CHECKSUM, &output) != WALLY_OK) return {};
+    const auto address = QString::fromLatin1(output);
+    wally_free_string(output);
+    return address;
+}
+
 } // namespace
 
 LedgerSignLiquidTransactionTask::LedgerSignLiquidTransactionTask(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device)
@@ -262,9 +276,14 @@ QList<QPair<QJsonObject, QByteArray>> LedgerSignLiquidTransactionTask::outputLiq
                 stream.writeRawData(scriptpubkey.data(), scriptpubkey.size());
             }
 
+            auto message_output = output;
+            const auto device_address = ledgerDisplayAddress(scriptpubkey, ParseByteArray(output.value("blinding_key")));
+            if (!device_address.isEmpty()) {
+                message_output["device_address"] = device_address;
+            }
             QJsonObject message = {
                 { "index", i },
-                { "output", output },
+                { "output", message_output },
             };
             res.append({message, data});
         }

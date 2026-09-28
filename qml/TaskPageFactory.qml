@@ -109,6 +109,16 @@ QtObject {
                 return
             }
         }
+        if (resolver.device instanceof LedgerDevice) {
+            if (resolver instanceof SignTransactionResolver) {
+                self.target.push(ledger_sign_transaction_view, { resolver })
+                return
+            }
+            if (resolver instanceof SignLiquidTransactionResolver) {
+                self.target.push(ledger_sign_liquid_transaction_view, { resolver })
+                return
+            }
+        }
     }
 
     property Component device_prompt_view: DevicePromptView {
@@ -336,6 +346,42 @@ QtObject {
         onCloseClicked: self.closed()
     }
     property Component jade_get_master_blinding_key_dialog: JadeGetMasterBlindingKeyView {
+    }
+    property Component ledger_sign_transaction_view: StackViewPage {
+        required property SignTransactionResolver resolver
+        Connections {
+            target: ledger_sign_transaction_page.resolver
+            function onFailed() {
+                ledger_sign_transaction_page.popPage()
+            }
+        }
+        id: ledger_sign_transaction_page
+        title: qsTrId('id_confirm_transaction_details_on')
+        rightItem: CloseButton {
+            onClicked: self.closed()
+        }
+        contentItem: LedgerSignTransactionView {
+            wallet: ledger_sign_transaction_page.resolver.session.context.wallet
+            resolver: ledger_sign_transaction_page.resolver
+        }
+    }
+    property Component ledger_sign_liquid_transaction_view: StackViewPage {
+        required property SignLiquidTransactionResolver resolver
+        Connections {
+            target: ledger_sign_liquid_transaction_page.resolver
+            function onFailed() {
+                ledger_sign_liquid_transaction_page.popPage()
+            }
+        }
+        id: ledger_sign_liquid_transaction_page
+        title: qsTrId('id_confirm_transaction_details_on')
+        rightItem: CloseButton {
+            onClicked: self.closed()
+        }
+        contentItem: SignLiquidTransactionResolverView {
+            wallet: ledger_sign_liquid_transaction_page.resolver.session.context.wallet
+            resolver: ledger_sign_liquid_transaction_page.resolver
+        }
     }
 
     /* TODO: refactor after ledger

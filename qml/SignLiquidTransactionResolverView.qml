@@ -3,7 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Column {
+ColumnLayout {
     property Wallet wallet
     property SignLiquidTransactionResolver resolver
 
@@ -14,7 +14,8 @@ Column {
         target: resolver.deviceTask
         function onMessageChanged({ index, output } = {}) {
             if (output) {
-                const component = output.is_fee ? review_fee_component : review_output_component
+                const is_fee = output.scriptpubkey === ''
+                const component = is_fee ? review_fee_component : review_output_component
                 stack_view.push(component, { index, output }, StackView.PushTransition)
             } else {
                 stack_view.pop()
@@ -22,14 +23,13 @@ Column {
         }
     }
     DeviceImage {
+        Layout.alignment: Qt.AlignCenter
+        Layout.preferredHeight: 32
         device: resolver.device
-        anchors.horizontalCenter: parent.horizontalCenter
-        height: 32
     }
     Loader {
+        Layout.alignment: Qt.AlignCenter
         active: resolver.deviceTask
-        anchors.horizontalCenter: parent.horizontalCenter
-        // TODO failed property removed from resolver
         sourceComponent: ProgressBar {
             from: resolver.deviceTask.progress.from
             to: resolver.deviceTask.progress.to
@@ -39,78 +39,127 @@ Column {
         }
         Behavior on opacity { OpacityAnimator {} }
     }
-//    Label {
-//        // TODO failed property removed from resolver
-//        opacity: resolver.failed ? 1 : 0
-//        Behavior on opacity { OpacityAnimator {} }
-//        anchors.horizontalCenter: parent.horizontalCenter
-//        text: qsTrId('id_operation_failure')
-//    }
     StackView {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
         id: stack_view
         clip: true
-        implicitHeight: currentItem.implicitHeight
-        implicitWidth: currentItem.implicitWidth
         initialItem: Item {
         }
     }
     Component {
         id: review_output_component
-        Column {
-            id: output_view
-            property var output
-            property int index
+        VFlickable {
+            required property int index
+            required property var output
             readonly property Asset asset: wallet.context.getOrCreateAsset(output.asset_id)
+            id: output_view
+            alignment: Qt.AlignTop
             spacing: 16
-            SectionLabel {
+            FieldTitle {
                 text: qsTrId('id_review_output_s').arg('#' + (index + 1))
             }
-            Row {
-                spacing: 16
-                AssetIcon {
-                    asset: output_view.asset
+            FieldTitle {
+                text: qsTrId('id_amount')
+            }
+            Pane {
+                Layout.fillWidth: true
+                padding: 20
+                background: Rectangle {
+                    color: '#181818'
+                    radius: 5
                 }
-                Column {
-                    anchors.verticalCenter: parent.verticalCenter
-                    Label {
-                        Layout.fillWidth: true
-                        text: output_view.asset.name
-                        font.pixelSize: 14
-                        elide: Label.ElideRight
+                contentItem: RowLayout {
+                    spacing: 16
+                    AssetIcon {
+                        asset: output_view.asset
                     }
-
                     Label {
-                        visible: 'entity' in output_view.asset.data
                         Layout.fillWidth: true
-                        opacity: 0.5
-                        text: output_view.asset.data.entity ? output_view.asset.data.entity.domain : ''
-                        elide: Label.ElideRight
+                        font.family: 'Roboto Mono'
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 16
+                        font.weight: 400
+                        horizontalAlignment: Qt.AlignRight
+                        text: output_view.asset.formatAmount(output.satoshi, true, 'BTC')
                     }
                 }
             }
-            SectionLabel { text: qsTrId('id_amount') }
-            Label {
-                text: output_view.asset.formatAmount(output.satoshi, true, 'BTC')
+            FieldTitle {
+                text: output.is_change ? qsTrId('id_change_address') : qsTrId('id_send_to')
             }
-            SectionLabel { text: output.is_change ? qsTrId('id_change_address') : qsTrId('id_recipient_address') }
-            Label {
-                text: output.address
+            AddressLabel {
+                Layout.fillWidth: true
+                address: output.address
+                bottomPadding: 20
+                elide: Label.ElideNone
+                leftPadding: 20
+                rightPadding: 20
+                topPadding: 20
+                background: Rectangle {
+                    color: '#181818'
+                    radius: 5
+                }
+            }
+            FieldTitle {
+                visible: !!output.device_address
+                text: 'Shown on your Ledger'
+            }
+            AddressLabel {
+                Layout.fillWidth: true
+                visible: !!output.device_address
+                address: output.device_address
+                bottomPadding: 20
+                elide: Label.ElideNone
+                leftPadding: 20
+                rightPadding: 20
+                topPadding: 20
+                background: Rectangle {
+                    color: '#181818'
+                    radius: 5
+                }
+            }
+            VSpacer {
             }
         }
     }
     Component {
         id: review_fee_component
-        Column {
-            id: fee_view
-            property var output
+        VFlickable {
+            required property int index
+            required property var output
             readonly property Asset asset: wallet.context.getOrCreateAsset(output.asset_id)
+            id: fee_view
+            alignment: Qt.AlignTop
             spacing: 16
-            SectionLabel {
+            FieldTitle {
                 text: qsTrId('id_confirm_transaction')
             }
-            SectionLabel { text: qsTrId('id_fee') }
-            Label {
-                text: fee_view.asset.formatAmount(output.satoshi, true, 'BTC')
+            FieldTitle { text: qsTrId('id_fee') }
+            Pane {
+                Layout.fillWidth: true
+                padding: 20
+                background: Rectangle {
+                    color: '#181818'
+                    radius: 5
+                }
+                contentItem: RowLayout {
+                    spacing: 16
+                    AssetIcon {
+                        asset: fee_view.asset
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        font.family: 'Roboto Mono'
+                        font.features: { 'calt': 0, 'zero': 1 }
+                        font.pixelSize: 16
+                        font.weight: 400
+                        horizontalAlignment: Qt.AlignRight
+                        text: fee_view.asset.formatAmount(output.satoshi, true, 'BTC')
+                    }
+                }
+            }
+            VSpacer {
             }
         }
     }

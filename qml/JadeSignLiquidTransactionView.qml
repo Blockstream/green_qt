@@ -16,6 +16,7 @@ StackViewPage {
         }
     }
     id: self
+    title: qsTrId('id_confirm_transaction_details_on')
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }
