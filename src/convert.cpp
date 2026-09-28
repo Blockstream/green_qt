@@ -183,11 +183,17 @@ void Convert::setAsset(Asset* asset)
 {
     Q_D(Convert);
     if (d->asset == asset) return;
+    if (d->asset) {
+        disconnect(d->asset, nullptr, this, nullptr);
+    }
     d->asset = asset;
     emit assetChanged();
     emit isLiquidAssetChanged();
     invalidate();
-    if (d->asset) connectToSessionSignals();
+    if (d->asset) {
+        connectToSessionSignals();
+        connect(d->asset, &Asset::dataChanged, this, &Convert::invalidate);
+    }
 }
 
 void Convert::setUnit(const QString& unit)
