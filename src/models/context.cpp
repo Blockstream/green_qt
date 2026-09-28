@@ -238,6 +238,23 @@ Session* Context::getOrCreateSession(Network* network)
                 emit account->transactionEvent(event);
                 connect(group, &TaskGroup::finished, account, &Account::loadBalance);
             }
+            if (network->isLiquid()) {
+                connect(group, &TaskGroup::finished, this, [=, this] {
+                    const auto txhash = event.value("txhash").toString();
+                    for (auto pointer : event.value("subaccounts").toArray()) {
+                        auto account = getOrCreateAccount(network, quint32(pointer.toInteger()));
+                        auto transaction = account->getTransaction(txhash);
+                        if (!transaction) continue;
+                        const auto satoshi = transaction->data().value("satoshi").toObject();
+                        for (auto i = satoshi.begin(); i != satoshi.end(); ++i) {
+                            if (!getOrCreateAsset(i.key())->hasData()) {
+                                dispatcher()->add(new LoadAssetsTask(true, session));
+                                return;
+                            }
+                        }
+                    }
+                });
+            }
             dispatcher()->add(group);
         });
         connect(session, &Session::configChanged, this, [=, this] {
