@@ -6,8 +6,6 @@
 
 #include "green.h"
 
-#include "connectable.h"
-
 Q_MOC_INCLUDE("context.h")
 Q_MOC_INCLUDE("network.h")
 

@@ -11,7 +11,6 @@ target_sources(blockstream_core PRIVATE
 
 target_sources(blockstream_core PRIVATE
     progress.h progress.cpp
-    connectable.h
     network.h network.cpp
     payment.h payment.cpp
     session.h session.cpp
