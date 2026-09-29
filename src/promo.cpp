@@ -3,7 +3,44 @@
 #include "promo.h"
 #include "util.h"
 
+#include <QJsonArray>
+#include <QSaveFile>
+#include <QSet>
+
 static PromoManager* g_promo_manager{nullptr};
+
+static bool IsHttpsUrl(const QString& value)
+{
+    const QUrl url(value, QUrl::StrictMode);
+    return url.isValid() && url.scheme() == QStringLiteral("https") && !url.host().isEmpty();
+}
+
+static QJsonObject NormalizePromo(const QJsonValue& value)
+{
+    if (!value.isObject()) return {};
+
+    auto data = value.toObject();
+    const auto id = data.value("id");
+    const auto title = data.value("title");
+    const auto description = data.value("description");
+    const auto cta = data.value("cta");
+    if (!id.isString() || id.toString().trimmed().isEmpty()) return {};
+    if (!title.isString() || title.toString().trimmed().isEmpty()) return {};
+    if (!description.isString() || description.toString().trimmed().isEmpty()) return {};
+    if (!cta.isObject()) return {};
+
+    const auto cta_data = cta.toObject();
+    const auto label = cta_data.value("label");
+    const auto url = cta_data.value("url");
+    if (!label.isString() || label.toString().trimmed().isEmpty()) return {};
+    if (!url.isString() || !IsHttpsUrl(url.toString())) return {};
+
+    const auto image_url = data.value("imageUrl");
+    if (!image_url.isString() || !IsHttpsUrl(image_url.toString())) {
+        data.remove("imageUrl");
+    }
+    return data;
+}
 
 Promo::Promo(const QString& id, PromoManager* manager)
     : QObject(manager)
@@ -11,7 +48,6 @@ Promo::Promo(const QString& id, PromoManager* manager)
     , m_id(id)
 {
     m_dismissed = Settings::instance()->promosDismissed().contains(m_id);
-    connect(this, &Promo::dataChanged, this, &Promo::readyChanged);
 }
 
 Promo::~Promo()
@@ -23,16 +59,6 @@ Promo::~Promo()
     }
 }
 
-bool Promo::ready() const
-{
-    for (auto i = m_resources.begin(); i != m_resources.end(); i++) {
-        if (!i.value()->ready()) {
-            return false;
-        }
-    }
-    return true;
-}
-
 void Promo::setData(const QJsonObject& data)
 {
     if (m_data == data) return;
@@ -42,13 +68,11 @@ void Promo::setData(const QJsonObject& data)
     // do not download resources if promo is dismissed
     if (m_dismissed) return;
 
-    for (auto i = m_data.begin(); i != m_data.end(); i++) {
-        if (i.key() == "link") continue;
-        if (!i.value().isString()) continue;
-        const auto value = i.value().toString();
-        if (!value.startsWith("https://")) continue;
-        auto resource = getOrCreateResource(i.key());
-        resource->download(value);
+    const auto image_url = m_data.value("imageUrl").toString();
+    auto resource = m_resources.value("imageUrl");
+    if (!image_url.isEmpty() || resource) {
+        resource = getOrCreateResource("imageUrl");
+        resource->download(image_url);
     }
 }
 
@@ -58,7 +82,6 @@ PromoResource* Promo::getOrCreateResource(const QString& name)
     if (!resource) {
         resource = new PromoResource(this);
         m_resources.insert(name, resource);
-        connect(resource, &PromoResource::pathChanged, this, &Promo::readyChanged);
     }
     return resource;
 }
@@ -89,6 +112,7 @@ PromoManager::PromoManager()
     g_promo_manager = this;
 
     connect(Analytics::instance(), &Analytics::remoteConfigChanged, this, &PromoManager::update);
+    QTimer::singleShot(0, this, &PromoManager::update);
 }
 
 PromoManager::~PromoManager()
@@ -103,14 +127,19 @@ QQmlListProperty<Promo> PromoManager::promos()
 
 void PromoManager::update()
 {
-    const auto config = Analytics::instance()->getRemoteConfigValue("promos");
-    if (!config.isArray()) return;
+    const auto config = Analytics::instance()->getRemoteConfigValue("promos_v2");
     if (m_config == config) return;
     m_config = config;
     m_promos.clear();
-    for (const auto value : config.toArray()) {
-        if (!value.isObject()) continue;
-        createOrUpdatePromo(value.toObject());
+    QSet<QString> ids;
+    const auto values = config.isArray() ? config.toArray() : QJsonArray{};
+    for (const auto value : values) {
+        const auto data = NormalizePromo(value);
+        if (data.isEmpty()) continue;
+        const auto id = data.value("id").toString();
+        if (ids.contains(id)) continue;
+        ids.insert(id);
+        createOrUpdatePromo(data);
     }
     emit changed();
     for (auto promo : m_promo_by_id.values()) {
@@ -139,6 +168,16 @@ PromoResource::PromoResource(Promo* promo)
 {
 }
 
+PromoResource::~PromoResource()
+{
+    if (!m_reply) return;
+    auto reply = m_reply;
+    m_reply = nullptr;
+    reply->disconnect(this);
+    reply->abort();
+    reply->deleteLater();
+}
+
 void PromoResource::setPath(const QString& path)
 {
     if (m_path == path) return;
@@ -150,14 +189,22 @@ void PromoResource::download(const QString& source)
 {
     if (m_source == source) return;
     m_source = source;
+    setPath({});
 
-    if (m_reply) return;
+    if (m_reply) {
+        auto reply = m_reply;
+        m_reply = nullptr;
+        reply->abort();
+    }
 
+    if (m_source.isEmpty()) return;
     downloadNow();
 }
 
 void PromoResource::downloadNow()
 {
+    if (m_source.isEmpty() || m_reply) return;
+
     QDir dir(GetDataDir("promos"));
 
     const auto url = QUrl(m_source);
@@ -184,16 +231,26 @@ void PromoResource::downloadNow()
         QTimer::singleShot(1000, this, &PromoResource::downloadNow);
         return;
     }
-    m_reply = net->get(req);
-    connect(m_reply, &QNetworkReply::finished, this, [=, this] {
-        QFile file(path);
-        if (file.open(QIODevice::WriteOnly)) {
-            file.write(m_reply->readAll());
-            file.close();
+    const auto source = m_source;
+    auto reply = net->get(req);
+    m_reply = reply;
+    connect(reply, &QNetworkReply::finished, this, [=, this] {
+        if (m_reply != reply) {
+            reply->deleteLater();
+            return;
         }
-        setPath(QUrl::fromLocalFile(path).toString());
-        m_reply->deleteLater();
         m_reply = nullptr;
+        if (m_source == source && reply->error() == QNetworkReply::NoError) {
+            const auto contents = reply->readAll();
+            QSaveFile file(path);
+            if (!contents.isEmpty()
+                    && file.open(QIODevice::WriteOnly)
+                    && file.write(contents) == contents.size()
+                    && file.commit()) {
+                setPath(QUrl::fromLocalFile(path).toString());
+            }
+        }
+        reply->deleteLater();
     });
 }
 
@@ -203,7 +260,3 @@ void PromoResource::purge()
     QFile::remove(path);
 }
 
-bool PromoResource::ready() const
-{
-    return m_source.isEmpty() || !m_path.isEmpty();
-}

@@ -2,249 +2,154 @@ import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Window
 
 import "analytics.js" as AnalyticsJS
 
-Loader {
-    signal clicked()
-    required property string screen
+AbstractButton {
+    signal dismissRequested()
+
+    required property Context context
     required property Promo promo
-    id: self
-    Component.onCompleted: {
-        Analytics.recordEvent('promo_impression', AnalyticsJS.segmentationPromo(null, self.promo, self.screen))
+    required property string screen
+
+    function openPromo() {
+        const url = self.promo?.data?.cta?.url ?? ''
+        if (!url) return
+        Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(self.context, self.promo, self.screen))
+        Qt.openUrlExternally(url)
     }
-    sourceComponent: {
-        switch (self.promo.data?.layout_small ?? 0) {
-        case 0: return layout_0
-        case 1: return layout_1
-        case 2: return layout_2
+
+    id: self
+    clip: true
+    focusPolicy: Qt.StrongFocus
+    hoverEnabled: true
+    implicitHeight: 164
+    padding: 24
+    rightPadding: Math.round(self.width * 0.44)
+    onClicked: self.openPromo()
+
+    background: Rectangle {
+        border.color: self.visualFocus ? '#00BCFF' : '#262626'
+        border.width: self.visualFocus ? 2 : 1
+        color: Qt.lighter('#181818', self.enabled && self.hovered ? 1.08 : 1)
+        radius: 4
+    }
+
+    contentItem: ColumnLayout {
+        spacing: 8
+
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            color: '#F5F5F5'
+            elide: Text.ElideRight
+            font.pixelSize: 16
+            font.weight: 600
+            maximumLineCount: 1
+            text: self.promo?.data?.title ?? ''
+            textFormat: Text.PlainText
+            wrapMode: Text.NoWrap
+        }
+
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            color: '#A0A0A0'
+            elide: Text.ElideRight
+            font.pixelSize: 14
+            font.weight: 400
+            maximumLineCount: 3
+            text: self.promo?.data?.description ?? ''
+            textFormat: Text.PlainText
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        }
+
+        Item {
+            Layout.fillHeight: true
+        }
+
+        LinkButton {
+            Layout.maximumWidth: parent.width
+            external: true
+            text: self.promo?.data?.cta?.label ?? ''
+            onClicked: self.openPromo()
         }
     }
-    CloseButton {
-        id: close_button
-        z: 1
+
+    Item {
+        id: image_slot
+        anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.margins: 16
-        onClicked: {
-            Analytics.recordEvent('promo_dismiss', AnalyticsJS.segmentationPromo(null, self.promo, self.screen))
-            self.promo.dismiss()
+        width: Math.max(0, self.rightPadding - 8)
+
+        Rectangle {
+            anchors.centerIn: parent
+            color: '#164347'
+            height: 116
+            opacity: 0.75
+            radius: width / 2
+            visible: promo_image.status !== Image.Ready
+            width: 148
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                autoPaddingEnabled: true
+                blur: 1
+                blurEnabled: true
+                blurMax: 48
+            }
+        }
+
+        Rectangle {
+            anchors.centerIn: parent
+            color: '#414345'
+            height: 72
+            opacity: 0.65
+            radius: width / 2
+            visible: promo_image.status !== Image.Ready
+            width: 96
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                autoPaddingEnabled: true
+                blur: 1
+                blurEnabled: true
+                blurMax: 32
+            }
+        }
+
+        Image {
+            id: promo_image
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.margins: 8
+            anchors.right: parent.right
+            anchors.top: parent.top
+            asynchronous: true
+            fillMode: Image.PreserveAspectFit
+            horizontalAlignment: Image.AlignHCenter
+            mipmap: true
+            smooth: true
+            source: self.promo?.getOrCreateResource('imageUrl')?.path ?? ''
+            sourceSize.height: Math.round(148 * Screen.devicePixelRatio)
+            verticalAlignment: Image.AlignVCenter
+            visible: status === Image.Ready
         }
     }
-    Component {
-        id: layout_0
-        Page {
-            bottomPadding: 12
-            leftPadding: 24
-            rightPadding: 24
-            topPadding: 12
-            background: Rectangle {
-                radius: 4
-                color: '#181818'
-                border.width: 1
-                border.color: '#262626'
-            }
-            footer: ColumnLayout {
-                PrimaryButton {
-                    Layout.fillWidth: true
-                    Layout.margins: 0
-                    Layout.leftMargin: 24
-                    Layout.rightMargin: 24
-                    Layout.bottomMargin: 12
-                    text: self.promo.data.cta_small
-                    onClicked: self.clicked()
-                }
-            }
-            header: RowLayout {
-                ColumnLayout {
-                    Layout.margins: 0
-                    Layout.leftMargin: 16
-                    Layout.rightMargin: 0
-                    Layout.topMargin: 16
-                    spacing: 10
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-                        id: title_label
-                        font.pixelSize: 14
-                        font.weight: 700
-                        text: self.promo.data.title_small ?? ''
-                        visible: title_label.text.length > 0
-                        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-                        id: text_label
-                        font.pixelSize: 12
-                        font.weight: 400
-                        verticalAlignment: Label.AlignTop
-                        opacity: 0.8
-                        text: self.promo.data.text_small ?? ''
-                        textFormat: Label.RichText
-                        visible: text_label.text.length > 0
-                        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                    }
-                }
-                Image {
-                    Layout.alignment: Qt.AlignTop | Qt.AlignRight
-                    Layout.maximumHeight: 100
-                    Layout.minimumWidth: image.paintedWidth
-                    Layout.preferredWidth: 0
-                    Layout.rightMargin: 16
-                    id: image
-                    source: self.promo.getOrCreateResource('image_small').path
-                    fillMode: Image.PreserveAspectFit
-                    verticalAlignment: Image.AlignTop
-                    visible: image.status === Image.Ready
-                }
-            }
-            contentItem: null
-        }
+
+    CloseButton {
+        anchors.right: parent.right
+        anchors.rightMargin: 14
+        anchors.top: parent.top
+        anchors.topMargin: 14
+        height: 20
+        width: 20
+        onClicked: self.dismissRequested()
     }
-    Component {
-        id: layout_1
-        Pane {
-            bottomPadding: 16
-            leftPadding: 24
-            rightPadding: 24
-            topPadding: 0
-            background: Rectangle {
-                radius: 4
-                color: '#181818'
-                border.width: 1
-                border.color: '#262626'
-            }
-            contentItem: ColumnLayout {
-                spacing: 10
-                Image {
-                    Layout.alignment: Qt.AlignTop | Qt.AlignRight
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 0
-                    Layout.minimumHeight: {
-                        if (image.status !== Image.Ready) return 0
-                        return image.sourceSize.height * image.width / image.sourceSize.width
-                    }
-                    Layout.maximumHeight: 200
-                    id: image
-                    source: self.promo.getOrCreateResource('image_small').path
-                    fillMode: Image.PreserveAspectFit
-                    verticalAlignment: Image.AlignTop
-                    horizontalAlignment: Image.AlignHCenter
-                    visible: image.status === Image.Ready
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    id: title_label
-                    font.pixelSize: 14
-                    font.weight: 700
-                    text: self.promo.data.title_small ?? ''
-                    visible: title_label.text.length > 0
-                    wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    id: text_label
-                    font.pixelSize: 12
-                    font.weight: 400
-                    verticalAlignment: Label.AlignTop
-                    opacity: 0.8
-                    text: self.promo.data.text_small ?? ''
-                    textFormat: Label.RichText
-                    visible: text_label.text.length > 0
-                    wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                }
-                PrimaryButton {
-                    Layout.fillWidth: true
-                    text: self.promo.data.cta_small
-                    onClicked: self.clicked()
-                }
-            }
-        }
-    }
-    Component {
-        id: layout_2
-        Page {
-            bottomPadding: 12
-            leftPadding: 24
-            rightPadding: 24
-            topPadding: 12
-            background: Rectangle {
-                radius: 4
-                color: '#181818'
-                Image {
-                    id: image
-                    anchors.fill: parent
-                    source: self.promo.getOrCreateResource('image_small').path
-                    fillMode: Image.PreserveAspectCrop
-                    verticalAlignment: Image.AlignTop
-                    visible: image.status === Image.Ready
-                }
-                Rectangle {
-                    anchors.fill: parent
-                    radius: 4
-                    color: 'transparent'
-                    border.width: 1
-                    border.color: '#262626'
-                }
-            }
-            footer: ColumnLayout {
-                PrimaryButton {
-                    Layout.fillWidth: true
-                    Layout.margins: 24
-                    text: self.promo.data.cta_small
-                    onClicked: self.clicked()
-                }
-            }
-            header: ColumnLayout {
-                Label {
-                    Layout.margins: 16
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    id: overline_label
-                    font.capitalization: Font.AllUppercase
-                    font.pixelSize: 10
-                    font.weight: 300
-                    horizontalAlignment: Label.AlignHCenter
-                    text: self.promo.data.overline_small
-                    visible: overline_label.text.length > 0
-                    wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    Layout.leftMargin: 24
-                    Layout.rightMargin: 24
-                    id: title_label
-                    font.pixelSize: 24
-                    font.weight: 700
-                    horizontalAlignment: Label.AlignHCenter
-                    text: self.promo.data.title_small ?? ''
-                    visible: title_label.text.length > 0
-                    wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    Layout.leftMargin: 24
-                    Layout.rightMargin: 24
-                    id: text_label
-                    font.pixelSize: 12
-                    font.weight: 400
-                    horizontalAlignment: Label.AlignHCenter
-                    verticalAlignment: Label.AlignTop
-                    opacity: 0.8
-                    text: self.promo.data.text_small ?? ''
-                    textFormat: Label.RichText
-                    visible: text_label.text.length > 0
-                    wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                }
-            }
-            contentItem: null
-        }
+
+    HoverHandler {
+        cursorShape: Qt.PointingHandCursor
     }
 }

@@ -6,7 +6,6 @@ import QtQuick.Layouts
 import QtQuick.Window
 import QtQml
 
-import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 Page {
@@ -27,7 +26,7 @@ Page {
         }
         TListView {
             Component.onCompleted: transaction_list_view.SplitView.preferredWidth = self.width / 2
-            SplitView.minimumWidth: 400
+            SplitView.minimumWidth: 300
             SplitView.preferredWidth: 500
             id: transaction_list_view
             contentY: 0
@@ -109,7 +108,8 @@ Page {
         }
         VFlickable {
             SplitView.fillWidth: true
-            SplitView.minimumWidth: 300
+            SplitView.minimumWidth: 468
+            id: overview_flickable
             alignment: Qt.AlignTop
             Label {
                 Layout.alignment: Qt.AlignTop
@@ -131,49 +131,15 @@ Page {
                 verticalGridLinesCount: 5
                 context: self.context
             }
-            Repeater {
-                id: promos_repeater
-                model: {
-                    return [...PromoManager.promos]
-                        .filter(_ => !Settings.useTor)
-                        .filter(promo => !promo.dismissed)
-                        .filter(promo => promo.ready)
-                        .filter(promo => UtilJS.filterPromo(WalletManager.wallets, promo))
-                        .filter(promo => promo.data.is_visible)
-                        .filter(promo => promo.data.screens.includes('HomeTab'))
-                        .slice(0, 1)
-                }
-                delegate: PromoCard {
-                    required property Promo modelData
-                    Layout.fillWidth: true
-                    Layout.minimumHeight: 250
-                    Layout.topMargin: 32
-                    id: card
-                    promo: card.modelData
-                    screen: 'WalletOverview'
-                    onClicked: {
-                        const context = self.context
-                        const promo = card.promo
-                        const screen = 'WalletOverview'
-                        if (card.promo.data.is_small) {
-                            Analytics.recordEvent('promo_action', AnalyticsJS.segmentationPromo(context, promo, screen))
-                            Qt.openUrlExternally(card.promo.data.link)
-                        } else {
-                            Analytics.recordEvent('promo_open', AnalyticsJS.segmentationPromo(context, promo, screen))
-                            promo_drawer.createObject(self, { context, promo, screen }).open()
-                        }
-                    }
-                }
+            PromosCarousel {
+                Layout.fillWidth: true
+                Layout.topMargin: 24
+                context: self.context
+                flickable: overview_flickable
             }
             VSpacer {
                 Layout.minimumHeight: 12
             }
-        }
-    }
-
-    Component {
-        id: promo_drawer
-        PromoDrawer {
         }
     }
 

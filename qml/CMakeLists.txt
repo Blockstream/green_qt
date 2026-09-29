@@ -266,10 +266,10 @@ set(QML_FILES_FEATURES
     JadeFirmwareUpdatedPage.qml
     AddressLabel.qml
     JadeGenuineCheckDrawer.qml
-    PromoDrawer.qml
     JadeGenuineCheckPage.qml
     JadeGenuineCheckingPage.qml
     PromoCard.qml
+    PromosCarousel.qml
     ReceivePage.qml
     JadeDetailsDrawer.qml
     HelpButton.qml

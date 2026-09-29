@@ -421,8 +421,8 @@ function confirmationTime(rate, estimates) {
 }
 
 function filterPromo(wallets, promo) {
-    const target = promo?.data?.target
-    if (!target) return true
+    const target = promo?.data?.target ?? ''
+    if (target === '') return true
     let sww = 0
     let hww = 0
     let jade_classic = 0
@@ -443,7 +443,6 @@ function filterPromo(wallets, promo) {
             sww ++
         }
     }
-    console.log('filter promo', promo.id, target, sww, hww, jade_classic, jade_plus)
     if (target === 'only_sww') {
         return sww > 0 && hww === 0
     } else if (target === 'jade_user') {
@@ -451,7 +450,7 @@ function filterPromo(wallets, promo) {
     } else if (target === 'jadeplus_user') {
         return jade_plus > 0
     }
-    return true
+    return false
 }
 
 function isJadeV2(boardType) {

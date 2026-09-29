@@ -20,13 +20,13 @@ class PromoResource : public QObject
     QML_UNCREATABLE("")
 public:
     PromoResource(Promo* promo);
+    ~PromoResource();
     Promo* promo() const { return m_promo; }
     QString path() const { return m_path; }
     void setPath(const QString& path);
     void download(const QString& source);
     void downloadNow();
     void purge();
-    bool ready() const;
 signals:
     void pathChanged();
 private:
@@ -40,7 +40,6 @@ class Promo : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString id READ id CONSTANT)
-    Q_PROPERTY(bool ready READ ready NOTIFY readyChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     Q_PROPERTY(bool dismissed READ dismissed NOTIFY dismissedChanged)
     QML_ELEMENT
@@ -50,7 +49,6 @@ public:
     virtual ~Promo();
     PromoManager* manager() const { return m_manager; }
     QString id() const { return m_id; }
-    bool ready() const;
     QJsonObject data() const { return m_data; }
     void setData(const QJsonObject& data);
     bool dismissed() const { return m_dismissed; }
@@ -58,7 +56,6 @@ public:
 public slots:
     void dismiss();
 signals:
-    void readyChanged();
     void dataChanged();
     void dismissedChanged();
 protected:
