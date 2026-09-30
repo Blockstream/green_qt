@@ -165,7 +165,7 @@ public:
     void createStandardAccount(TaskGroup* group, Network* network);
 
 public slots:
-    void refreshAccounts();
+    void refresh();
 
 signals:
     void walletChanged();

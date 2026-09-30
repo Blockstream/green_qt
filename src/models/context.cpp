@@ -1044,13 +1044,17 @@ void Context::loginNetwork(TaskGroup *group, Network *network)
     group->add(login);
 }
 
-void Context::refreshAccounts()
+void Context::refresh()
 {
     Q_D(Context);
 
+    LoadAssetsTask* load_assets{nullptr};
     auto group = new TaskGroup(this);
-    group->setName("id_loading_accounts");
     for (auto session : d->sessions_list) {
+        if (session->network()->isLiquid() && !load_assets) {
+            load_assets = new LoadAssetsTask(true, session);
+            group->add(load_assets);
+        }
         auto load_accounts = new LoadAccountsTask(!isWatchonly(), session);
         connect(load_accounts, &Task::finished, this, [=, this] {
             for (auto account : load_accounts->accounts()) {

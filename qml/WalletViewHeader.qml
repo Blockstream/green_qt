@@ -83,7 +83,7 @@ GPane {
             enabled: !(self.context?.dispatcher.busy ?? false)
             onClicked: {
                 menu.close()
-                self.context.refreshAccounts()
+                self.context.refresh()
             }
         }
         GMenu.Separator {
