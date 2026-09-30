@@ -2,6 +2,7 @@
 #include "jadeapi.h"
 #include "jadedevice.h"
 #include "jadedeviceserialportdiscoveryagent.h"
+#include "util.h"
 
 #include <QtConcurrentRun>
 
@@ -10,8 +11,6 @@
 #include <QTimer>
 
 #include <libserialport.h>
-
-extern QCommandLineParser g_args;
 
 namespace {
 

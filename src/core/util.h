@@ -2,10 +2,14 @@
 #define BLOCKSTREAM_CORE_UTIL_H
 
 #include <QByteArray>
+#include <QCommandLineParser>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QString>
+
+extern QString g_data_location;
+extern QCommandLineParser g_args;
 
 bool ExistsDataDir(const QString& context);
 bool RemoveDataDir(const QString& context);

@@ -13,8 +13,6 @@
 #include <unistd.h>
 #endif
 
-extern QString g_data_location;
-
 int watchdog_handler(Application& app)
 {
     QStringList args = app.arguments().mid(1);

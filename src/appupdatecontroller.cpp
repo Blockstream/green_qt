@@ -5,8 +5,6 @@
 
 #include <QTimer>
 
-extern QCommandLineParser g_args;
-
 class CheckForUpdatesTask : public HttpRequestTask
 {
 public:

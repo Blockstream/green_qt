@@ -21,6 +21,7 @@
 #endif
 
 QString g_data_location;
+QCommandLineParser g_args;
 
 bool ExistsDataDir(const QString& context)
 {

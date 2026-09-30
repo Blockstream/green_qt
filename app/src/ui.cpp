@@ -47,9 +47,6 @@
 
 #include <hidapi/hidapi.h>
 
-extern QString g_data_location;
-extern QCommandLineParser g_args;
-
 void SentryInit();
 void SentryClose();
 

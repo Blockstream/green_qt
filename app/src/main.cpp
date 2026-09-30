@@ -9,9 +9,7 @@
 #include "application.h"
 #include "config.h"
 #include "logging.h"
-
-extern QString g_data_location;
-QCommandLineParser g_args;
+#include "util.h"
 
 int watchdog_handler(Application& app);
 int ui_handler(Application& app, int argc, char *argv[]);
