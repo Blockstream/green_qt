@@ -38,7 +38,9 @@ Environment overrides:
 
 - `BUILD_DIR` — build directory (default: `build`). Example: `BUILD_DIR=build-tests ./tools/test.sh all`
 - `QT_CMAKE_BIN` — path to `qt-cmake` if it is not on `PATH`
-- `CTEST_JUNIT_FILE` — if set, CTest writes JUnit XML there (used in CI for GitLab test reports)
+- `CTEST_JUNIT_FILE` — if set, CTest writes JUnit XML there (for GitLab test reports)
+
+CI runs the tests in `linux-x86_64:build-appimage`, right after `tools/ci/build.sh` (which builds with `BUILD_TESTING` on by default), and fails the job if any test fails.
 
 If you need raw CMake/CTest invocations instead of the script, use the same build directory and flags as `tools/test.sh` (`qt-cmake -S . -B <dir> -DBUILD_TESTING=ON`, then `cmake --build` and `ctest --test-dir <dir>`).
 
@@ -47,24 +49,15 @@ If you need raw CMake/CTest invocations instead of the script, use the same buil
 Current tests live under `tests/unit`.
 
 1. Create a new test source file in `tests/unit` (for example `tst_wallet.cpp`).
-2. Add the file as a new test executable in `tests/unit/CMakeLists.txt` using `qt_add_executable(...)`.
-3. Link at least `Qt6::Core` and `Qt6::Test`.
-4. Register the executable with CTest using `add_test(...)`.
+2. Register it in `tests/unit/CMakeLists.txt` with `add_unit_test(...)`, which creates the executable, links `Qt6::Test` and adds it to CTest.
+3. List `blockstream_core` under `LIBRARIES` to test app code.
 
 Example CMake entry:
 
 ```cmake
-set(TEST_TARGET test_wallet)
-
-qt_add_executable(${TEST_TARGET}
-    tst_wallet.cpp
+add_unit_test(
+    NAME test_wallet
+    SOURCES tst_wallet.cpp
+    LIBRARIES blockstream_core
 )
-
-target_link_libraries(${TEST_TARGET}
-    PRIVATE
-    Qt6::Core
-    Qt6::Test
-)
-
-add_test(NAME ${TEST_TARGET} COMMAND ${TEST_TARGET})
 ```
