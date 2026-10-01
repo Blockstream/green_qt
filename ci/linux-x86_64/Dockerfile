@@ -16,16 +16,16 @@ RUN ./qt-online-installer-linux-x64-online.run \
     --root /qt \
     --accept-licenses --default-answer --confirm-command --accept-obligations \
     install \
-        qt.qt6.6112.linux_gcc_64 \
-        qt.qt6.6112.addons.qt5compat \
-        qt.qt6.6112.addons.qtconnectivity \
-        qt.qt6.6112.addons.qtmultimedia \
-        qt.qt6.6112.addons.qtserialport \
-        qt.qt6.6112.addons.qtpositioning \
-        extensions.qtwebengine.6112.linux_gcc_64 \
-        qt.qt6.6112.addons.qtwebview \
-        qt.qt6.6112.addons.qtwebchannel
-ENV PATH="/qt/6.11.2/gcc_64/bin/:$PATH"
+        qt.qt6.6120.linux_gcc_64 \
+        qt.qt6.6120.addons.qt5compat \
+        qt.qt6.6120.addons.qtconnectivity \
+        qt.qt6.6120.addons.qtmultimedia \
+        qt.qt6.6120.addons.qtserialport \
+        qt.qt6.6120.addons.qtpositioning \
+        extensions.qtwebengine.6120.61400.linux_gcc_64 \
+        qt.qt6.6120.addons.qtwebview \
+        qt.qt6.6120.addons.qtwebchannel
+ENV PATH="/qt/6.12.0/gcc_64/bin/:$PATH"
 
 FROM base AS hidapi
 COPY tools/buildlibusb.sh tools/buildhidapi.sh tools/

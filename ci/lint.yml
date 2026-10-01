@@ -27,7 +27,7 @@ qmllint:
   stage: lint
   allow_failure: true
   variables:
-    LINUX_IMAGE: $GAR/green_qt/linux-x86_64@sha256:c9d4c4202b3e9341203e686aaf9efadf691e6729a061025da416e68b62d8389c
+    LINUX_IMAGE: $GAR/green_qt/linux-x86_64@sha256:0067e1fbe0fb9e0716b4cefd876bcc5e6bf636e53a5ecfd54f52ea5c92f1a46c
   script:
     - docker pull "$LINUX_IMAGE"
     - >-
@@ -35,6 +35,6 @@ qmllint:
       -v "$CI_PROJECT_DIR:$CI_PROJECT_DIR"
       -w "$CI_PROJECT_DIR"
       "$LINUX_IMAGE"
-      bash -lc 'export PATH="/qt/6.11.2/gcc_64/bin:$PATH";
+      bash -lc 'export PATH="/qt/6.12.0/gcc_64/bin:$PATH";
       qmllint --version;
       tools/lint/qmllint.sh'

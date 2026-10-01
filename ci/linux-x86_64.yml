@@ -35,7 +35,7 @@ linux-x86_64:build-appimage:
       -e COUNTLY_APP_KEY_DEV
       -e COUNTLY_APP_KEY_PROD
       "$LINUX_IMAGE"
-      bash -lc 'export PATH="/qt/6.11.2/gcc_64/bin:$PREFIX/bin:$PATH";
+      bash -lc 'export PATH="/qt/6.12.0/gcc_64/bin:$PREFIX/bin:$PATH";
       export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH";
       export SOURCE_DATE_EPOCH=$(git log -1 --format=%ct);
       git ls-files -z | xargs -0 touch -d @$SOURCE_DATE_EPOCH;
