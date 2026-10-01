@@ -28,7 +28,7 @@ public:
         Notice,
         Alert,
     };
-    Q_ENUMS(Level);
+    Q_ENUM(Level)
     explicit Notification(QObject* parent);
     Level level() const { return m_level; }
     void setLevel(Level level);
