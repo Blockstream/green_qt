@@ -16,10 +16,31 @@ INSTALLER_NAME=qt-online-installer-macOS-universal-$INSTALLER_VERSION
 WEBENGINE_ID=${2:-$QT_ID}
 ROOT="${QT_INSTALL_ROOT:-$HOME/Qt}/$QT_VERSION"
 PREFIX="$ROOT/$QT_VERSION/macos"
+# Written only after a validated install, so a partial or interrupted install is never accepted.
+MARKER="$ROOT/.install-complete"
+EXPECTED="qt=$QT_VERSION webengine=$WEBENGINE_ID"
+COMPONENTS=(
+    qt.qt6.$QT_ID.clang_64
+    qt.qt6.$QT_ID.addons.qt5compat
+    qt.qt6.$QT_ID.addons.qtconnectivity
+    qt.qt6.$QT_ID.addons.qtmultimedia
+    qt.qt6.$QT_ID.addons.qtserialport
+    qt.qt6.$QT_ID.addons.qtpositioning
+    extensions.qtwebengine.$WEBENGINE_ID.clang_64
+    qt.qt6.$QT_ID.addons.qtwebview
+    qt.qt6.$QT_ID.addons.qtwebchannel
+)
 
 installed() {
-    [ "$("$PREFIX/bin/qmake" -query QT_VERSION 2>/dev/null)" = "$QT_VERSION" ] &&
-        [ -d "$PREFIX/lib/QtWebEngineCore.framework" ]
+    [ "$(cat "$MARKER" 2>/dev/null)" = "$EXPECTED" ]
+}
+
+validate() {
+    [ "$("$PREFIX/bin/qmake" -query QT_VERSION 2>/dev/null)" = "$QT_VERSION" ] || return 1
+    [ -d "$PREFIX/lib/QtWebEngineCore.framework" ] || return 1
+    for c in "${COMPONENTS[@]}"; do
+        grep -qF "<Name>$c</Name>" "$ROOT/components.xml" || { echo "Missing component $c" >&2; return 1; }
+    done
 }
 
 if installed; then
@@ -67,19 +88,12 @@ INSTALLER="$MOUNT/$INSTALLER_NAME.app/Contents/MacOS/$INSTALLER_NAME"
 "$INSTALLER" \
     --root "$ROOT" \
     --accept-licenses --default-answer --confirm-command --accept-obligations \
-    install \
-        qt.qt6.$QT_ID.clang_64 \
-        qt.qt6.$QT_ID.addons.qt5compat \
-        qt.qt6.$QT_ID.addons.qtconnectivity \
-        qt.qt6.$QT_ID.addons.qtmultimedia \
-        qt.qt6.$QT_ID.addons.qtserialport \
-        qt.qt6.$QT_ID.addons.qtpositioning \
-        extensions.qtwebengine.$WEBENGINE_ID.clang_64 \
-        qt.qt6.$QT_ID.addons.qtwebview \
-        qt.qt6.$QT_ID.addons.qtwebchannel
+    install "${COMPONENTS[@]}"
 
-if ! installed; then
+if ! validate; then
     echo "Qt $QT_VERSION install at $PREFIX is incomplete" >&2
     exit 1
 fi
+echo "$EXPECTED" > "$MARKER.tmp"
+mv "$MARKER.tmp" "$MARKER"
 echo "Installed Qt $QT_VERSION at $PREFIX"
