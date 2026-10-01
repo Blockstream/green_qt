@@ -3,7 +3,7 @@
 
 #include <QtGlobal>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 #include <QMap>
 
 #include <IOKit/hid/IOHIDDevice.h>
@@ -37,6 +37,6 @@ public:
     QSet<int32_t> m_device_unique_ids;
 };
 
-#endif // Q_OS_MAC
+#endif // Q_OS_MACOS
 
 #endif // GREEN_DEVICEDISCOVERYAGENT_MACOS_H

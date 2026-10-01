@@ -1,6 +1,6 @@
 #include "devicediscoveryagent.h"
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 
 #include <QDebug>
 
@@ -236,4 +236,4 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
     }
 }
 
-#endif // Q_OS_MAC
+#endif // Q_OS_MACOS

@@ -1,6 +1,6 @@
 #include <QWindow>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 #import <Cocoa/Cocoa.h>
 
 void dumpViews(NSView *v, int depth=0) {
