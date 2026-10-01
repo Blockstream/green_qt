@@ -3,6 +3,8 @@
     HOST: "macos"
     MACOSX_DEPLOYMENT_TARGET: 12.0
     SHA256SUM: "shasum -a 256"
+    QT_VERSION: "6.12.0"
+    QT_WEBENGINE_ID: "6120.61400"
 
 .macos:staple:
   tags:

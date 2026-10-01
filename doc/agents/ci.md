@@ -24,6 +24,10 @@ Keep **OS-specific CI files in sync** when a change applies to more than one var
 
 Example: adding a dependency build step on macOS usually means adding the same `tools/build*.sh` invocation to **both** `macos-x86_64:depends` and `macos-arm64:depends` (only `PREFIX`, `ARCH`, brew paths, and cache keys differ).
 
+### Qt on macOS runners
+
+The `macos-*:depends` jobs install Qt with `tools/ci/install-qt-macos.sh` into `~/Qt/<version>` on the runner; the version is `QT_VERSION` (plus `QT_WEBENGINE_ID`) in `ci/macos.yml`. After bumping it, run a macOS depends job before the build jobs.
+
 ### macOS x86_64 cross-build on arm64
 
 `macos-x86_64:*` jobs run on the **`macos-arm64`** runner and cross-compile Intel artifacts (`cmake/macos-x86_64-cross.cmake`, `tools/ci/macos-x86_64-cross-env.sh`).

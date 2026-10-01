@@ -9,7 +9,7 @@
   before_script:
     - export BREW_PREFIX="/opt/homebrew"
     - export PATH="$PREFIX/bin:$PATH"
-    - export PATH="$HOME/qt-install/6.11.2/macos/bin/:$PATH"
+    - export PATH="$HOME/Qt/$QT_VERSION/$QT_VERSION/macos/bin:$PATH"
     - export CMAKE_PREFIX_PATH="$PREFIX/lib/x86_64-apple-darwin:$PREFIX/lib/cmake"
     - source tools/ci/macos-x86_64-cross-env.sh
   tags:
@@ -25,6 +25,7 @@ macos-x86_64:depends:
         - depends/macos-x86_64/
       policy: push
   script:
+    - tools/ci/install-qt-macos.sh "$QT_VERSION" "$QT_WEBENGINE_ID"
     - tools/buildkdsingleapplication.sh
     - tools/buildlibserialport.sh --disable-shared
     - tools/buildlibusb.sh
@@ -54,7 +55,7 @@ macos-x86_64:build:
     - when: manual
       allow_failure: true
   after_script:
-    - $HOME/qt-install/6.11.2/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
+    - $HOME/Qt/$QT_VERSION/$QT_VERSION/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
     - cp "$PREFIX/bin/crashpad_handler" build/Blockstream.app/Contents/MacOS/
     # keep the .dSYM (dsymutil output) for the symbols upload job instead of deleting it
     - mkdir -p symbols && mv build/Blockstream.app/Contents/MacOS/Blockstream.dSYM symbols/
