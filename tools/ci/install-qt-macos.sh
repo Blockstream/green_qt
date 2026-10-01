@@ -10,6 +10,9 @@ if [ -z "$QT_VERSION" ]; then
     exit 1
 fi
 QT_ID=${QT_VERSION//./}
+INSTALLER_VERSION=4.11.0
+INSTALLER_SHA256=917fb4048226db081b780b751138c896165f66df523f3b0f4385bcfb4a1c59da
+INSTALLER_NAME=qt-online-installer-macOS-universal-$INSTALLER_VERSION
 WEBENGINE_ID=${2:-$QT_ID}
 ROOT="${QT_INSTALL_ROOT:-$HOME/Qt}/$QT_VERSION"
 PREFIX="$ROOT/$QT_VERSION/macos"
@@ -55,10 +58,11 @@ fi
 
 rm -rf "$ROOT"
 
-curl -sSfL -o "$WORK/installer.dmg" https://download.qt.io/official_releases/online_installers/qt-online-installer-macOS-universal.dmg
+curl -sSfL -o "$WORK/installer.dmg" "https://download.qt.io/archive/online_installers/${INSTALLER_VERSION%.*}/$INSTALLER_NAME.dmg"
+echo "$INSTALLER_SHA256  $WORK/installer.dmg" | shasum -a 256 -c -
 mkdir "$MOUNT"
 hdiutil attach "$WORK/installer.dmg" -nobrowse -readonly -mountpoint "$MOUNT" -quiet
-INSTALLER=$(echo "$MOUNT"/*.app/Contents/MacOS/qt-online-installer-*)
+INSTALLER="$MOUNT/$INSTALLER_NAME.app/Contents/MacOS/$INSTALLER_NAME"
 
 "$INSTALLER" \
     --root "$ROOT" \
