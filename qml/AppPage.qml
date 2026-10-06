@@ -25,6 +25,13 @@ MainPage {
 
     signal crashClicked
 
+    function openDesignSystem() {
+        if (design_system_loader.status !== Loader.Ready) return
+        wallets_drawer.close()
+        stack_layout.currentIndex = Array.from(stack_layout.children).indexOf(design_system_loader)
+        side_bar.currentView = SideBar.View.DesignSystem
+    }
+
     function openPreferences() {
         if (side_bar.currentView === SideBar.View.Preferences) {
             return
@@ -38,6 +45,7 @@ MainPage {
             const child = stack_layout.children[i]
             if (child instanceof WalletView && child.wallet === wallet) { // && !child.device) {
                 stack_layout.currentIndex = i;
+                side_bar.currentView = SideBar.View.Wallet
                 return
             }
         }
@@ -110,6 +118,7 @@ MainPage {
 
         if (WalletManager.wallets.length > 1 && current_index < 0) {
             stack_layout.currentIndex = 0
+            side_bar.currentView = SideBar.View.Wallets
             return
         }
 
@@ -191,9 +200,9 @@ MainPage {
             currentIndex: 0
             onCurrentItemChanged: {
                 const item = stack_layout.currentItem
-                if (item instanceof WalletView) {
-                    side_bar.currentWalletView = item as WalletView
-                }
+                if (!item) return
+                side_bar.currentView = item === design_system_loader ? SideBar.View.DesignSystem
+                    : item instanceof WalletView ? SideBar.View.Wallet : SideBar.View.Wallets
                 item.forceActiveFocus()
             }
             WalletsView {
@@ -206,6 +215,15 @@ MainPage {
                     name: 'Home'
                     active: stack_layout.currentIndex === 0
                 }
+            }
+            Loader {
+                readonly property string title: item?.title ?? ''
+
+                id: design_system_loader
+                active: env !== 'Production' && Qt.application.arguments.includes('--debug')
+                source: Qt.resolvedUrl('design-system/DesignSystemPage.qml')
+                enabled: StackLayout.isCurrentItem
+                focus: StackLayout.isCurrentItem
             }
         }
 
@@ -276,6 +294,7 @@ MainPage {
             }
         }
         onPreferencesClicked: preferences_action.trigger()
+        onDesignSystemClicked: self.openDesignSystem()
         onWalletsClicked: openWallets()
         onCrashClicked: self.crashClicked()
         onSimulateNotificationClicked: (type) => {
@@ -353,7 +372,8 @@ MainPage {
         PreferencesDialog {
             context: self.context
             onClosed: {
-                side_bar.currentView = side_bar.currentWalletView ? SideBar.View.Wallet : SideBar.View.Wallets
+                side_bar.currentView = stack_layout.currentItem === design_system_loader ? SideBar.View.DesignSystem
+                    : side_bar.currentWalletView ? SideBar.View.Wallet : SideBar.View.Wallets
                 destroy()
             }
         }

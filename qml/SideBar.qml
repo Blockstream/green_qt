@@ -8,10 +8,12 @@ Pane {
     enum View {
         Wallet,
         Wallets,
-        Preferences
+        Preferences,
+        DesignSystem
     }
 
     signal preferencesClicked
+    signal designSystemClicked
     signal walletsClicked
     signal crashClicked
     signal simulateNotificationClicked(string type)
@@ -131,6 +133,14 @@ Pane {
             view: OverviewPage.Settings
         }
         VSpacer {
+        }
+        SideButton {
+            visible: env !== 'Production' && Qt.application.arguments.includes('--debug')
+            icon.source: 'qrc:/icons/palette.svg'
+            icon.color: Theme.colors.iconSubtle
+            text: 'Design system'
+            isCurrent: self.currentView === SideBar.View.DesignSystem
+            onClicked: self.designSystemClicked()
         }
         SideButton {
             visible: Qt.application.arguments.includes('--debug')

@@ -545,6 +545,7 @@ qt_add_resources(blockstream_core "images"
         icons/list-checks.svg
         icons/magnifying-glass-plus.svg
         icons/note.svg
+        icons/palette.svg
 )
 
 qt_add_resources(blockstream_core "fonts"

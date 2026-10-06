@@ -19,6 +19,15 @@ set(QML_FILES_UI
     ui/UiLabel.qml
 )
 
+set(QML_FILES_DESIGN_SYSTEM)
+if(NOT GREEN_ENV STREQUAL "Production")
+    set(QML_FILES_DESIGN_SYSTEM
+        design-system/DesignSystemPage.qml
+        design-system/DesignSystemSwatch.qml
+        design-system/catalog.js
+    )
+endif()
+
 set(QML_FILES_CORE
     analytics.js
     util.js
@@ -337,6 +346,7 @@ set(QML_FILES_FEATURES
 set(QML_FILES
     ${QML_FILES_THEME}
     ${QML_FILES_UI}
+    ${QML_FILES_DESIGN_SYSTEM}
     ${QML_FILES_CORE}
     ${QML_FILES_WORKFLOWS}
     ${QML_FILES_DEVICES}

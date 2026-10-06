@@ -128,7 +128,7 @@ Label {
 }
 ```
 
-`qml/theme/Colors.qml` defines the required semantic color properties. `LightColors.qml` and `DarkColors.qml` provide their values. `Theme.dark` selects the active palette through `Theme.colors` and defaults to dark. Use `Theme.colors` in product QML.
+`qml/theme/Colors.qml` defines the required semantic color properties. `LightColors.qml` and `DarkColors.qml` provide their values. `Theme.dark` selects the active palette through `Theme.colors` and defaults to dark. Use `Theme.colors` in product QML. The debug gallery selects `Theme.lightColors` or `Theme.darkColors` independently, so its preview switch does not change the application palette.
 
 ### Typography
 
@@ -153,6 +153,12 @@ Inter covers body, label, title, overline, and display styles. Code styles use R
 ### Updating token definitions
 
 Add each semantic color property to `qml/theme/Colors.qml` and its values to both `LightColors.qml` and `DarkColors.qml`, keeping each token's path comment. Update text styles in `qml/theme/Typography.qml`. Update font assets and registration if families or weights change.
+
+### Debug gallery
+
+In non-production builds, launch with `--debug` and select **Design system** in the sidebar to inspect colors, typography, and component examples. The gallery QML and catalog are excluded when `GREEN_ENV` is `Production`, and the sidebar entry stays hidden even with `--debug`. AppPage loads the gallery dynamically so production does not depend on its QML types. The preview palette switch changes the whole gallery, including its background and controls, without changing the rest of the app. The Typography tab and UiLabel section each have a sample text field; each field updates only its own previews.
+
+Keep the grouped token names and design IDs in `qml/design-system/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `qml/design-system/DesignSystemPage.qml`; reusable components belong in `qml/ui/`.
 
 ## Custom background pattern
 
