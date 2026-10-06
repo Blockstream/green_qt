@@ -1,8 +1,8 @@
 setlocal enabledelayedexpansion
 
 set SENTRY_REPO=https://github.com/getsentry/sentry-native
-set SENTRY_TAG=0.16.8
-set SENTRY_COMMIT=d5677deb89ae24c14821f4217e50100f96bca3c7
+set SENTRY_TAG=0.17.1
+set SENTRY_COMMIT=620f6afda74c32a7c1468200a2578f62a8006277
 
 rem Staged into the image by the Dockerfile, from tools/patches.
 set PATCHES=C:\patches
