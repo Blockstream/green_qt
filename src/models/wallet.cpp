@@ -131,8 +131,15 @@ void Wallet::save()
     if (!m_amp2_wid.isEmpty()) {
         data.insert("amp2_wid", m_amp2_wid);
     }
+    QJsonObject amp2;
     if (m_amp2_hidden) {
-        data.insert("amp2", QJsonObject{{ "hidden", true }});
+        amp2.insert("hidden", true);
+    }
+    if (!m_amp2_name.isEmpty()) {
+        amp2.insert("name", m_amp2_name);
+    }
+    if (!amp2.isEmpty()) {
+        data.insert("amp2", amp2);
     }
     if (m_login) m_login->write(data);
     QFile file(GetDataFile("wallets2", m_id));
@@ -234,6 +241,13 @@ void Wallet::setAmp2Hidden(bool hidden)
 {
     if (m_amp2_hidden == hidden) return;
     m_amp2_hidden = hidden;
+    save();
+}
+
+void Wallet::setAmp2Name(const QString& name)
+{
+    if (m_amp2_name == name) return;
+    m_amp2_name = name;
     save();
 }
 

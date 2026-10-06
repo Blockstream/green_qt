@@ -248,6 +248,15 @@ bool Controller::setAccountName(Account* account, QString name)
     }
     if (account->name() == name) return false;
 
+    if (account->isAmp2()) {
+        // AMP2 has no gdk subaccount, so the name is kept in the wallet file.
+        auto wallet = d->context->wallet();
+        if (!wallet) return false;
+        wallet->setAmp2Name(name);
+        account->setName(name);
+        return true;
+    }
+
     auto network = account->network();
     auto session = d->context->getOrCreateSession(network);
 

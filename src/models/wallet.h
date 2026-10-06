@@ -154,6 +154,9 @@ public:
     bool amp2Hidden() const { return m_amp2_hidden; }
     void setAmp2Hidden(bool hidden);
 
+    QString amp2Name() const { return m_amp2_name; }
+    void setAmp2Name(const QString& name);
+
 public slots:
     void disconnect();
     void reload(bool refresh_accounts = false);
@@ -184,6 +187,7 @@ public:
     // LwkAmp2AccountController::deriveAmp2 / LoadController).
     QString m_amp2_wid;
     bool m_amp2_hidden{false};
+    QString m_amp2_name;
 
     void save();
 private:

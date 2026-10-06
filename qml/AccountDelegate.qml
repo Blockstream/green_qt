@@ -107,7 +107,6 @@ ItemDelegate {
             enabled: {
                 if (!delegate.highlighted) return false
                 if (delegate.account.hidden) return false
-                if (delegate.account.amp2) return false
                 if (delegate.account.context.watchonly) return false
                 if (delegate.account.session.config.twofactor_reset?.is_active ?? false) return false
                 return true
@@ -215,7 +214,6 @@ ItemDelegate {
                                 GMenu.Item {
                                     text: qsTrId('id_rename')
                                     icon.source: 'qrc:/svg/wallet-rename.svg'
-                                    enabled: !delegate.account.amp2
                                     onClicked: {
                                         account_delegate_menu.close()
                                         // delegate.ListView.view.currentIndex = index

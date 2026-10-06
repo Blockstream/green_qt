@@ -510,10 +510,11 @@ Account* Context::getOrCreateAmp2Account(Network* network)
     // lives on LwkAmp2AccountController, not the Account, so the generic path
     // is fine.
     constexpr quint32 AMP2_POINTER = 0x40000000;
+    const auto name = d->wallet ? d->wallet->amp2Name() : QString();
     return getOrCreateAccount(network, QJsonObject{
         { "pointer", static_cast<qint64>(AMP2_POINTER) },
         { "type", "amp2" },
-        { "name", "AMP Liquid" },
+        { "name", name.isEmpty() ? QStringLiteral("AMP Liquid") : name },
         { "hidden", d->wallet && d->wallet->amp2Hidden() },
         { "amp2_wid", d->wallet ? d->wallet->m_amp2_wid : QString() },
     });
