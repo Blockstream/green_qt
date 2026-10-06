@@ -165,7 +165,8 @@ function canArchiveAccount(context, account) {
     if (context.watchonly) return false
     if (account.hidden) return false
     if (account.amp2 && !account.synced) return false
-    if (accounts(context).length <= 1) return false
+    const network = account.network
+    if (accounts(context).filter(account => account.network.key === network.key).length <= 1) return false
     if (accountHasBalance(account)) return false
     return true
 }
