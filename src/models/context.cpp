@@ -514,7 +514,7 @@ Account* Context::getOrCreateAmp2Account(Network* network)
         { "pointer", static_cast<qint64>(AMP2_POINTER) },
         { "type", "amp2" },
         { "name", "AMP Liquid" },
-        { "hidden", false },
+        { "hidden", d->wallet && d->wallet->amp2Hidden() },
         { "amp2_wid", d->wallet ? d->wallet->m_amp2_wid : QString() },
     });
 }

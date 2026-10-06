@@ -123,6 +123,7 @@ void WalletManager::loadWallets()
         wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
         wallet->m_lightning_enabled = data.value("lightning_enabled").toBool(false);
         wallet->m_amp2_wid = data.value("amp2_wid").toString();
+        wallet->m_amp2_hidden = data.value("amp2").toObject().value("hidden").toBool(false);
 
         for (const auto hash : data.value("hashes").toArray()) {
             wallet->m_hashes.insert(hash.toString());

@@ -164,7 +164,7 @@ function canArchiveAccount(context, account) {
     if (!context || !account) return false
     if (context.watchonly) return false
     if (account.hidden) return false
-    if (account.amp2) return false
+    if (account.amp2 && !account.synced) return false
     if (accounts(context).length <= 1) return false
     if (accountHasBalance(account)) return false
     return true

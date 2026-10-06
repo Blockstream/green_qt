@@ -151,6 +151,9 @@ public:
     bool lightningEnabled() const { return m_lightning_enabled; }
     void setLightningEnabled(bool enabled);
 
+    bool amp2Hidden() const { return m_amp2_hidden; }
+    void setAmp2Hidden(bool hidden);
+
 public slots:
     void disconnect();
     void reload(bool refresh_accounts = false);
@@ -180,6 +183,7 @@ public:
     // and should be reloaded on login (see Context::amp2AccountController /
     // LwkAmp2AccountController::deriveAmp2 / LoadController).
     QString m_amp2_wid;
+    bool m_amp2_hidden{false};
 
     void save();
 private:

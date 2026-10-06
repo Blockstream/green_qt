@@ -269,6 +269,14 @@ void Controller::setAccountHidden(Account* account, bool hidden)
 {
     Q_D(Controller);
     if (!d->context) return;
+    if (account->isAmp2()) {
+        // AMP2 has no gdk subaccount, so the flag is kept in the wallet file.
+        auto wallet = d->context->wallet();
+        if (!wallet) return;
+        wallet->setAmp2Hidden(hidden);
+        account->setHidden(hidden);
+        return;
+    }
     auto network = account->network();
     auto session = d->context->getOrCreateSession(network);
 

@@ -131,6 +131,9 @@ void Wallet::save()
     if (!m_amp2_wid.isEmpty()) {
         data.insert("amp2_wid", m_amp2_wid);
     }
+    if (m_amp2_hidden) {
+        data.insert("amp2", QJsonObject{{ "hidden", true }});
+    }
     if (m_login) m_login->write(data);
     QFile file(GetDataFile("wallets2", m_id));
     bool result = file.open(QFile::WriteOnly | QFile::Truncate);
@@ -224,6 +227,13 @@ void Wallet::setLightningEnabled(bool enabled)
     if (m_lightning_enabled == enabled) return;
     m_lightning_enabled = enabled;
     emit lightningEnabledChanged();
+    save();
+}
+
+void Wallet::setAmp2Hidden(bool hidden)
+{
+    if (m_amp2_hidden == hidden) return;
+    m_amp2_hidden = hidden;
     save();
 }
 
