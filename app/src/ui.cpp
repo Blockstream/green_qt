@@ -177,12 +177,11 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings
     setlocale(LC_NUMERIC, "C");
 
-    QFontDatabase::addApplicationFont(":/fonts/inter_bold.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/inter_extra_light.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/inter_regular.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/inter_thin.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/monospace_bold.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/monospace_regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Inter-Regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Inter-Medium.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Inter-SemiBold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Inter-Bold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/RobotoMono-Regular.ttf");
 
     app.styleHints()->setTabFocusBehavior(Qt::TabFocusAllControls);
 

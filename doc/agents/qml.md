@@ -106,53 +106,62 @@ RowLayout {
 
 Use plain `Flickable` only when the view needs custom sizing, nested delegates, non-column content, or behavior that `VFlickable` does not provide. Follow the nearest existing page when choosing between them.
 
-## Styling constants
+## Design system foundations
+
+For new UI, use the `Theme` singleton in `Blockstream.Green`. It exposes the design system semantic colors and text styles. Existing components still contain older styling; use the tokens for new UI and future migrations.
+
+### Components
+
+Place new design system components in `qml/ui/` and prefix their filenames and QML type names with `Ui`, for example `UiButton.qml`, `UiTextField.qml`, `UiAlert.qml`, and `UiCard.qml`. Register them in the `QML_FILES_UI` list in `qml/CMakeLists.txt`. Use `Theme.colors` and `Theme.typography` for their styling.
+
+### Colors
+
+Choose the semantic role that describes the element, rather than matching a hex value or palette shade. Token paths become camel case names in QML: `text/primary` becomes `Theme.colors.textPrimary`, and `feedback/negative/on-fill` becomes `Theme.colors.feedbackNegativeOnFill`. Available groups are text, action, border, feedback, icon, overlay, and surface.
 
 ```qml
-// Colors (always hex strings)
-color: '#FFFFFF'          // White text
-color: '#A0A0A0'          // Muted text
-color: '#6F6F6F'          // Subtle text
-color: '#00BCFF'          // Accent cyan
-color: '#FF6B6B'          // Error red
-color: '#181818'          // Dark background
-color: '#222226'          // Card background
-color: '#262626'          // Border color
-color: '#313131'          // Lighter border
+import Blockstream.Green
+import QtQuick
+import QtQuick.Controls
 
-// Font sizes
-font.pixelSize: 28        // Large headers
-font.pixelSize: 16        // Body text
-font.pixelSize: 14        // Labels
-font.pixelSize: 12        // Small/caption
-
-// Font weights (numeric)
-font.weight: 700          // Bold
-font.weight: 600          // Semi-bold
-font.weight: 500          // Medium
-font.weight: 400          // Regular
-
-// Padding (explicit, not defaults)
-padding: 20
-leftPadding: 12
-rightPadding: 12
-topPadding: 10
-bottomPadding: 10
-
-// Radius
-radius: 5                 // Standard cards
-radius: 8                 // Buttons
-radius: 4                 // Small elements
+Label {
+    color: Theme.colors.textPrimary
+}
 ```
+
+`qml/theme/Colors.qml` defines the required semantic color properties. `LightColors.qml` and `DarkColors.qml` provide their values. `Theme.dark` selects the active palette through `Theme.colors` and defaults to dark. Use `Theme.colors` in product QML.
+
+### Typography
+
+Each text style has a `Theme.typography` object. Names follow the style path in camel case: `body/l` is `bodyL`, `label/m-medium` is `labelMMedium`, and `title/xxl-bold` is `titleXxlBold`. Styles without a weight suffix use their base name in QML. Each style exposes `.font` and `.lineHeight`. The font includes family, logical pixel size, weight, letter spacing, and capitalization.
+
+```qml
+import Blockstream.Green
+import QtQuick
+import QtQuick.Controls
+
+UiLabel {
+    text: qsTrId("id_settings")
+    color: Theme.colors.textPrimary
+    typography: Theme.typography.bodyM
+}
+```
+
+`UiLabel` binds both the font and fixed line height from one style. Qt keeps line height separate from `font`, so for a plain `Text` or `Label`, bind both `.font` and `.lineHeight` and set `lineHeightMode: Text.FixedHeight`. For controls that only expose `font`, bind `.font` and let the control manage its own text layout. A fixed line height can clip glyphs, so inspect new multiline uses in the target platform and language.
+
+Inter covers body, label, title, overline, and display styles. Code styles use Roboto Mono. The app registers the required TTF files at startup.
+
+### Updating token definitions
+
+Add each semantic color property to `qml/theme/Colors.qml` and its values to both `LightColors.qml` and `DarkColors.qml`, keeping each token's path comment. Update text styles in `qml/theme/Typography.qml`. Update font assets and registration if families or weights change.
 
 ## Custom background pattern
 
 ```qml
 background: Rectangle {
-    color: parent.pressed ? '#1a1a1a' : '#181818'
+    color: parent.pressed ? Theme.colors.surfaceSunken : Theme.colors.surfaceRaised
     radius: 5
     border.width: 1
-    border.color: parent.selected ? '#4FD1FF' : '#262626'
+    border.color: parent.selected ? Theme.colors.borderBrand : Theme.colors.borderSubtle
 }
 ```
 
@@ -163,7 +172,7 @@ background: Rectangle {
 background: Item {
     Rectangle {
         anchors.fill: parent
-        border.color: '#00BCFF'
+        border.color: Theme.colors.borderBrand
         border.width: 2
         color: 'transparent'
         radius: 8
@@ -172,7 +181,7 @@ background: Item {
     Rectangle {
         anchors.fill: parent
         anchors.margins: self.visualFocus ? 4 : 0
-        color: Qt.lighter('#181818', self.hovered ? 1.2 : 1)
+        color: self.hovered ? Theme.colors.surfaceRaised : Theme.colors.surfaceBase
         radius: self.visualFocus ? 4 : 8
     }
 }

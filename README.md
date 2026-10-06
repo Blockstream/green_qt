@@ -18,6 +18,10 @@ For build instructions, see:
 
 For test instructions, see [Tests guide](doc/tests/README.md).
 
+## Design system
+
+For semantic colors and typography in QML, see the [QML contributor guide](doc/agents/qml.md#design-system-foundations).
+
 ## Application data directory
 
 Ubuntu:

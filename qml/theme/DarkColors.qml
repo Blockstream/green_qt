@@ -1,0 +1,104 @@
+import Blockstream.Green
+
+Colors {
+    // text/brand
+    textBrand: '#00bcff'
+    // text/brand-hover
+    textBrandHover: '#4fd1ff'
+    // text/disabled
+    textDisabled: '#525252'
+    // text/inverse
+    textInverse: '#0a0a0a'
+    // text/primary
+    textPrimary: '#fafafa'
+    // text/subtle
+    textSubtle: '#a0a0a0'
+
+    // action/primary
+    actionPrimary: '#00bcff'
+    // action/pressed
+    actionPressed: '#062f4a'
+    // action/disabled
+    actionDisabled: '#262626'
+    // action/on-primary
+    actionOnPrimary: '#0a0a0a'
+    // action/on-primary-inverted
+    actionOnPrimaryInverted: '#0a0a0a'
+    // action/primary-inverted
+    actionPrimaryInverted: '#ffffff'
+    // action/primary-inverted-disabled
+    actionPrimaryInvertedDisabled: '#262626'
+    // action/primary-inverted-pressed
+    actionPrimaryInvertedPressed: '#d4d4d4'
+
+    // border/bold
+    borderBold: '#404040'
+    // border/brand
+    borderBrand: '#00bcff'
+    // border/inverse
+    borderInverse: '#ffffff'
+    // border/subtle
+    borderSubtle: '#262626'
+
+    // feedback/info/accent
+    feedbackInfoAccent: '#00bcff'
+    // feedback/info/fill
+    feedbackInfoFill: '#062f4a'
+    // feedback/info/on-fill
+    feedbackInfoOnFill: '#ffffff'
+    // feedback/info/stroke
+    feedbackInfoStroke: '#004a70'
+    // feedback/negative/accent
+    feedbackNegativeAccent: '#ff6467'
+    // feedback/negative/fill
+    feedbackNegativeFill: '#460708'
+    // feedback/negative/on-fill
+    feedbackNegativeOnFill: '#ffffff'
+    // feedback/negative/stroke
+    feedbackNegativeStroke: '#82181a'
+    // feedback/positive/accent
+    feedbackPositiveAccent: '#00c60d'
+    // feedback/positive/fill
+    feedbackPositiveFill: '#004301'
+    // feedback/positive/on-fill
+    feedbackPositiveOnFill: '#ffffff'
+    // feedback/positive/stroke
+    feedbackPositiveStroke: '#007b05'
+    // feedback/warning/accent
+    feedbackWarningAccent: '#fdc700'
+    // feedback/warning/fill
+    feedbackWarningFill: '#432004'
+    // feedback/warning/on-fill
+    feedbackWarningOnFill: '#ffffff'
+    // feedback/warning/stroke
+    feedbackWarningStroke: '#7e2a0d'
+
+    // icon/base
+    iconBase: '#fafafa'
+    // icon/brand
+    iconBrand: '#00bcff'
+    // icon/disabled
+    iconDisabled: '#525252'
+    // icon/inverse
+    iconInverse: '#0a0a0a'
+    // icon/subtle
+    iconSubtle: '#a0a0a0'
+
+    // overlay/scrim
+    overlayScrim: '#181818'
+
+    // surface/base
+    surfaceBase: '#181818'
+    // surface/canvas
+    surfaceCanvas: '#121416'
+    // surface/overlay
+    surfaceOverlay: '#262626'
+    // surface/raised
+    surfaceRaised: '#262626'
+    // surface/scrim
+    surfaceScrim: '#cc181818'
+    // surface/sunken
+    surfaceSunken: '#0a0a0a'
+    // surface/segmented/selected
+    surfaceSegmentedSelected: '#404040'
+}

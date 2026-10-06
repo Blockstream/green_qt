@@ -6,6 +6,19 @@ qt_add_resources(blockstream_core "qtquickcontrols2"
         +windows/qtquickcontrols2.conf
 )
 
+set(QML_FILES_THEME
+    theme/Theme.qml
+    theme/Colors.qml
+    theme/LightColors.qml
+    theme/DarkColors.qml
+    theme/Typography.qml
+    theme/TypographyStyle.qml
+)
+
+set(QML_FILES_UI
+    ui/UiLabel.qml
+)
+
 set(QML_FILES_CORE
     analytics.js
     util.js
@@ -322,6 +335,8 @@ set(QML_FILES_FEATURES
 )
 
 set(QML_FILES
+    ${QML_FILES_THEME}
+    ${QML_FILES_UI}
     ${QML_FILES_CORE}
     ${QML_FILES_WORKFLOWS}
     ${QML_FILES_DEVICES}

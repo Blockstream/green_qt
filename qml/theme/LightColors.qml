@@ -1,0 +1,104 @@
+import Blockstream.Green
+
+Colors {
+    // text/brand
+    textBrand: '#0069a8'
+    // text/brand-hover
+    textBrandHover: '#00598a'
+    // text/disabled
+    textDisabled: '#a0a0a0'
+    // text/inverse
+    textInverse: '#fafafa'
+    // text/primary
+    textPrimary: '#0a0a0a'
+    // text/subtle
+    textSubtle: '#525252'
+
+    // action/primary
+    actionPrimary: '#0069a8'
+    // action/pressed
+    actionPressed: '#e0f2fe'
+    // action/disabled
+    actionDisabled: '#e5e5e5'
+    // action/on-primary
+    actionOnPrimary: '#fafafa'
+    // action/on-primary-inverted
+    actionOnPrimaryInverted: '#fafafa'
+    // action/primary-inverted
+    actionPrimaryInverted: '#0a0a0a'
+    // action/primary-inverted-disabled
+    actionPrimaryInvertedDisabled: '#e5e5e5'
+    // action/primary-inverted-pressed
+    actionPrimaryInvertedPressed: '#404040'
+
+    // border/bold
+    borderBold: '#d4d4d4'
+    // border/brand
+    borderBrand: '#0084d1'
+    // border/inverse
+    borderInverse: '#0a0a0a'
+    // border/subtle
+    borderSubtle: '#e5e5e5'
+
+    // feedback/info/accent
+    feedbackInfoAccent: '#0069a8'
+    // feedback/info/fill
+    feedbackInfoFill: '#b8e6ff'
+    // feedback/info/on-fill
+    feedbackInfoOnFill: '#00598a'
+    // feedback/info/stroke
+    feedbackInfoStroke: '#00bcff'
+    // feedback/negative/accent
+    feedbackNegativeAccent: '#82181a'
+    // feedback/negative/fill
+    feedbackNegativeFill: '#ffd3d3'
+    // feedback/negative/on-fill
+    feedbackNegativeOnFill: '#82181a'
+    // feedback/negative/stroke
+    feedbackNegativeStroke: '#ff6467'
+    // feedback/positive/accent
+    feedbackPositiveAccent: '#00a609'
+    // feedback/positive/fill
+    feedbackPositiveFill: '#cbeacc'
+    // feedback/positive/on-fill
+    feedbackPositiveOnFill: '#007b05'
+    // feedback/positive/stroke
+    feedbackPositiveStroke: '#00c60d'
+    // feedback/warning/accent
+    feedbackWarningAccent: '#cb9407'
+    // feedback/warning/fill
+    feedbackWarningFill: '#feebcb'
+    // feedback/warning/on-fill
+    feedbackWarningOnFill: '#7e2a0d'
+    // feedback/warning/stroke
+    feedbackWarningStroke: '#fdc700'
+
+    // icon/base
+    iconBase: '#0a0a0a'
+    // icon/brand
+    iconBrand: '#0084d1'
+    // icon/disabled
+    iconDisabled: '#a0a0a0'
+    // icon/inverse
+    iconInverse: '#fafafa'
+    // icon/subtle
+    iconSubtle: '#525252'
+
+    // overlay/scrim
+    overlayScrim: '#f5f5f5'
+
+    // surface/base
+    surfaceBase: '#f0f0f0'
+    // surface/canvas
+    surfaceCanvas: '#f5f5f5'
+    // surface/overlay
+    surfaceOverlay: '#ffffff'
+    // surface/raised
+    surfaceRaised: '#ffffff'
+    // surface/scrim
+    surfaceScrim: '#ccf5f5f5'
+    // surface/sunken
+    surfaceSunken: '#fafafa'
+    // surface/segmented/selected
+    surfaceSegmentedSelected: '#e5e5e5'
+}

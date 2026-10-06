@@ -551,10 +551,9 @@ qt_add_resources(blockstream_core "fonts"
     PREFIX "/"
     BASE .
     FILES
-        fonts/monospace_bold.ttf
-        fonts/inter_regular.ttf
-        fonts/inter_extra_light.ttf
-        fonts/inter_thin.ttf
-        fonts/monospace_regular.ttf
-        fonts/inter_bold.ttf
+        fonts/Inter-Regular.ttf
+        fonts/Inter-Medium.ttf
+        fonts/Inter-SemiBold.ttf
+        fonts/Inter-Bold.ttf
+        fonts/RobotoMono-Regular.ttf
 )
