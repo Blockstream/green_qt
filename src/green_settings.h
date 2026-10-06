@@ -22,7 +22,6 @@ class Settings : public QObject
     Q_PROPERTY(QStringList recentWallets READ recentWallets NOTIFY recentWalletsChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
     Q_PROPERTY(QString country READ country NOTIFY languageChanged)
-    Q_PROPERTY(bool enableExperimental READ enableExperimental WRITE setEnableExperimental NOTIFY enableExperimentalChanged)
     Q_PROPERTY(bool usePersonalNode READ usePersonalNode WRITE setUsePersonalNode NOTIFY usePersonalNodeChanged)
     Q_PROPERTY(bool enableElectrumTls READ enableElectrumTls WRITE setEnableElectrumTls NOTIFY enableElectrumTlsChanged)
     Q_PROPERTY(QString bitcoinElectrumUrl READ bitcoinElectrumUrl WRITE setBitcoinElectrumUrl NOTIFY bitcoinElectrumUrlChanged)
@@ -66,8 +65,6 @@ public:
     QString language() const { return m_language; }
     void setLanguage(const QString& language);
     QString country() const;
-    bool enableExperimental() const { return m_enable_experimental; }
-    void setEnableExperimental(bool enable_experimental);
     bool usePersonalNode() const { return m_use_personal_node; }
     void setUsePersonalNode(bool use_personal_node);
     bool enableElectrumTls() const { return m_enable_electrum_tls; }
@@ -117,7 +114,6 @@ signals:
     void useTorChanged();
     void recentWalletsChanged();
     void languageChanged();
-    void enableExperimentalChanged();
     void usePersonalNodeChanged();
     void enableElectrumTlsChanged();
     void bitcoinElectrumUrlChanged();
@@ -154,7 +150,6 @@ private:
     QStringList m_recent_wallets;
     QString m_language;
     bool m_show_news{true};
-    bool m_enable_experimental{false};
     bool m_use_personal_node{false};
     bool m_enable_electrum_tls{true};
     QString m_bitcoin_electrum_url;

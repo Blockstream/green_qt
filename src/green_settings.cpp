@@ -117,14 +117,6 @@ QString Settings::country() const
     return code;
 }
 
-void Settings::setEnableExperimental(bool enable_experimental)
-{
-    if (m_enable_experimental == enable_experimental) return;
-    m_enable_experimental = enable_experimental;
-    emit enableExperimentalChanged();
-    saveLater();
-}
-
 void Settings::setLiquidElectrumUrl(const QString &liquid_electrum_url)
 {
     if (m_liquid_electrum_url == liquid_electrum_url) return;
@@ -347,7 +339,6 @@ void Settings::load(const QSettings& settings)
     LOAD(m_recent_wallets)
     LOAD(m_language)
     LOAD(m_show_news)
-    LOAD(m_enable_experimental)
     LOAD(m_use_personal_node)
     LOAD(m_enable_electrum_tls)
     LOAD(m_bitcoin_electrum_url)
@@ -389,7 +380,6 @@ void Settings::saveNow()
     SAVE(m_recent_wallets)
     SAVE(m_language)
     SAVE(m_show_news)
-    SAVE(m_enable_experimental)
     SAVE(m_use_personal_node)
     SAVE(m_enable_electrum_tls)
     SAVE(m_bitcoin_electrum_url)

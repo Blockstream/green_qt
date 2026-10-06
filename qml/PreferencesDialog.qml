@@ -207,11 +207,6 @@ AbstractDialog {
                     onClicked: Settings.enableTestnet = !Settings.enableTestnet
                 }
                 SwitchButton {
-                    text: qsTrId('id_enable_experimental_features')
-                    checked: Settings.enableExperimental
-                    onClicked: Settings.enableExperimental = !Settings.enableExperimental
-                }
-                SwitchButton {
                     text: qsTrId('id_remember_device_connection')
                     checked: Settings.rememberDevices
                     onClicked: Settings.toggleRememberDevices()
