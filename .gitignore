@@ -89,6 +89,7 @@ config.h
 target_wrapper.*
 
 # QtCreator
+.qtcreator/
 *.autosave
 
 # QtCreator Qml
