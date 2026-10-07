@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QMutex>
 #include <QObject>
+#include <QPointer>
 #include <QQueue>
 #include <QSet>
 
@@ -56,55 +57,55 @@ public:
 
 #ifndef QT_NO_DEBUG
     // Set debug mnemonic
-    int setMnemonic(const QString& mnemonic, const ResponseHandler &cb);
+    int setMnemonic(const QString& mnemonic, const QPointer<QObject> &context, const ResponseHandler &cb);
 #endif
 
-    int ping(const ResponseHandler &cb);
+    int ping(const QPointer<QObject> &context, const ResponseHandler &cb);
     // Get version information from the Jade
-    int getVersionInfo(bool nonblocking, const ResponseHandler &cb);
+    int getVersionInfo(bool nonblocking, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Send additional entropy for the rng to Jade
-    int addEntropy(const QByteArray &entropy, const ResponseHandler &cb);
+    int addEntropy(const QByteArray &entropy, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Trigger user authentication on the hw
     // Involves pinserver handshake
     // NOTE: the callback MUST ensure JadeAPI::handleHttpResponse() is called
     // when the http-request response is received, passing the originating id
     // and request object, as well as the response body received.
-    int authUser(const QString &network, const ResponseHandler &cb, const HttpRequestProxy &request_proxy);
-    void authUserWithEntropy(const QString &network, const ResponseHandler &cb, const HttpRequestProxy& request_proxy);
+    int authUser(const QString &network, const QPointer<QObject> &context, const ResponseHandler &cb, const HttpRequestProxy &request_proxy);
+    void authUserWithEntropy(const QString &network, const QPointer<QObject> &context, const ResponseHandler &cb, const HttpRequestProxy& request_proxy);
 
-    int logout(const ResponseHandler &cb);
+    int logout(const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Sign an attestation challenge.
-    int signAttestation(const QByteArray& challenge, const ResponseHandler& cb);
+    int signAttestation(const QByteArray& challenge, const QPointer<QObject> &context, const ResponseHandler& cb);
 
     // OTA update the connected Jade
     // The passed ResponseHandler will be called multiple times during the update process
-    int otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int chunksize, const ResponseHandler &cbProgress, const ResponseHandler &cb);
-    int otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int patch_size, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb);
+    int otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int chunksize, const QPointer<QObject> &context, const ResponseHandler &cbProgress, const ResponseHandler &cb);
+    int otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int patch_size, const int chunkSize, const QPointer<QObject> &context, const ResponseHandler &cbProgress, const ResponseHandler &cb);
 
     // Get (receive) green address
     int getReceiveAddress(const QString &network, quint32 subaccount, quint32 branch, quint32 pointer,
-                          const QString &recoveryxpub, quint32 csvBlocks, const ResponseHandler &cb);
-    int getReceiveAddress(const QString &network, const QString &variant, const QVector<quint32> &path, const ResponseHandler &cb);
+                          const QString &recoveryxpub, quint32 csvBlocks, const QPointer<QObject> &context, const ResponseHandler &cb);
+    int getReceiveAddress(const QString &network, const QString &variant, const QVector<quint32> &path, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Get xpub given path
-    int getXpub(const QString &network, const QVector<quint32> &path, const ResponseHandler &cb);
+    int getXpub(const QString &network, const QVector<quint32> &path, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Sign a message
-    int signMessage(const QVector<quint32> &path, const QString &message, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, const ResponseHandler &cb);
+    int signMessage(const QVector<quint32> &path, const QString &message, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Sign a txn
-    int signTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &change, const ResponseHandler &cb);
+    int signTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &change, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Get a Liquid public blinding key for a given script
-    int getBlindingKey(const QByteArray &script, const ResponseHandler &cb);
+    int getBlindingKey(const QByteArray &script, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Get the shared secret to unblind a tx, given the receiving script on
     // our side and the pubkey of the sender (sometimes called "nonce" in Liquid)
     // Get a Liquid public blinding key for a given script
-    int getSharedNonce(const QByteArray &script, const QByteArray &their_pubkey, const ResponseHandler &cb);
+    int getSharedNonce(const QByteArray &script, const QByteArray &their_pubkey, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Get a "trusted" blinding factor to blind an output. Normally the blinding
     // factors are generated and returned in the `get_commitments` call, but
@@ -118,7 +119,7 @@ public:
     //   to. It will be checked later during `sign_liquid_tx`.
     // `outputIndex` is the output we are trying to blind.
     // `type` can either be "ASSET" or "VALUE" to generate ABFs or VBFs.
-    int getBlindingFactor(const QByteArray &hashPrevouts, const quint32 outputIndex, const QString& type, const ResponseHandler &cb);
+    int getBlindingFactor(const QByteArray &hashPrevouts, const quint32 outputIndex, const QString& type, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Generate the blinding factors and commitments for a given output.
     // Can optionally get a "custom" VBF, normally used for the last
@@ -128,7 +129,7 @@ public:
     //   the `getBlindingFactor()` call.
     // NOTE: the `assetId` should be passed as it is normally displayed, so
     // reversed compared to the "consensus" representation.
-    int getCommitments(const QByteArray& assetId, const qint64 value, const QByteArray &hashPrevouts, const quint32 outputIndex, const QByteArray& vbf, const ResponseHandler &cb);
+    int getCommitments(const QByteArray& assetId, const qint64 value, const QByteArray &hashPrevouts, const quint32 outputIndex, const QByteArray& vbf, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Sign a liquid txn
     // `assetInfo` is optional asset-registry metadata (one entry per relevant
@@ -136,10 +137,10 @@ public:
     //   amount by the asset precision.  Each entry must hold the complete
     //   registry `contract` object and its `issuance_prevout`, as Jade
     //   re-computes and verifies the asset-id from them.
-    int signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const QVariantList &assetInfo, const ResponseHandler &cb);
+    int signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const QVariantList &assetInfo, const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Get master [un-]blinding key for wallet
-    int getMasterBlindingKey(bool only_if_silent, const ResponseHandler &cb);
+    int getMasterBlindingKey(bool only_if_silent, const QPointer<QObject> &context, const ResponseHandler &cb);
 signals:
     void onOpenError();
     void onConnected();
@@ -158,6 +159,9 @@ private:
 
     // Whether a response handler is still registered for id. Safe to call from any thread.
     bool hasResponseHandler(int id) const;
+
+    // Wrap a client handler so it is skipped once context is destroyed
+    static ResponseHandler guard(const QPointer<QObject> &context, const ResponseHandler &cb);
 
     // Client call response handlers for async response
     int registerResponseHandler(const ResponseHandler &cb, int timeout = 0);

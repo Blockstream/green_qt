@@ -83,7 +83,7 @@ void JadeVerifyAddressController::verifyMultisig() {
 
     if (device->api()) {
         QPointer<JadeVerifyAddressController> self{this};
-        device->api()->getReceiveAddress(network->canonicalId(), subaccount, branch, pointer, recovery_xpub, subtype, [=, this](const QVariantMap& msg) {
+        device->api()->getReceiveAddress(network->canonicalId(), subaccount, branch, pointer, recovery_xpub, subtype, this, [=, this](const QVariantMap& msg) {
             qDebug() << "jade: verify result" << msg;
             if (self) self->setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
         });
@@ -109,7 +109,7 @@ void JadeVerifyAddressController::verifySinglesig()
 
     if (device->api()) {
         QPointer<JadeVerifyAddressController> self{this};
-        device->api()->getReceiveAddress(network->canonicalId(), variant, path, [=, this](const QVariantMap& msg) {
+        device->api()->getReceiveAddress(network->canonicalId(), variant, path, this, [=, this](const QVariantMap& msg) {
             if (self) self->setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
         });
     }

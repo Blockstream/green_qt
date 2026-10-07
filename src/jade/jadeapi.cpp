@@ -198,6 +198,14 @@ void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, c
     send(newRequest);
 }
 
+JadeAPI::ResponseHandler JadeAPI::guard(const QPointer<QObject> &context, const ResponseHandler &cb)
+{
+    Q_ASSERT(context);
+    return [context, cb](const QVariantMap &msg) {
+        if (context) cb(msg);
+    };
+}
+
 // Register callback for request/response when received.
 // Called from client threads as well as from response handlers running on the
 // JadeAPI thread, so handing out an id and claiming it must be one atomic step:
@@ -429,8 +437,9 @@ static QCborArray convertPath(const QVector<quint32> &path)
 }
 #ifndef QT_NO_DEBUG
 // Set debug mnemonic
-int JadeAPI::setMnemonic(const QString& mnemonic, const ResponseHandler &cb)
+int JadeAPI::setMnemonic(const QString& mnemonic, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"mnemonic", mnemonic} };
     const QCborMap request = getRequest(id, "debug_set_mnemonic", params);
@@ -439,8 +448,9 @@ int JadeAPI::setMnemonic(const QString& mnemonic, const ResponseHandler &cb)
 }
 #endif
 
-int JadeAPI::ping(const ResponseHandler &cb)
+int JadeAPI::ping(const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     if (m_locked) {
         QMetaObject::invokeMethod(this, [=, this] {
             cb({{ "result", 1 }});
@@ -455,8 +465,9 @@ int JadeAPI::ping(const ResponseHandler &cb)
 }
 
 // Get version information from the jade
-int JadeAPI::getVersionInfo(bool nonblocking, const ResponseHandler &cb)
+int JadeAPI::getVersionInfo(bool nonblocking, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     if (m_locked) {
         QMetaObject::invokeMethod(this, [=, this] {
             cb({});
@@ -472,8 +483,9 @@ int JadeAPI::getVersionInfo(bool nonblocking, const ResponseHandler &cb)
 }
 
 // Send additional entropy for the rng to jade
-int JadeAPI::addEntropy(const QByteArray &entropy, const ResponseHandler &cb)
+int JadeAPI::addEntropy(const QByteArray &entropy, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"entropy", entropy} };
     const QCborMap request = getRequest(id, "add_entropy", params);
@@ -483,8 +495,9 @@ int JadeAPI::addEntropy(const QByteArray &entropy, const ResponseHandler &cb)
 
 // Trigger user authentication on the hw
 // Involves pinserver handshake
-int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const HttpRequestProxy& request_proxy)
+int JadeAPI::authUser(const QString &network, const QPointer<QObject> &context, const ResponseHandler &handler, const HttpRequestProxy& request_proxy)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     {
         QMutexLocker locker(&m_mutex);
@@ -498,8 +511,9 @@ int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const H
     return id;
 }
 
-void JadeAPI::authUserWithEntropy(const QString &network, const ResponseHandler &cb, const HttpRequestProxy& request_proxy)
+void JadeAPI::authUserWithEntropy(const QString &network, const QPointer<QObject> &context, const ResponseHandler &handler, const HttpRequestProxy& request_proxy)
 {
+    const auto cb = guard(context, handler);
     QByteArray entropy(32, Qt::Uninitialized);
     const auto rc = GA_get_random_bytes((unsigned char*) entropy.data(), 32);
 
@@ -508,25 +522,27 @@ void JadeAPI::authUserWithEntropy(const QString &network, const ResponseHandler 
         return;
     }
 
-    addEntropy(entropy, [=, this](const QVariantMap& msg) {
+    addEntropy(entropy, context, [=, this](const QVariantMap& msg) {
         if (msg.contains("result") && msg["result"].toBool()) {
-            authUser(network, cb, request_proxy);
+            authUser(network, context, handler, request_proxy);
         } else {
             cb({{ "error", "failed add entropy" }});
         }
     });
 }
 
-int JadeAPI::logout(const ResponseHandler &cb)
+int JadeAPI::logout(const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap request = getRequest(id, "logout", {});
     enqueue(request);
     return id;
 }
 
-int JadeAPI::signAttestation(const QByteArray &challenge, const ResponseHandler &cb)
+int JadeAPI::signAttestation(const QByteArray &challenge, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"challenge", challenge} };
     const QCborMap request = getRequest(id, "sign_attestation", params);
@@ -535,8 +551,10 @@ int JadeAPI::signAttestation(const QByteArray &challenge, const ResponseHandler 
 }
 
 // OTA update the connected Jade
-int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb)
+int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int chunkSize, const QPointer<QObject> &context, const ResponseHandler &progress_handler, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
+    const auto cbProgress = progress_handler ? guard(context, progress_handler) : ResponseHandler();
     // The exposed/returned id that will key the caller's handler (invoked
     // when the OTA completes successfully or errors).
     const int id = registerResponseHandler(cb);
@@ -557,8 +575,10 @@ int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& 
     return id;
 }
 
-int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int patch_size, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb)
+int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int patch_size, const int chunkSize, const QPointer<QObject> &context, const ResponseHandler &progress_handler, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
+    const auto cbProgress = progress_handler ? guard(context, progress_handler) : ResponseHandler();
     // The exposed/returned id that will key the caller's handler (invoked
     // when the OTA completes successfully or errors).
     const int id = registerResponseHandler(cb);
@@ -638,8 +658,9 @@ JadeAPI::ResponseHandler JadeAPI::makeOtaChunkCallback(const int id, const QByte
 
 // Get (receive) green address
 int JadeAPI::getReceiveAddress(const QString &network, const quint32 subaccount, const quint32 branch, const quint32 pointer,
-                               const QString &recoveryxpub, const quint32 csvBlocks, const ResponseHandler &cb)
+                               const QString &recoveryxpub, const quint32 csvBlocks, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"network", network},
                               {"subaccount", subaccount},
@@ -654,8 +675,9 @@ int JadeAPI::getReceiveAddress(const QString &network, const quint32 subaccount,
 }
 
 // Get (receive) green address
-int JadeAPI::getReceiveAddress(const QString& network, const QString& variant, const QVector<quint32>& path, const ResponseHandler &cb)
+int JadeAPI::getReceiveAddress(const QString& network, const QString& variant, const QVector<quint32>& path, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"network", network},
                               {"variant", variant},
@@ -667,8 +689,9 @@ int JadeAPI::getReceiveAddress(const QString& network, const QString& variant, c
 }
 
 // Get xpub given path
-int JadeAPI::getXpub(const QString &network, const QVector<quint32> &path, const ResponseHandler &cb)
+int JadeAPI::getXpub(const QString &network, const QVector<quint32> &path, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"network", network}, {"path", convertPath(path)} };
     const QCborMap request = getRequest(id, "get_xpub", params);
@@ -677,8 +700,9 @@ int JadeAPI::getXpub(const QString &network, const QVector<quint32> &path, const
 }
 
 // Sign a message
-int JadeAPI::signMessage(const QVector<quint32> &path, const QString &message, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, const ResponseHandler &cb)
+int JadeAPI::signMessage(const QVector<quint32> &path, const QString &message, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler([this, ae_host_entropy, cb](const QVariantMap& rslt) {
         if (rslt.contains("error")) {
             cb(rslt);
@@ -704,8 +728,9 @@ int JadeAPI::signMessage(const QVector<quint32> &path, const QString &message, c
 }
 
 // Sign a txn
-int JadeAPI::signTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &change, const ResponseHandler &cb)
+int JadeAPI::signTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &change, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     // Protocol:
     // We send one message per input (which includes host-commitment *but
     // not* the host entropy) and receive the signer-commitment in reply.
@@ -882,8 +907,9 @@ JadeAPI::ResponseHandler JadeAPI::makeReceiveSignatureCallback(const int id, con
 }
 
 // Get a Liquid public blinding key for a given script
-int JadeAPI::getBlindingKey(const QByteArray &script, const ResponseHandler &cb)
+int JadeAPI::getBlindingKey(const QByteArray &script, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"script", script} };
     const QCborMap request = getRequest(id, "get_blinding_key", params);
@@ -894,8 +920,9 @@ int JadeAPI::getBlindingKey(const QByteArray &script, const ResponseHandler &cb)
 // Get the shared secret to unblind a tx, given the receiving script on
 // our side and the pubkey of the sender (sometimes called "nonce" in Liquid)
 // Get a Liquid public blinding key for a given script
-int JadeAPI::getSharedNonce(const QByteArray &script, const QByteArray &their_pubkey, const ResponseHandler &cb)
+int JadeAPI::getSharedNonce(const QByteArray &script, const QByteArray &their_pubkey, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"script", script}, {"their_pubkey", their_pubkey} };
     const QCborMap request = getRequest(id, "get_shared_nonce", params);
@@ -915,8 +942,9 @@ int JadeAPI::getSharedNonce(const QByteArray &script, const QByteArray &their_pu
 //   to. It will be checked later during `sign_liquid_tx`.
 // `outputIndex` is the output we are trying to blind.
 // `type` can either be "ASSET" or "VALUE" to generate ABFs or VBFs.
-int JadeAPI::getBlindingFactor(const QByteArray &hashPrevouts, const quint32 outputIndex, const QString& type, const ResponseHandler &cb)
+int JadeAPI::getBlindingFactor(const QByteArray &hashPrevouts, const quint32 outputIndex, const QString& type, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"hash_prevouts", hashPrevouts}, {"output_index", outputIndex}, {"type", type} };
     const QCborMap request = getRequest(id, "get_blinding_factor", params);
@@ -932,8 +960,9 @@ int JadeAPI::getBlindingFactor(const QByteArray &hashPrevouts, const quint32 out
 //   the `getBlindingFactor()` call.
 // NOTE: the `assetId` should be passed as it is normally displayed, so
 // reversed compared to the "consensus" representation.
-int JadeAPI::getCommitments(const QByteArray& assetId, const qint64 value, const QByteArray &hashPrevouts, const quint32 outputIndex, const QByteArray& vbf, const ResponseHandler &cb)
+int JadeAPI::getCommitments(const QByteArray& assetId, const qint64 value, const QByteArray &hashPrevouts, const quint32 outputIndex, const QByteArray& vbf, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     QCborMap params = { {"asset_id", assetId}, {"value", value}, {"hash_prevouts", hashPrevouts}, {"output_index", outputIndex} };
     if (!vbf.isEmpty()) {
@@ -945,8 +974,9 @@ int JadeAPI::getCommitments(const QByteArray& assetId, const qint64 value, const
 }
 
 // Sign a liquid tx - based on / shares much with signTx() above.
-int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const QVariantList &assetInfo, const ResponseHandler &cb)
+int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const QVariantList &assetInfo, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     // Protocol:
     // We send one message per input (which includes host-commitment *but
     // not* the host entropy) and receive the signer-commitment in reply.
@@ -977,8 +1007,9 @@ int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const Q
     return id;
 }
 
-int JadeAPI::getMasterBlindingKey(bool only_if_silent, const ResponseHandler &cb)
+int JadeAPI::getMasterBlindingKey(bool only_if_silent, const QPointer<QObject> &context, const ResponseHandler &handler)
 {
+    const auto cb = guard(context, handler);
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"only_if_silent", only_if_silent} };
     const QCborMap request = getRequest(id, "get_master_blinding_key", params);

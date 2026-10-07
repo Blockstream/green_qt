@@ -218,7 +218,7 @@ void JadeSetupTask::update()
     QPointer<JadeSetupController> controller(m_controller);
     QPointer<JadeDevice> jade(device);
 
-    device->api()->authUserWithEntropy(network->canonicalId(), [=](const QVariantMap& msg) {
+    device->api()->authUserWithEntropy(network->canonicalId(), this, [=](const QVariantMap& msg) {
         if (!self) return;
         if (jade) jade->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
@@ -360,7 +360,7 @@ void JadeUnlockTask::update()
     QPointer<JadeUnlockController> controller(m_controller);
     QPointer<JadeDevice> jade(device);
 
-    device->api()->authUserWithEntropy(network->canonicalId(), [=](const QVariantMap& msg) {
+    device->api()->authUserWithEntropy(network->canonicalId(), this, [=](const QVariantMap& msg) {
         if (!self || self->m_status != Status::Active) return;
         if (jade) jade->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
@@ -419,7 +419,7 @@ void JadeIdentifyTask::update()
     if (device->state() == JadeDevice::StateTemporary) {
         QPointer<JadeIdentifyTask> self(this);
         QPointer<JadeDevice> jade(device);
-        device->api()->authUserWithEntropy(network->canonicalId(), [=](const QVariantMap& msg) {
+        device->api()->authUserWithEntropy(network->canonicalId(), this, [=](const QVariantMap& msg) {
             if (!self) return;
             if (msg.contains("error") || !(msg.contains("result") && msg["result"] == true)) {
                 self->setStatus(Status::Failed);
@@ -595,7 +595,7 @@ void JadeGenuineCheckController::genuineCheck()
     }
 
     QPointer<JadeGenuineCheckController> self(this);
-    m_device->api()->signAttestation(challenge, [=](const QVariantMap& msg) {
+    m_device->api()->signAttestation(challenge, this, [=](const QVariantMap& msg) {
         if (!self) return;
         if (msg.contains("result")) {
             const auto result = msg.value("result").toMap();

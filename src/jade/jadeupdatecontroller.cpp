@@ -105,9 +105,9 @@ void JadeUpdateTask::update()
 
     if (m_firmware.value("delta").toBool()) {
         const auto patch_size = m_firmware.value("patch_size").toInt();
-        backend->otaDeltaUpdate(m_data, size, fwhash, patch_size, chunk_size, progress_cb, done_cb);
+        backend->otaDeltaUpdate(m_data, size, fwhash, patch_size, chunk_size, this, progress_cb, done_cb);
     } else {
-        backend->otaUpdate(m_data, size, fwhash, chunk_size, progress_cb, done_cb);
+        backend->otaUpdate(m_data, size, fwhash, chunk_size, this, progress_cb, done_cb);
     }
 }
 

@@ -140,7 +140,7 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 {
     if (backend->m_locked) return;
     backend->connectDevice();
-    backend->getVersionInfo(false, [=, this](const QVariantMap& data) {
+    backend->getVersionInfo(false, this, [=, this](const QVariantMap& data) {
         if (data.contains("error")) {
             auto error = data.value("error").toMap();
             if (error.value("message").toString() == "timeout") {
@@ -190,7 +190,7 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
         const auto device = deviceFromBackend(backend);
         if (!device) return;
         if (QVersionNumber(1, 0, 21) <= QVersionNumber::fromString(device->version())) {
-            backend->ping([=, this](const QVariantMap& data) {
+            backend->ping(this, [=, this](const QVariantMap& data) {
                 if (data.contains("result")) {
                     int status = data.value("result").toInt();
                     const auto device = deviceFromBackend(backend);
@@ -203,7 +203,7 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
             device->setStatus(JadeDevice::StatusIdle);
         }
         if (QVersionNumber(1, 0, 21) <= QVersionNumber::fromString(device->version()) || !backend->isBusy() && !backend->m_locked) {
-            backend->getVersionInfo(true, [=, this](const QVariantMap& data) {
+            backend->getVersionInfo(true, this, [=, this](const QVariantMap& data) {
                 const auto device = deviceFromBackend(backend);
                 if (device) {
                     if (data.contains("error")) {

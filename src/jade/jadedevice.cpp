@@ -50,7 +50,7 @@ public:
     {
         if (!checkDeviceConnected(m_device, this)) return;
 
-        m_device->api()->getXpub(m_network->canonicalId(), m_path, [this](const QVariantMap& msg) {
+        m_device->api()->getXpub(m_network->canonicalId(), m_path, this, [this](const QVariantMap& msg) {
             if (msg.contains("error")) {
                 setStatus(Status::Failed);
                 return;
@@ -95,7 +95,7 @@ public:
 
         if (!checkDeviceConnected(m_device, this)) return;
 
-        m_device->api()->signMessage(m_path, m_message, m_ae_host_commitment, m_ae_host_entropy, [this](const QVariantMap& result) {
+        m_device->api()->signMessage(m_path, m_message, m_ae_host_commitment, m_ae_host_entropy, this, [this](const QVariantMap& result) {
             if (result.contains("error")) {
                 qDebug() << "JadeSignMessageTask" << result;
                 setStatus(Status::Failed);
@@ -206,7 +206,7 @@ public:
 
         if (!checkDeviceConnected(m_device, this)) return;
 
-        m_device->api()->signTx(m_network->canonicalId(), m_transaction, inputs, change, [this](const QVariantMap& result) {
+        m_device->api()->signTx(m_network->canonicalId(), m_transaction, inputs, change, this, [this](const QVariantMap& result) {
             if (result.contains("result")) {
                 for (const auto& s : result["result"].toMap()["signatures"].toList()) {
                     m_signatures.append(s.toByteArray());
@@ -247,7 +247,7 @@ public:
 
         // TODO: the following QByteArray::fromHex should be done in resolver (and refactor ledger task)
         const auto script = QByteArray::fromHex(m_script.toLocal8Bit());
-        m_device->api()->getBlindingKey(script, [this](const QVariantMap& msg) {
+        m_device->api()->getBlindingKey(script, this, [this](const QVariantMap& msg) {
             if (msg.contains("error") || !msg.contains("result") || msg["result"].typeId() != QMetaType::QByteArray) {
                 setStatus(Status::Failed);
                 return;
@@ -283,7 +283,7 @@ public:
 
         if (!checkDeviceConnected(m_device, this)) return;
 
-        m_device->api()->getSharedNonce(m_script, m_pubkey, [this](const QVariantMap& msg) {
+        m_device->api()->getSharedNonce(m_script, m_pubkey, this, [this](const QVariantMap& msg) {
             if (msg.contains("error") || !msg.contains("result") || msg["result"].typeId() != QMetaType::QByteArray) {
                 setStatus(Status::Failed);
                 return;
@@ -423,7 +423,7 @@ public:
 
         if (!checkDeviceConnected(m_device, this)) return;
 
-        m_device->api()->signLiquidTx(m_network->canonicalId(), m_transaction, m_inputs, m_trusted_commitments, m_change, asset_info, [this](const QVariantMap& msg) {
+        m_device->api()->signLiquidTx(m_network->canonicalId(), m_transaction, m_inputs, m_trusted_commitments, m_change, asset_info, this, [this](const QVariantMap& msg) {
             qDebug() << msg;
             if (handleError(msg)) return;
             if (!msg.contains("result")) {
@@ -480,7 +480,7 @@ void JadeGetMasterBlindingKeyTask::request()
 {
     if (!checkDeviceConnected(m_device, this)) return;
 
-    m_device->api()->getMasterBlindingKey(m_only_if_silent, [=, this](const QVariantMap& msg) {
+    m_device->api()->getMasterBlindingKey(m_only_if_silent, this, [=, this](const QVariantMap& msg) {
         if (msg.contains("result")) {
             m_master_blinding_key = msg["result"].toByteArray();
             setStatus(Status::Finished);
@@ -570,7 +570,7 @@ public:
             setStatus(Status::Failed);
             return;
         }
-        api->getBlindingFactor(m_hash_prevouts, index, "ASSET", [=, this](const QVariantMap& msg) {
+        api->getBlindingFactor(m_hash_prevouts, index, "ASSET", this, [=, this](const QVariantMap& msg) {
             if (msg.contains("error") || !msg.contains("result")) {
                 setStatus(Status::Failed);
                 return;
@@ -582,7 +582,7 @@ public:
                     setStatus(Status::Failed);
                     return;
                 }
-                api->getBlindingFactor(m_hash_prevouts, index, "VALUE", [=, this](const QVariantMap& msg) {
+                api->getBlindingFactor(m_hash_prevouts, index, "VALUE", this, [=, this](const QVariantMap& msg) {
                     if (msg.contains("error") || !msg.contains("result")) {
                         setStatus(Status::Failed);
                         return;
@@ -622,7 +622,7 @@ public:
 
         auto backend = m_device->api();
         if (backend) {
-            backend->logout([this](const QVariantMap& msg) {
+            backend->logout(this, [this](const QVariantMap& msg) {
                 setStatus(Status::Finished);
             });
         } else {
@@ -702,7 +702,7 @@ DeviceLogoutTask *JadeDevice::logout()
 void JadeDevice::updateVersionInfo()
 {
     if (!api() || !isConnected()) return;
-    api()->getVersionInfo(true, [this](const QVariantMap& data) {
+    api()->getVersionInfo(true, this, [this](const QVariantMap& data) {
         if (data.contains("error")) {
             qDebug() << "update version info failed";
             emit error();
