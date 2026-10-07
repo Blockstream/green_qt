@@ -128,10 +128,10 @@ void Wallet::save()
     if (!m_xpub_hash_id.isEmpty()) {
         data.insert("xpub_hash_id", m_xpub_hash_id);
     }
-    if (!m_amp2_wid.isEmpty()) {
-        data.insert("amp2_wid", m_amp2_wid);
-    }
     QJsonObject amp2;
+    if (!m_amp2_wid.isEmpty()) {
+        amp2.insert("wid", m_amp2_wid);
+    }
     if (m_amp2_hidden) {
         amp2.insert("hidden", true);
     }

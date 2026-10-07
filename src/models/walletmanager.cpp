@@ -122,8 +122,8 @@ void WalletManager::loadWallets()
         wallet->m_name = data.value("name").toString();
         wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
         wallet->m_lightning_enabled = data.value("lightning_enabled").toBool(false);
-        wallet->m_amp2_wid = data.value("amp2_wid").toString();
         const auto amp2 = data.value("amp2").toObject();
+        wallet->m_amp2_wid = amp2.value("wid").toString(data.value("amp2_wid").toString());
         wallet->m_amp2_hidden = amp2.value("hidden").toBool(false);
         wallet->m_amp2_name = amp2.value("name").toString();
 
