@@ -63,7 +63,7 @@ StackViewPage {
                 wrapMode: Label.Wrap
             }
             Repeater {
-                model: self.resolver.task.details.transaction_outputs.filter(({ is_change, is_fee }) => !is_change && !is_fee)
+                model: self.resolver.task.details.transaction_outputs.filter(({ is_change }) => !is_change)
                 delegate: ColumnLayout {
                     spacing: 15
                     Convert {

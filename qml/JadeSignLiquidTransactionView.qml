@@ -63,7 +63,7 @@ StackViewPage {
                 wrapMode: Label.Wrap
             }
             Repeater {
-                model: self.resolver.task.details.transaction_outputs.filter(({ is_change, is_fee, scriptpubkey }) => !is_change && !is_fee && scriptpubkey !== '')
+                model: self.resolver.task.details.transaction_outputs.filter(({ is_change, scriptpubkey }) => !is_change && scriptpubkey !== '')
                 delegate: ColumnLayout {
                     spacing: 15
                     Convert {
