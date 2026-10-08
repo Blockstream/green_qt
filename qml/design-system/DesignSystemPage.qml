@@ -296,7 +296,7 @@ Page {
                     Layout.bottomMargin: 20
                     color: self.previewColors.borderSubtle
                 }
-                CheckboxGallery {
+CheckboxGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
@@ -309,6 +309,18 @@ Page {
                     color: self.previewColors.borderSubtle
                 }
                 ToggleGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                // TODO: Use UiDivider when available
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    color: self.previewColors.borderSubtle
+                }
+                DividerGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }

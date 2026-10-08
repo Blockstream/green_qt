@@ -8,6 +8,7 @@ qt_add_qml_module(blockstream_controls
     QML_FILES
         UiButton.qml
         UiCheckbox.qml
+        UiDivider.qml
         UiIcon.qml
         UiIconButton.qml
         UiLabel.qml

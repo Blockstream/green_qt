@@ -15,6 +15,7 @@ qt_add_qml_module(blockstream_designsystem
         RadioGallery.qml
         CheckboxGallery.qml
         ToggleGallery.qml
+        DividerGallery.qml
         catalog.js
     RESOURCE_PREFIX /qt/qml
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Blockstream/DesignSystem"
