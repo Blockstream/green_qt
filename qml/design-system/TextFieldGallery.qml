@@ -96,17 +96,20 @@ ColumnLayout {
             }
             Flow {
                 Layout.fillWidth: true
-                spacing: 8
-                CheckBox {
+                spacing: 16
+                UiCheckbox {
                     id: disabled_toggle
+                    colors: self.colors
                     text: 'Disabled'
                 }
-                CheckBox {
+                UiCheckbox {
                     id: readonly_toggle
+                    colors: self.colors
                     text: 'Read-only'
                 }
-                CheckBox {
+                UiCheckbox {
                     id: clearable_toggle
+                    colors: self.colors
                     text: 'Clearable'
                     checked: true
                 }

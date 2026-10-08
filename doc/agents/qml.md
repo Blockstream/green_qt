@@ -251,6 +251,17 @@ UiRadio {
 }
 ```
 
+`UiCheckbox` is a Basic `CheckBox` that draws the 20px Figma indicator for unchecked, checked, and indeterminate states, followed by its `text` label (`body/m`, 8px spacing). The label is also the accessible name, and hovering or clicking it acts on the checkbox. Set `wrapMode` and `elide` when the control width is constrained (for example with `Layout.fillWidth`). It keeps the native checkbox behavior: `checked` or `checkState` bindings with `onToggled`, Tab focus, Space activation, `tristate`, `nextCheckState`, and `ButtonGroup` with `exclusive: false` for select-all parents. As in Qt, an indeterminate checkbox reports `checked: false` and exposes the mixed state through `Accessible.checkStateMixed`. Use `disabled` (default `false`) like UiButton; disabled checkboxes do not activate. The keyboard focus ring is drawn outside the indicator, so focus does not change the control size. `colors` is only for gallery preview overrides.
+
+```qml
+UiCheckbox {
+    id: remember_checkbox
+    text: qsTrId('id_remember_me')
+    checked: controller.remember
+    onToggled: controller.remember = remember_checkbox.checked
+}
+```
+
 `UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
 
 `UiTextField` extends Basic `TextField` with theme styling, native editing and validators. `size` defaults to `UiTextField.Large` (60px); use `UiTextField.Medium` (44px) or `UiTextField.Small` (36px) for compact inputs. Set `disabled` (default `false`) without overriding `enabled`; content is retained. Native `readOnly` permits selection and copying. Both hide clear. `errorMessage` controls the error border, wrapping panel, and accessible description. Callers own errors; validation and clearing never change them. The panel opens after 120ms and smoothly expands or collapses below the fixed input shell, including while disabled. `clearable` defaults to `true`. Filled editable fields show a keyboard-accessible clear button that returns focus to the editor. Clearing emits `textChanged` and `cleared()`, but not `textEdited`; handle `cleared` when syncing edits to caller state.

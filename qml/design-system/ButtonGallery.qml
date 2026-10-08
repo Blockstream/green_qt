@@ -78,21 +78,25 @@ ColumnLayout {
             }
             Flow {
                 Layout.fillWidth: true
-                spacing: 8
-                CheckBox {
+                spacing: 16
+                UiCheckbox {
                     id: leading_icon
+                    colors: self.colors
                     text: 'Leading icon'
                 }
-                CheckBox {
+                UiCheckbox {
                     id: trailing_icon
+                    colors: self.colors
                     text: 'Trailing icon'
                 }
-                CheckBox {
+                UiCheckbox {
                     id: button_disabled
+                    colors: self.colors
                     text: 'Disabled'
                 }
-                CheckBox {
+                UiCheckbox {
                     id: button_busy
+                    colors: self.colors
                     text: 'Loading'
                 }
             }
