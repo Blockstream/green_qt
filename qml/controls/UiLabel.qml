@@ -1,4 +1,4 @@
-import Blockstream.Green
+import Blockstream.Theme
 import QtQuick
 import QtQuick.Controls
 

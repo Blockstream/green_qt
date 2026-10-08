@@ -1,4 +1,4 @@
-import Blockstream.Green
+import Blockstream.Theme
 
 Colors {
     // text/brand

@@ -1,4 +1,6 @@
 import Blockstream.Green
+import Blockstream.Controls
+import Blockstream.Theme
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material

@@ -7,6 +7,8 @@ These notes apply to QML under `qml/`. They are part of the repository agent ins
 ```qml
 import Blockstream.Green       // Project imports first
 import Blockstream.Green.Core
+import Blockstream.Controls
+import Blockstream.Theme
 import QtQuick                 // Qt imports
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -108,18 +110,18 @@ Use plain `Flickable` only when the view needs custom sizing, nested delegates, 
 
 ## Design system foundations
 
-For new UI, use the `Theme` singleton in `Blockstream.Green`. It exposes the design system semantic colors and text styles. Existing components still contain older styling; use the tokens for new UI and future migrations.
+For new UI, use the `Theme` singleton from `Blockstream.Theme` and the `Ui*` components from `Blockstream.Controls`. Import these modules explicitly; `Blockstream.Green` does not re-export them. It exposes the design system semantic colors and text styles. Existing components still contain older styling; use the tokens for new UI and future migrations.
 
 ### Components
 
-Place new design system components in `qml/ui/` and prefix their filenames and QML type names with `Ui`, for example `UiButton.qml`, `UiTextField.qml`, `UiAlert.qml`, and `UiCard.qml`. Register them in the `QML_FILES_UI` list in `qml/CMakeLists.txt`. Use `Theme.colors` and `Theme.typography` for their styling.
+Place new design system components in `qml/controls/` and prefix their filenames and QML type names with `Ui`, for example `UiButton.qml`, `UiTextField.qml`, `UiAlert.qml`, and `UiCard.qml`. They belong to the `Blockstream.Controls` module; register them in its `QML_FILES` in `qml/controls/CMakeLists.txt`. Theme files belong to `Blockstream.Theme` in `qml/theme/`. Neither module imports `Blockstream.Green`, and `Blockstream.Theme` does not import `Blockstream.Controls`. Use `Theme.colors` and `Theme.typography` for their styling.
 
 ### Colors
 
 Choose the semantic role that describes the element, rather than matching a hex value or palette shade. Token paths become camel case names in QML: `text/primary` becomes `Theme.colors.textPrimary`, and `feedback/negative/on-fill` becomes `Theme.colors.feedbackNegativeOnFill`. Available groups are text, action, border, feedback, icon, overlay, and surface.
 
 ```qml
-import Blockstream.Green
+import Blockstream.Theme
 import QtQuick
 import QtQuick.Controls
 
@@ -135,7 +137,8 @@ Label {
 Each text style has a `Theme.typography` object. Names follow the style path in camel case: `body/l` is `bodyL`, `label/m-medium` is `labelMMedium`, and `title/xxl-bold` is `titleXxlBold`. Styles without a weight suffix use their base name in QML. Each style exposes `.font` and `.lineHeight`. The font includes family, logical pixel size, weight, letter spacing, and capitalization.
 
 ```qml
-import Blockstream.Green
+import Blockstream.Controls
+import Blockstream.Theme
 import QtQuick
 import QtQuick.Controls
 
@@ -158,7 +161,7 @@ Add each semantic color property to `qml/theme/Colors.qml` and its values to bot
 
 In non-production builds, launch with `--debug` and select **Design system** in the sidebar to inspect colors, typography, and component examples. The gallery QML and catalog are excluded when `GREEN_ENV` is `Production`, and the sidebar entry stays hidden even with `--debug`. AppPage loads the gallery dynamically so production does not depend on its QML types. The preview palette switch changes the whole gallery, including its background and controls, without changing the rest of the app. The Typography tab and UiLabel section each have a sample text field; each field updates only its own previews.
 
-Keep the grouped token names and design IDs in `qml/design-system/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `qml/design-system/DesignSystemPage.qml`; reusable components belong in `qml/ui/`.
+Keep the grouped token names and design IDs in `qml/design-system/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `qml/design-system/DesignSystemPage.qml`; reusable components belong in `qml/controls/`.
 
 ## Custom background pattern
 

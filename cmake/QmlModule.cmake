@@ -1,7 +1,5 @@
 qt_policy(SET QTP0004 NEW)
 
-set_source_files_properties(qml/theme/Theme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
-
 # The module is backed by the blockstream_core static library, because qmltyperegistrar
 # reads the metatypes of whichever target compiled the QML_ELEMENT headers. Qt generates
 # a static plugin for it, which the executable links (see app/CMakeLists.txt).
@@ -17,3 +15,5 @@ qt_add_qml_module(blockstream_core
     NO_CACHEGEN
     NO_LINT
 )
+
+target_link_libraries(blockstream_core PUBLIC blockstream_themeplugin blockstream_controlsplugin)
