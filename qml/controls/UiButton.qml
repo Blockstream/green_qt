@@ -15,17 +15,18 @@ AbstractButton {
     property string trailingIconName: ""
     property Colors colors: Theme.colors
 
+    property real buttonHeight: self.size === UiButton.Large ? 56 : self.size === UiButton.Small ? 40 : self.size === UiButton.ExtraSmall ? 32 : 48
+    property real iconSize: self.size === UiButton.Large ? 24 : 20
+
     readonly property TypographyStyle typography: self.size === UiButton.ExtraSmall ? Theme.typography.labelSmSemibold : Theme.typography.labelLSemibold
-    readonly property real buttonHeight: self.size === UiButton.Large ? 56 : self.size === UiButton.Small ? 40 : self.size === UiButton.ExtraSmall ? 32 : 48
-    readonly property real iconSize: self.size === UiButton.Large ? 24 : 20
 
     readonly property bool interactionPressed: self.enabled && !self.busy && self.down
     readonly property bool interactionHovered: self.enabled && !self.busy && !self.interactionPressed && !self.visualFocus && self.hovered
 
     readonly property color foregroundColor: {
         if (!self.enabled && !self.busy) return self.colors.textDisabled
-        if (self.variant === UiButton.Negative) return self.interactionPressed ? self.colors.feedbackNegativeOnFill : self.colors.feedbackNegativeAccent
-        if (self.variant === UiButton.PrimaryInverted) return self.colors.actionOnPrimaryInverted
+        if (self.variant === UiButton.Negative) return self.interactionPressed ? self.colors.textInverse : self.colors.feedbackNegativeAccent
+        if (self.variant === UiButton.PrimaryInverted) return self.colors.actionOnPrimary
         if (self.variant === UiButton.SecondaryInverted) return self.colors.borderInverse
         if (self.variant === UiButton.Primary && !self.interactionPressed) return self.colors.actionOnPrimary
         return self.interactionHovered ? self.colors.textBrandHover : self.colors.textBrand

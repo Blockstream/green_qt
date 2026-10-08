@@ -234,6 +234,7 @@ MainPage {
                         }
                     }
                 }
+                // TODO: Use UiDivider when available
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
@@ -245,6 +246,19 @@ MainPage {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
+                // TODO: Use UiDivider when available
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    color: self.previewColors.borderSubtle
+                }
+                IconButtonGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                // TODO: Use UiDivider when available
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1

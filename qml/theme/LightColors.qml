@@ -17,7 +17,7 @@ Colors {
     // action/primary
     actionPrimary: '#0069a8'
     // action/hover
-    actionHover: '#0069a8'
+    actionHover: '#00598a'
     // action/pressed
     actionPressed: '#e0f2fe'
     // action/disabled

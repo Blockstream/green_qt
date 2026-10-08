@@ -219,6 +219,24 @@ UiButton {
 
 The Components tab includes a UiButton playground and live examples of every variant and size. Hover/pressed/focus use real input; there is no forced state property. Use `colors` only for a local preview override; product buttons default to `Theme.colors`.
 
+`UiIconButton` is a square UiButton with one centered `iconName`. Set `text` to
+its accessible action name; labels and trailing icons are not rendered. It defaults
+to UiButton.Tertiary (ghost) and Medium, and also supports Primary and Secondary.
+Large/Medium/Small/ExtraSmall measure 56/40/36/28px with 24/24/20/16px icons.
+States, colors, and loading behavior are inherited from UiButton.
+
+```qml
+UiIconButton {
+    text: qsTrId('id_copy_address')
+    iconName: Theme.icons.copy
+    variant: UiButton.Secondary
+    size: UiButton.Small
+    onClicked: { /* perform the action */ }
+}
+```
+
+The Components tab previews variants, sizes, disabled, and loading in both themes.
+
 `UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
 
 ## Custom background pattern
