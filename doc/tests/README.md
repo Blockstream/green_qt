@@ -2,6 +2,12 @@
 
 This project uses CMake/CTest and Qt Test (`Qt6::Test`) for unit tests.
 
+`test_icon_catalog` checks that the icon properties in `Icons.qml` and the resource
+list in `qml/theme/icons/CMakeLists.txt` match every SVG in `qml/theme/icons/`,
+with no missing files or unlisted SVGs.
+Run it with `ctest --test-dir build -R test_icon_catalog --output-on-failure`,
+or directly with `cmake -P tests/check_icons.cmake` (no build required).
+
 ## Run Tests
 
 From the repository root, use [`tools/test.sh`](../../tools/test.sh). It configures with `qt-cmake`, builds the default tree directory `build`, and runs CTest.

@@ -10,6 +10,7 @@ qt_add_qml_module(blockstream_theme
     QML_FILES
         Theme.qml
         Colors.qml
+        Icons.qml
         LightColors.qml
         DarkColors.qml
         Typography.qml
@@ -17,3 +18,5 @@ qt_add_qml_module(blockstream_theme
     RESOURCE_PREFIX /qt/qml
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Blockstream/Theme"
 )
+
+add_subdirectory(icons)

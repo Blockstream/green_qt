@@ -11,7 +11,8 @@ AbstractButton {
     property int size: UiButton.Medium
     property bool disabled: false
     property bool busy: false
-    property url trailingIconSource
+    property string iconName: ""
+    property string trailingIconName: ""
     property Colors colors: Theme.colors
 
     readonly property TypographyStyle typography: self.size === UiButton.ExtraSmall ? Theme.typography.labelSmSemibold : Theme.typography.labelLSemibold
@@ -95,10 +96,8 @@ AbstractButton {
             spacing: self.spacing
             opacity: self.busy ? 0 : 1
             UiIcon {
-                Layout.preferredWidth: self.iconSize
-                Layout.preferredHeight: self.iconSize
-                visible: self.icon.source.toString().length > 0
-                source: self.icon.source
+                name: self.iconName
+                size: self.iconSize
                 color: self.foregroundColor
             }
             UiLabel {
@@ -114,10 +113,8 @@ AbstractButton {
                 wrapMode: Text.NoWrap
             }
             UiIcon {
-                Layout.preferredWidth: self.iconSize
-                Layout.preferredHeight: self.iconSize
-                visible: self.trailingIconSource.toString().length > 0
-                source: self.trailingIconSource
+                name: self.trailingIconName
+                size: self.iconSize
                 color: self.foregroundColor
             }
         }

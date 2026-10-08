@@ -157,13 +157,53 @@ Inter covers body, label, title, overline, and display styles. Code styles use R
 
 Add each semantic color property to `qml/theme/Colors.qml` and its values to both `LightColors.qml` and `DarkColors.qml`, keeping each token's path comment. Update text styles in `qml/theme/Typography.qml`. Update font assets and registration if families or weights change.
 
+### UI icons
+
+Use `UiIcon` with a name from `Theme.icons`:
+
+```qml
+import Blockstream.Controls
+import Blockstream.Theme
+
+UiIcon {
+    name: Theme.icons.plusBold
+    color: Theme.colors.iconBase
+    size: 24
+}
+```
+
+Defaults are an empty name, 24 logical pixels, and `Theme.colors.textPrimary`.
+Empty or unknown names hide the icon. Width, height, and layout properties can
+override its size. Color alpha controls transparency. Icons are decorative and
+non-interactive.
+
+For buttons, use `iconName` and `trailingIconName`:
+
+```qml
+UiButton {
+    text: qsTrId('id_continue')
+    iconName: Theme.icons.check
+    trailingIconName: Theme.icons.arrowRight
+}
+```
+
+`Theme.icons` exposes typed readonly string properties from `Icons.qml`, supporting
+editor completion. SVG filenames generate these properties; the gallery derives
+its list from them. Theme caches valid names in `iconNames` for UiIcon lookups.
+Theme also supplies the SVG resources; Controls supplies the UiIcon renderer.
+See [adding icons](repository.md#uiicon-assets) for importing
+and regeneration instructions.
+
 ### Debug gallery
 
 In non-production builds, launch with `--debug` and select **Design system** in the sidebar to inspect colors, typography, and component examples. The gallery QML and catalog are excluded when `GREEN_ENV` is `Production`, and the sidebar entry stays hidden even with `--debug`. AppPage loads the gallery dynamically so production does not depend on its QML types. The preview palette switch changes the whole gallery, including its background and controls, without changing the rest of the app. The Typography tab and UiLabel section each have a sample text field; each field updates only its own previews.
 
 Keep the grouped token names and design IDs in `qml/design-system/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `qml/design-system/DesignSystemPage.qml`; reusable components belong in `qml/controls/`.
 
-`UiButton` provides `variant` (`Primary`, `Secondary`, `Tertiary`, `Negative`, `PrimaryInverted`, `SecondaryInverted`) and `size` (`Large`, `Medium`, `Small`, `ExtraSmall`) enums; defaults are `UiButton.Primary` and `UiButton.Medium` (48px). Use `icon.source` for a leading monochrome icon and `trailingIconSource` for a trailing icon. Both follow the button foreground color. `busy` replaces content with a spinner and preserves dimensions and normal variant colors. Use `disabled` (default `false`) for caller-controlled availability. Leave inherited `enabled` untouched so the component's `enabled: !disabled && !busy` binding blocks activation during loading. QML still permits overriding `enabled`, which replaces this binding. Qt handles pointer input, keyboard activation, focus, and shortcuts.
+The UiIcon section lists icons in four compact columns, with search and tertiary
+Copy buttons for `Theme.icons` expressions. Buttons briefly read Copied after use.
+
+`UiButton` provides `variant` (`Primary`, `Secondary`, `Tertiary`, `Negative`, `PrimaryInverted`, `SecondaryInverted`) and `size` (`Large`, `Medium`, `Small`, `ExtraSmall`) enums; defaults are `UiButton.Primary` and `UiButton.Medium` (48px). Use `iconName: Theme.icons.check` for a leading icon and `trailingIconName: Theme.icons.copy` for a trailing icon. Both render through UiIcon and follow the button foreground color; empty or unknown names are hidden. `busy` replaces content with a spinner and preserves dimensions and normal variant colors. Use `disabled` (default `false`) for caller-controlled availability. Leave inherited `enabled` untouched so the component's `enabled: !disabled && !busy` binding blocks activation during loading. QML still permits overriding `enabled`, which replaces this binding. Qt handles pointer input, keyboard activation, focus, and shortcuts.
 
 ```qml
 UiButton {

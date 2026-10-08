@@ -102,8 +102,8 @@ ColumnLayout {
                     text: button_text.text
                     variant: self.variants[variant_selector.currentIndex]?.value ?? UiButton.Primary
                     size: self.sizes[size_selector.currentIndex]?.value ?? UiButton.Medium
-                    icon.source: leading_icon.checked ? 'qrc:/icons/check.svg' : ''
-                    trailingIconSource: trailing_icon.checked ? 'qrc:/icons/clipboard.svg' : ''
+                    iconName: leading_icon.checked ? Theme.icons.check : ''
+                    trailingIconName: trailing_icon.checked ? Theme.icons.copy : ''
                     disabled: button_disabled.checked
                     busy: button_busy.checked
                     onClicked: self.clickCount++

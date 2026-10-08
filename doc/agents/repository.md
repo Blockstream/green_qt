@@ -11,6 +11,8 @@ Where things live and how to gate debug behavior. Part of the repository agent i
     - **src/**: Entry point and process setup (`main.cpp`, `ui.cpp`, `sentry.cpp`, `watchdog.cpp`)
     - `Info.plist.in`, `production.rc`, `production.icns`, `production.ico`: Platform bundle metadata and app icons
 - **qml/**: QML files (*.qml) and JavaScript (*.js)
+    - **controls/**: The `Blockstream.Controls` module with QML controls
+    - **theme/**: The `Blockstream.Theme` module with theme tokens, icon names, and SVG icons
 - **cmake/**: Build modules (`AppLib.cmake`, `QmlModule.cmake`, `Platform*.cmake`, dependency finders)
 - **i18n/**: Translation sources (`green_*.ts`)
 - **tests/unit/**: Qt Test suites (`tst_*.cpp`) registered with CTest
@@ -21,6 +23,39 @@ Where things live and how to gate debug behavior. Part of the repository agent i
     - **flags/**: Country flag SVGs
     - **fonts/**: TTF fonts
     - **png/**, **pdf/**, **installer/**: Other static assets
+
+### UiIcon assets
+
+Store static monochrome SVGs in `qml/theme/icons/`. See [QML usage](qml.md#ui-icons)
+for `UiIcon` and button examples.
+
+From the repository root, pass SVG markup or omit it to use the macOS clipboard:
+
+```sh
+./tools/add-icon my-icon '<svg>...</svg>'
+./tools/add-icon my-icon
+```
+
+SVGs are saved unchanged. Use lowercase kebab-case names: `my-icon.svg` becomes
+`Theme.icons.myIcon`. Reserved JavaScript and QML keywords get an `Icon` suffix, such as
+`export` → `exportIcon`. `none` and `object-name` are reserved; duplicate filenames
+or property names are rejected.
+
+The script generates `qml/theme/Icons.qml` and the explicit resource list in
+`qml/theme/icons/CMakeLists.txt` from SVG filenames. The Theme module owns these
+resources. Builds use these committed files directly. After manually adding,
+renaming, or deleting SVGs, regenerate:
+
+```sh
+./tools/add-icon --generate
+```
+
+Commit the SVGs and generated files. Renaming icons requires updating callers.
+Check that the catalog and resource list match the files with:
+
+```sh
+cmake -P tests/check_icons.cmake
+```
 
 ### Monochrome UI icons (`assets/icons/*.svg`)
 

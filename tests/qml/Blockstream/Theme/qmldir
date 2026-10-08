@@ -5,3 +5,4 @@ LightColors 1.0 ../../../../qml/theme/LightColors.qml
 DarkColors 1.0 ../../../../qml/theme/DarkColors.qml
 Typography 1.0 ../../../../qml/theme/Typography.qml
 TypographyStyle 1.0 ../../../../qml/theme/TypographyStyle.qml
+Icons 1.0 ../../../../qml/theme/Icons.qml
