@@ -65,6 +65,11 @@ add_test(
     COMMAND "${QML_TEST_RUNNER}" -platform offscreen ${QML_TEST_IMPORT_ARGS} -input "${CMAKE_CURRENT_SOURCE_DIR}/tst_linechart.qml"
 )
 
+add_test(
+    NAME test_qml_uibutton
+    COMMAND "${QML_TEST_RUNNER}" -platform offscreen ${QML_TEST_IMPORT_ARGS} -input "${CMAKE_CURRENT_SOURCE_DIR}/tst_uibutton.qml"
+)
+
 # Run with the app's Controls style instead of the platform default, so results
 # don't depend on the host (e.g. the macOS style's BusyIndicator images).
 get_property(QML_TESTS DIRECTORY PROPERTY TESTS)

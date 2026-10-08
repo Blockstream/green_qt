@@ -16,6 +16,8 @@ QtObject {
 
     // action/primary
     required property color actionPrimary
+    // action/hover
+    required property color actionHover
     // action/pressed
     required property color actionPressed
     // action/disabled
@@ -35,6 +37,8 @@ QtObject {
     required property color borderBold
     // border/brand
     required property color borderBrand
+    // border/focus
+    required property color borderFocus
     // border/inverse
     required property color borderInverse
     // border/subtle
@@ -91,6 +95,8 @@ QtObject {
     required property color surfaceBase
     // surface/canvas
     required property color surfaceCanvas
+    // surface/hover
+    required property color surfaceHover
     // surface/overlay
     required property color surfaceOverlay
     // surface/raised

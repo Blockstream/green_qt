@@ -11,11 +11,7 @@ add_subdirectory(controls)
 
 set(QML_FILES_DESIGN_SYSTEM)
 if(NOT GREEN_ENV STREQUAL "Production")
-    set(QML_FILES_DESIGN_SYSTEM
-        design-system/DesignSystemPage.qml
-        design-system/DesignSystemSwatch.qml
-        design-system/catalog.js
-    )
+    add_subdirectory(design-system)
 endif()
 
 set(QML_FILES_CORE

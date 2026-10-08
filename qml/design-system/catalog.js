@@ -17,6 +17,7 @@ var colorGroups = [
         'title': 'Action',
         'tokens': [
             { name: 'actionPrimary', designId: 'action/primary' },
+            { name: 'actionHover', designId: 'action/hover' },
             { name: 'actionPressed', designId: 'action/pressed' },
             { name: 'actionDisabled', designId: 'action/disabled' },
             { name: 'actionOnPrimary', designId: 'action/on-primary' },
@@ -31,6 +32,7 @@ var colorGroups = [
         'tokens': [
             { name: 'borderBold', designId: 'border/bold' },
             { name: 'borderBrand', designId: 'border/brand' },
+            { name: 'borderFocus', designId: 'border/focus' },
             { name: 'borderInverse', designId: 'border/inverse' },
             { name: 'borderSubtle', designId: 'border/subtle' }
         ]
@@ -77,6 +79,7 @@ var colorGroups = [
         'tokens': [
             { name: 'surfaceBase', designId: 'surface/base' },
             { name: 'surfaceCanvas', designId: 'surface/canvas' },
+            { name: 'surfaceHover', designId: 'surface/hover' },
             { name: 'surfaceOverlay', designId: 'surface/overlay' },
             { name: 'surfaceRaised', designId: 'surface/raised' },
             { name: 'surfaceScrim', designId: 'surface/scrim' },

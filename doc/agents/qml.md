@@ -163,6 +163,24 @@ In non-production builds, launch with `--debug` and select **Design system** in 
 
 Keep the grouped token names and design IDs in `qml/design-system/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `qml/design-system/DesignSystemPage.qml`; reusable components belong in `qml/controls/`.
 
+`UiButton` provides `variant` (`Primary`, `Secondary`, `Tertiary`, `Negative`, `PrimaryInverted`, `SecondaryInverted`) and `size` (`Large`, `Medium`, `Small`, `ExtraSmall`) enums; defaults are `UiButton.Primary` and `UiButton.Medium` (48px). Use `icon.source` for a leading monochrome icon and `trailingIconSource` for a trailing icon. Both follow the button foreground color. `busy` replaces content with a spinner and preserves dimensions and normal variant colors. Use `disabled` (default `false`) for caller-controlled availability. Leave inherited `enabled` untouched so the component's `enabled: !disabled && !busy` binding blocks activation during loading. QML still permits overriding `enabled`, which replaces this binding. Qt handles pointer input, keyboard activation, focus, and shortcuts.
+
+```qml
+UiButton {
+    Layout.fillWidth: true
+    variant: UiButton.Primary
+    size: UiButton.Medium
+    text: qsTrId('id_continue')
+    busy: controller.loading
+    disabled: !controller.canSubmit
+    onClicked: controller.submit()
+}
+```
+
+The Components tab includes a UiButton playground and live examples of every variant and size. Hover/pressed/focus use real input; there is no forced state property. Use `colors` only for a local preview override; product buttons default to `Theme.colors`.
+
+`UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
+
 ## Custom background pattern
 
 ```qml

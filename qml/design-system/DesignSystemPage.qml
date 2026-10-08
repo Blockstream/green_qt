@@ -234,6 +234,17 @@ MainPage {
                         }
                     }
                 }
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    color: self.previewColors.borderSubtle
+                }
+                ButtonGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
                 Item { Layout.fillHeight: true }
             }
         }

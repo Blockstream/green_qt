@@ -16,6 +16,8 @@ Colors {
 
     // action/primary
     actionPrimary: '#0069a8'
+    // action/hover
+    actionHover: '#0069a8'
     // action/pressed
     actionPressed: '#e0f2fe'
     // action/disabled
@@ -35,6 +37,8 @@ Colors {
     borderBold: '#d4d4d4'
     // border/brand
     borderBrand: '#0084d1'
+    // border/focus
+    borderFocus: '#0084d1'
     // border/inverse
     borderInverse: '#0a0a0a'
     // border/subtle
@@ -91,6 +95,8 @@ Colors {
     surfaceBase: '#f0f0f0'
     // surface/canvas
     surfaceCanvas: '#f5f5f5'
+    // surface/hover
+    surfaceHover: '#d4d4d4'
     // surface/overlay
     surfaceOverlay: '#ffffff'
     // surface/raised
