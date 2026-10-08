@@ -10,6 +10,7 @@ qt_add_qml_module(blockstream_controls
         UiIcon.qml
         UiIconButton.qml
         UiLabel.qml
+        UiRadio.qml
         UiSpinner.qml
         UiTextField.qml
     RESOURCE_PREFIX /qt/qml

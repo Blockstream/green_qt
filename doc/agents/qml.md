@@ -237,6 +237,20 @@ UiIconButton {
 
 The Components tab previews variants, sizes, disabled, and loading in both themes.
 
+`UiRadio` is a Basic `RadioButton` that draws the 20px Figma indicator followed by its `text` label (`body/m`, 8px spacing). The label is also the accessible name, and hovering or clicking it acts on the radio. Set `wrapMode` and `elide` when the control width is constrained (for example with `Layout.fillWidth`). It keeps the native radio behavior: sibling auto-exclusivity or `ButtonGroup.group`, `checked` bindings with `onToggled`, Tab focus, and Space activation. Use `disabled` (default `false`) like UiButton; disabled radios do not activate. The keyboard focus ring is drawn outside the indicator, so focus does not change the control size. `colors` is only for gallery preview overrides.
+
+```qml
+ButtonGroup {
+    id: fee_group
+}
+UiRadio {
+    ButtonGroup.group: fee_group
+    text: qsTrId('id_fast')
+    checked: controller.feeRate === 'fast'
+    onToggled: controller.feeRate = 'fast'
+}
+```
+
 `UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
 
 `UiTextField` extends Basic `TextField` with theme styling, native editing and validators. `size` defaults to `UiTextField.Large` (60px); use `UiTextField.Medium` (44px) or `UiTextField.Small` (36px) for compact inputs. Set `disabled` (default `false`) without overriding `enabled`; content is retained. Native `readOnly` permits selection and copying. Both hide clear. `errorMessage` controls the error border, wrapping panel, and accessible description. Callers own errors; validation and clearing never change them. The panel opens after 120ms and smoothly expands or collapses below the fixed input shell, including while disabled. `clearable` defaults to `true`. Filled editable fields show a keyboard-accessible clear button that returns focus to the editor. Clearing emits `textChanged` and `cleared()`, but not `textEdited`; handle `cleared` when syncing edits to caller state.
