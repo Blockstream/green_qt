@@ -42,12 +42,11 @@ Page {
                 color: self.previewColors.textPrimary
                 typography: Theme.typography.titleLBold
             }
-            Label { text: 'Preview'; color: self.previewColors.textSubtle }
-            Switch {
+            UiToggle {
                 id: palette_switch
                 checked: true
-                text: checked ? 'Dark' : 'Light'
-                Accessible.name: 'Dark preview'
+                colors: self.previewColors
+                text: 'Dark preview'
             }
         }
         TabBar {
@@ -298,6 +297,18 @@ Page {
                     color: self.previewColors.borderSubtle
                 }
                 CheckboxGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                // TODO: Use UiDivider when available
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    color: self.previewColors.borderSubtle
+                }
+                ToggleGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }

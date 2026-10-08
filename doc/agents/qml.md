@@ -262,6 +262,18 @@ UiCheckbox {
 }
 ```
 
+`UiToggle` is a Basic `Switch` that draws its `text` label (`body/m`) followed by the 48×28px Figma on/off control, 8px apart. The control stays right-aligned, so a toggle with `Layout.fillWidth: true` forms a settings row. The label is also the accessible name, and hovering or clicking it acts on the toggle. Set `wrapMode` and `elide` when the control width is constrained. It exposes `Accessible.Switch` with its on/off state and keeps the native switch behavior: `checked` bindings with `onToggled`, Tab focus, Space activation, dragging, and the animated knob. Use `disabled` (default `false`) like UiButton; disabled toggles do not activate. The keyboard focus ring is drawn inside the control and the track shrinks, so focus does not change the control size. `colors` is only for gallery preview overrides.
+
+```qml
+UiToggle {
+    id: remember_toggle
+    Layout.fillWidth: true
+    text: qsTrId('id_remember_me')
+    checked: controller.remember
+    onToggled: controller.remember = remember_toggle.checked
+}
+```
+
 `UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
 
 `UiTextField` extends Basic `TextField` with theme styling, native editing and validators. `size` defaults to `UiTextField.Large` (60px); use `UiTextField.Medium` (44px) or `UiTextField.Small` (36px) for compact inputs. Set `disabled` (default `false`) without overriding `enabled`; content is retained. Native `readOnly` permits selection and copying. Both hide clear. `errorMessage` controls the error border, wrapping panel, and accessible description. Callers own errors; validation and clearing never change them. The panel opens after 120ms and smoothly expands or collapses below the fixed input shell, including while disabled. `clearable` defaults to `true`. Filled editable fields show a keyboard-accessible clear button that returns focus to the editor. Clearing emits `textChanged` and `cleared()`, but not `textEdited`; handle `cleared` when syncing edits to caller state.

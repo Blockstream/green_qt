@@ -14,6 +14,7 @@ qt_add_qml_module(blockstream_controls
         UiRadio.qml
         UiSpinner.qml
         UiTextField.qml
+        UiToggle.qml
     RESOURCE_PREFIX /qt/qml
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Blockstream/Controls"
 )
