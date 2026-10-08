@@ -281,6 +281,16 @@ UiDivider {}
 UiDivider { orientation: Qt.Vertical; weight: UiDivider.Bold }
 ```
 
+`UiLink` is an underlined text link with a trailing 16px icon. Set `text` (also the accessible name), `url`, `size` (`UiLink.Large` by default, or `UiLink.Medium`), and `iconName` (`Theme.icons.arrowSquareOut` by default; empty hides it). A click, Space, Return, or Enter emits `linkActivated(url)` and opens the URL like `LinkLabel`. Disabled links and links without a `url` do not activate.
+
+```qml
+UiLink {
+    size: UiLink.Medium
+    text: qsTrId('id_learn_more')
+    url: 'https://help.blockstream.com/hc/en-us/articles/900001392563-What-is-a-recovery-phrase'
+}
+```
+
 `UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
 
 `UiTextField` extends Basic `TextField` with theme styling, native editing and validators. `size` defaults to `UiTextField.Large` (60px); use `UiTextField.Medium` (44px) or `UiTextField.Small` (36px) for compact inputs. Set `disabled` (default `false`) without overriding `enabled`; content is retained. Native `readOnly` permits selection and copying. Both hide clear. `errorMessage` controls the error border, wrapping panel, and accessible description. Callers own errors; validation and clearing never change them. The panel opens after 120ms and smoothly expands or collapses below the fixed input shell, including while disabled. `clearable` defaults to `true`. Filled editable fields show a keyboard-accessible clear button that returns focus to the editor. Clearing emits `textChanged` and `cleared()`, but not `textEdited`; handle `cleared` when syncing edits to caller state.

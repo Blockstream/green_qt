@@ -300,6 +300,15 @@ Page {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
+                LinkGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
                 Item { Layout.fillHeight: true }
             }
         }
