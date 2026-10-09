@@ -1,4 +1,4 @@
-get_filename_component(ROOT "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
+get_filename_component(ROOT "${CMAKE_CURRENT_LIST_DIR}/../../.." ABSOLUTE)
 file(GLOB_RECURSE SVG_FILES RELATIVE "${ROOT}/qml/theme/icons" "${ROOT}/qml/theme/icons/*.svg")
 file(READ "${ROOT}/qml/theme/Icons.qml" ICONS_QML)
 string(REGEX MATCHALL "readonly property string [A-Za-z0-9_]+: \"[^\"]+\"" ENTRIES "${ICONS_QML}")

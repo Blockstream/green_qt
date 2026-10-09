@@ -16,3 +16,7 @@ qt_add_qml_module(blockstream_controls
 )
 
 target_link_libraries(blockstream_controls PUBLIC blockstream_themeplugin)
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

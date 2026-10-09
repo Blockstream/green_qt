@@ -6,7 +6,7 @@ This project uses CMake/CTest and Qt Test (`Qt6::Test`) for unit tests.
 list in `qml/theme/icons/CMakeLists.txt` match every SVG in `qml/theme/icons/`,
 with no missing files or unlisted SVGs.
 Run it with `ctest --test-dir build -R test_icon_catalog --output-on-failure`,
-or directly with `cmake -P tests/check_icons.cmake` (no build required).
+or directly with `cmake -P qml/theme/tests/check_icons.cmake` (no build required).
 
 ## Run Tests
 
@@ -52,7 +52,9 @@ If you need raw CMake/CTest invocations instead of the script, use the same buil
 
 ## Add a New Test
 
-Current tests live under `tests/unit`.
+C++ unit tests live under `tests/unit`. QML tests for the `Blockstream.Controls` module live in
+`qml/controls/tests` and run against the compiled module; QML tests for app components live in
+`tests/qml` and run with `qmltestrunner` against stub types.
 
 1. Create a new test source file in `tests/unit` (for example `tst_wallet.cpp`).
 2. Register it in `tests/unit/CMakeLists.txt` with `add_unit_test(...)`, which creates the executable, links `Qt6::Test` and adds it to CTest.

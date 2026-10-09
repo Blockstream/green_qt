@@ -139,10 +139,12 @@ main() {
             ;;
         qml)
             configure_tests
+            build_tests
             run_qml_tests
             ;;
         qml-one)
             configure_tests
+            build_tests
             run_one_qml_test "${2:-}"
             ;;
         list)

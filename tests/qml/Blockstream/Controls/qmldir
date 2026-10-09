@@ -1,6 +1,0 @@
-module Blockstream.Controls
-UiIcon 1.0 ../../../../qml/controls/UiIcon.qml
-UiButton 1.0 ../../../../qml/controls/UiButton.qml
-UiLabel 1.0 ../../../../qml/controls/UiLabel.qml
-UiSpinner 1.0 ../../../../qml/controls/UiSpinner.qml
-UiIconButton 1.0 ../../../../qml/controls/UiIconButton.qml

@@ -9,6 +9,19 @@ find_program(QML_TEST_RUNNER
     REQUIRED
 )
 
+# Shares GreenTestCase with the module tests under qml/*/tests.
+qt_add_library(blockstream_testing STATIC)
+set_target_properties(blockstream_testing PROPERTIES AUTOMOC ON)
+qt_add_qml_module(blockstream_testing
+    URI Blockstream.Testing
+    VERSION 1.0
+    DEPENDENCIES QtQuick QtTest
+    QML_FILES
+        GreenTestCase.qml
+    RESOURCE_PREFIX /qt/qml
+    OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Blockstream/Testing"
+)
+
 set(QML_TEST_IMPORT_ARGS
     -import "${CMAKE_CURRENT_SOURCE_DIR}"
     -import "${CMAKE_SOURCE_DIR}/qml"
@@ -63,16 +76,6 @@ add_test(
 add_test(
     NAME test_qml_linechart
     COMMAND "${QML_TEST_RUNNER}" -platform offscreen ${QML_TEST_IMPORT_ARGS} -input "${CMAKE_CURRENT_SOURCE_DIR}/tst_linechart.qml"
-)
-
-add_test(
-    NAME test_qml_uibutton
-    COMMAND "${QML_TEST_RUNNER}" -platform offscreen ${QML_TEST_IMPORT_ARGS} -input "${CMAKE_CURRENT_SOURCE_DIR}/tst_uibutton.qml"
-)
-
-add_test(
-    NAME test_qml_uiiconbutton
-    COMMAND "${QML_TEST_RUNNER}" -platform offscreen ${QML_TEST_IMPORT_ARGS} -input "${CMAKE_CURRENT_SOURCE_DIR}/tst_uiiconbutton.qml"
 )
 
 # Run with the app's Controls style instead of the platform default, so results

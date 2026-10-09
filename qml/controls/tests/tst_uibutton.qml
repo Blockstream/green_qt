@@ -1,4 +1,5 @@
 import Blockstream.Controls
+import Blockstream.Testing
 import QtQuick
 import QtTest
 

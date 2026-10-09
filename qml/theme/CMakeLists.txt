@@ -20,3 +20,7 @@ qt_add_qml_module(blockstream_theme
 )
 
 add_subdirectory(icons)
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
