@@ -277,19 +277,9 @@ UiToggle {
 `UiDivider` draws a 1px separator. Set `orientation` to `Qt.Horizontal` (default) or `Qt.Vertical`, and `weight` to `UiDivider.Subtle` (default, `border/subtle`) or `UiDivider.Bold` (`border/bold`). Inside layouts, it fills the width when horizontal or the height when vertical, and its thickness stays at 1px. Outside layouts, set the length with `width`, `height`, or anchors. It is non-interactive, never takes keyboard focus, and exposes `Accessible.Separator`. `colors` is only for gallery preview overrides.
 
 ```qml
-ColumnLayout {
-    UiLabel { text: qsTrId('id_settings'); typography: Theme.typography.bodyM; color: Theme.colors.textPrimary }
-    UiDivider {}
-    RowLayout {
-        Layout.preferredHeight: 24
-        UiLabel { text: qsTrId('id_fast'); typography: Theme.typography.bodyM; color: Theme.colors.textPrimary }
-        UiDivider { orientation: Qt.Vertical; weight: UiDivider.Bold }
-        UiLabel { text: qsTrId('id_slow'); typography: Theme.typography.bodyM; color: Theme.colors.textPrimary }
-    }
-}
+UiDivider {}
+UiDivider { orientation: Qt.Vertical; weight: UiDivider.Bold }
 ```
-
-The Components tab includes a UiDivider playground and every orientation and weight previewed in both dark and light palettes.
 
 `UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
 

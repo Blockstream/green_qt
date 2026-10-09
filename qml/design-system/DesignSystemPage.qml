@@ -228,97 +228,73 @@ Page {
                         }
                     }
                 }
-                // TODO: Use UiDivider when available
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
+                UiDivider {
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
-                    color: self.previewColors.borderSubtle
+                    colors: self.previewColors
                 }
                 ButtonGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
-                // TODO: Use UiDivider when available
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
+                UiDivider {
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
-                    color: self.previewColors.borderSubtle
+                    colors: self.previewColors
                 }
                 IconButtonGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
-                // TODO: Use UiDivider when available
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
+                UiDivider {
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
-                    color: self.previewColors.borderSubtle
+                    colors: self.previewColors
                 }
                 TextFieldGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
-                // TODO: Use UiDivider when available
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
+                UiDivider {
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
-                    color: self.previewColors.borderSubtle
+                    colors: self.previewColors
                 }
                 IconGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
-                // TODO: Use UiDivider when available
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
+                UiDivider {
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
-                    color: self.previewColors.borderSubtle
+                    colors: self.previewColors
                 }
                 RadioGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
-                // TODO: Use UiDivider when available
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
+                UiDivider {
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
-                    color: self.previewColors.borderSubtle
+                    colors: self.previewColors
                 }
-CheckboxGallery {
+                CheckboxGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
-                // TODO: Use UiDivider when available
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
+                UiDivider {
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
-                    color: self.previewColors.borderSubtle
+                    colors: self.previewColors
                 }
                 ToggleGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
-                // TODO: Use UiDivider when available
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
+                UiDivider {
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
-                    color: self.previewColors.borderSubtle
+                    colors: self.previewColors
                 }
                 DividerGallery {
                     Layout.fillWidth: true
