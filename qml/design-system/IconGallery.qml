@@ -24,19 +24,12 @@ ColumnLayout {
             typography: Theme.typography.titleSSemibold
             color: self.colors.textPrimary
         }
-        TextField {
+        UiTextField {
             id: search_input
-            Layout.preferredWidth: 240
-            Layout.preferredHeight: 32
-            font: Theme.typography.bodyS.font
-            leftPadding: 8
-            rightPadding: 8
-            topPadding: 4
-            bottomPadding: 4
-            color: self.colors.textPrimary
+            Layout.maximumWidth: 240
+            colors: self.colors
+            size: UiTextField.Small
             placeholderText: 'Search icons'
-            placeholderTextColor: self.colors.textSubtle
-            selectByMouse: true
             Accessible.name: 'Search icons'
         }
     }

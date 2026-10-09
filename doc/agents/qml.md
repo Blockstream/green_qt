@@ -239,6 +239,19 @@ The Components tab previews variants, sizes, disabled, and loading in both theme
 
 `UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
 
+`UiTextField` extends Basic `TextField` with theme styling, native editing and validators. `size` defaults to `UiTextField.Large` (60px); use `UiTextField.Medium` (44px) or `UiTextField.Small` (36px) for compact inputs. Set `disabled` (default `false`) without overriding `enabled`; content is retained. Native `readOnly` permits selection and copying. Both hide clear. `errorMessage` controls the error border, wrapping panel, and accessible description. Callers own errors; validation and clearing never change them. The panel opens after 120ms and smoothly expands or collapses below the fixed input shell, including while disabled. `clearable` defaults to `true`. Filled editable fields show a keyboard-accessible clear button that returns focus to the editor. Clearing emits `textChanged` and `cleared()`, but not `textEdited`; handle `cleared` when syncing edits to caller state.
+
+```qml
+UiTextField {
+    placeholderText: qsTrId('id_name')
+    errorMessage: controller.errorMessage
+    disabled: controller.loading
+    Accessible.name: qsTrId('id_name')
+    onTextEdited: controller.name = text
+    onCleared: controller.name = ''
+}
+```
+
 ## Custom background pattern
 
 ```qml

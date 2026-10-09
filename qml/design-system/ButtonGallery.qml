@@ -53,6 +53,7 @@ ColumnLayout {
                 ComboBox {
                     id: variant_selector
                     Layout.fillWidth: true
+                    Layout.preferredHeight: 44
                     model: self.variants
                     textRole: 'name'
                     Accessible.name: 'Button variant'
@@ -60,16 +61,18 @@ ColumnLayout {
                 ComboBox {
                     id: size_selector
                     Layout.fillWidth: true
+                    Layout.preferredHeight: 44
                     model: self.sizes
                     textRole: 'name'
                     currentIndex: 1
                     Accessible.name: 'Button size'
                 }
-                TextField {
+                UiTextField {
                     id: button_text
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: 240
+                    colors: self.colors
+                    size: UiTextField.Medium
                     text: 'Continue'
-                    selectByMouse: true
                     Accessible.name: 'Button text'
                 }
             }

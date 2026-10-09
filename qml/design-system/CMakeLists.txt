@@ -11,6 +11,7 @@ qt_add_qml_module(blockstream_designsystem
         IconButtonGallery.qml
         DesignSystemPage.qml
         DesignSystemSwatch.qml
+        TextFieldGallery.qml
         catalog.js
     RESOURCE_PREFIX /qt/qml
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Blockstream/DesignSystem"

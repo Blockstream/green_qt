@@ -261,6 +261,18 @@ Page {
                     Layout.bottomMargin: 20
                     color: self.previewColors.borderSubtle
                 }
+                TextFieldGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                // TODO: Use UiDivider when available
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    color: self.previewColors.borderSubtle
+                }
                 IconGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
@@ -287,11 +299,12 @@ Page {
         }
     }
 
-    component SampleField: TextField {
+    component SampleField: UiTextField {
         Layout.fillWidth: true
+        colors: self.previewColors
+        size: UiTextField.Medium
         text: 'The quick brown fox jumps over the lazy dog. 0123456789'
         Accessible.name: 'Sample text'
-        selectByMouse: true
     }
 
     component GalleryTab: TabButton {
