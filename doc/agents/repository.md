@@ -12,6 +12,7 @@ Where things live and how to gate debug behavior. Part of the repository agent i
     - `Info.plist.in`, `production.rc`, `production.icns`, `production.ico`: Platform bundle metadata and app icons
 - **qml/**: QML files (*.qml) and JavaScript (*.js)
     - **controls/**: The `Blockstream.Controls` module with QML controls
+    - **design-system/**: The `Blockstream.DesignSystem` module with the debug-only design system gallery (not built in production)
     - **theme/**: The `Blockstream.Theme` module with theme tokens, icon names, and SVG icons
 - **cmake/**: Build modules (`AppLib.cmake`, `QmlModule.cmake`, `Platform*.cmake`, dependency finders)
 - **i18n/**: Translation sources (`green_*.ts`)
@@ -97,7 +98,7 @@ When adding or renaming a file under `assets/icons/`, **append it to the `FILES`
 
 - Keep commit subjects compatible with commitlint: use a capitalized imperative subject with no scope prefix, for example `Add receive warning`.
 - For C++ changes, run `./tools/lint/cpplint.sh` when feasible; for QML/JS changes, `./tools/lint/qmllint.sh`.
-- For added or removed QML files, update the file list in `qml/CMakeLists.txt`, or the module's own `CMakeLists.txt` for `qml/theme/` (`Blockstream.Theme`) and `qml/controls/` (`Blockstream.Controls`).
+- For added or removed QML files, update the file list in `qml/CMakeLists.txt`, or the module's own `CMakeLists.txt` for `qml/theme/` (`Blockstream.Theme`), `qml/controls/` (`Blockstream.Controls`) and `qml/design-system/` (`Blockstream.DesignSystem`).
 - For added or removed C++ files, update the `target_sources` of the closest `CMakeLists.txt` (`src/`, its subfolders, or `app/src/` for the executable).
 - For behavior changes, run the narrowest relevant build or test target available in the checkout and mention the command in the handoff. Unit tests run with `./tools/test.sh all` or `./tools/test.sh one <suite_regex>`.
 

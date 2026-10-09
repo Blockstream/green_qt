@@ -1,4 +1,3 @@
-import Blockstream.Green
 import Blockstream.Controls
 import Blockstream.Theme
 import QtQuick
@@ -8,7 +7,7 @@ import QtQuick.Layouts
 
 import 'catalog.js' as Catalog
 
-MainPage {
+Page {
     readonly property Colors previewColors: palette_switch.checked ? Theme.darkColors : Theme.lightColors
 
     function hex(value) {
@@ -23,8 +22,10 @@ MainPage {
 
     id: self
     title: 'Design system'
-    topPadding: 24
-    bottomPadding: 24
+    focusPolicy: Qt.ClickFocus
+    clip: true
+    padding: 24
+    implicitWidth: 0
     Material.theme: palette_switch.checked ? Material.Dark : Material.Light
     Material.background: previewColors.surfaceCanvas
     Material.foreground: previewColors.textPrimary
@@ -42,7 +43,7 @@ MainPage {
                 typography: Theme.typography.titleLBold
             }
             Label { text: 'Preview'; color: self.previewColors.textSubtle }
-            GSwitch {
+            Switch {
                 id: palette_switch
                 checked: true
                 text: checked ? 'Dark' : 'Light'
@@ -62,9 +63,7 @@ MainPage {
             Layout.fillHeight: true
             currentIndex: tabs.currentIndex
 
-            VFlickable {
-                alignment: Qt.AlignTop
-                spacing: 12
+            GalleryFlickable {
                 Repeater {
                     model: Catalog.colorGroups
                     ColumnLayout {
@@ -130,9 +129,7 @@ MainPage {
                 Item { Layout.fillHeight: true }
             }
 
-            VFlickable {
-                alignment: Qt.AlignTop
-                spacing: 12
+            GalleryFlickable {
                 SampleField {
                     id: typography_sample
                 }
@@ -187,9 +184,7 @@ MainPage {
                 Item { Layout.fillHeight: true }
             }
 
-            VFlickable {
-                alignment: Qt.AlignTop
-                spacing: 12
+            GalleryFlickable {
                 UiLabel {
                     text: 'UiLabel'
                     color: self.previewColors.textPrimary
@@ -272,6 +267,23 @@ MainPage {
                 }
                 Item { Layout.fillHeight: true }
             }
+        }
+    }
+
+    component GalleryFlickable: Flickable {
+        default property alias contentItemData: layout.data
+
+        id: flickable
+        clip: true
+        contentWidth: flickable.width
+        contentHeight: layout.height
+        focusPolicy: Qt.ClickFocus
+        ScrollIndicator.vertical: ScrollIndicator {}
+        ColumnLayout {
+            id: layout
+            width: flickable.width
+            height: Math.max(flickable.height, layout.implicitHeight)
+            spacing: 12
         }
     }
 

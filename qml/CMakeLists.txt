@@ -9,7 +9,6 @@ qt_add_resources(blockstream_core "qtquickcontrols2"
 add_subdirectory(theme)
 add_subdirectory(controls)
 
-set(QML_FILES_DESIGN_SYSTEM)
 if(NOT GREEN_ENV STREQUAL "Production")
     add_subdirectory(design-system)
 endif()
@@ -330,7 +329,6 @@ set(QML_FILES_FEATURES
 )
 
 set(QML_FILES
-    ${QML_FILES_DESIGN_SYSTEM}
     ${QML_FILES_CORE}
     ${QML_FILES_WORKFLOWS}
     ${QML_FILES_DEVICES}

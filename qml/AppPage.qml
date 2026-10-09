@@ -221,7 +221,7 @@ MainPage {
 
                 id: design_system_loader
                 active: env !== 'Production' && Qt.application.arguments.includes('--debug')
-                source: Qt.resolvedUrl('design-system/DesignSystemPage.qml')
+                source: 'qrc:/qt/qml/Blockstream/DesignSystem/DesignSystemPage.qml'
                 enabled: StackLayout.isCurrentItem
                 focus: StackLayout.isCurrentItem
             }

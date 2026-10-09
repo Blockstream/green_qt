@@ -196,7 +196,7 @@ and regeneration instructions.
 
 ### Debug gallery
 
-In non-production builds, launch with `--debug` and select **Design system** in the sidebar to inspect colors, typography, and component examples. The gallery QML and catalog are excluded when `GREEN_ENV` is `Production`, and the sidebar entry stays hidden even with `--debug`. AppPage loads the gallery dynamically so production does not depend on its QML types. The preview palette switch changes the whole gallery, including its background and controls, without changing the rest of the app. The Typography tab and UiLabel section each have a sample text field; each field updates only its own previews.
+In non-production builds, launch with `--debug` and select **Design system** in the sidebar to inspect colors, typography, and component examples. The gallery is the `Blockstream.DesignSystem` module in `qml/design-system/`; it is not built when `GREEN_ENV` is `Production`, and the sidebar entry stays hidden even with `--debug`. AppPage loads the gallery by its resource URL so production does not depend on its QML types. Like the other design system modules, it does not import `Blockstream.Green`. The preview palette switch changes the whole gallery, including its background and controls, without changing the rest of the app. The Typography tab and UiLabel section each have a sample text field; each field updates only its own previews.
 
 Keep the grouped token names and design IDs in `qml/design-system/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `qml/design-system/DesignSystemPage.qml`; reusable components belong in `qml/controls/`.
 

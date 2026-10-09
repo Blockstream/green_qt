@@ -17,3 +17,7 @@ qt_add_qml_module(blockstream_core
 )
 
 target_link_libraries(blockstream_core PUBLIC blockstream_themeplugin blockstream_controlsplugin)
+
+if(NOT GREEN_ENV STREQUAL "Production")
+    target_link_libraries(blockstream_core PUBLIC blockstream_designsystemplugin)
+endif()
