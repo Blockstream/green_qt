@@ -17,6 +17,14 @@ codesign \
   --deep "$FILE" \
   -s "Developer ID Application: Blockstream Corporation ($TEAM_ID)"
 
+if [[ "$FILE" = *.app ]]; then
+  # V8 needs JIT in the WebEngine helper, then reseal the framework and app that contain it.
+  WEBENGINE="$FILE/Contents/Frameworks/QtWebEngineCore.framework"
+  codesign --verbose=4 --options runtime --force --entitlements entitlements_webengine.plist "$WEBENGINE/Versions/A/Helpers/QtWebEngineProcess.app" -s "Developer ID Application: Blockstream Corporation ($TEAM_ID)"
+  codesign --verbose=4 --options runtime --force "$WEBENGINE" -s "Developer ID Application: Blockstream Corporation ($TEAM_ID)"
+  codesign --verbose=4 --options runtime --force --entitlements $ENTITLEMENTS "$FILE" -s "Developer ID Application: Blockstream Corporation ($TEAM_ID)"
+fi
+
 codesign --verbose=4 --strict --verify --deep $FILE
 
 ditto -c -k --keepParent "$FILE" "$FILE.zip"
