@@ -79,11 +79,11 @@ ColumnLayout {
             Flow {
                 Layout.fillWidth: true
                 spacing: 8
-                CheckBox {
+                UiCheckbox {
                     id: group_disabled
                     text: 'Disable group'
                 }
-                CheckBox {
+                UiCheckbox {
                     id: option_disabled
                     text: 'Disable Lightning'
                 }
