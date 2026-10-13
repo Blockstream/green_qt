@@ -3,7 +3,6 @@ import Blockstream.Testing
 import Blockstream.Theme
 import QtQuick
 import QtQuick.Controls
-import QtTest
 
 GreenTestCase {
     id: self
