@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run qmllint on all QML/JS under qml/. Uses .qmllint.ini at repo root.
+# Run qmllint on all QML/JS under qml/ and modules/. Uses .qmllint.ini at repo root.
 # Same idea as the earlier branch: no CMake, no Docker build image, no import stubs.
 
 set +e
@@ -23,9 +23,10 @@ if [[ ! -f .qmllint.ini ]]; then
 fi
 
 qml_dir="${root}/qml"
-total_files=$(find "${qml_dir}" \( -name '*.qml' -o -name '*.js' \) -type f | wc -l | tr -d ' ')
+qml_dirs=("${qml_dir}" "${root}/modules")
+total_files=$(find "${qml_dirs[@]}" \( -name '*.qml' -o -name '*.js' \) -type f | wc -l | tr -d ' ')
 if [[ "${total_files}" -eq 0 ]]; then
-  echo -e "${YELLOW}Warning: no QML/JS files under ${qml_dir}${NC}"
+  echo -e "${YELLOW}Warning: no QML/JS files under ${qml_dirs[*]}${NC}"
   exit 0
 fi
 
@@ -35,7 +36,7 @@ echo ""
 temp_out="$(mktemp)"
 trap 'rm -f "${temp_out}"' EXIT
 # -I qml: enough for relative imports; Blockstream.* modules are C++/CMake at runtime.
-find "${qml_dir}" \( -name '*.qml' -o -name '*.js' \) -type f -print0 \
+find "${qml_dirs[@]}" \( -name '*.qml' -o -name '*.js' \) -type f -print0 \
   | xargs -0 qmllint -I "${qml_dir}" >"${temp_out}" 2>&1
 qmllint_rc=$?
 

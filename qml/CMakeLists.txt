@@ -6,11 +6,6 @@ qt_add_resources(blockstream_core "qtquickcontrols2"
         +windows/qtquickcontrols2.conf
 )
 
-
-if(NOT GREEN_ENV STREQUAL "Production")
-    add_subdirectory(design-system)
-endif()
-
 set(QML_FILES_CORE
     analytics.js
     util.js
