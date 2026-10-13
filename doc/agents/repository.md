@@ -28,7 +28,7 @@ Where things live and how to gate debug behavior. Part of the repository agent i
 
 ### UiIcon assets
 
-Store static monochrome SVGs in `qml/theme/icons/`. See [QML usage](qml.md#ui-icons)
+Store static monochrome SVGs in `modules/theme/assets/icons/`. See [QML usage](qml.md#ui-icons)
 for `UiIcon` and button examples.
 
 From the repository root, pass SVG markup or omit it to use the macOS clipboard:
@@ -43,8 +43,8 @@ SVGs are saved unchanged. Use lowercase kebab-case names: `my-icon.svg` becomes
 `export` → `exportIcon`. `none` and `object-name` are reserved; duplicate filenames
 or property names are rejected.
 
-The script generates `qml/theme/Icons.qml` and the explicit resource list in
-`qml/theme/icons/CMakeLists.txt` from SVG filenames. The Theme module owns these
+The script generates `modules/theme/qml/Icons.qml` and the explicit resource list in
+`modules/theme/assets/icons/CMakeLists.txt` from SVG filenames. The Theme module owns these
 resources. Builds use these committed files directly. After manually adding,
 renaming, or deleting SVGs, regenerate:
 
@@ -56,7 +56,7 @@ Commit the SVGs and generated files. Renaming icons requires updating callers.
 Check that the catalog and resource list match the files with:
 
 ```sh
-cmake -P qml/theme/tests/check_icons.cmake
+cmake -P modules/theme/tests/check_icons.cmake
 ```
 
 ### Monochrome UI icons (`assets/icons/*.svg`)
@@ -99,7 +99,7 @@ When adding or renaming a file under `assets/icons/`, **append it to the `FILES`
 
 - Keep commit subjects compatible with commitlint: use a capitalized imperative subject with no scope prefix, for example `Add receive warning`.
 - For C++ changes, run `./tools/lint/cpplint.sh` when feasible; for QML/JS changes, `./tools/lint/qmllint.sh`.
-- For added or removed QML files, update the file list in `qml/CMakeLists.txt`, or the module's own `CMakeLists.txt` for `qml/theme/` (`Blockstream.Theme`), `qml/controls/` (`Blockstream.Controls`) and `qml/design-system/` (`Blockstream.DesignSystem`).
+- For added or removed QML files, update the file list in `qml/CMakeLists.txt`, or the module's own `CMakeLists.txt` for `modules/theme/` (`Blockstream.Theme`), `qml/controls/` (`Blockstream.Controls`) and `qml/design-system/` (`Blockstream.DesignSystem`).
 - Tests for `Blockstream.Controls` live in `qml/controls/tests/` and run against the compiled module: add `tst_<name>.qml` there and its name to the `foreach` in that `CMakeLists.txt`. Use `GreenTestCase` from `import Blockstream.Testing`.
 - For added or removed C++ files, update the `target_sources` of the closest `CMakeLists.txt` (`src/`, its subfolders, or `app/src/` for the executable).
 - For behavior changes, run the narrowest relevant build or test target available in the checkout and mention the command in the handoff. Unit tests run with `./tools/test.sh all` or `./tools/test.sh one <suite_regex>`.

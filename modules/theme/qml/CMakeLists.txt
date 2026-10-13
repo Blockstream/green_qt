@@ -18,9 +18,3 @@ qt_add_qml_module(blockstream_theme
     RESOURCE_PREFIX /qt/qml
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Blockstream/Theme"
 )
-
-add_subdirectory(icons)
-
-if(BUILD_TESTING)
-    add_subdirectory(tests)
-endif()

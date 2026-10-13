@@ -24,6 +24,7 @@ add_subdirectory(app)
 
 include(cmake/AppLib.cmake)
 
+add_subdirectory(modules)
 add_subdirectory(qml)
 include(cmake/QmlModule.cmake)
 

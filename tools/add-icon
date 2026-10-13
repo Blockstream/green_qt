@@ -4,7 +4,7 @@ set -euo pipefail
 export LC_ALL=C
 
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-assets="$root/qml/theme/icons"
+assets="$root/modules/theme/assets/icons"
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
@@ -104,7 +104,7 @@ save_outputs() {
     if [[ -n "$new_name" ]]; then
         mv "$work/icon.svg" "$assets/$new_name.svg"
     fi
-    mv "$work/Icons.qml" "$root/qml/theme/Icons.qml"
+    mv "$work/Icons.qml" "$root/modules/theme/qml/Icons.qml"
     mv "$work/CMakeLists.txt" "$assets/CMakeLists.txt"
 }
 

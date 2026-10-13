@@ -114,7 +114,7 @@ For new UI, use the `Theme` singleton from `Blockstream.Theme` and the `Ui*` com
 
 ### Components
 
-Place new design system components in `qml/controls/` and prefix their filenames and QML type names with `Ui`, for example `UiButton.qml`, `UiTextField.qml`, `UiAlert.qml`, and `UiCard.qml`. They belong to the `Blockstream.Controls` module; register them in its `QML_FILES` in `qml/controls/CMakeLists.txt`. Theme files belong to `Blockstream.Theme` in `qml/theme/`. Neither module imports `Blockstream.Green`, and `Blockstream.Theme` does not import `Blockstream.Controls`. Use `Theme.colors` and `Theme.typography` for their styling.
+Place new design system components in `qml/controls/` and prefix their filenames and QML type names with `Ui`, for example `UiButton.qml`, `UiTextField.qml`, `UiAlert.qml`, and `UiCard.qml`. They belong to the `Blockstream.Controls` module; register them in its `QML_FILES` in `qml/controls/CMakeLists.txt`. Theme files belong to `Blockstream.Theme` in `modules/theme/`. Neither module imports `Blockstream.Green`, and `Blockstream.Theme` does not import `Blockstream.Controls`. Use `Theme.colors` and `Theme.typography` for their styling.
 
 ### Colors
 
@@ -130,7 +130,7 @@ Label {
 }
 ```
 
-`qml/theme/Colors.qml` defines the required semantic color properties. `LightColors.qml` and `DarkColors.qml` provide their values. `Theme.dark` selects the active palette through `Theme.colors` and defaults to dark. Use `Theme.colors` in product QML. The debug gallery selects `Theme.lightColors` or `Theme.darkColors` independently, so its preview switch does not change the application palette.
+`modules/theme/qml/Colors.qml` defines the required semantic color properties. `LightColors.qml` and `DarkColors.qml` provide their values. `Theme.dark` selects the active palette through `Theme.colors` and defaults to dark. Use `Theme.colors` in product QML. The debug gallery selects `Theme.lightColors` or `Theme.darkColors` independently, so its preview switch does not change the application palette.
 
 ### Typography
 
@@ -155,7 +155,7 @@ Inter covers body, label, title, overline, and display styles. Code styles use R
 
 ### Updating token definitions
 
-Add each semantic color property to `qml/theme/Colors.qml` and its values to both `LightColors.qml` and `DarkColors.qml`, keeping each token's path comment. Update text styles in `qml/theme/Typography.qml`. Update font assets and registration if families or weights change.
+Add each semantic color property to `modules/theme/qml/Colors.qml` and its values to both `LightColors.qml` and `DarkColors.qml`, keeping each token's path comment. Update text styles in `modules/theme/qml/Typography.qml`. Update font assets and registration if families or weights change.
 
 ### UI icons
 
