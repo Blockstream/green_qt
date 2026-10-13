@@ -114,7 +114,7 @@ For new UI, use the `Theme` singleton from `Blockstream.Theme` and the `Ui*` com
 
 ### Components
 
-Place new design system components in `qml/controls/` and prefix their filenames and QML type names with `Ui`, for example `UiButton.qml`, `UiTextField.qml`, `UiAlert.qml`, and `UiCard.qml`. They belong to the `Blockstream.Controls` module; register them in its `QML_FILES` in `qml/controls/CMakeLists.txt`. Theme files belong to `Blockstream.Theme` in `modules/theme/`. Neither module imports `Blockstream.Green`, and `Blockstream.Theme` does not import `Blockstream.Controls`. Use `Theme.colors` and `Theme.typography` for their styling.
+Place new design system components in `modules/controls/qml/` and prefix their filenames and QML type names with `Ui`, for example `UiButton.qml`, `UiTextField.qml`, `UiAlert.qml`, and `UiCard.qml`. They belong to the `Blockstream.Controls` module; register them in its `QML_FILES` in `modules/controls/qml/CMakeLists.txt`. Theme files belong to `Blockstream.Theme` in `modules/theme/`. Neither module imports `Blockstream.Green`, and `Blockstream.Theme` does not import `Blockstream.Controls`. Use `Theme.colors` and `Theme.typography` for their styling.
 
 ### Colors
 
@@ -198,7 +198,7 @@ and regeneration instructions.
 
 In non-production builds, launch with `--debug` and select **Design system** in the sidebar to inspect colors, typography, and component examples. The gallery is the `Blockstream.DesignSystem` module in `qml/design-system/`; it is not built when `GREEN_ENV` is `Production`, and the sidebar entry stays hidden even with `--debug`. AppPage loads the gallery by its resource URL so production does not depend on its QML types. Like the other design system modules, it does not import `Blockstream.Green`. The preview palette switch changes the whole gallery, including its background and controls, without changing the rest of the app. The Typography tab and UiLabel section each have a sample text field; each field updates only its own previews.
 
-Keep the grouped token names and design IDs in `qml/design-system/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `qml/design-system/DesignSystemPage.qml`; reusable components belong in `qml/controls/`.
+Keep the grouped token names and design IDs in `qml/design-system/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `qml/design-system/DesignSystemPage.qml`; reusable components belong in `modules/controls/qml/`.
 
 The UiIcon section lists icons in four compact columns, with search and tertiary
 Copy buttons for `Theme.icons` expressions. Buttons briefly read Copied after use.

@@ -53,7 +53,7 @@ If you need raw CMake/CTest invocations instead of the script, use the same buil
 ## Add a New Test
 
 C++ unit tests live under `tests/unit`. QML tests for the `Blockstream.Controls` module live in
-`qml/controls/tests` and run against the compiled module; QML tests for app components live in
+`modules/controls/tests` and run against the compiled module; QML tests for app components live in
 `tests/qml` and run with `qmltestrunner` against stub types.
 
 1. Create a new test source file in `tests/unit` (for example `tst_wallet.cpp`).

@@ -6,7 +6,6 @@ qt_add_resources(blockstream_core "qtquickcontrols2"
         +windows/qtquickcontrols2.conf
 )
 
-add_subdirectory(controls)
 
 if(NOT GREEN_ENV STREQUAL "Production")
     add_subdirectory(design-system)

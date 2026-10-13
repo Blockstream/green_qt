@@ -9,7 +9,7 @@ find_program(QML_TEST_RUNNER
     REQUIRED
 )
 
-# Shares GreenTestCase with the module tests under qml/*/tests.
+# Shares GreenTestCase with the module tests under modules/*/tests.
 qt_add_library(blockstream_testing STATIC)
 set_target_properties(blockstream_testing PROPERTIES AUTOMOC ON)
 qt_add_qml_module(blockstream_testing
