@@ -291,6 +291,22 @@ UiLink {
 }
 ```
 
+`UiTabs` is a Basic `TabBar` and `UiTab` is a Basic `TabButton` for the Figma tab item (60px tall, 24px horizontal padding). The selected tab uses `textPrimary` with a 2px `borderBrand` underline; inactive tabs use `textSubtle` and lighten to `textPrimary` on hover. Use `disabled` like UiButton so a tab cannot activate or become selected through pointer or keyboard input. The keyboard focus ring is drawn outside the tab, so focus does not change its size. Set `wrapMode` and `elide` when a tab width is constrained. `UiTabs` exposes native `currentIndex` / `currentItem` selection; keep page content and routing in a caller-owned `StackLayout` or similar. On `UiTab`, `colors` is only for gallery preview overrides.
+
+```qml
+UiTabs {
+    id: account_tabs
+    Layout.fillWidth: true
+    UiTab { text: qsTrId('id_transactions') }
+    UiTab { text: qsTrId('id_coins') }
+    UiTab { text: qsTrId('id_addresses') }
+}
+StackLayout {
+    currentIndex: account_tabs.currentIndex
+    // caller-owned pages...
+}
+```
+
 `UiSpinner` wraps the Material `BusyIndicator` used by UiButton. Set `size` in pixels (default 20), `color` (default `Theme.colors.textPrimary`), and `running` to show and animate it. Animation is handled by Qt.
 
 `UiTextField` extends Basic `TextField` with theme styling, native editing and validators. `size` defaults to `UiTextField.Large` (60px); use `UiTextField.Medium` (44px) or `UiTextField.Small` (36px) for compact inputs. Set `disabled` (default `false`) without overriding `enabled`; content is retained. Native `readOnly` permits selection and copying. Both hide clear. `errorMessage` controls the error border, wrapping panel, and accessible description. Callers own errors; validation and clearing never change them. The panel opens after 120ms and smoothly expands or collapses below the fixed input shell, including while disabled. `clearable` defaults to `true`. Filled editable fields show a keyboard-accessible clear button that returns focus to the editor. Clearing emits `textChanged` and `cleared()`, but not `textEdited`; handle `cleared` when syncing edits to caller state.

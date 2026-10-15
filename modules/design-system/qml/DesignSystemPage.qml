@@ -49,13 +49,12 @@ Page {
                 text: 'Dark preview'
             }
         }
-        TabBar {
+        UiTabs {
             Layout.alignment: Qt.AlignLeft
             id: tabs
-            background: Item {}
-            GalleryTab { text: 'Colors'; colors: self.previewColors }
-            GalleryTab { text: 'Typography'; colors: self.previewColors }
-            GalleryTab { text: 'Components'; colors: self.previewColors }
+            UiTab { colors: self.previewColors; text: 'Colors' }
+            UiTab { colors: self.previewColors; text: 'Typography' }
+            UiTab { colors: self.previewColors; text: 'Components' }
         }
         StackLayout {
             Layout.fillWidth: true
@@ -309,6 +308,15 @@ Page {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
+                TabsGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
                 Item { Layout.fillHeight: true }
             }
         }
@@ -337,36 +345,6 @@ Page {
         size: UiTextField.Medium
         text: 'The quick brown fox jumps over the lazy dog. 0123456789'
         Accessible.name: 'Sample text'
-    }
-
-    component GalleryTab: TabButton {
-        required property Colors colors
-
-        id: tab
-        width: implicitWidth
-        leftPadding: 16
-        rightPadding: 16
-        font: Theme.typography.labelLMedium.font
-        contentItem: UiLabel {
-            text: tab.text
-            typography: Theme.typography.labelLMedium
-            color: tab.checked ? tab.colors.textBrand : tab.colors.textPrimary
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-        }
-        background: Rectangle {
-            color: 'transparent'
-            border.width: tab.visualFocus ? 1 : 0
-            border.color: tab.colors.borderBrand
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                height: 2
-                visible: tab.checked
-                color: tab.colors.borderBrand
-            }
-        }
     }
 
     component PreviewCard: Pane {

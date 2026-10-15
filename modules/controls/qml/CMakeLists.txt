@@ -15,6 +15,8 @@ qt_add_qml_module(blockstream_controls
         UiLink.qml
         UiRadio.qml
         UiSpinner.qml
+        UiTab.qml
+        UiTabs.qml
         UiTextField.qml
         UiToggle.qml
     RESOURCE_PREFIX /qt/qml
