@@ -66,6 +66,25 @@ property alias contentItemData: layout.data
 property alias leftItem: left_pane.contentItem
 ```
 
+For short `if` returns in computed properties, keep the condition and `return` on one line. Use braces only when the line would be hard to read:
+
+```qml
+// Good: short one-liners
+readonly property color fillColor: {
+    if (self.variant === UiAlertBanner.Negative) return self.colors.feedbackNegativeFill
+    if (self.variant === UiAlertBanner.Warning) return self.colors.feedbackWarningFill
+    return self.colors.feedbackInfoFill
+}
+
+// Good: braces when the return expression is too long for one line
+readonly property string label: {
+    if (self.useDetailedLabel) {
+        return qsTrId('id_a_very_long_translation_id_that_should_use_braces')
+    }
+    return qsTrId('id_name')
+}
+```
+
 ## Null-safe access
 
 Prefer optional chaining and nullish coalescing for values that can be unset while pages are loading, sessions are switching, or models are rebuilding:
@@ -288,6 +307,33 @@ UiLink {
     size: UiLink.Medium
     text: qsTrId('id_learn_more')
     url: 'https://help.blockstream.com/hc/en-us/articles/900001392563-What-is-a-recovery-phrase'
+}
+```
+
+`UiAlertBanner` is a `Page`-based status banner (same header/content/footer split as `StackViewPage` / `AlertView`) for Negative, Warning, and Info variants. `header` is null; the content row holds the 24px status icon, optional `title` (`label/l-semibold`, `textPrimary`), wrapping `description` (`body/m`, `textSubtle`), and optional dismissal through `UiIconButton`. Put footer actions as children (a `UiButton`, `UiLink`, or a `Row` of controls); they align with the text column (not under the icon/dismiss). The banner does not hardcode button props. Height grows with content; long text wraps instead of clipping. Callers handle child `clicked` / `linkActivated` and `dismissed` for navigation, persistence, and visibility. Use `disabled` to block dismissal. Override `iconName` when the default semantic icon is not right. `colors` is only for gallery preview overrides.
+
+```qml
+UiAlertBanner {
+    Layout.fillWidth: true
+    variant: UiAlertBanner.Warning
+    title: qsTrId('id_back_up_recovery_phrase')
+    description: qsTrId('id_learn_more')
+    dismissible: true
+    onDismissed: banner.visible = false
+    Row {
+        spacing: 8
+        UiButton {
+            size: UiButton.ExtraSmall
+            variant: UiButton.PrimaryInverted
+            text: qsTrId('id_continue')
+            onClicked: stack_view.push(backup_page)
+        }
+        UiButton {
+            size: UiButton.ExtraSmall
+            variant: UiButton.SecondaryInverted
+            text: qsTrId('id_cancel')
+        }
+    }
 }
 ```
 

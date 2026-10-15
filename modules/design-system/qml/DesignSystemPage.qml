@@ -313,6 +313,15 @@ Page {
                     Layout.bottomMargin: 20
                     colors: self.previewColors
                 }
+                AlertBannerGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
                 TabsGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors

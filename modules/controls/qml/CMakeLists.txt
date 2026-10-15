@@ -6,6 +6,7 @@ qt_add_qml_module(blockstream_controls
     VERSION 1.0
     DEPENDENCIES QtQuick QtQuick.Controls QtQuick.Controls.Basic QtQuick.Layouts QtQuick.Effects QtQuick.Shapes Blockstream.Theme
     QML_FILES
+        UiAlertBanner.qml
         UiButton.qml
         UiCheckbox.qml
         UiDivider.qml

@@ -6,6 +6,7 @@ qt_add_qml_module(blockstream_designsystem
     VERSION 1.0
     DEPENDENCIES QtQuick QtQuick.Controls QtQuick.Controls.Material QtQuick.Layouts Blockstream.Theme Blockstream.Controls
     QML_FILES
+        AlertBannerGallery.qml
         ButtonGallery.qml
         IconGallery.qml
         IconButtonGallery.qml
