@@ -23,7 +23,6 @@ class Device : public QObject
     Q_OBJECT
     Q_PROPERTY(QString uuid READ uuid CONSTANT)
     Q_PROPERTY(Vendor vendor READ vendor CONSTANT)
-    Q_PROPERTY(Transport transport READ transport CONSTANT)
     Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QJsonObject details READ details NOTIFY detailsChanged)
@@ -32,9 +31,6 @@ class Device : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    enum Transport {
-        USB,
-    };
     enum Vendor {
         NoVendor,
         Blockstream,
@@ -46,12 +42,10 @@ public:
         LedgerNanoS,
         LedgerNanoX,
     };
-    Q_ENUM(Transport)
     Q_ENUM(Vendor)
     Q_ENUM(Type)
     Device(QObject* parent = nullptr);
     QString uuid() const { return m_uuid; }
-    virtual Transport transport() const = 0;
     virtual Vendor vendor() const = 0;
     virtual Type type() const = 0;
     virtual QString name() const = 0;

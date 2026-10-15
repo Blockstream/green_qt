@@ -102,7 +102,6 @@ void DeviceDiscoveryAgentPrivate::deviceMaching(IOHIDDeviceRef handle)
 #endif
 
     auto device = new DevicePrivateImpl;
-    device->m_transport = Device::USB;
     device->m_type = device_type;
     device->m_unique_id = unique_id;
     device->handle = handle;

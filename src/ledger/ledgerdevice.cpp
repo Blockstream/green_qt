@@ -45,11 +45,6 @@ Device::Type LedgerDevice::type() const
     return d->m_type;
 }
 
-Device::Transport LedgerDevice::transport() const
-{
-    return d->m_transport;
-}
-
 QString LedgerDevice::name() const
 {
     switch (d->m_type) {

@@ -38,7 +38,6 @@ public:
 
     JadeDevice(QObject* parent = nullptr);
     Vendor vendor() const override { return Device::Blockstream; }
-    Transport transport() const override { return Transport::USB; }
     Type type() const override { return Type::BlockstreamJade; }
     QString name() const override { return m_name; }
     void setName(const QString& name);
