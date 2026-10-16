@@ -78,6 +78,7 @@ void JadeUpdateTask::update()
             const auto error = result.value("error").toMap();
             const auto code = error.value("code").toLongLong();
             const auto message = error.value("message").toString();
+            const auto status = QString::fromLatin1(error.value("data").toByteArray());
 
 #define CBOR_RPC_USER_CANCELLED -32000
 #define CBOR_RPC_PROTOCOL_ERROR -32001
@@ -96,8 +97,8 @@ void JadeUpdateTask::update()
                 return;
             }
 
-            qDebug() << Q_FUNC_INFO << guard << "Unexpected error" << code << message;
-            guard->abort(message);
+            qDebug() << Q_FUNC_INFO << guard << "Unexpected error" << code << message << status;
+            guard->abort(status.isEmpty() ? message : status);
         }
     };
 
@@ -456,7 +457,7 @@ void JadeFirmwareUpdateController::update()
         m_updating = false;
         emit updatingChanged();
         setLocked(false);
-        emit updateFailed();
+        emit updateFailed(task->error());
     });
     connect(task, &Task::finished, this, [=, this] {
         m_task = nullptr;
@@ -468,7 +469,7 @@ void JadeFirmwareUpdateController::update()
         if (task->hasError()) {
             qDebug() << task->response();
             setLocked(false);
-            emit updateFailed();
+            emit updateFailed(task->error());
         } else {
             const auto data = QByteArray::fromBase64(task->body().toByteArray());
             install(data);
@@ -516,7 +517,7 @@ void JadeFirmwareUpdateController::install(const QByteArray& data)
         setLocked(false);
         emit updatingChanged();
         if (m_device && m_device->isConnected()) {
-            emit updateFailed();
+            emit updateFailed(task->error());
         }
     });
     connect(task, &Task::finished, this, [=, this] {

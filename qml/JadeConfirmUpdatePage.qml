@@ -7,7 +7,7 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 Page {
-    signal updateFailed()
+    signal updateFailed(string error)
     signal updateFinished()
     required property JadeDevice device
     required property var firmware
@@ -18,7 +18,7 @@ Page {
         id: controller
         device: self.device
         firmware: self.firmware
-        onDeviceDisconnected: self.updateFailed()
+        onDeviceDisconnected: self.updateFailed('')
         onUnlockRequired: stack_view.replace(null, unlock_view, StackView.PushTransition)
         onUpdateStarted: {
             stack_view.replace(null, updating_view, StackView.PushTransition)
@@ -26,13 +26,13 @@ Page {
         }
         onUpdateCancelled: {
             Analytics.recordEvent('ota_refuse', AnalyticsJS.segmentationFirmwareUpdate(self.device, controller.firmware))
-            self.updateFailed()
+            self.updateFailed('')
         }
         onUpdateFinished: {
             self.updateFinished()
             Analytics.recordEvent('ota_complete', AnalyticsJS.segmentationFirmwareUpdate(self.device, controller.firmware))
         }
-        onUpdateFailed: self.updateFailed()
+        onUpdateFailed: (error) => self.updateFailed(error)
     }
     id: self
     background: null
@@ -176,7 +176,7 @@ Page {
             device: self.device
             showRemember: false
             onUnlockFinished: stack_view.replace(null, preparing_view, StackView.PushTransition)
-            onUnlockFailed: self.updateFailed()
+            onUnlockFailed: self.updateFailed('')
         }
     }
 }

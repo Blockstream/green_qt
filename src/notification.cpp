@@ -255,3 +255,22 @@ BackupNotification::BackupNotification(Context *context)
     : ContextNotification(context)
 {
 }
+
+ErrorNotification::ErrorNotification(QObject* parent)
+    : Notification(parent)
+{
+    setLevel(Alert);
+    setDismissable(true);
+    m_dismissed = true;
+}
+
+void ErrorNotification::show(const QString& message)
+{
+    if (m_message != message) {
+        m_message = message;
+        emit messageChanged();
+    }
+    if (!m_dismissed) return;
+    m_dismissed = false;
+    emit dismissedChanged();
+}

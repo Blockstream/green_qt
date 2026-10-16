@@ -201,4 +201,19 @@ public:
     explicit BackupNotification(Context* context);
 };
 
+class ErrorNotification : public Notification
+{
+    Q_OBJECT
+    Q_PROPERTY(QString message READ message NOTIFY messageChanged)
+    QML_ELEMENT
+public:
+    explicit ErrorNotification(QObject* parent = nullptr);
+    QString message() const { return m_message; }
+    Q_INVOKABLE void show(const QString& message);
+signals:
+    void messageChanged();
+private:
+    QString m_message;
+};
+
 #endif // GREEN_NOTIFICATION_H

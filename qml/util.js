@@ -8,6 +8,9 @@ function formatError(error) {
     if (error === 'id_rate_connection_limited') {
         return 'Too many connections to the Electrum server. Please wait a moment and try again.'
     }
+    if (error === 'ERR_NODOWNGRADE') {
+        return 'Jade rejected the firmware downgrade. This device does not allow installing an older firmware version.'
+    }
     if (typeof error === 'string') {
         const lower = error.toLowerCase()
         if (lower.includes('assertion failure') && lower.includes('ga_psbt')) {

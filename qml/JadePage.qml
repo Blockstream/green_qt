@@ -24,6 +24,10 @@ StackViewPage {
         index: firmware_controller.index
         device: self.device
     }
+    ErrorNotification {
+        id: error_notification
+    }
+    readonly property var notifications: UtilJS.flatten(error_notification)
     id: self
     footer: null
     padding: 60
@@ -119,6 +123,7 @@ StackViewPage {
     }
 
     function skipFirmwareUpdate() {
+        error_notification.dismiss()
         switch (self.device.state) {
         case JadeDevice.StateReady:
             stack_view.replace(null, login_view, { context: null, device: self.device }, StackView.PushTransition)
@@ -189,7 +194,10 @@ StackViewPage {
             fetching: firmware_controller.fetching
             onAdvancedClicked: stack_view.replace(null, advanced_update_view, StackView.PushTransition)
             onSkipClicked: self.skipFirmwareUpdate()
-            onFirmwareSelected: (firmware) => stack_view.replace(null, confirm_update_view, { firmware }, StackView.PushTransition)
+            onFirmwareSelected: (firmware) => {
+                error_notification.dismiss()
+                stack_view.replace(null, confirm_update_view, { firmware }, StackView.PushTransition)
+            }
         }
     }
 
@@ -200,7 +208,10 @@ StackViewPage {
             showSkip: true
             onSkipClicked: self.skipFirmwareUpdate()
             onGenuineCheckClicked: self.openGenuineCheckDialog()
-            onFirmwareSelected: (firmware) => stack_view.replace(null, confirm_update_view, { firmware }, StackView.PushTransition)
+            onFirmwareSelected: (firmware) => {
+                error_notification.dismiss()
+                stack_view.replace(null, confirm_update_view, { firmware }, StackView.PushTransition)
+            }
         }
     }
 
@@ -234,7 +245,11 @@ StackViewPage {
         id: confirm_update_view
         JadeConfirmUpdatePage {
             device: self.device
-            onUpdateFailed: stack_view.pop()
+            onUpdateFailed: (error) => {
+                stack_view.clear()
+                self.pushView()
+                if (error) error_notification.show(UtilJS.formatError(error))
+            }
             onUpdateFinished: {
                 stack_view.replace(null, firmware_updated_page, StackView.PushTransition)
                 self.firmwareUpdated()

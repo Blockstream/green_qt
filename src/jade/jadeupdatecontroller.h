@@ -125,7 +125,7 @@ signals:
     void updateStarted();
     void updateCancelled();
     void updateFinished();
-    void updateFailed();
+    void updateFailed(const QString& error);
     void unlockRequired();
 private:
     void setLocked(bool locked);
