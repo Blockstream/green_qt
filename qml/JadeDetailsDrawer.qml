@@ -104,9 +104,11 @@ AbstractDrawer {
                         }
                         KeyLabel {
                             text: qsTrId('Battery')
+                            visible: self.device.versionInfo.BOARD_TYPE !== 'JADE_V2C'
                         }
                         Pane {
                             Layout.alignment: Qt.AlignRight
+                            visible: self.device.versionInfo.BOARD_TYPE !== 'JADE_V2C'
                             padding: 3
                             background: Rectangle {
                                 border.width: 1
