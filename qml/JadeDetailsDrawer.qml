@@ -82,7 +82,7 @@ AbstractDrawer {
                         Label {
                             Layout.fillWidth: true
                             horizontalAlignment: Label.AlignRight
-                            text: self.device.versionInfo.JADE_CONFIG ? 'YES' : 'NO'
+                            text: self.device.versionInfo.JADE_HAS_PIN ? 'YES' : 'NO'
                         }
                         Separator {
                         }
