@@ -985,10 +985,10 @@ class RSAVerifyTask : public AuthHandlerTask
 public:
     RSAVerifyTask(const QString& pem, const QByteArray& challenge, const QByteArray& signature, Session* session);
     RSAVerifyTask(const QJsonObject& details, Session* session);
+    bool verified() const;
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-    void handleDone(const QJsonObject& result) override;
 };
 
 class LoadPaymentsTaskPrivate;

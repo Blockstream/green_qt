@@ -605,11 +605,21 @@ void JadeGenuineCheckController::genuineCheck()
             const auto signature = result.value("signature").toByteArray();
 
             auto group = new TaskGroup(self.data());
+            auto verify_challenge = new RSAVerifyTask(pubkey_pem, challenge, signature, self->m_session);
+            auto verify_pubkey = new RSAVerifyTask(g_ext_pubkey_pem, pubkey_pem.toUtf8(), ext_signature, self->m_session);
 
-            group->add(new RSAVerifyTask(pubkey_pem, challenge, signature, self->m_session));
-            group->add(new RSAVerifyTask(g_ext_pubkey_pem, pubkey_pem.toUtf8(), ext_signature, self->m_session));
+            group->add(verify_challenge);
+            group->add(verify_pubkey);
 
-            connect(group, &TaskGroup::finished, self.data(), &JadeGenuineCheckController::success);
+            // Only a completed verification that doesn't hold means the Jade isn't genuine,
+            // any other failure is operational and must not be reported as such.
+            connect(group, &TaskGroup::finished, self.data(), [=] {
+                if (verify_challenge->verified() && verify_pubkey->verified()) {
+                    emit self->success();
+                } else {
+                    emit self->notGenuine();
+                }
+            });
             connect(group, &TaskGroup::failed, self.data(), &JadeGenuineCheckController::failed);
 
             self->monitor()->add(group);

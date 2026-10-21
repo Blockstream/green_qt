@@ -73,6 +73,7 @@ public slots:
     void genuineCheck();
 signals:
     void success();
+    void notGenuine();
     void failed();
     void unsupported();
     void cancelled();
