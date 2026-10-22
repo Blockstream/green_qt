@@ -10,6 +10,7 @@ ColumnLayout {
     required property var notifications
 
     property var animatedSet: new Set()
+    property var pendingSet: new Set()
 
     readonly property var items: {
         const items = []
@@ -47,9 +48,8 @@ ColumnLayout {
     onNotificationsChanged: {
         if (self.notifications.length > 0) {
             const newestNotification = self.notifications[self.notifications.length - 1]
-            if (!self.animatedSet.has(newestNotification) && newestNotification._animatedIn !== true) {
-                newestNotification._isNew = true
-                self.animatedSet.add(newestNotification)
+            if (!self.animatedSet.has(newestNotification)) {
+                self.pendingSet.add(newestNotification)
             }
         }
     }
@@ -191,15 +191,15 @@ ColumnLayout {
                 return
             }
 
-            const isNew = toast.notification._isNew === true && toast.notification._animatedIn !== true
+            const isNew = self.pendingSet.has(toast.notification)
+            self.pendingSet.delete(toast.notification)
+            self.animatedSet.add(toast.notification)
             if (isNew) {
                 toast.isAnimatingIn = true
                 toast.x = 0
                 toast.opacity = 1
                 Qt.callLater(() => { toast.isAnimatingIn = false })
                 toast.hasAnimatedIn = true
-                toast.notification._animatedIn = true
-                delete toast.notification._isNew
             } else {
                 toast.isAnimatingIn = false
                 toast.x = 0
