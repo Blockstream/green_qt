@@ -9,9 +9,7 @@ qt_add_resources(blockstream_core "qtquickcontrols2"
 set(QML_FILES_CORE
     analytics.js
     util.js
-    GCard.qml
     TwoFactorEnableDrawer.qml
-    DebugRectangle.qml
     WalletGeneralSettingsView.qml
     AmpAccountSettingsSection.qml
     EnableLightningDrawer.qml
@@ -19,12 +17,10 @@ set(QML_FILES_CORE
     TransactionView.qml
     HSpacer.qml
     WalletDialog.qml
-    StackViewPushAction.qml
     SignLiquidTransactionResolverView.qml
     GHeader.qml
     Wallet2faSettingsView.qml
     GComboBox.qml
-    GDropdown.qml
     TwoFactorAuthExpiryDialog.qml
     Tag.qml
     AccountDelegate.qml
@@ -32,34 +28,27 @@ set(QML_FILES_CORE
     MnemonicView.qml
     TwoFactorLimitDrawer.qml
     JadeSignMessageView.qml
-    MainMenuBar.qml
     GTextField.qml
     NLockTimeDialog.qml
     GSwitch.qml
     VSpacer.qml
     AbstractDialog.qml
-    WizardPage.qml
     Spacer.qml
     AssetDelegate.qml
     RemoveWalletDialog.qml
-    DialogFooter.qml
     OutputDelegate.qml
     AnimLoader.qml
     PreferencesDialog.qml
     AssetDrawer.qml
-    AssetListView.qml
-    DescriptiveRadioButton.qml
     SettingsPage.qml
     CopyableLabel.qml
     InlineCopyableLabel.qml
     TransactionProgress.qml
     QRCode.qml
     JadeSignLiquidTransactionView.qml
-    GButton.qml
     WordField.qml
     WalletViewHeader.qml
     AmountValidator.qml
-    DisableAllPinsDialog.qml
     GPane.qml
     main.qml
     DialogHeader.qml
@@ -68,7 +57,6 @@ set(QML_FILES_CORE
     Collapsible.qml
     ScannerPopup.qml
     DeviceImage.qml
-    DeviceBadge.qml
     TwoFactorDisableDrawer.qml
     TransactionDelegate.qml
     AnalyticsConsentPage.qml
@@ -78,23 +66,19 @@ set(QML_FILES_CORE
 )
 
 set(QML_FILES_WORKFLOWS
-    WalletAdvancedSettingsView.qml
     RequestTwoFactorResetDrawer.qml
     EditableLabel.qml
     FixedErrorBadge.qml
     QRCodePopup.qml
     ProgressIndicator.qml
     ScannerView.qml
-    StatusBar.qml
     PinView.qml
-    GFlickable.qml
     TransactionIcon.qml
     TransactionStatusBadge.qml
     PopupBalloon.qml
     SectionLabel.qml
     AddressDelegate.qml
     SettingsBox.qml
-    CoinDelegate.qml
     CoinSelectionDelegate.qml
     CoinSelectionPage.qml
     CoinDetailsPage.qml
@@ -106,8 +90,6 @@ set(QML_FILES_WORKFLOWS
     ColorIcon.qml
     ProviderIcon.qml
     AuthHandlerTaskView.qml
-    GetCredentialsView.qml
-    TaskDispatcherInspector.qml
     TProgressBar.qml
     TListView.qml
     GMenu.qml
@@ -119,7 +101,6 @@ set(QML_FILES_WORKFLOWS
     BackButton.qml
     SendAccountAssetSelector.qml
     AccountAssetField.qml
-    AddressField.qml
     AmountField.qml
     PrimaryButton.qml
     RegularButton.qml
@@ -129,7 +110,6 @@ set(QML_FILES_WORKFLOWS
     AssetField.qml
     AssetSelector.qml
     SearchField.qml
-    DrawerTitle.qml
     FieldTitle.qml
     CreateAccountPage.qml
     SecurityPolicyButton.qml
@@ -224,7 +204,6 @@ set(QML_FILES_DEVICES
     WalletOptionsButton.qml
     SelectFeePage.qml
     AssetDetailsPage.qml
-    AppBanner.qml
     NotificationToast.qml
     ConnectLedgerPage.qml
     LedgerPage.qml
@@ -271,7 +250,6 @@ set(QML_FILES_FEATURES
     PromosCarousel.qml
     ReceivePage.qml
     JadeDetailsDrawer.qml
-    HelpButton.qml
     RequestSupportPage.qml
     SupportSubmittedPage.qml
     SupportDrawer.qml
