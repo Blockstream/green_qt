@@ -64,6 +64,8 @@ public:
             GA_destroy_auth_handler(auth_handler);
         }
     }
+    // Declared before auth_handler so the gdk session outlives it.
+    std::shared_ptr<GA_session> ga_session;
     GA_auth_handler* auth_handler{nullptr};
 };
 
@@ -555,8 +557,13 @@ void AuthHandlerTask::update()
     setStatus(Status::Active);
 
     Q_D(AuthHandlerTask);
-    auto future = QtConcurrent::run([=, this] {
-        const auto ok = call(session()->m_session, &d->auth_handler);
+    if (d->auth_handler) {
+        GA_destroy_auth_handler(d->auth_handler);
+        d->auth_handler = nullptr;
+    }
+    d->ga_session = session()->gdkSession();
+    auto future = QtConcurrent::run([=, this, ga_session = d->ga_session] {
+        const auto ok = call(ga_session.get(), &d->auth_handler);
         const auto error = gdk::get_thread_error_details();
         return qMakePair(ok, error);
     });
@@ -576,6 +583,12 @@ void AuthHandlerTask::update()
     });
 
     waitForFuture(future);
+}
+
+std::shared_ptr<GA_session> AuthHandlerTask::gdkSession() const
+{
+    Q_D(const AuthHandlerTask);
+    return d->ga_session;
 }
 
 void AuthHandlerTask::requestCode(const QString &method)
@@ -974,8 +987,8 @@ void LoadTwoFactorConfigTask::update()
 
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([=, this] {
-        return gdk::get_twofactor_config(session()->m_session);
+    auto future = QtConcurrent::run([ga_session = session()->gdkSession()] {
+        return gdk::get_twofactor_config(ga_session.get());
     });
 
     future.then(this, [=, this](const QJsonObject& config) {
@@ -999,8 +1012,8 @@ void LoadCurrenciesTask::update()
 
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([=, this] {
-        return gdk::get_available_currencies(session()->m_session);
+    auto future = QtConcurrent::run([ga_session = session()->gdkSession()] {
+        return gdk::get_available_currencies(ga_session.get());
     });
 
     future.then(this, [=, this](const QJsonObject& currencies) {
@@ -1205,9 +1218,9 @@ void GetWatchOnlyDetailsTask::update()
 
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([ga_session = session()->gdkSession()] {
         char* data;
-        const auto rc = GA_get_watch_only_username(session()->m_session, &data);
+        const auto rc = GA_get_watch_only_username(ga_session.get(), &data);
         if (rc != GA_OK) return QString();
         const auto username = QString::fromUtf8(data);
         GA_destroy_string(data);
@@ -1264,10 +1277,10 @@ void LoadAssetsTask::update()
 
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([=, this, ga_session = session()->gdkSession()] {
         if (d->refresh) {
             const auto params = Json::fromObject({{ "assets", true }, { "icons", true }});
-            const auto rc = GA_refresh_assets(session()->m_session, params.get());
+            const auto rc = GA_refresh_assets(ga_session.get(), params.get());
             if (rc != GA_OK) return false;
         }
 
@@ -1275,7 +1288,7 @@ void LoadAssetsTask::update()
 
         {
             const auto params = Json::fromObject({{ "category", "all" }});
-            const auto err = GA_get_assets(session()->m_session, params.get(), &output);
+            const auto err = GA_get_assets(ga_session.get(), params.get(), &output);
             if (err != GA_OK) return false;
         }
 
@@ -1521,7 +1534,7 @@ bool SetCsvTimeTask::call(GA_session* session, GA_auth_handler** auth_handler) {
 
 void SetCsvTimeTask::handleDone(const QJsonObject &result)
 {
-    auto settings = gdk::get_settings(session()->m_session);
+    auto settings = gdk::get_settings(gdkSession().get());
     session()->setSettings(settings);
     AuthHandlerTask::handleDone(result);
 }
@@ -1571,7 +1584,7 @@ bool ChangeSettingsTask::call(GA_session* session, GA_auth_handler** auth_handle
 
 void ChangeSettingsTask::handleDone(const QJsonObject& result)
 {
-    auto settings = gdk::get_settings(session()->m_session);
+    auto settings = gdk::get_settings(gdkSession().get());
     if (!settings.isEmpty()) session()->setSettings(settings);
     AuthHandlerTask::handleDone(result);
 }
@@ -1652,10 +1665,10 @@ void SendNLocktimesTask::update()
 
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([=, this] {
-        const auto rc = GA_send_nlocktimes(session()->m_session);
+    auto future = QtConcurrent::run([ga_session = session()->gdkSession()] {
+        const auto rc = GA_send_nlocktimes(ga_session.get());
         if (rc == GA_OK) {
-            return qMakePair(true, gdk::get_settings(session()->m_session));
+            return qMakePair(true, gdk::get_settings(ga_session.get()));
         } else {
             return qMakePair(false, gdk::get_thread_error_details());
         }
@@ -2045,9 +2058,8 @@ void ConnectTask::update()
             });
         }
 
-        auto future = QtConcurrent::run([=, this] {
-            const auto params = get_params(session());
-            const auto rc = GA_connect(session()->m_session, Json::fromObject(params).get());
+        auto future = QtConcurrent::run([params = get_params(session()), ga_session = session()->gdkSession()] {
+            const auto rc = GA_connect(ga_session.get(), Json::fromObject(params).get());
             if (rc == GA_OK) return QString();
             const auto error = gdk::get_thread_error_details();
             return error.value("details").toString();
@@ -2180,9 +2192,9 @@ void GetSystemMessageTask::update()
 
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([ga_session = session()->gdkSession()] {
         char* message_text;
-        const auto rc = GA_get_system_message(session()->m_session, &message_text);
+        const auto rc = GA_get_system_message(ga_session.get(), &message_text);
         if (rc != GA_OK) {
             const auto error = gdk::get_thread_error_details();
             return qMakePair(false, QString());
@@ -2330,9 +2342,9 @@ void HttpRequestTask::update()
 
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([params = d->params, ga_session = session()->m_session] {
+    auto future = QtConcurrent::run([params = d->params, ga_session = session()->gdkSession()] {
         GA_json* output = nullptr;
-        const auto rc = GA_http_request(ga_session, Json::fromObject(params).get(), &output);
+        const auto rc = GA_http_request(ga_session.get(), Json::fromObject(params).get(), &output);
         if (rc == GA_OK && output) {
             auto res = Json::toObject(output);
             GA_destroy_json(output);

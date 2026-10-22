@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QtQml>
 
+#include <memory>
+
 #include "green.h"
 
 Q_MOC_INCLUDE("context.h")
@@ -84,6 +86,7 @@ public:
 
     bool isTwoFactorResetActive() const;
     int gapLimit() const { return m_gap_limit; };
+    std::shared_ptr<GA_session> gdkSession() const { return m_session; }
 
 signals:
     void contextChanged();
@@ -133,7 +136,7 @@ private:
     int const m_gap_limit;
 public:
     // TODO: make m_session private
-    GA_session* m_session{nullptr};
+    std::shared_ptr<GA_session> m_session;
     bool m_connected{false};
     bool m_ready{false};
     QJsonObject m_config;

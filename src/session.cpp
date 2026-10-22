@@ -263,8 +263,12 @@ static QMap<int64_t, QPointer<Session>> g_sessions;
 void Session::update()
 {
     if (m_active && !m_session) {
-        int rc = GA_create_session(&m_session);
+        GA_session* session = nullptr;
+        int rc = GA_create_session(&session);
         Q_ASSERT(rc == GA_OK);
+        // Workers hold their own reference, so the gdk session is destroyed
+        // by whoever drops the last one, possibly after setActive(false).
+        m_session.reset(session, [](GA_session* session) { GA_destroy_session(session); });
 
         {
             QMutexLocker locker(&g_session_mutex);
@@ -272,7 +276,7 @@ void Session::update()
             g_sessions[m_id] = this;
         }
 
-        rc = GA_set_notification_handler(m_session, [](void* context, GA_json* details) {
+        rc = GA_set_notification_handler(m_session.get(), [](void* context, GA_json* details) {
             QMutexLocker locker(&g_session_mutex);
             const auto id = (int64_t) context;
 
@@ -298,16 +302,15 @@ void Session::update()
             m_id = 0;
         }
 
-        GA_set_notification_handler(m_session, nullptr, nullptr);
+        GA_set_notification_handler(m_session.get(), nullptr, nullptr);
         if (m_is_tor) {
             QJsonObject details{{ "hint", "disconnect" }, { "tor_hint", "disconnect" }};
-            GA_reconnect_hint(m_session, Json::fromObject(details).get());
+            GA_reconnect_hint(m_session.get(), Json::fromObject(details).get());
         } else {
             QJsonObject details{{ "hint", "disconnect" }};
-            GA_reconnect_hint(m_session, Json::fromObject(details).get());
+            GA_reconnect_hint(m_session.get(), Json::fromObject(details).get());
         }
-        GA_destroy_session(m_session);
-        m_session = nullptr;
+        m_session.reset();
         return;
     }
 }

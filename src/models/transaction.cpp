@@ -172,7 +172,7 @@ void AccountTransaction::updateMemo(const QString& memo)
     if (m_memo == memo) return;
     auto txhash = m_data.value("txhash").toString().toLocal8Bit();
     if (!m_account->session()) return;
-    auto session = m_account->session()->m_session;
+    auto session = m_account->session()->m_session.get();
     if (!session) return;
     int rc = GA_set_transaction_memo(session, txhash.constData(), memo.toUtf8().constData(), 0);
     if (rc != GA_OK) return;

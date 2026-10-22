@@ -236,7 +236,7 @@ void Analytics::start()
         req.insert("accept", "base64");
 
         GA_json* out = nullptr;
-        const auto rc = GA_http_request(session->m_session, Json::fromObject(req).get(), &out);
+        const auto rc = GA_http_request(session->m_session.get(), Json::fromObject(req).get(), &out);
         if (rc == GA_OK && out) {
             const auto reply = Json::toObject(out);
             GA_destroy_json(out);

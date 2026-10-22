@@ -24,7 +24,7 @@ void FeeEstimates::setSession(Session* session)
 void FeeEstimates::update()
 {
     if (!m_session) return;
-    const auto fees = gdk::get_fee_estimates(m_session->m_session);
+    const auto fees = gdk::get_fee_estimates(m_session->m_session.get());
     if (m_fees == fees) return;
     m_fees = fees;
     emit feesChanged();

@@ -7,6 +7,8 @@
 
 #include <QElapsedTimer>
 #include <QFuture>
+
+#include <memory>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
@@ -294,6 +296,7 @@ private:
     void next();
 protected:
     AuthHandlerTask(AuthHandlerTaskPrivate* d, Session* session);
+    std::shared_ptr<GA_session> gdkSession() const;
     QJsonObject m_result;
     Prompt* m_prompt{nullptr};
     Resolver* m_resolver{nullptr};

@@ -461,9 +461,9 @@ void Convert::update()
         return;
     }
 
-    auto future = QtConcurrent::run([=, this] {
+    auto future = QtConcurrent::run([=, this, ga_session = session->gdkSession()] {
         GA_json* output;
-        const int rc = GA_convert_amount(session->m_session, Json::fromObject(details).get(), &output);
+        const int rc = GA_convert_amount(ga_session.get(), Json::fromObject(details).get(), &output);
         if (rc == GA_OK) {
             const auto result = Json::toObject(output);
             GA_destroy_json(output);

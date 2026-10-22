@@ -75,7 +75,7 @@ void RedepositController::update()
         if (m_fee_rate > 0) {
             details["fee_rate"] = m_fee_rate;
         } else {
-            const auto estimates = gdk::get_fee_estimates(session->m_session);
+            const auto estimates = gdk::get_fee_estimates(session->m_session.get());
             if (estimates.size() > 24) {
                 details["fee_rate"] = estimates.at(24);
             }

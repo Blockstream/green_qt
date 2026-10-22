@@ -84,7 +84,7 @@ void Wallet::reload(bool refresh_accounts)
 
         if (!m_watch_only) {
             char* data;
-            GA_get_watch_only_username(session()->m_session, &data);
+            GA_get_watch_only_username(session()->m_session.get(), &data);
             auto username = QString::fromUtf8(data);
             GA_destroy_string(data);
             if (m_username != username) {
@@ -177,7 +177,7 @@ QJsonObject Wallet::convert(const QJsonObject& value) const
     if (!session) return {};
     auto details = Json::fromObject(value);
     GA_json* balance;
-    int err = GA_convert_amount(session->m_session, details.get(), &balance);
+    int err = GA_convert_amount(session->m_session.get(), details.get(), &balance);
     if (err != GA_OK) return {};
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);
