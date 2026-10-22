@@ -47,7 +47,7 @@ Popup {
                 layer.samples: 4
                 PopupBalloon {
                     strokeWidth: 0
-                    fillColor: constants.c700
+                    fillColor: '#19222C'
                 }
             }
             ScannerView {

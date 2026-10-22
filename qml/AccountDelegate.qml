@@ -24,10 +24,10 @@ ItemDelegate {
         clip: true
         radius: 5
     }
-    leftPadding: constants.p2
-    rightPadding: constants.p2
-    topPadding: constants.p1
-    bottomPadding: constants.p1
+    leftPadding: 16
+    rightPadding: 16
+    topPadding: 12
+    bottomPadding: 12
     hoverEnabled: true
     layer.enabled: true
     opacity: delegate.highlighted ? 1 : delegate.hovered ? 0.9 : 0.5

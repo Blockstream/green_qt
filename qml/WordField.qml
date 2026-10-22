@@ -105,7 +105,7 @@ TextField {
         id: popup
         visible: self.activeFocus && (word.suggestions.length > 1 || (word.suggestions.length === 1 && word.suggestions[0] !== self.text) || self.invalid)
         x: scenePosition.x + self.width / 2 - popup.width / 2
-        y: scenePosition.y + self.height + constants.s1
+        y: scenePosition.y + self.height + 12
         parent: Overlay.overlay
         topPadding: 20
         background: Item {
@@ -114,9 +114,9 @@ TextField {
                 id: shape
                 layer.samples: 4
                 ShapePath {
-                    strokeColor: constants.c200
+                    strokeColor: '#939AA2'
                     strokeWidth: 1
-                    fillColor: constants.c400
+                    fillColor: '#475361'
                     startX: 4
                     startY: 8
                     PathLine {
@@ -179,7 +179,7 @@ TextField {
             contentHeight: suggestions_layout.implicitHeight
             ColumnLayout {
                 id: suggestions_layout
-                spacing: constants.s1
+                spacing: 12
                 Label {
                     visible: self.invalid
                     text: qsTrId('id_not_a_valid_word')
@@ -195,7 +195,7 @@ TextField {
                                 height: parent.height
                                 anchors.centerIn: parent
                                 width: popup.contentItem.width
-                                color: constants.c200
+                                color: '#939AA2'
                             }
                         }
                         text: modelData

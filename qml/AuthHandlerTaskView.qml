@@ -106,7 +106,7 @@ StackLayout {
             visible: active
             sourceComponent: Label {
                 text: task.email
-                color: constants.c100
+                color: '#BEC2C7'
                 font.pixelSize: 14
             }
         }
@@ -119,7 +119,7 @@ StackLayout {
                     if (self.authResult?.method === 'gauth') return qsTrId('id_authenticator_app')
                     return self.session.config[self.authResult?.method]?.data
                 }
-                color: constants.c100
+                color: '#BEC2C7'
                 font.pixelSize: 14
             }
         }

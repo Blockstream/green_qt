@@ -10,7 +10,7 @@ RadioButton {
     contentItem: ColumnLayout {
         spacing: 8
         RowLayout {
-            spacing: constants.s1
+            spacing: 12
             Label {
                 Layout.leftMargin: control.indicator.width + control.spacing
                 Layout.maximumWidth: implicitWidth + 1

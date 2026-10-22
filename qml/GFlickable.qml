@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 
 Flickable {
-    property var availableWidth: vertical_scroll_bar.visible ? width - constants.p0 * 2 : width
+    property var availableWidth: vertical_scroll_bar.visible ? width - 8 * 2 : width
 
     id: self
     contentWidth: width
@@ -11,12 +11,12 @@ Flickable {
         policy: ScrollBar.AlwaysOn
         visible: self.contentHeight > self.height
         background: Rectangle {
-            color: constants.c800
+            color: '#12171E'
             radius: width / 2
         }
         contentItem: Rectangle {
-            implicitWidth: constants.p0
-            color: vertical_scroll_bar.pressed ? constants.c400 : constants.c600
+            implicitWidth: 8
+            color: vertical_scroll_bar.pressed ? '#475361' : '#23303E'
             radius: 8
         }
     }
@@ -25,12 +25,12 @@ Flickable {
         policy: ScrollBar.AlwaysOn
         visible: self.contentWidth > self.width
         background: Rectangle {
-            color: constants.c800
+            color: '#12171E'
             radius: width / 2
         }
         contentItem: Rectangle {
-            implicitHeight: constants.p0
-            color: horizontal_scroll_bar.pressed ? constants.c400 : constants.c600
+            implicitHeight: 8
+            color: horizontal_scroll_bar.pressed ? '#475361' : '#23303E'
             radius: 8
         }
     }

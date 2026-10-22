@@ -47,7 +47,7 @@ WalletDrawer {
                 onClicked: self.close()
             }
             contentItem: ColumnLayout {
-                spacing: constants.s1
+                spacing: 12
                 Spacer {
                 }
                 MultiImage {

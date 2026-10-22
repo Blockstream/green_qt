@@ -491,15 +491,15 @@ StackViewPage {
 /*
         // TODO Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
         ColumnLayout {
-            spacing: constants.p0
+            spacing: 8
             visible: !wallet.watchOnly
             SectionLabel {
                 text: qsTrId('id_my_notes')
             }
             EditableLabel {
                 id: memo_edit
-                leftPadding: constants.p0
-                rightPadding: constants.p0
+                leftPadding: 8
+                rightPadding: 8
                 Layout.fillWidth: true
                 // placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
                 text: transaction.memo

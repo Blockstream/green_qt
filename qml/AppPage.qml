@@ -166,7 +166,6 @@ MainPage {
         WalletManager.removeWallet(wallet)
         Analytics.recordEvent('wallet_delete')
     }
-    property Constants constants: Constants {}
 
     Action {
         id: preferences_action

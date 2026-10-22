@@ -32,8 +32,8 @@ Loader {
 
     sourceComponent: Page {
         implicitWidth: 0
-        leftPadding: constants.p2
-        rightPadding: constants.p2
+        leftPadding: 16
+        rightPadding: 16
         background: Rectangle {
             radius: 4
             color: 'white'
@@ -41,17 +41,17 @@ Loader {
         header: Label {
             text: self.alert.title
             font.bold: true
-            color: constants.c900
-            padding: constants.p2
+            color: '#080B0E'
+            padding: 16
         }
         contentItem: Label {
             text: self.alert.message
             wrapMode: Label.WordWrap
-            color: constants.c800
+            color: '#12171E'
         }
         footer: RowLayout {
             LinkButton {
-                Layout.margins: constants.p2
+                Layout.margins: 16
                 font.bold: true
                 font.pixelSize: 14
                 text: qsTrId('id_learn_more')
@@ -61,7 +61,7 @@ Loader {
             HSpacer {
             }
             LinkButton {
-                Layout.margins: constants.p2
+                Layout.margins: 16
                 font.bold: true
                 font.pixelSize: 14
                 text: 'Dismiss'

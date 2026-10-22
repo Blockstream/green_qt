@@ -7,9 +7,6 @@ import QtMultimedia
 
 ApplicationWindow {
     readonly property bool hasVideoInput: media_devices.videoInputs.length > 0
-    Constants {
-        id: constants
-    }
     id: window
     x: Settings.windowX
     y: Settings.windowY

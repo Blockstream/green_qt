@@ -43,7 +43,7 @@ Collapsible {
                     width: 8
                     height: 8
                     rotation: 45
-                    color: constants.r500
+                    color: '#69302E'
                     transformOrigin: Item.Center
                     anchors.centerIn: parent
                 }

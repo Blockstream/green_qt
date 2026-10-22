@@ -13,7 +13,7 @@ GPane {
         }
         RowLayout {
             id: row_layout
-            spacing: constants.s1
+            spacing: 12
         }
     }
 }

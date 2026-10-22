@@ -8,12 +8,12 @@ GPane {
     rightPadding: 24
     focusPolicy: Qt.ClickFocus
     background: Rectangle {
-        color: constants.c800
+        color: '#12171E'
         Rectangle {
             anchors.top: parent.top
             width: parent.width
             height: 1
-            color: constants.c900
+            color: '#080B0E'
         }
     }
 }

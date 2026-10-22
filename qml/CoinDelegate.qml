@@ -30,7 +30,7 @@ ItemDelegate {
         }
         ColumnLayout {
             Layout.fillWidth: true
-            spacing: constants.p1
+            spacing: 12
             RowLayout {
                 Tag2 {
                     visible: output.expired

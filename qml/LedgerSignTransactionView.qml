@@ -32,7 +32,7 @@ VFlickable {
             Layout.fillWidth: true
             background: null
             header: FieldTitle {
-                bottomPadding: constants.s1
+                bottomPadding: 12
                 text: 'Output ' + (index + 1) + '/' + outputs.length
             }
             contentItem: ColumnLayout {
@@ -66,12 +66,12 @@ VFlickable {
         Layout.fillWidth: true
         background: null
         header: FieldTitle {
-            bottomPadding: constants.s1
+            bottomPadding: 12
             text: 'Summary'
         }
         contentItem: GridLayout {
-            columnSpacing: constants.s1
-            rowSpacing: constants.s1
+            columnSpacing: 12
+            rowSpacing: 12
             columns: 2
             Label {
                 text: 'Fee'
@@ -88,12 +88,12 @@ VFlickable {
             Layout.fillWidth: true
             background: null
             header: FieldTitle {
-                bottomPadding: constants.s1
+                bottomPadding: 12
                 text: 'Input ' + (index + 1) + '/' + inputs.length
             }
             contentItem: GridLayout {
-                columnSpacing: constants.s1
-                rowSpacing: constants.s1
+                columnSpacing: 12
+                rowSpacing: 12
                 columns: 2
                 Label {
                     text: qsTrId('id_path_used_for_signing')

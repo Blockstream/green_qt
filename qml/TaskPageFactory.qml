@@ -274,7 +274,7 @@ QtObject {
                 visible: active
                 sourceComponent: Label {
                     text: view.prompt.task.email
-                    color: constants.c100
+                    color: '#BEC2C7'
                     font.pixelSize: 14
                 }
             }
@@ -294,7 +294,7 @@ QtObject {
                         if (method === 'gauth') return qsTrId('id_authenticator_app')
                         return view.prompt.task.session.config[method].data
                     }
-                    color: constants.c100
+                    color: '#BEC2C7'
                     font.pixelSize: 14
                 }
             }

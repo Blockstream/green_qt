@@ -118,7 +118,7 @@ Page {
                                         text: UtilJS.twoFactorMethodLabel(button.method)
                                     }
                                     Label {
-                                        color: constants.c100
+                                        color: '#BEC2C7'
                                         font.pixelSize: 14
                                         font.weight: 400
                                         text: {

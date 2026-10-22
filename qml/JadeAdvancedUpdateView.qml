@@ -179,7 +179,7 @@ StackViewPage {
             }
         }
         contentItem: RowLayout {
-            spacing: constants.s1
+            spacing: 12
             Label {
                 Layout.fillWidth: true
                 text: control.text

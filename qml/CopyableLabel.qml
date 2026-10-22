@@ -66,9 +66,9 @@ Label {
             }
         }
         background: Rectangle {
-            color: constants.c400
+            color: '#475361'
             border.width: 1
-            border.color: constants.c200
+            border.color: '#939AA2'
             radius: 4
             MouseArea {
                 id: popup_hover_handler

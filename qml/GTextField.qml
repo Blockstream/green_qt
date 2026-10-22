@@ -16,8 +16,8 @@ TextField {
         implicitWidth: 200
         radius: self.radius
         opacity: self.activeFocus ? 1 : (self.enabled ? 0.8 : 0.5)
-        color: constants.c500
-        border.color: error ? constants.r500 : Qt.lighter(color)
+        color: '#273545'
+        border.color: error ? '#69302E' : Qt.lighter(color)
         border.width: self.activeFocus ? 1 : 0
     }
 }

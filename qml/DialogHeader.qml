@@ -1,8 +1,8 @@
 import QtQuick
 
 GHeader {
-    leftPadding: constants.p3
-    rightPadding: constants.p3
-    topPadding: constants.p1
+    leftPadding: 24
+    rightPadding: 24
+    topPadding: 12
     bottomPadding: 0
 }

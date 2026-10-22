@@ -11,12 +11,13 @@ Button {
         if (baseColor) {
             return Qt.lighter(baseColor, 1 + 0.001 * index)
         } else {
-            const prefix = self.highlighted ? 'g' : self.destructive ? 'r' : 'c'
-            return constants[prefix + index]
+            const colors = self.highlighted
+                ? { 500: '#00B45A', 600: '#00a550', 700: '#009244' }
+                : self.destructive
+                    ? { 500: '#69302E', 600: '#612B29', 700: '#341817' }
+                    : { 500: '#273545', 600: '#23303E', 700: '#19222C' }
+            return colors[index]
         }
-    }
-    Constants {
-        id: constants
     }
     id: self
     topInset: 0

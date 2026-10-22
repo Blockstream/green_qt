@@ -10,7 +10,7 @@ ColumnLayout {
     signal failed
     required property SignMessageResolver resolver
     id: self
-    spacing: constants.s1
+    spacing: 12
     Connections {
         target: self.resolver
         function onResolved() {

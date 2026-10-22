@@ -45,7 +45,7 @@ WalletDrawer {
             }
             title: self.title
             contentItem: ColumnLayout {
-                spacing: constants.s1
+                spacing: 12
                 Label {
                     text: {
                         if (self.dispute) {

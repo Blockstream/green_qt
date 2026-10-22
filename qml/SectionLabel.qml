@@ -4,5 +4,5 @@ import QtQuick.Controls
 Label {
     font.capitalization: Font.AllUppercase
     font.pixelSize: 12
-    color: constants.c200
+    color: '#939AA2'
 }

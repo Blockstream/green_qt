@@ -9,9 +9,9 @@ AbstractButton {
     padding: 24
     background: Rectangle {
         border.width: self.activeFocus ? 1 : 0
-        border.color: constants.c600
+        border.color: '#23303E'
         radius: 8
-        color: self.hovered ? constants.c500 : constants.c700
+        color: self.hovered ? '#273545' : '#19222C'
         Behavior on color {
             ColorAnimation {
                 duration: 300

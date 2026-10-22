@@ -93,7 +93,6 @@ set(QML_FILES_WORKFLOWS
     PopupBalloon.qml
     SectionLabel.qml
     AddressDelegate.qml
-    Constants.qml
     SettingsBox.qml
     CoinDelegate.qml
     CoinSelectionDelegate.qml
