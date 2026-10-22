@@ -69,3 +69,12 @@ add_unit_test(
     LIBRARIES blockstream_core
 )
 ```
+
+## Icon rendering checks
+
+Icon colorization pixel tests are skipped on the software renderer.
+To run them, use a native desktop session:
+
+```sh
+./build/modules/controls/tests/test_qml_controls -input modules/controls/tests/tst_uiicon.qml
+```

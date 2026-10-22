@@ -4,16 +4,26 @@ set_target_properties(blockstream_controls PROPERTIES AUTOMOC ON)
 qt_add_qml_module(blockstream_controls
     URI Blockstream.Controls
     VERSION 1.0
-    DEPENDENCIES QtQuick QtQuick.Controls QtQuick.Controls.Basic QtQuick.Layouts QtQuick.Effects QtQuick.Shapes Blockstream.Theme
+    DEPENDENCIES QtQuick QtQuick.Controls QtQuick.Controls.Basic QtQuick.Controls.Material QtQuick.Templates QtQuick.Layouts QtQuick.Effects QtQuick.Shapes Blockstream.Theme
     QML_FILES
+        PopupAccessibility.qml
         UiAlertBanner.qml
         UiButton.qml
+        UiCard.qml
+        UiCardButton.qml
         UiCheckbox.qml
+        UiDialog.qml
         UiDivider.qml
+        UiDrawer.qml
         UiIcon.qml
         UiIconButton.qml
         UiLabel.qml
         UiLink.qml
+        UiMenu.qml
+        UiMenuItem.qml
+        UiMenuSeparator.qml
+        UiPopup.qml
+        UiPopupSurface.qml
         UiRadio.qml
         UiSpinner.qml
         UiTab.qml

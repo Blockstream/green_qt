@@ -54,6 +54,7 @@ Page {
             id: tabs
             UiTab { colors: self.previewColors; text: 'Colors' }
             UiTab { colors: self.previewColors; text: 'Typography' }
+            UiTab { colors: self.previewColors; text: 'Icons' }
             UiTab { colors: self.previewColors; text: 'Components' }
         }
         StackLayout {
@@ -183,6 +184,14 @@ Page {
             }
 
             GalleryFlickable {
+                IconGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                Item { Layout.fillHeight: true }
+            }
+
+            GalleryFlickable {
                 UiLabel {
                     text: 'UiLabel'
                     color: self.previewColors.textPrimary
@@ -259,15 +268,6 @@ Page {
                     Layout.bottomMargin: 20
                     colors: self.previewColors
                 }
-                IconGallery {
-                    Layout.fillWidth: true
-                    colors: self.previewColors
-                }
-                UiDivider {
-                    Layout.topMargin: 20
-                    Layout.bottomMargin: 20
-                    colors: self.previewColors
-                }
                 RadioGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
@@ -323,6 +323,33 @@ Page {
                     colors: self.previewColors
                 }
                 TabsGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
+                PopupsGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
+                OverlaysGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
+                CardsGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }

@@ -6,6 +6,7 @@ Item {
     property string name: ""
     property real size: 24
     property color color: Theme.colors.textPrimary
+    property bool colorize: true
 
     readonly property url source: Theme.iconNames.has(self.name) ? `qrc:/ui-icons/${self.name}.svg` : ''
 
@@ -24,11 +25,11 @@ Item {
         sourceSize.width: Math.ceil(self.width)
         sourceSize.height: Math.ceil(self.height)
         fillMode: Image.PreserveAspectFit
-        layer.enabled: true
+        layer.enabled: self.colorize
         layer.effect: MultiEffect {
             colorization: 1
             colorizationColor: icon_image.color
         }
-        opacity: self.color.a
+        opacity: self.colorize ? self.color.a : 1
     }
 }

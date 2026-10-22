@@ -47,6 +47,7 @@ qt_add_resources(blockstream_theme "ui_icons"
         bluetooth-x.svg
         bolt.svg
         book-open-text.svg
+        bug.svg
         building.svg
         camera.svg
         caret-bottom.svg
@@ -129,6 +130,7 @@ qt_add_resources(blockstream_theme "ui_icons"
         info-filled.svg
         jade.svg
         key.svg
+        ledger.svg
         lifebuoy.svg
         lightning-slash.svg
         link.svg
@@ -154,6 +156,7 @@ qt_add_resources(blockstream_theme "ui_icons"
         number-circle-two.svg
         number-circle-two-filled.svg
         numpad.svg
+        palette.svg
         password.svg
         pencil-simple.svg
         pencil-simple-line.svg

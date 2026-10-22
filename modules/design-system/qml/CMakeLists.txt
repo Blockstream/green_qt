@@ -8,6 +8,9 @@ qt_add_qml_module(blockstream_designsystem
     QML_FILES
         AlertBannerGallery.qml
         ButtonGallery.qml
+        CardsGallery.qml
+        PopupsGallery.qml
+        OverlaysGallery.qml
         IconGallery.qml
         IconButtonGallery.qml
         DesignSystemPage.qml

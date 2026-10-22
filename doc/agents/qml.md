@@ -193,7 +193,11 @@ UiIcon {
 
 Defaults are an empty name, 24 logical pixels, and `Theme.colors.textPrimary`.
 Empty or unknown names hide the icon. Width, height, and layout properties can
-override its size. Color alpha controls transparency. Icons are decorative and
+override its size. With the default `colorize: true`, `color` supplies the tint
+and its alpha controls transparency. Use `colorize: false` for assets such as
+`Theme.icons.jade` and `Theme.icons.ledger`: this bypasses the colorization layer
+and ignores `color`, including its alpha, preserving the SVG's original colors.
+Set the item's `opacity` to fade an original-color icon. Icons are decorative and
 non-interactive.
 
 For buttons, use `iconName` and `trailingIconName`:
@@ -219,8 +223,13 @@ In non-production builds, launch with `--debug` and select **Design system** in 
 
 Keep the grouped token names and design IDs in `modules/design-system/qml/catalog.js` in sync when adding or renaming tokens. Add future component examples to the Components tab in `modules/design-system/qml/DesignSystemPage.qml`; reusable components belong in `modules/controls/qml/`.
 
-The UiIcon section lists icons in four compact columns, with search and tertiary
-Copy buttons for `Theme.icons` expressions. Buttons briefly read Copied after use.
+The tabs are Colors, Typography, Icons, and Components. The Icons tab lists brand
+icons first with `colorize: false`, then theme-colored UI icons, using the same
+four-column rows. Search covers both subsections. Tertiary Copy buttons copy
+`Theme.icons` expressions and briefly read Copied after use. Brand rows follow the preview palette, with a small dark logo tile in both
+palettes so the original white logo details stay visible.
+The Components tab includes card, menu, and popup examples; use them to inspect
+hover, keyboard focus, disabled states, counts, long labels, scrolling, and dismissal.
 
 `UiButton` provides `variant` (`Primary`, `Secondary`, `Tertiary`, `Negative`, `PrimaryInverted`, `SecondaryInverted`) and `size` (`Large`, `Medium`, `Small`, `ExtraSmall`) enums; defaults are `UiButton.Primary` and `UiButton.Medium` (48px). Use `iconName: Theme.icons.check` for a leading icon and `trailingIconName: Theme.icons.copy` for a trailing icon. Both render through UiIcon and follow the button foreground color; empty or unknown names are hidden. `busy` replaces content with a spinner and preserves dimensions and normal variant colors. Use `disabled` (default `false`) for caller-controlled availability. Leave inherited `enabled` untouched so the component's `enabled: !disabled && !busy` binding blocks activation during loading. QML still permits overriding `enabled`, which replaces this binding. Qt handles pointer input, keyboard activation, focus, and shortcuts.
 
@@ -367,6 +376,127 @@ UiTextField {
     onCleared: controller.name = ''
 }
 ```
+
+## Shared cards, menus, and popups
+
+Use `UiCard` for a static surface with caller-owned `contentItem`. It defaults to
+24px padding, a subtle border, and a 4px radius. Use `UiCardButton` when the whole
+card is one action; supply its `text` for the accessible name, its `contentItem`
+for the visible content, and handle `onClicked`. Use `disabled` for availability
+rather than replacing its `enabled` binding. It supports hover, press, Tab focus,
+and Space activation; its focus border does not alter padding. Supply content
+colors from the theme, including disabled colors where appropriate. Both controls
+accept `colors` for gallery previews. Keep wallet-specific row content in the
+product QML files rather than adding it to these shared controls.
+
+`UiMenu` is the shared action menu. Add `UiMenuItem` children and
+`UiMenuSeparator` between groups. Items accept `text`, `iconName`, `count`
+(default 0), and inherited `enabled`. Pass a translated label and numeric count
+separately; parentheses in `text` are literal. Counts greater than zero appear in
+a badge and are included in the accessible name. Handle actions in `onTriggered`;
+Qt closes the menu when an action triggers. Disabled items cannot activate.
+Labels stay on one line and elide when necessary. The menu sizes to its items
+between 200px and 360px wide and caps its height at 300px, with scrolling for
+longer content. For generated items, use `Instantiator` with `insertItem` and
+`removeItem`, as in `PopupsGallery.qml`; do not put a `Repeater` directly in the menu.
+
+```qml
+UiButton {
+    text: qsTrId('id_more')
+    onClicked: options_menu.open()
+    UiMenu {
+        id: options_menu
+        accessibleId: 'example_options_menu'
+        y: parent.height + 8
+        UiMenuItem {
+            text: qsTrId('id_view_archived_accounts')
+            count: 2 // Bind to the actual count at the call site.
+            iconName: Theme.icons.archive
+            onTriggered: console.log('Open archived accounts')
+        }
+    }
+}
+```
+
+Use `UiPopup` for arbitrary interactive content rather than an action list. It
+provides 16px padding, focus handling, and a themed `UiPopupSurface`; callers own
+content, actions, dimensions, and placement. `UiPopupSurface` is the common visual
+background, not an interactive popup on its own. Its pointer coordinates are
+normalized (`pointerX: 0.5`, `pointerY: 0`); callers position the popup and its
+pointer so neither extends beyond the available viewport. `UiPopup` exposes
+`pointerX`; `UiMenu` exposes both `pointerX` and `pointerY`.
+
+Both `UiMenu` and `UiPopup` are modal without dimming. Escape or a press outside
+closes them. The outside press is consumed, including a press on the trigger,
+so a single click dismisses without reopening. Retain this behavior when adding
+callers; do not disable a trigger merely because its popup is visible.
+
+### Dialog and drawer shells
+
+`UiDialog` and `UiDrawer` are presentation shells based on the legacy
+`AbstractDialog` and `AbstractDrawer`, using the Figma modal/drawer foundations:
+32px padding, `surfaceOverlay`, and modal background blur. The current
+surfaces have no border, shadow, or additional scrim fill. They expose `colors` for preview palettes and `accessibleId`
+for the visual content root. Neither creates a title, close button, hint, or action
+layout. Callers own those elements and scrolling; the legacy wrappers remain in
+place until individual flows migrate.
+
+`UiDialog` defaults to 400px wide, centered in the window overlay, with a 12px
+radius. It has 24px external margins and shrinks to the available
+window width. Override `implicitWidth` for wider bodies (for example 480px or
+560px), or `width` for a custom sizing policy. Content determines height; provide
+a scrollable body for content taller than the window. `header` and `footer` are
+null by default, so `standardButtons` does not create an action row; supply your
+own actions and call `accept()` / `reject()` when appropriate. Native section
+spacing is 20px; caller-owned layouts should also use 20px between body sections.
+
+`UiDrawer` defaults to the right edge and full overlay height, with a plain
+rectangular surface. Set `edge: Qt.LeftEdge` for a wallet picker. Like the
+reference wrapper, it exposes `minimumContentWidth` (450px) and
+`preferredContentWidth` (0px), measured before padding. The default content width
+plus 32px padding on each side produces 514px overall when the window has room.
+The content width follows the larger value, capped by the window's available
+width; a `SmoothedAnimation` handles width changes. Provide a `Page` with
+`padding: 0`, `spacing: 20`, a scrollable body, and an optional footer when that
+layout is needed. Closed drawers do not open through edge dragging; opening is
+caller-controlled, while an open drawer retains native drag-to-dismiss behavior.
+
+Both shells use Escape/outside-press dismissal and consume the outside press.
+Their surfaces use the supplied `colors`; the shared controls depend only on
+Theme and Qt, not on application wallet types. The gallery demonstrates a
+caller-owned dialog action layout and a drawer with a pinned bottom action,
+short/long content, and both side edges.
+
+### Popup test IDs
+
+Set `accessibleId` on `UiMenu`, `UiPopup`, `UiDialog`, and `UiDrawer`, rather than
+attaching `Accessible.id` to those popup objects. The components bind it to `contentItem.Accessible.id`,
+which is a visual item. Identified content roots also receive an accessible role
+that remains exposed in the native tree: Dialog for dialogs, Grouping for popups
+and drawers, and PopupMenu for menus. On macOS all four use Grouping because
+Qt flattens PopupMenu nodes and reserves window roles for native windows.
+Clearing the ID restores the content's original role. The shared
+`PopupAccessibility` helper resolves binding targets during component completion,
+after caller-supplied initial content is assigned.
+The bindings track changes to `accessibleId` and replacement of `contentItem`, including
+caller-owned content. Assign the root ID through `accessibleId` only; give
+individual actions their own `Accessible.id` values.
+
+```qml
+UiPopup {
+    accessibleId: 'example_details_popup'
+    contentItem: UiLabel {
+        text: qsTrId('id_details')
+        typography: Theme.typography.bodyM
+        color: Theme.colors.textPrimary
+    }
+}
+```
+
+This contract covers these four shared controls. Migration of legacy
+dialog/drawer/scanner wrappers, automatic back-button IDs, and fixed-versus-prefixed
+IDs in other reusable components still require the coordinated foundations work. Do not invent a
+second naming policy in a flow migration.
 
 ## Custom background pattern
 
