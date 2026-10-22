@@ -12,6 +12,8 @@ qt_add_qml_module(blockstream_controls
         UiCard.qml
         UiCardButton.qml
         UiCheckbox.qml
+        UiCircularProgress.qml
+        UiComboBox.qml
         UiDialog.qml
         UiDivider.qml
         UiDrawer.qml
@@ -24,12 +26,18 @@ qt_add_qml_module(blockstream_controls
         UiMenuSeparator.qml
         UiPopup.qml
         UiPopupSurface.qml
+        UiProgressBar.qml
         UiRadio.qml
+        UiScrollBar.qml
+        UiScrollIndicator.qml
+        UiSlider.qml
         UiSpinner.qml
         UiTab.qml
         UiTabs.qml
+        UiTextArea.qml
         UiTextField.qml
         UiToggle.qml
+        UiToolTip.qml
     RESOURCE_PREFIX /qt/qml
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Blockstream/Controls"
 )

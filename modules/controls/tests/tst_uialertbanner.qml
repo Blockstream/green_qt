@@ -234,4 +234,15 @@ GreenTestCase {
         compare(banner.Accessible.name, "Back up your wallet")
         compare(banner.Accessible.description, "Anyone with a copy of your recovery phrase can spend your funds.")
     }
+    function test_dismissActionId() {
+        const banner = createBanner({dismissible: true})
+        banner.Accessible.id = 'banner'
+        const dismiss = dismissButton(banner)
+        compare(dismiss.Accessible.id, 'banner_dismiss')
+        banner.Accessible.id = 'changed'
+        compare(dismiss.Accessible.id, 'changed_dismiss')
+        banner.Accessible.id = ''
+        compare(dismiss.Accessible.id, '')
+    }
+
 }

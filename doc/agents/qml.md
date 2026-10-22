@@ -135,6 +135,37 @@ For new UI, use the `Theme` singleton from `Blockstream.Theme` and the `Ui*` com
 
 Place new design system components in `modules/controls/qml/` and prefix their filenames and QML type names with `Ui`, for example `UiButton.qml`, `UiTextField.qml`, `UiAlert.qml`, and `UiCard.qml`. They belong to the `Blockstream.Controls` module; register them in its `QML_FILES` in `modules/controls/qml/CMakeLists.txt`. Theme files belong to `Blockstream.Theme` in `modules/theme/`. Neither module imports `Blockstream.Green`, and `Blockstream.Theme` does not import `Blockstream.Controls`. Use `Theme.colors` and `Theme.typography` for their styling.
 
+#### Input, progress, scrolling, and tooltip controls
+
+`UiTextArea` retains native multiline editing, selection, and `readOnly`. It wraps
+text and grows with content; constrain it with a scrolling container where needed.
+Use `disabled` to block editing and `errorMessage` for caller-owned validation.
+Its error panel follows UiTextField, including the delayed reveal and accessible
+description. Neither control clears errors when text changes.
+
+`UiComboBox` retains `model`, `textRole`, `valueRole`, `currentIndex`,
+`currentValue`, and `activated`. It is a non-editable single selector with a
+scrollable popup. Use native role-based models and handle `onActivated` to write
+user selections back to caller state. Editable/searchable combinations are not
+supported by its presentation.
+
+`UiSlider` retains native `from`, `to`, `value`, `stepSize`, `snapMode`,
+`orientation`, and `moved`. Bind `value` to caller state and update that state in
+`onMoved`. Use `disabled` for availability. `UiProgressBar` supports measured and
+indeterminate linear progress. `UiCircularProgress` uses the native ProgressBar
+range/value API for measured progress, with `diameter` (24) and `strokeWidth` (2).
+Use `UiSpinner` for ordinary loading. All expose `colors` for gallery previews.
+
+Attach `UiScrollBar` and `UiScrollIndicator` through the standard Qt attached
+properties; their range and activity follow the Flickable. The scrollbar is
+interactive and supports native policy settings. It defaults to `Qt.NoFocus`,
+preserving editor focus during pointer scrolling
+and staying outside the tab chain. Callers may opt into `Qt.TabFocus` for arrow-key
+scrolling along its orientation while `interactive` is enabled.
+Instantiate `UiToolTip` inside its target and bind `visible` to the target's hover state; native `delay`,
+`timeout`, `show`, and `hide` remain available. Constrain width for wrapped hints.
+
+
 ### Colors
 
 Choose the semantic role that describes the element, rather than matching a hex value or palette shade. Token paths become camel case names in QML: `text/primary` becomes `Theme.colors.textPrimary`, and `feedback/negative/on-fill` becomes `Theme.colors.feedbackNegativeOnFill`. Available groups are text, action, border, feedback, icon, overlay, and surface.
@@ -366,6 +397,20 @@ StackLayout {
 
 `UiTextField` extends Basic `TextField` with theme styling, native editing and validators. `size` defaults to `UiTextField.Large` (60px); use `UiTextField.Medium` (44px) or `UiTextField.Small` (36px) for compact inputs. Set `disabled` (default `false`) without overriding `enabled`; content is retained. Native `readOnly` permits selection and copying. Both hide clear. `errorMessage` controls the error border, wrapping panel, and accessible description. Callers own errors; validation and clearing never change them. The panel opens after 120ms and smoothly expands or collapses below the fixed input shell, including while disabled. `clearable` defaults to `true`. Filled editable fields show a keyboard-accessible clear button that returns focus to the editor. Clearing emits `textChanged` and `cleared()`, but not `textEdited`; handle `cleared` when syncing edits to caller state.
 
+`UiTextField.iconName` adds a decorative leading icon. `leadingItem` replaces
+that icon; `trailingItem` supplies a caller-owned action beside the built-in clear
+button. Supply items with explicit or implicit dimensions and native keyboard
+focus behavior. Tab visits the editor, visible and enabled focusable leading and
+trailing items, then clear; Backtab reverses this order and exits the field.
+Wallet operations belong to the caller. Set `Accessible.id` on
+the field to derive `<id>_clear`; assign semantic IDs to supplied actions, for
+example `<id>_copy`. An empty root ID leaves the built-in action unidentified.
+`UiAlertBanner` similarly derives `<id>_dismiss` from its root `Accessible.id`.
+These bindings follow subsequent root ID changes.
+
+Replacing or clearing a text-field action slot detaches its old item from the
+visual tree without destroying it. Callers can assign that item to a slot again.
+
 ```qml
 UiTextField {
     placeholderText: qsTrId('id_name')
@@ -388,6 +433,10 @@ and Space activation; its focus border does not alter padding. Supply content
 colors from the theme, including disabled colors where appropriate. Both controls
 accept `colors` for gallery previews. Keep wallet-specific row content in the
 product QML files rather than adding it to these shared controls.
+
+`UiMenuItem` renders `checkable` / `checked` with a trailing check. Use native
+`ActionGroup` exclusivity for sorting and independent checkable actions for
+filters. Hover/highlight remains separate from checked state.
 
 `UiMenu` is the shared action menu. Add `UiMenuItem` children and
 `UiMenuSeparator` between groups. Items accept `text`, `iconName`, `count`

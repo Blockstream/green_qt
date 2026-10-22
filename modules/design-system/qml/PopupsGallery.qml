@@ -62,6 +62,12 @@ ColumnLayout {
                     enabled: count > 0
                     onTriggered: self.lastAction = `${text}: ${count}`
                 }
+                UiMenuItem {
+                    text: 'Selected sorting option'
+                    colors: self.colors
+                    checkable: true
+                    checked: true
+                }
                 UiMenuSeparator { colors: self.colors }
                 UiMenuItem {
                     colors: self.colors

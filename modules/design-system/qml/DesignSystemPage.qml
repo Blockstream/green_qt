@@ -268,6 +268,24 @@ Page {
                     Layout.bottomMargin: 20
                     colors: self.previewColors
                 }
+                TextAreaGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
+                ComboBoxGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
                 RadioGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
@@ -295,7 +313,25 @@ Page {
                     Layout.bottomMargin: 20
                     colors: self.previewColors
                 }
+                ProgressGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
                 DividerGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
+                ScrollingGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }
@@ -332,6 +368,15 @@ Page {
                     colors: self.previewColors
                 }
                 PopupsGallery {
+                    Layout.fillWidth: true
+                    colors: self.previewColors
+                }
+                UiDivider {
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                    colors: self.previewColors
+                }
+                ToolTipGallery {
                     Layout.fillWidth: true
                     colors: self.previewColors
                 }

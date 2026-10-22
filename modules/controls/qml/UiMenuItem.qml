@@ -62,5 +62,11 @@ Basic.MenuItem {
             }
             Accessible.ignored: true
         }
+        UiIcon {
+            visible: self.checkable
+            name: self.checked ? Theme.icons.check : ''
+            size: 20
+            color: self.enabled ? self.colors.iconBase : self.colors.iconDisabled
+        }
     }
 }

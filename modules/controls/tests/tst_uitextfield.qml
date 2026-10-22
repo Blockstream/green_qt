@@ -1,3 +1,4 @@
+import Blockstream.Theme
 import Blockstream.Controls
 import Blockstream.Testing
 import QtQuick
@@ -17,12 +18,27 @@ GreenTestCase {
     }
     Component {
         id: integer_validator
-        IntValidator { bottom: 0; top: 9999 }
+        IntValidator {
+            bottom: 0
+            top: 9999
+        }
     }
-    SignalSpy { id: cleared_spy; signalName: 'cleared' }
-    SignalSpy { id: edited_spy; signalName: 'textEdited' }
-    SignalSpy { id: accepted_spy; signalName: 'accepted' }
-    SignalSpy { id: changed_spy; signalName: 'textChanged' }
+    SignalSpy {
+        id: cleared_spy
+        signalName: 'cleared'
+    }
+    SignalSpy {
+        id: edited_spy
+        signalName: 'textEdited'
+    }
+    SignalSpy {
+        id: accepted_spy
+        signalName: 'accepted'
+    }
+    SignalSpy {
+        id: changed_spy
+        signalName: 'textChanged'
+    }
 
     function createField(properties = {}) {
         const field = createTemporaryObject(field_component, self, properties)
@@ -249,5 +265,180 @@ GreenTestCase {
         compare(panel.expanded, false)
         compare(field.hasError, false)
         compare(field.Accessible.description, '')
+    }
+    Component {
+        id: composed_component
+        UiTextField {
+            text: 'Filled'
+            trailingItem: UiIconButton {
+                text: 'Copy'
+                iconName: Theme.icons.copy
+            }
+        }
+    }
+    function test_composedFocus() {
+        const field = createTemporaryObject(composed_component, self)
+        field.forceActiveFocus(Qt.TabFocusReason)
+        keyClick(Qt.Key_Tab)
+        compare(field.trailingItem.activeFocus, true)
+        keyClick(Qt.Key_Tab)
+        const clear = findItems(field, item => item instanceof AbstractButton && item !== field.trailingItem)[0]
+        compare(clear.activeFocus, true)
+        keyClick(Qt.Key_Backtab)
+        compare(field.trailingItem.activeFocus, true)
+        keyClick(Qt.Key_Backtab)
+        compare(field.activeFocus, true)
+        verify(field.rightPadding > field.trailingItem.width)
+    }
+    function test_clearActionId() {
+        const field = createField({text: 'value'})
+        field.Accessible.id = 'field'
+        const clear = clearButton(field)
+        compare(clear.Accessible.id, 'field_clear')
+        field.Accessible.id = 'changed'
+        compare(clear.Accessible.id, 'changed_clear')
+        field.Accessible.id = ''
+        compare(clear.Accessible.id, '')
+    }
+
+    function test_slotReplacementAndRemoval_data() {
+        return [{tag: 'leading', slot: 'leadingItem'}, {tag: 'trailing', slot: 'trailingItem'}]
+    }
+    function test_slotReplacementAndRemoval(row) {
+        const host = createTemporaryObject(focus_host_component, self)
+        const field = host.field
+        const original = field[row.slot]
+        const replacement = createTemporaryObject(action_component, field)
+        original.forceActiveFocus(Qt.TabFocusReason)
+        field[row.slot] = replacement
+        compare(original.parent, null)
+        verify(!original.activeFocus)
+        verify(replacement.parent !== field && replacement.parent !== null)
+        field[row.slot] = null
+        compare(replacement.parent, null)
+        field[row.slot] = original
+        verify(original.parent !== field && original.parent !== null)
+        verify(original.visible)
+        verify(original.enabled)
+        original.forceActiveFocus(Qt.TabFocusReason)
+        verify(original.activeFocus)
+    }
+    Component {
+        id: action_component
+        UiIconButton {
+            text: 'Replacement'
+            iconName: Theme.icons.copy
+        }
+    }
+
+    function test_actionFocusBorder() {
+        const host = createTemporaryObject(focus_host_component, self)
+        for (const action of [host.field.leadingItem, host.field.trailingItem]) {
+            action.forceActiveFocus(Qt.TabFocusReason)
+            verify(action.activeFocus)
+            compare(host.field.borderColor, host.field.colors.borderBrand)
+        }
+    }
+
+    Component {
+        id: focus_host_component
+        Item {
+            property alias before: before_field
+            property alias field: composed_field
+            property alias after: after_field
+            property bool leadingAvailable: true
+            property bool trailingAvailable: true
+            property bool clearAvailable: true
+            property bool leadingFocusable: true
+
+            id: focus_host
+            width: 400
+            height: 240
+            UiTextField {
+                id: before_field
+                width: 300
+                clearable: false
+            }
+            UiTextField {
+                id: composed_field
+                y: 80
+                width: 300
+                text: 'Filled'
+                clearable: focus_host.clearAvailable
+                leadingItem: UiIconButton {
+                    text: 'Select all'
+                    iconName: Theme.icons.check
+                    visible: focus_host.leadingAvailable
+                    focusPolicy: focus_host.leadingFocusable ? Qt.StrongFocus : Qt.NoFocus
+                }
+                trailingItem: UiIconButton {
+                    text: 'Copy'
+                    iconName: Theme.icons.copy
+                    enabled: focus_host.trailingAvailable
+                }
+            }
+            UiTextField {
+                id: after_field
+                y: 160
+                width: 300
+                clearable: false
+            }
+        }
+    }
+
+    function test_composedFocusTraversal_data() {
+        return [
+            { tag: 'all actions', leading: true, trailing: true, clearable: true },
+            { tag: 'leading only', leading: true, trailing: false, clearable: false },
+            { tag: 'trailing only', leading: false, trailing: true, clearable: false },
+            { tag: 'no actions', leading: false, trailing: false, clearable: false },
+            { tag: 'clear only', leading: false, trailing: false, clearable: true },
+            { tag: 'non-focusable leading', leading: true, trailing: false, clearable: false, leadingFocusable: false }
+        ]
+    }
+
+    function test_composedFocusTraversal(row) {
+        const host = createTemporaryObject(focus_host_component, self, {
+            leadingAvailable: row.leading,
+            trailingAvailable: row.trailing,
+            clearAvailable: row.clearable,
+            leadingFocusable: row.leadingFocusable ?? true
+        })
+        const field = host.field
+        const clear = findItems(field, item => item instanceof AbstractButton && item !== field.leadingItem && item !== field.trailingItem)[0]
+        const order = [host.before, field]
+        if (row.leading && host.leadingFocusable) order.push(field.leadingItem)
+        if (row.trailing) order.push(field.trailingItem)
+        if (row.clearable) order.push(clear)
+        order.push(host.after)
+
+        host.before.forceActiveFocus(Qt.TabFocusReason)
+        for (let index = 1; index < order.length; ++index) {
+            keyClick(Qt.Key_Tab)
+            compare(order[index].activeFocus, true, 'Forward focus at index ' + index)
+        }
+        // Start inside the field: native macOS reverse entry can skip buttons
+        // when the system is configured to tab only to text controls.
+        order[order.length - 2].forceActiveFocus(Qt.BacktabFocusReason)
+        for (let index = order.length - 3; index >= 0; --index) {
+            keyClick(Qt.Key_Backtab)
+            compare(order[index].activeFocus, true, 'Backward focus at index ' + index)
+        }
+
+        host.leadingAvailable = false
+        host.trailingAvailable = false
+        field.clear()
+        field.forceActiveFocus(Qt.TabFocusReason)
+        keyClick(Qt.Key_Tab)
+        compare(host.after.activeFocus, true)
+        field.forceActiveFocus(Qt.BacktabFocusReason)
+        keyClick(Qt.Key_Backtab)
+        compare(host.before.activeFocus, true)
+
+        field.leadingItem = null
+        field.trailingItem = null
+        field.forceActiveFocus(Qt.TabFocusReason)
+        keyClick(Qt.Key_Tab)
+        compare(host.after.activeFocus, true)
     }
 }

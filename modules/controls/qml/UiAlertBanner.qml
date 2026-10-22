@@ -120,6 +120,7 @@ Page {
 
             UiIconButton {
                 id: dismiss_button
+                Accessible.id: self.Accessible.id ? self.Accessible.id + '_dismiss' : ''
                 Layout.alignment: Qt.AlignTop
                 visible: self.dismissible
                 size: UiButton.ExtraSmall

@@ -1,5 +1,6 @@
 import Blockstream.Controls
 import Blockstream.Theme
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -24,7 +25,7 @@ ColumnLayout {
         }
         UiLabel {
             Layout.fillWidth: true
-            text: 'Configure the field below. Hover, click, or use Tab to inspect focus; Tab again to reach clear.'
+            text: 'Configure the field below. Hover, click, or use Tab to inspect focus; Tab through the enabled field actions.'
             typography: Theme.typography.bodyS
             color: self.colors.textSubtle
             wrapMode: Text.Wrap
@@ -113,9 +114,51 @@ ColumnLayout {
                     text: 'Clearable'
                     checked: true
                 }
+                UiCheckbox {
+                    id: leading_icon_toggle
+                    colors: self.colors
+                    text: 'Leading icon'
+                }
+                UiCheckbox {
+                    id: leading_action_toggle
+                    colors: self.colors
+                    text: 'Leading action · select all'
+                }
+                UiCheckbox {
+                    id: trailing_action_toggle
+                    colors: self.colors
+                    text: 'Trailing action · copy'
+                }
             }
             UiTextField {
                 id: sample
+                Accessible.id: 'gallery_text_field'
+                iconName: leading_icon_toggle.checked ? Theme.icons.magnifyingGlass : ''
+                leadingItem: leading_action_toggle.checked ? select_action : null
+                trailingItem: trailing_action_toggle.checked ? copy_action : null
+                UiIconButton {
+                    id: select_action
+                    visible: leading_action_toggle.checked
+                    text: 'Select all'
+                    iconName: Theme.icons.check
+                    colors: self.colors
+                    size: UiButton.ExtraSmall
+                    Accessible.id: sample.Accessible.id + '_select_all'
+                    onClicked: {
+                        sample.forceActiveFocus()
+                        sample.selectAll()
+                    }
+                }
+                UiIconButton {
+                    id: copy_action
+                    visible: trailing_action_toggle.checked
+                    text: 'Copy'
+                    iconName: Theme.icons.copy
+                    colors: self.colors
+                    size: UiButton.ExtraSmall
+                    Accessible.id: sample.Accessible.id + '_copy'
+                    onClicked: Clipboard.copy(sample.text)
+                }
                 Layout.maximumWidth: 325
                 colors: self.colors
                 size: self.sizes[size_selector.currentIndex]?.value ?? UiTextField.Large

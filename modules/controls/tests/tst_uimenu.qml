@@ -266,4 +266,22 @@ GreenTestCase {
         compare(host.openings, 2)
         host.menu.close()
     }
+    Component {
+        id: menu_component
+        UiMenuItem {
+            text: 'Sort'
+            checkable: true
+        }
+    }
+    function test_checkableSelection() {
+        const item = createTemporaryObject(menu_component, self)
+        mouseClick(item)
+        compare(item.checked, true)
+        mouseClick(item)
+        compare(item.checked, false)
+        item.enabled = false
+        mouseClick(item)
+        compare(item.checked, false)
+    }
+
 }

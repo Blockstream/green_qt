@@ -9,20 +9,25 @@ qt_add_qml_module(blockstream_designsystem
         AlertBannerGallery.qml
         ButtonGallery.qml
         CardsGallery.qml
-        PopupsGallery.qml
-        OverlaysGallery.qml
-        IconGallery.qml
-        IconButtonGallery.qml
+        catalog.js
+        CheckboxGallery.qml
+        ComboBoxGallery.qml
         DesignSystemPage.qml
         DesignSystemSwatch.qml
-        TextFieldGallery.qml
-        RadioGallery.qml
-        CheckboxGallery.qml
-        ToggleGallery.qml
         DividerGallery.qml
+        IconButtonGallery.qml
+        IconGallery.qml
         LinkGallery.qml
+        OverlaysGallery.qml
+        PopupsGallery.qml
+        ProgressGallery.qml
+        RadioGallery.qml
+        ScrollingGallery.qml
         TabsGallery.qml
-        catalog.js
+        TextAreaGallery.qml
+        TextFieldGallery.qml
+        ToggleGallery.qml
+        ToolTipGallery.qml
     RESOURCE_PREFIX /qt/qml
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Blockstream/DesignSystem"
 )

@@ -8,6 +8,9 @@ Basic.TextField {
 
     signal cleared()
 
+    property string iconName: ''
+    property Item leadingItem: null
+    property Item trailingItem: null
     property int size: UiTextField.Large
     property bool disabled: false
     property bool clearable: true
@@ -16,17 +19,28 @@ Basic.TextField {
 
     readonly property bool hasError: self.errorMessage.length > 0
     readonly property bool clearVisible: self.clearable && self.enabled && !self.readOnly && self.length > 0
+    readonly property Item leadingFocusItem: {
+        const item = self.leadingItem
+        return item?.visible && item.enabled && item.activeFocusOnTab ? item : null
+    }
+    readonly property Item trailingFocusItem: {
+        const item = self.trailingItem
+        return item?.visible && item.enabled && item.activeFocusOnTab ? item : null
+    }
     readonly property real fieldHeight: {
         if (self.size === UiTextField.Small) return 36
         if (self.size === UiTextField.Medium) return 44
         return 60
     }
+    readonly property real edgePadding: self.size === UiTextField.Large ? 16 : 12
     readonly property real errorHeight: error_panel.revealProgress * error_panel.implicitHeight
 
     readonly property color borderColor: {
         if (self.hasError) return self.colors.feedbackNegativeStroke
         if (!self.enabled) return self.colors.borderSubtle
-        if (self.activeFocus || clear_button.activeFocus) return self.colors.borderBrand
+        if (self.activeFocus || clear_button.activeFocus || self.leadingItem?.activeFocus || self.trailingItem?.activeFocus) {
+            return self.colors.borderBrand
+        }
         if (self.hovered) return self.colors.borderBold
         return self.colors.borderSubtle
     }
@@ -52,13 +66,83 @@ Basic.TextField {
         if (self.size === UiTextField.Medium) return 8
         return 12
     }
-    leftPadding: self.size === UiTextField.Large ? 16 : 12
-    rightPadding: self.clearVisible ? self.leftPadding + clear_button.width + 8 : self.leftPadding
+    leftPadding: self.edgePadding + (leading_host.width > 0 ? leading_host.width + 8 : 0)
+    rightPadding: self.edgePadding + trailing_host.width + (trailing_host.width > 0 ? 8 : 0) + (self.clearVisible ? clear_button.width + 8 : 0)
     // Reserve the error panel below the native editor, including its placeholder.
     bottomPadding: self.padding + self.errorHeight
     Accessible.description: self.errorMessage
-    // Explicit navigation also reaches clear when macOS tabs only to text controls.
-    KeyNavigation.tab: self.clearVisible ? clear_button : null
+    // Include field actions even when macOS tabs only to text controls.
+    KeyNavigation.tab: {
+        if (self.leadingFocusItem) return self.leadingFocusItem
+        if (self.trailingFocusItem) return self.trailingFocusItem
+        return self.clearVisible ? clear_button : null
+    }
+
+    ActionSlot {
+        id: leading_host
+        item: self.leadingItem
+        x: self.edgePadding
+        y: (self.fieldHeight - height) / 2
+        width: self.leadingItem?.visible ? self.leadingItem.width : leading_icon.visible ? leading_icon.width : 0
+        height: self.leadingItem?.height ?? 20
+
+        UiIcon {
+            id: leading_icon
+            visible: !self.leadingItem && name.length > 0
+            name: self.iconName
+            size: 20
+            color: self.colors.iconSubtle
+        }
+    }
+    ActionSlot {
+        id: trailing_host
+        item: self.trailingItem
+        x: self.width - self.edgePadding - width - (self.clearVisible ? clear_button.width + 8 : 0)
+        y: (self.fieldHeight - height) / 2
+        width: self.trailingItem?.visible ? self.trailingItem.width : 0
+        height: self.trailingItem?.height ?? 0
+    }
+
+    component ActionSlot: Item {
+        property Item item: null
+        property Item hostedItem: null
+
+        id: slot
+        onItemChanged: {
+            // Detach outgoing actions without destroying caller-owned objects.
+            if (slot.hostedItem?.parent === slot) slot.hostedItem.parent = null
+            slot.hostedItem = slot.item
+            if (slot.item) slot.item.parent = slot
+        }
+    }
+    Binding {
+        target: self.trailingItem
+        property: 'KeyNavigation.tab'
+        value: self.trailingFocusItem && self.clearVisible ? clear_button : null
+        when: self.trailingItem !== null
+    }
+    Binding {
+        target: self.trailingItem
+        property: 'KeyNavigation.backtab'
+        value: self.trailingFocusItem ? (self.leadingFocusItem ?? self) : null
+        when: self.trailingItem !== null
+    }
+    Binding {
+        target: self.leadingItem
+        property: 'KeyNavigation.tab'
+        value: {
+            if (!self.leadingFocusItem) return null
+            if (self.trailingFocusItem) return self.trailingFocusItem
+            return self.clearVisible ? clear_button : null
+        }
+        when: self.leadingItem !== null
+    }
+    Binding {
+        target: self.leadingItem
+        property: 'KeyNavigation.backtab'
+        value: self.leadingFocusItem ? self : null
+        when: self.leadingItem !== null
+    }
 
     background: Item {
         Rectangle {
@@ -79,6 +163,7 @@ Basic.TextField {
 
     Basic.AbstractButton {
         id: clear_button
+        Accessible.id: self.Accessible.id ? self.Accessible.id + '_clear' : ''
         x: self.width - width
         y: (self.fieldHeight - height) / 2
         width: height
@@ -89,7 +174,10 @@ Basic.TextField {
         visible: self.clearVisible
         enabled: self.clearVisible
         Accessible.name: clear_button.text
-        KeyNavigation.backtab: self
+        KeyNavigation.backtab: {
+            if (!self.clearVisible) return null
+            return self.trailingFocusItem ?? self.leadingFocusItem ?? self
+        }
         background: Rectangle {
             color: 'transparent'
             border.width: 2
