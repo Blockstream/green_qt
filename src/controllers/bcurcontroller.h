@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <QSet>
 #include <QQueue>
+#include <QTimer>
 
 class DecodeBCURTask;
 class BCURController : public Controller
@@ -26,11 +27,13 @@ signals:
     void resultDecoded(const QJsonObject& result);
     void dataDiscarded(const QString& data);
 private:
+    void dropTask();
     void next();
 private:
     QJsonObject m_result;
     QSet<QString> m_seen;
     QQueue<QString> m_pending;
+    QTimer m_timeout_timer;
     DecodeBCURTask* m_task{nullptr};
     int m_progress{0};
 };

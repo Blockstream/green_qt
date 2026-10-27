@@ -17,7 +17,8 @@ Item {
     readonly property bool waitingForPermission: permission.status === Qt.Undetermined
     readonly property bool hasCamera: media_devices.videoInputs.length > 0
     readonly property bool cameraAvailable: !self.permissionDenied && self.hasCamera
-    readonly property bool waitingForCamera: self.cameraAvailable && permission.status === Qt.Granted && !camera.active
+    readonly property bool scanFailed: !controller.noErrors
+    readonly property bool waitingForCamera: self.cameraAvailable && permission.status === Qt.Granted && !self.scanFailed && !camera.active
     readonly property bool showCameraWarning: !self.cameraAvailable && !self.waitingForPermission
     property var barcodeOverlays: []
     signal codeScanned(string code)
@@ -80,11 +81,37 @@ Item {
         }
     }
 
+    ColumnLayout {
+        anchors.centerIn: parent
+        spacing: 12
+        visible: self.scanFailed && !self.showCameraWarning
+        width: Math.min(parent.width - 40, 280)
+        Image {
+            Layout.alignment: Qt.AlignHCenter
+            source: 'qrc:/svg2/warning.svg'
+        }
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            horizontalAlignment: Label.AlignHCenter
+            font.pixelSize: 14
+            font.weight: 400
+            opacity: 0.8
+            wrapMode: Label.WordWrap
+            text: qsTrId('id_could_not_recognized_qr_code')
+        }
+        LinkButton {
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTrId('id_try_again')
+            onClicked: self.reset()
+        }
+    }
+
     CaptureSession {
         camera: Camera {
             id: camera
             cameraDevice: camera_selector.cameraDevice
-            active: self.cameraAvailable && permission.status === Qt.Granted
+            active: self.cameraAvailable && permission.status === Qt.Granted && !self.scanFailed
         }
         videoOutput: video_output
     }

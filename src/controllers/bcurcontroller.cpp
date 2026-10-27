@@ -2,9 +2,28 @@
 #include "context.h"
 #include "task.h"
 
+namespace {
+
+// Time allowed to complete a multipart scan, counted from the first UR fragment
+constexpr int BCUR_SCAN_TIMEOUT = 5 * 60 * 1000;
+
+// Upper bound of distinct codes accepted in a single scan, so that an animated
+// QR with endless unique payloads can't grow memory without bound. Jade loops
+// a fixed set of frames and shows each one for at least 270ms, so a legitimate
+// scan sees at most ~1100 distinct codes within BCUR_SCAN_TIMEOUT
+constexpr int BCUR_MAX_SEEN_PARTS = 2000;
+
+} // namespace
+
 BCURController::BCURController(QObject* parent)
     : Controller(parent)
 {
+    m_timeout_timer.setSingleShot(true);
+    m_timeout_timer.setInterval(BCUR_SCAN_TIMEOUT);
+    connect(&m_timeout_timer, &QTimer::timeout, this, [this] {
+        reset();
+        setError("data", "timeout");
+    });
 }
 
 void BCURController::setProgress(int progress)
@@ -16,31 +35,45 @@ void BCURController::setProgress(int progress)
 
 void BCURController::reset()
 {
-    if (m_task) {
-        m_task->deleteLater();
-        m_task = nullptr;
-    }
+    dropTask();
     m_result = {};
     m_seen.clear();
     m_pending.clear();
     setProgress(0);
+    clearErrors();
+}
+
+void BCURController::dropTask()
+{
+    m_timeout_timer.stop();
+    if (!m_task) return;
+    // Queued GDK continuations may still emit after the task is dropped
+    if (auto prompt = m_task->prompt()) disconnect(prompt, nullptr, this, nullptr);
+    disconnect(m_task, nullptr, this, nullptr);
+    m_task->deleteLater();
+    m_task = nullptr;
 }
 
 void BCURController::process(const QString& data)
 {
     if (!m_result.isEmpty()) return;
+    if (!noErrors()) return;
 
     if (m_seen.contains(data)) return;
+    if (m_seen.size() >= BCUR_MAX_SEEN_PARTS) {
+        reset();
+        setError("data", "too_many_parts");
+        return;
+    }
     m_seen.insert(data);
 
     if (!data.startsWith("ur:", Qt::CaseInsensitive)) {
         emit dataDiscarded(data);
-        if (m_task) {
-            m_task->deleteLater();
-            m_task = nullptr;
-        }
+        dropTask();
         return;
     }
+
+    if (!m_timeout_timer.isActive()) m_timeout_timer.start();
 
     if (!context()) {
         setContext(ContextManager::instance()->create("mainnet", false));
@@ -67,13 +100,11 @@ void BCURController::process(const QString& data)
         connect(m_task, &DecodeBCURTask::finished, this, [=, this] {
             m_result = m_task->decodedResult();
             emit resultDecoded(m_result);
-            m_task->deleteLater();
-            m_task = nullptr;
+            dropTask();
         });
         connect(m_task, &DecodeBCURTask::failed, this, [=, this] {
             emit dataDiscarded(data);
-            m_task->deleteLater();
-            m_task = nullptr;
+            dropTask();
         });
         dispatcher()->add(m_task);
     } else {
