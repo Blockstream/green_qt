@@ -4,7 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
-    enum Variant { Primary, Secondary, Tertiary, Negative, PrimaryInverted, SecondaryInverted }
+    enum Variant { Primary, Secondary, Tertiary, Negative, PrimaryInverted, SecondaryInverted, Neutral }
     enum Size { Large, Medium, Small, ExtraSmall }
 
     property int variant: UiButton.Primary
@@ -18,31 +18,33 @@ AbstractButton {
     property real buttonHeight: self.size === UiButton.Large ? 56 : self.size === UiButton.Small ? 40 : self.size === UiButton.ExtraSmall ? 32 : 48
     property real iconSize: self.size === UiButton.Large ? 24 : 20
 
-    readonly property TypographyStyle typography: self.size === UiButton.ExtraSmall ? Theme.typography.labelSmSemibold : Theme.typography.labelLSemibold
-
     readonly property bool interactionPressed: self.enabled && !self.busy && self.down
     readonly property bool interactionHovered: self.enabled && !self.busy && !self.interactionPressed && !self.visualFocus && self.hovered
 
-    readonly property color foregroundColor: {
-        if (!self.enabled && !self.busy) return self.colors.textDisabled
+    property TypographyStyle typography: self.size === UiButton.ExtraSmall ? Theme.typography.labelSmSemibold : Theme.typography.labelLSemibold
+
+    property color foregroundColor: {
+        if (!self.enabled && !self.busy) return self.variant === UiButton.Neutral ? self.colors.iconDisabled : self.colors.textDisabled
         if (self.variant === UiButton.Negative) return self.interactionPressed ? self.colors.textInverse : self.colors.feedbackNegativeAccent
         if (self.variant === UiButton.PrimaryInverted) return self.colors.actionOnPrimary
         if (self.variant === UiButton.SecondaryInverted) return self.colors.borderInverse
         if (self.variant === UiButton.Primary && !self.interactionPressed) return self.colors.actionOnPrimary
+        if (self.variant === UiButton.Neutral) return self.interactionHovered || self.interactionPressed ? self.colors.iconBase : self.colors.iconSubtle
         return self.interactionHovered ? self.colors.textBrandHover : self.colors.textBrand
     }
 
-    readonly property color surfaceColor: {
-        if (!self.enabled && !self.busy) return self.colors.actionDisabled
+    property color surfaceColor: {
+        if (!self.enabled && !self.busy) return self.variant === UiButton.Neutral ? 'transparent' : self.colors.actionDisabled
         if (self.variant === UiButton.PrimaryInverted) return self.colors.actionPrimaryInverted
         if (self.variant === UiButton.SecondaryInverted) return 'transparent'
         if (self.variant === UiButton.Negative) return self.interactionPressed ? self.colors.feedbackNegativeAccent : self.interactionHovered ? self.colors.feedbackNegativeFill : 'transparent'
+        if (self.variant === UiButton.Neutral) return self.interactionHovered || self.interactionPressed ? Qt.alpha(self.colors.iconBase, 0.1) : 'transparent'
         if (self.interactionPressed) return self.colors.actionPressed
         if (self.variant === UiButton.Primary) return self.interactionHovered ? self.colors.actionHover : self.colors.actionPrimary
         return 'transparent'
     }
 
-    readonly property color outlineColor: {
+    property color outlineColor: {
         if (!self.enabled && !self.busy) return 'transparent'
         if (self.variant === UiButton.Secondary) return self.interactionHovered ? self.colors.textBrandHover : self.colors.borderBrand
         if (self.variant === UiButton.Negative) return self.colors.feedbackNegativeAccent

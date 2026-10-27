@@ -15,9 +15,10 @@ Basic.TextField {
     property bool disabled: false
     property bool clearable: true
     property string errorMessage: ''
+    property bool invalid: false
     property Colors colors: Theme.colors
 
-    readonly property bool hasError: self.errorMessage.length > 0
+    readonly property bool hasError: self.invalid || self.errorMessage.length > 0
     readonly property bool clearVisible: self.clearable && self.enabled && !self.readOnly && self.length > 0
     readonly property Item leadingFocusItem: {
         const item = self.leadingItem
@@ -27,15 +28,19 @@ Basic.TextField {
         const item = self.trailingItem
         return item?.visible && item.enabled && item.activeFocusOnTab ? item : null
     }
-    readonly property real fieldHeight: {
+    property real fieldHeight: {
         if (self.size === UiTextField.Small) return 36
         if (self.size === UiTextField.Medium) return 44
         return 60
     }
-    readonly property real edgePadding: self.size === UiTextField.Large ? 16 : 12
+    property real edgePadding: self.size === UiTextField.Large ? 16 : 12
+    property real actionCenterY: self.fieldHeight / 2
     readonly property real errorHeight: error_panel.revealProgress * error_panel.implicitHeight
 
-    readonly property color borderColor: {
+    property color backgroundColor: self.colors.surfaceBase
+
+    property real borderWidth: 1
+    property color borderColor: {
         if (self.hasError) return self.colors.feedbackNegativeStroke
         if (!self.enabled) return self.colors.borderSubtle
         if (self.activeFocus || clear_button.activeFocus || self.leadingItem?.activeFocus || self.trailingItem?.activeFocus) {
@@ -82,7 +87,7 @@ Basic.TextField {
         id: leading_host
         item: self.leadingItem
         x: self.edgePadding
-        y: (self.fieldHeight - height) / 2
+        y: self.actionCenterY - height / 2
         width: self.leadingItem?.visible ? self.leadingItem.width : leading_icon.visible ? leading_icon.width : 0
         height: self.leadingItem?.height ?? 20
 
@@ -97,8 +102,8 @@ Basic.TextField {
     ActionSlot {
         id: trailing_host
         item: self.trailingItem
-        x: self.width - self.edgePadding - width - (self.clearVisible ? clear_button.width + 8 : 0)
-        y: (self.fieldHeight - height) / 2
+        x: self.width - self.edgePadding - width  - (self.clearVisible ? clear_button.width : 0)
+        y: self.actionCenterY - height / 2
         width: self.trailingItem?.visible ? self.trailingItem.width : 0
         height: self.trailingItem?.height ?? 0
     }
@@ -155,43 +160,29 @@ Basic.TextField {
         Rectangle {
             width: parent.width
             height: self.fieldHeight
-            color: self.colors.surfaceBase
+            color: self.backgroundColor
             border.color: self.borderColor
+            border.width: self.borderWidth
             radius: 8
         }
     }
 
-    Basic.AbstractButton {
+    UiIconButton {
         id: clear_button
-        Accessible.id: self.Accessible.id ? self.Accessible.id + '_clear' : ''
-        x: self.width - width
-        y: (self.fieldHeight - height) / 2
+        Accessible.id: self.clearable && self.Accessible.id ? self.Accessible.id + '_clear_btn' : ''
+        x: self.width - self.edgePadding / 2 - width
+        y: self.actionCenterY - height / 2
         width: height
-        height: self.size === UiTextField.Small ? 36 : 44
-        focusPolicy: Qt.StrongFocus
-        hoverEnabled: true
+        size: self.size === UiTextField.Small ? UiButton.ExtraSmall : UiButton.Small
+        iconName: Theme.icons.xCircle
+        variant: UiButton.Neutral
+        colors: self.colors
         text: qsTrId('id_clear')
         visible: self.clearVisible
-        enabled: self.clearVisible
-        Accessible.name: clear_button.text
+        disabled: !self.clearVisible
         KeyNavigation.backtab: {
             if (!self.clearVisible) return null
             return self.trailingFocusItem ?? self.leadingFocusItem ?? self
-        }
-        background: Rectangle {
-            color: 'transparent'
-            border.width: 2
-            border.color: self.colors.borderFocus
-            radius: 8
-            visible: clear_button.enabled && clear_button.visualFocus
-        }
-        contentItem: Item {
-            UiIcon {
-                anchors.centerIn: parent
-                name: Theme.icons.xCircle
-                size: self.size === UiTextField.Small ? 16 : 20
-                color: clear_button.hovered ? self.colors.textPrimary : self.colors.iconSubtle
-            }
         }
         onClicked: {
             if (!self.clearVisible) return

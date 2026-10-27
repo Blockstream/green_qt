@@ -142,6 +142,24 @@ text and grows with content; constrain it with a scrolling container where neede
 Use `disabled` to block editing and `errorMessage` for caller-owned validation.
 Its error panel follows UiTextField, including the delayed reveal and accessible
 description. Neither control clears errors when text changes.
+Pass a caller-defined `Row` or other `Item` through `UiTextArea.actions` for the
+bottom-left slot. The caller owns its buttons, styling, and handlers; the text
+area only hosts and positions the item. Set `clearable: false` to disable the bottom-right clear
+button. The minimum total height is 128px, leaving room for about three text
+lines above the standard action row. The gallery can hide its custom actions
+independently of Clear. The Clear
+button is hidden for empty, disabled, or read-only input and emits `cleared`
+after restoring editor focus. If a focused Clear button is hidden by a text reset
+or a switch to read-only, focus returns to the enabled editor. Disabling the
+control does not restore editor focus. Clearable defaults to true. The action row reserves
+space below the text and above validation, including when the clear button is
+hidden. Inside a ScrollView or with `TextArea.flickable`, actions, Clear, and
+validation stay at the bottom of the viewport while the text scrolls. A growing
+text area within a scrollable page still scrolls as part of that page.
+Tab moves focus from the editor to the next item in Qt's native focus
+chain without inserting a tab character. Focus navigation respects platform
+preferences; the component does not force action buttons into the tab chain
+when macOS is configured to tab only to text controls.
 
 `UiComboBox` retains `model`, `textRole`, `valueRole`, `currentIndex`,
 `currentValue`, and `activated`. It is a non-editable single selector with a
@@ -280,7 +298,13 @@ The Components tab includes a UiButton playground and live examples of every var
 
 `UiIconButton` is a square UiButton with one centered `iconName`. Set `text` to
 its accessible action name; labels and trailing icons are not rendered. It defaults
-to UiButton.Tertiary (ghost) and Medium, and also supports Primary and Secondary.
+to UiButton.Tertiary (ghost) and Medium, and also supports Primary, Secondary and
+Neutral. Use `variant: UiButton.Neutral` for Close actions: `iconSubtle` at rest,
+`iconBase` on hover/press, and a surface using `iconBase` at 10% opacity on hover/press.
+Neutral buttons retain UiButton's existing 8px corner radius; the inset surface
+uses a 4px radius during keyboard focus.
+Disabled icons use `iconDisabled` without a fill; keyboard focus keeps the inset
+ring and subtle icon. The loading spinner keeps the neutral foreground.
 Large/Medium/Small/ExtraSmall measure 56/40/36/28px with 24/24/20/16px icons.
 States, colors, and loading behavior are inherited from UiButton.
 
@@ -403,10 +427,20 @@ button. Supply items with explicit or implicit dimensions and native keyboard
 focus behavior. Tab visits the editor, visible and enabled focusable leading and
 trailing items, then clear; Backtab reverses this order and exits the field.
 Wallet operations belong to the caller. Set `Accessible.id` on
-the field to derive `<id>_clear`; assign semantic IDs to supplied actions, for
-example `<id>_copy`. An empty root ID leaves the built-in action unidentified.
-`UiAlertBanner` similarly derives `<id>_dismiss` from its root `Accessible.id`.
+the field to derive `<id>_clear_btn`; assign semantic IDs to supplied actions, for
+example `<id>_copy_btn`. An empty root ID or `clearable: false` leaves the built-in action unidentified.
+`UiAlertBanner` similarly derives `<id>_dismiss_btn` from its root `Accessible.id`.
 These bindings follow subsequent root ID changes.
+
+`invalid` marks a field invalid without adding a message panel; retained application
+fields use it for legacy `error` values whose message is rendered by the caller.
+`errorMessage` still supplies the optional built-in panel. UiTextArea supports the
+same `invalid` contract. UiTextField exposes `borderColor` and `borderWidth` for
+retained caller-owned status outlines; ordinary fields keep their themed defaults.
+
+`fieldHeight` can be overridden for composed inputs such as AmountField; the
+background, slots and validation panel follow that height. Ordinary fields should
+keep the size-derived default.
 
 Replacing or clearing a text-field action slot detaches its old item from the
 visual tree without destroying it. Callers can assign that item to a slot again.
@@ -486,17 +520,28 @@ callers; do not disable a trigger merely because its popup is visible.
 `AbstractDialog` and `AbstractDrawer`, using the Figma modal/drawer foundations:
 32px padding, `surfaceOverlay`, and modal background blur. The current
 surfaces have no border, shadow, or additional scrim fill. They expose `colors` for preview palettes and `accessibleId`
-for the visual content root. Neither creates a title, close button, hint, or action
-layout. Callers own those elements and scrolling; the legacy wrappers remain in
-place until individual flows migrate.
+for the visual content root. UiDialog provides a title and Close
+header; UiDrawer leaves its header to the caller. Callers own body content, hints,
+actions and scrolling; legacy wrappers remain until individual flows migrate.
 
 `UiDialog` defaults to 400px wide, centered in the window overlay, with a 12px
 radius. It has 24px external margins and shrinks to the available
 window width. Override `implicitWidth` for wider bodies (for example 480px or
 560px), or `width` for a custom sizing policy. Content determines height; provide
-a scrollable body for content taller than the window. `header` and `footer` are
-null by default, so `standardButtons` does not create an action row; supply your
-own actions and call `accept()` / `reject()` when appropriate. Native section
+a scrollable body for content taller than the window. The default header uses
+`title` and a Close button calling `reject()`. Close is shown even without a
+title. `dismissible` defaults to true; set it to false to hide and disable Close
+and block Escape/outside-click dismissal through the default `closePolicy`
+binding. Leave that binding intact when using `dismissible` to control all three.
+An explicit `Popup.NoAutoClose` policy also hides and disables Close. When Close
+is hidden and the title is empty, the default header is hidden. Changes take
+effect while the dialog is open. Caller-owned actions may still call `accept()`,
+`reject()`, or `close()`. The default header shares the
+dialog's 32px outer inset, with only `spacing` between the header and body. The
+Close button derives `<accessibleId>_close_btn`; empty IDs stay empty. Override
+`header` or set `header: null` for a custom presentation. `footer` is null by
+default, so `standardButtons` does not create an action row; supply your own
+actions and call `accept()` / `reject()` when appropriate. Native section
 spacing is 20px; caller-owned layouts should also use 20px between body sections.
 
 `UiDrawer` defaults to the right edge and full overlay height, with a plain
@@ -712,3 +757,7 @@ PrimaryButton {
 ## User-facing text
 
 Use `qsTrId(...)` for user-facing strings when an id already exists or when adding text to translated flows. Literal strings are acceptable for debug/internal UI, network names, protocol names, or files that already deliberately use literals. Do not replace existing translation ids with hardcoded English.
+
+On macOS, UiAlertBanner uses accessible Grouping because Cocoa omits the
+AlertMessage container and its runtime ID. Its name, description, and dismissal
+action remain intact.

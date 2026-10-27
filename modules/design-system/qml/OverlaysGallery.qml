@@ -23,7 +23,7 @@ ColumnLayout {
         }
         UiLabel {
             Layout.fillWidth: true
-            text: 'Bare shells with 32px padding and a scrim. Content and actions belong to the caller; no title or close button is supplied. Try Escape, outside clicks, and both drawer edges.'
+            text: 'Dialog and drawer surfaces with 32px padding and a scrim. Dialogs supply a title and Close header; callers own body content and actions. Try Escape, outside clicks, and both drawer edges.'
             typography: Theme.typography.bodyS
             color: self.colors.textSubtle
             wrapMode: Text.Wrap
@@ -70,6 +70,7 @@ ColumnLayout {
 
     UiDialog {
         id: example_dialog
+        title: 'Example dialog'
         colors: self.colors
         accessibleId: 'gallery_example_dialog'
         onAccepted: self.lastAction = 'Dialog accepted'

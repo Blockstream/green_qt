@@ -230,7 +230,7 @@ GreenTestCase {
 
     function test_accessibility() {
         const banner = createBanner()
-        compare(banner.Accessible.role, Accessible.AlertMessage)
+        compare(banner.Accessible.role, Qt.platform.os === 'osx' ? Accessible.Grouping : Accessible.AlertMessage)
         compare(banner.Accessible.name, "Back up your wallet")
         compare(banner.Accessible.description, "Anyone with a copy of your recovery phrase can spend your funds.")
     }
@@ -238,9 +238,9 @@ GreenTestCase {
         const banner = createBanner({dismissible: true})
         banner.Accessible.id = 'banner'
         const dismiss = dismissButton(banner)
-        compare(dismiss.Accessible.id, 'banner_dismiss')
+        compare(dismiss.Accessible.id, 'banner_dismiss_btn')
         banner.Accessible.id = 'changed'
-        compare(dismiss.Accessible.id, 'changed_dismiss')
+        compare(dismiss.Accessible.id, 'changed_dismiss_btn')
         banner.Accessible.id = ''
         compare(dismiss.Accessible.id, '')
     }

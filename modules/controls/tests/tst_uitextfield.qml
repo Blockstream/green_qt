@@ -69,6 +69,27 @@ GreenTestCase {
         changed_spy.target = null
     }
 
+    function test_invalidWithoutMessageAndBorderOverride() {
+        const field = createField({ text: 'value', invalid: true, width: 400 })
+        compare(field.hasError, true)
+        compare(field.errorMessage, '')
+        compare(field.errorHeight, 0)
+        compare(field.borderColor, Theme.colors.feedbackNegativeStroke)
+        field.invalid = false
+        field.borderColor = Theme.colors.feedbackInfoStroke
+        field.borderWidth = 0
+        compare(field.background.children[1].border.color, Theme.colors.feedbackInfoStroke)
+        compare(field.background.children[1].border.width, 0)
+    }
+
+    function test_composedFieldHeight() {
+        const field = createField({ fieldHeight: 88, width: 400, errorMessage: 'Failure' })
+        compare(field.fieldHeight, 88)
+        tryVerify(() => field.height > 88)
+        compare(field.background.children[1].height, 88)
+        compare(field.leadingItem, null)
+    }
+
     function test_nativeEditing() {
         const field = createField()
         field.forceActiveFocus(Qt.TabFocusReason)
@@ -152,6 +173,10 @@ GreenTestCase {
     function test_clearActivation(row) {
         const field = createField({ text: 'Filled', size: row.size })
         const button = clearButton(field)
+        verify(button instanceof UiIconButton)
+        compare(button.height, row.size === UiTextField.Small ? 28 : 36)
+        compare(button.iconSize, row.size === UiTextField.Small ? 16 : 20)
+        compare(field.width - button.x - button.width, row.size === UiTextField.Large ? 8 : 6)
         field.forceActiveFocus(Qt.TabFocusReason)
         if (row.key) {
             keyClick(Qt.Key_Tab)
@@ -294,9 +319,13 @@ GreenTestCase {
         const field = createField({text: 'value'})
         field.Accessible.id = 'field'
         const clear = clearButton(field)
-        compare(clear.Accessible.id, 'field_clear')
+        compare(clear.Accessible.id, 'field_clear_btn')
         field.Accessible.id = 'changed'
-        compare(clear.Accessible.id, 'changed_clear')
+        compare(clear.Accessible.id, 'changed_clear_btn')
+        field.clearable = false
+        compare(clear.Accessible.id, '')
+        field.clearable = true
+        compare(clear.Accessible.id, 'changed_clear_btn')
         field.Accessible.id = ''
         compare(clear.Accessible.id, '')
     }

@@ -48,6 +48,41 @@ GreenTestCase {
         ]
     }
 
+    function test_neutralStates_data() {
+        return [
+            {tag: 'light', colors: Theme.lightColors},
+            {tag: 'dark', colors: Theme.darkColors}
+        ]
+    }
+
+    function test_neutralStates(row) {
+        const button = createButton({variant: UiButton.Neutral, colors: row.colors})
+        const surface = button.background.children[1]
+        mouseMove(self, self.width - 1, self.height - 1)
+        compare(button.surfaceColor.a, 0)
+        compare(button.foregroundColor, row.colors.iconSubtle)
+        mouseMove(button, button.width / 2, button.height / 2)
+        tryCompare(button, 'hovered', true)
+        compare(surface.radius, 8)
+        compare(button.surfaceColor, Qt.alpha(row.colors.iconBase, 0.1))
+        mousePress(button)
+        compare(button.foregroundColor, row.colors.iconBase)
+        compare(surface.radius, 8)
+        mouseRelease(button)
+        self.forceActiveFocus(Qt.OtherFocusReason)
+        button.forceActiveFocus(Qt.TabFocusReason)
+        verify(button.visualFocus)
+        compare(button.background.children[0].radius, 8)
+        compare(surface.radius, 4)
+        button.disabled = true
+        compare(button.foregroundColor, row.colors.iconDisabled)
+        compare(button.surfaceColor.a, 0)
+        button.disabled = false
+        button.busy = true
+        compare(button.foregroundColor, row.colors.iconSubtle)
+        compare(button.surfaceColor.a, 0)
+    }
+
     function test_geometry(row) {
         const button = createButton({ size: row.size })
         const icon = self.findItems(button.contentItem, item => item instanceof UiIcon)[0]

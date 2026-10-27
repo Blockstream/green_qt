@@ -168,6 +168,7 @@ qt_add_resources(blockstream_theme "ui_icons"
         plus-bold.svg
         plus-circle.svg
         plus-regular.svg
+        printer.svg
         qr-code.svg
         qr-code-regular.svg
         question-mark.svg
@@ -205,6 +206,7 @@ qt_add_resources(blockstream_theme "ui_icons"
         text-aa.svg
         ticket.svg
         timer.svg
+        tor.svg
         trash.svg
         trash-simple.svg
         trend-down.svg

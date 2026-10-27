@@ -64,7 +64,8 @@ Page {
     bottomPadding: 0
     implicitWidth: Math.max(self.implicitContentWidth + self.leftPadding + self.rightPadding, 200)
     focusPolicy: Qt.NoFocus
-    Accessible.role: Accessible.AlertMessage
+    // Cocoa omits the AlertMessage container and its runtime ID.
+    Accessible.role: Qt.platform.os === 'osx' ? Accessible.Grouping : Accessible.AlertMessage
     Accessible.name: self.title.length > 0 ? self.title : self.description
     Accessible.description: self.title.length > 0 ? self.description : ''
 
@@ -120,23 +121,16 @@ Page {
 
             UiIconButton {
                 id: dismiss_button
-                Accessible.id: self.Accessible.id ? self.Accessible.id + '_dismiss' : ''
+                Accessible.id: self.Accessible.id ? self.Accessible.id + '_dismiss_btn' : ''
                 Layout.alignment: Qt.AlignTop
                 visible: self.dismissible
                 size: UiButton.ExtraSmall
-                variant: UiButton.Tertiary
+                variant: UiButton.Neutral
                 colors: self.colors
                 iconName: Theme.icons.x
                 disabled: self.disabled
                 Accessible.name: qsTrId('id_close')
                 onClicked: self.dismissed()
-                background: null
-
-                contentItem: UiIcon {
-                    name: dismiss_button.iconName
-                    size: dismiss_button.iconSize
-                    color: dismiss_button.enabled ? self.colors.iconBase : self.colors.textDisabled
-                }
             }
         }
 

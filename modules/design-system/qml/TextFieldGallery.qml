@@ -142,7 +142,8 @@ ColumnLayout {
                     text: 'Select all'
                     iconName: Theme.icons.check
                     colors: self.colors
-                    size: UiButton.ExtraSmall
+                    size: UiButton.Small
+                    variant: UiButton.Neutral
                     Accessible.id: sample.Accessible.id + '_select_all'
                     onClicked: {
                         sample.forceActiveFocus()
@@ -155,7 +156,8 @@ ColumnLayout {
                     text: 'Copy'
                     iconName: Theme.icons.copy
                     colors: self.colors
-                    size: UiButton.ExtraSmall
+                    variant: UiButton.Neutral
+                    size: UiButton.Small
                     Accessible.id: sample.Accessible.id + '_copy'
                     onClicked: Clipboard.copy(sample.text)
                 }

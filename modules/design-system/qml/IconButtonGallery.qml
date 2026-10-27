@@ -8,6 +8,7 @@ ColumnLayout {
     required property Colors colors
     readonly property var variants: [
         { name: 'Default', value: UiButton.Tertiary },
+        { name: 'Neutral · close', value: UiButton.Neutral },
         { name: 'Primary', value: UiButton.Primary },
         { name: 'Secondary', value: UiButton.Secondary }
     ]
@@ -68,8 +69,8 @@ ColumnLayout {
 
                                     id: size_sample
                                     colors: self.colors
-                                    text: 'Copy address'
-                                    iconName: Theme.icons.copy
+                                    text: variant_sample.modelData.value === UiButton.Neutral ? 'Close' : 'Copy address'
+                                    iconName: variant_sample.modelData.value === UiButton.Neutral ? Theme.icons.x : Theme.icons.copy
                                     variant: variant_sample.modelData.value
                                     size: size_sample.modelData.value
                                 }
@@ -107,15 +108,15 @@ ColumnLayout {
                             spacing: 8
                             UiIconButton {
                                 colors: self.colors
-                                text: 'Copy address'
-                                iconName: Theme.icons.copy
+                                text: state_sample.modelData.value === UiButton.Neutral ? 'Close' : 'Copy address'
+                                iconName: state_sample.modelData.value === UiButton.Neutral ? Theme.icons.x : Theme.icons.copy
                                 variant: state_sample.modelData.value
                                 disabled: true
                             }
                             UiIconButton {
                                 colors: self.colors
-                                text: 'Copy address'
-                                iconName: Theme.icons.copy
+                                text: state_sample.modelData.value === UiButton.Neutral ? 'Close' : 'Copy address'
+                                iconName: state_sample.modelData.value === UiButton.Neutral ? Theme.icons.x : Theme.icons.copy
                                 variant: state_sample.modelData.value
                                 busy: true
                             }

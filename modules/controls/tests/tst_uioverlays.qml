@@ -1,6 +1,7 @@
 import Blockstream.Controls
 import Blockstream.Testing
 import QtQuick
+import QtQuick.Controls as Controls
 
 GreenTestCase {
     id: self
@@ -12,6 +13,9 @@ GreenTestCase {
     Component {
         id: dialog_component
         UiDialog {
+            property int rejectedCount: 0
+
+            onRejected: ++rejectedCount
             contentItem: Item { implicitHeight: 100 }
         }
     }
@@ -52,6 +56,78 @@ GreenTestCase {
         overlay.accessibleId = ''
         tryCompare(replacement.Accessible, 'id', '')
         compare(replacement.Accessible.role, Accessible.Pane)
+    }
+
+    function test_dialogClosePolicy_data() {
+        return [
+            {tag: 'untitled', title: '', policy: Controls.Popup.CloseOnEscape},
+            {tag: 'titled', title: 'Dialog title', policy: Controls.Popup.CloseOnPressOutside},
+            {tag: 'untitled locked', title: '', policy: Controls.Popup.NoAutoClose},
+            {tag: 'titled locked', title: 'Dialog title', policy: Controls.Popup.NoAutoClose}
+        ]
+    }
+
+    function test_dialogClosePolicy(row) {
+        const dialog = createTemporaryObject(dialog_component, self, {
+            title: row.title, closePolicy: row.policy
+        })
+        dialog.open()
+        tryCompare(dialog, 'opened', true)
+        const close = findItems(dialog.header, item => item instanceof UiIconButton)[0]
+        const closable = row.policy !== Controls.Popup.NoAutoClose
+        compare(close.visible, closable)
+        compare(close.enabled, closable)
+        compare(dialog.header.visible, closable || row.title.length > 0)
+        dialog.closePolicy = Controls.Popup.NoAutoClose
+        verify(!close.visible)
+        verify(!close.enabled)
+        mouseClick(close)
+        compare(dialog.opened, true)
+        compare(dialog.rejectedCount, 0)
+        dialog.closePolicy = Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutside
+        verify(close.visible)
+        verify(close.enabled)
+        mouseClick(close)
+        tryCompare(dialog, 'visible', false)
+        compare(dialog.rejectedCount, 1)
+    }
+
+    function test_dialogDismissible_data() {
+        return [
+            {tag: 'untitled close', title: '', method: 'close'},
+            {tag: 'titled close', title: 'Dialog title', method: 'close'},
+            {tag: 'untitled escape', title: '', method: 'escape'},
+            {tag: 'titled escape', title: 'Dialog title', method: 'escape'},
+            {tag: 'untitled outside', title: '', method: 'outside'},
+            {tag: 'titled outside', title: 'Dialog title', method: 'outside'}
+        ]
+    }
+
+    function attemptDismissal(method, close) {
+        if (method === 'close') mouseClick(close)
+        else if (method === 'escape') keyClick(Qt.Key_Escape)
+        else mouseClick(self, 1, 1)
+    }
+
+    function test_dialogDismissible(row) {
+        const dialog = createTemporaryObject(dialog_component, self, {title: row.title})
+        compare(dialog.dismissible, true)
+        dialog.open()
+        tryCompare(dialog, 'opened', true)
+        const close = findItems(dialog.header, item => item instanceof UiIconButton)[0]
+        dialog.dismissible = false
+        compare(dialog.closePolicy, Controls.Popup.NoAutoClose)
+        verify(!close.visible)
+        verify(!close.enabled)
+        compare(dialog.header.visible, row.title.length > 0)
+        attemptDismissal(row.method, close)
+        verify(dialog.opened)
+        compare(dialog.rejectedCount, 0)
+        dialog.dismissible = true
+        verify(close.visible)
+        verify(close.enabled)
+        attemptDismissal(row.method, close)
+        tryCompare(dialog, 'visible', false)
     }
 
     function test_drawerContentInsets_data() {
