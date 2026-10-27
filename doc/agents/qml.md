@@ -277,7 +277,9 @@ icons first with `colorize: false`, then theme-colored UI icons, using the same
 four-column rows. Search covers both subsections. Tertiary Copy buttons copy
 `Theme.icons` expressions and briefly read Copied after use. Brand rows follow the preview palette, with a small dark logo tile in both
 palettes so the original white logo details stay visible.
-The Components tab includes card, menu, and popup examples; use them to inspect
+The Components tab has a case-insensitive search by component name, including
+partial matches such as `button` or `area`. Clearing search restores all sections.
+It includes card, menu, and popup examples; use them to inspect
 hover, keyboard focus, disabled states, counts, long labels, scrolling, and dismissal.
 
 `UiButton` provides `variant` (`Primary`, `Secondary`, `Tertiary`, `Negative`, `PrimaryInverted`, `SecondaryInverted`) and `size` (`Large`, `Medium`, `Small`, `ExtraSmall`) enums; defaults are `UiButton.Primary` and `UiButton.Medium` (48px). Use `iconName: Theme.icons.check` for a leading icon and `trailingIconName: Theme.icons.copy` for a trailing icon. Both render through UiIcon and follow the button foreground color; empty or unknown names are hidden. `busy` replaces content with a spinner and preserves dimensions and normal variant colors. Use `disabled` (default `false`) for caller-controlled availability. Leave inherited `enabled` untouched so the component's `enabled: !disabled && !busy` binding blocks activation during loading. QML still permits overriding `enabled`, which replaces this binding. Qt handles pointer input, keyboard activation, focus, and shortcuts.
