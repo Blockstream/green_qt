@@ -58,86 +58,25 @@ AbstractDrawer {
         }
     }
 
-    component RetryPage: StackViewPage {
-        required property string heading
-        required property string message
-        id: page
-        leftItem: Item {}
-        rightItem: CloseButton {
-            onClicked: self.abort()
-        }
-        contentItem: ColumnLayout {
-            spacing: 20
-            VSpacer {
-            }
-            MultiImage {
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredHeight: 260
-                Layout.preferredWidth: 320
-                foreground: 'qrc:/png/jade_genuine_1.png'
-                margins: 30
-                Image {
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                    anchors.margins: 40
-                    source: 'qrc:/svg2/fail-light.svg'
-                }
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.topMargin: -10
-                font.capitalization: Font.AllUppercase
-                font.pixelSize: 16
-                font.weight: 600
-                text: self.device?.name ?? ''
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 26
-                font.weight: 600
-                horizontalAlignment: Label.AlignHCenter
-                text: page.heading
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: 0
-                Layout.fillWidth: true
-                Layout.maximumWidth: 400
-                color: '#898989'
-                font.pixelSize: 14
-                font.weight: 400
-                horizontalAlignment: Label.AlignHCenter
-                text: page.message
-                wrapMode: Label.WordWrap
-            }
-            RowLayout {
-                Layout.fillWidth: false
-                Layout.alignment: Qt.AlignCenter
-                spacing: 10
-                PrimaryButton {
-                    Layout.minimumWidth: 160
-                    text: qsTrId('Retry')
-                    onClicked: stack_view.replace(null, check_view, StackView.PushTransition)
-                }
-            }
-            VSpacer {
-            }
-        }
-    }
-
     Component {
         id: cancelled_view
-        RetryPage {
+        JadeGenuineRetryPage {
+            device: self.device
             heading: 'Genuine check canceled'
             message: 'We were unable to complete the authenticity check because it was canceled on Jade.'
+            onCloseClicked: self.abort()
+            onRetryClicked: stack_view.replace(null, check_view, StackView.PushTransition)
         }
     }
 
     Component {
         id: error_view
-        RetryPage {
+        JadeGenuineRetryPage {
+            device: self.device
             heading: 'Unable to complete genuine check'
             message: 'Something went wrong while checking your Jade. This does not mean your device is not genuine, please try again.'
+            onCloseClicked: self.abort()
+            onRetryClicked: stack_view.replace(null, check_view, StackView.PushTransition)
         }
     }
 
