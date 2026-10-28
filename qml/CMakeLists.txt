@@ -248,6 +248,7 @@ set(QML_FILES_FEATURES
     JadeGenuineCheckingPage.qml
     JadeGenuineRetryPage.qml
     JadeGenuineUnsupportedPage.qml
+    JadeGenuineSuccessPage.qml
     PromoCard.qml
     PromosCarousel.qml
     ReceivePage.qml
