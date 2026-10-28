@@ -30,7 +30,6 @@ public:
     bool skip_load_accounts{false};
     bool remember{true};
     bool watchonly{false};
-    bool assets_loaded{false};
     QString xpub_hash_id;
     QJsonObject device_details;
     QJsonObject credentials;

@@ -182,6 +182,7 @@ MainPage {
         }
     }
     StackView.onActivated: side_bar.x = 0
+    Component.onCompleted: AssetManager.start()
 
     AppUpdateController {
         id: update_controller

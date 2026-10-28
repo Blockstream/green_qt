@@ -214,21 +214,6 @@ int ui_handler(Application& app, int argc, char *argv[]) {
 
     QQuickStyle::setStyle("Material");
 
-    HttpManager http_manager;
-    Analytics analytics;
-    AssetManager asset_manager;
-
-    qInfo() << "Register singletons";
-    qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
-    qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());
-    qmlRegisterSingletonInstance<HttpManager>("Blockstream.Green.Core", 0, 1, "HttpManager", HttpManager::instance());
-    qmlRegisterSingletonInstance<NetworkManager>("Blockstream.Green.Core", 0, 1, "NetworkManager", NetworkManager::instance());
-    qmlRegisterSingletonInstance<Settings>("Blockstream.Green.Core", 0, 1, "Settings", Settings::instance());
-    qmlRegisterSingletonInstance<SessionManager>("Blockstream.Green.Core", 0, 1, "SessionManager", SessionManager::instance());
-    qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
-    qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
-    qmlRegisterSingletonInstance<AssetManager>("Blockstream.Green.Core", 0, 1, "AssetManager", AssetManager::instance());
-
     if (g_args.isSet("testnet")) {
         const auto value = g_args.value("testnet");
         Settings::instance()->setEnableTestnet(value.isEmpty() || value == "true" || value == "1");
@@ -247,6 +232,21 @@ int ui_handler(Application& app, int argc, char *argv[]) {
             Settings::instance()->setProxyPort(proxy[1].toInt());
         }
     }
+
+    HttpManager http_manager;
+    Analytics analytics;
+    AssetManager asset_manager;
+
+    qInfo() << "Register singletons";
+    qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
+    qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());
+    qmlRegisterSingletonInstance<HttpManager>("Blockstream.Green.Core", 0, 1, "HttpManager", HttpManager::instance());
+    qmlRegisterSingletonInstance<NetworkManager>("Blockstream.Green.Core", 0, 1, "NetworkManager", NetworkManager::instance());
+    qmlRegisterSingletonInstance<Settings>("Blockstream.Green.Core", 0, 1, "Settings", Settings::instance());
+    qmlRegisterSingletonInstance<SessionManager>("Blockstream.Green.Core", 0, 1, "SessionManager", SessionManager::instance());
+    qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
+    qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
+    qmlRegisterSingletonInstance<AssetManager>("Blockstream.Green.Core", 0, 1, "AssetManager", AssetManager::instance());
 
     qInfo() << "Load wallets";
     wallet_manager.loadWallets();
@@ -328,6 +328,7 @@ int ui_handler(Application& app, int argc, char *argv[]) {
 
     analytics.stop();
     http_manager.stop();
+    asset_manager.stop();
     context_manager.exit();
     session_manager.exit();
 

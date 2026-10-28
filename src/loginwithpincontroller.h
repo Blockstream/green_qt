@@ -70,6 +70,7 @@ signals:
 private:
     void loadPayments(TaskGroup* group);
     void loadSwaps(TaskGroup* group);
+    void refreshUnknownAssets();
 };
 
 class PinDataController : public Controller

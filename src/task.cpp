@@ -1,6 +1,7 @@
 #include "account.h"
 #include "address.h"
 #include "asset.h"
+#include "assetmanager.h"
 #include "config.h"
 #include "context.h"
 #include "device.h"
@@ -100,7 +101,6 @@ class DecodeBCURTaskPrivate : public AuthHandlerTaskPrivate { public: QString pa
 class EncodeBCURTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
 class RSAVerifyTaskPrivate : public AuthHandlerTaskPrivate { public: QJsonObject details; };
 class ConnectTaskPrivate : public SessionTaskPrivate { public: int timeout{0}; };
-class LoadAssetsTaskPrivate : public SessionTaskPrivate { public: bool refresh{false}; };
 class GetSystemMessageTaskPrivate : public SessionTaskPrivate { public: QString message; };
 class HttpRequestTaskPrivate : public SessionTaskPrivate { public: QJsonObject params; QJsonObject response; };
 class LoadPaymentsTaskPrivate : public ContextTaskPrivate { public: QNetworkAccessManager* net{nullptr}; };
@@ -1239,28 +1239,43 @@ void GetWatchOnlyDetailsTask::update()
     waitForFuture(future);
 }
 
-LoadAssetsTask::LoadAssetsTask(bool refresh, Session* session)
-    : SessionTask(new LoadAssetsTaskPrivate, session)
+namespace {
+
+struct AssetEntry
 {
-    Q_D(LoadAssetsTask);
-    d->refresh = refresh;
+    QString id;
+    QJsonObject data;
+    QString icon;
+};
+
+bool ReadAssets(GA_session* session, QList<AssetEntry>& entries)
+{
+    GA_json* output;
+    const auto params = Json::fromObject({{ "category", "all" }});
+    if (GA_get_assets(session, params.get(), &output) != GA_OK) return false;
+    const auto result = Json::toObject(output);
+    GA_destroy_json(output);
+    if (result.contains("error")) return false;
+
+    const auto assets = result.value("assets").toObject();
+    const auto icons = result.value("icons").toObject();
+    entries.clear();
+    for (auto i = assets.begin(); i != assets.end(); ++i) {
+        const auto icon = icons.value(i.key()).toString();
+        entries.append({ i.key(), i.value().toObject(), icon.isEmpty() ? QString() : QStringLiteral("data:image/png;base64,") + icon });
+    }
+    return true;
 }
 
-QString LoadAssetsTask::description() const
+} // namespace
+
+LoadAssetsTask::LoadAssetsTask(Session* session)
+    : SessionTask(session)
 {
-    Q_D(const LoadAssetsTask);
-    return QStringLiteral("%1 refresh=%2").arg(SessionTask::description(), d->refresh ? QStringLiteral("true") : QStringLiteral("false"));
 }
 
 void LoadAssetsTask::update()
 {
-    auto context = session()->context();
-
-    if (!context) {
-        setStatus(Status::Failed);
-        return;
-    }
-
     if (m_status != Status::Ready) return;
 
     if (!session()->network()->isLiquid()) {
@@ -1268,61 +1283,35 @@ void LoadAssetsTask::update()
         return;
     }
 
-    Q_D(LoadAssetsTask);
-
-    if (context->assetsLoaded() && !d->refresh) {
-        setStatus(Status::Finished);
-        return;
-    }
-
     setStatus(Status::Active);
 
-    auto future = QtConcurrent::run([=, this, ga_session = session()->gdkSession()] {
-        if (d->refresh) {
-            const auto params = Json::fromObject({{ "assets", true }, { "icons", true }});
-            const auto rc = GA_refresh_assets(ga_session.get(), params.get());
-            if (rc != GA_OK) return false;
-        }
+    const auto deployment = session()->network()->deployment();
+    auto manager = AssetManager::instance();
+    const auto publish = [=](const QList<AssetEntry>& entries) {
+        QMetaObject::invokeMethod(manager, [=] {
+            for (const auto& entry : entries) {
+                auto asset = manager->assetWithId(deployment, entry.id);
+                asset->setData(entry.data);
+                if (!entry.icon.isEmpty()) asset->setIcon(entry.icon);
+            }
+        }, Qt::QueuedConnection);
+    };
 
-        GA_json* output;
+    auto future = QtConcurrent::run([=, ga_session = session()->gdkSession()] {
+        QList<AssetEntry> entries;
+        // Cached registry first so assets show up before the refresh completes.
+        if (!ReadAssets(ga_session.get(), entries)) return false;
+        publish(entries);
 
-        {
-            const auto params = Json::fromObject({{ "category", "all" }});
-            const auto err = GA_get_assets(ga_session.get(), params.get(), &output);
-            if (err != GA_OK) return false;
-        }
-
-        const auto result = Json::toObject(output);
-        const auto assets = result.value("assets").toObject();
-        const auto icons = result.value("icons").toObject();
-        for (auto i = assets.begin(); i != assets.end(); i++) {
-            const auto asset_id = i.key();
-            const auto data = i.value().toObject();
-            const auto icon = icons.value(asset_id);
-            QMetaObject::invokeMethod(session(), [=, this] {
-                auto context = session()->context();
-                if (!context) return;
-                auto asset = context->getOrCreateAsset(asset_id);
-                asset->setData(data);
-                if (!icon.isNull() && !icon.toString().isEmpty()) {
-                    asset->setIcon(QString("data:image/png;base64,") + icon.toString());
-                }
-            }, Qt::QueuedConnection);
-        }
-        GA_destroy_json((GA_json*) output);
-
+        const auto params = Json::fromObject({{ "assets", true }, { "icons", true }});
+        if (GA_refresh_assets(ga_session.get(), params.get()) != GA_OK) return false;
+        if (!ReadAssets(ga_session.get(), entries)) return false;
+        publish(entries);
         return true;
     });
 
     future.then(this, [=, this](bool ok) {
-        if (ok) {
-            if (session() && session()->context()) {
-                session()->context()->setAssetsLoaded();
-            }
-            setStatus(Status::Finished);
-        } else {
-            setStatus(Status::Failed);
-        }
+        setStatus(ok ? Status::Finished : Status::Failed);
     });
 
     waitForFuture(future);

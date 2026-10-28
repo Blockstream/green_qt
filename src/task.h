@@ -511,17 +511,13 @@ private:
     void handleDone(const QJsonObject& result) override;
 };
 
-class LoadAssetsTaskPrivate;
-
 class LoadAssetsTask : public SessionTask
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(LoadAssetsTask)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    LoadAssetsTask(bool refresh, Session* session);
-    QString description() const override;
+    LoadAssetsTask(Session* session);
 private:
     void update() override;
 };

@@ -141,9 +141,6 @@ public:
     LightningSession* lightningSession();
     QJsonObject lightningNodeInfo() const;
 
-    bool assetsLoaded() const;
-    void setAssetsLoaded();
-
     QList<Notification*> getNotifications() const;
     QQmlListProperty<Notification> notifications();
     void addNotification(Notification* notification);

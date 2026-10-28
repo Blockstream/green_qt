@@ -39,31 +39,6 @@
 #include <QUrl>
 #include <QtConcurrentRun>
 
-namespace {
-void UpdateAsset(GA_session* session, Asset* asset)
-{
-    const auto id = asset->id();
-
-    auto params = Json::fromObject({{ "assets_id", QJsonArray{id} }});
-    GA_json* output;
-
-    const auto err = GA_get_assets(session, params.get(), &output);
-    Q_ASSERT(err == GA_OK);
-
-    const auto result = Json::toObject(output);
-    const auto data = result.value("assets").toObject().value(id);
-    if (!data.isNull()) {
-      asset->setData(data.toObject());
-    }
-    const auto icon = result.value("icons").toObject().value(id);
-    if (!icon.isNull()) {
-        asset->setIcon(QString("data:image/png;base64,") + icon.toString());
-    }
-    GA_destroy_json(output);
-}
-
-}
-
 void fetchCoins(TaskGroup* group, Account* account);
 void fetchTransactions(TaskGroup* group, Account* account);
 void fetchTransactions(TaskGroup* group, Account* account, int page, int size);
@@ -248,7 +223,7 @@ Session* Context::getOrCreateSession(Network* network)
                         const auto satoshi = transaction->data().value("satoshi").toObject();
                         for (auto i = satoshi.begin(); i != satoshi.end(); ++i) {
                             if (!getOrCreateAsset(i.key())->hasData()) {
-                                dispatcher()->add(new LoadAssetsTask(true, session));
+                                AssetManager::instance()->refreshIfStale(d->deployment);
                                 return;
                             }
                         }
@@ -662,18 +637,6 @@ QJsonObject Context::lightningNodeInfo() const
     return d->lightning_session ? d->lightning_session->nodeInfo() : QJsonObject{};
 }
 
-bool Context::assetsLoaded() const
-{
-    Q_D(const Context);
-    return d->assets_loaded;
-}
-
-void Context::setAssetsLoaded()
-{
-    Q_D(Context);
-    d->assets_loaded = true;
-}
-
 bool Context::lightningEnabled() const
 {
     Q_D(const Context);
@@ -908,9 +871,6 @@ void Context::loadNetwork(TaskGroup *group, Network *network)
         Q_UNREACHABLE();
         return;
     }
-    if (isWatchonly() && session->network()->isLiquid()) {
-        group->add(new LoadAssetsTask(false, session));
-    }
     group->add(new GetWatchOnlyDetailsTask(session));
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
@@ -999,10 +959,7 @@ void Context::loginNetwork(TaskGroup *group, Network *network)
         login = new LoginTask(d->credentials, {}, session);
     }
 
-    auto load_assets = new LoadAssetsTask(false, session);
-    connect_session->then(load_assets);
-    load_assets->then(login);
-    group->add(load_assets);
+    connect_session->then(login);
 
     connect(connect_session, &Task::failed, this, [=, this](const QString& error) {
         if (error == "timeout error") {
@@ -1049,13 +1006,10 @@ void Context::refresh()
 {
     Q_D(Context);
 
-    LoadAssetsTask* load_assets{nullptr};
+    AssetManager::instance()->refresh(d->deployment);
+
     auto group = new TaskGroup(this);
     for (auto session : d->sessions_list) {
-        if (session->network()->isLiquid() && !load_assets) {
-            load_assets = new LoadAssetsTask(true, session);
-            group->add(load_assets);
-        }
         auto load_accounts = new LoadAccountsTask(!isWatchonly(), session);
         connect(load_accounts, &Task::finished, this, [=, this] {
             for (auto account : load_accounts->accounts()) {
