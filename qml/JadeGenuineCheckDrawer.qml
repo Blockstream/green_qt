@@ -10,11 +10,6 @@ AbstractDrawer {
     signal abort()
     required property bool autoCheck
     required property JadeDevice device
-    function openSupport() {
-        const version = Qt.application.version
-        const url = `https://help.blockstream.com/hc/en-us/requests/new?tf_900008231623=${platform}&tf_subject=Genuine Check&&tf_900003758323=blockstream_jade&tf_900006375926=jade&tf_900009625166=${version}`
-        Qt.openUrlExternally(url);
-    }
     onClosed: self.destroy()
     id: self
     edge: Qt.RightEdge
@@ -23,16 +18,16 @@ AbstractDrawer {
         id: controller
         device: self.device
         onSuccess: stack_view.push(success_view)
-        onNotGenuine: stack_view.replace(null, not_genuine_view, StackView.PushTransition)
+        onNotGenuine: stack_view.replace(null, unsupported_page, StackView.PushTransition)
         onFailed: stack_view.replace(null, error_view, StackView.PushTransition)
-        onUnsupported: stack_view.replace(null, not_genuine_view, StackView.PushTransition)
+        onUnsupported: stack_view.replace(null, unsupported_page, StackView.PushTransition)
         onCancelled: stack_view.replace(null, cancelled_view, StackView.PushTransition)
         onDisconnected: self.abort()
     }
     contentItem: GStackView {
         id: stack_view
         initialItem: {
-            if (!self.device.secureBoot) return not_genuine_view
+            if (!self.device.secureBoot) return unsupported_page
             return self.autoCheck ? check_view : initial_view
         }
     }
@@ -147,72 +142,11 @@ AbstractDrawer {
     }
 
     Component {
-        id: not_genuine_view
-        StackViewPage {
-            readonly property bool diy: !self.device.secureBoot
-            id: page
-            leftItem: Item {}
-            rightItem: CloseButton {
-                onClicked: self.abort()
-            }
-            contentItem: ColumnLayout {
-                spacing: 20
-                VSpacer {
-                }
-                Image {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.preferredHeight: 260
-                    Layout.preferredWidth: 320
-                    source: 'qrc:/png/jade_genuine_1.png'
-                }
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.topMargin: -10
-                    font.capitalization: Font.AllUppercase
-                    font.pixelSize: 16
-                    font.weight: 600
-                    text: self.device?.name ?? ''
-                }
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    font.pixelSize: 26
-                    font.weight: 600
-                    horizontalAlignment: Label.AlignHCenter
-                    text: 'This Jade is not genuine'
-                }
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.preferredWidth: 0
-                    Layout.fillWidth: true
-                    Layout.maximumWidth: 400
-                    color: '#898989'
-                    font.pixelSize: 14
-                    font.weight: 400
-                    horizontalAlignment: Label.AlignHCenter
-                    text: page.diy
-                        ? 'This device was not manufactured by Blockstream. It could be DIY hardware or possibly a malicious clone. Please contact support for more assistance.'
-                        : 'This device was not manufactured by Blockstream and could be a malicious clone. Please contact support for more assistance.'
-                    wrapMode: Label.WordWrap
-                }
-                RowLayout {
-                    Layout.fillWidth: false
-                    Layout.alignment: Qt.AlignCenter
-                    spacing: 10
-                    PrimaryButton {
-                        Layout.minimumWidth: 160
-                        text: 'Contact Support'
-                        onClicked: self.openSupport()
-                    }
-                    RegularButton {
-                        Layout.minimumWidth: 160
-                        text: 'Continue as DIY'
-                        visible: page.diy
-                        onClicked: self.diy()
-                    }
-                }
-                VSpacer {
-                }
-            }
+        id: unsupported_page
+        JadeGenuineUnsupportedPage {
+            device: self.device
+            onCloseClicked: self.abort()
+            onDiyClicked: self.diy()
         }
     }
 

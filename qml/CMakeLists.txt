@@ -246,6 +246,7 @@ set(QML_FILES_FEATURES
     JadeGenuineCheckDrawer.qml
     JadeGenuineCheckPage.qml
     JadeGenuineCheckingPage.qml
+    JadeGenuineUnsupportedPage.qml
     PromoCard.qml
     PromosCarousel.qml
     ReceivePage.qml
