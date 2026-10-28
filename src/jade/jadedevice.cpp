@@ -767,6 +767,11 @@ bool JadeDevice::updateRequired() const
     return QVersionNumber::fromString(version()) < JADE_MIN_ALLOWED_FW_VERSION;
 }
 
+bool JadeDevice::secureBoot() const
+{
+    return m_version_info.value("JADE_FEATURES").toStringList().contains("SB");
+}
+
 QString JadeDevice::version() const
 {
     return m_version_info.value("JADE_VERSION").toString();

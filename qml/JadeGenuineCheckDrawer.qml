@@ -11,6 +11,14 @@ AbstractDrawer {
     signal abort()
     required property bool autoCheck
     required property JadeDevice device
+    property bool mandatory: false
+    function dismiss() {
+        if (self.mandatory) {
+            self.abort()
+        } else {
+            self.skip()
+        }
+    }
     function openSupport() {
         const version = Qt.application.version
         const url = `https://help.blockstream.com/hc/en-us/requests/new?tf_900008231623=${platform}&tf_subject=Genuine Check&&tf_900003758323=blockstream_jade&tf_900006375926=jade&tf_900009625166=${version}`
@@ -24,15 +32,18 @@ AbstractDrawer {
         id: controller
         device: self.device
         onSuccess: stack_view.push(success_view)
-        onNotGenuine: stack_view.replace(null, diy_view, StackView.PushTransition)
+        onNotGenuine: stack_view.replace(null, not_genuine_view, StackView.PushTransition)
         onFailed: stack_view.replace(null, error_view, StackView.PushTransition)
-        onUnsupported: stack_view.replace(null, diy_view, StackView.PushTransition)
+        onUnsupported: stack_view.replace(null, not_genuine_view, StackView.PushTransition)
         onCancelled: stack_view.replace(null, cancelled_view, StackView.PushTransition)
         onDisconnected: self.abort()
     }
     contentItem: GStackView {
         id: stack_view
-        initialItem: self.autoCheck ? check_view : initial_view
+        initialItem: {
+            if (!self.device.secureBoot) return not_genuine_view
+            return self.autoCheck ? check_view : initial_view
+        }
     }
     Component {
         id: initial_view
@@ -40,10 +51,10 @@ AbstractDrawer {
             device: self.device
             leftItem: Item {}
             rightItem: CloseButton {
-                onClicked: self.skip()
+                onClicked: self.dismiss()
             }
             onStart: stack_view.replace(null, check_view, StackView.PushTransition)
-            onClose: self.skip()
+            onClose: self.dismiss()
         }
     }
 
@@ -53,7 +64,7 @@ AbstractDrawer {
             device: self.device
             leftItem: Item {}
             rightItem: CloseButton {
-                onClicked: self.skip()
+                onClicked: self.dismiss()
             }
             StackView.onActivated: {
                 controller.genuineCheck()
@@ -67,7 +78,7 @@ AbstractDrawer {
         id: page
         leftItem: Item {}
         rightItem: CloseButton {
-            onClicked: self.skip()
+            onClicked: self.dismiss()
         }
         contentItem: ColumnLayout {
             spacing: 20
@@ -120,6 +131,7 @@ AbstractDrawer {
                 RegularButton {
                     Layout.minimumWidth: 160
                     text: qsTrId('id_skip')
+                    visible: !self.mandatory
                     onClicked: self.skip()
                 }
                 PrimaryButton {
@@ -150,8 +162,10 @@ AbstractDrawer {
     }
 
     Component {
-        id: diy_view
+        id: not_genuine_view
         StackViewPage {
+            readonly property bool diy: !self.device.secureBoot
+            id: page
             leftItem: Item {}
             rightItem: CloseButton {
                 onClicked: self.abort()
@@ -190,7 +204,9 @@ AbstractDrawer {
                     font.pixelSize: 14
                     font.weight: 400
                     horizontalAlignment: Label.AlignHCenter
-                    text: 'This device was not manufactured by Blockstream. It could be DIY hardware or possibly a malicious clone. Please contact support for more assistance.'
+                    text: page.diy
+                        ? 'This device was not manufactured by Blockstream. It could be DIY hardware or possibly a malicious clone. Please contact support for more assistance.'
+                        : 'This device was not manufactured by Blockstream and could be a malicious clone. Please contact support for more assistance.'
                     wrapMode: Label.WordWrap
                 }
                 RowLayout {
@@ -205,6 +221,7 @@ AbstractDrawer {
                     RegularButton {
                         Layout.minimumWidth: 160
                         text: 'Continue as DIY'
+                        visible: page.diy
                         onClicked: self.diy()
                     }
                 }

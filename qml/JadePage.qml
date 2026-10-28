@@ -102,7 +102,9 @@ StackViewPage {
                 const check_genuine = Settings.isEventRegistered(UtilJS.jadeGenuineCheckEvent(efusemac, 'genuine'))
                 const check_diy = Settings.isEventRegistered(UtilJS.jadeGenuineCheckEvent(efusemac, 'diy'))
                 const check_skip = Settings.isEventRegistered(UtilJS.jadeGenuineCheckEvent(efusemac, 'skip'))
-                if (!check_genuine && !check_diy && !check_skip) {
+                // A unit reporting secure boot must pass the check, an earlier skip or DIY choice doesn't count
+                const checked = self.device.secureBoot ? check_genuine : check_genuine || check_diy || check_skip
+                if (!checked) {
                     self.openGenuineCheckDialog()
                     return
                 }
@@ -220,6 +222,7 @@ StackViewPage {
         JadeGenuineCheckDrawer {
             id: drawer
             autoCheck: false
+            mandatory: true
             onGenuine: {
                 self.registerEvent('genuine')
                 drawer.close()

@@ -15,6 +15,7 @@ class JadeDevice : public Device
     Q_PROPERTY(QVariantMap versionInfo READ versionInfo NOTIFY versionInfoChanged)
     Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
     Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
+    Q_PROPERTY(bool secureBoot READ secureBoot NOTIFY versionInfoChanged)
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(bool unlocking READ unlocking NOTIFY unlockingChanged)
@@ -59,6 +60,7 @@ public:
     QVariantMap versionInfo() const;
     QVersionNumber minimumRequiredVersion() const;
     bool updateRequired() const;
+    bool secureBoot() const;
     QString version() const;
     QString systemLocation() const { return m_system_location; }
     void setSystemLocation(const QString& system_location);
