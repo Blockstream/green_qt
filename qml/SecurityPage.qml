@@ -614,13 +614,6 @@ Page {
                 }
                 drawer.close()
             }
-            onSkip: {
-                if (Settings.rememberDevices && drawer.device) {
-                    const efusemac = drawer.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'skip'))
-                }
-                drawer.close()
-            }
             onAbort: {
                 drawer.close()
             }

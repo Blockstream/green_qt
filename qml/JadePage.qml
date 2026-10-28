@@ -222,17 +222,12 @@ StackViewPage {
         JadeGenuineCheckDrawer {
             id: drawer
             autoCheck: false
-            mandatory: true
             onGenuine: {
                 self.registerEvent('genuine')
                 drawer.close()
             }
             onDiy: {
                 self.registerEvent('diy')
-                drawer.close()
-            }
-            onSkip: {
-                self.registerEvent('skip')
                 drawer.close()
             }
             onAbort: {

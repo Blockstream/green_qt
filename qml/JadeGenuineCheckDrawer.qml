@@ -7,18 +7,9 @@ import QtQuick.Layouts
 AbstractDrawer {
     signal genuine()
     signal diy()
-    signal skip()
     signal abort()
     required property bool autoCheck
     required property JadeDevice device
-    property bool mandatory: false
-    function dismiss() {
-        if (self.mandatory) {
-            self.abort()
-        } else {
-            self.skip()
-        }
-    }
     function openSupport() {
         const version = Qt.application.version
         const url = `https://help.blockstream.com/hc/en-us/requests/new?tf_900008231623=${platform}&tf_subject=Genuine Check&&tf_900003758323=blockstream_jade&tf_900006375926=jade&tf_900009625166=${version}`
@@ -51,10 +42,10 @@ AbstractDrawer {
             device: self.device
             leftItem: Item {}
             rightItem: CloseButton {
-                onClicked: self.dismiss()
+                onClicked: self.abort()
             }
             onStart: stack_view.replace(null, check_view, StackView.PushTransition)
-            onClose: self.dismiss()
+            onClose: self.abort()
         }
     }
 
@@ -64,7 +55,7 @@ AbstractDrawer {
             device: self.device
             leftItem: Item {}
             rightItem: CloseButton {
-                onClicked: self.dismiss()
+                onClicked: self.abort()
             }
             StackView.onActivated: {
                 controller.genuineCheck()
@@ -78,7 +69,7 @@ AbstractDrawer {
         id: page
         leftItem: Item {}
         rightItem: CloseButton {
-            onClicked: self.dismiss()
+            onClicked: self.abort()
         }
         contentItem: ColumnLayout {
             spacing: 20
@@ -128,12 +119,6 @@ AbstractDrawer {
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignCenter
                 spacing: 10
-                RegularButton {
-                    Layout.minimumWidth: 160
-                    text: qsTrId('id_skip')
-                    visible: !self.mandatory
-                    onClicked: self.skip()
-                }
                 PrimaryButton {
                     Layout.minimumWidth: 160
                     text: qsTrId('Retry')
