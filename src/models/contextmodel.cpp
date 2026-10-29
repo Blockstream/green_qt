@@ -17,6 +17,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QTextStream>
+#include <QTimeZone>
 #include <QUrl>
 
 #include <algorithm>
@@ -185,10 +186,14 @@ void TransactionModel::exportToFile()
         const auto currency = session->network()->isMainnet() ? pricing.value("currency").toString() : "FIAT";
         const auto exchange = pricing.value("exchange").toString();
         const auto unit = session->unit().toLower().replace("µbtc", "ubtc");
+        const int offset = datetime.offsetFromUtc() / 60;
+        const auto utc_offset = QString("%1%2:%3").arg(offset < 0 ? "-" : "+")
+            .arg(qAbs(offset) / 60, 2, 10, QChar('0'))
+            .arg(qAbs(offset) % 60, 2, 10, QChar('0'));
 
         QString fee_field = QString("fee (%1)").arg(display_unit);
-        QString fiat_field = QString("fiat (%1 %2 %3)").arg(currency, exchange, datetime.toString(Qt::ISODate));
-        QStringList fields = QStringList{"time", "network", "account", "description", "amount", "unit", fee_field, fiat_field, "txhash", "memo"};
+        QString fiat_field = QString("fiat (%1 %2 %3)").arg(currency, exchange, datetime.toUTC().toString(Qt::ISODate));
+        QStringList fields = QStringList{"time", "utc_offset", "network", "account", "account_id", "description", "amount", "unit", "asset_id", fee_field, fiat_field, "txhash", "memo"};
         QStringList lines;
         QString separator{","};
 
@@ -213,10 +218,15 @@ void TransactionModel::exportToFile()
                     } else if (field == "account") {
                         auto name = transaction->account()->name();
                         values.append(name.isEmpty() ? qtTrId("id_main_account") : name);
+                    } else if (field == "account_id") {
+                        const auto account = transaction->account();
+                        values.append(QString("%1-%2-%3").arg(network->key(), account->type()).arg(account->pointer()));
                     } else if (field == "time") {
                         const auto created_at_ts = data.value("created_at_ts").toDouble();
-                        const auto created_at = QDateTime::fromMSecsSinceEpoch(created_at_ts / 1000);
+                        const auto created_at = QDateTime::fromMSecsSinceEpoch(created_at_ts / 1000, QTimeZone::UTC);
                         values.append(created_at.toString(Qt::ISODate));
+                    } else if (field == "utc_offset") {
+                        values.append(utc_offset);
                     } else if (field == "description") {
                         values.append(data.value("type").toString());
                     } else if (field == "amount") {
@@ -235,6 +245,8 @@ void TransactionModel::exportToFile()
                         } else {
                             values.append(display_unit);
                         }
+                    } else if (field == "asset_id") {
+                        values.append(network->isLiquid() ? i.key() : QString());
                     } else if (field == fee_field) {
                         if (data.value("type").toString() == "outgoing") {
                             const double fee = data.value("fee").toInt();
