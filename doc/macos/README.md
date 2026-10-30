@@ -68,7 +68,7 @@ Pick the target architecture:
 
   Use a universal (or x86_64) Qt install. Install the Rust target with
   `rustup target add x86_64-apple-darwin` (and for lwk’s pinned toolchain,
-  `--toolchain 1.85.0-aarch64-apple-darwin` as well).
+  `--toolchain 1.91.0-aarch64-apple-darwin` as well).
 
 ### Install Qt 6.11 (Qt online installer)
 

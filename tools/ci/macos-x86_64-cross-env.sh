@@ -27,7 +27,7 @@ export LDFLAGS="${ARCH_FLAGS}"
 # Ensure Rust can cross-compile crates used by lwk / glsdk / GDK.
 if command -v rustup >/dev/null 2>&1; then
     rustup target add x86_64-apple-darwin >/dev/null
-    if rustup toolchain list 2>/dev/null | grep -q '^1.85.0-aarch64-apple-darwin'; then
-        rustup target add x86_64-apple-darwin --toolchain 1.85.0-aarch64-apple-darwin >/dev/null
+    if rustup toolchain list 2>/dev/null | grep -q '^1.91.0-aarch64-apple-darwin'; then
+        rustup target add x86_64-apple-darwin --toolchain 1.91.0-aarch64-apple-darwin >/dev/null
     fi
 fi

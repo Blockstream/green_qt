@@ -10,7 +10,7 @@ apt-get install --no-install-recommends --no-install-suggests -yqq clang-12 libc
 
 curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.88.0
 source /root/.cargo/env
-rustup toolchain install 1.85.0-x86_64-unknown-linux-gnu
+rustup toolchain install 1.91.0-x86_64-unknown-linux-gnu
 rustup toolchain install 1.88.0-x86_64-unknown-linux-gnu
 rustup default 1.88.0-x86_64-unknown-linux-gnu
 

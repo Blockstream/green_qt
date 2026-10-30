@@ -93,22 +93,22 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_amp2_descriptor_from_str() != 47737) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_amp2_elip153_from_signer() != 1406) {
+    if (uniffi_lwk_checksum_method_amp2_elip153_from_external_signer() != 30760) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_amp2_elip153_from_str() != 43116) {
+    if (uniffi_lwk_checksum_method_amp2_elip153_from_signer() != 59080) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_amp2_elip153_user_path() != 17407) {
+    if (uniffi_lwk_checksum_method_amp2_elip153_user_path() != 29071) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_amp2_elip153_view_path() != 63960) {
+    if (uniffi_lwk_checksum_method_amp2_elip153_view_path() != 60413) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_amp2_register_wallet() != 64376) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_amp2descriptor_descriptor() != 61502) {
+    if (uniffi_lwk_checksum_method_amp2descriptor_descriptor() != 28560) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_assetamount_amount() != 49734) {
@@ -339,6 +339,15 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_derivationpath_to_vec() != 25747) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_descriptorpublickey_derivation_path() != 30408) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_descriptorpublickey_fingerprint() != 55003) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_descriptorpublickey_xpub() != 29683) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_electrumclient_broadcast() != 47006) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -351,7 +360,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_electrumclient_get_tx() != 33161) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_electrumclient_has_txs() != 53069) {
+    if (uniffi_lwk_checksum_method_electrumclient_has_txs() != 47355) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_electrumclient_ping() != 58048) {
@@ -369,7 +378,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_esploraclient_full_scan_to_index() != 5341) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_esploraclient_has_txs() != 53120) {
+    if (uniffi_lwk_checksum_method_esploraclient_has_txs() != 4834) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_esploraclient_tip() != 31289) {
@@ -465,7 +474,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_issuancerequest_contract() != 29893) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_issuancerequest_pin_input() != 8104) {
+    if (uniffi_lwk_checksum_method_issuancerequest_pin_input() != 39502) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_lightningpayment_bolt11_invoice() != 47603) {
@@ -543,48 +552,6 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_logging_log() != 50033) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_lwktestenv_amp2_url() != 23056) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_electrum_url() != 44900) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_esplora_url() != 37949) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_generate() != 57601) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_genesis_block_hash() != 32389) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_get_new_address() != 18169) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_height() != 19939) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_issue_asset() != 64492) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_network() != 45785) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_send_to_address() != 578) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwktestenv_waterfalls_url() != 39201) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwkteststore_read() != 60137) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwkteststore_remove() != 61117) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_lwkteststore_write() != 36350) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
     if (uniffi_lwk_checksum_method_mnemonic_word_count() != 61849) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -616,6 +583,33 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_outpoint_vout() != 28332) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_asset() != 42838) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_derivation_path() != 19263) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_is_fee() != 10459) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_is_fully_confidential() != 40228) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_is_fully_explicit() != 47050) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_is_owned() != 34815) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_satoshi() != 13501) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_script_pubkey() != 21061) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_outputdetails_vout() != 11256) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_payment_bip21() != 43062) {
@@ -756,13 +750,19 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_psetdetails_balance() != 59666) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_psetdetails_fingerprints_has() != 6688) {
+    if (uniffi_lwk_checksum_method_psetdetails_fingerprints_has() != 51634) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_psetdetails_fingerprints_missing() != 9065) {
+    if (uniffi_lwk_checksum_method_psetdetails_fingerprints_missing() != 49280) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_psetdetails_has_non_default_sighash() != 50087) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_psetdetails_inputs_issuances() != 33153) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_psetdetails_outputs() != 3112) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_psetdetails_signatures() != 7984) {
@@ -837,7 +837,10 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_reissuancerequest_add_asset_output() != 9922) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_reissuancerequest_issuance_tx() != 62641) {
+    if (uniffi_lwk_checksum_method_reissuancerequest_issuance_tx() != 60162) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_reissuancerequest_pin_input() != 5211) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_script_bytes() != 57904) {
@@ -873,13 +876,13 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_signer_derive_bip85_mnemonic() != 32162) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_signer_derive_xpub() != 26077) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_signer_fingerprint() != 51686) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_signer_keyorigin_xpub() != 48213) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_method_signer_keyorigin_xpub_from_path() != 46810) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_signer_mnemonic() != 41786) {
@@ -892,6 +895,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_signer_slip77_master_blinding_key() != 6040) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_signer_ss_desc() != 53820) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_signer_wpkh_slip77_descriptor() != 50399) {
@@ -946,6 +952,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_add_reissuance() != 26747) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_txbuilder_allow_high_fee_rate() != 58527) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_txbuilder_drain_lbtc_to() != 34381) {
@@ -1038,7 +1047,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_txid_to_bytes() != 51573) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_unvalidatedliquidexproposal_insecure_validate() != 45940) {
+    if (uniffi_lwk_checksum_method_unvalidatedliquidexproposal_insecure_validate() != 47708) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_unvalidatedliquidexproposal_needed_tx() != 38170) {
@@ -1122,13 +1131,22 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_waterfallsclient_full_scan_to_index() != 12641) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_waterfallsclient_has_txs() != 30365) {
+    if (uniffi_lwk_checksum_method_waterfallsclient_has_txs() != 12000) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_waterfallsclient_subscribe() != 62222) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_lwk_checksum_method_waterfallsclient_subscribe_reconnecting() != 63165) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_lwk_checksum_method_waterfallsclient_tip() != 38774) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_waterfallsreconnectingsubscription_close_subscription() != 35456) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_waterfallsreconnectingsubscription_next_update() != 54672) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_waterfallssubscription_close_subscription() != 52559) {
@@ -1140,7 +1158,7 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_method_wollet_add_details() != 42615) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_method_wollet_address() != 64900) {
+    if (uniffi_lwk_checksum_method_wollet_address() != 53597) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_wollet_apply_transaction() != 55817) {
@@ -1174,6 +1192,9 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_wollet_pset_details() != 3928) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_method_wollet_set_amp0_last_index() != 60764) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_method_wollet_transaction() != 42318) {
@@ -1305,13 +1326,16 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_customelementsnetworkbuilder_new() != 38068) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_constructor_derivationpath_from_account() != 35229) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
     if (uniffi_lwk_checksum_constructor_derivationpath_from_vec() != 4058) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_derivationpath_new() != 44555) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_derivationpath_ss_path() != 49644) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
+    if (uniffi_lwk_checksum_constructor_descriptorpublickey_new() != 4499) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_electrumclient_from_builder() != 14213) {
@@ -1351,15 +1375,6 @@ void ensure_initialized() {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_logginglink_new() != 31235) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_constructor_lwktestenv_new() != 2775) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_constructor_lwktestenv_new_with_amp2() != 20610) {
-        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
-    }
-    if (uniffi_lwk_checksum_constructor_lwkteststore_new() != 48161) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
     if (uniffi_lwk_checksum_constructor_mnemonic_from_entropy() != 36360) {
@@ -1497,10 +1512,10 @@ void ensure_initialized() {
     if (uniffi_lwk_checksum_constructor_wolletbuilder_new() != 41459) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_constructor_wolletdescriptor_from_xpub() != 10212) {
+    if (uniffi_lwk_checksum_constructor_wolletdescriptor_new() != 61281) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
-    if (uniffi_lwk_checksum_constructor_wolletdescriptor_new() != 61281) {
+    if (uniffi_lwk_checksum_constructor_wolletdescriptor_ss_desc_from_external_signer() != 27449) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
 
@@ -2348,33 +2363,33 @@ std::shared_ptr<Amp2Descriptor> Amp2::descriptor_from_str(const std::string &key
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterString::lower(keyorigin_xpub), uniffi::FfiConverterString::lower(descriptor_blinding_key)));
 }
-std::shared_ptr<Amp2Descriptor> Amp2::elip153_from_signer(const std::shared_ptr<Signer> &signer, uint32_t account) {
+std::shared_ptr<Amp2Descriptor> Amp2::elip153_from_external_signer(uint32_t account_num, const std::shared_ptr<DescriptorPublicKey> &user_key, const std::shared_ptr<DescriptorPublicKey> &view_key) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterAmp2Descriptor::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_amp2_elip153_from_external_signer,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterUInt32::lower(account_num), uniffi::FfiConverterDescriptorPublicKey::lower(user_key), uniffi::FfiConverterDescriptorPublicKey::lower(view_key)));
+}
+std::shared_ptr<Amp2Descriptor> Amp2::elip153_from_signer(const std::shared_ptr<Signer> &signer, uint32_t account_num) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterAmp2Descriptor::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_amp2_elip153_from_signer,
         uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterSigner::lower(signer), uniffi::FfiConverterUInt32::lower(account)));
+        ptr, uniffi::FfiConverterSigner::lower(signer), uniffi::FfiConverterUInt32::lower(account_num)));
 }
-std::shared_ptr<Amp2Descriptor> Amp2::elip153_from_str(const std::string &user_keyorigin_xpub, const std::string &view_keyorigin_xpub) {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterAmp2Descriptor::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_amp2_elip153_from_str,
-        uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterString::lower(user_keyorigin_xpub), uniffi::FfiConverterString::lower(view_keyorigin_xpub)));
-}
-std::shared_ptr<DerivationPath> Amp2::elip153_user_path(uint32_t account) {
+std::shared_ptr<DerivationPath> Amp2::elip153_user_path(uint32_t account_num) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterDerivationPath::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_amp2_elip153_user_path,
         uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterUInt32::lower(account)));
+        ptr, uniffi::FfiConverterUInt32::lower(account_num)));
 }
-std::shared_ptr<DerivationPath> Amp2::elip153_view_path(uint32_t account) {
+std::shared_ptr<DerivationPath> Amp2::elip153_view_path(uint32_t account_num) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterDerivationPath::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_amp2_elip153_view_path,
         uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterUInt32::lower(account)));
+        ptr, uniffi::FfiConverterUInt32::lower(account_num)));
 }
 std::string Amp2::register_wallet(const std::shared_ptr<Amp2Descriptor> &desc) {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -3594,16 +3609,16 @@ std::shared_ptr<DerivationPath> DerivationPath::init(const std::string &path) {
     );
 }
 
-std::shared_ptr<DerivationPath> DerivationPath::from_account(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num) {
-    return std::shared_ptr<DerivationPath>(new DerivationPath(uniffi::rust_call(
-        uniffi_lwk_fn_constructor_derivationpath_from_account,
-        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterNetwork::lower(network), uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num))));
-}
-
 std::shared_ptr<DerivationPath> DerivationPath::from_vec(const std::vector<uint32_t> &path) {
     return std::shared_ptr<DerivationPath>(new DerivationPath(uniffi::rust_call(
         uniffi_lwk_fn_constructor_derivationpath_from_vec,
         nullptr, uniffi::FfiConverterSequenceUInt32::lower(path))));
+}
+
+std::shared_ptr<DerivationPath> DerivationPath::ss_path(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num) {
+    return std::shared_ptr<DerivationPath>(new DerivationPath(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_derivationpath_ss_path,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterNetwork::lower(network), uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num))));
 }
 
 std::vector<uint32_t> DerivationPath::to_vec() {
@@ -3633,6 +3648,74 @@ void *DerivationPath::_uniffi_internal_clone_pointer() const {
 std::string DerivationPath::to_string() const {
     return uniffi::FfiConverterString::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_derivationpath_uniffi_trait_display,
+        nullptr,
+        this->_uniffi_internal_clone_pointer()));
+}
+
+
+
+
+
+DescriptorPublicKey::DescriptorPublicKey(void *ptr): instance(ptr) {}
+
+DescriptorPublicKey::DescriptorPublicKey(const DescriptorPublicKey &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+std::shared_ptr<DescriptorPublicKey> DescriptorPublicKey::init(const std::string &s) {
+    return std::shared_ptr<DescriptorPublicKey>(
+        new DescriptorPublicKey(uniffi::rust_call(
+        uniffi_lwk_fn_constructor_descriptorpublickey_new,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterString::lower(s)))
+    );
+}
+
+std::shared_ptr<DerivationPath> DescriptorPublicKey::derivation_path() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalDerivationPath::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_descriptorpublickey_derivation_path,
+        nullptr,
+        ptr));
+}
+std::optional<std::string> DescriptorPublicKey::fingerprint() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_descriptorpublickey_fingerprint,
+        nullptr,
+        ptr));
+}
+std::optional<std::string> DescriptorPublicKey::xpub() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_descriptorpublickey_xpub,
+        nullptr,
+        ptr));
+}
+
+DescriptorPublicKey::~DescriptorPublicKey() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_descriptorpublickey,
+        nullptr,
+        this->instance
+    );
+}
+
+void *DescriptorPublicKey::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_descriptorpublickey,
+        nullptr,
+        this->instance
+    );
+}
+
+std::string DescriptorPublicKey::to_string() const {
+    return uniffi::FfiConverterString::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_descriptorpublickey_uniffi_trait_display,
         nullptr,
         this->_uniffi_internal_clone_pointer()));
 }
@@ -4712,188 +4795,6 @@ void *LoggingLink::_uniffi_internal_clone_pointer() const {
 
 
 
-LwkTestEnv::LwkTestEnv(void *ptr): instance(ptr) {}
-
-LwkTestEnv::LwkTestEnv(const LwkTestEnv &other) : instance(nullptr) {
-    if (other.instance) {
-        instance = other._uniffi_internal_clone_pointer();
-    }
-}
-
-
-
-
-std::shared_ptr<LwkTestEnv> LwkTestEnv::init() {
-    return std::shared_ptr<LwkTestEnv>(
-        new LwkTestEnv(uniffi::rust_call(
-        uniffi_lwk_fn_constructor_lwktestenv_new,
-        nullptr))
-    );
-}
-
-std::shared_ptr<LwkTestEnv> LwkTestEnv::new_with_amp2() {
-    return std::shared_ptr<LwkTestEnv>(new LwkTestEnv(uniffi::rust_call(
-        uniffi_lwk_fn_constructor_lwktestenv_new_with_amp2,
-        nullptr)));
-}
-
-std::string LwkTestEnv::amp2_url() {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterString::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_amp2_url,
-        nullptr,
-        ptr));
-}
-std::string LwkTestEnv::electrum_url() {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterString::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_electrum_url,
-        nullptr,
-        ptr));
-}
-std::string LwkTestEnv::esplora_url() {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterString::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_esplora_url,
-        nullptr,
-        ptr));
-}
-void LwkTestEnv::generate(uint32_t blocks) {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_generate,
-        nullptr,
-        ptr, uniffi::FfiConverterUInt32::lower(blocks));
-}
-std::string LwkTestEnv::genesis_block_hash() {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterString::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_genesis_block_hash,
-        nullptr,
-        ptr));
-}
-std::shared_ptr<Address> LwkTestEnv::get_new_address() {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterAddress::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_get_new_address,
-        nullptr,
-        ptr));
-}
-uint64_t LwkTestEnv::height() {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterUInt64::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_height,
-        nullptr,
-        ptr));
-}
-AssetId LwkTestEnv::issue_asset(uint64_t satoshi) {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterTypeAssetId::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_issue_asset,
-        nullptr,
-        ptr, uniffi::FfiConverterUInt64::lower(satoshi)));
-}
-std::shared_ptr<Network> LwkTestEnv::network() {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterNetwork::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_network,
-        nullptr,
-        ptr));
-}
-std::shared_ptr<Txid> LwkTestEnv::send_to_address(const std::shared_ptr<Address> &address, uint64_t satoshi, std::optional<AssetId> asset) {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterTxid::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_send_to_address,
-        nullptr,
-        ptr, uniffi::FfiConverterAddress::lower(address), uniffi::FfiConverterUInt64::lower(satoshi), uniffi::FfiConverterOptionalTypeAssetId::lower(asset)));
-}
-std::string LwkTestEnv::waterfalls_url() {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterString::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwktestenv_waterfalls_url,
-        nullptr,
-        ptr));
-}
-
-LwkTestEnv::~LwkTestEnv() {
-    uniffi::rust_call(
-        uniffi_lwk_fn_free_lwktestenv,
-        nullptr,
-        this->instance
-    );
-}
-
-void *LwkTestEnv::_uniffi_internal_clone_pointer() const {
-    return uniffi::rust_call(
-        uniffi_lwk_fn_clone_lwktestenv,
-        nullptr,
-        this->instance
-    );
-}
-
-
-
-
-LwkTestStore::LwkTestStore(void *ptr): instance(ptr) {}
-
-LwkTestStore::LwkTestStore(const LwkTestStore &other) : instance(nullptr) {
-    if (other.instance) {
-        instance = other._uniffi_internal_clone_pointer();
-    }
-}
-
-
-
-
-std::shared_ptr<LwkTestStore> LwkTestStore::init(const std::shared_ptr<ForeignStoreLink> &store) {
-    return std::shared_ptr<LwkTestStore>(
-        new LwkTestStore(uniffi::rust_call(
-        uniffi_lwk_fn_constructor_lwkteststore_new,
-        nullptr, uniffi::FfiConverterForeignStoreLink::lower(store)))
-    );
-}
-
-std::optional<std::vector<uint8_t>> LwkTestStore::read(const std::string &key) {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterOptionalBytes::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_lwkteststore_read,
-        uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterString::lower(key)));
-}
-void LwkTestStore::remove(const std::string &key) {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    uniffi::rust_call(
-        uniffi_lwk_fn_method_lwkteststore_remove,
-        uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterString::lower(key));
-}
-void LwkTestStore::write(const std::string &key, const std::vector<uint8_t> &value) {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    uniffi::rust_call(
-        uniffi_lwk_fn_method_lwkteststore_write,
-        uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterString::lower(key), uniffi::FfiConverterBytes::lower(value));
-}
-
-LwkTestStore::~LwkTestStore() {
-    uniffi::rust_call(
-        uniffi_lwk_fn_free_lwkteststore,
-        nullptr,
-        this->instance
-    );
-}
-
-void *LwkTestStore::_uniffi_internal_clone_pointer() const {
-    return uniffi::rust_call(
-        uniffi_lwk_fn_clone_lwkteststore,
-        nullptr,
-        this->instance
-    );
-}
-
-
-
-
 Mnemonic::Mnemonic(void *ptr): instance(ptr) {}
 
 Mnemonic::Mnemonic(const Mnemonic &other) : instance(nullptr) {
@@ -5164,6 +5065,100 @@ std::string OutPoint::to_string() const {
         this->_uniffi_internal_clone_pointer()));
 }
 
+
+
+
+
+OutputDetails::OutputDetails(void *ptr): instance(ptr) {}
+
+OutputDetails::OutputDetails(const OutputDetails &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+std::optional<AssetId> OutputDetails::asset() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalTypeAssetId::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_asset,
+        nullptr,
+        ptr));
+}
+std::shared_ptr<DerivationPath> OutputDetails::derivation_path() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalDerivationPath::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_derivation_path,
+        nullptr,
+        ptr));
+}
+bool OutputDetails::is_fee() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_is_fee,
+        nullptr,
+        ptr));
+}
+bool OutputDetails::is_fully_confidential() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_is_fully_confidential,
+        nullptr,
+        ptr));
+}
+bool OutputDetails::is_fully_explicit() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_is_fully_explicit,
+        nullptr,
+        ptr));
+}
+bool OutputDetails::is_owned() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_is_owned,
+        nullptr,
+        ptr));
+}
+std::optional<uint64_t> OutputDetails::satoshi() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalUInt64::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_satoshi,
+        nullptr,
+        ptr));
+}
+std::shared_ptr<Script> OutputDetails::script_pubkey() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterScript::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_script_pubkey,
+        nullptr,
+        ptr));
+}
+uint32_t OutputDetails::vout() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterUInt32::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_outputdetails_vout,
+        nullptr,
+        ptr));
+}
+
+OutputDetails::~OutputDetails() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_outputdetails,
+        nullptr,
+        this->instance
+    );
+}
+
+void *OutputDetails::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_outputdetails,
+        nullptr,
+        this->instance
+    );
+}
 
 
 
@@ -5783,10 +5778,24 @@ std::vector<std::string> PsetDetails::fingerprints_missing() {
         nullptr,
         ptr));
 }
+bool PsetDetails::has_non_default_sighash() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_psetdetails_has_non_default_sighash,
+        nullptr,
+        ptr));
+}
 std::vector<std::shared_ptr<Issuance>> PsetDetails::inputs_issuances() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterSequenceIssuance::lift(uniffi::rust_call(
         uniffi_lwk_fn_method_psetdetails_inputs_issuances,
+        nullptr,
+        ptr));
+}
+std::vector<std::shared_ptr<OutputDetails>> PsetDetails::outputs() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterSequenceOutputDetails::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_psetdetails_outputs,
         nullptr,
         ptr));
 }
@@ -6159,6 +6168,13 @@ void ReissuanceRequest::issuance_tx(const std::shared_ptr<Transaction> &tx) {
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterTransaction::lower(tx));
 }
+void ReissuanceRequest::pin_input(const std::shared_ptr<OutPoint> &input) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_reissuancerequest_pin_input,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterOutPoint::lower(input));
+}
 
 ReissuanceRequest::~ReissuanceRequest() {
     uniffi::rust_call(
@@ -6395,6 +6411,13 @@ std::shared_ptr<Mnemonic> Signer::derive_bip85_mnemonic(uint32_t index, uint32_t
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterUInt32::lower(index), uniffi::FfiConverterUInt32::lower(word_count)));
 }
+std::shared_ptr<DescriptorPublicKey> Signer::derive_xpub(const std::shared_ptr<DerivationPath> &path) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterDescriptorPublicKey::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_signer_derive_xpub,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterDerivationPath::lower(path)));
+}
 std::string Signer::fingerprint() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterString::lift(uniffi::rust_call(
@@ -6408,13 +6431,6 @@ std::string Signer::keyorigin_xpub(const std::shared_ptr<Bip> &bip) {
         uniffi_lwk_fn_method_signer_keyorigin_xpub,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterBip::lower(bip)));
-}
-std::string Signer::keyorigin_xpub_from_path(const std::shared_ptr<DerivationPath> &path) {
-    auto ptr = this->_uniffi_internal_clone_pointer();
-    return uniffi::FfiConverterString::lift(uniffi::rust_call(
-        uniffi_lwk_fn_method_signer_keyorigin_xpub_from_path,
-        uniffi::FfiConverterLwkError::lift,
-        ptr, uniffi::FfiConverterDerivationPath::lower(path)));
 }
 std::shared_ptr<Mnemonic> Signer::mnemonic() {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -6443,6 +6459,13 @@ std::string Signer::slip77_master_blinding_key() {
         uniffi_lwk_fn_method_signer_slip77_master_blinding_key,
         uniffi::FfiConverterLwkError::lift,
         ptr));
+}
+std::shared_ptr<WolletDescriptor> Signer::ss_desc(const std::string &account_type, uint32_t account_num) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterWolletDescriptor::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_signer_ss_desc,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num)));
 }
 std::shared_ptr<WolletDescriptor> Signer::wpkh_slip77_descriptor() {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -6706,6 +6729,13 @@ void TxBuilder::add_reissuance(const std::shared_ptr<ReissuanceRequest> &request
         uniffi_lwk_fn_method_txbuilder_add_reissuance,
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterReissuanceRequest::lower(request));
+}
+void TxBuilder::allow_high_fee_rate() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_txbuilder_allow_high_fee_rate,
+        uniffi::FfiConverterLwkError::lift,
+        ptr);
 }
 void TxBuilder::drain_lbtc_to(const std::shared_ptr<Address> &address) {
     auto ptr = this->_uniffi_internal_clone_pointer();
@@ -7588,6 +7618,13 @@ std::shared_ptr<WaterfallsSubscription> WaterfallsClient::subscribe(const std::s
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterWolletDescriptor::lower(descriptor)));
 }
+std::shared_ptr<WaterfallsReconnectingSubscription> WaterfallsClient::subscribe_reconnecting(const std::shared_ptr<WolletDescriptor> &descriptor) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterWaterfallsReconnectingSubscription::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsclient_subscribe_reconnecting,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterWolletDescriptor::lower(descriptor)));
+}
 std::shared_ptr<BlockHeader> WaterfallsClient::tip() {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterBlockHeader::lift(uniffi::rust_call(
@@ -7607,6 +7644,51 @@ WaterfallsClient::~WaterfallsClient() {
 void *WaterfallsClient::_uniffi_internal_clone_pointer() const {
     return uniffi::rust_call(
         uniffi_lwk_fn_clone_waterfallsclient,
+        nullptr,
+        this->instance
+    );
+}
+
+
+
+
+WaterfallsReconnectingSubscription::WaterfallsReconnectingSubscription(void *ptr): instance(ptr) {}
+
+WaterfallsReconnectingSubscription::WaterfallsReconnectingSubscription(const WaterfallsReconnectingSubscription &other) : instance(nullptr) {
+    if (other.instance) {
+        instance = other._uniffi_internal_clone_pointer();
+    }
+}
+
+
+
+
+void WaterfallsReconnectingSubscription::close_subscription() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsreconnectingsubscription_close_subscription,
+        nullptr,
+        ptr);
+}
+std::optional<WaterfallsSubscriptionUpdate> WaterfallsReconnectingSubscription::next_update() {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterOptionalWaterfallsSubscriptionUpdate::lift(uniffi::rust_call(
+        uniffi_lwk_fn_method_waterfallsreconnectingsubscription_next_update,
+        uniffi::FfiConverterLwkError::lift,
+        ptr));
+}
+
+WaterfallsReconnectingSubscription::~WaterfallsReconnectingSubscription() {
+    uniffi::rust_call(
+        uniffi_lwk_fn_free_waterfallsreconnectingsubscription,
+        nullptr,
+        this->instance
+    );
+}
+
+void *WaterfallsReconnectingSubscription::_uniffi_internal_clone_pointer() const {
+    return uniffi::rust_call(
+        uniffi_lwk_fn_clone_waterfallsreconnectingsubscription,
         nullptr,
         this->instance
     );
@@ -7815,6 +7897,13 @@ std::shared_ptr<PsetDetails> Wollet::pset_details(const std::shared_ptr<Pset> &p
         uniffi::FfiConverterLwkError::lift,
         ptr, uniffi::FfiConverterPset::lower(pset)));
 }
+void Wollet::set_amp0_last_index(const std::shared_ptr<Amp0> &amp0) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    uniffi::rust_call(
+        uniffi_lwk_fn_method_wollet_set_amp0_last_index,
+        uniffi::FfiConverterLwkError::lift,
+        ptr, uniffi::FfiConverterAmp0::lower(amp0));
+}
 std::shared_ptr<WalletTx> Wollet::transaction(const std::shared_ptr<Txid> &txid) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterWalletTx::lift(uniffi::rust_call(
@@ -7970,10 +8059,10 @@ std::shared_ptr<WolletDescriptor> WolletDescriptor::init(const std::string &desc
     );
 }
 
-std::shared_ptr<WolletDescriptor> WolletDescriptor::from_xpub(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num, const std::string &master_blinding_key, const std::string &fingerprint, const std::string &xpub) {
+std::shared_ptr<WolletDescriptor> WolletDescriptor::ss_desc_from_external_signer(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num, const std::string &master_blinding_key, const std::shared_ptr<DescriptorPublicKey> &key) {
     return std::shared_ptr<WolletDescriptor>(new WolletDescriptor(uniffi::rust_call(
-        uniffi_lwk_fn_constructor_wolletdescriptor_from_xpub,
-        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterNetwork::lower(network), uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num), uniffi::FfiConverterString::lower(master_blinding_key), uniffi::FfiConverterString::lower(fingerprint), uniffi::FfiConverterString::lower(xpub))));
+        uniffi_lwk_fn_constructor_wolletdescriptor_ss_desc_from_external_signer,
+        uniffi::FfiConverterLwkError::lift, uniffi::FfiConverterNetwork::lower(network), uniffi::FfiConverterString::lower(account_type), uniffi::FfiConverterUInt32::lower(account_num), uniffi::FfiConverterString::lower(master_blinding_key), uniffi::FfiConverterDescriptorPublicKey::lower(key))));
 }
 
 std::shared_ptr<SecretKey> WolletDescriptor::derive_blinding_key(const std::shared_ptr<Script> &script_pubkey) {
@@ -8041,6 +8130,10 @@ std::string WolletDescriptor::to_string() const {
         nullptr,
         this->_uniffi_internal_clone_pointer()));
 }
+
+
+
+
 
 
 
@@ -8701,6 +8794,31 @@ uint64_t FfiConverterDerivationPath::allocation_size(const std::shared_ptr<Deriv
 
 
 
+std::shared_ptr<DescriptorPublicKey> FfiConverterDescriptorPublicKey::lift(void *ptr) {
+    return std::shared_ptr<DescriptorPublicKey>(new DescriptorPublicKey(ptr));
+}
+
+void *FfiConverterDescriptorPublicKey::lower(const std::shared_ptr<DescriptorPublicKey> &obj) {
+    return reinterpret_cast<DescriptorPublicKey*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<DescriptorPublicKey> FfiConverterDescriptorPublicKey::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterDescriptorPublicKey::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterDescriptorPublicKey::write(RustStream &stream, const std::shared_ptr<DescriptorPublicKey> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterDescriptorPublicKey::lower(obj));
+}
+
+uint64_t FfiConverterDescriptorPublicKey::allocation_size(const std::shared_ptr<DescriptorPublicKey> &) {
+    return 8;
+}
+
+
+
 std::shared_ptr<ElectrumClient> FfiConverterElectrumClient::lift(void *ptr) {
     return std::shared_ptr<ElectrumClient>(new ElectrumClient(ptr));
 }
@@ -9028,56 +9146,6 @@ uint64_t FfiConverterLoggingLink::allocation_size(const std::shared_ptr<LoggingL
 
 
 
-std::shared_ptr<LwkTestEnv> FfiConverterLwkTestEnv::lift(void *ptr) {
-    return std::shared_ptr<LwkTestEnv>(new LwkTestEnv(ptr));
-}
-
-void *FfiConverterLwkTestEnv::lower(const std::shared_ptr<LwkTestEnv> &obj) {
-    return reinterpret_cast<LwkTestEnv*>(obj.get())->_uniffi_internal_clone_pointer();
-}
-
-std::shared_ptr<LwkTestEnv> FfiConverterLwkTestEnv::read(RustStream &stream) {
-    std::uintptr_t ptr;
-    stream >> ptr;
-
-    return FfiConverterLwkTestEnv::lift(reinterpret_cast<void *>(ptr));
-}
-
-void FfiConverterLwkTestEnv::write(RustStream &stream, const std::shared_ptr<LwkTestEnv> &obj) {
-    stream << reinterpret_cast<std::uintptr_t>(FfiConverterLwkTestEnv::lower(obj));
-}
-
-uint64_t FfiConverterLwkTestEnv::allocation_size(const std::shared_ptr<LwkTestEnv> &) {
-    return 8;
-}
-
-
-
-std::shared_ptr<LwkTestStore> FfiConverterLwkTestStore::lift(void *ptr) {
-    return std::shared_ptr<LwkTestStore>(new LwkTestStore(ptr));
-}
-
-void *FfiConverterLwkTestStore::lower(const std::shared_ptr<LwkTestStore> &obj) {
-    return reinterpret_cast<LwkTestStore*>(obj.get())->_uniffi_internal_clone_pointer();
-}
-
-std::shared_ptr<LwkTestStore> FfiConverterLwkTestStore::read(RustStream &stream) {
-    std::uintptr_t ptr;
-    stream >> ptr;
-
-    return FfiConverterLwkTestStore::lift(reinterpret_cast<void *>(ptr));
-}
-
-void FfiConverterLwkTestStore::write(RustStream &stream, const std::shared_ptr<LwkTestStore> &obj) {
-    stream << reinterpret_cast<std::uintptr_t>(FfiConverterLwkTestStore::lower(obj));
-}
-
-uint64_t FfiConverterLwkTestStore::allocation_size(const std::shared_ptr<LwkTestStore> &) {
-    return 8;
-}
-
-
-
 std::shared_ptr<Mnemonic> FfiConverterMnemonic::lift(void *ptr) {
     return std::shared_ptr<Mnemonic>(new Mnemonic(ptr));
 }
@@ -9148,6 +9216,31 @@ void FfiConverterOutPoint::write(RustStream &stream, const std::shared_ptr<OutPo
 }
 
 uint64_t FfiConverterOutPoint::allocation_size(const std::shared_ptr<OutPoint> &) {
+    return 8;
+}
+
+
+
+std::shared_ptr<OutputDetails> FfiConverterOutputDetails::lift(void *ptr) {
+    return std::shared_ptr<OutputDetails>(new OutputDetails(ptr));
+}
+
+void *FfiConverterOutputDetails::lower(const std::shared_ptr<OutputDetails> &obj) {
+    return reinterpret_cast<OutputDetails*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<OutputDetails> FfiConverterOutputDetails::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterOutputDetails::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterOutputDetails::write(RustStream &stream, const std::shared_ptr<OutputDetails> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterOutputDetails::lower(obj));
+}
+
+uint64_t FfiConverterOutputDetails::allocation_size(const std::shared_ptr<OutputDetails> &) {
     return 8;
 }
 
@@ -9903,6 +9996,31 @@ uint64_t FfiConverterWaterfallsClient::allocation_size(const std::shared_ptr<Wat
 
 
 
+std::shared_ptr<WaterfallsReconnectingSubscription> FfiConverterWaterfallsReconnectingSubscription::lift(void *ptr) {
+    return std::shared_ptr<WaterfallsReconnectingSubscription>(new WaterfallsReconnectingSubscription(ptr));
+}
+
+void *FfiConverterWaterfallsReconnectingSubscription::lower(const std::shared_ptr<WaterfallsReconnectingSubscription> &obj) {
+    return reinterpret_cast<WaterfallsReconnectingSubscription*>(obj.get())->_uniffi_internal_clone_pointer();
+}
+
+std::shared_ptr<WaterfallsReconnectingSubscription> FfiConverterWaterfallsReconnectingSubscription::read(RustStream &stream) {
+    std::uintptr_t ptr;
+    stream >> ptr;
+
+    return FfiConverterWaterfallsReconnectingSubscription::lift(reinterpret_cast<void *>(ptr));
+}
+
+void FfiConverterWaterfallsReconnectingSubscription::write(RustStream &stream, const std::shared_ptr<WaterfallsReconnectingSubscription> &obj) {
+    stream << reinterpret_cast<std::uintptr_t>(FfiConverterWaterfallsReconnectingSubscription::lower(obj));
+}
+
+uint64_t FfiConverterWaterfallsReconnectingSubscription::allocation_size(const std::shared_ptr<WaterfallsReconnectingSubscription> &) {
+    return 8;
+}
+
+
+
 std::shared_ptr<WaterfallsSubscription> FfiConverterWaterfallsSubscription::lift(void *ptr) {
     return std::shared_ptr<WaterfallsSubscription>(new WaterfallsSubscription(ptr));
 }
@@ -10171,7 +10289,9 @@ EsploraClientBuilder FfiConverterTypeEsploraClientBuilder::read(RustStream &stre
         FfiConverterOptionalUInt8::read(stream),
         FfiConverterBool::read(stream),
         FfiConverterOptionalMapStringString::read(stream),
-        FfiConverterOptionalTokenProvider::read(stream)
+        FfiConverterOptionalTokenProvider::read(stream),
+        FfiConverterOptionalUInt32::read(stream),
+        FfiConverterOptionalUInt64::read(stream)
     };
 }
 
@@ -10184,6 +10304,8 @@ void FfiConverterTypeEsploraClientBuilder::write(RustStream &stream, const Esplo
     FfiConverterBool::write(stream, val.utxo_only);
     FfiConverterOptionalMapStringString::write(stream, val.headers);
     FfiConverterOptionalTokenProvider::write(stream, val.token_provider);
+    FfiConverterOptionalUInt32::write(stream, val.scan_timeout);
+    FfiConverterOptionalUInt64::write(stream, val.max_response_size);
 }
 
 uint64_t FfiConverterTypeEsploraClientBuilder::allocation_size(const EsploraClientBuilder &val) {
@@ -10196,7 +10318,9 @@ uint64_t FfiConverterTypeEsploraClientBuilder::allocation_size(const EsploraClie
         FfiConverterOptionalUInt8::allocation_size(val.timeout) +
         FfiConverterBool::allocation_size(val.utxo_only) +
         FfiConverterOptionalMapStringString::allocation_size(val.headers) +
-        FfiConverterOptionalTokenProvider::allocation_size(val.token_provider);
+        FfiConverterOptionalTokenProvider::allocation_size(val.token_provider) +
+        FfiConverterOptionalUInt32::allocation_size(val.scan_timeout) +
+        FfiConverterOptionalUInt64::allocation_size(val.max_response_size);
     
 }
 
@@ -10368,7 +10492,9 @@ WaterfallsClientBuilder FfiConverterTypeWaterfallsClientBuilder::read(RustStream
         FfiConverterOptionalUInt8::read(stream),
         FfiConverterBool::read(stream),
         FfiConverterOptionalMapStringString::read(stream),
-        FfiConverterOptionalTokenProvider::read(stream)
+        FfiConverterOptionalTokenProvider::read(stream),
+        FfiConverterOptionalUInt32::read(stream),
+        FfiConverterOptionalUInt64::read(stream)
     };
 }
 
@@ -10380,6 +10506,8 @@ void FfiConverterTypeWaterfallsClientBuilder::write(RustStream &stream, const Wa
     FfiConverterBool::write(stream, val.utxo_only);
     FfiConverterOptionalMapStringString::write(stream, val.headers);
     FfiConverterOptionalTokenProvider::write(stream, val.token_provider);
+    FfiConverterOptionalUInt32::write(stream, val.scan_timeout);
+    FfiConverterOptionalUInt64::write(stream, val.max_response_size);
 }
 
 uint64_t FfiConverterTypeWaterfallsClientBuilder::allocation_size(const WaterfallsClientBuilder &val) {
@@ -10391,7 +10519,9 @@ uint64_t FfiConverterTypeWaterfallsClientBuilder::allocation_size(const Waterfal
         FfiConverterOptionalUInt8::allocation_size(val.timeout) +
         FfiConverterBool::allocation_size(val.utxo_only) +
         FfiConverterOptionalMapStringString::allocation_size(val.headers) +
-        FfiConverterOptionalTokenProvider::allocation_size(val.token_provider);
+        FfiConverterOptionalTokenProvider::allocation_size(val.token_provider) +
+        FfiConverterOptionalUInt32::allocation_size(val.scan_timeout) +
+        FfiConverterOptionalUInt64::allocation_size(val.max_response_size);
     
 }
 
@@ -11293,6 +11423,98 @@ uint64_t FfiConverterTokenProvider::allocation_size(const TokenProvider &val) {
     return size;
 }
 
+
+WaterfallsSubscriptionUpdate FfiConverterWaterfallsSubscriptionUpdate::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterWaterfallsSubscriptionUpdate::read(stream);
+
+    rustbuffer_free(buf);
+
+    return std::move(ret);
+}
+
+RustBuffer FfiConverterWaterfallsSubscriptionUpdate::lower(const WaterfallsSubscriptionUpdate &val) {
+    auto buf = rustbuffer_alloc(FfiConverterWaterfallsSubscriptionUpdate::allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterWaterfallsSubscriptionUpdate::write(stream, val);
+
+    return std::move(buf);
+}
+
+WaterfallsSubscriptionUpdate FfiConverterWaterfallsSubscriptionUpdate::read(RustStream &stream) {
+    int32_t variant_id;
+    stream >> variant_id;
+
+    switch (variant_id) {
+        
+    case 1:
+        return WaterfallsSubscriptionUpdate::kEvent {
+            .event = FfiConverterTypeWaterfallsSubscriptionEvent::read(stream),
+        };
+        
+    case 2:
+        return WaterfallsSubscriptionUpdate::kDisconnected {
+            .error = FfiConverterOptionalString::read(stream),
+        };
+        
+    case 3:
+        return WaterfallsSubscriptionUpdate::kReconnected {
+        };
+        
+    default:
+        throw std::runtime_error("No matching WaterfallsSubscriptionUpdate variant");
+    }
+}
+
+void FfiConverterWaterfallsSubscriptionUpdate::write(RustStream &stream, const WaterfallsSubscriptionUpdate &val) {
+    int32_t variant_id = static_cast<int32_t>(val.variant.index() + 1);
+
+    stream << variant_id;
+
+    std::visit([&](auto &&arg) {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, WaterfallsSubscriptionUpdate::kEvent>) {
+            FfiConverterTypeWaterfallsSubscriptionEvent::write(stream, arg.event);
+        }
+        else if constexpr (std::is_same_v<T, WaterfallsSubscriptionUpdate::kDisconnected>) {
+            FfiConverterOptionalString::write(stream, arg.error);
+        }
+        else if constexpr (std::is_same_v<T, WaterfallsSubscriptionUpdate::kReconnected>) {
+        }
+        else {
+            static_assert(always_false_v<T>, "non-exhaustive WaterfallsSubscriptionUpdate visitor");
+        }
+    }, val.variant);
+}
+
+uint64_t FfiConverterWaterfallsSubscriptionUpdate::allocation_size(const WaterfallsSubscriptionUpdate &val) {
+    uint64_t size = sizeof(int32_t);
+
+    size += std::visit([&](auto &&arg) {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, WaterfallsSubscriptionUpdate::kEvent>) {
+            uint64_t size = 0;
+            size += FfiConverterTypeWaterfallsSubscriptionEvent::allocation_size(arg.event);
+            return size;
+        }
+        else if constexpr (std::is_same_v<T, WaterfallsSubscriptionUpdate::kDisconnected>) {
+            uint64_t size = 0;
+            size += FfiConverterOptionalString::allocation_size(arg.error);
+            return size;
+        }
+        else if constexpr (std::is_same_v<T, WaterfallsSubscriptionUpdate::kReconnected>) {
+            uint64_t size = 0;
+            return size;
+        }
+        else {
+            static_assert(always_false_v<T>, "non-exhaustive WaterfallsSubscriptionUpdate visitor");
+        }
+    }, val.variant);
+
+    return size;
+}
+
 std::optional<uint8_t> FfiConverterOptionalUInt8::lift(RustBuffer buf) {
     auto stream = RustStream(&buf);
     auto ret = FfiConverterOptionalUInt8::read(stream);
@@ -11899,6 +12121,53 @@ uint64_t FfiConverterOptionalContract::allocation_size(const std::shared_ptr<Con
 
     if (val) {
         ret += FfiConverterContract::allocation_size(val);
+    }
+
+    return ret;
+}
+
+std::shared_ptr<DerivationPath> FfiConverterOptionalDerivationPath::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterOptionalDerivationPath::read(stream);
+
+    rustbuffer_free(buf);
+
+    return ret;
+}
+
+RustBuffer FfiConverterOptionalDerivationPath::lower(const std::shared_ptr<DerivationPath>& val) {
+    auto buf = rustbuffer_alloc(FfiConverterOptionalDerivationPath::allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterOptionalDerivationPath::write(stream, val);
+
+    return buf;
+}
+
+std::shared_ptr<DerivationPath> FfiConverterOptionalDerivationPath::read(RustStream &stream) {
+    char has_value;
+
+    stream.get(has_value);
+    if (has_value) {
+        return FfiConverterDerivationPath::read(stream);
+    } else {
+        return nullptr;
+    }
+}
+
+void FfiConverterOptionalDerivationPath::write(RustStream &stream, const std::shared_ptr<DerivationPath>& value) {
+    stream.put(static_cast<uint8_t>(!!value));
+
+    if (value) {
+        FfiConverterDerivationPath::write(stream, value);
+    }
+}
+
+uint64_t FfiConverterOptionalDerivationPath::allocation_size(const std::shared_ptr<DerivationPath> &val) {
+    uint64_t ret = 1;
+
+    if (val) {
+        ret += FfiConverterDerivationPath::allocation_size(val);
     }
 
     return ret;
@@ -12656,6 +12925,53 @@ uint64_t FfiConverterOptionalTokenProvider::allocation_size(const std::optional<
     return ret;
 }
 
+std::optional<WaterfallsSubscriptionUpdate> FfiConverterOptionalWaterfallsSubscriptionUpdate::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = FfiConverterOptionalWaterfallsSubscriptionUpdate::read(stream);
+
+    rustbuffer_free(buf);
+
+    return ret;
+}
+
+RustBuffer FfiConverterOptionalWaterfallsSubscriptionUpdate::lower(const std::optional<WaterfallsSubscriptionUpdate>& val) {
+    auto buf = rustbuffer_alloc(FfiConverterOptionalWaterfallsSubscriptionUpdate::allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    FfiConverterOptionalWaterfallsSubscriptionUpdate::write(stream, val);
+
+    return buf;
+}
+
+std::optional<WaterfallsSubscriptionUpdate> FfiConverterOptionalWaterfallsSubscriptionUpdate::read(RustStream &stream) {
+    char has_value;
+
+    stream.get(has_value);
+    if (has_value) {
+        return std::make_optional(FfiConverterWaterfallsSubscriptionUpdate::read(stream));
+    } else {
+        return std::nullopt;
+    }
+}
+
+void FfiConverterOptionalWaterfallsSubscriptionUpdate::write(RustStream &stream, const std::optional<WaterfallsSubscriptionUpdate>& value) {
+    stream.put(static_cast<uint8_t>(!!value));
+
+    if (value) {
+        FfiConverterWaterfallsSubscriptionUpdate::write(stream, value.value());
+    }
+}
+
+uint64_t FfiConverterOptionalWaterfallsSubscriptionUpdate::allocation_size(const std::optional<WaterfallsSubscriptionUpdate> &val) {
+    uint64_t ret = 1;
+
+    if (val) {
+        ret += FfiConverterWaterfallsSubscriptionUpdate::allocation_size(val.value());
+    }
+
+    return ret;
+}
+
 std::optional<std::vector<AssetId>> FfiConverterOptionalSequenceTypeAssetId::lift(RustBuffer buf) {
     auto stream = RustStream(&buf);
     auto ret = FfiConverterOptionalSequenceTypeAssetId::read(stream);
@@ -13047,6 +13363,57 @@ uint64_t FfiConverterSequenceOutPoint::allocation_size(const std::vector<std::sh
 
     for (auto &elem : val) {
         size += FfiConverterOutPoint::allocation_size(elem);
+    }
+
+    return size;
+}
+
+
+std::vector<std::shared_ptr<OutputDetails>> FfiConverterSequenceOutputDetails::lift(RustBuffer buf) {
+    auto stream = RustStream(&buf);
+    auto ret = read(stream);
+
+    rustbuffer_free(buf);
+
+    return ret;
+}
+
+RustBuffer FfiConverterSequenceOutputDetails::lower(const std::vector<std::shared_ptr<OutputDetails>> &val) {
+    auto buf = rustbuffer_alloc(allocation_size(val));
+    auto stream = RustStream(&buf);
+
+    write(stream, val);
+
+    return buf;
+}
+
+std::vector<std::shared_ptr<OutputDetails>> FfiConverterSequenceOutputDetails::read(RustStream &stream) {
+    std::vector<std::shared_ptr<OutputDetails>> ret;
+    int32_t count;
+    stream >> count;
+
+    ret.reserve(count);
+
+    for (decltype(count) i = 0; i < count; i++) {
+        ret.push_back(FfiConverterOutputDetails::read(stream));
+    }
+
+    return ret;
+}
+
+void FfiConverterSequenceOutputDetails::write(RustStream &stream, const std::vector<std::shared_ptr<OutputDetails>> &val) {
+    stream << static_cast<int32_t>(val.size());
+
+    for (auto &elem : val) {
+        FfiConverterOutputDetails::write(stream, elem);
+    }
+}
+
+uint64_t FfiConverterSequenceOutputDetails::allocation_size(const std::vector<std::shared_ptr<OutputDetails>> &val) {
+    uint64_t size = sizeof(int32_t);
+
+    for (auto &elem : val) {
+        size += FfiConverterOutputDetails::allocation_size(elem);
     }
 
     return size;

@@ -43,6 +43,7 @@ struct Contract;
 struct CurrencyCode;
 struct CustomElementsNetworkBuilder;
 struct DerivationPath;
+struct DescriptorPublicKey;
 struct ElectrumClient;
 struct EsploraClient;
 struct ExternalUtxo;
@@ -56,11 +57,10 @@ struct LightningPayment;
 struct LockupResponse;
 struct Logging;
 struct LoggingLink;
-struct LwkTestEnv;
-struct LwkTestStore;
 struct Mnemonic;
 struct Network;
 struct OutPoint;
+struct OutputDetails;
 struct Payment;
 struct PosConfig;
 struct Precision;
@@ -91,6 +91,7 @@ struct ValueBlindingFactor;
 struct WalletTx;
 struct WalletTxOut;
 struct WaterfallsClient;
+struct WaterfallsReconnectingSubscription;
 struct WaterfallsSubscription;
 struct WebHook;
 struct Wollet;
@@ -114,7 +115,78 @@ enum class PaymentState;
 enum class Singlesig;
 enum class SwapAsset;
 struct TokenProvider;
+struct WaterfallsSubscriptionUpdate;
 typedef std::string AssetId;
+
+
+
+
+/**
+ * An exported trait for handling logging messages.
+ *
+ * Implement this trait to receive and handle logging messages from the lightning session.
+ */
+struct Logging {
+    virtual ~Logging() {}
+    /**
+     * Log a message with the given level
+     */
+    virtual
+    void log(const LogLevel &level, const std::string &message) = 0;
+};
+
+namespace uniffi {
+    struct UniffiCallbackInterfaceLogging {
+        static void log(uint64_t uniffi_handle,RustBuffer level,RustBuffer message,void * uniffi_out_return,RustCallStatus *out_status);
+
+        static void uniffi_free(uint64_t uniffi_handle);
+        static void init();
+    private:
+        static inline UniffiVTableCallbackInterfaceLogging vtable = UniffiVTableCallbackInterfaceLogging {
+            .log = reinterpret_cast<void *>(&log),
+            .uniffi_free = reinterpret_cast<void *>(&uniffi_free)
+        };
+    };
+}
+
+namespace uniffi {
+    struct FfiConverterLogging;
+} // namespace uniffi
+
+/**
+ * An exported trait for handling logging messages.
+ *
+ * Implement this trait to receive and handle logging messages from the lightning session.
+ */
+struct LoggingImpl
+
+ : public Logging 
+
+{
+    friend uniffi::FfiConverterLogging;
+
+    LoggingImpl() = delete;
+
+    LoggingImpl(LoggingImpl &&) = delete;
+
+    LoggingImpl &operator=(const LoggingImpl &) = delete;
+    LoggingImpl &operator=(LoggingImpl &&) = delete;
+
+    ~LoggingImpl();
+    /**
+     * Log a message with the given level
+     */
+    void log(const LogLevel &level, const std::string &message);
+
+    private:
+    LoggingImpl(const LoggingImpl &);
+
+    LoggingImpl(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
 
 
 namespace uniffi {
@@ -216,148 +288,6 @@ struct Network
     void *instance = nullptr;
 };
 
-
-namespace uniffi {
-    struct FfiConverterAddress;
-} // namespace uniffi
-
-/**
- * A Liquid address
- */
-struct Address
-
-
-
-{
-    friend uniffi::FfiConverterAddress;
-
-    Address() = delete;
-
-    Address(Address &&) = delete;
-
-    Address &operator=(const Address &) = delete;
-    Address &operator=(Address &&) = delete;
-
-    ~Address();
-    /**
-     * Construct an Address object
-     */
-    static std::shared_ptr<Address> init(const std::string &s);
-    /**
-     * Return true if the address is blinded.
-     */
-    bool is_blinded();
-    /**
-     * Returns the network of the address
-     */
-    std::shared_ptr<Network> network();
-    /**
-     * Returns a string of the QR code printable in a terminal environment
-     */
-    std::string qr_code_text();
-    /**
-     * Returns a string encoding an image in a uri
-     *
-     * The string can be open in the browser or be used as `src` field in `img` in HTML
-     *
-     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
-     * and use styling to scale up the image in the browser. eg
-     * `style="image-rendering: pixelated; border: 20px solid white;"`
-     */
-    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
-    /**
-     * Return the script pubkey of the address.
-     */
-    std::shared_ptr<Script> script_pubkey();
-    /**
-     * Return the unconfidential address.
-     */
-    std::shared_ptr<Address> to_unconfidential();
-    /**
-     * Returns a string representation of the object, internally calls Rust's `Display` trait.
-     */
-    std::string to_string() const;
-
-    private:
-    Address(const Address &);
-
-    Address(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-
-
-/**
- * An exported trait for handling logging messages.
- *
- * Implement this trait to receive and handle logging messages from the lightning session.
- */
-struct Logging {
-    virtual ~Logging() {}
-    /**
-     * Log a message with the given level
-     */
-    virtual
-    void log(const LogLevel &level, const std::string &message) = 0;
-};
-
-namespace uniffi {
-    struct UniffiCallbackInterfaceLogging {
-        static void log(uint64_t uniffi_handle,RustBuffer level,RustBuffer message,void * uniffi_out_return,RustCallStatus *out_status);
-
-        static void uniffi_free(uint64_t uniffi_handle);
-        static void init();
-    private:
-        static inline UniffiVTableCallbackInterfaceLogging vtable = UniffiVTableCallbackInterfaceLogging {
-            .log = reinterpret_cast<void *>(&log),
-            .uniffi_free = reinterpret_cast<void *>(&uniffi_free)
-        };
-    };
-}
-
-namespace uniffi {
-    struct FfiConverterLogging;
-} // namespace uniffi
-
-/**
- * An exported trait for handling logging messages.
- *
- * Implement this trait to receive and handle logging messages from the lightning session.
- */
-struct LoggingImpl
-
- : public Logging 
-
-{
-    friend uniffi::FfiConverterLogging;
-
-    LoggingImpl() = delete;
-
-    LoggingImpl(LoggingImpl &&) = delete;
-
-    LoggingImpl &operator=(const LoggingImpl &) = delete;
-    LoggingImpl &operator=(LoggingImpl &&) = delete;
-
-    ~LoggingImpl();
-    /**
-     * Log a message with the given level
-     */
-    void log(const LogLevel &level, const std::string &message);
-
-    private:
-    LoggingImpl(const LoggingImpl &);
-
-    LoggingImpl(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
 namespace uniffi {
 struct FfiConverterTokenProvider;
 } // namespace uniffi
@@ -434,6 +364,153 @@ private:
 
 
 namespace uniffi {
+    struct FfiConverterAnyClient;
+} // namespace uniffi
+
+struct AnyClient
+
+
+
+{
+    friend uniffi::FfiConverterAnyClient;
+
+    AnyClient() = delete;
+
+    AnyClient(AnyClient &&) = delete;
+
+    AnyClient &operator=(const AnyClient &) = delete;
+    AnyClient &operator=(AnyClient &&) = delete;
+
+    ~AnyClient();
+    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
+    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
+    /**
+     * Create a generic client backed by Waterfalls.
+     */
+    static std::shared_ptr<AnyClient> from_waterfalls(const std::shared_ptr<WaterfallsClient> &client);
+
+    private:
+    AnyClient(const AnyClient &);
+
+    AnyClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterAddress;
+} // namespace uniffi
+
+/**
+ * A Liquid address
+ */
+struct Address
+
+
+
+{
+    friend uniffi::FfiConverterAddress;
+
+    Address() = delete;
+
+    Address(Address &&) = delete;
+
+    Address &operator=(const Address &) = delete;
+    Address &operator=(Address &&) = delete;
+
+    ~Address();
+    /**
+     * Construct an Address object
+     */
+    static std::shared_ptr<Address> init(const std::string &s);
+    /**
+     * Return true if the address is blinded.
+     */
+    bool is_blinded();
+    /**
+     * Returns the network of the address
+     */
+    std::shared_ptr<Network> network();
+    /**
+     * Returns a string of the QR code printable in a terminal environment
+     */
+    std::string qr_code_text();
+    /**
+     * Returns a string encoding an image in a uri
+     *
+     * The string can be open in the browser or be used as `src` field in `img` in HTML
+     *
+     * For max efficiency we suggest to pass `None` to `pixel_per_module`, get a very small image
+     * and use styling to scale up the image in the browser. eg
+     * `style="image-rendering: pixelated; border: 20px solid white;"`
+     */
+    std::string qr_code_uri(std::optional<uint8_t> pixel_per_module);
+    /**
+     * Return the script pubkey of the address.
+     */
+    std::shared_ptr<Script> script_pubkey();
+    /**
+     * Return the unconfidential address.
+     */
+    std::shared_ptr<Address> to_unconfidential();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    Address(const Address &);
+
+    Address(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterForeignStoreLink;
+} // namespace uniffi
+
+/**
+ * A bridge that connects a [`ForeignStore`] to [`lwk_common::Store`].
+ */
+struct ForeignStoreLink
+
+
+
+{
+    friend uniffi::FfiConverterForeignStoreLink;
+
+    ForeignStoreLink() = delete;
+
+    ForeignStoreLink(ForeignStoreLink &&) = delete;
+
+    ForeignStoreLink &operator=(const ForeignStoreLink &) = delete;
+    ForeignStoreLink &operator=(ForeignStoreLink &&) = delete;
+
+    ~ForeignStoreLink();
+    /**
+     * Create a new `ForeignStoreLink` from a foreign store implementation.
+     */
+    static std::shared_ptr<ForeignStoreLink> init(const std::shared_ptr<ForeignStore> &store);
+
+    private:
+    ForeignStoreLink(const ForeignStoreLink &);
+
+    ForeignStoreLink(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
     struct FfiConverterMnemonic;
 } // namespace uniffi
 
@@ -487,81 +564,6 @@ struct Mnemonic
 };
 
 
-namespace uniffi {
-    struct FfiConverterForeignStoreLink;
-} // namespace uniffi
-
-/**
- * A bridge that connects a [`ForeignStore`] to [`lwk_common::Store`].
- */
-struct ForeignStoreLink
-
-
-
-{
-    friend uniffi::FfiConverterForeignStoreLink;
-
-    ForeignStoreLink() = delete;
-
-    ForeignStoreLink(ForeignStoreLink &&) = delete;
-
-    ForeignStoreLink &operator=(const ForeignStoreLink &) = delete;
-    ForeignStoreLink &operator=(ForeignStoreLink &&) = delete;
-
-    ~ForeignStoreLink();
-    /**
-     * Create a new `ForeignStoreLink` from a foreign store implementation.
-     */
-    static std::shared_ptr<ForeignStoreLink> init(const std::shared_ptr<ForeignStore> &store);
-
-    private:
-    ForeignStoreLink(const ForeignStoreLink &);
-
-    ForeignStoreLink(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
-    struct FfiConverterAnyClient;
-} // namespace uniffi
-
-struct AnyClient
-
-
-
-{
-    friend uniffi::FfiConverterAnyClient;
-
-    AnyClient() = delete;
-
-    AnyClient(AnyClient &&) = delete;
-
-    AnyClient &operator=(const AnyClient &) = delete;
-    AnyClient &operator=(AnyClient &&) = delete;
-
-    ~AnyClient();
-    static std::shared_ptr<AnyClient> from_electrum(const std::shared_ptr<ElectrumClient> &client);
-    static std::shared_ptr<AnyClient> from_esplora(const std::shared_ptr<EsploraClient> &client);
-    /**
-     * Create a generic client backed by Waterfalls.
-     */
-    static std::shared_ptr<AnyClient> from_waterfalls(const std::shared_ptr<WaterfallsClient> &client);
-
-    private:
-    AnyClient(const AnyClient &);
-
-    AnyClient(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
 /**
  * Chain tip metadata included in Waterfalls subscription events.
  */
@@ -599,6 +601,102 @@ struct EsploraClientBuilder {
      * Token provider for authenticated Esplora and Waterfalls backends
      */
     std::optional<TokenProvider> token_provider = std::nullopt;
+    /**
+     * Maximum duration in seconds of a scan, default is 10 minutes
+     */
+    std::optional<uint32_t> scan_timeout = std::nullopt;
+    /**
+     * Maximum size in bytes of a single response, default is 64 MiB
+     */
+    std::optional<uint64_t> max_response_size = std::nullopt;
+};
+
+
+/**
+ * Liquid BIP21 payment details
+ */
+struct LiquidBip21 {
+    /**
+     * The Liquid address
+     */
+    std::shared_ptr<Address> address;
+    /**
+     * The asset identifier
+     */
+    AssetId asset;
+    /**
+     * The amount in satoshis
+     */
+    std::optional<uint64_t> satoshi;
+};
+
+
+/**
+ * A builder for the `WaterfallsClient`
+ */
+struct WaterfallsClientBuilder {
+    std::string base_url;
+    std::shared_ptr<Network> network;
+    std::optional<uint32_t> concurrency = std::nullopt;
+    std::optional<uint8_t> timeout = std::nullopt;
+    bool utxo_only = false;
+    /**
+     * HTTP headers to set on each request, for example to authenticate with a backend
+     */
+    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
+    /**
+     * Token provider for authenticated Waterfalls backends
+     */
+    std::optional<TokenProvider> token_provider = std::nullopt;
+    /**
+     * Maximum duration in seconds of a scan, default is 10 minutes
+     */
+    std::optional<uint32_t> scan_timeout = std::nullopt;
+    /**
+     * Maximum size in bytes of a single response, default is 64 MiB
+     */
+    std::optional<uint64_t> max_response_size = std::nullopt;
+};
+
+
+/**
+ * An update received from a Waterfalls descriptor subscription stream.
+ */
+struct WaterfallsSubscriptionEvent {
+    /**
+     * The event kind: `tip`, `mempool`, `block`, or `reorg`.
+     */
+    std::string kind;
+    /**
+     * The Waterfalls server tip observed when the event was emitted.
+     */
+    std::optional<WaterfallsSubscriptionTip> tip;
+};
+
+
+/**
+ * A builder for the [`ElectrumClient`], to set a token provider (for authenticated Electrum
+ * RPC proxies) and other options.
+ */
+struct ElectrumClientBuilder {
+    /**
+     * The Electrum server url, e.g. `ssl://elements-mainnet.blockstream.info:50002` or `tcp://host:50001`
+     */
+    std::string url;
+    /**
+     * Request/connection timeout in seconds
+     */
+    std::optional<uint8_t> timeout = std::nullopt;
+    /**
+     * Token provider for authenticated Electrum RPC proxies
+     */
+    std::optional<TokenProvider> token_provider = std::nullopt;
+    /**
+     * Allow sending the token over a plaintext (`tcp://`) connection. Insecure; only for a
+     * localhost proxy or an already-tunneled connection. Off by default, so a token on a
+     * `tcp://` url is refused.
+     */
+    bool allow_plaintext_with_token = false;
 };
 
 
@@ -640,84 +738,66 @@ struct BoltzSessionBuilder {
     std::shared_ptr<ForeignStoreLink> store = nullptr;
 };
 
+namespace uniffi {
+struct FfiConverterWaterfallsSubscriptionUpdate;
+} // namespace uniffi
 
 /**
- * A builder for the [`ElectrumClient`], to set a token provider (for authenticated Electrum
- * RPC proxies) and other options.
+ * A server event or a local connection status update.
  */
-struct ElectrumClientBuilder {
+struct WaterfallsSubscriptionUpdate {
+    friend uniffi::FfiConverterWaterfallsSubscriptionUpdate;
     /**
-     * The Electrum server url, e.g. `ssl://blockstream.info:995` or `tcp://host:50001`
+     * A Waterfalls server update event.
      */
-    std::string url;
+    struct kEvent {
+        /**
+         * The Waterfalls server update.
+         */
+        WaterfallsSubscriptionEvent event;
+    };
     /**
-     * Request/connection timeout in seconds
+     * The stream closed or failed. An error is present when it failed.
      */
-    std::optional<uint8_t> timeout = std::nullopt;
+    struct kDisconnected {
+        /**
+         * The cause of the disconnect, if any.
+         */
+        std::optional<std::string> error;
+    };
     /**
-     * Token provider for authenticated Electrum RPC proxies
+     * The stream reopened. Scan the wallet because events may have been missed.
      */
-    std::optional<TokenProvider> token_provider = std::nullopt;
-    /**
-     * Allow sending the token over a plaintext (`tcp://`) connection. Insecure; only for a
-     * localhost proxy or an already-tunneled connection. Off by default, so a token on a
-     * `tcp://` url is refused.
-     */
-    bool allow_plaintext_with_token = false;
-};
+    struct kReconnected {
+    };
+    WaterfallsSubscriptionUpdate(kEvent variant): variant(variant) {}
+    WaterfallsSubscriptionUpdate(kDisconnected variant): variant(variant) {}
+    WaterfallsSubscriptionUpdate(kReconnected variant): variant(variant) {}
 
+    WaterfallsSubscriptionUpdate(const WaterfallsSubscriptionUpdate &other): variant(other.variant) {}
+    WaterfallsSubscriptionUpdate(WaterfallsSubscriptionUpdate &&other): variant(std::move(other.variant)) {}
 
-/**
- * A builder for the `WaterfallsClient`
- */
-struct WaterfallsClientBuilder {
-    std::string base_url;
-    std::shared_ptr<Network> network;
-    std::optional<uint32_t> concurrency = std::nullopt;
-    std::optional<uint8_t> timeout = std::nullopt;
-    bool utxo_only = false;
-    /**
-     * HTTP headers to set on each request, for example to authenticate with a backend
-     */
-    std::optional<std::unordered_map<std::string, std::string>> headers = std::nullopt;
-    /**
-     * Token provider for authenticated Waterfalls backends
-     */
-    std::optional<TokenProvider> token_provider = std::nullopt;
-};
+    WaterfallsSubscriptionUpdate &operator=(const WaterfallsSubscriptionUpdate &other) {
+        variant = other.variant;
+        return *this;
+    }
 
+    WaterfallsSubscriptionUpdate &operator=(WaterfallsSubscriptionUpdate &&other) {
+        variant = std::move(other.variant);
+        return *this;
+    }
 
-/**
- * Liquid BIP21 payment details
- */
-struct LiquidBip21 {
     /**
-     * The Liquid address
+     * Returns the variant of this enum
      */
-    std::shared_ptr<Address> address;
-    /**
-     * The asset identifier
-     */
-    AssetId asset;
-    /**
-     * The amount in satoshis
-     */
-    std::optional<uint64_t> satoshi;
-};
+    const std::variant<kEvent, kDisconnected, kReconnected> &get_variant() const {
+        return variant;
+    }
 
+private:
+    std::variant<kEvent, kDisconnected, kReconnected> variant;
 
-/**
- * An update received from a Waterfalls descriptor subscription stream.
- */
-struct WaterfallsSubscriptionEvent {
-    /**
-     * The event kind: `tip`, `mempool`, `block`, or `reorg`.
-     */
-    std::string kind;
-    /**
-     * The Waterfalls server tip observed when the event was emitted.
-     */
-    std::optional<WaterfallsSubscriptionTip> tip;
+    WaterfallsSubscriptionUpdate();
 };
 
 
@@ -1021,7 +1101,7 @@ namespace uniffi {
 } // namespace uniffi
 
 /**
- * Wrapper over [`lwk_wollet::amp2::Amp2`]
+ * Context for actions interacting with AMP2
  */
 struct Amp2
 
@@ -1058,26 +1138,28 @@ struct Amp2
      */
     std::shared_ptr<Amp2Descriptor> descriptor_from_str(const std::string &keyorigin_xpub, const std::string &descriptor_blinding_key);
     /**
+     * Create an AMP2 descriptor ELIP153 compliant from a signer managed externally.
+     *
+     * Caller must ensure that:
+     * * `user_keyorigin_xpub` is the keyorigin xpub derived at `Amp2::elip153_user_path()` for `account_num`
+     * * `view_keyorigin_xpub` is the keyorigin xpub derived at `Amp2::elip153_view_path()` for `account_num`
+     *
+     * **Warning**: Passing incorrect signer data can lead to creating an incorrect
+     * descriptor, which could lead to loss of funds.
+     */
+    std::shared_ptr<Amp2Descriptor> elip153_from_external_signer(uint32_t account_num, const std::shared_ptr<DescriptorPublicKey> &user_key, const std::shared_ptr<DescriptorPublicKey> &view_key);
+    /**
      * Create an AMP2 descriptor ELIP153 compliant from a signer
      */
-    std::shared_ptr<Amp2Descriptor> elip153_from_signer(const std::shared_ptr<Signer> &signer, uint32_t account);
-    /**
-     * Create an AMP2 descriptor ELIP153 compliant from xpub strings.
-     *
-     * This is typically used when the signer is managed outside of LWK.
-     * Derive the user xpub at [`Amp2::elip153_user_path()`] and
-     * the view xpub at [`Amp2::elip153_view_path()`], and pass the
-     * obtained keyorigin_xpub strings here.
-     */
-    std::shared_ptr<Amp2Descriptor> elip153_from_str(const std::string &user_keyorigin_xpub, const std::string &view_keyorigin_xpub);
+    std::shared_ptr<Amp2Descriptor> elip153_from_signer(const std::shared_ptr<Signer> &signer, uint32_t account_num);
     /**
      * ELIP153 `USER_PATH = m/purpose'/coin_type'/account'`
      */
-    std::shared_ptr<DerivationPath> elip153_user_path(uint32_t account);
+    std::shared_ptr<DerivationPath> elip153_user_path(uint32_t account_num);
     /**
      * ELIP153 `VIEW_PATH = m/purpose'/coin_type'/account'/server_fingerprint_masked'`
      */
-    std::shared_ptr<DerivationPath> elip153_view_path(uint32_t account);
+    std::shared_ptr<DerivationPath> elip153_view_path(uint32_t account_num);
     /**
      * Register an AMP2 wallet with the AMP2 server
      */
@@ -1099,7 +1181,7 @@ namespace uniffi {
 } // namespace uniffi
 
 /**
- * Wrapper over [`lwk_wollet::amp2::Amp2Descriptor`]
+ * An AMP2 descriptor
  */
 struct Amp2Descriptor
 
@@ -1124,6 +1206,9 @@ struct Amp2Descriptor
      * register this with AMP2 as soon as possible.
      */
     static std::shared_ptr<Amp2Descriptor> new_with_custom_descriptor(const std::shared_ptr<WolletDescriptor> &desc);
+    /**
+     * The inner `WolletDescriptor`
+     */
     std::shared_ptr<WolletDescriptor> descriptor();
     /**
      * Returns a string representation of the object, internally calls Rust's `Display` trait.
@@ -2079,15 +2164,15 @@ struct DerivationPath
      */
     static std::shared_ptr<DerivationPath> init(const std::string &path);
     /**
-     * Construct the account-level derivation path
-     *
-     * `account_type` must be one of "wpkh", "shwpkh", "pkh" or "tr"
-     */
-    static std::shared_ptr<DerivationPath> from_account(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num);
-    /**
      * Construct a DerivationPath from a vector of u32
      */
     static std::shared_ptr<DerivationPath> from_vec(const std::vector<uint32_t> &path);
+    /**
+     * Construct the account-level derivation path
+     *
+     * `account_type` must be one of "wpkh", "shwpkh" or "tr"
+     */
+    static std::shared_ptr<DerivationPath> ss_path(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num);
     /**
      * Return the derivation path as a vector of u32
      */
@@ -2101,6 +2186,62 @@ struct DerivationPath
     DerivationPath(const DerivationPath &);
 
     DerivationPath(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterDescriptorPublicKey;
+} // namespace uniffi
+
+/**
+ * A descriptor public key
+ */
+struct DescriptorPublicKey
+
+
+
+{
+    friend uniffi::FfiConverterDescriptorPublicKey;
+
+    DescriptorPublicKey() = delete;
+
+    DescriptorPublicKey(DescriptorPublicKey &&) = delete;
+
+    DescriptorPublicKey &operator=(const DescriptorPublicKey &) = delete;
+    DescriptorPublicKey &operator=(DescriptorPublicKey &&) = delete;
+
+    ~DescriptorPublicKey();
+    /**
+     * Construct a DescriptorPublicKey from its string representation
+     *
+     * Accepts both a bare xpub and a keyorigin xpub
+     */
+    static std::shared_ptr<DescriptorPublicKey> init(const std::string &s);
+    /**
+     * Return the derivation path from the master key, if key origin information is available.
+     */
+    std::shared_ptr<DerivationPath> derivation_path();
+    /**
+     * Return the fingerprint of the master key, if key origin information is available.
+     */
+    std::optional<std::string> fingerprint();
+    /**
+     * Return the extended public key, without any key origin information.
+     */
+    std::optional<std::string> xpub();
+    /**
+     * Returns a string representation of the object, internally calls Rust's `Display` trait.
+     */
+    std::string to_string() const;
+
+    private:
+    DescriptorPublicKey(const DescriptorPublicKey &);
+
+    DescriptorPublicKey(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -2180,7 +2321,9 @@ struct ElectrumClient
      */
     std::shared_ptr<Transaction> get_tx(const std::shared_ptr<Txid> &txid);
     /**
-     * Whether the descriptor has any tx using the first `gap_limit` addresses (default 20)
+     * Returns true if the wallet has any tx using the first gap_limit addresses (default 20)
+     *
+     * Note: if the descriptor does not have a wildcard, gap limit is ignored.
      */
     bool has_txs(const std::shared_ptr<WolletDescriptor> &descriptor, std::optional<uint32_t> gap_limit);
     /**
@@ -2273,7 +2416,9 @@ struct EsploraClient
      */
     std::shared_ptr<Update> full_scan_to_index(const std::shared_ptr<Wollet> &wollet, uint32_t index);
     /**
-     * Whether the descriptor has any tx using the first `gap_limit` addresses (default 20)
+     * Returns true if the wallet has any tx using the first gap_limit addresses (default 20)
+     *
+     * Note: if the descriptor does not have a wildcard, gap limit is ignored.
      */
     bool has_txs(const std::shared_ptr<WolletDescriptor> &descriptor, std::optional<uint32_t> gap_limit);
     /**
@@ -2716,6 +2861,8 @@ struct IssuanceRequest
     /**
      * Pin this issuance to a specific input
      *
+     * **Experimental**: this API might change without notice.
+     *
      * Requires manual inputs order: `input` must be one of the outpoints passed to
      * [`TxBuilder::set_inputs_order()`], otherwise [`TxBuilder::finish()`] will error.
      *
@@ -2948,152 +3095,6 @@ struct LoggingLink
 
 
 namespace uniffi {
-    struct FfiConverterLwkTestEnv;
-} // namespace uniffi
-
-/**
- * Test environment
- *
- * Regtest with:
- * * Elements node
- * * Electrum server
- * * Esplora server
- * * Waterfalls server
- *
- * Wrapper over [`lwk_test_util::TestEnv`]
- */
-struct LwkTestEnv
-
-
-
-{
-    friend uniffi::FfiConverterLwkTestEnv;
-
-    LwkTestEnv() = delete;
-
-    LwkTestEnv(LwkTestEnv &&) = delete;
-
-    LwkTestEnv &operator=(const LwkTestEnv &) = delete;
-    LwkTestEnv &operator=(LwkTestEnv &&) = delete;
-
-    ~LwkTestEnv();
-    /**
-     * Creates a new test environment
-     */
-    static std::shared_ptr<LwkTestEnv> init();
-    /**
-     * Creates a new test environment with AMP2 mock
-     */
-    static std::shared_ptr<LwkTestEnv> new_with_amp2();
-    /**
-     * Get the AMP2 URL of the test environment
-     */
-    std::string amp2_url();
-    /**
-     * Get the Electrum URL of the test environment
-     */
-    std::string electrum_url();
-    /**
-     * Get the Esplora URL of the test environment
-     */
-    std::string esplora_url();
-    /**
-     * Generate `blocks` blocks from the node
-     */
-    void generate(uint32_t blocks);
-    /**
-     * Get the genesis block hash from the running node.
-     */
-    std::string genesis_block_hash();
-    /**
-     * Get a new address from the node
-     */
-    std::shared_ptr<Address> get_new_address();
-    /**
-     * Get the height of the node
-     */
-    uint64_t height();
-    /**
-     * Issue `satoshi` of an asset from the node
-     */
-    AssetId issue_asset(uint64_t satoshi);
-    /**
-     * Get the network of the test environment.
-     */
-    std::shared_ptr<Network> network();
-    /**
-     * Send `satoshi` to `address` from the node
-     */
-    std::shared_ptr<Txid> send_to_address(const std::shared_ptr<Address> &address, uint64_t satoshi, std::optional<AssetId> asset);
-    /**
-     * Get the Waterfalls URL of the test environment
-     */
-    std::string waterfalls_url();
-
-    private:
-    LwkTestEnv(const LwkTestEnv &);
-
-    LwkTestEnv(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
-    struct FfiConverterLwkTestStore;
-} // namespace uniffi
-
-/**
- * A lightweight test helper for [`ForeignStore`](crate::ForeignStore) implementations.
- *
- * Use this to verify that Rust can correctly read/write through an FFI store.
- */
-struct LwkTestStore
-
-
-
-{
-    friend uniffi::FfiConverterLwkTestStore;
-
-    LwkTestStore() = delete;
-
-    LwkTestStore(LwkTestStore &&) = delete;
-
-    LwkTestStore &operator=(const LwkTestStore &) = delete;
-    LwkTestStore &operator=(LwkTestStore &&) = delete;
-
-    ~LwkTestStore();
-    /**
-     * Create a new test store helper wrapping the given store.
-     */
-    static std::shared_ptr<LwkTestStore> init(const std::shared_ptr<ForeignStoreLink> &store);
-    /**
-     * Read a value from the store.
-     */
-    std::optional<std::vector<uint8_t>> read(const std::string &key);
-    /**
-     * Remove a key from the store.
-     */
-    void remove(const std::string &key);
-    /**
-     * Write a key-value pair to the store.
-     */
-    void write(const std::string &key, const std::vector<uint8_t> &value);
-
-    private:
-    LwkTestStore(const LwkTestStore &);
-
-    LwkTestStore(void *);
-
-    void *_uniffi_internal_clone_pointer() const;
-
-    void *instance = nullptr;
-};
-
-
-namespace uniffi {
     struct FfiConverterOutPoint;
 } // namespace uniffi
 
@@ -3142,6 +3143,79 @@ struct OutPoint
     OutPoint(const OutPoint &);
 
     OutPoint(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterOutputDetails;
+} // namespace uniffi
+
+/**
+ * The details of an output of a PSET
+ */
+struct OutputDetails
+
+
+
+{
+    friend uniffi::FfiConverterOutputDetails;
+
+    OutputDetails() = delete;
+
+    OutputDetails(OutputDetails &&) = delete;
+
+    OutputDetails &operator=(const OutputDetails &) = delete;
+    OutputDetails &operator=(OutputDetails &&) = delete;
+
+    ~OutputDetails();
+    /**
+     * The asset of the output, or None if it couldn't be verified against the commitments
+     */
+    std::optional<AssetId> asset();
+    /**
+     * The derivation path of the output, if it belongs to the wallet
+     */
+    std::shared_ptr<DerivationPath> derivation_path();
+    /**
+     * Whether this is the fee output
+     */
+    bool is_fee();
+    /**
+     * Whether the output is fully confidential
+     * committed
+     */
+    bool is_fully_confidential();
+    /**
+     * Whether the output is fully explicit
+     * with no commitments
+     */
+    bool is_fully_explicit();
+    /**
+     * Whether the output belongs to the wallet
+     */
+    bool is_owned();
+    /**
+     * The amount of the output in satoshis, or None if it couldn't be verified against
+     * the commitments
+     */
+    std::optional<uint64_t> satoshi();
+    /**
+     * The script pubkey of the output
+     */
+    std::shared_ptr<Script> script_pubkey();
+    /**
+     * The index of the output in the transaction
+     */
+    uint32_t vout();
+
+    private:
+    OutputDetails(const OutputDetails &);
+
+    OutputDetails(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -3596,17 +3670,25 @@ struct PsetDetails
      */
     std::shared_ptr<PsetBalance> balance();
     /**
-     * Set of fingerprints for which the PSET has a signature
+     * Fingerprints for which the PSET has a signature.
      */
     std::vector<std::string> fingerprints_has();
     /**
-     * Set of fingerprints for which the PSET is missing a signature
+     * Fingerprints for which the PSET is missing a signature.
      */
     std::vector<std::string> fingerprints_missing();
+    /**
+     * Whether any PSET input sighash is not the default one
+     */
+    bool has_non_default_sighash();
     /**
      * Return an element for every input that could possibly be a issuance or a reissuance
      */
     std::vector<std::shared_ptr<Issuance>> inputs_issuances();
+    /**
+     * The details of the outputs of the PSET
+     */
+    std::vector<std::shared_ptr<OutputDetails>> outputs();
     /**
      * For each input its existing or missing signatures
      */
@@ -3907,9 +3989,24 @@ struct ReissuanceRequest
     /**
      * Sets the transaction containing the original issuance of the reissued asset
      *
+     * **Experimental**: this API might change without notice.
+     *
      * Only needed if that issuance transaction does not involve this wallet.
      */
     void issuance_tx(const std::shared_ptr<Transaction> &tx);
+    /**
+     * Pin this reissuance to the reissuance token utxo spent by `input`
+     *
+     * **Experimental**: this API might change without notice.
+     *
+     * `input` must hold the reissuance token of the asset being reissued, otherwise
+     * [`TxBuilder::finish()`] will error. If it is not already an input of the transaction it is
+     * added, unless a manual inputs order is set, in which case it must be one of the outpoints
+     * passed to [`TxBuilder::set_inputs_order()`].
+     *
+     * If not called, the reissuance is assigned to the first input holding the token.
+     */
+    void pin_input(const std::shared_ptr<OutPoint> &input);
 
     private:
     ReissuanceRequest(const ReissuanceRequest &);
@@ -4122,6 +4219,10 @@ struct Signer
      */
     std::shared_ptr<Mnemonic> derive_bip85_mnemonic(uint32_t index, uint32_t word_count);
     /**
+     * Derive an xpub at `path`
+     */
+    std::shared_ptr<DescriptorPublicKey> derive_xpub(const std::shared_ptr<DerivationPath> &path);
+    /**
      * Return the signer fingerprint
      */
     std::string fingerprint();
@@ -4129,10 +4230,6 @@ struct Signer
      * Return keyorigin and xpub, like "[73c5da0a/84h/1h/0h]tpub..."
      */
     std::string keyorigin_xpub(const std::shared_ptr<Bip> &bip);
-    /**
-     * Derive an xpub at `path` and return it as a keyorigin xpub string
-     */
-    std::string keyorigin_xpub_from_path(const std::shared_ptr<DerivationPath> &path);
     /**
      * Get the mnemonic of the signer
      */
@@ -4152,6 +4249,26 @@ struct Signer
      * Return the signer slip77 master blinding key
      */
     std::string slip77_master_blinding_key();
+    /**
+     * Derive a "standard" single sig descriptor
+     *
+     * **Experimental**: this API might change without notice.
+     *
+     * `account_type` must "wpkh", "shwpkh" or "tr".
+     *
+     * These are the "standard" single sig descriptors derived and
+     * used by common Liquid wallets. Their derivation is not
+     * specified in any ELIP.
+     *
+     * The unblinded descriptor follows BIP44/BIP49/BIP84/BIP86.
+     *
+     * They use a SLIP77 descriptor blinding key, however all
+     * accounts use the same descriptor blinding key. This has the
+     * undesirable consequence that if you share the CT descriptor
+     * for one account, you reveal the descriptor blinding key used
+     * by all other accounts.
+     */
+    std::shared_ptr<WolletDescriptor> ss_desc(const std::string &account_type, uint32_t account_num);
     /**
      * Return the witness public key hash, slip77 descriptor of this signer
      */
@@ -4390,6 +4507,10 @@ struct TxBuilder
      * Can't be used if [`TxBuilder::issue_asset`] or [`TxBuilder::add_issuance`] has been called
      */
     void add_reissuance(const std::shared_ptr<ReissuanceRequest> &request);
+    /**
+     * Allow a fee rate higher than 1000000 sats/kvb (1000 sat/vb)
+     */
+    void allow_high_fee_rate();
     /**
      * Sets the address to drain excess L-BTC to
      */
@@ -4778,7 +4899,13 @@ struct UnvalidatedLiquidexProposal
      */
     static std::shared_ptr<UnvalidatedLiquidexProposal> from_pset(const std::shared_ptr<Pset> &pset);
     /**
-     * Validate the proposal output but not the input wich require fetching the previous transaction
+     * Validate the proposal in an insecure way
+     *
+     * Warning: using this method can lead to loss of funds.
+     * This method performs partial validation, which could be leveraged by potential attackers.
+     * Use it only if you properly understand the risks.
+     *
+     * In general, prefer using `validate()`.
      */
     std::shared_ptr<ValidatedLiquidexProposal> insecure_validate();
     /**
@@ -5139,7 +5266,9 @@ struct WaterfallsClient
      */
     std::shared_ptr<Update> full_scan_to_index(const std::shared_ptr<Wollet> &wollet, uint32_t index);
     /**
-     * Whether the descriptor has any tx using the first `gap_limit` addresses (default 20)
+     * Returns true if the wallet has any tx using the first gap_limit addresses (default 20)
+     *
+     * Note: if the descriptor does not have a wildcard, gap limit is ignored.
      */
     bool has_txs(const std::shared_ptr<WolletDescriptor> &descriptor, std::optional<uint32_t> gap_limit);
     /**
@@ -5150,6 +5279,15 @@ struct WaterfallsClient
      */
     std::shared_ptr<WaterfallsSubscription> subscribe(const std::shared_ptr<WolletDescriptor> &descriptor);
     /**
+     * Subscribe to Waterfalls descriptor updates and reopen after disconnects.
+     *
+     * The stream reports server events and `Disconnected`/`Reconnected` status
+     * updates. Scan the wallet after `Reconnected` because events may have been
+     * missed. Reconnect failures are returned by `next_update()`; the worker
+     * retries after one second.
+     */
+    std::shared_ptr<WaterfallsReconnectingSubscription> subscribe_reconnecting(const std::shared_ptr<WolletDescriptor> &descriptor);
+    /**
      * See [`BlockchainBackend::tip`]
      */
     std::shared_ptr<BlockHeader> tip();
@@ -5158,6 +5296,51 @@ struct WaterfallsClient
     WaterfallsClient(const WaterfallsClient &);
 
     WaterfallsClient(void *);
+
+    void *_uniffi_internal_clone_pointer() const;
+
+    void *instance = nullptr;
+};
+
+
+namespace uniffi {
+    struct FfiConverterWaterfallsReconnectingSubscription;
+} // namespace uniffi
+
+/**
+ * A Waterfalls descriptor subscription that reopens after disconnects.
+ */
+struct WaterfallsReconnectingSubscription
+
+
+
+{
+    friend uniffi::FfiConverterWaterfallsReconnectingSubscription;
+
+    WaterfallsReconnectingSubscription() = delete;
+
+    WaterfallsReconnectingSubscription(WaterfallsReconnectingSubscription &&) = delete;
+
+    WaterfallsReconnectingSubscription &operator=(const WaterfallsReconnectingSubscription &) = delete;
+    WaterfallsReconnectingSubscription &operator=(WaterfallsReconnectingSubscription &&) = delete;
+
+    ~WaterfallsReconnectingSubscription();
+    /**
+     * Stop the subscription stream and release its worker thread.
+     */
+    void close_subscription();
+    /**
+     * Return the next server event or connection status update.
+     *
+     * Returns `None` after `close_subscription()` is called. Reconnect failures
+     * are returned as errors; the subscription continues retrying in the background.
+     */
+    std::optional<WaterfallsSubscriptionUpdate> next_update();
+
+    private:
+    WaterfallsReconnectingSubscription(const WaterfallsReconnectingSubscription &);
+
+    WaterfallsReconnectingSubscription(void *);
 
     void *_uniffi_internal_clone_pointer() const;
 
@@ -5280,6 +5463,10 @@ struct Wollet
      *
      * If Some return the address at the given index,
      * otherwise the last unused address.
+     *
+     * Returns an error when an index is supplied for a descriptor without a
+     * wildcard, or when no index is supplied for a wallet backed by a fixed
+     * list of script pubkeys.
      */
     std::shared_ptr<AddressResult> address(std::optional<uint32_t> index);
     /**
@@ -5353,6 +5540,13 @@ struct Wollet
      * Get the PSET details with respect to the wallet
      */
     std::shared_ptr<PsetDetails> pset_details(const std::shared_ptr<Pset> &pset);
+    /**
+     * Set the highest AMP0 address index the tx builder is allowed to use
+     *
+     * Call this with the AMP0 context after creating the `Wollet` and every time
+     * `Amp0::address()` returns a new address.
+     */
+    void set_amp0_last_index(const std::shared_ptr<Amp0> &amp0);
     /**
      * Get all the wallet transaction
      */
@@ -5482,14 +5676,22 @@ struct WolletDescriptor
      */
     static std::shared_ptr<WolletDescriptor> init(const std::string &descriptor);
     /**
-     * Descriptor from xpub
+     * Same as `Signer::ss_desc` but with data obtained from a
+     * signer managed externally.
      *
-     * This should be used when the xpub is obtained from a signer
-     * (e.g. Jade) managed outside LWK.
+     * Caller must ensure that:
+     * * `master_blinding_key` is derived from the signer, and wrapped in "slip77(...)", as
+     * returned by `Signer::slip77_master_blinding_key`
+     * * `key` must be the signer keyorigin xpub, i.e. its fingerprint must be the signer
+     * master fingerprint, and its xpub must be the one derived at path
+     * `DerivationPath::ss_path(network, account_type, account_num)`.
      *
-     * If master blinding key is SLIP77, it must be wrapped in "slip77(...)"
+     * **Warning**: Passing incorrect signer data can lead to creating an incorrect
+     * descriptor, which could lead to loss of funds.
+     *
+     * **Experimental**: this API might change without notice.
      */
-    static std::shared_ptr<WolletDescriptor> from_xpub(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num, const std::string &master_blinding_key, const std::string &fingerprint, const std::string &xpub);
+    static std::shared_ptr<WolletDescriptor> ss_desc_from_external_signer(const std::shared_ptr<Network> &network, const std::string &account_type, uint32_t account_num, const std::string &master_blinding_key, const std::shared_ptr<DescriptorPublicKey> &key);
     /**
      * Derive the private blinding key
      */
@@ -6305,6 +6507,16 @@ private:
 };
 
 
+struct FfiConverterDescriptorPublicKey {
+    static std::shared_ptr<DescriptorPublicKey> lift(void *);
+    static void *lower(const std::shared_ptr<DescriptorPublicKey> &);
+    static std::shared_ptr<DescriptorPublicKey> read(RustStream &);
+    static void write(RustStream &, const std::shared_ptr<DescriptorPublicKey> &);
+    static uint64_t allocation_size(const std::shared_ptr<DescriptorPublicKey> &);
+private:
+};
+
+
 struct FfiConverterElectrumClient {
     static std::shared_ptr<ElectrumClient> lift(void *);
     static void *lower(const std::shared_ptr<ElectrumClient> &);
@@ -6439,26 +6651,6 @@ private:
 };
 
 
-struct FfiConverterLwkTestEnv {
-    static std::shared_ptr<LwkTestEnv> lift(void *);
-    static void *lower(const std::shared_ptr<LwkTestEnv> &);
-    static std::shared_ptr<LwkTestEnv> read(RustStream &);
-    static void write(RustStream &, const std::shared_ptr<LwkTestEnv> &);
-    static uint64_t allocation_size(const std::shared_ptr<LwkTestEnv> &);
-private:
-};
-
-
-struct FfiConverterLwkTestStore {
-    static std::shared_ptr<LwkTestStore> lift(void *);
-    static void *lower(const std::shared_ptr<LwkTestStore> &);
-    static std::shared_ptr<LwkTestStore> read(RustStream &);
-    static void write(RustStream &, const std::shared_ptr<LwkTestStore> &);
-    static uint64_t allocation_size(const std::shared_ptr<LwkTestStore> &);
-private:
-};
-
-
 struct FfiConverterMnemonic {
     static std::shared_ptr<Mnemonic> lift(void *);
     static void *lower(const std::shared_ptr<Mnemonic> &);
@@ -6485,6 +6677,16 @@ struct FfiConverterOutPoint {
     static std::shared_ptr<OutPoint> read(RustStream &);
     static void write(RustStream &, const std::shared_ptr<OutPoint> &);
     static uint64_t allocation_size(const std::shared_ptr<OutPoint> &);
+private:
+};
+
+
+struct FfiConverterOutputDetails {
+    static std::shared_ptr<OutputDetails> lift(void *);
+    static void *lower(const std::shared_ptr<OutputDetails> &);
+    static std::shared_ptr<OutputDetails> read(RustStream &);
+    static void write(RustStream &, const std::shared_ptr<OutputDetails> &);
+    static uint64_t allocation_size(const std::shared_ptr<OutputDetails> &);
 private:
 };
 
@@ -6789,6 +6991,16 @@ private:
 };
 
 
+struct FfiConverterWaterfallsReconnectingSubscription {
+    static std::shared_ptr<WaterfallsReconnectingSubscription> lift(void *);
+    static void *lower(const std::shared_ptr<WaterfallsReconnectingSubscription> &);
+    static std::shared_ptr<WaterfallsReconnectingSubscription> read(RustStream &);
+    static void write(RustStream &, const std::shared_ptr<WaterfallsReconnectingSubscription> &);
+    static uint64_t allocation_size(const std::shared_ptr<WaterfallsReconnectingSubscription> &);
+private:
+};
+
+
 struct FfiConverterWaterfallsSubscription {
     static std::shared_ptr<WaterfallsSubscription> lift(void *);
     static void *lower(const std::shared_ptr<WaterfallsSubscription> &);
@@ -6973,6 +7185,13 @@ struct FfiConverterTokenProvider {
     static void write(RustStream &, const TokenProvider &);
     static uint64_t allocation_size(const TokenProvider &);
 };
+struct FfiConverterWaterfallsSubscriptionUpdate {
+    static WaterfallsSubscriptionUpdate lift(RustBuffer);
+    static RustBuffer lower(const WaterfallsSubscriptionUpdate &);
+    static WaterfallsSubscriptionUpdate read(RustStream &);
+    static void write(RustStream &, const WaterfallsSubscriptionUpdate &);
+    static uint64_t allocation_size(const WaterfallsSubscriptionUpdate &);
+};
 struct FfiConverterOptionalUInt8 {
     static std::optional<uint8_t> lift(RustBuffer buf);
     static RustBuffer lower(const std::optional<uint8_t>& val);
@@ -7063,6 +7282,13 @@ struct FfiConverterOptionalContract {
     static std::shared_ptr<Contract> read(RustStream &stream);
     static void write(RustStream &stream, const std::shared_ptr<Contract>& value);
     static uint64_t allocation_size(const std::shared_ptr<Contract> &val);
+};
+struct FfiConverterOptionalDerivationPath {
+    static std::shared_ptr<DerivationPath> lift(RustBuffer buf);
+    static RustBuffer lower(const std::shared_ptr<DerivationPath>& val);
+    static std::shared_ptr<DerivationPath> read(RustStream &stream);
+    static void write(RustStream &stream, const std::shared_ptr<DerivationPath>& value);
+    static uint64_t allocation_size(const std::shared_ptr<DerivationPath> &val);
 };
 struct FfiConverterOptionalForeignStoreLink {
     static std::shared_ptr<ForeignStoreLink> lift(RustBuffer buf);
@@ -7176,6 +7402,13 @@ struct FfiConverterOptionalTokenProvider {
     static void write(RustStream &stream, const std::optional<TokenProvider>& value);
     static uint64_t allocation_size(const std::optional<TokenProvider> &val);
 };
+struct FfiConverterOptionalWaterfallsSubscriptionUpdate {
+    static std::optional<WaterfallsSubscriptionUpdate> lift(RustBuffer buf);
+    static RustBuffer lower(const std::optional<WaterfallsSubscriptionUpdate>& val);
+    static std::optional<WaterfallsSubscriptionUpdate> read(RustStream &stream);
+    static void write(RustStream &stream, const std::optional<WaterfallsSubscriptionUpdate>& value);
+    static uint64_t allocation_size(const std::optional<WaterfallsSubscriptionUpdate> &val);
+};
 struct FfiConverterOptionalSequenceTypeAssetId {
     static std::optional<std::vector<AssetId>> lift(RustBuffer buf);
     static RustBuffer lower(const std::optional<std::vector<AssetId>>& val);
@@ -7236,6 +7469,14 @@ struct FfiConverterSequenceOutPoint {
     static std::vector<std::shared_ptr<OutPoint>> read(RustStream &);
     static void write(RustStream &, const std::vector<std::shared_ptr<OutPoint>> &);
     static uint64_t allocation_size(const std::vector<std::shared_ptr<OutPoint>> &);
+};
+
+struct FfiConverterSequenceOutputDetails {
+    static std::vector<std::shared_ptr<OutputDetails>> lift(RustBuffer);
+    static RustBuffer lower(const std::vector<std::shared_ptr<OutputDetails>> &);
+    static std::vector<std::shared_ptr<OutputDetails>> read(RustStream &);
+    static void write(RustStream &, const std::vector<std::shared_ptr<OutputDetails>> &);
+    static uint64_t allocation_size(const std::vector<std::shared_ptr<OutputDetails>> &);
 };
 
 struct FfiConverterSequencePsetInput {

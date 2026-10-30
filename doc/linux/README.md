@@ -35,7 +35,7 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
   ```
 
 - **Rust**: `1.88.0` is the default toolchain used to build GDK and GLSDK, and
-  `1.85.0` is the extra toolchain used in LWK (pinned by its
+  `1.91.0` is the extra toolchain used in LWK (pinned by its
   `rust-toolchain.toml`). This matches
   [`ci/linux-x86_64/setup.sh`](../../ci/linux-x86_64/setup.sh). Install via
   rustup:
@@ -43,7 +43,7 @@ The script checks prerequisites, builds dependencies, and compiles the app. If a
   ```bash
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.88.0
   . "$HOME/.cargo/env"
-  rustup toolchain install 1.85.0 1.88.0
+  rustup toolchain install 1.91.0 1.88.0
   ```
 
   The first command sets (or updates) your default toolchain to `1.88.0`, which

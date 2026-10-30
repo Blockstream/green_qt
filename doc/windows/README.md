@@ -280,7 +280,7 @@ Copy the **entire** `$PREFIX` tree to your Windows machine so that Phase 2 can u
 - **Git** and **7-Zip** (e.g. via Chocolatey), for cloning and extracting sources.
 - **Rust** via `rustup` for the native LWK and GLSDK steps:
   - Default toolchain: `1.88.0`
-  - Extra toolchain used in LWK: `1.85.0-x86_64-pc-windows-msvc`
+  - Extra toolchain used in LWK: `1.91.0-x86_64-pc-windows-msvc`
 - **Python** (for GDK was already used on Linux; not required on Windows for the steps below).
 - **Protobuf compiler** (`protoc`) to build GLSDK.
 

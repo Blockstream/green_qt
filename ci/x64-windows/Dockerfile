@@ -38,7 +38,7 @@ ENV RUSTUP_HOME=C:\rustup
 ENV CARGO_HOME=C:\cargo
 RUN curl -SL --output rustup-init.exe https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe && `
     rustup-init.exe -y --default-toolchain 1.88.0 --profile minimal --default-host x86_64-pc-windows-msvc && `
-    \cargo\bin\rustup toolchain install 1.85.0-x86_64-pc-windows-msvc && `
+    \cargo\bin\rustup toolchain install 1.91.0-x86_64-pc-windows-msvc && `
     del rustup-init.exe
 
 RUN curl -SL --output qt-online-installer-windows-x64-online.exe https://download.qt.io/official_releases/online_installers/qt-online-installer-windows-x64-online.exe
