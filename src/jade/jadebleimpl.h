@@ -40,6 +40,11 @@ private:
     QLowEnergyService           *m_service;
     QLowEnergyCharacteristic    m_tx;
     QLowEnergyCharacteristic    m_rx;
+    // Writes refused while the platform is still setting up link encryption are
+    // retried rather than dropping the connection, until Jade first replies.
+    int                         m_write_retries{0};
+    bool                        m_replied{false};
+    bool                        m_ready{false};
 };
 
 #endif // JADEBLEIMPL_H

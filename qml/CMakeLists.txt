@@ -193,6 +193,7 @@ set(QML_FILES_DEVICES
     JadeInstructionsView.qml
     JadeCard.qml
     DevicePromptView.qml
+    BluetoothPermissionWarning.qml
     JadeBasicUpdateView.qml
     JadeAdvancedUpdateView.qml
     JadeConfirmUpdatePage.qml

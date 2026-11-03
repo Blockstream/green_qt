@@ -17,6 +17,9 @@ StackViewPage {
             stack_view.pop()
         }
     }
+    DeviceDiscoveryRequest {
+        active: self.visible && self.StackView.status === StackView.Active
+    }
     DeviceListModel {
         id: devices_model
         onRowCountChanged: self.update()
@@ -64,6 +67,9 @@ StackViewPage {
                 font.pixelSize: 12
                 font.weight: 600
                 text: qsTrId('id_looking_for_device')
+            }
+            BluetoothPermissionWarning {
+                Layout.bottomMargin: 60
             }
         }
     }

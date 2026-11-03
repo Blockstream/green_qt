@@ -19,6 +19,10 @@ class JadeDevice : public Device
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(bool unlocking READ unlocking NOTIFY unlockingChanged)
+    Q_PROPERTY(bool usbAvailable READ usbAvailable NOTIFY backendsChanged)
+    Q_PROPERTY(bool bluetoothAvailable READ bluetoothAvailable NOTIFY backendsChanged)
+    Q_PROPERTY(ConnectionType connectionType READ connectionType NOTIFY connectionTypeChanged)
+    Q_PROPERTY(bool connectionSelected READ connectionSelected NOTIFY connectionSelectedChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -36,6 +40,12 @@ public:
         StatusHandleMenuNavigation,
     };
     Q_ENUM(Status)
+    enum ConnectionType {
+        NoConnection,
+        USB,
+        Bluetooth,
+    };
+    Q_ENUM(ConnectionType)
 
     JadeDevice(QObject* parent = nullptr);
     Vendor vendor() const override { return Device::Blockstream; }
@@ -43,7 +53,15 @@ public:
     QString name() const override { return m_name; }
     void setName(const QString& name);
     JadeAPI *api() const { return m_api; }
-    void setBackend(JadeAPI* api);
+    JadeAPI* usbApi() const { return m_usb_api; }
+    JadeAPI* bluetoothApi() const { return m_bluetooth_api; }
+    void setUsbBackend(JadeAPI* api);
+    void setBluetoothBackend(JadeAPI* api);
+    bool usbAvailable() const { return m_usb_api; }
+    bool bluetoothAvailable() const { return m_bluetooth_api; }
+    ConnectionType connectionType() const;
+    bool connectionSelected() const { return m_connection_selected; }
+    Q_INVOKABLE void selectConnection(ConnectionType type);
     QJsonObject details() const override;
     DeviceGetWalletPublicKeyTask* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
     DeviceSignMessageTask* signMessage(const QString& message, const QVector<uint32_t>& path) override;
@@ -79,8 +97,18 @@ signals:
     void statusChanged();
     void error();
     bool unlockingChanged();
+    void backendsChanged();
+    void connectionTypeChanged();
+    void connectionSelectedChanged();
+private:
+    void setBackend(JadeAPI* api);
+    void updateBackend();
+    void setConnectionSelected(bool connection_selected);
 private:
     JadeAPI* m_api{nullptr};
+    JadeAPI* m_usb_api{nullptr};
+    JadeAPI* m_bluetooth_api{nullptr};
+    bool m_connection_selected{false};
     Status m_status{StatusIdle};
     QString m_system_location;
     QVariantMap m_version_info;

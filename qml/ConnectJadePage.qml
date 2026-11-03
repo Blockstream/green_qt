@@ -15,6 +15,9 @@ StackViewPage {
         text: qsTrId('id_setup_guide')
         onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/19629901272345-Set-up-Jade')
     }
+    DeviceDiscoveryRequest {
+        active: self.visible && self.StackView.status === StackView.Active
+    }
     Repeater {
         id: device_repeater
         model: DeviceListModel {
@@ -40,6 +43,9 @@ StackViewPage {
         font.pixelSize: 12
         font.weight: 600
         text: qsTrId('id_looking_for_device')
+    }
+    BluetoothPermissionWarning {
+        Layout.topMargin: 20
     }
     RegularButton {
         Layout.alignment: Qt.AlignCenter

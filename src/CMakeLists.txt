@@ -141,3 +141,7 @@ target_sources(blockstream_core PRIVATE
 if(UNIX AND NOT APPLE AND NOT WIN32)
     target_sources(blockstream_core PRIVATE glibc_compat.cpp)
 endif()
+
+target_sources(blockstream_core PRIVATE
+    jadebluetoothmonitor.h jadebluetoothmonitor.cpp
+)

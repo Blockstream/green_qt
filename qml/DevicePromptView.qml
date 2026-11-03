@@ -15,6 +15,9 @@ GStackView {
         }
     }
     Component.onCompleted: self.update()
+    DeviceDiscoveryRequest {
+        active: self.visible
+    }
     DeviceListModel {
         id: devices_model
         onRowCountChanged: self.update()
@@ -45,6 +48,9 @@ GStackView {
             font.pixelSize: 12
             font.weight: 600
             text: qsTrId('id_looking_for_device')
+        }
+        BluetoothPermissionWarning {
+            Layout.bottomMargin: 60
         }
     }
 

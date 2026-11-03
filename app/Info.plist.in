@@ -30,6 +30,8 @@
   <true/>
   <key>LSUIElement</key>
   <true/>
+  <key>NSBluetoothAlwaysUsageDescription</key>
+  <string>This app requires Bluetooth access to connect to and communicate with Jade devices</string>
   <key>NSCameraUsageDescription</key>
   <string>We use the camera to scan QR codes</string>
   <key>NSCameraUseContinuityCameraDeviceType</key>

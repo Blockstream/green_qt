@@ -271,6 +271,9 @@ MainPage {
 
     JadeDeviceSerialPortDiscoveryAgent {
     }
+    JadeBluetoothMonitor {
+        active: self.StackView.status === StackView.Active && DeviceManager.discoveryRequested && DeviceManager.bluetoothPermission === Qt.Granted
+    }
     DeviceDiscoveryAgent {
     }
 

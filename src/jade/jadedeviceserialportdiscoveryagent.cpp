@@ -64,6 +64,7 @@ QList<QSerialPortInfo> AvailablePorts()
     }
 
     sp_free_port_list(port_list);
+
     return ports;
 }
 
@@ -113,7 +114,7 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
                 connect(backend, &JadeAPI::onDisconnected, this, [=, this] {
                     // qDebug() << "DISCONNECT" << system_location;
                     const auto device = deviceFromBackend(backend);
-                    if (device) {
+                    if (device && device->api() == backend) {
                         device->setConnected(false);
                     }
                 });
@@ -166,7 +167,10 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
             }
 
             if (!device) device = new JadeDevice(this);
-            device->setBackend(backend);
+            // Plugging in a device already connected over Bluetooth leaves it
+            // connected, so announce it to offer USB as well.
+            const bool plugged = device->usbApi() != backend && device->isConnected();
+            device->setUsbBackend(backend);
             device->setVersionInfo(version_info);
             device->setConnected(true);
             const auto system_location = m_backends.key(backend);
@@ -178,6 +182,7 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
             }
 #endif
             DeviceManager::instance()->addDevice(device);
+            if (plugged) emit DeviceManager::instance()->deviceConnected(device);
         }
 
         updateLater(backend);
@@ -189,6 +194,11 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
     QTimer::singleShot(1000, backend, [=, this] {
         const auto device = deviceFromBackend(backend);
         if (!device) return;
+        // Leave the device alone while it is used over Bluetooth.
+        if (device->api() != backend) {
+            updateLater(backend);
+            return;
+        }
         if (QVersionNumber(1, 0, 21) <= QVersionNumber::fromString(device->version())) {
             backend->ping(this, [=, this](const QVariantMap& data) {
                 if (data.contains("result")) {
@@ -228,7 +238,7 @@ JadeDevice *JadeDeviceSerialPortDiscoveryAgent::deviceFromBackend(JadeAPI* backe
     for (auto a_device : DeviceManager::instance()->devices()) {
         auto jade_device = qobject_cast<JadeDevice*>(a_device);
         if (!jade_device) continue;
-        if (jade_device && jade_device->api() == backend) return jade_device;
+        if (jade_device->usbApi() == backend) return jade_device;
     }
     return nullptr;
 }
@@ -240,8 +250,8 @@ void JadeDeviceSerialPortDiscoveryAgent::remove(JadeAPI* backend)
 
     auto device = deviceFromBackend(backend);
     if (device) {
-        device->setBackend(nullptr);
-        device->setConnected(false);
+        device->setUsbBackend(nullptr);
+        device->setConnected(device->api());
         device->setStatus(JadeDevice::StatusIdle);
     }
 

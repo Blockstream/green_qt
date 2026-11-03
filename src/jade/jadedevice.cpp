@@ -638,13 +638,75 @@ JadeDevice::JadeDevice(QObject* parent)
 
 void JadeDevice::setBackend(JadeAPI* backend)
 {
+    if (m_api == backend) return;
+    if (m_api) disconnect(m_api, nullptr, this, nullptr);
     m_api = backend;
+    if (m_api) {
+        connect(m_api, &JadeAPI::onDisconnected, this, [=, this] {
+            setConnected(false);
+        });
+    }
+    emit connectionTypeChanged();
+    emit detailsChanged();
+}
+
+void JadeDevice::setUsbBackend(JadeAPI* backend)
+{
+    if (m_usb_api == backend) return;
+    m_usb_api = backend;
+    updateBackend();
+}
+
+void JadeDevice::setBluetoothBackend(JadeAPI* backend)
+{
+    if (m_bluetooth_api == backend) return;
+    m_bluetooth_api = backend;
+    updateBackend();
+}
+
+void JadeDevice::updateBackend()
+{
+    emit backendsChanged();
+    // A new link never takes over the active one, the user picks it instead.
+    if (m_api && (m_api == m_usb_api || m_api == m_bluetooth_api)) return;
+    if (m_api) {
+        setConnectionSelected(false);
+        setConnected(false);
+    }
+    setBackend(m_usb_api ? m_usb_api : m_bluetooth_api);
+}
+
+JadeDevice::ConnectionType JadeDevice::connectionType() const
+{
+    if (!m_api) return NoConnection;
+    return m_api == m_bluetooth_api ? Bluetooth : USB;
+}
+
+void JadeDevice::selectConnection(ConnectionType type)
+{
+    const auto backend = type == USB ? m_usb_api : type == Bluetooth ? m_bluetooth_api : nullptr;
+    if (!backend) return;
+    setBackend(backend);
+    setConnectionSelected(true);
+}
+
+void JadeDevice::setConnectionSelected(bool connection_selected)
+{
+    if (m_connection_selected == connection_selected) return;
+    m_connection_selected = connection_selected;
+    emit connectionSelectedChanged();
 }
 
 QJsonObject JadeDevice::details() const
 {
     const auto board_type = m_version_info.value("BOARD_TYPE").toString();
-    return {{"type", "jade"}, {"version", version()}, {"name", name()}, {"board", board_type}};
+    QJsonObject details{{"type", "jade"}, {"version", version()}, {"name", name()}, {"board", board_type}};
+    switch (connectionType()) {
+    case USB: details.insert("connection", "usb"); break;
+    case Bluetooth: details.insert("connection", "bluetooth"); break;
+    case NoConnection: break;
+    }
+    return details;
 }
 
 DeviceGetWalletPublicKeyTask *JadeDevice::getWalletPublicKey(Network *network, const QVector<uint32_t>& path)
