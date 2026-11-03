@@ -57,7 +57,9 @@
       "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/bld",
       "cacheVariables": {
-        "CMAKE_CXX_FLAGS": "/FS"
+        "CMAKE_CXX_FLAGS": "/FS",
+        "CMAKE_POLICY_DEFAULT_CMP0141": "NEW",
+        "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded"
       }
     }
   ]
