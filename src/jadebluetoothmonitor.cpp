@@ -10,6 +10,7 @@
 
 #include "jadeapi.h"
 #include "jadebleimpl.h"
+#include "jadebluetoothpairing_win.h"
 
 #include "jadedevice.h"
 #include "devicemanager.h"
@@ -109,26 +110,14 @@ void JadeBluetoothMonitor::update()
             connect(m_local_device, &QBluetoothLocalDevice::pairingFinished, this, [=, this](QBluetoothAddress address, QBluetoothLocalDevice::Pairing pairing) {
                 qDebug() << Q_FUNC_INFO << "pairing finished for" << m_pairing.name() << address << pairing;
                 if (!m_pairing.isValid() || m_pairing.address() != address) return;
-                const auto info = std::exchange(m_pairing, {});
-                JadeDevice* const device = m_listed.value(info.name());
-                if (pairing == QBluetoothLocalDevice::Unpaired) {
-                    // Left for the user to ask again rather than retrying straight
-                    // away, which would loop the system dialog.
-                    qWarning() << Q_FUNC_INFO << "pairing failed for" << info.name();
-                    if (device) device->setBluetoothState(JadeDevice::BluetoothUnpaired);
-                    return;
-                }
-                if (device) device->setBluetoothState(JadeDevice::BluetoothPaired);
-                connectToDevice(info);
+                finishPairing(pairing != QBluetoothLocalDevice::Unpaired);
             });
             // A failed bond is reported here rather than through pairingFinished,
             // and without the address it was for. Forget the pending request so
             // it can be asked again instead of waiting forever.
             connect(m_local_device, &QBluetoothLocalDevice::errorOccurred, this, [=, this](QBluetoothLocalDevice::Error error) {
                 qWarning() << Q_FUNC_INFO << "local device error" << error << "pending pairing" << m_pairing.name() << m_pairing.address();
-                JadeDevice* const device = m_listed.value(m_pairing.name());
-                if (device) device->setBluetoothState(JadeDevice::BluetoothUnpaired);
-                m_pairing = {};
+                if (m_pairing.isValid()) finishPairing(false);
             });
         }
         // DeviceManager asks for the permission when a screen needs discovery.
@@ -145,6 +134,7 @@ void JadeBluetoothMonitor::update()
         // A bond asked for while scanning should not open a connection once the
         // screen that wanted it is gone; the next scan asks again if needed.
         m_pairing = {};
+        delete m_pairing_request;
         dropListedDevices();
     }
 }
@@ -162,6 +152,7 @@ JadeDevice* JadeBluetoothMonitor::listDevice(const QString& name)
         break;
     }
     if (!device) {
+        qDebug() << Q_FUNC_INFO << "listing" << name;
         device = new JadeDevice(this);
         device->setName(name);
         DeviceManager::instance()->addDevice(device);
@@ -184,7 +175,42 @@ void JadeBluetoothMonitor::pairDevice(const QString& name)
     m_pairing = info;
     device->setBluetoothState(JadeDevice::BluetoothPairing);
     qDebug() << Q_FUNC_INFO << "requesting pairing for" << info.name() << info.address().toString();
+#ifdef Q_OS_WIN
+    const QPointer<JadeDevice> listed(device);
+    auto pairing = new JadeBluetoothPairing(info.address(), this);
+    m_pairing_request = pairing;
+    connect(pairing, &JadeBluetoothPairing::finished, pairing, &QObject::deleteLater);
+    connect(pairing, &JadeBluetoothPairing::pinRequested, this, [=, this](const QString& pin) {
+        if (!listed || m_pairing.address() != info.address()) return;
+        listed->setBluetoothPin(pin);
+        listed->setBluetoothState(JadeDevice::BluetoothConfirmingPin);
+    });
+    connect(device, &JadeDevice::bluetoothPinConfirmed, pairing, &JadeBluetoothPairing::confirmPin);
+    connect(pairing, &JadeBluetoothPairing::finished, this, [=, this](bool paired) {
+        if (listed) listed->setBluetoothPin({});
+        if (m_pairing.address() != info.address()) return;
+        finishPairing(paired);
+    });
+    pairing->start();
+#else
     m_local_device->requestPairing(info.address(), QBluetoothLocalDevice::Paired);
+#endif
+}
+
+void JadeBluetoothMonitor::finishPairing(bool paired)
+{
+    const auto info = std::exchange(m_pairing, {});
+    JadeDevice* const device = m_listed.value(info.name());
+    if (!paired) {
+        // Left for the user to ask again rather than retrying straight away,
+        // which would loop the system dialog.
+        qWarning() << Q_FUNC_INFO << "pairing failed for" << info.name();
+        if (device) device->setBluetoothState(JadeDevice::BluetoothUnpaired);
+        return;
+    }
+    qDebug() << Q_FUNC_INFO << "paired" << info.name() << info.address().toString() << "status" << m_local_device->pairingStatus(info.address());
+    if (device) device->setBluetoothState(JadeDevice::BluetoothPaired);
+    connectToDevice(info);
 }
 
 // Once the scan stops the adverts are stale, so the entries that exist only
@@ -197,6 +223,7 @@ void JadeBluetoothMonitor::dropListedDevices()
         disconnect(device, nullptr, this, nullptr);
         device->setBluetoothState(JadeDevice::BluetoothNone);
         if (device->isConnected() || device->api() || device->parent() != this) continue;
+        qDebug() << Q_FUNC_INFO << "dropping" << device->name();
         DeviceManager::instance()->removeDevice(device);
         device->deleteLater();
     }

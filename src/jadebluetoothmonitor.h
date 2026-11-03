@@ -28,6 +28,7 @@ protected slots:
     void probe(QPointer<JadeAPI> backend);
     JadeDevice* listDevice(const QString& name);
     void pairDevice(const QString& name);
+    void finishPairing(bool paired);
     void dropListedDevices();
 
 signals:
@@ -45,6 +46,8 @@ private:
     // The device a bond has been asked for, until pairingFinished or a pairing
     // error arrives. One at a time, since the error does not say which it is for.
     QBluetoothDeviceInfo m_pairing;
+    // The WinRT pairing in progress, where that is used instead of the local device.
+    QPointer<QObject> m_pairing_request;
     // Jades seen advertising while scanning, by name, listed before they are
     // connected so an unpaired one can be picked. The advert is the latest, as
     // the address rotates.

@@ -876,6 +876,13 @@ void JadeDevice::setBluetoothState(BluetoothState state)
     emit bluetoothStateChanged();
 }
 
+void JadeDevice::setBluetoothPin(const QString& pin)
+{
+    if (m_bluetooth_pin == pin) return;
+    m_bluetooth_pin = pin;
+    emit bluetoothPinChanged();
+}
+
 void JadeDevice::setStatus(Status status)
 {
     if (m_status == status) return;

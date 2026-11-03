@@ -50,6 +50,26 @@ Control {
             visible: !self.device.connected && (self.device.bluetoothState === JadeDevice.BluetoothUnpaired || self.device.bluetoothState === JadeDevice.BluetoothPairing)
             onClicked: self.device.pairBluetooth()
         }
+        Label {
+            font.pixelSize: 16
+            font.weight: 700
+            color: '#FFF'
+            text: self.device.bluetoothPin
+            visible: self.device.bluetoothState === JadeDevice.BluetoothConfirmingPin
+        }
+        RegularButton {
+            font.pixelSize: 14
+            topPadding: 8
+            bottomPadding: 8
+            text: 'Same code on Jade'
+            visible: self.device.bluetoothState === JadeDevice.BluetoothConfirmingPin
+            onClicked: self.device.confirmBluetoothPin(true)
+        }
+        LinkButton {
+            text: qsTrId('id_cancel')
+            visible: self.device.bluetoothState === JadeDevice.BluetoothConfirmingPin
+            onClicked: self.device.confirmBluetoothPin(false)
+        }
         RegularButton {
             font.pixelSize: 14
             topPadding: 8

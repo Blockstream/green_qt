@@ -92,7 +92,8 @@ if(ENABLE_SENTRY)
 endif()
 
 if (WIN32)
-    target_link_libraries(blockstream_core PUBLIC hid ntdll userenv bcrypt)
+    # WindowsApp for the WinRT calls in jadebluetoothpairing_win.cpp.
+    target_link_libraries(blockstream_core PUBLIC hid ntdll userenv bcrypt WindowsApp)
 elseif (APPLE)
     find_library(LIBLWK lwk REQUIRED)
     find_library(LIBGLSDK glsdk REQUIRED)

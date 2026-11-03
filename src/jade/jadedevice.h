@@ -24,6 +24,7 @@ class JadeDevice : public Device
     Q_PROPERTY(ConnectionType connectionType READ connectionType NOTIFY connectionTypeChanged)
     Q_PROPERTY(bool connectionSelected READ connectionSelected NOTIFY connectionSelectedChanged)
     Q_PROPERTY(BluetoothState bluetoothState READ bluetoothState NOTIFY bluetoothStateChanged)
+    Q_PROPERTY(QString bluetoothPin READ bluetoothPin NOTIFY bluetoothPinChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -52,6 +53,7 @@ public:
         BluetoothNone,
         BluetoothUnpaired,
         BluetoothPairing,
+        BluetoothConfirmingPin,
         BluetoothPaired,
     };
     Q_ENUM(BluetoothState)
@@ -65,6 +67,10 @@ public:
     BluetoothState bluetoothState() const { return m_bluetooth_state; }
     void setBluetoothState(BluetoothState state);
     Q_INVOKABLE void pairBluetooth() { emit bluetoothPairRequested(); }
+    // The code shown by both sides while pairing, to be confirmed as matching.
+    QString bluetoothPin() const { return m_bluetooth_pin; }
+    void setBluetoothPin(const QString& pin);
+    Q_INVOKABLE void confirmBluetoothPin(bool match) { emit bluetoothPinConfirmed(match); }
     JadeAPI *api() const { return m_api; }
     JadeAPI* usbApi() const { return m_usb_api; }
     JadeAPI* bluetoothApi() const { return m_bluetooth_api; }
@@ -115,6 +121,8 @@ signals:
     void connectionSelectedChanged();
     void bluetoothStateChanged();
     void bluetoothPairRequested();
+    void bluetoothPinChanged();
+    void bluetoothPinConfirmed(bool match);
 private:
     void setBackend(JadeAPI* api);
     void updateBackend();
@@ -131,6 +139,7 @@ private:
     bool m_unlocking{false};
     JadeDevice::State m_state{StateLocked};
     BluetoothState m_bluetooth_state{BluetoothNone};
+    QString m_bluetooth_pin;
 };
 
 class JadeGetMasterBlindingKeyTask : public DeviceGetMasterBlindingKeyTask

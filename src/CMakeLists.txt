@@ -144,4 +144,5 @@ endif()
 
 target_sources(blockstream_core PRIVATE
     jadebluetoothmonitor.h jadebluetoothmonitor.cpp
+    jadebluetoothpairing_win.h jadebluetoothpairing_win.cpp
 )
