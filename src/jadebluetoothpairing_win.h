@@ -24,7 +24,7 @@ public slots:
     void confirmPin(bool match);
 signals:
     void pinRequested(const QString& pin);
-    void finished(bool paired);
+    void finished(bool paired, const QBluetoothAddress& address);
 private:
     struct Private;
     const std::shared_ptr<Private> d;

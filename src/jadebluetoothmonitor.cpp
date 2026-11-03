@@ -11,6 +11,7 @@
 
 #include "jadeapi.h"
 #include "jadebleimpl.h"
+#include "jadebluetoothpairing_linux.h"
 #include "jadebluetoothpairing_win.h"
 
 #include "jadedevice.h"
@@ -215,7 +216,7 @@ void JadeBluetoothMonitor::pairDevice(const QString& name)
     // CoreBluetooth asks the user to pair once the connection is used.
     if (info.address().isNull()) return connectToDevice(info);
     m_pairing = info;
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     const QPointer<JadeDevice> listed(device);
     auto pairing = new JadeBluetoothPairing(info.address(), this);
     m_pairing_request = pairing;
@@ -226,9 +227,15 @@ void JadeBluetoothMonitor::pairDevice(const QString& name)
         listed->setBluetoothState(JadeDevice::BluetoothConfirmingPin);
     });
     connect(device, &JadeDevice::bluetoothPinConfirmed, pairing, &JadeBluetoothPairing::confirmPin);
-    connect(pairing, &JadeBluetoothPairing::finished, this, [=, this](bool paired) {
+    connect(pairing, &JadeBluetoothPairing::finished, this, [=, this](bool paired, const QBluetoothAddress& address) {
         if (listed) listed->setBluetoothPin({});
         if (m_pairing.address() != info.address()) return;
+        // BlueZ resolves the advert address to the identity one while bonding
+        // and only knows the device by that afterwards.
+        if (paired && address != info.address()) {
+            m_pairing = QBluetoothDeviceInfo(address, info.name(), 0);
+            m_pairing.setCoreConfigurations(info.coreConfigurations());
+        }
         finishPairing(paired);
     });
     pairing->start();

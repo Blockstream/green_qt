@@ -23,5 +23,5 @@ if (QT_FEATURE_static)
     message(STATUS "FFMPEG_LIBRARIES: ${FFMPEG_LIBRARIES}")
 endif()
 
-find_package(Qt6 6.11 CONFIG REQUIRED NO_MODULE COMPONENTS WaylandClient)
+find_package(Qt6 6.11 CONFIG REQUIRED NO_MODULE COMPONENTS WaylandClient DBus)
 

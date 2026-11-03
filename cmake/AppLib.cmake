@@ -105,7 +105,7 @@ elseif (APPLE)
 elseif (UNIX)
     find_library(LIBLWK lwk REQUIRED)
     find_library(LIBGLSDK glsdk REQUIRED)
-    target_link_libraries(blockstream_core PUBLIC dl Xrender cap ${LIBLWK} ${LIBGLSDK} Qt6::WaylandClient)
+    target_link_libraries(blockstream_core PUBLIC dl Xrender cap ${LIBLWK} ${LIBGLSDK} Qt6::WaylandClient Qt6::DBus)
 endif()
 
 target_include_directories(blockstream_core PUBLIC

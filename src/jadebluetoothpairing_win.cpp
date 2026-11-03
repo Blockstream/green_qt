@@ -60,7 +60,7 @@ struct JadeBluetoothPairing::Private : std::enable_shared_from_this<Private>
             } else {
                 qWarning() << "JadeBluetoothPairing: pairing failed:" << reason;
             }
-            emit q->finished(paired);
+            emit q->finished(paired, QBluetoothAddress(address));
         });
     }
 
