@@ -19,6 +19,15 @@ linux-x86_64:build-appimage:
   variables:
     AFTER_SCRIPT_IGNORE_ERRORS: "false"
     CTEST_JUNIT_FILE: "$CI_PROJECT_DIR/build/ctest-junit.xml"
+    CMAKE_CXX_COMPILER_LAUNCHER: ccache
+    CCACHE_DIR: "$CI_PROJECT_DIR/.ccache"
+    CCACHE_BASEDIR: "$CI_PROJECT_DIR"
+    CCACHE_NOHASHDIR: "1"
+    CCACHE_MAXSIZE: 2G
+  cache:
+    - key: linux_x86_64_ccache
+      paths:
+        - .ccache/
   script:
     - docker pull "$LINUX_IMAGE"
     - >-
@@ -34,12 +43,19 @@ linux-x86_64:build-appimage:
       -e SENTRY_PROJECT
       -e COUNTLY_APP_KEY_DEV
       -e COUNTLY_APP_KEY_PROD
+      -e CMAKE_CXX_COMPILER_LAUNCHER
+      -e CCACHE_DIR
+      -e CCACHE_BASEDIR
+      -e CCACHE_NOHASHDIR
+      -e CCACHE_MAXSIZE
       "$LINUX_IMAGE"
       bash -lc 'export PATH="/qt/6.12.0/gcc_64/bin:$PREFIX/bin:$PATH";
       export CMAKE_PREFIX_PATH="$PREFIX:$CMAKE_PREFIX_PATH";
       export SOURCE_DATE_EPOCH=$(git log -1 --format=%ct);
       git ls-files -z | xargs -0 touch -d @$SOURCE_DATE_EPOCH;
+      ccache -z;
       tools/ci/build.sh;
+      ccache -s;
       ctest --test-dir build --output-on-failure --output-junit "$CTEST_JUNIT_FILE" || exit 1;
       mv build/blockstream .;
       mkdir -p symbols && cp blockstream symbols/;
