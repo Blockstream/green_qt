@@ -695,13 +695,7 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
     if (result.contains("required_data")) {
         Resolver* resolver{nullptr};
         const auto device = session()->context()->device();
-        const auto xpub_hash_id = session()->context()->xpubHashId();
         if (!device) return promptDevice(result);
-        if (device->session() && !xpub_hash_id.isEmpty()) {
-            if (device->session()->xpubHashId() != xpub_hash_id) {
-                return promptDevice(result);
-            }
-        }
         auto network = session()->network();
         const auto required_data = result.value("required_data").toObject();
         const auto action = required_data.value("action").toString();
@@ -2155,10 +2149,9 @@ DevicePrompt::DevicePrompt(const QJsonObject& result, AuthHandlerTask* task)
 
 void DevicePrompt::select(Device* device)
 {
-    if (device->session() && device->session()->xpubHashId() == m_task->session()->context()->xpubHashId()) {
-        m_task->session()->context()->setDevice(device);
-        m_task->handleResolveCode(m_result);
-    }
+    const auto context = m_task->session()->context();
+    context->setDevice(device);
+    if (context->device() == device) m_task->handleResolveCode(m_result);
 }
 
 

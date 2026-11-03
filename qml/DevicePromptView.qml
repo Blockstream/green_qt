@@ -127,7 +127,12 @@ GStackView {
         JadeUnlockView {
             id: view
             onUnlockFinished: (context) => {
-                self.prompt.select(view.device)
+                // Left unattached when it holds another wallet's keys.
+                if (context.device === view.device) {
+                    self.prompt.select(view.device)
+                } else {
+                    self.pop()
+                }
             }
             onUnlockFailed: self.pop()
         }

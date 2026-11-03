@@ -8,6 +8,7 @@
 #include "context_p.h"
 #include "controllers/lwkamp2accountcontroller.h"
 #include "device.h"
+#include "devicesession.h"
 #include "green_settings.h"
 #include "json.h"
 #include "lightningsession.h"
@@ -296,15 +297,27 @@ Device* Context::device() const
     return d->device;
 }
 
+static bool device_matches(Device* device, const QString& xpub_hash_id)
+{
+    if (xpub_hash_id.isEmpty()) return true;
+    return device->session() && device->session()->xpubHashId() == xpub_hash_id;
+}
+
 void Context::setDevice(Device* device)
 {
     Q_D(Context);
     if (d->device == device) return;
+    // Once the wallet is known, only a device unlocked with its keys is kept.
+    if (device && !device_matches(device, d->xpub_hash_id)) return;
     const auto was_lightning_enabled = lightningEnabled();
+    if (d->device) QObject::disconnect(d->device, nullptr, this, nullptr);
     d->device = device;
     if (d->device) {
         QObject::connect(d->device, &QObject::destroyed, this, [=, this] {
             setDevice(nullptr);
+        });
+        QObject::connect(d->device, &Device::sessionChanged, this, [=, this] {
+            if (!device_matches(d->device, d->xpub_hash_id)) setDevice(nullptr);
         });
         if (d->wallet) {
             auto device_data = qobject_cast<DeviceData*>(d->wallet->login());
@@ -625,7 +638,7 @@ bool Context::lightningEnabled() const
 {
     Q_D(const Context);
 
-    return !d->bip39 && isMainnet() && !d->watchonly && !d->device && d->wallet && d->wallet->lightningEnabled();
+    return !d->bip39 && isMainnet() && !d->watchonly && d->wallet && !qobject_cast<DeviceData*>(d->wallet->login()) && d->wallet->lightningEnabled();
 }
 
 void Context::updateLightningEnabled(bool was_enabled)
@@ -933,15 +946,16 @@ void Context::loginNetwork(TaskGroup *group, Network *network)
 {
     Q_D(Context);
 
+    // A hardware wallet whose device is away is asked for through the device
+    // prompt; without device or mnemonic there is nothing to log in with.
+    const bool hardware = d->device || !d->device_details.isEmpty();
+    if (!hardware && !d->credentials.contains("mnemonic")) return;
+
     auto session = getOrCreateSession(network);
     auto connect_session = new ConnectTask(10000, session);
-    LoginTask* login{nullptr};
-
-    if (d->device) {
-        login = new LoginTask(device_details_from_device(d->device), session);
-    } else if (d->credentials.contains("mnemonic")) {
-        login = new LoginTask(d->credentials, {}, session);
-    }
+    auto login = hardware
+        ? new LoginTask(d->device ? device_details_from_device(d->device) : d->device_details, session)
+        : new LoginTask(d->credentials, {}, session);
 
     connect_session->then(login);
 

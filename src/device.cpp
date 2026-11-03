@@ -41,8 +41,10 @@ void Device::setConnected(bool connected)
 
 void Device::createSession(const QString& xpub_hash_id)
 {
-    clearSession();
+    // Swapped without passing through null, which would drop the device from its context.
+    const auto session = m_session;
     setSession(new DeviceSession(xpub_hash_id, this));
+    if (session) session->deleteLater();
 }
 
 void Device::clearSession()
