@@ -39,6 +39,7 @@ static void RememberJade(const QString& name)
 JadeBluetoothMonitor::JadeBluetoothMonitor(QObject* parent)
     : QObject(parent)
 {
+    m_clock.start();
     // The scan stops with an error while Bluetooth is off, so it is started
     // again once it is back on. Adverts seen before are stale by then.
     connect(DeviceManager::instance(), &DeviceManager::bluetoothStateChanged, this, [this] {
@@ -94,6 +95,8 @@ void JadeBluetoothMonitor::update()
                 // Windows also reports bonded devices from its cache, with no RSSI,
                 // whether or not they are in range. Only an advert proves it is.
                 if (info.rssi() == 0) return;
+                // Keyed by the name, which the first advert may not carry yet.
+                if (info.name().isEmpty()) return;
 
                 // A device advertises continuously, so this fires repeatedly for
                 // one Jade. Connecting again each time leaves several GATT
@@ -105,7 +108,7 @@ void JadeBluetoothMonitor::update()
                 // random address, so the same device arrives here under a new
                 // address every rotation and would not match itself. The name
                 // carries the last bytes of its EFUSEMAC and is stable.
-                const auto key = info.name().isEmpty() ? info.address().toString() : info.name();
+                const auto key = info.name();
                 if (m_backends.contains(key)) return;
 
                 // Jade's characteristics need an encrypted link, so the platform
@@ -124,6 +127,7 @@ void JadeBluetoothMonitor::update()
                     : IsKnownJade(key) ? QBluetoothLocalDevice::Paired : QBluetoothLocalDevice::Unpaired;
                 qDebug() << Q_FUNC_INFO << "discovered" << info.name() << address << info.deviceUuid() << "rssi" << info.rssi() << pairing;
                 m_adverts.insert(key, info);
+                m_seen.insert(key, m_clock.elapsed());
                 JadeDevice* const device = listDevice(key);
                 if (pairing == QBluetoothLocalDevice::Unpaired) {
                     // Listed for the user to pair. Asking by itself on every advert
@@ -287,21 +291,28 @@ void JadeBluetoothMonitor::cancelPairing()
 // because of them go, and the rest no longer claim to be in range.
 void JadeBluetoothMonitor::dropListedDevices()
 {
+    for (const auto& name : m_listed.keys()) dropListedDevice(name);
     m_adverts.clear();
-    for (JadeDevice* const device : std::exchange(m_listed, {})) {
-        if (!device) continue;
-        disconnect(device, nullptr, this, nullptr);
-        device->setBluetoothState(JadeDevice::BluetoothNone);
-        if (device->isConnected() || device->api() || device->parent() != this) continue;
-        qDebug() << Q_FUNC_INFO << "dropping" << device->name();
-        DeviceManager::instance()->removeDevice(device);
-        device->deleteLater();
-    }
+    m_seen.clear();
+}
+
+void JadeBluetoothMonitor::dropListedDevice(const QString& name)
+{
+    m_adverts.remove(name);
+    m_seen.remove(name);
+    JadeDevice* const device = m_listed.take(name);
+    if (!device) return;
+    disconnect(device, nullptr, this, nullptr);
+    device->setBluetoothState(JadeDevice::BluetoothNone);
+    if (device->isConnected() || device->api() || device->parent() != this) return;
+    qDebug() << Q_FUNC_INFO << "dropping" << name;
+    DeviceManager::instance()->removeDevice(device);
+    device->deleteLater();
 }
 
 void JadeBluetoothMonitor::connectToDevice(const QBluetoothDeviceInfo& info)
 {
-    const auto key = info.name().isEmpty() ? info.address().toString() : info.name();
+    const auto key = info.name();
     if (m_backends.contains(key)) return;
 
     auto backend = new JadeAPI(info, this);
@@ -336,6 +347,14 @@ void JadeBluetoothMonitor::connectToDevice(const QBluetoothDeviceInfo& info)
 
 void JadeBluetoothMonitor::deviceScanFinished()
 {
+    // A Jade that is switched off just stops advertising. BlueZ keeps reporting
+    // it from its cache for a while, so on Linux this only starts after that.
+    const qint64 stale_ms = 10000;
+    for (const auto& name : m_listed.keys()) {
+        if (m_backends.contains(name) || m_pairing.name() == name) continue;
+        if (m_clock.elapsed() - m_seen.value(name) > stale_ms) dropListedDevice(name);
+    }
+
     // The agent stops itself after lowEnergyDiscoveryTimeout, so without starting
     // it again a Jade that is powered on later never reaches deviceDiscovered and
     // goes unnoticed until something else calls update(). Restarting keeps the

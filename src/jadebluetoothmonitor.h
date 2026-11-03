@@ -3,6 +3,7 @@
 
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QBluetoothLocalDevice>
+#include <QElapsedTimer>
 #include <QPointer>
 #include <QtQml>
 
@@ -30,6 +31,7 @@ protected slots:
     void pairDevice(const QString& name);
     void finishPairing(bool paired);
     void cancelPairing();
+    void dropListedDevice(const QString& name);
     void dropListedDevices();
 
 signals:
@@ -54,6 +56,10 @@ private:
     // the address rotates.
     QMap<QString, QBluetoothDeviceInfo> m_adverts;
     QMap<QString, QPointer<JadeDevice>> m_listed;
+    // When each listed Jade was last reported, so one that stops advertising
+    // is dropped while the scan goes on.
+    QElapsedTimer m_clock;
+    QMap<QString, qint64> m_seen;
 };
 
 #endif // GREEN_JADEBLUETOOTHMONITOR_H
