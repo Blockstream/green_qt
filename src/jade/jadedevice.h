@@ -67,6 +67,7 @@ public:
     BluetoothState bluetoothState() const { return m_bluetooth_state; }
     void setBluetoothState(BluetoothState state);
     Q_INVOKABLE void pairBluetooth() { emit bluetoothPairRequested(); }
+    Q_INVOKABLE void cancelBluetoothPairing() { emit bluetoothPairCancelled(); }
     // The code shown by both sides while pairing, to be confirmed as matching.
     QString bluetoothPin() const { return m_bluetooth_pin; }
     void setBluetoothPin(const QString& pin);
@@ -121,6 +122,7 @@ signals:
     void connectionSelectedChanged();
     void bluetoothStateChanged();
     void bluetoothPairRequested();
+    void bluetoothPairCancelled();
     void bluetoothPinChanged();
     void bluetoothPinConfirmed(bool match);
 private:

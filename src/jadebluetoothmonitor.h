@@ -29,6 +29,7 @@ protected slots:
     JadeDevice* listDevice(const QString& name);
     void pairDevice(const QString& name);
     void finishPairing(bool paired);
+    void cancelPairing();
     void dropListedDevices();
 
 signals:

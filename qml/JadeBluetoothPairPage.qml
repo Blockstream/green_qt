@@ -20,6 +20,11 @@ StackViewPage {
             self.deviceSelected(self.device)
         }
     }
+    // Going back or closing the drawer abandons a bond still in progress.
+    Component.onDestruction: {
+        const state = self.device?.bluetoothState
+        if (state === JadeDevice.BluetoothPairing || state === JadeDevice.BluetoothConfirmingPin) self.device.cancelBluetoothPairing()
+    }
     StackView.onActivated: {
         if (self.device.bluetoothState === JadeDevice.BluetoothUnpaired) self.device.pairBluetooth()
         self.check()

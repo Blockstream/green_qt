@@ -47,8 +47,7 @@ JadeBluetoothMonitor::JadeBluetoothMonitor(QObject* parent)
         DeviceManager::instance()->setBluetoothScanning(false);
         // A bond in flight is aborted without a result, so forget it or no
         // other can be asked for.
-        m_pairing = {};
-        delete m_pairing_request;
+        cancelPairing();
         dropListedDevices();
     });
 }
@@ -165,13 +164,21 @@ void JadeBluetoothMonitor::update()
         DeviceManager::instance()->setBluetoothScanning(m_device_discovery_agent->isActive());
     } else if (m_device_discovery_agent) {
         DeviceManager::instance()->setBluetoothScanning(false);
-        // Only the scan stops. Devices already connected keep their backends, so
-        // leaving the screen that looks for devices does not drop them.
+        // Devices already connected keep their backends, so leaving the screen
+        // that looks for devices does not drop them. Connections still being
+        // opened were for that screen, and go with it.
         m_device_discovery_agent->stop();
+        for (auto it = m_backends.begin(); it != m_backends.end();) {
+            if (m_devices.contains(it.value())) {
+                ++it;
+                continue;
+            }
+            delete it.value();
+            it = m_backends.erase(it);
+        }
         // A bond asked for while scanning should not open a connection once the
         // screen that wanted it is gone; the next scan asks again if needed.
-        m_pairing = {};
-        delete m_pairing_request;
+        cancelPairing();
         dropListedDevices();
     }
 }
@@ -197,6 +204,9 @@ JadeDevice* JadeBluetoothMonitor::listDevice(const QString& name)
     m_listed.insert(name, device);
     connect(device, &JadeDevice::bluetoothPairRequested, this, [=, this] {
         pairDevice(name);
+    });
+    connect(device, &JadeDevice::bluetoothPairCancelled, this, [=, this] {
+        if (m_pairing.name() == name) cancelPairing();
     });
     return device;
 }
@@ -258,6 +268,19 @@ void JadeBluetoothMonitor::finishPairing(bool paired)
     qDebug() << Q_FUNC_INFO << "paired" << info.name() << info.address().toString() << "status" << m_local_device->pairingStatus(info.address());
     if (device) device->setBluetoothState(JadeDevice::BluetoothPaired);
     connectToDevice(info);
+}
+
+// Abandoned without a result, which would otherwise block pairing another Jade.
+// ponytail: on Linux a bond still before its code keeps going in BlueZ; call
+// Device1.CancelPairing if that turns out to matter.
+void JadeBluetoothMonitor::cancelPairing()
+{
+    const auto info = std::exchange(m_pairing, {});
+    delete m_pairing_request;
+    JadeDevice* const device = m_listed.value(info.name());
+    if (!device) return;
+    device->setBluetoothPin({});
+    device->setBluetoothState(JadeDevice::BluetoothUnpaired);
 }
 
 // Once the scan stops the adverts are stale, so the entries that exist only
