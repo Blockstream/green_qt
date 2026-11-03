@@ -271,7 +271,10 @@ void JadeUnlockController::unlock()
         setContext(ContextManager::instance()->create(deployment, false));
     }
 
-    context()->setDevice(m_device);
+    // A wallet already logged in only takes the device back once it proves to
+    // hold the same keys, a Jade reset with another seed keeps its name.
+    const bool attach = context()->xpubHashId().isEmpty() || context()->device() == m_device;
+    if (attach) context()->setDevice(m_device);
     context()->setRemember(m_remember);
 
     m_network = context()->primaryNetwork();
@@ -294,6 +297,14 @@ void JadeUnlockController::unlock()
     monitor()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=, this] {
+        if (!attach) {
+            const auto session = m_device ? m_device->session() : nullptr;
+            if (!session || session->xpubHashId() != context()->xpubHashId()) {
+                qWarning() << Q_FUNC_INFO << "unlocked device does not match the wallet";
+                return;
+            }
+            context()->setDevice(m_device);
+        }
         emit unlocked(context());
     });
 

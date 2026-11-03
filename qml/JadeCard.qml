@@ -7,7 +7,22 @@ import QtQuick.Layouts
 WalletHeaderCard {
     signal detailsClicked
 
-    readonly property JadeDevice device: self.context?.device instanceof JadeDevice ? self.context.device : null
+    // Once disconnected the wallet has no device until one is attached again, so
+    // offer a reconnected Jade with the same name to be unlocked from here. It is
+    // kept while unlocking, when it is no longer locked but not yet identified,
+    // and dropped once identified as another wallet.
+    readonly property JadeDevice device: {
+        if (self.context?.device instanceof JadeDevice) return self.context.device
+        const name = self.context?.wallet?.login?.device?.name
+        if (!name) return null
+        for (let i = 0; i < jade_devices.count; ++i) {
+            const device = jade_devices.objectAt(i)?.device
+            if (!(device instanceof JadeDevice) || !device.connected || device.name !== name) continue
+            if (device.session && device.session.xpubHashId !== self.context.xpubHashId) continue
+            return device
+        }
+        return null
+    }
 
     function isJadeLocked() {
         return !!self.device?.connected && self.device?.state === JadeDevice.StateLocked
@@ -26,6 +41,18 @@ WalletHeaderCard {
     }
 
     Component.onCompleted: firmware_controller.check(self.device)
+    DeviceDiscoveryRequest {
+        active: self.visible && !self.device?.connected
+    }
+    Instantiator {
+        id: jade_devices
+        model: DeviceListModel {
+            type: Device.BlockstreamJade
+        }
+        delegate: QtObject {
+            required property Device device
+        }
+    }
     JadeFirmwareController {
         id: firmware_controller
     }
