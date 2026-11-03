@@ -2,8 +2,10 @@
 #include "device.h"
 #include "networkmanager.h"
 
+#include <QBluetoothLocalDevice>
 #include <QGuiApplication>
 #include <QPermissions>
+#include <QTimer>
 
 DeviceManager::DeviceManager(QObject* parent)
     : QObject(parent)
@@ -126,6 +128,39 @@ void DeviceManager::setBluetoothPermission(Qt::PermissionStatus permission)
     if (m_bluetooth_permission == permission) return;
     m_bluetooth_permission = permission;
     emit bluetoothPermissionChanged();
+    if (permission == Qt::PermissionStatus::Granted) watchBluetoothState();
+}
+
+// Only once access is granted: on macOS the local device talks to CoreBluetooth,
+// which asks for access by itself. An invalid one stays invalid once an adapter
+// is back, and on Linux goes invalid without a signal, so it is checked and
+// replaced while a screen looks for devices.
+// ponytail: polled every 2s, as Qt has no adapter added or removed signal.
+void DeviceManager::watchBluetoothState()
+{
+    if (m_bluetooth_local_device && m_bluetooth_local_device->isValid()) return updateBluetoothState();
+    if (!m_bluetooth_local_device) {
+        auto timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [this] {
+            if (isDiscoveryRequested()) watchBluetoothState();
+        });
+        timer->start(2000);
+    }
+    delete m_bluetooth_local_device;
+    m_bluetooth_local_device = new QBluetoothLocalDevice(this);
+    connect(m_bluetooth_local_device, &QBluetoothLocalDevice::hostModeStateChanged, this, &DeviceManager::updateBluetoothState);
+    updateBluetoothState();
+}
+
+void DeviceManager::updateBluetoothState()
+{
+    const bool available = m_bluetooth_local_device->isValid();
+    const bool enabled = available && m_bluetooth_local_device->hostMode() != QBluetoothLocalDevice::HostPoweredOff;
+    if (m_bluetooth_available == available && m_bluetooth_enabled == enabled) return;
+    m_bluetooth_available = available;
+    m_bluetooth_enabled = enabled;
+    qDebug() << Q_FUNC_INFO << "available" << available << "enabled" << enabled;
+    emit bluetoothStateChanged();
 }
 
 void DeviceManager::setBluetoothScanning(bool bluetooth_scanning)

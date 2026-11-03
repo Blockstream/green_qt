@@ -20,6 +20,18 @@ const QUuid JADE_SERVICE_UUID{"6e400001-b5a3-f393-e0a9-e50e24dcca9e"};
 JadeBluetoothMonitor::JadeBluetoothMonitor(QObject* parent)
     : QObject(parent)
 {
+    // The scan stops with an error while Bluetooth is off, so it is started
+    // again once it is back on. Adverts seen before are stale by then.
+    connect(DeviceManager::instance(), &DeviceManager::bluetoothStateChanged, this, [this] {
+        if (!m_active) return;
+        if (DeviceManager::instance()->isBluetoothEnabled()) return update();
+        DeviceManager::instance()->setBluetoothScanning(false);
+        // A bond in flight is aborted without a result, so forget it or no
+        // other can be asked for.
+        m_pairing = {};
+        delete m_pairing_request;
+        dropListedDevices();
+    });
 }
 
 JadeBluetoothMonitor::~JadeBluetoothMonitor()
@@ -48,6 +60,11 @@ void JadeBluetoothMonitor::setActive(bool active)
 void JadeBluetoothMonitor::update()
 {
     if (m_active) {
+        // An invalid local device stays invalid once an adapter is back.
+        if (m_local_device && !m_local_device->isValid()) {
+            delete std::exchange(m_device_discovery_agent, nullptr);
+            delete std::exchange(m_local_device, nullptr);
+        }
         if (!m_device_discovery_agent) {
             m_device_discovery_agent = new QBluetoothDeviceDiscoveryAgent(this);
             m_local_device = new QBluetoothLocalDevice(this);

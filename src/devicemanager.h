@@ -7,6 +7,7 @@
 #include <QVector>
 
 class Device;
+class QBluetoothLocalDevice;
 
 class DeviceManager : public QObject
 {
@@ -14,6 +15,10 @@ class DeviceManager : public QObject
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(bool discoveryRequested READ isDiscoveryRequested NOTIFY discoveryRequestedChanged)
     Q_PROPERTY(Qt::PermissionStatus bluetoothPermission READ bluetoothPermission NOTIFY bluetoothPermissionChanged)
+    // Whether the machine has a Bluetooth adapter and whether it is turned on,
+    // known once access is granted.
+    Q_PROPERTY(bool bluetoothAvailable READ isBluetoothAvailable NOTIFY bluetoothStateChanged)
+    Q_PROPERTY(bool bluetoothEnabled READ isBluetoothEnabled NOTIFY bluetoothStateChanged)
     Q_PROPERTY(bool bluetoothScanning READ isBluetoothScanning NOTIFY bluetoothScanningChanged)
 public:
     virtual ~DeviceManager();
@@ -24,6 +29,8 @@ public:
     void addDiscoveryRequest(QObject* request);
     void removeDiscoveryRequest(QObject* request);
     Qt::PermissionStatus bluetoothPermission() const { return m_bluetooth_permission; }
+    bool isBluetoothAvailable() const { return m_bluetooth_available; }
+    bool isBluetoothEnabled() const { return m_bluetooth_enabled; }
     bool isBluetoothScanning() const { return m_bluetooth_scanning; }
     void setBluetoothScanning(bool bluetooth_scanning);
 public slots:
@@ -33,6 +40,7 @@ signals:
     void countChanged();
     void discoveryRequestedChanged();
     void bluetoothPermissionChanged();
+    void bluetoothStateChanged();
     void bluetoothScanningChanged();
     void deviceAdded(Device* device);
     void deviceRemoved(Device* device);
@@ -41,10 +49,15 @@ private:
     explicit DeviceManager(QObject* parent = nullptr);
     void updateBluetoothPermission();
     void setBluetoothPermission(Qt::PermissionStatus permission);
+    void watchBluetoothState();
+    void updateBluetoothState();
     QSet<Device*> m_devices;
     QMap<QString, QSet<QByteArray>> m_xpubs;
     QSet<QObject*> m_discovery_requests;
     Qt::PermissionStatus m_bluetooth_permission{Qt::PermissionStatus::Undetermined};
+    QBluetoothLocalDevice* m_bluetooth_local_device{nullptr};
+    bool m_bluetooth_available{true};
+    bool m_bluetooth_enabled{true};
     bool m_bluetooth_scanning{false};
     bool m_watching_application_state{false};
 };
