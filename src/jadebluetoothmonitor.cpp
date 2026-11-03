@@ -6,6 +6,7 @@
 #include <qbluetoothdeviceinfo.h>
 #include <qbluetoothservicediscoveryagent.h>
 
+#include <QSettings>
 #include <QTimer>
 
 #include "jadeapi.h"
@@ -14,8 +15,25 @@
 
 #include "jadedevice.h"
 #include "devicemanager.h"
+#include "util.h"
 
 const QUuid JADE_SERVICE_UUID{"6e400001-b5a3-f393-e0a9-e50e24dcca9e"};
+
+// CoreBluetooth does not tell whether a device is bonded, so the Jades that
+// connected before are remembered by name.
+static bool IsKnownJade(const QString& name)
+{
+    return QSettings(GetDataFile("app", "bluetooth.ini"), QSettings::IniFormat).value("known").toStringList().contains(name);
+}
+
+static void RememberJade(const QString& name)
+{
+    QSettings settings(GetDataFile("app", "bluetooth.ini"), QSettings::IniFormat);
+    auto known = settings.value("known").toStringList();
+    if (known.contains(name)) return;
+    known.append(name);
+    settings.setValue("known", known);
+}
 
 JadeBluetoothMonitor::JadeBluetoothMonitor(QObject* parent)
     : QObject(parent)
@@ -98,11 +116,12 @@ void JadeBluetoothMonitor::update()
                 // bond up front instead and only open the connection once it is in
                 // place.
                 // Only where the platform identifies devices by address. CoreBluetooth
-                // reports a null address and identifies peripherals by uuid, and it
-                // handles pairing itself, so asking for a bond there would request one
-                // for 00:00:00:00:00:00 and wait for a result that never arrives.
+                // reports a null address and pairs by itself on the first encrypted
+                // access, so connecting to an unknown Jade there would prompt the
+                // user to pair it unasked.
                 const auto address = info.address().toString();
-                const auto pairing = info.address().isNull() ? QBluetoothLocalDevice::Paired : m_local_device->pairingStatus(info.address());
+                const auto pairing = !info.address().isNull() ? m_local_device->pairingStatus(info.address())
+                    : IsKnownJade(key) ? QBluetoothLocalDevice::Paired : QBluetoothLocalDevice::Unpaired;
                 qDebug() << Q_FUNC_INFO << "discovered" << info.name() << address << info.deviceUuid() << "rssi" << info.rssi() << pairing;
                 m_adverts.insert(key, info);
                 JadeDevice* const device = listDevice(key);
@@ -183,15 +202,19 @@ JadeDevice* JadeBluetoothMonitor::listDevice(const QString& name)
 
 void JadeBluetoothMonitor::pairDevice(const QString& name)
 {
+    qDebug() << Q_FUNC_INFO << name;
+
     // Jade advertises under a new address every few seconds, so asking per
     // address would start several bonds for the same device.
     if (m_pairing.isValid()) return;
     const auto info = m_adverts.value(name);
     JadeDevice* const device = m_listed.value(name);
     if (!info.isValid() || !device) return;
-    m_pairing = info;
     device->setBluetoothState(JadeDevice::BluetoothPairing);
     qDebug() << Q_FUNC_INFO << "requesting pairing for" << info.name() << info.address().toString();
+    // CoreBluetooth asks the user to pair once the connection is used.
+    if (info.address().isNull()) return connectToDevice(info);
+    m_pairing = info;
 #ifdef Q_OS_WIN
     const QPointer<JadeDevice> listed(device);
     auto pairing = new JadeBluetoothPairing(info.address(), this);
@@ -263,6 +286,11 @@ void JadeBluetoothMonitor::connectToDevice(const QBluetoothDeviceInfo& info)
         // Drop the entry so the device can be picked up again the next time it is
         // advertised.
         m_backends.remove(key);
+        // The connection asked for on CoreBluetooth did not get as far as a probe.
+        JadeDevice* const listed = m_listed.value(key);
+        if (listed && listed->bluetoothState() == JadeDevice::BluetoothPairing) {
+            listed->setBluetoothState(JadeDevice::BluetoothUnpaired);
+        }
         JadeDevice* const device = m_devices.take(backend);
         if (device && device->bluetoothApi() == backend) {
             device->setBluetoothBackend(nullptr);
@@ -315,6 +343,10 @@ void JadeBluetoothMonitor::probe(QPointer<JadeAPI> backend)
             if (!device) {
                 device = listDevice(JadeDevice::nameForEfusemac(efusemac));
                 m_devices.insert(backend, device);
+                RememberJade(device->name());
+                if (device->bluetoothState() == JadeDevice::BluetoothPairing) {
+                    device->setBluetoothState(JadeDevice::BluetoothPaired);
+                }
             }
             device->setBluetoothBackend(backend);
             if (device->api() == backend) {

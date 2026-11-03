@@ -95,7 +95,13 @@ void JadeBleImpl::connectDeviceImpl()
                                     this, &JadeBleImpl::onServiceStateChange);
                             // Jade's characteristic values are never used, and reading them
                             // on Windows is aborted often enough to drop the connection.
+                            // CoreBluetooth skips the descriptors too, which the
+                            // subscription below needs.
+#ifdef Q_OS_WIN
                             m_service->discoverDetails(QLowEnergyService::SkipValueDiscovery);
+#else
+                            m_service->discoverDetails();
+#endif
                         }
                         else
                         {
