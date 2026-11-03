@@ -4,13 +4,25 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 StackViewPage {
-    signal genuine()
-    signal diy()
+    signal genuine(JadeDevice device)
+    signal diy(JadeDevice device)
+
     required property JadeDevice device
+
+    function registerEvent(device, result) {
+        if (Settings.rememberDevices) {
+            const efusemac = device.versionInfo.EFUSEMAC
+            Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, result))
+        }
+    }
+
     id: self
+    title: 'Genuine Check'
     footer: null
-    leftItem: Item {}
+    skipOnPop: true
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }
@@ -83,7 +95,7 @@ StackViewPage {
             heading: 'Genuine check canceled'
             message: 'We were unable to complete the authenticity check because it was canceled on Jade.'
             onCloseClicked: self.closeClicked()
-            onRetryClicked: self.popPage(self)
+            onRetryClicked: self.StackView.view.pop(self)
         }
     }
 
@@ -94,7 +106,7 @@ StackViewPage {
             heading: 'Unable to complete genuine check'
             message: 'Something went wrong while checking your Jade. This does not mean your device is not genuine, please try again.'
             onCloseClicked: self.closeClicked()
-            onRetryClicked: self.popPage(self)
+            onRetryClicked: self.StackView.view.pop(self)
         }
     }
 
@@ -103,16 +115,20 @@ StackViewPage {
         JadeGenuineUnsupportedPage {
             device: self.device
             onCloseClicked: self.closeClicked()
-            onDiyClicked: self.diy()
+            onDiyClicked: {
+                self.registerEvent(self.device, 'diy')
+                self.diy(self.device)
+            }
         }
     }
 
     Component {
         id: success_page
         JadeGenuineSuccessPage {
+            StackView.onActivated: self.registerEvent(self.device, 'genuine')
             device: self.device
-            onCloseClicked: self.genuine()
-            onContinueClicked: self.genuine()
+            onCloseClicked: self.closeClicked()
+            onContinueClicked: self.genuine(self.device)
         }
     }
 }

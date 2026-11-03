@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
 
-Page {
+StackViewPage {
     signal updateFailed(string error)
     signal updateFinished()
     required property JadeDevice device
@@ -35,8 +35,7 @@ Page {
         onUpdateFailed: (error) => self.updateFailed(error)
     }
     id: self
-    background: null
-    padding: 60
+    title: qsTrId('id_firmware_upgrade')
     contentItem: GStackView {
         id: stack_view
         initialItem: preparing_view
@@ -70,12 +69,6 @@ Page {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 26
-                font.weight: 600
-                text: qsTrId('id_firmware_upgrade')
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 14
                 font.weight: 400
                 opacity: 0.5
@@ -92,8 +85,7 @@ Page {
                 value: controller.progress
             }
             Pane {
-                Layout.alignment: Qt.AlignCenter
-                Layout.minimumWidth: 400
+                Layout.fillWidth: true
                 padding: 20
                 background: Rectangle {
                     color: '#0E0F11'

@@ -24,17 +24,13 @@ WalletHeaderCard {
         return null
     }
 
-    function isJadeLocked() {
-        return !!self.device?.connected && self.device?.state === JadeDevice.StateLocked
-    }
-
-    function getJadeStatusOptions () {
-        if (!self.device?.connected) {
-            return { text: qsTrId('id_disconnected'), color: '#FF6467' }
+    readonly property var status: {
+        if (!self.device?.connected || self.context?.device !== self.device) {
+            return { text: qsTrId('id_disconnected'), color: '#FF6467', action: 'Connect' }
         }
 
-        if (self.isJadeLocked()) {
-            return { text: qsTrId('id_locked'), color: '#FDC700' }
+        if (!!self.device?.connected && self.device?.state === JadeDevice.StateLocked) {
+            return { text: qsTrId('id_locked'), color: '#FDC700', action: qsTrId('id_unlock') }
         }
 
         return { text: qsTrId('id_connected'), color: '#00C60D' }
@@ -97,7 +93,7 @@ WalletHeaderCard {
             spacing: 4
             Rectangle {
                 Layout.alignment: Qt.AlignCenter
-                color: self.getJadeStatusOptions().color
+                color: self.status.color
                 implicitWidth: 8
                 implicitHeight: 8
                 radius: 4
@@ -106,13 +102,15 @@ WalletHeaderCard {
                 font.pixelSize: 14
                 font.weight: 400
                 color: '#A0A0A0'
-                text: self.getJadeStatusOptions().text
+                text: self.status.text
             }
             LinkButton {
-                text: qsTrId('id_unlock')
-                visible: self.isJadeLocked()
-                enabled: unlock_controller.monitor?.idle ?? true
-                onClicked: unlock_controller.unlock()
+                text: self.status.action ?? ''
+                visible: !!self.status.action
+                onClicked: {
+                    const drawer = jade_connect_drawer.createObject(self)
+                    drawer.open()
+                }
             }
         }
         LinkButton {
@@ -123,31 +121,27 @@ WalletHeaderCard {
             textColor: '#FDC700'
             font.pixelSize: 12
             text: qsTrId('id_new_firmware_available')
-            onClicked: update_firmware_dialog.createObject(self).open()
+            onClicked: update_firmware_drawer.createObject(self).open()
         }
         VSpacer {
         }
     }
 
     Component {
-        id: update_firmware_dialog
-        JadeUpdateDialog2 {
-            context: self.context
+        id: update_firmware_drawer
+        JadeUpdateDrawer {
             device: self.device
         }
     }
-    JadeUnlockController {
-        id: unlock_controller
-        context: self.context
-        device: self.device
-        onHttpRequest: (request) => {
-            const dialog = http_request_dialog.createObject(self, { request, context: self.context })
-            dialog.open()
-        }
-    }
     Component {
-        id: http_request_dialog
-        JadeHttpRequestDialog {
+        id: jade_connect_drawer
+        JadeConnectDrawer {
+            id: drawer
+            // Unlocked on the wallet's context, which takes the device back once
+            // it proves to hold the wallet keys; the page reports a mismatch.
+            context: self.context
+            wallet: self.context.wallet
+            onDeviceSelected: drawer.close()
         }
     }
 }

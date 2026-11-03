@@ -12,7 +12,7 @@ StackViewPage {
     required property string message
 
     id: self
-    leftItem: Item {}
+    title: 'Genuine Check'
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }

@@ -1,38 +1,34 @@
+import Blockstream.Controls
 import Blockstream.Green
 import Blockstream.Green.Core
+import Blockstream.Theme
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
-ColumnLayout {
+UiAlertBanner {
     readonly property bool denied: DeviceManager.bluetoothPermission === Qt.Denied
     readonly property bool missing: DeviceManager.bluetoothPermission === Qt.Granted && !DeviceManager.bluetoothAvailable
     readonly property bool off: DeviceManager.bluetoothPermission === Qt.Granted && DeviceManager.bluetoothAvailable && !DeviceManager.bluetoothEnabled
-    Layout.alignment: Qt.AlignCenter
-    Layout.maximumWidth: 360
+    Layout.fillWidth: true
     id: self
     spacing: 12
+    dismissible: false
+    variant: UiAlertBanner.Info
     visible: self.denied || self.missing || self.off
-    Image {
-        Layout.alignment: Qt.AlignHCenter
-        source: 'qrc:/svg2/warning.svg'
+    title: {
+        if (self.denied) return 'Grant Blockstream Bluetooth permission'
+        if (self.missing) return 'Bluetooth is not available'
+        return 'Bluetooth is off'
     }
-    Label {
-        Layout.fillWidth: true
-        Layout.preferredWidth: 0
-        horizontalAlignment: Label.AlignHCenter
-        font.pixelSize: 14
-        font.weight: 400
-        opacity: 0.8
-        wrapMode: Label.WordWrap
-        text: {
-            if (self.denied) return 'Bluetooth access is denied, so Jade can only be found over USB. Allow Bluetooth access in the system settings to connect over Bluetooth.'
-            if (self.missing) return 'No Bluetooth adapter was found, so Jade can only be found over USB.'
-            return 'Bluetooth is turned off, so Jade can only be found over USB. Turn on Bluetooth to connect over Bluetooth.'
-        }
+    description: {
+        if (self.denied) return 'Allow access in System Settings to connect Jade wirelessly. USB still works.'
+        if (self.missing) return 'No Bluetooth adapter was found, so Jade can only be found over USB.'
+        return 'Turn on Bluetooth to connect Jade wirelessly. USB still works.'
     }
-    RegularButton {
-        Layout.alignment: Qt.AlignHCenter
+    UiButton {
+        size: UiButton.ExtraSmall
+        variant: UiButton.SecondaryInverted
+        colors: self.colors
         text: 'Open System Settings'
         visible: {
             if (self.denied) return Qt.platform.os === 'osx'

@@ -14,7 +14,7 @@ RowLayout {
     readonly property var amp2Accounts: UtilJS.accounts(self.context).filter(account => account.amp2)
 
     readonly property bool canCreateAmp0Account: !self.context?.watchonly
-    readonly property bool canCreateAmp2Account: !self.context?.mainnet && !self.context?.watchonly && !self.context?.device && self.context?.deployment === 'testnet'
+    readonly property bool canCreateAmp2Account: !self.context?.mainnet && !self.context?.watchonly && !(self.context?.wallet?.login instanceof DeviceData) && self.context?.deployment === 'testnet'
     readonly property bool canCreateAmpAccount: (self.context.mainnet && self.canCreateAmp0Account) || self.canCreateAmp2Account
 
     readonly property bool hasVisibleAmpAccounts: self.amp0Accounts.length > 0 || self.amp2Accounts.length > 0

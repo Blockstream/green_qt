@@ -120,16 +120,23 @@ JadeFirmwareCheckController::JadeFirmwareCheckController(QObject *parent)
 void JadeFirmwareCheckController::setDevice(JadeDevice *device)
 {
     if (m_device == device) return;
+    if (m_device) disconnect(m_device, nullptr, this, nullptr);
     m_device = device;
     emit deviceChanged();
     if (m_device) {
-        connect(m_device, &JadeDevice::versionInfoChanged, this, [&] {
+        connect(m_device, &JadeDevice::versionInfoChanged, this, [this] {
             check();
         });
-        connect(m_device, &Device::connectedChanged, this, [&] {
+        connect(m_device, &Device::connectedChanged, this, [this] {
             if (m_device && !m_device->isConnected()) {
                 emit deviceDisconnected();
             }
+        });
+        // A Bluetooth Jade is deleted when it goes, while the firmware index
+        // may still be on its way.
+        connect(m_device, &QObject::destroyed, this, [this] {
+            emit deviceChanged();
+            check();
         });
     }
     check();

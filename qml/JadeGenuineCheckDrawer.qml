@@ -25,11 +25,8 @@ AbstractDrawer {
         JadeGenuineCheckPage {
             device: self.device
             leftItem: Item {}
-            rightItem: CloseButton {
-                onClicked: self.abort()
-            }
+            onCloseClicked: self.abort()
             onStart: stack_view.replace(null, checking_page, StackView.PushTransition)
-            onClose: self.abort()
         }
     }
 

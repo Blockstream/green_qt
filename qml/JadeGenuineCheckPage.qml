@@ -5,11 +5,15 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    signal start()
-    signal close()
+    signal start(JadeDevice device)
     required property JadeDevice device
     id: self
+    title: 'Genuine Check'
     footer: null
+    skipOnPop: true
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
+    }
     contentItem: ColumnLayout {
         spacing: 10
         VSpacer {
@@ -52,7 +56,7 @@ StackViewPage {
             Layout.margins: 20
             enabled: self.device.status === JadeDevice.StatusIdle
             text: 'Genuine Check'
-            onClicked: self.start()
+            onClicked: self.start(self.device)
         }
         Label {
             Layout.alignment: Qt.AlignCenter

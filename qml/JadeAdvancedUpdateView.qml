@@ -3,8 +3,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "util.js" as UtilJS
-
 StackViewPage {
     signal skipClicked()
     signal genuineCheckClicked()
@@ -12,15 +10,7 @@ StackViewPage {
     required property JadeDevice device
     required property bool showSkip
     readonly property bool debug: Qt.application.arguments.includes('--debugjade')
-    id: self
-    padding: 0
-    background: Item {
-        BusyIndicator {
-            anchors.centerIn: parent
-            running: firmware_controller.fetching
-        }
-    }
-    StackView.onActivated: firmware_controller.check(self.device)
+
     JadeFirmwareController {
         id: firmware_controller
     }
@@ -29,8 +19,19 @@ StackViewPage {
         index: firmware_controller.index
         device: self.device
     }
-    header: null
+
+    id: self
+    title: qsTrId('id_firmware_upgrade')
+    StackView.onActivated: firmware_controller.check(self.device)
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
+    }
     footerItem: ColumnLayout {
+        BusyIndicator {
+            anchors.centerIn: parent
+            running: firmware_controller.fetching
+            visible: firmware_controller.fetching
+        }
         Image {
             Layout.alignment: Qt.AlignCenter
             source: 'qrc:/svg2/warning.svg'
@@ -43,54 +44,28 @@ StackViewPage {
             text: qsTrId('id_new_jade_firmware_required')
             visible: self.device.updateRequired
         }
-        RowLayout {
-            Layout.topMargin: 20
-            CheckBox {
-                Layout.alignment: Qt.AlignCenter
-                id: left_item
-                text: qsTrId('id_show_all')
-                visible: self.debug
-            }
-            Item {
-                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(right_item) - UtilJS.effectiveWidth(left_item), 0)
-            }
-            HSpacer {
-            }
-            PrimaryButton {
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: 250
-                enabled: button_group.checkedButton && self.device?.connected && self.device?.status === JadeDevice.StatusIdle
-                text: qsTrId('id_continue')
-                onClicked: self.firmwareSelected(button_group.checkedButton.firmware)
-            }
-            HSpacer {
-            }
-            Item {
-                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(left_item) - UtilJS.effectiveWidth(right_item), 0)
-            }
-            LinkButton {
-                Layout.alignment: Qt.AlignCenter
-                id: right_item
-                text: qsTrId('id_skip')
-                visible: self.showSkip && !self.device.updateRequired
-                onClicked: self.skipClicked()
-            }
+        CheckBox {
+            Layout.alignment: Qt.AlignCenter
+            id: left_item
+            text: qsTrId('id_show_all')
+            visible: self.debug
+        }
+        PrimaryButton {
+            Layout.alignment: Qt.AlignCenter
+            Layout.preferredWidth: 250
+            enabled: button_group.checkedButton && self.device?.connected && self.device?.status === JadeDevice.StatusIdle
+            text: qsTrId('id_continue')
+            onClicked: self.firmwareSelected(button_group.checkedButton.firmware)
+        }
+        LinkButton {
+            Layout.alignment: Qt.AlignCenter
+            id: right_item
+            text: qsTrId('id_skip')
+            visible: self.showSkip && !self.device.updateRequired
+            onClicked: self.skipClicked()
         }
     }
     contentItem: ColumnLayout {
-        opacity: firmware_controller.fetching ? 0 : 1
-        Behavior on opacity {
-            SmoothedAnimation {
-                velocity: 3
-            }
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            font.pixelSize: 26
-            font.weight: 600
-            text: qsTrId('id_firmware_upgrade')
-            wrapMode: Label.WordWrap
-        }
         JadeFirmwareConfigSelector {
             Layout.topMargin: 20
             id: config_selector
@@ -124,9 +99,7 @@ StackViewPage {
         }
         ListView {
             Layout.fillHeight: true
-            Layout.alignment: Qt.AlignCenter
-            Layout.minimumWidth: 325
-            Layout.minimumHeight: 300
+            Layout.fillWidth: true
             ScrollIndicator.vertical: ScrollIndicator {}
             clip: true
             spacing: 0

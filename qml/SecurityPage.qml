@@ -4,8 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "util.js" as UtilJS
-
 Page {
     required property Context context
     property bool backupCompleted: !Settings.isEventRegistered({ walletId: self.context.xpubHashId, status: 'pending', type: 'wallet_backup' })
@@ -518,10 +516,8 @@ Page {
                             iconSide: true
                             rightAction: Action {
                                 onTriggered: {
-                                    const dialog = update_firmware_dialog.createObject(self, {
-                                        device: self.jadeDevice
-                                    })
-                                    dialog.open()
+                                    const drawer = update_firmware_drawer.createObject(self)
+                                    drawer.open()
                                 }
                             }
                         }
@@ -600,30 +596,15 @@ Page {
         id: genuine_check_drawer
         JadeGenuineCheckDrawer {
             id: drawer
-            onGenuine: {
-                if (Settings.rememberDevices && drawer.device) {
-                    const efusemac = drawer.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'genuine'))
-                }
-                drawer.close()
-            }
-            onDiy: {
-                if (Settings.rememberDevices && drawer.device) {
-                    const efusemac = drawer.device.versionInfo.EFUSEMAC
-                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(efusemac, 'diy'))
-                }
-                drawer.close()
-            }
-            onAbort: {
-                drawer.close()
-            }
+            onGenuine: drawer.close()
+            onDiy: drawer.close()
+            onAbort: drawer.close()
         }
     }
 
     Component {
-        id: update_firmware_dialog
-        JadeUpdateDialog2 {
-            context: self.context
+        id: update_firmware_drawer
+        JadeUpdateDrawer {
             device: self.jadeDevice
         }
     }

@@ -208,7 +208,7 @@ Pane {
         RowLayout {
             Layout.fillWidth: true
             spacing: 20
-            visible: !self.context.device
+            visible: !(self.context.wallet?.login instanceof DeviceData)
 
             // Left: Label
             ColumnLayout {
@@ -584,7 +584,7 @@ Pane {
             id: lightning_box
             spacing: 20
             Layout.fillWidth: true
-            visible: !self.context.bip39 && self.context.mainnet && !self.context.watchonly && !self.context.device
+            visible: !self.context.bip39 && self.context.mainnet && !self.context.watchonly && !(self.context.wallet?.login instanceof DeviceData)
 
             // Left: Label
             ColumnLayout {

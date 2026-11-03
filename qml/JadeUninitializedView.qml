@@ -8,11 +8,8 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 VFlickable {
-    signal updateClicked()
     signal setupFinished(Context context)
     required property JadeDevice device
-    required property var latestFirmware
-    readonly property bool debug: Qt.application.arguments.includes('--debugjade')
     function setup() {
         if (Settings.enableTestnet) {
             deployment_dialog.createObject(self).open()
@@ -78,13 +75,6 @@ VFlickable {
                 onClicked: self.setup()
             }
         }
-    }
-    RegularButton {
-        Layout.alignment: Qt.AlignCenter
-        Layout.minimumWidth: 325
-        enabled: (self.debug || self.latestFirmware) && self.device.status === JadeDevice.StatusIdle
-        text: qsTrId('id_firmware_upgrade')
-        onClicked: self.updateClicked()
     }
 
     Component {

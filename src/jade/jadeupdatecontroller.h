@@ -82,7 +82,7 @@ signals:
     void updateCompleted();
     void unlockRequired();
 private:
-    JadeDevice* m_device{nullptr};
+    QPointer<JadeDevice> m_device;
     QJsonObject m_index;
     QString m_channel;
     QVariantList m_firmwares;

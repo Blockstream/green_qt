@@ -1,12 +1,11 @@
 import Blockstream.Green
 import QtQuick
 
-WalletDialog {
+AbstractDrawer {
     required property JadeDevice device
+    onClosed: self.destroy()
     id: self
-    clip: true
-    width: 650
-    height: 700
+    edge: Qt.RightEdge
     contentItem: GStackView {
         id: stack_view
         initialItem: JadeAdvancedUpdateView {
@@ -18,7 +17,6 @@ WalletDialog {
     Component {
         id: confirm_update_view
         JadeConfirmUpdatePage {
-            id: view
             device: self.device
             onUpdateFailed: stack_view.pop()
             onUpdateFinished: stack_view.replace(firmware_updated_page)

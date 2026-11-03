@@ -5,6 +5,7 @@ import QtQuick.Layouts
 StackViewPage {
     signal timeout()
     id: self
+    title: qsTrId('id_firmware_upgrade')
     Timer {
         id: timer
         running: self.StackView.status === StackView.Active

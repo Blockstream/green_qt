@@ -6,16 +6,14 @@ import QtQuick.Layouts
 
 import "util.js" as UtilJS
 
-ColumnLayout {
+StackViewPage {
     signal unlockFinished(Context context)
     signal unlockFailed()
     required property Context context
     required property JadeDevice device
     property bool showRemember: true
     readonly property bool connected: controller.context?.sessions?.[0]?.connected ?? false
-    StackView.onActivated: controller.unlock()
-    id: self
-    spacing: 20
+
     JadeUnlockController {
         id: controller
         context: self.context
@@ -28,42 +26,39 @@ ColumnLayout {
         onInvalidPin: self.unlockFailed()
         onDisconnected: self.unlockFailed()
     }
-    VSpacer {
+
+    StackView.onActivated: controller.unlock()
+    id: self
+    title: 'Unlock Jade'
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
     }
-    MultiImage {
-        Layout.alignment: Qt.AlignCenter
-        width: 352
-        height: 240
-        foreground: UtilJS.jadeImage(self.device, 7)
-    }
-    Label {
-        Layout.fillWidth: true
-        Layout.preferredWidth: 0
-        color: '#FFFFFF'
-        font.pixelSize: 22
-        font.weight: 600
-        horizontalAlignment: Label.AlignHCenter
-        text: qsTrId('id_unlock_your_device_to_continue')
-        visible: self.connected
-        wrapMode: Label.WordWrap
-    }
-    ColumnLayout {
-        Layout.alignment: Qt.AlignCenter
-        Layout.fillWidth: false
-        visible: !self.connected
-        TProgressBar {
+    contentItem: ColumnLayout {
+    spacing: 20
+        VSpacer {
+        }
+        MultiImage {
             Layout.alignment: Qt.AlignCenter
-            Layout.minimumWidth: 100
-            indeterminate: true
+            width: 200
+            height: 240
+            foreground: UtilJS.jadeImage(self.device, 7)
         }
         Label {
-            Layout.alignment: Qt.AlignCenter
-            font.pixelSize: 12
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            color: '#FFFFFF'
+            font.pixelSize: 22
             font.weight: 600
-            text: qsTrId('id_connecting')
+            horizontalAlignment: Label.AlignHCenter
+            text: qsTrId('id_unlock_your_device_to_continue')
+            wrapMode: Label.WordWrap
         }
-    }
-    VSpacer {
+        BusyIndicator {
+            Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 10
+        }
+        VSpacer {
+        }
     }
     Component {
         id: http_request_dialog

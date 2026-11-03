@@ -14,6 +14,27 @@ GStackView {
             self.pop()
         }
     }
+    function select(device) {
+        const context = self.context
+        switch (device.state) {
+        case JadeDevice.StateReady:
+            // Unlocked but not yet identified as this wallet, which the context
+            // requires before taking the device.
+            if (device.session?.xpubHashId === context.xpubHashId) {
+                self.prompt.select(device)
+                break
+            }
+            // fallthrough
+        case JadeDevice.StateTemporary:
+        case JadeDevice.StateLocked:
+            self.push(jade_unlock_view, { context, device, showRemember: false })
+            break
+        case JadeDevice.StateUninitialized:
+        case JadeDevice.StateUnsaved:
+            // TODO: show view to jump to onboarding
+            break
+        }
+    }
     Component.onCompleted: self.update()
     DeviceDiscoveryRequest {
         active: self.visible
@@ -83,23 +104,6 @@ GStackView {
     Component {
         id: jade_device
         JadeDeviceDelegate {
-            function trigger() {
-                const device = delegate.device
-                const context = self.context
-                switch (device.state) {
-                case JadeDevice.StateReady:
-                    self.prompt.select(device)
-                    break;
-                case JadeDevice.StateTemporary:
-                case JadeDevice.StateLocked:
-                    self.push(jade_unlock_view, { context, device, showRemember: false })
-                    break
-                case JadeDevice.StateUninitialized:
-                case JadeDevice.StateUnsaved:
-                    // TODO: show view to jump to onboarding
-                    break
-                }
-            }
             id: delegate
             device: _device
             enabled: {
@@ -118,7 +122,28 @@ GStackView {
                     return false
                 }
             }
-            onSelected: delegate.trigger()
+            onConnectUsbClicked: (device) => {
+                device.selectConnection(JadeDevice.USB)
+                self.select(device)
+            }
+            onConnectBluetoothClicked: (device) => {
+                if (device.connected && device.bluetoothAvailable) {
+                    device.selectConnection(JadeDevice.Bluetooth)
+                    self.select(device)
+                } else {
+                    self.push(jade_bluetooth_pair_page, { device })
+                }
+            }
+        }
+    }
+
+    Component {
+        id: jade_bluetooth_pair_page
+        JadeBluetoothPairPage {
+            onDeviceSelected: (device) => {
+                self.pop(StackView.Immediate)
+                self.select(device)
+            }
         }
     }
 

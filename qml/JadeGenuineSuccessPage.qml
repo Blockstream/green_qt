@@ -10,7 +10,8 @@ StackViewPage {
     required property JadeDevice device
 
     id: self
-    leftItem: Item {}
+    title: 'Genuine Check'
+    skipOnPop: true
     rightItem: CloseButton {
         onClicked: self.closeClicked()
     }

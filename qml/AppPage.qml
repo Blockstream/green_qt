@@ -49,6 +49,10 @@ MainPage {
                 return
             }
         }
+        if (!wallet?.context && wallet?.login?.device?.type === 'jade') {
+            jade_connect_drawer.createObject(self, { wallet }).open()
+            return
+        }
         wallet_view.createObject(stack_layout, { wallet })
         stack_layout.currentIndex = stack_layout.children.length - 1
         side_bar.currentView = SideBar.View.Wallet
@@ -84,7 +88,7 @@ MainPage {
 
         if (options?.prompt ?? true) {
             if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
-                jade_notification_dialog.createObject(window, { device }).open()
+                jade_notification_drawer.createObject(self, { device }).open()
                 return
             }
 
@@ -105,17 +109,7 @@ MainPage {
     }
     // Let the user pick the device and how to connect to it.
     function openDeviceScan() {
-        for (let i = 0; i < stack_layout.children.length; ++i) {
-            const child = stack_layout.children[i]
-            if (child instanceof WalletView && child.scan && !child.wallet) {
-                stack_layout.currentIndex = i
-                side_bar.currentView = SideBar.View.Wallet
-                return
-            }
-        }
-        wallet_view.createObject(stack_layout, { scan: true })
-        stack_layout.currentIndex = stack_layout.children.length - 1
-        side_bar.currentView = SideBar.View.Wallet
+        jade_connect_drawer.createObject(self).open()
     }
     function openWallets() {
         if (wallets_drawer.visible) {
@@ -277,6 +271,19 @@ MainPage {
     }
 
     Component {
+        id: jade_connect_drawer
+        JadeConnectDrawer {
+            id: drawer
+            onDeviceSelected: (device, context) => {
+                drawer.close()
+                wallet_view.createObject(stack_layout, { wallet: drawer.wallet, device, context })
+                stack_layout.currentIndex = stack_layout.children.length - 1
+                side_bar.currentView = SideBar.View.Wallet
+            }
+        }
+    }
+
+    Component {
         id: remove_wallet_dialog
         RemoveWalletDialog {
             onRemoveWallet: (wallet) => {
@@ -370,9 +377,9 @@ MainPage {
     }
 
     Component {
-        id: jade_notification_dialog
-        JadeNotificationDialog {
-            onSetupClicked: (device) => {
+        id: jade_notification_drawer
+        JadeNotificationDrawer {
+            onDeviceSelected: (device) => {
                 self.openDevice(device, { prompt: false })
                 close()
             }

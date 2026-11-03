@@ -53,9 +53,7 @@ StackViewPage {
 
     id: self
     title: qsTrId('id_connect_via_qr')
-    footer: null
-    padding: 60
-    rightItem: LinkButton {
+    footerItem: LinkButton {
         external: true
         text: qsTrId('id_learn_more')
         onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/20272957303577-Add-Jade-to-a-QR-supported-app')
@@ -115,7 +113,7 @@ StackViewPage {
             Layout.topMargin: 10
             text: qsTrId('id_qr_pin_unlock')
             cyan: true
-            onClicked: self.StackView.view.push(qrunlock_page)
+            onClicked: self.pushPage(qrunlock_page)
         }
         FixedErrorBadge {
             Layout.alignment: Qt.AlignHCenter

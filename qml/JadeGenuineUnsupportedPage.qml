@@ -17,6 +17,7 @@ StackViewPage {
     }
 
     id: self
+    title: 'Genuine Check'
     leftItem: Item {}
     rightItem: CloseButton {
         onClicked: self.closeClicked()

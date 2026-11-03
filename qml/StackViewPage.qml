@@ -11,11 +11,18 @@ Page {
     property alias centerItem: center_pane.contentItem
     property alias rightItem: right_pane.contentItem
     property alias footerItem: footer_pane.contentItem
+    property bool skipOnPop: false
     function pushPage(...args) {
         return self.StackView.view.push(...args)
     }
     function popPage(...args) {
-        return self.StackView.view.pop(...args)
+        const view = self.StackView.view
+        // Back past the transient Jade steps, counted from the top of the stack
+        // whichever page asks, so a page closing its own selector keeps its place.
+        let i = view.depth - 2
+        while (args.length === 0 && i > 0 && view.get(i, StackView.DontLoad)?.skipOnPop) i--
+        if (i < view.depth - 2) return view.pop(view.get(i))
+        return view.pop(...args)
     }
     function replacePage(...args) {
         return self.StackView.view.replace(...args)
@@ -51,9 +58,9 @@ Page {
                 background: null
                 padding: 0
                 contentItem: BackButton {
-                    onClicked: self.popPage()
-                    visible: self.StackView.index > 0
                     enabled: self.StackView.status === StackView.Active
+                    visible: self.StackView.index > 0
+                    onClicked: self.popPage()
                 }
             }
             Item {

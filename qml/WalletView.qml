@@ -15,7 +15,8 @@ MainPage {
 
     property Wallet wallet
     property Device device
-    property bool scan: false
+    // The context a Jade was unlocked on, logged in from here.
+    property Context context: null
     readonly property Account currentAccount: stack_view.currentItem?.currentAccount ?? null
     readonly property var notifications: UtilJS.flatten(stack_view.currentItem?.notifications, login_alert.notification)
 
@@ -52,15 +53,10 @@ MainPage {
     }
     Component.onCompleted: {
         const wallet = self.wallet
-        if (!wallet) {
-            if (self.device instanceof JadeDevice) {
-                stack_view.push(jade_page, { device: self.device }, StackView.Immediate)
-            } else if (self.scan) {
-                stack_view.push(terms_of_service_page, {}, StackView.Immediate)
-                stack_view.push(connect_jade_page, {}, StackView.Immediate)
-            } else {
-                stack_view.push(terms_of_service_page, {}, StackView.Immediate)
-            }
+        if (!wallet?.context && self.device instanceof JadeDevice) {
+            stack_view.push(jade_page, { device: self.device, context: self.context }, StackView.Immediate)
+        } else if (!wallet) {
+            stack_view.push(terms_of_service_page, {}, StackView.Immediate)
         } else if (wallet.context) {
             stack_view.push(loading_page, { context: wallet.context }, StackView.Immediate)
         } else if (wallet.login instanceof WatchonlyData) {
@@ -106,7 +102,6 @@ MainPage {
                 self.wallet = context.wallet
                 stack_view.replace(null, loading_page, { context }, StackView.Immediate)
             }
-            onFirmwareUpdated: stack_view.pop()
             onCloseClicked: self.closeDevice(self.device)
             onDetailsClicked: self.openJadeDetailsDrawer(page.device)
         }
@@ -147,28 +142,11 @@ MainPage {
     Component {
         id: use_device_page
         UseDevicePage {
-            onConnectJadeClicked: stack_view.push(connect_jade_page)
-            onConnectLedgerClicked: stack_view.push(connect_ledger_page)
-        }
-    }
-
-    Component {
-        id: connect_jade_page
-        ConnectJadePage {
-            onDeviceSelected: (device) => stack_view.push(jade_page, { device, unlock: true })
-            onQrmodeSelected: stack_view.push(jade_qr_connect_page)
-        }
-    }
-
-    Component {
-        id: jade_qr_connect_page
-        JadeQrConnectPage {
-            onLoginStarted: self.showLoggingInPage()
-            onLoginStopped: self.hideLoggingInPage()
-            onLoginFinished: (context) => {
-                self.wallet = context.wallet
-                stack_view.replace(loading_page, { context }, StackView.Immediate)
+            onConnectJadeClicked: {
+                const drawer = jade_connect_drawer.createObject(self)
+                drawer.open()
             }
+            onConnectLedgerClicked: stack_view.push(connect_ledger_page)
         }
     }
 
@@ -401,6 +379,23 @@ MainPage {
     Component {
         id: jade_details_drawer
         JadeDetailsDrawer {
+        }
+    }
+
+    Component {
+        id: jade_connect_drawer
+        JadeConnectDrawer {
+            id: drawer
+            qrEnabled: true
+            onDeviceSelected: (device, context) => {
+                drawer.close()
+                stack_view.push(jade_page, { device, context })
+            }
+            onLoginFinished: (context) => {
+                drawer.close()
+                self.wallet = context.wallet
+                stack_view.replace(null, loading_page, { context }, StackView.Immediate)
+            }
         }
     }
 }

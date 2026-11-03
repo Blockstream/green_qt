@@ -104,12 +104,28 @@ StackViewPage {
     Component {
         id: jade_device
         JadeDeviceDelegate {
-            id: delegate
             device: _device
-            function trigger() {
-                self.deviceSelected(delegate.device)
+            onConnectUsbClicked: (device) => {
+                device.selectConnection(JadeDevice.USB)
+                self.deviceSelected(device)
             }
-            onSelected: delegate.trigger()
+            onConnectBluetoothClicked: (device) => {
+                if (device.connected && device.bluetoothAvailable) {
+                    device.selectConnection(JadeDevice.Bluetooth)
+                    self.deviceSelected(device)
+                } else {
+                    stack_view.push(jade_bluetooth_pair_page, { device })
+                }
+            }
+        }
+    }
+    Component {
+        id: jade_bluetooth_pair_page
+        JadeBluetoothPairPage {
+            onDeviceSelected: (device) => {
+                stack_view.pop(StackView.Immediate)
+                self.deviceSelected(device)
+            }
         }
     }
     Component {

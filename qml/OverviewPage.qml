@@ -48,17 +48,7 @@ Page {
         }
     }
 
-    function checkDeviceMatches() {
-        if (self.context.wallet.login instanceof DeviceData) {
-            if (!self.context.device) return true
-            if (!self.context.device.session) return true
-            if (self.context.device.session.xpubHashId !== self.context.xpubHashId) return false
-        }
-        return true
-    }
-
     function openCreateAccountDrawer() {
-        if (!self.checkDeviceMatches()) return
         const network = self.context.primaryNetwork()
         const id = network.liquid ? network.policyAsset : 'btc'
         const asset = self.context.getOrCreateAsset(id)

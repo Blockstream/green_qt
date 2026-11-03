@@ -157,17 +157,18 @@ set(QML_FILES_DEVICES
     AlreadyRestoredPage.qml
     UseDevicePage.qml
     ConnectJadePage.qml
+    JadeConnectDrawer.qml
+    JadeConnectFlow.qml
     JadeQrConnectPage.qml
     JadeQrConnectUnlockPage.qml
     JadePage.qml
-    JadeConnectionView.qml
     JadeInitializedView.qml
     JadeLoginView.qml
     JadeUninitializedView.qml
     JadeUnlockView.qml
     JadeFirmwareConfigSelector.qml
     ArchivedAccountsDrawer.qml
-    JadeNotificationDialog.qml
+    JadeNotificationDrawer.qml
     SendConfirmPage.qml
     IncreaseFeePage.qml
     AirgappedUnlockPage.qml
@@ -191,6 +192,7 @@ set(QML_FILES_DEVICES
     AddressDetailsPage.qml
     DevicePage.qml
     JadeDeviceDelegate.qml
+    JadeBluetoothPairPage.qml
     JadeInstructionsView.qml
     JadeCard.qml
     DevicePromptView.qml
@@ -198,7 +200,7 @@ set(QML_FILES_DEVICES
     JadeBasicUpdateView.qml
     JadeAdvancedUpdateView.qml
     JadeConfirmUpdatePage.qml
-    JadeUpdateDialog2.qml
+    JadeUpdateDrawer.qml
     JadeVerifyAddressPage.qml
     Hint.qml
     SplashPage.qml
