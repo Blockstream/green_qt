@@ -235,6 +235,8 @@ qt_add_resources(blockstream_core "images"
         svg2/bug.svg
         svg2/headset.svg
         svg2/green-rebrand.svg
+        svg2/usb.svg
+        svg2/bluetooth.svg
 
         pdf/recovery-phrase-backup-template-12-words.pdf
 

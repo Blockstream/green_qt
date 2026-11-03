@@ -41,6 +41,7 @@ void DeviceListModel::setType(Device::Type type)
 
 void DeviceListModel::addDevice(Device* device)
 {
+    if (m_items.contains(device)) return;
     auto item = new QStandardItem;
     item->setData(QVariant::fromValue(device), Qt::UserRole);
     m_source_model.appendRow(item);
@@ -50,6 +51,7 @@ void DeviceListModel::addDevice(Device* device)
 void DeviceListModel::removeDevice(Device* device)
 {
     auto item = m_items.take(device);
+    if (!item) return;
     m_source_model.takeRow(item->row());
     delete item;
 }

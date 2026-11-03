@@ -94,8 +94,26 @@ MainPage {
             }
         }
 
+        if (options?.scan && device instanceof JadeDevice) {
+            self.openDeviceScan()
+            return
+        }
         console.log('create view for device', device)
         wallet_view.createObject(stack_layout, { device })
+        stack_layout.currentIndex = stack_layout.children.length - 1
+        side_bar.currentView = SideBar.View.Wallet
+    }
+    // Let the user pick the device and how to connect to it.
+    function openDeviceScan() {
+        for (let i = 0; i < stack_layout.children.length; ++i) {
+            const child = stack_layout.children[i]
+            if (child instanceof WalletView && child.scan && !child.wallet) {
+                stack_layout.currentIndex = i
+                side_bar.currentView = SideBar.View.Wallet
+                return
+            }
+        }
+        wallet_view.createObject(stack_layout, { scan: true })
         stack_layout.currentIndex = stack_layout.children.length - 1
         side_bar.currentView = SideBar.View.Wallet
     }
@@ -174,9 +192,8 @@ MainPage {
     }
 
     StackView.onActivating: {
-        const device = DeviceManager.defaultDevice()
-        if (device instanceof JadeDevice) {
-            self.openDevice(device)
+        if (jade_devices.rowCount > 0) {
+            self.openDeviceScan()
         } else {
             self.openWallets()
         }
@@ -335,13 +352,20 @@ MainPage {
     }
 
 
+    DeviceListModel {
+        id: jade_devices
+        type: Device.BlockstreamJade
+    }
     Connections {
         target: DeviceManager
+        // Screens looking for devices list them for the user to pick.
         function onDeviceAdded(device) {
-            self.openDevice(device)
+            if (DeviceManager.discoveryRequested) return
+            self.openDevice(device, { scan: true })
         }
         function onDeviceConnected(device) {
-            self.openDevice(device)
+            if (DeviceManager.discoveryRequested) return
+            self.openDevice(device, { scan: true })
         }
     }
 

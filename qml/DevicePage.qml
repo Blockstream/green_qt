@@ -8,7 +8,6 @@ StackViewPage {
     signal deviceSelected(Device device)
     signal removeClicked()
     required property Wallet wallet
-    property bool login: true
     function update() {
         if (timer.running) return
         if (stack_view.depth === 1 && devices_model.rowCount > 0) {
@@ -100,42 +99,6 @@ StackViewPage {
             }
             VSpacer {
             }
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                id: auto_login_loader
-                active: stack_view.currentItem === view && self.login && device_repeater.count === 1 && device_repeater.itemAt(0).item.device.connected && device_repeater.itemAt(0).item.enabled
-                sourceComponent: ColumnLayout {
-                    LinkButton {
-                        Layout.alignment: Qt.AlignCenter
-                        text: 'Cancel Automatic Login'
-                        onClicked: self.login = false
-                    }
-                    Item {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.bottomMargin: 60
-                        Layout.minimumWidth: 400
-                        Layout.minimumHeight: 4
-                        Rectangle {
-                            anchors.centerIn: parent
-                            implicitHeight: 2
-                            radius: 1
-                            color: '#00BCFF'
-                            NumberAnimation on implicitWidth {
-                                easing.type: Easing.OutCubic
-                                from: 400
-                                to: 0
-                                duration: 3000
-                                onFinished: {
-                                    device_repeater.itemAt(0).item.trigger()
-                                    self.login = false
-                                }
-                            }
-                            opacity: Math.min(1, implicitWidth / 20)
-                        }
-                    }
-                }
-            }
-
         }
     }
     Component {
@@ -144,7 +107,6 @@ StackViewPage {
             id: delegate
             device: _device
             function trigger() {
-                self.login = false
                 self.deviceSelected(delegate.device)
             }
             onSelected: delegate.trigger()
@@ -156,7 +118,6 @@ StackViewPage {
             id: delegate
             device: _device
             function trigger() {
-                self.login = false
                 self.deviceSelected(delegate.device)
             }
             onSelected: delegate.trigger()

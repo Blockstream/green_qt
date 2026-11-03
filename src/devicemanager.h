@@ -14,16 +14,18 @@ class DeviceManager : public QObject
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(bool discoveryRequested READ isDiscoveryRequested NOTIFY discoveryRequestedChanged)
     Q_PROPERTY(Qt::PermissionStatus bluetoothPermission READ bluetoothPermission NOTIFY bluetoothPermissionChanged)
+    Q_PROPERTY(bool bluetoothScanning READ isBluetoothScanning NOTIFY bluetoothScanningChanged)
 public:
     virtual ~DeviceManager();
     static DeviceManager* instance();
     int count() const;
     QSet<Device*> devices() const;
-    Q_INVOKABLE Device* defaultDevice() const;
     bool isDiscoveryRequested() const { return !m_discovery_requests.isEmpty(); }
     void addDiscoveryRequest(QObject* request);
     void removeDiscoveryRequest(QObject* request);
     Qt::PermissionStatus bluetoothPermission() const { return m_bluetooth_permission; }
+    bool isBluetoothScanning() const { return m_bluetooth_scanning; }
+    void setBluetoothScanning(bool bluetooth_scanning);
 public slots:
     void addDevice(Device* device);
     void removeDevice(Device* device);
@@ -31,6 +33,7 @@ signals:
     void countChanged();
     void discoveryRequestedChanged();
     void bluetoothPermissionChanged();
+    void bluetoothScanningChanged();
     void deviceAdded(Device* device);
     void deviceRemoved(Device* device);
     void deviceConnected(Device* device);
@@ -42,6 +45,7 @@ private:
     QMap<QString, QSet<QByteArray>> m_xpubs;
     QSet<QObject*> m_discovery_requests;
     Qt::PermissionStatus m_bluetooth_permission{Qt::PermissionStatus::Undetermined};
+    bool m_bluetooth_scanning{false};
     bool m_watching_application_state{false};
 };
 

@@ -18,31 +18,40 @@ StackViewPage {
     DeviceDiscoveryRequest {
         active: self.visible && self.StackView.status === StackView.Active
     }
-    Repeater {
-        id: device_repeater
-        model: DeviceListModel {
-            type: Device.BlockstreamJade
+    ColumnLayout {
+        Layout.alignment: Qt.AlignCenter
+        spacing: 10
+        visible: device_repeater.count > 0
+        Repeater {
+            id: device_repeater
+            model: DeviceListModel {
+                type: Device.BlockstreamJade
+            }
+            delegate: JadeDeviceDelegate {
+                Layout.fillWidth: true
+                onSelected: (device) => self.deviceSelected(device)
+            }
         }
-        delegate: JadeDeviceDelegate {
-            onSelected: (device) => self.deviceSelected(device)
+    }
+    RowLayout {
+        Layout.alignment: Qt.AlignCenter
+        Layout.topMargin: 10
+        spacing: 8
+        visible: DeviceManager.bluetoothScanning
+        BusyIndicator {
+            Layout.preferredHeight: 24
+            Layout.preferredWidth: 24
+        }
+        Label {
+            color: '#FFF'
+            font.pixelSize: 12
+            font.weight: 600
+            opacity: 0.6
+            text: qsTrId('id_looking_for_device')
         }
     }
     JadeInstructionsView {
         visible: device_repeater.count === 0
-    }
-    BusyIndicator {
-        Layout.alignment: Qt.AlignCenter
-        Layout.preferredHeight: 40
-        Layout.preferredWidth: 40
-        Layout.topMargin: 10
-    }
-    Label {
-        Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 8
-        color: '#FFF'
-        font.pixelSize: 12
-        font.weight: 600
-        text: qsTrId('id_looking_for_device')
     }
     BluetoothPermissionWarning {
         Layout.topMargin: 20

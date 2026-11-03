@@ -92,7 +92,7 @@ AbstractDrawer {
                         Label {
                             Layout.fillWidth: true
                             horizontalAlignment: Label.AlignRight
-                            text: 'USB'
+                            text: self.device.connectionType === JadeDevice.Bluetooth ? qsTrId('id_bluetooth') : 'USB'
                         }
                         KeyLabel {
                             text: qsTrId('id_system_location')

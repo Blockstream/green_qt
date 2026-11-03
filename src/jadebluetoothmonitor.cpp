@@ -32,6 +32,7 @@ JadeBluetoothMonitor::~JadeBluetoothMonitor()
         delete device;
     }
     qDeleteAll(m_backends);
+    DeviceManager::instance()->setBluetoothScanning(false);
 }
 
 void JadeBluetoothMonitor::setActive(bool active)
@@ -91,6 +92,9 @@ void JadeBluetoothMonitor::update()
                 connectToDevice(info);
             });
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::finished, this, &JadeBluetoothMonitor::deviceScanFinished);
+            connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::errorOccurred, this, [=, this] {
+                DeviceManager::instance()->setBluetoothScanning(false);
+            });
 
             connect(m_local_device, &QBluetoothLocalDevice::pairingFinished, this, [=, this](QBluetoothAddress address, QBluetoothLocalDevice::Pairing pairing) {
                 const auto info = m_pairing.take(address.toString());
@@ -109,7 +113,9 @@ void JadeBluetoothMonitor::update()
         if (permission == Qt::PermissionStatus::Granted && !m_device_discovery_agent->isActive()) {
             m_device_discovery_agent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
         }
+        DeviceManager::instance()->setBluetoothScanning(m_device_discovery_agent->isActive());
     } else if (m_device_discovery_agent) {
+        DeviceManager::instance()->setBluetoothScanning(false);
         // Only the scan stops. Devices already connected keep their backends, so
         // leaving the screen that looks for devices does not drop them.
         m_device_discovery_agent->stop();
@@ -159,6 +165,7 @@ void JadeBluetoothMonitor::deviceScanFinished()
     if (m_active && m_device_discovery_agent && !m_device_discovery_agent->isActive()) {
         m_device_discovery_agent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
     }
+    DeviceManager::instance()->setBluetoothScanning(m_device_discovery_agent->isActive());
 }
 
 void JadeBluetoothMonitor::probe(QPointer<JadeAPI> backend)

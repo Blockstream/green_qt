@@ -30,15 +30,6 @@ QSet<Device*> DeviceManager::devices() const
 }
 
 
-Device* DeviceManager::defaultDevice() const
-{
-    if (m_devices.size() == 1) {
-        return m_devices.values().first();
-    } else {
-        return nullptr;
-    }
-}
-
 void DeviceManager::addDevice(Device* device)
 {
     if (m_devices.contains(device)) return;
@@ -135,4 +126,11 @@ void DeviceManager::setBluetoothPermission(Qt::PermissionStatus permission)
     if (m_bluetooth_permission == permission) return;
     m_bluetooth_permission = permission;
     emit bluetoothPermissionChanged();
+}
+
+void DeviceManager::setBluetoothScanning(bool bluetooth_scanning)
+{
+    if (m_bluetooth_scanning == bluetooth_scanning) return;
+    m_bluetooth_scanning = bluetooth_scanning;
+    emit bluetoothScanningChanged();
 }

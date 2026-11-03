@@ -160,6 +160,7 @@ set(QML_FILES_DEVICES
     JadeQrConnectPage.qml
     JadeQrConnectUnlockPage.qml
     JadePage.qml
+    JadeConnectionView.qml
     JadeInitializedView.qml
     JadeLoginView.qml
     JadeUninitializedView.qml

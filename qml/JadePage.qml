@@ -12,7 +12,8 @@ StackViewPage {
     signal skip(Device device)
      signal detailsClicked()
     required property JadeDevice device
-    required property bool login
+    // Set when the user picked the device, otherwise wait for Login.
+    property bool unlock: false
     readonly property bool debug: Qt.application.arguments.includes('--debugjade')
     readonly property bool ready: (self.device?.connected && 'BOARD_TYPE' in self.device?.versionInfo)
     StackView.onActivated: firmware_controller.check(self.device);
@@ -89,6 +90,10 @@ StackViewPage {
     function pushView() {
         if (stack_view.depth > 0) return
         if (!self.ready) return
+        if (self.device.bluetoothAvailable && !self.device.connectionSelected) {
+            stack_view.replace(null, connection_view, StackView.PushTransition)
+            return
+        }
         if (self.genuineCheckDialog) return
         if (firmware_controller.fetching) return
         if (self.device.state === JadeDevice.StateUnsaved) {
@@ -132,7 +137,7 @@ StackViewPage {
             break;
         case JadeDevice.StateTemporary:
         case JadeDevice.StateLocked:
-            if (self.login) {
+            if (self.unlock) {
                 stack_view.replace(null, unlock_view, { device: self.device }, StackView.PushTransition)
             } else {
                 stack_view.replace(null, intialized_view, StackView.PushTransition)
@@ -167,6 +172,16 @@ StackViewPage {
         self.genuineCheckDialog.open()
     }
 
+    Connections {
+        target: self.device
+        function onConnectionSelectedChanged() {
+            // The selected link went away, ask again before going on.
+            if (self.device.connectionSelected || !self.device.bluetoothAvailable) return
+            stack_view.clear()
+            self.pushView()
+        }
+    }
+
     Timer {
         interval: 500
         repeat: true
@@ -186,6 +201,18 @@ StackViewPage {
             anchors.rightMargin: self.padding
             anchors.bottomMargin: self.padding
             id: stack_view
+        }
+    }
+
+    Component {
+        id: connection_view
+        JadeConnectionView {
+            device: self.device
+            onConnectionSelected: {
+                self.unlock = true
+                stack_view.clear()
+                self.pushView()
+            }
         }
     }
 
@@ -270,7 +297,13 @@ StackViewPage {
         JadeInitializedView {
             device: self.device
             latestFirmware: self.latestFirmware
-            onLoginClicked: self.skipFirmwareUpdate()
+            onLoginClicked: {
+                if (self.device.state === JadeDevice.StateLocked || self.device.state === JadeDevice.StateTemporary) {
+                    stack_view.replace(null, unlock_view, { device: self.device }, StackView.PushTransition)
+                } else {
+                    self.skipFirmwareUpdate()
+                }
+            }
             onUpdateClicked: stack_view.replace(null, basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
         }
     }

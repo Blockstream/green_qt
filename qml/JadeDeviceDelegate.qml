@@ -4,28 +4,22 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-AbstractButton {
+Control {
     signal selected(JadeDevice device)
     required property JadeDevice device
+    function select(type) {
+        self.device.selectConnection(type)
+        self.selected(self.device)
+    }
     Layout.alignment: Qt.AlignCenter
     Layout.minimumWidth: 350
-    onClicked: if (self.device.connected) self.selected(self.device)
     id: self
     enabled: !self.device.connected || self.device.status === JadeDevice.StatusIdle
     padding: 20
     opacity: self.enabled ? 1 : 0.4
     background: Rectangle {
-        color: Qt.lighter('#262626', self.enabled && self.hovered ? 1.2 : 1)
+        color: '#262626'
         radius: 5
-        Rectangle {
-            border.width: 2
-            border.color: '#00BCFF'
-            color: 'transparent'
-            radius: 9
-            anchors.fill: parent
-            anchors.margins: -4
-            visible: self.visualFocus
-        }
     }
     contentItem: RowLayout {
         spacing: 20
@@ -46,10 +40,23 @@ AbstractButton {
             visible: !self.device.connected
             onClicked: DeviceManager.removeDevice(self.device)
         }
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/svg2/right.svg'
-            visible: self.device.connected
+        RegularButton {
+            font.pixelSize: 14
+            topPadding: 8
+            bottomPadding: 8
+            icon.source: 'qrc:/svg2/usb.svg'
+            text: 'USB'
+            visible: self.device.connected && self.device.usbAvailable
+            onClicked: self.select(JadeDevice.USB)
+        }
+        RegularButton {
+            font.pixelSize: 14
+            topPadding: 8
+            bottomPadding: 8
+            icon.source: 'qrc:/svg2/bluetooth.svg'
+            text: qsTrId('id_bluetooth')
+            visible: self.device.connected && self.device.bluetoothAvailable
+            onClicked: self.select(JadeDevice.Bluetooth)
         }
     }
 }

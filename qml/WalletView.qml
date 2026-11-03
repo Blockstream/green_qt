@@ -15,6 +15,7 @@ MainPage {
 
     property Wallet wallet
     property Device device
+    property bool scan: false
     readonly property Account currentAccount: stack_view.currentItem?.currentAccount ?? null
     readonly property var notifications: UtilJS.flatten(stack_view.currentItem?.notifications, login_alert.notification)
 
@@ -35,8 +36,8 @@ MainPage {
         stack_view.pop(StackView.Immediate)
     }
 
-    function openJadeDetailsDrawer() {
-        const drawer = jade_details_drawer.createObject(self, { device: self.device })
+    function openJadeDetailsDrawer(device) {
+        const drawer = jade_details_drawer.createObject(self, { device })
         drawer.open()
     }
 
@@ -53,7 +54,10 @@ MainPage {
         const wallet = self.wallet
         if (!wallet) {
             if (self.device instanceof JadeDevice) {
-                stack_view.push(jade_page, { device: self.device, login: true }, StackView.Immediate)
+                stack_view.push(jade_page, { device: self.device }, StackView.Immediate)
+            } else if (self.scan) {
+                stack_view.push(terms_of_service_page, {}, StackView.Immediate)
+                stack_view.push(connect_jade_page, {}, StackView.Immediate)
             } else {
                 stack_view.push(terms_of_service_page, {}, StackView.Immediate)
             }
@@ -82,7 +86,7 @@ MainPage {
             padding: 60
             onDeviceSelected: (device) => {
                 if (device instanceof JadeDevice) {
-                    stack_view.push(jade_page, { device, login: true })
+                    stack_view.push(jade_page, { device, unlock: true })
                 }
                 if (device instanceof LedgerDevice) {
                     stack_view.push(ledger_page, { device })
@@ -96,6 +100,7 @@ MainPage {
     Component {
         id: jade_page
         JadePage {
+            id: page
             onLoginFinished: (context) => {
                 wallet_created_page
                 self.wallet = context.wallet
@@ -103,7 +108,7 @@ MainPage {
             }
             onFirmwareUpdated: stack_view.pop()
             onCloseClicked: self.closeDevice(self.device)
-            onDetailsClicked: self.openJadeDetailsDrawer()
+            onDetailsClicked: self.openJadeDetailsDrawer(page.device)
         }
     }
 
@@ -150,7 +155,7 @@ MainPage {
     Component {
         id: connect_jade_page
         ConnectJadePage {
-            onDeviceSelected: (device) => stack_view.push(jade_page, { device, login: true })
+            onDeviceSelected: (device) => stack_view.push(jade_page, { device, unlock: true })
             onQrmodeSelected: stack_view.push(jade_qr_connect_page)
         }
     }
@@ -346,9 +351,10 @@ MainPage {
     Component {
         id: overview_page
         OverviewPage {
+            id: page
             Component.onDestruction: self.wallet.disconnect()
             onLogout: stack_view.replace(logout_page, StackView.PushTransition)
-            onJadeDetailsClicked: self.openJadeDetailsDrawer()
+            onJadeDetailsClicked: self.openJadeDetailsDrawer(page.context.device)
         }
     }
 
