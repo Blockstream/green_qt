@@ -5,6 +5,7 @@
 #include <QTimer>
 
 #include <qbluetoothdeviceinfo.h>
+#include <qlowenergyconnectionparameters.h>
 #include <qlowenergycontroller.h>
 #include <qlowenergyservice.h>
 
@@ -38,7 +39,7 @@ bool JadeBleImpl::isConnectedImpl() {
 void JadeBleImpl::connectDeviceImpl()
 {
     Q_ASSERT(m_controller);
-    qDebug() << "JadeBleImpl::connectDeviceImpl()";
+    qDebug() << "JadeBleImpl::connectDeviceImpl()" << m_controller->remoteName() << m_controller->remoteAddress() << m_controller->remoteDeviceUuid();
 
     // Only try to connect if not already connected
     if (isConnected())
@@ -59,7 +60,7 @@ void JadeBleImpl::connectDeviceImpl()
     connect(m_controller, &QLowEnergyController::discoveryFinished,
             this, [this]()
             {
-                qDebug() << "JadeBleImpl::connectDeviceImpl()::lambda - Service discovery complete.  Looking for Jade service...";
+                qDebug() << "JadeBleImpl::connectDeviceImpl()::lambda - Service discovery complete.  Looking for Jade service..." << m_controller->services();
                 for (const QBluetoothUuid& serviceId : m_controller->services())
                 {
                     if (serviceId == QBluetoothUuid(IO_SERVICE_UUID))
@@ -85,14 +86,16 @@ void JadeBleImpl::connectDeviceImpl()
                                     qWarning() << "JadeBleImpl::lambda - write refused before the first reply" << m_write_retries;
                                     return;
                                 }
-                                qWarning() << "JadeBleImpl::lambda - error from the Jade service - disconnecting:" << error;
+                                qWarning() << "JadeBleImpl::lambda - error from the Jade service - disconnecting:" << error << "replied" << m_replied << "retries" << m_write_retries;
                                 disconnectDevice();
                             });
 
                             // Connect slot for characteristic discovery and initiate that process
                             connect(m_service, &QLowEnergyService::stateChanged,
                                     this, &JadeBleImpl::onServiceStateChange);
-                            m_service->discoverDetails();
+                            // Jade's characteristic values are never used, and reading them
+                            // on Windows is aborted often enough to drop the connection.
+                            m_service->discoverDetails(QLowEnergyService::SkipValueDiscovery);
                         }
                         else
                         {
@@ -125,6 +128,19 @@ void JadeBleImpl::connectDeviceImpl()
 
     connect(m_controller, &QLowEnergyController::disconnected,
             this, &JadeBleImpl::onDeviceDisconnection);
+
+    connect(m_controller, &QLowEnergyController::stateChanged, this, [](QLowEnergyController::ControllerState state) {
+        qDebug() << "JadeBleImpl::lambda - controller state" << state;
+    });
+
+    connect(m_controller, &QLowEnergyController::mtuChanged, this, [](int mtu) {
+        qDebug() << "JadeBleImpl::lambda - mtu changed" << mtu;
+    });
+
+    connect(m_controller, &QLowEnergyController::connectionUpdated, this, [](const QLowEnergyConnectionParameters& parameters) {
+        qDebug() << "JadeBleImpl::lambda - connection updated, interval" << parameters.minimumInterval() << parameters.maximumInterval()
+                 << "latency" << parameters.latency() << "supervision timeout" << parameters.supervisionTimeout();
+    });
 
 
     // PublicAddress or RandomAddress ?
@@ -211,11 +227,13 @@ void JadeBleImpl::onServiceStateChange(const QLowEnergyService::ServiceState new
     connect(m_service, &QLowEnergyService::descriptorWritten, this,
             [this, notification, ready](const QLowEnergyDescriptor& descriptor, const QByteArray& value) {
                 if (descriptor != notification) return;
+                qDebug() << "JadeBleImpl::lambda - notification descriptor written" << value.toHex();
                 ready();
             });
 
     QTimer::singleShot(1000, this, [this, ready] {
         if (m_ready || !isConnected()) return;
+        qDebug() << "JadeBleImpl::lambda - notification descriptor write not confirmed, continuing";
         ready();
     });
 
@@ -278,7 +296,6 @@ int JadeBleImpl::writeImpl(const QByteArray &data)
     Q_ASSERT(isConnected());
     Q_ASSERT(m_tx.isValid());
 
-    qDebug() << "JadeBleImpl::write() sending" << data.length() << "bytes";
 
     // A characteristic write cannot exceed the negotiated ATT MTU less the three
     // byte ATT header; anything longer is rejected rather than split up. macOS
@@ -305,8 +322,6 @@ void JadeBleImpl::onBleDataReady(const QLowEnergyCharacteristic &changed,
 {
     Q_ASSERT(m_controller);
     Q_ASSERT(m_service);
-
-    qDebug() << "onBleDataReady() -" << data.length() << "bytes received";
 
     // Shouldn't happen, but doesn't hurt to double check and ignore
     if (changed != m_rx)

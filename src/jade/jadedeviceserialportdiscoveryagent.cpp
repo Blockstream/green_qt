@@ -158,10 +158,11 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 
             JadeDevice* device = nullptr;
 
+            // By name, so a Jade listed from its Bluetooth adverts is the same entry.
             for (auto a_device : DeviceManager::instance()->devices()) {
                 auto jade_device = qobject_cast<JadeDevice*>(a_device);
                 if (!jade_device) continue;
-                if (efusemac != jade_device->versionInfo().value("EFUSEMAC").toString()) continue;
+                if (jade_device->name() != JadeDevice::nameForEfusemac(efusemac)) continue;
                 device = jade_device;
                 break;
             }

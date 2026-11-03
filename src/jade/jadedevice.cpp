@@ -809,9 +809,15 @@ void JadeDevice::setVersionInfo(const QVariantMap& version_info)
     m_version_info = version_info;
     emit versionInfoChanged();
     setState(JadeDeviceGetState(m_version_info));
-    setName(QString("Jade %1").arg(version_info.value("EFUSEMAC").toString().mid(6)));
+    setName(nameForEfusemac(version_info.value("EFUSEMAC").toString()));
     emit nameChanged();
     emit detailsChanged();
+}
+
+// Also the name Jade advertises over Bluetooth.
+QString JadeDevice::nameForEfusemac(const QString& efusemac)
+{
+    return QString("Jade %1").arg(efusemac.mid(6));
 }
 
 QVariantMap JadeDevice::versionInfo() const
@@ -861,6 +867,13 @@ void JadeDevice::setName(const QString& name)
     if (m_name == name) return;
     m_name = name;
     emit nameChanged();
+}
+
+void JadeDevice::setBluetoothState(BluetoothState state)
+{
+    if (m_bluetooth_state == state) return;
+    m_bluetooth_state = state;
+    emit bluetoothStateChanged();
 }
 
 void JadeDevice::setStatus(Status status)

@@ -32,6 +32,7 @@ JadeBluetoothMonitor::~JadeBluetoothMonitor()
         delete device;
     }
     qDeleteAll(m_backends);
+    dropListedDevices();
     DeviceManager::instance()->setBluetoothScanning(false);
 }
 
@@ -54,6 +55,9 @@ void JadeBluetoothMonitor::update()
 
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, [=, this](const QBluetoothDeviceInfo& info) {
                 if (!info.serviceUuids().contains({JADE_SERVICE_UUID})) return;
+                // Windows also reports bonded devices from its cache, with no RSSI,
+                // whether or not they are in range. Only an advert proves it is.
+                if (info.rssi() == 0) return;
 
                 // A device advertises continuously, so this fires repeatedly for
                 // one Jade. Connecting again each time leaves several GATT
@@ -68,7 +72,6 @@ void JadeBluetoothMonitor::update()
                 const auto key = info.name().isEmpty() ? info.address().toString() : info.name();
                 if (m_backends.contains(key)) return;
 
-
                 // Jade's characteristics need an encrypted link, so the platform
                 // starts bonding by itself the first time one is used. Doing that
                 // in the middle of service discovery leaves the security exchange
@@ -81,31 +84,51 @@ void JadeBluetoothMonitor::update()
                 // handles pairing itself, so asking for a bond there would request one
                 // for 00:00:00:00:00:00 and wait for a result that never arrives.
                 const auto address = info.address().toString();
-                if (!info.address().isNull()
-                    && m_local_device->pairingStatus(info.address()) == QBluetoothLocalDevice::Unpaired) {
-                    if (m_pairing.contains(address)) return;
-                    m_pairing.insert(address, info);
-                    m_local_device->requestPairing(info.address(), QBluetoothLocalDevice::Paired);
+                const auto pairing = info.address().isNull() ? QBluetoothLocalDevice::Paired : m_local_device->pairingStatus(info.address());
+                qDebug() << Q_FUNC_INFO << "discovered" << info.name() << address << info.deviceUuid() << "rssi" << info.rssi() << pairing;
+                m_adverts.insert(key, info);
+                JadeDevice* const device = listDevice(key);
+                if (pairing == QBluetoothLocalDevice::Unpaired) {
+                    // Listed for the user to pair. Asking by itself on every advert
+                    // bonded every Jade in range, and under each rotating address.
+                    if (device->bluetoothState() == JadeDevice::BluetoothNone) {
+                        device->setBluetoothState(JadeDevice::BluetoothUnpaired);
+                    }
                     return;
                 }
 
+                device->setBluetoothState(JadeDevice::BluetoothPaired);
                 connectToDevice(info);
             });
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::finished, this, &JadeBluetoothMonitor::deviceScanFinished);
-            connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::errorOccurred, this, [=, this] {
+            connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::errorOccurred, this, [=, this](QBluetoothDeviceDiscoveryAgent::Error error) {
+                qWarning() << Q_FUNC_INFO << "discovery error" << error << m_device_discovery_agent->errorString();
                 DeviceManager::instance()->setBluetoothScanning(false);
             });
 
             connect(m_local_device, &QBluetoothLocalDevice::pairingFinished, this, [=, this](QBluetoothAddress address, QBluetoothLocalDevice::Pairing pairing) {
-                const auto info = m_pairing.take(address.toString());
-                if (!info.isValid()) return;
+                qDebug() << Q_FUNC_INFO << "pairing finished for" << m_pairing.name() << address << pairing;
+                if (!m_pairing.isValid() || m_pairing.address() != address) return;
+                const auto info = std::exchange(m_pairing, {});
+                JadeDevice* const device = m_listed.value(info.name());
                 if (pairing == QBluetoothLocalDevice::Unpaired) {
-                    // Left for the next advertisement to retry rather than asking
-                    // again straight away, which would loop the system dialog.
+                    // Left for the user to ask again rather than retrying straight
+                    // away, which would loop the system dialog.
                     qWarning() << Q_FUNC_INFO << "pairing failed for" << info.name();
+                    if (device) device->setBluetoothState(JadeDevice::BluetoothUnpaired);
                     return;
                 }
+                if (device) device->setBluetoothState(JadeDevice::BluetoothPaired);
                 connectToDevice(info);
+            });
+            // A failed bond is reported here rather than through pairingFinished,
+            // and without the address it was for. Forget the pending request so
+            // it can be asked again instead of waiting forever.
+            connect(m_local_device, &QBluetoothLocalDevice::errorOccurred, this, [=, this](QBluetoothLocalDevice::Error error) {
+                qWarning() << Q_FUNC_INFO << "local device error" << error << "pending pairing" << m_pairing.name() << m_pairing.address();
+                JadeDevice* const device = m_listed.value(m_pairing.name());
+                if (device) device->setBluetoothState(JadeDevice::BluetoothUnpaired);
+                m_pairing = {};
             });
         }
         // DeviceManager asks for the permission when a screen needs discovery.
@@ -121,7 +144,61 @@ void JadeBluetoothMonitor::update()
         m_device_discovery_agent->stop();
         // A bond asked for while scanning should not open a connection once the
         // screen that wanted it is gone; the next scan asks again if needed.
-        m_pairing.clear();
+        m_pairing = {};
+        dropListedDevices();
+    }
+}
+
+// The entry for a Jade seen advertising, shared with the serial discovery
+// through the name, which both derive from the EFUSEMAC.
+JadeDevice* JadeBluetoothMonitor::listDevice(const QString& name)
+{
+    JadeDevice* device = m_listed.value(name);
+    if (device) return device;
+    for (auto a_device : DeviceManager::instance()->devices()) {
+        auto jade_device = qobject_cast<JadeDevice*>(a_device);
+        if (!jade_device || jade_device->name() != name) continue;
+        device = jade_device;
+        break;
+    }
+    if (!device) {
+        device = new JadeDevice(this);
+        device->setName(name);
+        DeviceManager::instance()->addDevice(device);
+    }
+    m_listed.insert(name, device);
+    connect(device, &JadeDevice::bluetoothPairRequested, this, [=, this] {
+        pairDevice(name);
+    });
+    return device;
+}
+
+void JadeBluetoothMonitor::pairDevice(const QString& name)
+{
+    // Jade advertises under a new address every few seconds, so asking per
+    // address would start several bonds for the same device.
+    if (m_pairing.isValid()) return;
+    const auto info = m_adverts.value(name);
+    JadeDevice* const device = m_listed.value(name);
+    if (!info.isValid() || !device) return;
+    m_pairing = info;
+    device->setBluetoothState(JadeDevice::BluetoothPairing);
+    qDebug() << Q_FUNC_INFO << "requesting pairing for" << info.name() << info.address().toString();
+    m_local_device->requestPairing(info.address(), QBluetoothLocalDevice::Paired);
+}
+
+// Once the scan stops the adverts are stale, so the entries that exist only
+// because of them go, and the rest no longer claim to be in range.
+void JadeBluetoothMonitor::dropListedDevices()
+{
+    m_adverts.clear();
+    for (JadeDevice* const device : std::exchange(m_listed, {})) {
+        if (!device) continue;
+        disconnect(device, nullptr, this, nullptr);
+        device->setBluetoothState(JadeDevice::BluetoothNone);
+        if (device->isConnected() || device->api() || device->parent() != this) continue;
+        DeviceManager::instance()->removeDevice(device);
+        device->deleteLater();
     }
 }
 
@@ -192,16 +269,8 @@ void JadeBluetoothMonitor::probe(QPointer<JadeAPI> backend)
 
             JadeDevice* device = m_devices.value(backend);
             if (!device) {
-                for (auto a_device : DeviceManager::instance()->devices()) {
-                    auto jade_device = qobject_cast<JadeDevice*>(a_device);
-                    if (!jade_device) continue;
-                    if (efusemac != jade_device->versionInfo().value("EFUSEMAC").toString()) continue;
-                    device = jade_device;
-                    break;
-                }
-                if (!device) device = new JadeDevice(this);
+                device = listDevice(JadeDevice::nameForEfusemac(efusemac));
                 m_devices.insert(backend, device);
-                DeviceManager::instance()->addDevice(device);
             }
             device->setBluetoothBackend(backend);
             if (device->api() == backend) {

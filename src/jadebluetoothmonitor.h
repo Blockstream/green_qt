@@ -26,6 +26,9 @@ protected slots:
     void connectToDevice(const QBluetoothDeviceInfo& info);
     void update();
     void probe(QPointer<JadeAPI> backend);
+    JadeDevice* listDevice(const QString& name);
+    void pairDevice(const QString& name);
+    void dropListedDevices();
 
 signals:
     void activeChanged();
@@ -39,9 +42,14 @@ private:
     // connected is not connected to again. Keyed by name, not address: Jade
     // advertises a rotating random address.
     QMap<QString, JadeAPI*> m_backends;
-    // Devices a bond has been asked for, by the address it was asked against,
-    // until pairingFinished arrives for it.
-    QMap<QString, QBluetoothDeviceInfo> m_pairing;
+    // The device a bond has been asked for, until pairingFinished or a pairing
+    // error arrives. One at a time, since the error does not say which it is for.
+    QBluetoothDeviceInfo m_pairing;
+    // Jades seen advertising while scanning, by name, listed before they are
+    // connected so an unpaired one can be picked. The advert is the latest, as
+    // the address rotates.
+    QMap<QString, QBluetoothDeviceInfo> m_adverts;
+    QMap<QString, QPointer<JadeDevice>> m_listed;
 };
 
 #endif // GREEN_JADEBLUETOOTHMONITOR_H

@@ -37,8 +37,18 @@ Control {
         }
         CircleButton {
             icon.source: 'qrc:/svg2/eject-simple-thin.svg'
-            visible: !self.device.connected
+            visible: !self.device.connected && self.device.bluetoothState === JadeDevice.BluetoothNone
             onClicked: DeviceManager.removeDevice(self.device)
+        }
+        RegularButton {
+            font.pixelSize: 14
+            topPadding: 8
+            bottomPadding: 8
+            icon.source: 'qrc:/svg2/bluetooth.svg'
+            text: self.device.bluetoothState === JadeDevice.BluetoothPairing ? 'Pairing...' : 'Pair'
+            enabled: self.device.bluetoothState === JadeDevice.BluetoothUnpaired
+            visible: !self.device.connected && (self.device.bluetoothState === JadeDevice.BluetoothUnpaired || self.device.bluetoothState === JadeDevice.BluetoothPairing)
+            onClicked: self.device.pairBluetooth()
         }
         RegularButton {
             font.pixelSize: 14
