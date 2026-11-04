@@ -83,7 +83,7 @@ function segmentationSession(context) {
                 segmentation.model = device.versionInfo.BOARD_TYPE
             }
             segmentation.firmware = device.version
-            segmentation.connection = 'USB'
+            segmentation.connection = device.connectionType === 2 ? 'BLE' : 'USB' // JadeDevice.Bluetooth
         }
         if (device.type === 2) {
             segmentation.brand = 'Ledger'
@@ -128,7 +128,7 @@ function segmentationFirmwareUpdate(device, firmware) {
             segmentation.model = device.versionInfo.BOARD_TYPE
         }
         segmentation.firmware = device.version
-        segmentation.connection = 'USB'
+        segmentation.connection = device.connectionType === 2 ? 'BLE' : 'USB' // JadeDevice.Bluetooth
     }
     return segmentation
 }
