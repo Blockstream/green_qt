@@ -617,7 +617,6 @@ void JadeGenuineCheckController::genuineCheck()
 
             auto group = new TaskGroup(self.data());
 
-            group->add(new ConnectTask(self->m_session));
             group->add(new RSAVerifyTask(pubkey_pem, challenge, signature, self->m_session));
             group->add(new RSAVerifyTask(g_ext_pubkey_pem, pubkey_pem.toUtf8(), ext_signature, self->m_session));
 

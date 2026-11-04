@@ -2308,9 +2308,15 @@ RSAVerifyTask::RSAVerifyTask(const QJsonObject& details, Session* session)
     d->details = details;
 }
 
+bool RSAVerifyTask::active() const
+{
+    return session();
+}
+
 bool RSAVerifyTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     Q_D(RSAVerifyTask);
+    GA_connect(session, Json::fromObject({{ "name", "electrum-mainnet" }}).get());
     const auto rc = GA_rsa_verify(session, Json::fromObject(d->details).get(), auth_handler);
     return rc == GA_OK;
 }
