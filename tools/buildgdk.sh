@@ -2,8 +2,8 @@
 set -eo pipefail
 
 GDK_REPO=https://github.com/Blockstream/gdk.git
-GDK_BRANCH=release_0.78.0
-GDK_COMMIT=02e3646264ed10afd460e61c2c516510b9ce5cf5
+GDK_BRANCH=release_0.78.1
+GDK_COMMIT=8fcf0f7cb5295e7ded7244697d475f2b21dd9dd2
 
 mkdir -p build
 

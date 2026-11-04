@@ -36,7 +36,7 @@ windows-x86_64:depends:
   tags:
     - cloud
   variables:
-    IMAGE: $GAR/green_qt/windows-x86_64@sha256:dea48b421f2e999afa4c93521498dca84dde58f5bdd6be23b14601d92fe9c1ee
+    IMAGE: $GAR/green_qt/windows-x86_64@sha256:779d63b8136c2a0b2434bac5f473933cc3347ab93f4eb657e15df885d8053daf
   script:
     - docker pull "$IMAGE"
     - id=$(docker create "$IMAGE")
@@ -94,7 +94,7 @@ windows-x86_64:build:
     DOCKER_DRIVER: null
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
-    IMAGE: $GAR/green_qt/x64-windows@sha256:d61e4a24ab80b99fc99f0c4b19a16c6cabc6c2c9d7126c419342f267b2ef042a
+    IMAGE: $GAR/green_qt/x64-windows@sha256:41f094612f8f1e94f924e07f844dc0a87c834ae17e13aa07e695a92efc5df8c5
   script:
     - if (-not (docker image inspect $env:IMAGE 2>$null)) { docker pull $env:IMAGE }
     - docker run --rm -v "${env:CI_PROJECT_DIR}:C:\src" -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY -e SENTRY_PROJECT $env:IMAGE cmd /c C:\src\build.bat
