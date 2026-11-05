@@ -52,9 +52,10 @@ sast:
     - tools/ci/sentry-upload.sh "$SYMBOLS_PATH"
 
 include:
-  - component: $CI_SERVER_FQDN/infrastructure/devops/gitlab-components/gcp-wif-auth/gcp-auth@0.0.3
+  - component: $CI_SERVER_FQDN/infrastructure/devops/gitlab-components/gcp-wif-auth/gcp-auth@v1
     inputs:
       service_account_email: $GAR_SERVICE_ACCOUNT_EMAIL
+      pool_id: gitlab-protected-env
       disable_auth_job: true
   - local: ci/docker.yaml
   - local: ci/lint.yml

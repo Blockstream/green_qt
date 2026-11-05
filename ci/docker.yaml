@@ -1,3 +1,17 @@
+# GCP jobs run in the protected environment release-images (gitlab-protected-env
+# WIF pool): start for jobs that push, prepare for jobs that only pull or sign.
+.release_images_start:
+  environment:
+    name: release-images
+    deployment_tier: production
+    action: start
+
+.release_images_prepare:
+  environment:
+    name: release-images
+    deployment_tier: production
+    action: prepare
+
 .gar_wif:
   extends:
     - .gcp_wif_variables
@@ -28,7 +42,9 @@
     - cloud
 
 docker_codesigntool:
-  extends: .docker_build_base
+  extends:
+    - .docker_build_base
+    - .release_images_start
   script:
     - docker build
       --network=host

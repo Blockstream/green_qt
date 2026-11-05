@@ -21,7 +21,9 @@ cpplint:
     - ./tools/lint/cpplint.sh
 
 qmllint:
-  extends: .gar_wif
+  extends:
+    - .gar_wif
+    - .release_images_prepare
   tags:
     - cloud
   stage: lint

@@ -1,5 +1,7 @@
 linux-x86_64:build-image:
-  extends: .docker_build
+  extends:
+    - .docker_build
+    - .release_images_start
   variables:
     IMAGE: $GAR/green_qt/linux-x86_64
     DOCKER_FILE: ci/linux-x86_64/Dockerfile
@@ -15,6 +17,7 @@ linux-x86_64:build-image:
 linux-x86_64:build-appimage:
   extends:
     - .linux-x86_64
+    - .release_images_prepare
   stage: build
   variables:
     AFTER_SCRIPT_IGNORE_ERRORS: "false"
@@ -73,9 +76,11 @@ linux-x86_64:build-appimage:
       - symbols/
 
 linux-x86_64:symbols:
-  extends:
-    - .linux-x86_64
-    - .upload-symbols
+  # Uploads from the build-appimage artifacts only; needs no GAR credentials.
+  extends: .upload-symbols
+  image: harbor.blockstream.io/google/blockstream/public/gcloud-docker:27.3-504.0.1
+  tags:
+    - cloud
   needs:
     - job: linux-x86_64:build-appimage
       artifacts: true

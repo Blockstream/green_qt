@@ -53,11 +53,19 @@ package:build:
     - ../tools/publish.sh
 
 package:publish-rc:
+  environment:
+    name: release-downloads
+    deployment_tier: production
+    action: start
   extends: .publish
   variables:
     CHANNEL: rc
 
 package:publish-latest:
+  environment:
+    name: release-downloads
+    deployment_tier: production
+    action: start
   extends: .publish
   variables:
     CHANNEL: latest

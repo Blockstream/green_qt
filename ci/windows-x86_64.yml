@@ -5,7 +5,9 @@
 # windows-x86_64:depends to the digest pushed here (same @sha256: pinning convention as
 # ci/linux-x86_64.yml and ci/lint.yml).
 windows-x86_64:build-with-mingw:
-  extends: .docker_build
+  extends:
+    - .docker_build
+    - .release_images_start
   variables:
     IMAGE: $GAR/green_qt/windows-x86_64
     DOCKER_FILE: ci/windows-x86_64/Dockerfile
@@ -29,7 +31,9 @@ windows-x86_64:build-with-mingw:
 # linux runner: the windows runner's docker daemon is in windows-container mode and cannot
 # create a container from this image.
 windows-x86_64:depends:
-  extends: .gar_wif
+  extends:
+    - .gar_wif
+    - .release_images_prepare
   stage: depends
   needs: []
   when: manual
@@ -56,7 +60,9 @@ windows-x86_64:depends:
     - pwsh -NoProfile -File tools/ci/gcp-wif-docker-login.ps1
 
 windows-x86_64:build-image:
-  extends: .windows_gar_wif
+  extends:
+    - .windows_gar_wif
+    - .release_images_start
   stage: depends
   image: docker:27
   retry:
@@ -85,7 +91,9 @@ windows-x86_64:build-image:
     - docker push "${env:GAR}/green_qt/x64-windows:latest"
 
 windows-x86_64:build:
-  extends: .windows_gar_wif
+  extends:
+    - .windows_gar_wif
+    - .release_images_prepare
   stage: build
   tags:
     - windows
@@ -126,7 +134,9 @@ windows-x86_64:symbols:
     - pwsh -NoProfile -File tools/ci/sentry-upload.ps1 bld\RelWithDebInfo
 
 windows-x86_64:sign:
-  extends: .windows:sign
+  extends:
+    - .windows:sign
+    - .release_images_prepare
   needs:
     - windows-x86_64:build
   variables:
@@ -203,7 +213,9 @@ windows-x86_64:installer:
       done'
 
 windows-x86_64:sign-installer:
-  extends: .windows:sign
+  extends:
+    - .windows:sign
+    - .release_images_prepare
   stage: installer
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
