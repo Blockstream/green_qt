@@ -86,4 +86,11 @@ RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\V
 COPY glsdk.bat .
 RUN cmd /S /C ""C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" x64 && glsdk.bat"
 
+ENV CCACHE_VERSION=4.14.2
+ENV CCACHE_SHA256=6993ce645e53192cec592ee23186200b574ac4c59097ecde8d9cfd681b47ae84
+RUN curl -sSfL -o ccache.zip https://github.com/ccache/ccache/releases/download/v%CCACHE_VERSION%/ccache-%CCACHE_VERSION%-windows-x86_64.zip && `
+    powershell -NoProfile -Command "if ((Get-FileHash ccache.zip -Algorithm SHA256).Hash -ne $env:CCACHE_SHA256) { exit 1 }" && `
+    tar -xf ccache.zip -C C:\ && `
+    del ccache.zip
+
 COPY depends\ C:\depends

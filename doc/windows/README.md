@@ -359,6 +359,6 @@ The executable and required DLLs will be in `bld\RelWithDebInfo\`.
 
 The `windows-x86_64:build` job (root `build.bat`, `ci-windows` preset) caches MSVC output with ccache in a GitLab cache (`.ccache/`, key `windows_x86_64_ccache`).
 
-- `build.bat` downloads the pinned ccache release zip and verifies it against `CCACHE_SHA256`. Bump `CCACHE_VERSION` and `CCACHE_SHA256` together.
+- `ci/x64-windows/Dockerfile` downloads the pinned ccache release zip and verifies it against `CCACHE_SHA256`. Bump `CCACHE_VERSION` and `CCACHE_SHA256` together, then rebuild the image and update `IMAGE` in `windows-x86_64:build`.
 - ccache can't cache `/Zi` (shared PDB), so `ci-windows` sets `CMAKE_MSVC_DEBUG_INFORMATION_FORMAT=Embedded` (`/Z7`, policy CMP0141). Keep it, or every compile misses. The linker still writes `blockstream.pdb` for Sentry.
 - Local builds with `dev-windows` don't use ccache.
