@@ -36,7 +36,7 @@ windows-x86_64:depends:
   tags:
     - cloud
   variables:
-    IMAGE: $GAR/green_qt/windows-x86_64@sha256:779d63b8136c2a0b2434bac5f473933cc3347ab93f4eb657e15df885d8053daf
+    IMAGE: $GAR/green_qt/windows-x86_64@sha256:7e84cc5a6d64454a2c1862180bcaf96d7b873211cfc89387fbbe86d4ddd0928d
   script:
     - docker pull "$IMAGE"
     - id=$(docker create "$IMAGE")
@@ -94,7 +94,7 @@ windows-x86_64:build:
     DOCKER_DRIVER: null
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
-    IMAGE: $GAR/green_qt/x64-windows@sha256:41f094612f8f1e94f924e07f844dc0a87c834ae17e13aa07e695a92efc5df8c5
+    IMAGE: $GAR/green_qt/x64-windows@sha256:c91858433832f4fadcea83f80433795b03dcbbe8fc86c64b2699d30d11228abe
     CMAKE_CXX_COMPILER_LAUNCHER: ccache
     CCACHE_DIR: 'C:\src\.ccache'
     CCACHE_BASEDIR: 'C:\src'
