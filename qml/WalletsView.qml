@@ -11,6 +11,7 @@ MainPage {
     signal openWallet(Wallet wallet)
     signal openDevice(Device device)
     signal createWallet
+    signal removeWallet(Wallet wallet)
     readonly property int count: sww_repeater.count + hww_repeater.count
     readonly property var notifications: UtilJS.flatten(home_alert.notification)
     AnalyticsAlert {
@@ -75,6 +76,7 @@ MainPage {
                     Layout.fillWidth: true
                     id: wallet_button
                     onClicked: self.openWallet(wallet_button.wallet)
+                    onRemoveClicked: self.removeWallet(wallet_button.wallet)
                 }
             }
             Label {
@@ -99,6 +101,7 @@ MainPage {
                     Layout.fillWidth: true
                     id: device_button
                     onClicked: self.openWallet(device_button.wallet)
+                    onRemoveClicked: self.removeWallet(device_button.wallet)
                 }
             }
         }

@@ -223,6 +223,7 @@ MainPage {
                 onOpenWallet: (wallet) => self.openWallet(wallet)
                 onOpenDevice: (device) => self.openDevice(device)
                 onCreateWallet: self.openWallet(null)
+                onRemoveWallet: (wallet) => remove_wallet_dialog.createObject(self, { wallet }).open()
                 AnalyticsView {
                     name: 'Home'
                     active: stack_layout.currentIndex === 0
@@ -399,6 +400,10 @@ MainPage {
         onDeviceClicked: (device) => {
             wallets_drawer.close()
             self.openDevice(device)
+        }
+        onRemoveWallet: (wallet) => {
+            wallets_drawer.close()
+            remove_wallet_dialog.createObject(self, { wallet }).open()
         }
     }
 

@@ -7,6 +7,7 @@ import QtQuick.Layouts
 AbstractDrawer {
     signal walletClicked(Wallet wallet)
     signal deviceClicked(Device device)
+    signal removeWallet(Wallet wallet)
 
     id: self
     dim: true
@@ -43,6 +44,7 @@ AbstractDrawer {
                 delegate: WalletButton {
                     id: wallet_button
                     onClicked: self.walletClicked(wallet_button.wallet)
+                    onRemoveClicked: self.removeWallet(wallet_button.wallet)
                 }
             }
             Label {
@@ -66,6 +68,7 @@ AbstractDrawer {
                 delegate: WalletButton {
                     id: device_button
                     onClicked: self.walletClicked(device_button.wallet)
+                    onRemoveClicked: self.removeWallet(device_button.wallet)
                 }
             }
             VSpacer {
@@ -106,6 +109,7 @@ AbstractDrawer {
     }
 
     component WalletButton: ListButton {
+        signal removeClicked()
         required property Wallet wallet
         id: button
         contentItem: RowLayout {
@@ -141,6 +145,28 @@ AbstractDrawer {
                 radius: 5
                 visible: !!button.wallet.context
             }
+            CircleButton {
+                Layout.alignment: Qt.AlignCenter
+                id: options_button
+                icon.source: 'qrc:/svg/3-dots.svg'
+                opacity: button.hovered || options_button.visualFocus || options_menu.visible ? 1 : 0
+                onClicked: options_menu.open()
+                GMenu {
+                    id: options_menu
+                    x: options_button.width * 0.5 - options_menu.width * 0.85
+                    y: options_button.height + 8
+                    pointerX: 0.85
+                    pointerY: 0
+                    GMenu.Item {
+                        text: qsTrId('id_remove_wallet')
+                        icon.source: 'qrc:/svg2/trash.svg'
+                        onClicked: {
+                            options_menu.close()
+                            button.removeClicked()
+                        }
+                    }
+                }
+            }
             Image {
                 Layout.alignment: Qt.AlignCenter
                 visible: button.wallet.login?.device ?? false
@@ -157,7 +183,7 @@ AbstractDrawer {
                 }
             }
             RightArrowIndicator {
-                active: button.hovered
+                active: button.hovered || options_menu.visible
             }
         }
     }
