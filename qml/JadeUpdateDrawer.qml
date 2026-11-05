@@ -39,6 +39,7 @@ AbstractDrawer {
         id: confirm_update_view
         JadeConfirmUpdatePage {
             device: self.device
+            onCloseClicked: self.close()
             onUpdateFailed: stack_view.pop()
             onUpdateFinished: stack_view.replace(firmware_updated_page)
         }

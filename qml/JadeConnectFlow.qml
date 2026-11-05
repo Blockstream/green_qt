@@ -293,6 +293,7 @@ Item {
                 }
             }
             id: page
+            onCloseClicked: flow.closeClicked()
             onUpdateFailed: page.StackView.view.pop()
             onUpdateFinished: page.StackView.view.replace(firmware_rebooting_page, { name: page.name, connectionType: page.connectionType, usbRequired: page.usbRequired, gone: page.gone })
         }

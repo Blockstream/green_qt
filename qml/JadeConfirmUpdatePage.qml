@@ -36,6 +36,9 @@ StackViewPage {
     }
     id: self
     title: qsTrId('id_firmware_upgrade')
+    rightItem: CloseButton {
+        onClicked: self.closeClicked()
+    }
     contentItem: GStackView {
         id: stack_view
         initialItem: preparing_view
