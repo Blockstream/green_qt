@@ -31,6 +31,7 @@ AbstractDrawer {
         JadeAdvancedUpdateView {
             device: self.device
             showSkip: false
+            onCloseClicked: self.close()
             onFirmwareSelected: (firmware) => stack_view.push(confirm_update_view, { firmware })
         }
     }
@@ -45,7 +46,10 @@ AbstractDrawer {
     Component {
         id: firmware_updated_page
         JadeFirmwareUpdatedPage {
-            header: null
+            leftItem: null
+            rightItem: CloseButton {
+                onClicked: self.close()
+            }
             onTimeout: self.close()
         }
     }
