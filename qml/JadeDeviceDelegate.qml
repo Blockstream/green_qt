@@ -17,22 +17,19 @@ UiCard {
     padding: 20
     opacity: self.enabled ? 1 : 0.4
     contentItem: RowLayout {
-        spacing: 20
+        spacing: 10
         Image {
             Layout.alignment: Qt.AlignCenter
             source: 'qrc:/svg2/lock-simple-thin.svg'
             visible: self.device.connected && self.device.state === JadeDevice.StateLocked
         }
-        ColumnLayout {
-            Label {
-                Layout.fillWidth: true
-                font.pixelSize: 16
-                font.weight: 700
-                color: '#FFF'
-                text: self.device.name
-            }
+        Label {
+            Layout.fillWidth: true
+            font.pixelSize: 16
+            font.weight: 700
+            color: '#FFF'
+            text: self.device.name
         }
-
         CircleButton {
             icon.source: 'qrc:/svg2/eject-simple-thin.svg'
             visible: !self.device.connected && self.device.bluetoothState === JadeDevice.BluetoothNone
