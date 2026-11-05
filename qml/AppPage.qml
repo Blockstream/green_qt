@@ -109,6 +109,7 @@ MainPage {
     }
     // Let the user pick the device and how to connect to it.
     function openDeviceScan() {
+        if (DeviceManager.discoveryRequested) return
         jade_connect_drawer.createObject(self).open()
     }
     function openWallets() {
