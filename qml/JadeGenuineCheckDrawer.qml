@@ -8,18 +8,34 @@ AbstractDrawer {
     signal diy()
     signal abort()
     required property bool autoCheck
-    required property JadeDevice device
+    property JadeDevice device: null
+    // Without a device, one is picked and unlocked on this context.
+    property Context context: null
+    function startPage() {
+        if (!self.device.secureBoot) return unsupported_page
+        return self.autoCheck ? checking_page : check_page
+    }
     onClosed: self.destroy()
     id: self
     edge: Qt.RightEdge
     minimumContentWidth: 400
     contentItem: GStackView {
         id: stack_view
-        initialItem: {
-            if (!self.device.secureBoot) return unsupported_page
-            return self.autoCheck ? checking_page : check_page
+        initialItem: self.device ? self.startPage() : connect_page
+    }
+    Component {
+        id: connect_page
+        ConnectJadePage {
+            context: self.context
+            wallet: self.context?.wallet ?? null
+            onDeviceSelected: (device) => {
+                self.device = device
+                stack_view.replace(null, self.startPage(), StackView.PushTransition)
+            }
+            onCloseClicked: self.abort()
         }
     }
+
     Component {
         id: check_page
         JadeGenuineCheckPage {

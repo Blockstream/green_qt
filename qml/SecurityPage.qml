@@ -15,7 +15,8 @@ Page {
             firmware_controller.check(self.jadeDevice)
         }
     }
-    
+    onJadeDeviceChanged: firmware_controller.check(self.jadeDevice)
+
     Connections {
         target: self.jadeDevice
         function onConnectedChanged() {
@@ -465,13 +466,12 @@ Page {
                             iconSide: true
                             rightAction: Action {
                                 onTriggered: {
-                                    if (self.jadeDevice) {
-                                        const drawer = genuine_check_drawer.createObject(self, {
-                                            device: self.jadeDevice,
-                                            autoCheck: true
-                                        })
-                                        drawer.open()
-                                    }
+                                    const drawer = genuine_check_drawer.createObject(self, {
+                                        context: self.context,
+                                        device: self.jadeDevice,
+                                        autoCheck: true
+                                    })
+                                    drawer.open()
                                 }
                             }
                         }
@@ -605,6 +605,7 @@ Page {
     Component {
         id: update_firmware_drawer
         JadeUpdateDrawer {
+            context: self.context
             device: self.jadeDevice
         }
     }
