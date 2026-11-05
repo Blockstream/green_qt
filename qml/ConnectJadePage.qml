@@ -60,7 +60,8 @@ StackViewPage {
         onDeviceReady: (device, context) => self.selectDevice(device, context)
         onCloseClicked: self.closeClicked()
     }
-    contentItem: ColumnLayout {
+    contentItem: VFlickable {
+        alignment: Qt.AlignTop
         BluetoothPermissionWarning {
         }
         FixedErrorBadge {
