@@ -79,7 +79,12 @@ QtObject {
             return
         }
         if (prompt instanceof DevicePrompt) {
-            self.target.push(device_prompt_view, { context: self.task.session.context, prompt })
+            const context = self.task.session.context
+            if (context.wallet?.login?.device?.type === 'jade') {
+                self.target.push(jade_connect_page, { context, wallet: context.wallet, prompt })
+            } else {
+                self.target.push(device_prompt_view, { context, prompt })
+            }
             return
         }
     }
@@ -384,13 +389,14 @@ QtObject {
         }
     }
 
-    /* TODO: refactor after ledger
-    property Component jade_connect_view: ConnectJadePage {
-        required property DeviceResolver resolver
-        onDeviceSelected: (device) => self.target.push(jade_page, { device })
-        padding: 0
-        rightItem: Item {}
-        footer: Item {}
+    property Component jade_connect_page: ConnectJadePage {
+        required property DevicePrompt prompt
+        id: page
+        skipOnPop: true
+        onDeviceSelected: (device) => {
+            self.target.pop(page, StackView.Immediate)
+            page.prompt.select(device)
+        }
+        onCloseClicked: self.closed()
     }
-    */
 }
