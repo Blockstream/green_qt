@@ -96,11 +96,13 @@ AbstractDrawer {
                         }
                         KeyLabel {
                             text: qsTrId('id_system_location')
+                            visible: self.device.connectionType !== JadeDevice.Bluetooth
                         }
                         CopyableLabel {
                             Layout.fillWidth: true
                             horizontalAlignment: Label.AlignRight
                             text: self.device.systemLocation
+                            visible: self.device.connectionType !== JadeDevice.Bluetooth
                         }
                         KeyLabel {
                             text: qsTrId('Battery')
