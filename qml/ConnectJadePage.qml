@@ -18,10 +18,10 @@ StackViewPage {
     function selectDevice(device, context) {
         if (self.wallet && device.session?.xpubHashId !== self.wallet.xpubHashId) {
             self.StackView.view.pop(self)
-            mismatch_badge.raise('This Jade does not hold ' + self.wallet.name)
+            mismatch_banner.title = 'This Jade does not hold ' + self.wallet.name
             return
         }
-        mismatch_badge.clear()
+        mismatch_banner.title = ''
         self.deviceSelected(device, context)
     }
 
@@ -62,12 +62,16 @@ StackViewPage {
     }
     contentItem: VFlickable {
         alignment: Qt.AlignTop
+        spacing: 10
         BluetoothPermissionWarning {
         }
-        FixedErrorBadge {
-            Layout.alignment: Qt.AlignCenter
-            id: mismatch_badge
-            pointer: false
+        UiAlertBanner {
+            Layout.fillWidth: true
+            id: mismatch_banner
+            dismissible: true
+            variant: UiAlertBanner.Negative
+            visible: mismatch_banner.title.length > 0
+            onDismissed: mismatch_banner.title = ''
         }
         ColumnLayout {
             Layout.alignment: Qt.AlignCenter
