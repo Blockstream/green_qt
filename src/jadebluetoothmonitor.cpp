@@ -40,10 +40,11 @@ JadeBluetoothMonitor::JadeBluetoothMonitor(QObject* parent)
     : QObject(parent)
 {
     m_clock.start();
+    DeviceManager::instance()->checkBluetoothPermission();
     // The scan stops with an error while Bluetooth is off, so it is started
     // again once it is back on. Adverts seen before are stale by then.
     connect(DeviceManager::instance(), &DeviceManager::bluetoothStateChanged, this, [this] {
-        if (!m_active) return;
+        if (!m_active && !m_watching) return;
         if (DeviceManager::instance()->isBluetoothEnabled()) return update();
         DeviceManager::instance()->setBluetoothScanning(false);
         // A bond in flight is aborted without a result, so forget it or no
@@ -73,12 +74,45 @@ void JadeBluetoothMonitor::setActive(bool active)
     if (m_active == active) return;
     m_active = active;
     emit activeChanged();
+    if (!m_active) {
+        // The Jades in range were seen by the screen that is gone, so watching
+        // does not announce them again.
+        for (const auto& name : m_adverts.keys()) m_announced.insert(name);
+        const auto seen = m_seen;
+        // Devices already connected keep their backends, so leaving the screen
+        // that looks for devices does not drop them. Connections still being
+        // opened were for that screen, and go with it.
+        for (auto it = m_backends.begin(); it != m_backends.end();) {
+            if (m_devices.contains(it.value())) {
+                ++it;
+                continue;
+            }
+            delete it.value();
+            it = m_backends.erase(it);
+        }
+        // A bond asked for while scanning should not open a connection once the
+        // screen that wanted it is gone; the next scan asks again if needed.
+        cancelPairing();
+        dropListedDevices();
+        // Kept to tell when an announced Jade stops advertising.
+        m_seen = seen;
+    }
     update();
 }
 
+void JadeBluetoothMonitor::setWatching(bool watching)
+{
+    if (m_watching == watching) return;
+    m_watching = watching;
+    emit watchingChanged();
+    update();
+}
+
+// ponytail: watching scans nonstop on the home screen; duty cycle it in
+// deviceScanFinished if the battery cost shows.
 void JadeBluetoothMonitor::update()
 {
-    if (m_active) {
+    if (m_active || m_watching) {
         // An invalid local device stays invalid once an adapter is back.
         if (m_local_device && !m_local_device->isValid()) {
             delete std::exchange(m_device_discovery_agent, nullptr);
@@ -128,6 +162,14 @@ void JadeBluetoothMonitor::update()
                 qDebug() << Q_FUNC_INFO << "discovered" << info.name() << address << info.deviceUuid() << "rssi" << info.rssi() << pairing;
                 m_adverts.insert(key, info);
                 m_seen.insert(key, m_clock.elapsed());
+                // Only listed for a screen to open, without connecting: Jade takes a
+                // single connection, which may be another host's.
+                if (!m_active) {
+                    if (pairing == QBluetoothLocalDevice::Unpaired || m_announced.contains(key)) return;
+                    m_announced.insert(key);
+                    listDevice(key)->setBluetoothState(JadeDevice::BluetoothPaired);
+                    return;
+                }
                 JadeDevice* const device = listDevice(key);
                 if (pairing == QBluetoothLocalDevice::Unpaired) {
                     // Listed for the user to pair. Asking by itself on every advert
@@ -168,22 +210,9 @@ void JadeBluetoothMonitor::update()
         DeviceManager::instance()->setBluetoothScanning(m_device_discovery_agent->isActive());
     } else if (m_device_discovery_agent) {
         DeviceManager::instance()->setBluetoothScanning(false);
-        // Devices already connected keep their backends, so leaving the screen
-        // that looks for devices does not drop them. Connections still being
-        // opened were for that screen, and go with it.
         m_device_discovery_agent->stop();
-        for (auto it = m_backends.begin(); it != m_backends.end();) {
-            if (m_devices.contains(it.value())) {
-                ++it;
-                continue;
-            }
-            delete it.value();
-            it = m_backends.erase(it);
-        }
-        // A bond asked for while scanning should not open a connection once the
-        // screen that wanted it is gone; the next scan asks again if needed.
-        cancelPairing();
         dropListedDevices();
+        m_announced.clear();
     }
 }
 
@@ -354,13 +383,17 @@ void JadeBluetoothMonitor::deviceScanFinished()
         if (m_backends.contains(name) || m_pairing.name() == name) continue;
         if (m_clock.elapsed() - m_seen.value(name) > stale_ms) dropListedDevice(name);
     }
+    for (auto it = m_announced.begin(); it != m_announced.end();) {
+        if (m_clock.elapsed() - m_seen.value(*it) > stale_ms) it = m_announced.erase(it);
+        else ++it;
+    }
 
     // The agent stops itself after lowEnergyDiscoveryTimeout, so without starting
     // it again a Jade that is powered on later never reaches deviceDiscovered and
     // goes unnoticed until something else calls update(). Restarting keeps the
     // scan window open; discovery itself stays event driven, this does not poll
     // any device.
-    if (m_active && m_device_discovery_agent && !m_device_discovery_agent->isActive()) {
+    if ((m_active || m_watching) && m_device_discovery_agent && !m_device_discovery_agent->isActive()) {
         m_device_discovery_agent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
     }
     DeviceManager::instance()->setBluetoothScanning(m_device_discovery_agent->isActive());

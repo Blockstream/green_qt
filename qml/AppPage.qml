@@ -299,6 +299,7 @@ MainPage {
     }
     JadeBluetoothMonitor {
         active: self.StackView.status === StackView.Active && DeviceManager.discoveryRequested && DeviceManager.bluetoothPermission === Qt.Granted
+        watching: self.StackView.status === StackView.Active && !self.context && DeviceManager.bluetoothPermission === Qt.Granted
     }
     DeviceDiscoveryAgent {
     }
@@ -367,13 +368,14 @@ MainPage {
     }
     Connections {
         target: DeviceManager
-        // Screens looking for devices list them for the user to pick.
+        // Screens looking for devices list them for the user to pick, and a
+        // logged in wallet is not interrupted.
         function onDeviceAdded(device) {
-            if (DeviceManager.discoveryRequested) return
+            if (DeviceManager.discoveryRequested || self.context) return
             self.openDevice(device, { scan: true })
         }
         function onDeviceConnected(device) {
-            if (DeviceManager.discoveryRequested) return
+            if (DeviceManager.discoveryRequested || self.context) return
             self.openDevice(device, { scan: true })
         }
     }

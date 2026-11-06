@@ -15,12 +15,16 @@ class JadeBluetoothMonitor: public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
+    // Scans without connecting, to announce paired Jades switched on nearby.
+    Q_PROPERTY(bool watching READ watching WRITE setWatching NOTIFY watchingChanged)
     QML_ELEMENT
 public:
     JadeBluetoothMonitor(QObject* parent = nullptr);
     ~JadeBluetoothMonitor();
     bool active() const { return m_active; }
     void setActive(bool active);
+    bool watching() const { return m_watching; }
+    void setWatching(bool watching);
 
 protected slots:
     void deviceScanFinished();
@@ -36,9 +40,11 @@ protected slots:
 
 signals:
     void activeChanged();
+    void watchingChanged();
 
 private:
     bool m_active{false};
+    bool m_watching{false};
     QBluetoothDeviceDiscoveryAgent* m_device_discovery_agent{nullptr};
     QBluetoothLocalDevice* m_local_device{nullptr};
     QMap<JadeAPI*, QPointer<JadeDevice>> m_devices;
@@ -60,6 +66,9 @@ private:
     // is dropped while the scan goes on.
     QElapsedTimer m_clock;
     QMap<QString, qint64> m_seen;
+    // Jades already announced while watching, until they stop advertising, so
+    // a dismissed one does not announce itself again.
+    QSet<QString> m_announced;
 };
 
 #endif // GREEN_JADEBLUETOOTHMONITOR_H

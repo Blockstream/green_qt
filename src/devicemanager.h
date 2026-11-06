@@ -33,6 +33,8 @@ public:
     bool isBluetoothEnabled() const { return m_bluetooth_enabled; }
     bool isBluetoothScanning() const { return m_bluetooth_scanning; }
     void setBluetoothScanning(bool bluetooth_scanning);
+    // Without asking, for discovery that runs without a screen requesting it.
+    void checkBluetoothPermission();
 public slots:
     void addDevice(Device* device);
     void removeDevice(Device* device);

@@ -112,15 +112,19 @@ void DeviceManager::updateBluetoothPermission()
         });
     }
 
-    const auto permission = qApp->checkPermission(QBluetoothPermission{});
-    setBluetoothPermission(permission);
+    checkBluetoothPermission();
 
     // Only asked for once a screen needs to discover devices, as on mobile.
-    if (permission == Qt::PermissionStatus::Undetermined) {
+    if (m_bluetooth_permission == Qt::PermissionStatus::Undetermined) {
         qApp->requestPermission(QBluetoothPermission{}, this, [this](const QPermission& permission) {
             setBluetoothPermission(permission.status());
         });
     }
+}
+
+void DeviceManager::checkBluetoothPermission()
+{
+    setBluetoothPermission(qApp->checkPermission(QBluetoothPermission{}));
 }
 
 void DeviceManager::setBluetoothPermission(Qt::PermissionStatus permission)
