@@ -25,14 +25,6 @@ bool IsValidXpub(const QString& xpub)
     return rc == WALLY_OK;
 }
 
-bool IsValidDescriptor(const QString& input)
-{
-    wally_descriptor* out{nullptr};
-    const auto rc = wally_descriptor_parse(input.toUtf8().constData(), NULL, WALLY_NETWORK_NONE, 0, &out);
-    if (out) wally_descriptor_free(out);
-    return rc == WALLY_OK;
-}
-
 } // namespace
 
 CreateAccountController::CreateAccountController(QObject *parent)
@@ -413,29 +405,6 @@ QValidator::State XPubValidator::validate(QString& input, int& pos) const
             if (!IsValidXpub(line)) {
                 return QValidator::Intermediate;
             }
-        }
-    }
-    return QValidator::Acceptable;
-}
-
-DescriptorValidator::DescriptorValidator(QObject* parent)
-    : QValidator(parent)
-{
-}
-
-void DescriptorValidator::setNetwork(Network* network)
-{
-    if (m_network == network) return;
-    m_network = network;
-    emit networkChanged();
-}
-
-QValidator::State DescriptorValidator::validate(QString& input, int& pos) const
-{
-    Q_UNUSED(pos);
-    if (!m_network || !m_network->isLiquid()) {
-        for (const auto line : input.split('\n')) {
-            if (!IsValidDescriptor(line)) return QValidator::Intermediate;
         }
     }
     return QValidator::Acceptable;
