@@ -101,6 +101,8 @@ public:
     QStringList mnemonic() const;
     void setMnemonic(const QStringList& mnemonic);
 
+    bool isSoftwareSigner() const;
+
     bool isWatchonly() const;
     void setWatchonly(bool watchonly);
 

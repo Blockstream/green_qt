@@ -359,8 +359,7 @@ void LoadController::loadAmp2()
 
     // The descriptor is re-derived from the signer rather than persisted, so a
     // software signer is required (matches the create flow).
-    const auto mnemonic = context()->credentials().value("mnemonic").toString();
-    if (mnemonic.isEmpty()) return;
+    if (!context()->isSoftwareSigner()) return;
 
     if (!wallet->m_amp2_wid.isEmpty()) {
         // context()->amp2AccountController() is gated on wallet->m_amp2_wid,

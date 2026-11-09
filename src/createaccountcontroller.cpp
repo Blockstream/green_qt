@@ -102,9 +102,8 @@ void CreateAccountController::createAmp2Account()
     // racing two register_wallet calls.
     if (m_busy) return;
     qDebug() << Q_FUNC_INFO << "starting AMP2 account creation on" << m_network;
-    const auto mnemonic = context()->credentials().value("mnemonic").toString();
-    if (mnemonic.isEmpty()) {
-        qDebug() << Q_FUNC_INFO << "no mnemonic available, aborting";
+    if (!context()->isSoftwareSigner()) {
+        qDebug() << Q_FUNC_INFO << "no software signer, aborting";
         m_error = "AMP2 account creation requires a software signer.";
         emit errorChanged();
         emit failed(m_error);

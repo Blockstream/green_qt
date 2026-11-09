@@ -383,6 +383,12 @@ void Context::setMnemonic(const QStringList& mnemonic)
     emit lightningMnemonicChanged();
 }
 
+bool Context::isSoftwareSigner() const
+{
+    Q_D(const Context);
+    return d->device_details.isEmpty() && !d->watchonly;
+}
+
 bool Context::isWatchonly() const
 {
     Q_D(const Context);
