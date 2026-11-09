@@ -789,6 +789,8 @@ void AuthHandlerTask::next()
     const auto status = result.value("status").toString();
 
     if (status == "done") {
+        GA_destroy_auth_handler(d->auth_handler);
+        d->auth_handler = nullptr;
         handleDone(result);
         return;
     }
@@ -1552,9 +1554,8 @@ bool GetCredentialsTask::active() const
 
 void GetCredentialsTask::handleDone(const QJsonObject& result)
 {
-    const auto credentials = result.value("result").toObject();
-    session()->context()->setCredentials(credentials);
-    AuthHandlerTask::handleDone(result);
+    session()->context()->setCredentials(result.value("result").toObject());
+    setStatus(Status::Finished);
 }
 
 ChangeSettingsTask::ChangeSettingsTask(const QJsonObject& data, Session* session)
