@@ -356,30 +356,8 @@ void Context::setCredentials(const QJsonObject &credentials)
     Q_D(Context);
 
     if (d->credentials == credentials) return;
-    const auto mnemonic = credentials.value("mnemonic").toString().split(" ");
-    const auto mnemonic_changed = d->mnemonic != mnemonic;
     d->credentials = credentials;
     emit credentialsChanged();
-    setMnemonic(mnemonic);
-    if (!mnemonic_changed) {
-        emit lightningMnemonicChanged();
-    }
-}
-
-QStringList Context::mnemonic() const
-{
-    Q_D(const Context);
-    return d->mnemonic;
-}
-
-void Context::setMnemonic(const QStringList& mnemonic)
-{
-    Q_D(Context);
-
-    if (d->mnemonic == mnemonic) return;
-    Q_ASSERT(d->mnemonic.isEmpty());
-    d->mnemonic = mnemonic;
-    emit mnemonicChanged();
     emit lightningMnemonicChanged();
 }
 
@@ -412,7 +390,7 @@ QStringList Context::lightningMnemonic() const
 
     if (d->bip39) return {};
 
-    const auto source_mnemonic = d->mnemonic.join(' ');
+    const auto source_mnemonic = d->credentials.value("mnemonic").toString();
     if (source_mnemonic.trimmed().isEmpty()) return {};
 
     const auto source_passphrase = d->credentials.value("bip39_passphrase").toString();

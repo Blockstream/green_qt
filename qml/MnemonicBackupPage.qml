@@ -64,7 +64,13 @@ StackViewPage {
             contentItem: MnemonicView {
                 id: mnemonic_view
                 columns: self.columns
-                mnemonic: self.context?.mnemonic ?? WalletManager.generateMnemonic(self.size)
+                mnemonic: {
+                    if (self.context) {
+                        return self.context.credentials?.mnemonic?.split(' ') ?? []
+                    } else {
+                        return WalletManager.generateMnemonic(self.size)
+                    }
+                }
             }
         }
         Bip39Passphrase {
@@ -112,7 +118,7 @@ StackViewPage {
                 QRCode {
                     Layout.alignment: Qt.AlignHCenter
                     id: qrcode
-                    text: self.context?.mnemonic.join(' ')
+                    text: self.context?.credentials?.mnemonic ?? ''
                     implicitHeight: 300
                     implicitWidth: 300
                     radius: 4

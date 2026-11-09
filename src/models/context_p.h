@@ -33,7 +33,6 @@ public:
     QString xpub_hash_id;
     QJsonObject device_details;
     QJsonObject credentials;
-    QStringList mnemonic;
     QMap<Network*, Session*> sessions;
     QList<Session*> sessions_list;
     QList<Notification*> notifications;

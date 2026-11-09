@@ -57,7 +57,6 @@ class Context : public QObject
     Q_PROPERTY(Session* primarySession READ primarySession NOTIFY sessionsChanged)
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QJsonObject credentials READ credentials NOTIFY credentialsChanged)
-    Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(bool lightningEnabled READ lightningEnabled NOTIFY lightningEnabledChanged)
     Q_PROPERTY(QStringList lightningMnemonic READ lightningMnemonic NOTIFY lightningMnemonicChanged)
     Q_PROPERTY(LightningSession* lightningSession READ lightningSession NOTIFY lightningSessionChanged)
@@ -97,9 +96,6 @@ public:
 
     QJsonObject credentials() const;
     void setCredentials(const QJsonObject& credentials);
-
-    QStringList mnemonic() const;
-    void setMnemonic(const QStringList& mnemonic);
 
     bool isSoftwareSigner() const;
 
@@ -171,7 +167,6 @@ signals:
     void deviceChanged();
     void rememberChanged();
     void credentialsChanged();
-    void mnemonicChanged();
     void accountsChanged();
     void watchonlyChanged();
     void sessionsChanged();
