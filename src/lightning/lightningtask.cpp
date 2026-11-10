@@ -1,6 +1,7 @@
 #include "context.h"
 #include "lightningsession.h"
 #include "lightningtask.h"
+#include "wallet.h"
 
 #include <QDebug>
 #include <QPointer>
@@ -75,7 +76,8 @@ void LightningEnableTask::update()
     }
 
     auto session = context()->lightningSession();
-    if (!session) {
+    auto wallet = context()->wallet();
+    if (!session || !wallet) {
         setError(QStringLiteral("Lightning session is not available"));
         setStatus(Status::Failed);
         return;
@@ -84,18 +86,55 @@ void LightningEnableTask::update()
     const QPointer<LightningSession> session_guard(session);
     setStatus(Status::Active);
 
-    auto future = session->connectNode(lightning_mnemonic).then(this, [=, this](const QString& error) {
+    // Gate registration of new nodes on LSP capacity; a cached true skips the network call.
+    auto future = session->checkAvailability(lightning_mnemonic, wallet->lightningAvailable()).then(this, [=, this](const LightningValueResult<LightningAvailability>& result) {
         if (!session_guard) {
             setError(QStringLiteral("Lightning session is not available"));
             setStatus(Status::Failed);
             return;
         }
-        if (!error.isEmpty()) {
+        if (!result) {
+            qWarning() << Q_FUNC_INFO << result.error;
+            setError(QStringLiteral("lightning_gate_failed"));
+            setStatus(Status::Failed);
+            return;
+        }
+        qInfo() << Q_FUNC_INFO << "node" << result.value->node_id << "available" << result.value->available;
+        if (!result.value->available) {
+            setError(QStringLiteral("lightning_at_capacity"));
+            setStatus(Status::Failed);
+            return;
+        }
+        connectNode(session, lightning_mnemonic, result.value->node_id);
+    });
+
+    waitForFuture(future);
+}
+
+void LightningEnableTask::connectNode(LightningSession* session, const QString& mnemonic, const QString& node_id)
+{
+    const QPointer<LightningSession> session_guard(session);
+    auto future = session->connectNode(mnemonic).then(this, [=, this](const QString& error) {
+        if (!session_guard) {
+            setError(QStringLiteral("Lightning session is not available"));
+            setStatus(Status::Failed);
+            return;
+        }
+        if (session->state() != LightningSession::State::Connected) {
             qWarning() << Q_FUNC_INFO << error;
             setError(error);
             setStatus(Status::Failed);
             return;
         }
+        // Connected with an error means listing payments failed, which is non-fatal.
+        if (!error.isEmpty()) qWarning() << Q_FUNC_INFO << error;
+        if (session->nodeInfo().value("id").toString().compare(node_id, Qt::CaseInsensitive) != 0) {
+            session->disconnectNode();
+            setError(QStringLiteral("Lightning node id mismatch"));
+            setStatus(Status::Failed);
+            return;
+        }
+        if (auto wallet = context()->wallet()) wallet->setLightningAvailable(true);
         context()->setLightningEnabled(true);
         setStatus(Status::Finished);
     });

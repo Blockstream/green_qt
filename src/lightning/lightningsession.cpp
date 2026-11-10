@@ -148,6 +148,22 @@ std::shared_ptr<glsdk::NodeEventListener> LightningSession::eventListener() cons
     return std::static_pointer_cast<glsdk::NodeEventListener>(m_event_listener);
 }
 
+QFuture<LightningValueResult<LightningAvailability>> LightningSession::checkAvailability(const QString& mnemonic, bool cached) const
+{
+    if (QThread::currentThread() != thread()) {
+        QFuture<LightningValueResult<LightningAvailability>> future;
+        QMetaObject::invokeMethod(const_cast<LightningSession*>(this), [this, mnemonic, cached, &future] {
+            future = checkAvailability(mnemonic, cached);
+        }, Qt::BlockingQueuedConnection);
+        return future;
+    }
+
+    const auto client = m_client;
+    return QtConcurrent::run([client, mnemonic, cached] {
+        return client->checkAvailability(mnemonic, cached);
+    });
+}
+
 QFuture<QString> LightningSession::connectNode(const QString& mnemonic)
 {
     if (QThread::currentThread() != thread()) {
@@ -175,7 +191,13 @@ QFuture<QString> LightningSession::connectNode(const QString& mnemonic)
 
     begin();
 
-    if (!started) return QtConcurrent::run([] { return QString(); });
+    if (!started) {
+        if (m_state != State::Connecting) return QtFuture::makeReadyValueFuture(QString());
+        // Wait for the in-flight connect; its future already has a continuation.
+        return QtFuture::connect(this, &LightningSession::stateChanged).then(this, [this] {
+            return m_error;
+        });
+    }
 
     m_connect_future = QtConcurrent::run([=] {
         ConnectNodeResult result;

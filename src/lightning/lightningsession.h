@@ -50,6 +50,7 @@ public:
     State state() const { return m_state; }
     QString error() const { return m_error; }
     QJsonObject nodeInfo() const { return m_node_info; }
+    QFuture<LightningValueResult<LightningAvailability>> checkAvailability(const QString& mnemonic, bool cached) const;
     QFuture<QString> connectNode(const QString& mnemonic);
     QFuture<LightningCreateInvoiceResult> createInvoice(quint64 satoshi, const QString& description) const;
     QFuture<LightningValueResult<LightningSendResponse>> sendPayment(const QString& invoice, std::optional<quint64> amount_msat);

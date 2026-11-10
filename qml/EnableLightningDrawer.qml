@@ -1,3 +1,4 @@
+import Blockstream.Controls
 import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
@@ -10,7 +11,7 @@ WalletDrawer {
     property string error: ''
 
     readonly property bool busy: controller.monitor ? !controller.monitor.idle : false
-    readonly property bool detailsVisible: !self.busy && !self.context.lightningEnabled
+    readonly property bool detailsVisible: !self.context.lightningEnabled
 
     id: self
 
@@ -33,8 +34,14 @@ WalletDrawer {
         target: controller
         function onFailed(error) {
             self.error = error
+            debounce_timer.restart()
             Analytics.recordEvent('enable_failed')
         }
+    }
+
+    Timer {
+        id: debounce_timer
+        interval: 2000
     }
 
     contentItem: GStackView {
@@ -50,8 +57,9 @@ WalletDrawer {
                     Layout.fillWidth: true
                     Layout.topMargin: 24
                     text: 'Enable Lightning'
+                    enabled: !self.busy && !debounce_timer.running
+                    busy: self.busy
                     onClicked: {
-                        self.error = ''
                         Analytics.recordEvent('enable_start')
                         controller.enable()
                     }
@@ -75,44 +83,6 @@ WalletDrawer {
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 16
-
-                        Pane {
-                            Layout.fillWidth: true
-                            visible: self.error !== ''
-                            verticalPadding: 12
-                            horizontalPadding: 16
-                            background: Rectangle {
-                                radius: 4
-                                color: '#69302E'
-                            }
-                            contentItem: RowLayout {
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: 4
-                                    Label {
-                                        Layout.fillWidth: true
-                                        color: '#FFFFFF'
-                                        font.pixelSize: 14
-                                        font.weight: 600
-                                        text: 'Failed to enable Lightning'
-                                        wrapMode: Label.Wrap
-                                    }
-                                    Label {
-                                        Layout.fillWidth: true
-                                        color: '#FFFFFF'
-                                        font.pixelSize: 12
-                                        font.weight: 400
-                                        opacity: 0.6
-                                        text: self.error ?? ''
-                                        wrapMode: Label.Wrap
-                                    }
-                                }
-                                CloseButton {
-                                    Layout.alignment: Qt.AlignCenter
-                                    onClicked: self.error = ''
-                                }
-                            }
-                        }
 
                         Label {
                             Layout.fillWidth: true
@@ -159,7 +129,28 @@ WalletDrawer {
                     VSpacer {
                     }
 
+                    UiAlertBanner {
+                        Layout.fillWidth: true
+                        visible: self.error !== ''
+                        variant: UiAlertBanner.Negative
+                        title: {
+                            switch (self.error) {
+                            case 'lightning_at_capacity': return 'Lightning Is at Capacity'
+                            case 'lightning_gate_failed': return 'Couldn’t Enable Lightning'
+                            default: return 'Failed to enable Lightning'
+                            }
+                        }
+                        description: {
+                            switch (self.error) {
+                            case 'lightning_at_capacity': return 'We are rolling out Lightning access as capacity becomes available. Please try again soon.'
+                            case 'lightning_gate_failed': return 'We are unable to enable Lightning on your wallet at this time. Please try again soon.'
+                            default: return self.error
+                            }
+                        }
+                    }
+
                     Pane {
+                        visible: self.error === ''
                         Layout.fillWidth: true
                         leftPadding: 16
                         rightPadding: 16
@@ -206,26 +197,6 @@ WalletDrawer {
                                 }
                             }
                         }
-                    }
-                }
-
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-                    spacing: 8
-                    visible: self.busy
-                    BusyIndicator {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.preferredHeight: 40
-                        Layout.preferredWidth: 40
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        color: '#FFFFFF'
-                        font.pixelSize: 16
-                        font.weight: 600
-                        horizontalAlignment: Label.AlignHCenter
-                        text: 'Enabling Lightning...'
                     }
                 }
             }

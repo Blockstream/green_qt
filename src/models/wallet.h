@@ -155,6 +155,9 @@ public:
     bool lightningEnabled() const;
     void setLightningEnabled(bool enabled);
 
+    bool lightningAvailable() const;
+    void setLightningAvailable(bool available);
+
     // Non-empty means an AMP2 account was registered and is reloaded on login
     QString amp2Wid() const;
     void setAmp2Wid(const QString& wid);

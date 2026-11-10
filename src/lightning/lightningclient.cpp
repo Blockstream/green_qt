@@ -232,6 +232,19 @@ LightningClient::~LightningClient()
     qDebug() << Q_FUNC_INFO << "Lightning client destroyed";
 }
 
+LightningValueResult<LightningAvailability> LightningClient::checkAvailability(const QString& mnemonic, bool cached) const
+{
+    try {
+        const auto node_id = glsdk::Signer::init(mnemonic.toStdString())->node_id();
+        LightningAvailability availability;
+        availability.node_id = QString::fromLatin1(QByteArray(reinterpret_cast<const char*>(node_id.data()), node_id.size()).toHex());
+        availability.available = cached || glsdk::Scheduler::init(glsdk::Network::kBitcoin)->lightning_available(node_id);
+        return { availability, {} };
+    } catch (...) {
+        return { std::nullopt, CurrentGlsdkExceptionMessage() };
+    }
+}
+
 LightningValueResult<std::shared_ptr<glsdk::Node>> LightningClient::connectNode(const QString& mnemonic, const std::shared_ptr<glsdk::NodeEventListener>& listener)
 {
     if (mnemonic.trimmed().isEmpty()) {

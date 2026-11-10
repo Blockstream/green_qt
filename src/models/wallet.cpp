@@ -36,6 +36,7 @@ public:
     QString xpub_hash_id;
     QSet<QString> hashes;
     bool lightning_enabled{false};
+    bool lightning_available{false};
     QString amp2_wid;
     bool amp2_hidden{false};
     QString amp2_name;
@@ -184,6 +185,7 @@ void Wallet::read(const QJsonObject& data)
     d->name = data.value("name").toString();
     d->xpub_hash_id = data.value("xpub_hash_id").toString();
     d->lightning_enabled = data.value("lightning_enabled").toBool(false);
+    d->lightning_available = data.value("lightning_available").toBool(false);
     const auto amp2 = data.value("amp2").toObject();
     d->amp2_wid = amp2.value("wid").toString(data.value("amp2_wid").toString());
     d->amp2_hidden = amp2.value("hidden").toBool(false);
@@ -204,6 +206,7 @@ void Wallet::save()
         { "deployment", d->deployment },
         { "hashes", QJsonArray::fromStringList(d->hashes.values()) },
         { "lightning_enabled", d->lightning_enabled },
+        { "lightning_available", d->lightning_available },
     });
     if (!d->xpub_hash_id.isEmpty()) {
         data.insert("xpub_hash_id", d->xpub_hash_id);
@@ -343,6 +346,20 @@ void Wallet::setLightningEnabled(bool enabled)
     if (d->lightning_enabled == enabled) return;
     d->lightning_enabled = enabled;
     emit lightningEnabledChanged();
+    save();
+}
+
+bool Wallet::lightningAvailable() const
+{
+    Q_D(const Wallet);
+    return d->lightning_available;
+}
+
+void Wallet::setLightningAvailable(bool available)
+{
+    Q_D(Wallet);
+    if (d->lightning_available == available) return;
+    d->lightning_available = available;
     save();
 }
 

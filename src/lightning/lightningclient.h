@@ -122,6 +122,11 @@ struct LightningNodeInfo {
     quint64 max_receivable_msat{0};
 };
 
+struct LightningAvailability {
+    QString node_id;
+    bool available{false};
+};
+
 // Stateless Lightning client facade.
 class LightningClient final
 {
@@ -129,6 +134,7 @@ public:
     LightningClient();
     ~LightningClient();
 
+    LightningValueResult<LightningAvailability> checkAvailability(const QString& mnemonic, bool cached) const;
     LightningValueResult<std::shared_ptr<glsdk::Node>> connectNode(const QString& mnemonic, const std::shared_ptr<glsdk::NodeEventListener>& listener);
     void disconnectNode(const std::shared_ptr<glsdk::Node>& node);
 

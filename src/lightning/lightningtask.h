@@ -5,6 +5,8 @@
 
 #include <QQmlEngine>
 
+class LightningSession;
+
 class LightningConnectNodeTask : public ContextTask
 {
     Q_OBJECT
@@ -23,6 +25,8 @@ class LightningEnableTask : public ContextTask
 public:
     LightningEnableTask(Context* context);
     void update() override;
+private:
+    void connectNode(LightningSession* session, const QString& mnemonic, const QString& node_id);
 };
 
 #endif // BLOCKSTREAM_LIGHTNING_TASK_H
