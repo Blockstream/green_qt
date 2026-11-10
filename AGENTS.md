@@ -25,6 +25,7 @@ This is a cross-platform Bitcoin/Liquid wallet using Qt 6 and QML. It integrates
 - Keep diffs easy to review: one behavior change per patch where possible, with related build/list updates in the same patch.
 - Prefer existing project components, controllers, tasks, and QML helpers over new abstractions.
 - Preserve user-facing behavior unless the task explicitly changes it; be especially careful around wallet state, sessions, authentication, and transaction flows.
+- When adding or changing log statements, keep secrets and wallet data out of them as described in [doc/agents/logging.md](doc/agents/logging.md).
 - For user-facing QML text, reuse existing `qsTrId(...)` ids when available. Avoid new hardcoded English unless the surrounding feature deliberately uses literals or the string is internal/debug-only.
 - Before handing off, run the narrowest relevant lint, build, or test command you can and report what was or was not run.
 
@@ -37,6 +38,7 @@ This is a cross-platform Bitcoin/Liquid wallet using Qt 6 and QML. It integrates
 - **CI, build scripts, platform docs**: [doc/agents/ci.md](doc/agents/ci.md)
 - **Repository layout, assets, testing hooks**: [doc/agents/repository.md](doc/agents/repository.md)
 - **Large features** (wallet protocols, cross-layer flows): [doc/agents/large-features.md](doc/agents/large-features.md)
+- **Logging and support log redaction**: [doc/agents/logging.md](doc/agents/logging.md)
 - **Common mistakes**: [doc/agents/pitfalls.md](doc/agents/pitfalls.md)
 
 When a task spans several areas, read each applicable guide.
