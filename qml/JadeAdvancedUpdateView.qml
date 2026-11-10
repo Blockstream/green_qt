@@ -28,21 +28,21 @@ StackViewPage {
     }
     footerItem: ColumnLayout {
         BusyIndicator {
-            anchors.centerIn: parent
+            Layout.alignment: Qt.AlignCenter
             running: firmware_controller.fetching
             visible: firmware_controller.fetching
         }
         Image {
             Layout.alignment: Qt.AlignCenter
             source: 'qrc:/svg2/warning.svg'
-            visible: self.device.updateRequired
+            visible: self.device?.updateRequired ?? false
         }
         Label {
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 12
             font.weight: 600
             text: qsTrId('id_new_jade_firmware_required')
-            visible: self.device.updateRequired
+            visible: self.device?.updateRequired ?? false
         }
         CheckBox {
             Layout.alignment: Qt.AlignCenter
@@ -53,7 +53,7 @@ StackViewPage {
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: 250
-            enabled: button_group.checkedButton && self.device?.connected && self.device?.status === JadeDevice.StatusIdle
+            enabled: !!(button_group.checkedButton && self.device?.connected && self.device?.status === JadeDevice.StatusIdle)
             text: qsTrId('id_continue')
             onClicked: self.firmwareSelected(button_group.checkedButton.firmware)
         }
@@ -61,7 +61,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             id: right_item
             text: qsTrId('id_skip')
-            visible: self.showSkip && !self.device.updateRequired
+            visible: self.showSkip && !(self.device?.updateRequired ?? false)
             onClicked: self.skipClicked()
         }
     }
@@ -69,7 +69,7 @@ StackViewPage {
         JadeFirmwareConfigSelector {
             Layout.topMargin: 20
             id: config_selector
-            config: self.device.versionInfo.JADE_CONFIG.toLowerCase()
+            config: self.device?.versionInfo?.JADE_CONFIG?.toLowerCase() ?? ''
             onConfigClicked: (config) => config_selector.config = config
         }
         Label {
