@@ -124,7 +124,9 @@ void JadeBluetoothMonitor::update()
 
             m_device_discovery_agent->setLowEnergyDiscoveryTimeout(5000);
 
-            connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, [=, this](const QBluetoothDeviceInfo& info) {
+            // BlueZ reports a cached device again on every scan restart without an
+            // RSSI, and its fresh adverts only as updates.
+            const auto advertised = [=, this](const QBluetoothDeviceInfo& info) {
                 if (!info.serviceUuids().contains({JADE_SERVICE_UUID})) return;
                 // Windows also reports bonded devices from its cache, with no RSSI,
                 // whether or not they are in range. Only an advert proves it is.
@@ -159,7 +161,9 @@ void JadeBluetoothMonitor::update()
                 const auto address = info.address().toString();
                 const auto pairing = !info.address().isNull() ? m_local_device->pairingStatus(info.address())
                     : IsKnownJade(key) ? QBluetoothLocalDevice::Paired : QBluetoothLocalDevice::Unpaired;
-                qDebug() << Q_FUNC_INFO << "discovered" << info.name() << address << info.deviceUuid() << "rssi" << info.rssi() << pairing;
+                if (!m_adverts.contains(key) || m_adverts.value(key).address() != info.address()) {
+                    qDebug() << Q_FUNC_INFO << "discovered" << info.name() << address << info.deviceUuid() << "rssi" << info.rssi() << pairing;
+                }
                 m_adverts.insert(key, info);
                 m_seen.insert(key, m_clock.elapsed());
                 // Only listed for a screen to open, without connecting: Jade takes a
@@ -182,7 +186,9 @@ void JadeBluetoothMonitor::update()
 
                 device->setBluetoothState(JadeDevice::BluetoothPaired);
                 connectToDevice(info);
-            });
+            };
+            connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, advertised);
+            connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::deviceUpdated, this, advertised);
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::finished, this, &JadeBluetoothMonitor::deviceScanFinished);
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::errorOccurred, this, [=, this](QBluetoothDeviceDiscoveryAgent::Error error) {
                 qWarning() << Q_FUNC_INFO << "discovery error" << error << m_device_discovery_agent->errorString();
