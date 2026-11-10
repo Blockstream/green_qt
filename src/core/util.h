@@ -3,6 +3,7 @@
 
 #include <QByteArray>
 #include <QCommandLineParser>
+#include <QIODevice>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
@@ -28,6 +29,8 @@ QByteArray ReverseByteArray(const QByteArray& byte_array);
 
 QString Sha256(const QString& value);
 QString Sha256(const QJsonObject& value);
+
+bool RedactLog(QIODevice& in, QIODevice& out);
 
 QString GetHardwareModel();
 

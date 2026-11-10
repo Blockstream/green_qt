@@ -4,8 +4,13 @@
 #include <QCryptographicHash>
 #include <QDir>
 #include <QFileInfo>
+#include <QIODevice>
 #include <QJsonDocument>
+#include <QRegularExpression>
+#include <QSet>
 #include <QUrl>
+
+#include <functional>
 
 #ifdef Q_OS_MACOS
 #include <sys/sysctl.h>
@@ -116,6 +121,104 @@ QString Sha256(const QString &value)
 QString Sha256(const QJsonObject& value)
 {
     return Sha256(QJsonDocument(value).toJson(QJsonDocument::Compact));
+}
+
+static void ReplaceMatches(QString& text, const QRegularExpression& re, const std::function<QString(const QString&)>& replacement)
+{
+    QString result;
+    qsizetype last = 0;
+    for (auto it = re.globalMatch(text); it.hasNext();) {
+        const auto match = it.next();
+        result += QStringView(text).mid(last, match.capturedStart() - last);
+        result += replacement(match.captured());
+        last = match.capturedEnd();
+    }
+    if (last == 0) return;
+    result += QStringView(text).mid(last);
+    text = result;
+}
+
+bool RedactLog(QIODevice& in, QIODevice& out)
+{
+    static const QRegularExpression hex_re(R"(\b[0-9a-f]{32,}\b)");
+    static const QRegularExpression public_re(R"((?:genesis_hash|policy_asset|block_hash|previous_hash|prev_blockhash|merkle_root)\W+(?:String\(\W*)?([0-9a-f]{64})|(?:tip=|block:)\(\d+, (?:Bitcoin|Elements)\(([0-9a-f]{64}))");
+    static const QRegularExpression address_re(R"(address\\?"\s*:\s*(?:String\(\\?"|")([^\\"]+))");
+    static const QRegularExpression fingerprint_re(R"((?:set_fingerprint input "String\(\\?"|\[)([0-9a-f]{8})\b)");
+    static const QRegularExpression token_re(R"([0-9A-Za-z]{26,})");
+    static const QRegularExpression xpub_re(R"(\b[tuvxyzTUVXYZ]p(?:ub|rv)[1-9A-HJ-NP-Za-km-z]{20,})");
+    static const QRegularExpression bech32_re(R"(\b(?:bc|tb|bcrt|lq|tlq|ex|tex|el|ert)1[02-9ac-hj-np-z]{8,})");
+    // log lines are truncated, so these values may be shorter than the HEX minimum
+    static const QRegularExpression hex_field_re(R"((?:script|blinding_key|txhash|txid|blinder)\\?"\s*:\s*(?:String\(\\?"|")\K[0-9a-f]+)");
+    static const QRegularExpression satoshi_re(R"(satoshi\\?"\s*:\s*(?:Number\()?\K-?\d+)");
+    static const QRegularExpression satoshi_map_re(R"(satoshi\\?"\s*:\s*(?:Object\s*)?\{\K[^}]*)");
+    static const QRegularExpression amount_re(R"(:\s*(?:Number\()?\K-?\d+)");
+    static const QRegularExpression blob_re(R"((?:blob|hmac|encrypted_data)\\?"\s*:\s*(?:String\(\\?"|")\K[^\\"]+)");
+    static const QRegularExpression short_hex_re(R"(\b[0-9a-f]{8}\b)");
+    // nested values are escaped twice, and QDebug splits \x escapes with ""
+    static const QRegularExpression name_re(R"(name(?:"\s*:\s*(?:String\()?"\K(?:\\.|[^\\"\r\n])+|\\"\s*:\s*(?:String\()?\\"\K(?:\\\\\\?.|\\?[^\\"\r\n]|"")+))");
+
+    const auto home = QDir::homePath();
+    const auto native_home = QDir::toNativeSeparators(home);
+    const auto escaped_home = QString(native_home).replace('\\', QStringLiteral("\\\\"));
+
+    QSet<QString> public_hex;
+    QSet<QString> addresses;
+    QSet<QString> fingerprints;
+    QHash<QString, QString> placeholders;
+    QHash<QString, int> counters;
+    const auto placeholder = [&](const QString& kind, const QString& value) {
+        auto& result = placeholders[value];
+        if (result.isEmpty()) result = QStringLiteral("<%1_%2>").arg(kind).arg(++counters[kind]);
+        return result;
+    };
+
+    // the log keeps growing while we read it
+    const qint64 limit = in.size();
+    while (in.pos() < limit && !in.atEnd()) {
+        QString line = QString::fromUtf8(in.readLine());
+
+        // network config and block hashes are public
+        const bool is_network_config = line.contains(QLatin1String("create_session"));
+        if (is_network_config) {
+            for (auto it = hex_re.globalMatch(line); it.hasNext();) public_hex.insert(it.next().captured());
+        }
+        for (auto it = public_re.globalMatch(line); it.hasNext();) {
+            const auto match = it.next();
+            public_hex.insert(match.captured(1) + match.captured(2));
+        }
+        for (auto it = address_re.globalMatch(line); it.hasNext();) addresses.insert(it.next().captured(1));
+        for (auto it = fingerprint_re.globalMatch(line); it.hasNext();) fingerprints.insert(it.next().captured(1));
+
+        ReplaceMatches(line, token_re, [&](const QString& token) {
+            return addresses.contains(token) ? placeholder("ADDR", token) : token;
+        });
+        ReplaceMatches(line, xpub_re, [&](const QString& xpub) { return placeholder("XPUB", xpub); });
+        ReplaceMatches(line, bech32_re, [&](const QString& address) { return placeholder("ADDR", address); });
+        ReplaceMatches(line, hex_re, [&](const QString& hex) {
+            return public_hex.contains(hex) ? hex : placeholder("HEX", hex);
+        });
+        ReplaceMatches(line, hex_field_re, [&](const QString& hex) { return placeholder("HEX", hex); });
+        ReplaceMatches(line, satoshi_re, [&](const QString& satoshi) { return placeholder("SAT", satoshi); });
+        ReplaceMatches(line, satoshi_map_re, [&](QString amounts) {
+            ReplaceMatches(amounts, amount_re, [&](const QString& satoshi) { return placeholder("SAT", satoshi); });
+            return amounts;
+        });
+        ReplaceMatches(line, blob_re, [&](const QString& blob) { return placeholder("BLOB", blob); });
+        if (!is_network_config) {
+            ReplaceMatches(line, name_re, [&](const QString& name) { return placeholder("NAME", name); });
+        }
+        ReplaceMatches(line, short_hex_re, [&](const QString& hex) {
+            return fingerprints.contains(hex) ? placeholder("FP", hex) : hex;
+        });
+        if (home != QDir::rootPath()) {
+            line.replace(home, QStringLiteral("~"));
+            line.replace(native_home, QStringLiteral("~"));
+            line.replace(escaped_home, QStringLiteral("~"));
+        }
+
+        if (out.write(line.toUtf8()) < 0) return false;
+    }
+    return true;
 }
 
 QString GetHardwareModel()

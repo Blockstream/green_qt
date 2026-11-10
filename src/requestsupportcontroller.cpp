@@ -2,6 +2,11 @@
 #include "requestsupportcontroller.h"
 #include "util.h"
 
+#include <QTemporaryFile>
+#include <QtConcurrentRun>
+
+#include <memory>
+
 RequestSupportController::RequestSupportController(QObject* parent)
     : QObject(parent)
 {
@@ -13,47 +18,59 @@ void RequestSupportController::submit(bool share_logs, const QJsonObject& data)
         return createSupportRequest({}, data);
     }
 
-    QFileInfo file_info(GetLogFilename());
-
-    auto file = new QFile(file_info.absoluteFilePath(), this);
-    if (!file->open(QFile::ReadOnly)) {
+    const auto file = std::make_shared<QTemporaryFile>();
+    if (!file->open()) {
         emit failed("Failed to open log file");
         return;
     }
 
-    auto net = qmlEngine(this)->networkAccessManager();
+    const auto path = GetLogFilename();
+    auto future = QtConcurrent::run([=] {
+        QFile log(path);
+        return log.open(QFile::ReadOnly) && RedactLog(log, *file) && file->flush();
+    });
 
-    QUrlQuery query;
-    query.addQueryItem("filename", file_info.fileName());
-
-    QUrl url("https://blockstream.zendesk.com/api/v2/uploads");
-    url.setQuery(query);
-
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
-
-    auto reply = net->post(request, file);
-
-    connect(reply, &QNetworkReply::finished, this, [=, this] {
-        reply->deleteLater();
-
-        if (reply->error() != QNetworkReply::NoError) {
-            emit failed("Log upload failed (network error)");
+    future.then(this, [=, this](bool redacted) {
+        if (!redacted) {
+            emit failed("Failed to open log file");
             return;
         }
+        file->reset();
 
-        const auto response = QJsonDocument::fromJson(reply->readAll());
-        const auto token = response.object().value("upload").toObject().value("token").toString();
+        auto net = qmlEngine(this)->networkAccessManager();
 
-        if (token.isEmpty()) {
-            emit failed("Log upload failed (server error)");
-            return;
-        }
+        QUrlQuery query;
+        query.addQueryItem("filename", QFileInfo(path).fileName());
 
-        QJsonArray uploads;
-        uploads.append(token);
+        QUrl url("https://blockstream.zendesk.com/api/v2/uploads");
+        url.setQuery(query);
 
-        createSupportRequest(uploads, data);
+        QNetworkRequest request(url);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
+
+        auto reply = net->post(request, file.get());
+
+        connect(reply, &QNetworkReply::finished, this, [=, this, keep_alive = file] {
+            reply->deleteLater();
+
+            if (reply->error() != QNetworkReply::NoError) {
+                emit failed("Log upload failed (network error)");
+                return;
+            }
+
+            const auto response = QJsonDocument::fromJson(reply->readAll());
+            const auto token = response.object().value("upload").toObject().value("token").toString();
+
+            if (token.isEmpty()) {
+                emit failed("Log upload failed (server error)");
+                return;
+            }
+
+            QJsonArray uploads;
+            uploads.append(token);
+
+            createSupportRequest(uploads, data);
+        });
     });
 }
 
