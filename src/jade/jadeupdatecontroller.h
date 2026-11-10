@@ -130,7 +130,7 @@ signals:
 private:
     void setLocked(bool locked);
     void abortUpdate();
-    JadeDevice* m_device{nullptr};
+    QPointer<JadeDevice> m_device;
     QPointer<Task> m_task;
     QPointer<JadeDevice> m_completing_device;
     QPointer<JadeAPI> m_completing_api;

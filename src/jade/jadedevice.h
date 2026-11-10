@@ -2,6 +2,7 @@
 #define GREEN_JADEDEVICE_H
 
 #include <QObject>
+#include <QPointer>
 #include <QVariant>
 
 #include "device.h"
@@ -72,13 +73,13 @@ public:
     QString bluetoothPin() const { return m_bluetooth_pin; }
     void setBluetoothPin(const QString& pin);
     Q_INVOKABLE void confirmBluetoothPin(bool match) { emit bluetoothPinConfirmed(match); }
-    JadeAPI *api() const { return m_api; }
-    JadeAPI* usbApi() const { return m_usb_api; }
-    JadeAPI* bluetoothApi() const { return m_bluetooth_api; }
+    JadeAPI* api() const;
+    JadeAPI* usbApi() const;
+    JadeAPI* bluetoothApi() const;
     void setUsbBackend(JadeAPI* api);
     void setBluetoothBackend(JadeAPI* api);
-    bool usbAvailable() const { return m_usb_api; }
-    bool bluetoothAvailable() const { return m_bluetooth_api; }
+    bool usbAvailable() const { return !m_usb_api.isNull(); }
+    bool bluetoothAvailable() const { return !m_bluetooth_api.isNull(); }
     ConnectionType connectionType() const;
     bool connectionSelected() const { return m_connection_selected; }
     Q_INVOKABLE void selectConnection(ConnectionType type);
@@ -130,9 +131,10 @@ private:
     void updateBackend();
     void setConnectionSelected(bool connection_selected);
 private:
-    JadeAPI* m_api{nullptr};
-    JadeAPI* m_usb_api{nullptr};
-    JadeAPI* m_bluetooth_api{nullptr};
+    // Guarded: the discovery that owns a connection deletes it on disconnect.
+    QPointer<JadeAPI> m_api;
+    QPointer<JadeAPI> m_usb_api;
+    QPointer<JadeAPI> m_bluetooth_api;
     bool m_connection_selected{false};
     Status m_status{StatusIdle};
     QString m_system_location;

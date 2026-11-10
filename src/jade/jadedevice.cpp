@@ -636,6 +636,10 @@ JadeDevice::JadeDevice(QObject* parent)
 {
 }
 
+JadeAPI* JadeDevice::api() const { return m_api; }
+JadeAPI* JadeDevice::usbApi() const { return m_usb_api; }
+JadeAPI* JadeDevice::bluetoothApi() const { return m_bluetooth_api; }
+
 void JadeDevice::setBackend(JadeAPI* backend)
 {
     if (m_api == backend) return;
