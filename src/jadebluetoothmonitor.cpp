@@ -188,7 +188,10 @@ void JadeBluetoothMonitor::update()
                 connectToDevice(info);
             };
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, advertised);
+#ifdef Q_OS_LINUX
+            // Elsewhere updates come on every advert, and Windows answers pairingStatus blocking.
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::deviceUpdated, this, advertised);
+#endif
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::finished, this, &JadeBluetoothMonitor::deviceScanFinished);
             connect(m_device_discovery_agent, &QBluetoothDeviceDiscoveryAgent::errorOccurred, this, [=, this](QBluetoothDeviceDiscoveryAgent::Error error) {
                 qWarning() << Q_FUNC_INFO << "discovery error" << error << m_device_discovery_agent->errorString();
