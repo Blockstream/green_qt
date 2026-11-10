@@ -10,5 +10,5 @@ echo "cfc1055b2b9dbc08412b579f20990b7b41a17b61beaa5847dc9477c96c9e9617  linuxdep
 chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
 curl -sL -o appimagetool-x86_64.AppImage https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
-echo "62aebc77c2149e96b593b94da9bbd1881e0984a56399ff6d7a03b7ddd7c9ce68  appimagetool-x86_64.AppImage" | sha256sum --check
+echo "e8c1169c4af66c3184d7ee110713d4be04befe671fa358e2c1591ee840553b03  appimagetool-x86_64.AppImage" | sha256sum --check
 chmod +x appimagetool-x86_64.AppImage
