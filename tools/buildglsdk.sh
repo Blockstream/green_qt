@@ -2,8 +2,8 @@
 set -eo pipefail
 
 REPO=https://github.com/Blockstream/greenlight
-BRANCH=gl-sdk-v0.4.0
-COMMIT=c804a01e6f47e1201cfd107f9100704252443a44
+BRANCH=gl-sdk-v0.5.0
+COMMIT=22398836bb44e57828cff23e1647aa918fac71a0
 
 PROJECT_ROOT=$(pwd)
 BUILD_DIR="${BUILD_DIR:-build/glsdk-src}"

@@ -86,85 +86,6 @@ struct NodeEventListener;
 
 
 /**
- * Successful LNURL-withdraw result data.
- */
-struct LnUrlWithdrawSuccessData {
-    /**
-     * The BOLT11 invoice that was submitted for withdrawal.
-     */
-    std::string invoice;
-};
-
-
-/**
- * Error returned by an LNURL service endpoint.
- */
-struct LnUrlErrorData {
-    std::string reason;
-};
-
-
-struct Peer {
-    /**
-     * Peer node public key as lowercase hex (66 chars).
-     */
-    std::string id;
-    bool connected;
-    std::optional<uint32_t> num_channels;
-    std::vector<std::string> netaddr;
-    std::optional<std::string> remote_addr;
-    std::optional<std::vector<uint8_t>> features;
-};
-
-
-/**
- * Log level for filtering messages.
- */
-enum class LogLevel: int32_t {
-    kError = 1,
-    kWarn = 2,
-    kInfo = 3,
-    kDebug = 4,
-    kTrace = 5
-};
-
-
-/**
- * Details of a paid invoice.
- */
-struct InvoicePaidEvent {
-    /**
-     * Payment hash of the paid invoice as lowercase hex (64 chars).
-     */
-    std::string payment_hash;
-    /**
-     * The bolt11 invoice string.
-     */
-    std::string bolt11;
-    /**
-     * Preimage that proves payment as lowercase hex (64 chars).
-     */
-    std::string preimage;
-    /**
-     * The label assigned to the invoice.
-     */
-    std::string label;
-    /**
-     * Amount received in millisatoshis.
-     */
-    uint64_t amount_msat;
-};
-
-
-enum class OutputStatus: int32_t {
-    kUnconfirmed = 1,
-    kConfirmed = 2,
-    kSpent = 3,
-    kImmature = 4
-};
-
-
-/**
  * Data from an LNURL-pay endpoint (LUD-06).
  *
  * Contains the service's accepted amount range and metadata.
@@ -203,12 +124,16 @@ struct LnUrlPayRequestData {
 };
 
 
-/**
- * Which side of a channel performed a given action (e.g. initiated close).
- */
-enum class ChannelSide: int32_t {
-    kLocal = 1,
-    kRemote = 2
+enum class PaymentTypeFilter: int32_t {
+    kSent = 1,
+    kReceived = 2
+};
+
+
+enum class InvoiceStatus: int32_t {
+    kUnpaid = 1,
+    kPaid = 2,
+    kExpired = 3
 };
 
 namespace uniffi {
@@ -275,6 +200,33 @@ private:
 
 
 /**
+ * A specific on-chain output, identified by its outpoint.
+ */
+struct Outpoint {
+    /**
+     * Transaction id as lowercase hex (64 chars).
+     */
+    std::string txid;
+    /**
+     * Output index within that transaction.
+     */
+    uint32_t vout;
+};
+
+
+/**
+ * Log level for filtering messages.
+ */
+enum class LogLevel: int32_t {
+    kError = 1,
+    kWarn = 2,
+    kInfo = 3,
+    kDebug = 4,
+    kTrace = 5
+};
+
+
+/**
  * Data from an LNURL-withdraw endpoint (LUD-03).
  *
  * Contains the service's accepted withdrawal range and session key.
@@ -309,46 +261,17 @@ struct LnUrlWithdrawRequestData {
 };
 
 
-enum class PaymentType: int32_t {
-    kSent = 1,
-    kReceived = 2
-};
-
-
-enum class PaymentStatus: int32_t {
-    kPending = 1,
-    kComplete = 2,
-    kFailed = 3
-};
-
-
 /**
- * Details of a failed LNURL-pay attempt on the pay phase.
+ * Error returned by an LNURL service endpoint.
  */
-struct LnUrlPayErrorData {
-    /**
-     * Hex-encoded payment hash of the invoice the service returned.
-     */
-    std::string payment_hash;
-    /**
-     * Human-readable reason the pay attempt failed.
-     */
+struct LnUrlErrorData {
     std::string reason;
 };
 
 
-/**
- * A specific on-chain output, identified by its outpoint.
- */
-struct Outpoint {
-    /**
-     * Transaction id as lowercase hex (64 chars).
-     */
-    std::string txid;
-    /**
-     * Output index within that transaction.
-     */
-    uint32_t vout;
+enum class PaymentType: int32_t {
+    kSent = 1,
+    kReceived = 2
 };
 
 
@@ -382,9 +305,93 @@ enum class PayStatus: int32_t {
 };
 
 
-enum class PaymentTypeFilter: int32_t {
-    kSent = 1,
-    kReceived = 2
+/**
+ * Which side of a channel performed a given action (e.g. initiated close).
+ */
+enum class ChannelSide: int32_t {
+    kLocal = 1,
+    kRemote = 2
+};
+
+
+enum class PaymentStatus: int32_t {
+    kPending = 1,
+    kComplete = 2,
+    kFailed = 3
+};
+
+
+enum class OutputStatus: int32_t {
+    kUnconfirmed = 1,
+    kConfirmed = 2,
+    kSpent = 3,
+    kImmature = 4
+};
+
+
+/**
+ * Details of a paid invoice.
+ */
+struct InvoicePaidEvent {
+    /**
+     * Payment hash of the paid invoice as lowercase hex (64 chars).
+     */
+    std::string payment_hash;
+    /**
+     * The bolt11 invoice string.
+     */
+    std::string bolt11;
+    /**
+     * Preimage that proves payment as lowercase hex (64 chars).
+     */
+    std::string preimage;
+    /**
+     * The label assigned to the invoice.
+     */
+    std::string label;
+    /**
+     * Amount received in millisatoshis.
+     */
+    uint64_t amount_msat;
+};
+
+
+struct Peer {
+    /**
+     * Peer node public key as lowercase hex (66 chars).
+     */
+    std::string id;
+    bool connected;
+    std::optional<uint32_t> num_channels;
+    std::vector<std::string> netaddr;
+    std::optional<std::string> remote_addr;
+    std::optional<std::vector<uint8_t>> features;
+};
+
+
+/**
+ * Details of a failed LNURL-pay attempt on the pay phase.
+ */
+struct LnUrlPayErrorData {
+    /**
+     * Hex-encoded payment hash of the invoice the service returned.
+     */
+    std::string payment_hash;
+    /**
+     * Human-readable reason the pay attempt failed.
+     */
+    std::string reason;
+};
+
+
+/**
+ * Successful LNURL-withdraw result data.
+ */
+struct LnUrlWithdrawSuccessData {
+    /**
+     * The BOLT11 invoice that was submitted for withdrawal.
+     */
+    std::string invoice;
 };
 
 
@@ -423,51 +430,76 @@ struct ParsedInvoice {
 };
 
 
-enum class InvoiceStatus: int32_t {
-    kUnpaid = 1,
-    kPaid = 2,
-    kExpired = 3
-};
-
-
-struct Pay {
+struct SendResponse {
+    PayStatus status;
+    /**
+     * Payment preimage (proof of payment) as lowercase hex (64 chars).
+     */
+    std::string preimage;
     /**
      * Payment hash as lowercase hex (64 chars).
      */
     std::string payment_hash;
-    PayStatus status;
     /**
      * Recipient node pubkey as lowercase hex (66 chars), if known.
      */
     std::optional<std::string> destination_pubkey;
-    std::optional<uint64_t> amount_msat;
-    std::optional<uint64_t> amount_sent_msat;
-    std::optional<std::string> label;
-    std::optional<std::string> bolt11;
-    std::optional<std::string> description;
-    std::optional<std::string> bolt12;
-    /**
-     * Payment preimage as lowercase hex (64 chars), if the payment completed.
-     */
-    std::optional<std::string> preimage;
-    uint64_t created_at;
-    std::optional<uint64_t> completed_at;
-    std::optional<uint64_t> number_of_parts;
+    uint64_t amount_msat;
+    uint64_t amount_sent_msat;
+    uint32_t parts;
 };
 
 
 /**
- * Successful LNURL-pay result data.
+ * Request to execute an LNURL-pay flow.
+ *
+ * Combines the resolved service data with the user's chosen amount.
  */
-struct LnUrlPaySuccessData {
+struct LnUrlPayRequest {
     /**
-     * The payment preimage (proof of payment), hex-encoded.
+     * The resolved pay request data from `parse_input()`.
      */
-    std::string payment_preimage;
+    LnUrlPayRequestData data;
     /**
-     * Optional success action from the service (LUD-09).
+     * Amount to pay in millisatoshis.
      */
-    std::optional<SuccessActionProcessed> success_action;
+    uint64_t amount_msat;
+    /**
+     * Optional comment to send with the payment.
+     */
+    std::optional<std::string> comment;
+    /**
+     * When true (the default), a URL success action is rejected if its
+     * domain differs from the callback's domain.
+     *
+     * This is a wallet-side safety convention, not a LUD-09 requirement:
+     * LUD-09 does not mandate same-domain URLs, but a divergent domain
+     * can be used to phish users, so the SDK rejects it by default.
+     * Set to `Some(false)` only if you have a specific reason to trust
+     * cross-domain success-action URLs from this service.
+     */
+    std::optional<bool> validate_success_action_url;
+};
+
+
+/**
+ * Request to execute an LNURL-withdraw flow.
+ *
+ * Combines the resolved service data with the user's chosen amount.
+ */
+struct LnUrlWithdrawRequest {
+    /**
+     * The resolved withdraw request data from `parse_input()`.
+     */
+    LnUrlWithdrawRequestData data;
+    /**
+     * Amount to withdraw in millisatoshis.
+     */
+    uint64_t amount_msat;
+    /**
+     * Optional description for the invoice (overrides default).
+     */
+    std::optional<std::string> description;
 };
 
 
@@ -496,138 +528,31 @@ struct Invoice {
 };
 
 
-/**
- * Preview of an on-chain send: the inputs CLN would select at the
- * given fee rate, the resulting fee, and the amount the recipient
- * would receive. Inputs are NOT reserved — the wallet is free to
- * spend them via other paths until `onchain_send` actually broadcasts.
- *
- * Pass `utxos` and `sat_per_vbyte` back to `onchain_send` to broadcast
- * with identical inputs and fee.
- *
- * Amounts are in satoshis: on-chain transactions cannot carry sub-sat
- * precision, so msat denomination would be misleading here.
- */
-struct PreparedOnchainSend {
+struct ListPaymentsRequest {
     /**
-     * UTXOs that would be spent, in selection order.
+     * Filter by payment type (Sent, Received). None or empty = all.
      */
-    std::vector<Outpoint> utxos;
+    std::optional<std::vector<PaymentTypeFilter>> filters;
     /**
-     * Sum of all input UTXO values, in satoshis.
+     * Include only payments after this epoch timestamp (seconds).
      */
-    uint64_t total_input_sat;
+    std::optional<uint64_t> from_timestamp;
     /**
-     * Fee that would be paid, in satoshis.
+     * Include only payments before this epoch timestamp (seconds).
      */
-    uint64_t fee_sat;
+    std::optional<uint64_t> to_timestamp;
     /**
-     * Amount the recipient would receive, in satoshis.
-     * For a sweep ("all") this equals `total_input_sat - fee_sat`.
-     * For a fixed amount this equals the requested amount.
+     * Include failed payments. Default: false.
      */
-    uint64_t recipient_sat;
+    std::optional<bool> include_failures;
     /**
-     * Effective fee rate (sat per virtual byte) the node used to
-     * compute this preview. Equal to the caller's `sat_per_vbyte` if
-     * one was supplied; otherwise the rate the node picked at
-     * "normal" priority. Pass this back to `onchain_send` to
-     * reproduce the previewed fee.
+     * Pagination offset.
      */
-    uint32_t sat_per_vbyte;
-};
-
-namespace uniffi {
-struct FfiConverterLnUrlWithdrawResult;
-} // namespace uniffi
-
-/**
- * Result of an LNURL-withdraw operation.
- */
-struct LnUrlWithdrawResult {
-    friend uniffi::FfiConverterLnUrlWithdrawResult;
+    std::optional<uint32_t> offset;
     /**
-     * The service accepted our invoice and will pay it.
+     * Pagination limit.
      */
-    struct kOk {
-        LnUrlWithdrawSuccessData data;
-    };
-    /**
-     * The LNURL service returned an error.
-     */
-    struct kErrorStatus {
-        LnUrlErrorData data;
-    };
-    LnUrlWithdrawResult(kOk variant): variant(variant) {}
-    LnUrlWithdrawResult(kErrorStatus variant): variant(variant) {}
-
-    LnUrlWithdrawResult(const LnUrlWithdrawResult &other): variant(other.variant) {}
-    LnUrlWithdrawResult(LnUrlWithdrawResult &&other): variant(std::move(other.variant)) {}
-
-    LnUrlWithdrawResult &operator=(const LnUrlWithdrawResult &other) {
-        variant = other.variant;
-        return *this;
-    }
-
-    LnUrlWithdrawResult &operator=(LnUrlWithdrawResult &&other) {
-        variant = std::move(other.variant);
-        return *this;
-    }
-
-    /**
-     * Returns the variant of this enum
-     */
-    const std::variant<kOk, kErrorStatus> &get_variant() const {
-        return variant;
-    }
-
-private:
-    std::variant<kOk, kErrorStatus> variant;
-
-    LnUrlWithdrawResult();
-};
-
-namespace uniffi {
-struct FfiConverterNodeEvent;
-} // namespace uniffi
-
-/**
- * A real-time event from the node.
- */
-struct NodeEvent {
-    friend uniffi::FfiConverterNodeEvent;
-    /**
-     * An invoice was paid.
-     */
-    struct kInvoicePaid {
-        InvoicePaidEvent details;
-    };
-    NodeEvent(kInvoicePaid variant): variant(variant) {}
-
-    NodeEvent(const NodeEvent &other): variant(other.variant) {}
-    NodeEvent(NodeEvent &&other): variant(std::move(other.variant)) {}
-
-    NodeEvent &operator=(const NodeEvent &other) {
-        variant = other.variant;
-        return *this;
-    }
-
-    NodeEvent &operator=(NodeEvent &&other) {
-        variant = std::move(other.variant);
-        return *this;
-    }
-
-    /**
-     * Returns the variant of this enum
-     */
-    const std::variant<kInvoicePaid> &get_variant() const {
-        return variant;
-    }
-
-private:
-    std::variant<kInvoicePaid> variant;
-
-    NodeEvent();
+    std::optional<uint32_t> limit;
 };
 
 
@@ -683,137 +608,6 @@ struct PeerChannel {
      * available in the on-chain balance.
      */
     std::vector<std::string> status;
-};
-
-
-struct Payment {
-    std::string id;
-    PaymentType payment_type;
-    uint64_t payment_time;
-    uint64_t amount_msat;
-    uint64_t fee_msat;
-    PaymentStatus status;
-    std::optional<std::string> description;
-    std::optional<std::string> bolt11;
-    /**
-     * Payment preimage as lowercase hex (64 chars), when known.
-     */
-    std::optional<std::string> preimage;
-    /**
-     * Pubkey of the counterparty in the payment, as lowercase hex
-     * (66 chars).
-     *
-     * For `PaymentType::Sent`: the recipient node we paid (when CLN
-     * reports it).
-     *
-     * For `PaymentType::Received`: always `None`. Lightning's privacy
-     * model does not reveal the sender's pubkey to the recipient — the
-     * HTLC arrives via one of our channel peers, but that peer is
-     * usually just a router, not the original payer. The only pubkey
-     * derivable from a paid invoice is the *payee* (i.e. our own
-     * node), which is uninteresting to display per-row.
-     */
-    std::optional<std::string> destination;
-};
-
-
-struct ListPeersResponse {
-    std::vector<Peer> peers;
-};
-
-
-struct ListPaymentsRequest {
-    /**
-     * Filter by payment type (Sent, Received). None or empty = all.
-     */
-    std::optional<std::vector<PaymentTypeFilter>> filters;
-    /**
-     * Include only payments after this epoch timestamp (seconds).
-     */
-    std::optional<uint64_t> from_timestamp;
-    /**
-     * Include only payments before this epoch timestamp (seconds).
-     */
-    std::optional<uint64_t> to_timestamp;
-    /**
-     * Include failed payments. Default: false.
-     */
-    std::optional<bool> include_failures;
-    /**
-     * Pagination offset.
-     */
-    std::optional<uint32_t> offset;
-    /**
-     * Pagination limit.
-     */
-    std::optional<uint32_t> limit;
-};
-
-namespace uniffi {
-struct FfiConverterResolvedInput;
-} // namespace uniffi
-
-/**
- * The result of `resolve_input`: a fully-resolved input ready for
- * the caller's next action. LNURL bech32 strings and Lightning
- * Addresses are resolved over HTTP into typed pay or withdraw
- * request data; BOLT11 and node IDs pass through unchanged.
- */
-struct ResolvedInput {
-    friend uniffi::FfiConverterResolvedInput;
-    /**
-     * A BOLT11 Lightning invoice. No HTTP was performed.
-     */
-    struct kBolt11 {
-        ParsedInvoice invoice;
-    };
-    /**
-     * A Lightning node public key. No HTTP was performed.
-     */
-    struct kNodeId {
-        std::string node_id;
-    };
-    /**
-     * An LNURL-pay endpoint with the service's parameters fetched.
-     */
-    struct kLnUrlPay {
-        LnUrlPayRequestData data;
-    };
-    /**
-     * An LNURL-withdraw endpoint with the service's parameters fetched.
-     */
-    struct kLnUrlWithdraw {
-        LnUrlWithdrawRequestData data;
-    };
-    ResolvedInput(kBolt11 variant): variant(variant) {}
-    ResolvedInput(kNodeId variant): variant(variant) {}
-    ResolvedInput(kLnUrlPay variant): variant(variant) {}
-    ResolvedInput(kLnUrlWithdraw variant): variant(variant) {}
-
-    ResolvedInput(const ResolvedInput &other): variant(other.variant) {}
-    ResolvedInput(ResolvedInput &&other): variant(std::move(other.variant)) {}
-
-    ResolvedInput &operator=(const ResolvedInput &other) {
-        variant = other.variant;
-        return *this;
-    }
-
-    ResolvedInput &operator=(ResolvedInput &&other) {
-        variant = std::move(other.variant);
-        return *this;
-    }
-
-    /**
-     * Returns the variant of this enum
-     */
-    const std::variant<kBolt11, kNodeId, kLnUrlPay, kLnUrlWithdraw> &get_variant() const {
-        return variant;
-    }
-
-private:
-    std::variant<kBolt11, kNodeId, kLnUrlPay, kLnUrlWithdraw> variant;
-
-    ResolvedInput();
 };
 
 namespace uniffi {
@@ -910,59 +704,6 @@ struct FundChannel {
 
 
 /**
- * Request to execute an LNURL-pay flow.
- *
- * Combines the resolved service data with the user's chosen amount.
- */
-struct LnUrlPayRequest {
-    /**
-     * The resolved pay request data from `parse_input()`.
-     */
-    LnUrlPayRequestData data;
-    /**
-     * Amount to pay in millisatoshis.
-     */
-    uint64_t amount_msat;
-    /**
-     * Optional comment to send with the payment.
-     */
-    std::optional<std::string> comment;
-    /**
-     * When true (the default), a URL success action is rejected if its
-     * domain differs from the callback's domain.
-     *
-     * This is a wallet-side safety convention, not a LUD-09 requirement:
-     * LUD-09 does not mandate same-domain URLs, but a divergent domain
-     * can be used to phish users, so the SDK rejects it by default.
-     * Set to `Some(false)` only if you have a specific reason to trust
-     * cross-domain success-action URLs from this service.
-     */
-    std::optional<bool> validate_success_action_url;
-};
-
-
-/**
- * Request to execute an LNURL-withdraw flow.
- *
- * Combines the resolved service data with the user's chosen amount.
- */
-struct LnUrlWithdrawRequest {
-    /**
-     * The resolved withdraw request data from `parse_input()`.
-     */
-    LnUrlWithdrawRequestData data;
-    /**
-     * Amount to withdraw in millisatoshis.
-     */
-    uint64_t amount_msat;
-    /**
-     * Optional description for the invoice (overrides default).
-     */
-    std::optional<std::string> description;
-};
-
-
-/**
  * A single log message from the SDK.
  */
 struct LogEntry {
@@ -983,23 +724,360 @@ struct LogEntry {
 };
 
 
-struct SendResponse {
-    PayStatus status;
-    /**
-     * Payment preimage (proof of payment) as lowercase hex (64 chars).
-     */
-    std::string preimage;
+struct Pay {
     /**
      * Payment hash as lowercase hex (64 chars).
      */
     std::string payment_hash;
+    PayStatus status;
     /**
      * Recipient node pubkey as lowercase hex (66 chars), if known.
      */
     std::optional<std::string> destination_pubkey;
+    std::optional<uint64_t> amount_msat;
+    std::optional<uint64_t> amount_sent_msat;
+    std::optional<std::string> label;
+    std::optional<std::string> bolt11;
+    std::optional<std::string> description;
+    std::optional<std::string> bolt12;
+    /**
+     * Payment preimage as lowercase hex (64 chars), if the payment completed.
+     */
+    std::optional<std::string> preimage;
+    uint64_t created_at;
+    std::optional<uint64_t> completed_at;
+    std::optional<uint64_t> number_of_parts;
+};
+
+
+struct ListPeersResponse {
+    std::vector<Peer> peers;
+};
+
+
+/**
+ * Successful LNURL-pay result data.
+ */
+struct LnUrlPaySuccessData {
+    /**
+     * The payment preimage (proof of payment), hex-encoded.
+     */
+    std::string payment_preimage;
+    /**
+     * Optional success action from the service (LUD-09).
+     */
+    std::optional<SuccessActionProcessed> success_action;
+};
+
+namespace uniffi {
+struct FfiConverterLnUrlWithdrawResult;
+} // namespace uniffi
+
+/**
+ * Result of an LNURL-withdraw operation.
+ */
+struct LnUrlWithdrawResult {
+    friend uniffi::FfiConverterLnUrlWithdrawResult;
+    /**
+     * The service accepted our invoice and will pay it.
+     */
+    struct kOk {
+        LnUrlWithdrawSuccessData data;
+    };
+    /**
+     * The LNURL service returned an error.
+     */
+    struct kErrorStatus {
+        LnUrlErrorData data;
+    };
+    LnUrlWithdrawResult(kOk variant): variant(variant) {}
+    LnUrlWithdrawResult(kErrorStatus variant): variant(variant) {}
+
+    LnUrlWithdrawResult(const LnUrlWithdrawResult &other): variant(other.variant) {}
+    LnUrlWithdrawResult(LnUrlWithdrawResult &&other): variant(std::move(other.variant)) {}
+
+    LnUrlWithdrawResult &operator=(const LnUrlWithdrawResult &other) {
+        variant = other.variant;
+        return *this;
+    }
+
+    LnUrlWithdrawResult &operator=(LnUrlWithdrawResult &&other) {
+        variant = std::move(other.variant);
+        return *this;
+    }
+
+    /**
+     * Returns the variant of this enum
+     */
+    const std::variant<kOk, kErrorStatus> &get_variant() const {
+        return variant;
+    }
+
+private:
+    std::variant<kOk, kErrorStatus> variant;
+
+    LnUrlWithdrawResult();
+};
+
+namespace uniffi {
+struct FfiConverterNodeEvent;
+} // namespace uniffi
+
+/**
+ * A real-time event from the node.
+ */
+struct NodeEvent {
+    friend uniffi::FfiConverterNodeEvent;
+    /**
+     * An invoice was paid.
+     */
+    struct kInvoicePaid {
+        InvoicePaidEvent details;
+    };
+    NodeEvent(kInvoicePaid variant): variant(variant) {}
+
+    NodeEvent(const NodeEvent &other): variant(other.variant) {}
+    NodeEvent(NodeEvent &&other): variant(std::move(other.variant)) {}
+
+    NodeEvent &operator=(const NodeEvent &other) {
+        variant = other.variant;
+        return *this;
+    }
+
+    NodeEvent &operator=(NodeEvent &&other) {
+        variant = std::move(other.variant);
+        return *this;
+    }
+
+    /**
+     * Returns the variant of this enum
+     */
+    const std::variant<kInvoicePaid> &get_variant() const {
+        return variant;
+    }
+
+private:
+    std::variant<kInvoicePaid> variant;
+
+    NodeEvent();
+};
+
+namespace uniffi {
+struct FfiConverterResolvedInput;
+} // namespace uniffi
+
+/**
+ * The result of `resolve_input`: a fully-resolved input ready for
+ * the caller's next action. LNURL bech32 strings and Lightning
+ * Addresses are resolved over HTTP into typed pay or withdraw
+ * request data; BOLT11 and node IDs pass through unchanged.
+ */
+struct ResolvedInput {
+    friend uniffi::FfiConverterResolvedInput;
+    /**
+     * A BOLT11 Lightning invoice. No HTTP was performed.
+     */
+    struct kBolt11 {
+        ParsedInvoice invoice;
+    };
+    /**
+     * A Lightning node public key. No HTTP was performed.
+     */
+    struct kNodeId {
+        std::string node_id;
+    };
+    /**
+     * An LNURL-pay endpoint with the service's parameters fetched.
+     */
+    struct kLnUrlPay {
+        LnUrlPayRequestData data;
+    };
+    /**
+     * An LNURL-withdraw endpoint with the service's parameters fetched.
+     */
+    struct kLnUrlWithdraw {
+        LnUrlWithdrawRequestData data;
+    };
+    ResolvedInput(kBolt11 variant): variant(variant) {}
+    ResolvedInput(kNodeId variant): variant(variant) {}
+    ResolvedInput(kLnUrlPay variant): variant(variant) {}
+    ResolvedInput(kLnUrlWithdraw variant): variant(variant) {}
+
+    ResolvedInput(const ResolvedInput &other): variant(other.variant) {}
+    ResolvedInput(ResolvedInput &&other): variant(std::move(other.variant)) {}
+
+    ResolvedInput &operator=(const ResolvedInput &other) {
+        variant = other.variant;
+        return *this;
+    }
+
+    ResolvedInput &operator=(ResolvedInput &&other) {
+        variant = std::move(other.variant);
+        return *this;
+    }
+
+    /**
+     * Returns the variant of this enum
+     */
+    const std::variant<kBolt11, kNodeId, kLnUrlPay, kLnUrlWithdraw> &get_variant() const {
+        return variant;
+    }
+
+private:
+    std::variant<kBolt11, kNodeId, kLnUrlPay, kLnUrlWithdraw> variant;
+
+    ResolvedInput();
+};
+
+
+/**
+ * Preview of an on-chain send: the inputs CLN would select at the
+ * given fee rate, the resulting fee, and the amount the recipient
+ * would receive. Inputs are NOT reserved — the wallet is free to
+ * spend them via other paths until `onchain_send` actually broadcasts.
+ *
+ * Pass `utxos` and `sat_per_vbyte` back to `onchain_send` to broadcast
+ * with identical inputs and fee.
+ *
+ * Amounts are in satoshis: on-chain transactions cannot carry sub-sat
+ * precision, so msat denomination would be misleading here.
+ */
+struct PreparedOnchainSend {
+    /**
+     * UTXOs that would be spent, in selection order.
+     */
+    std::vector<Outpoint> utxos;
+    /**
+     * Sum of all input UTXO values, in satoshis.
+     */
+    uint64_t total_input_sat;
+    /**
+     * Fee that would be paid, in satoshis.
+     */
+    uint64_t fee_sat;
+    /**
+     * Amount the recipient would receive, in satoshis.
+     * For a sweep ("all") this equals `total_input_sat - fee_sat`.
+     * For a fixed amount this equals the requested amount.
+     */
+    uint64_t recipient_sat;
+    /**
+     * Effective fee rate (sat per virtual byte) the node used to
+     * compute this preview. Equal to the caller's `sat_per_vbyte` if
+     * one was supplied; otherwise the rate the node picked at
+     * "normal" priority. Pass this back to `onchain_send` to
+     * reproduce the previewed fee.
+     */
+    uint32_t sat_per_vbyte;
+};
+
+
+struct Payment {
+    std::string id;
+    PaymentType payment_type;
+    uint64_t payment_time;
     uint64_t amount_msat;
-    uint64_t amount_sent_msat;
-    uint32_t parts;
+    uint64_t fee_msat;
+    PaymentStatus status;
+    std::optional<std::string> description;
+    std::optional<std::string> bolt11;
+    /**
+     * Payment preimage as lowercase hex (64 chars), when known.
+     */
+    std::optional<std::string> preimage;
+    /**
+     * Pubkey of the counterparty in the payment, as lowercase hex
+     * (66 chars).
+     *
+     * For `PaymentType::Sent`: the recipient node we paid (when CLN
+     * reports it).
+     *
+     * For `PaymentType::Received`: always `None`. Lightning's privacy
+     * model does not reveal the sender's pubkey to the recipient — the
+     * HTLC arrives via one of our channel peers, but that peer is
+     * usually just a router, not the original payer. The only pubkey
+     * derivable from a paid invoice is the *payee* (i.e. our own
+     * node), which is uninteresting to display per-row.
+     */
+    std::optional<std::string> destination;
+};
+
+
+struct ListInvoicesResponse {
+    std::vector<Invoice> invoices;
+};
+
+
+struct ListPaysResponse {
+    std::vector<Pay> pays;
+};
+
+
+struct ListFundsResponse {
+    std::vector<FundOutput> outputs;
+    std::vector<FundChannel> channels;
+};
+
+namespace uniffi {
+struct FfiConverterLnUrlPayResult;
+} // namespace uniffi
+
+/**
+ * Result of an LNURL-pay operation.
+ */
+struct LnUrlPayResult {
+    friend uniffi::FfiConverterLnUrlPayResult;
+    /**
+     * Payment succeeded.
+     */
+    struct kEndpointSuccess {
+        LnUrlPaySuccessData data;
+    };
+    /**
+     * The LNURL service returned an error before the invoice was paid.
+     */
+    struct kEndpointError {
+        LnUrlErrorData data;
+    };
+    /**
+     * The invoice was fetched successfully but paying it failed.
+     */
+    struct kPayError {
+        LnUrlPayErrorData data;
+    };
+    LnUrlPayResult(kEndpointSuccess variant): variant(variant) {}
+    LnUrlPayResult(kEndpointError variant): variant(variant) {}
+    LnUrlPayResult(kPayError variant): variant(variant) {}
+
+    LnUrlPayResult(const LnUrlPayResult &other): variant(other.variant) {}
+    LnUrlPayResult(LnUrlPayResult &&other): variant(std::move(other.variant)) {}
+
+    LnUrlPayResult &operator=(const LnUrlPayResult &other) {
+        variant = other.variant;
+        return *this;
+    }
+
+    LnUrlPayResult &operator=(LnUrlPayResult &&other) {
+        variant = std::move(other.variant);
+        return *this;
+    }
+
+    /**
+     * Returns the variant of this enum
+     */
+    const std::variant<kEndpointSuccess, kEndpointError, kPayError> &get_variant() const {
+        return variant;
+    }
+
+private:
+    std::variant<kEndpointSuccess, kEndpointError, kPayError> variant;
+
+    LnUrlPayResult();
+};
+
+
+struct ListPeerChannelsResponse {
+    std::vector<PeerChannel> channels;
 };
 
 
@@ -1154,84 +1232,6 @@ struct NodeState {
      * send-money screen should gate against.
      */
     uint64_t spendable_balance_msat;
-};
-
-
-struct ListPaysResponse {
-    std::vector<Pay> pays;
-};
-
-namespace uniffi {
-struct FfiConverterLnUrlPayResult;
-} // namespace uniffi
-
-/**
- * Result of an LNURL-pay operation.
- */
-struct LnUrlPayResult {
-    friend uniffi::FfiConverterLnUrlPayResult;
-    /**
-     * Payment succeeded.
-     */
-    struct kEndpointSuccess {
-        LnUrlPaySuccessData data;
-    };
-    /**
-     * The LNURL service returned an error before the invoice was paid.
-     */
-    struct kEndpointError {
-        LnUrlErrorData data;
-    };
-    /**
-     * The invoice was fetched successfully but paying it failed.
-     */
-    struct kPayError {
-        LnUrlPayErrorData data;
-    };
-    LnUrlPayResult(kEndpointSuccess variant): variant(variant) {}
-    LnUrlPayResult(kEndpointError variant): variant(variant) {}
-    LnUrlPayResult(kPayError variant): variant(variant) {}
-
-    LnUrlPayResult(const LnUrlPayResult &other): variant(other.variant) {}
-    LnUrlPayResult(LnUrlPayResult &&other): variant(std::move(other.variant)) {}
-
-    LnUrlPayResult &operator=(const LnUrlPayResult &other) {
-        variant = other.variant;
-        return *this;
-    }
-
-    LnUrlPayResult &operator=(LnUrlPayResult &&other) {
-        variant = std::move(other.variant);
-        return *this;
-    }
-
-    /**
-     * Returns the variant of this enum
-     */
-    const std::variant<kEndpointSuccess, kEndpointError, kPayError> &get_variant() const {
-        return variant;
-    }
-
-private:
-    std::variant<kEndpointSuccess, kEndpointError, kPayError> variant;
-
-    LnUrlPayResult();
-};
-
-
-struct ListFundsResponse {
-    std::vector<FundOutput> outputs;
-    std::vector<FundChannel> channels;
-};
-
-
-struct ListPeerChannelsResponse {
-    std::vector<PeerChannel> channels;
-};
-
-
-struct ListInvoicesResponse {
-    std::vector<Invoice> invoices;
 };
 
 
@@ -1832,6 +1832,29 @@ struct Scheduler
      * production service pre-configured.
      */
     static std::shared_ptr<Scheduler> init(const Network &network);
+    /**
+     * Asks whether the Lightning account backed by `node_id` may be
+     * surfaced to the user.
+     *
+     * This is a feature gate for applications that offer Lightning
+     * alongside other account types. Greenlight relays the question
+     * to its Lightning Service Provider, which answers based on
+     * whether it has previously granted this node a slot, or has the
+     * capacity to grant one now.
+     *
+     * Deliberately callable before `register()`, since an
+     * application has to decide whether to offer Lightning at all
+     * before it creates a node. It needs no credentials, and the
+     * `node_id` is passed explicitly.
+     *
+     * The answer is monotonic: once the node has been registered
+     * it is reported as available, and stays available regardless
+     * of the node's status or the provider's current capacity.
+     * Before registration the answer is advisory and may change
+     * over time. Treat an error as "unknown" rather than as a
+     * negative answer.
+     */
+    bool lightning_available(const std::vector<uint8_t> &node_id);
     std::shared_ptr<Credentials> recover(const std::shared_ptr<Signer> &signer);
     std::shared_ptr<Credentials> register_node(const std::shared_ptr<Signer> &signer, std::optional<std::string> code);
     /**

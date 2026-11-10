@@ -87,6 +87,7 @@ RustBuffer uniffi_glsdk_fn_method_nodeeventstream_next(void * ptr, RustCallStatu
 void * uniffi_glsdk_fn_clone_scheduler(void * ptr, RustCallStatus *out_status);
 void uniffi_glsdk_fn_free_scheduler(void * ptr, RustCallStatus *out_status);
 void * uniffi_glsdk_fn_constructor_scheduler_new(RustBuffer network, RustCallStatus *out_status);
+int8_t uniffi_glsdk_fn_method_scheduler_lightning_available(void * ptr, RustBuffer node_id, RustCallStatus *out_status);
 void * uniffi_glsdk_fn_method_scheduler_recover(void * ptr, void * signer, RustCallStatus *out_status);
 void * uniffi_glsdk_fn_method_scheduler_register(void * ptr, void * signer, RustBuffer code, RustCallStatus *out_status);
 void * uniffi_glsdk_fn_method_scheduler_with_developer_cert(void * ptr, void * cert, RustCallStatus *out_status);
@@ -144,6 +145,7 @@ uint16_t uniffi_glsdk_checksum_method_nodebuilder_register();
 uint16_t uniffi_glsdk_checksum_method_nodebuilder_register_or_recover();
 uint16_t uniffi_glsdk_checksum_method_nodebuilder_with_event_listener();
 uint16_t uniffi_glsdk_checksum_method_nodeeventstream_next();
+uint16_t uniffi_glsdk_checksum_method_scheduler_lightning_available();
 uint16_t uniffi_glsdk_checksum_method_scheduler_recover();
 uint16_t uniffi_glsdk_checksum_method_scheduler_register();
 uint16_t uniffi_glsdk_checksum_method_scheduler_with_developer_cert();

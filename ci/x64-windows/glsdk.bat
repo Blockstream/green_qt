@@ -4,8 +4,8 @@ setlocal enabledelayedexpansion
 set PATH=%PATH%;C:\cargo\bin
 
 set GLSDK_REPO=https://github.com/Blockstream/greenlight
-set GLSDK_BRANCH=gl-sdk-v0.4.0
-set GLSDK_COMMIT=c804a01e6f47e1201cfd107f9100704252443a44
+set GLSDK_BRANCH=gl-sdk-v0.5.0
+set GLSDK_COMMIT=22398836bb44e57828cff23e1647aa918fac71a0
 set TARGET=x86_64-pc-windows-msvc
 
 git clone --recurse-submodules --quiet --depth 1 --branch %GLSDK_BRANCH% %GLSDK_REPO% glsdk-src

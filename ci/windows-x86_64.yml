@@ -102,7 +102,7 @@ windows-x86_64:build:
     DOCKER_DRIVER: null
     DOCKER_HOST: null
     GIT_CLEAN_FLAGS: -ffdx
-    IMAGE: $GAR/green_qt/x64-windows@sha256:c91858433832f4fadcea83f80433795b03dcbbe8fc86c64b2699d30d11228abe
+    IMAGE: $GAR/green_qt/x64-windows@sha256:f59431fddad8c48f0e6e47878bd3a77ffed4910dc5c3df6b9f11d4d7f8a3f4aa
     CMAKE_CXX_COMPILER_LAUNCHER: ccache
     CCACHE_DIR: 'C:\src\.ccache'
     CCACHE_BASEDIR: 'C:\src'

@@ -126,6 +126,9 @@ void ensure_initialized() {
     if (uniffi_glsdk_checksum_method_nodeeventstream_next() != 12635) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
+    if (uniffi_glsdk_checksum_method_scheduler_lightning_available() != 8721) {
+        throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
+    }
     if (uniffi_glsdk_checksum_method_scheduler_recover() != 55514) {
         throw std::runtime_error("UniFFI API checksum mismatch: try cleaning and rebuilding your project");
     }
@@ -970,6 +973,13 @@ std::shared_ptr<Scheduler> Scheduler::init(const Network &network) {
     );
 }
 
+bool Scheduler::lightning_available(const std::vector<uint8_t> &node_id) {
+    auto ptr = this->_uniffi_internal_clone_pointer();
+    return uniffi::FfiConverterBool::lift(uniffi::rust_call(
+        uniffi_glsdk_fn_method_scheduler_lightning_available,
+        uniffi::FfiConverterError::lift,
+        ptr, uniffi::FfiConverterBytes::lower(node_id)));
+}
 std::shared_ptr<Credentials> Scheduler::recover(const std::shared_ptr<Signer> &signer) {
     auto ptr = this->_uniffi_internal_clone_pointer();
     return uniffi::FfiConverterCredentials::lift(uniffi::rust_call(
