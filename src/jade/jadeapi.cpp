@@ -256,7 +256,7 @@ void JadeAPI::callResponseHandler(const QVariantMap &msg)
     }
     if (!handler)
     {
-        // qWarning() << "JadeAPI::callResponseHandler() - Message ignored - no handler found for id" << msg;
+        qWarning() << "JadeAPI::callResponseHandler() - no handler on" << m_jade->metaObject()->className() << "for id" << id << msg.keys();
         return;
     }
 
@@ -305,7 +305,7 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
     if (msg.contains(QCborValue("result")) && msg["result"].isMap()
             && msg["result"].toMap().contains(QCborValue("http_request")))
     {
-        qDebug() << "JadeAPI::processResponseMessage() - Jade response" << id << "requires http-request";
+        qDebug() << "JadeAPI::processResponseMessage() - Jade response" << id << "requires http-request on" << m_jade->metaObject()->className();
         // Handle responses which require the results of an http_request
         Q_ASSERT(msg["result"]["http_request"].isMap());
         const QCborMap httpRequest = msg["result"]["http_request"].toMap();
@@ -386,6 +386,10 @@ void JadeAPI::send(const QCborMap &msg)
     // failPendingRequests(). Inserting afterwards would resurrect the id with no
     // handler left to clear it, and drain() would never send anything again.
     m_msg_inflight.insert(id);
+    // Skip the background polling, it repeats every second
+    if (method != "ping" && method != "get_version_info") {
+        qDebug() << "JadeAPI::send()" << m_jade->metaObject()->className() << id << method;
+    }
     m_jade->send(msg);
     if (timeout > 0) QTimer::singleShot(timeout, this, [=, this] {
         // Get (ie. remove) the response handler for that id from the map of registered handlers

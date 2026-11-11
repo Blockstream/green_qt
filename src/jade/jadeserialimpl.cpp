@@ -45,6 +45,7 @@ void JadeSerialImpl::connectDeviceImpl()
     // Open the serial port
     if (m_serial->open(QIODevice::ReadWrite))
     {
+        qDebug() << "JadeSerialImpl::connectDeviceImpl() opened" << m_serial->portName();
         // Connect 'data received' slot
         connect(m_serial, &QSerialPort::readyRead,
                 this, &JadeSerialImpl::onSerialDataReady);
@@ -52,6 +53,7 @@ void JadeSerialImpl::connectDeviceImpl()
         // Connect error signal - critical for Windows disconnect detection during unlock
         connect(m_serial, &QSerialPort::errorOccurred, this, [this](QSerialPort::SerialPortError error) {
             if (!m_serial->isOpen()) return;
+            if (error != QSerialPort::NoError) qWarning() << "JadeSerialImpl::lambda - serial error" << m_serial->portName() << error << m_serial->errorString();
             if (error == QSerialPort::ResourceError || error == QSerialPort::DeviceNotFoundError || error == QSerialPort::PermissionError || error == QSerialPort::NotOpenError) {
                 disconnectDevice();
             }
@@ -64,7 +66,7 @@ void JadeSerialImpl::connectDeviceImpl()
     }
     else
     {
-        // qWarning() << "JadeSerialImpl::connectDeviceImpl() error opening " << m_serial->portName();
+        qWarning() << "JadeSerialImpl::connectDeviceImpl() error opening" << m_serial->portName() << m_serial->errorString();
         emit onOpenError();
         disconnectDevice();
     }
@@ -82,7 +84,7 @@ void JadeSerialImpl::disconnectDeviceImpl()
     // Close port
     if (m_serial->isOpen())
     {
-        // qDebug() << "JadeSerialImpl::disconnectDeviceImpl() - closing underlying serial port";
+        qDebug() << "JadeSerialImpl::disconnectDeviceImpl() closing" << m_serial->portName();
         m_serial->close();
     }
 
