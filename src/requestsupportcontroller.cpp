@@ -49,10 +49,10 @@ void RequestSupportController::submit(bool share_logs, const QJsonObject& data)
         request.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
 
         auto reply = net->post(request, file.get());
+        // the reply can outlive this controller, so it owns its cleanup and the upload device
+        connect(reply, &QNetworkReply::finished, reply, [reply, file] { reply->deleteLater(); });
 
-        connect(reply, &QNetworkReply::finished, this, [=, this, keep_alive = file] {
-            reply->deleteLater();
-
+        connect(reply, &QNetworkReply::finished, this, [=, this] {
             if (reply->error() != QNetworkReply::NoError) {
                 emit failed("Log upload failed (network error)");
                 return;
