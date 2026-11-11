@@ -57,11 +57,14 @@ void JadeUpdateTask::update()
 
     auto backend = m_device->api();
     if (!backend) {
+        qWarning() << Q_FUNC_INFO << "no backend";
         setStatus(Status::Failed);
         return;
     }
     const auto size = m_firmware.value("fwsize").toLongLong();
     const auto chunk_size = backend->relaxWrite() ? 256 : m_device->versionInfo().value("JADE_OTA_MAX_CHUNK").toInt();
+    qDebug() << Q_FUNC_INFO << "start" << m_firmware.value("version").toString() << "delta" << m_firmware.value("delta").toBool()
+             << "fwsize" << size << "cmpsize" << m_data.size() << "chunk" << chunk_size;
 
     auto progress_cb = [guard = QPointer<JadeUpdateTask>(this)](const QVariantMap& result) {
         if (!guard) return;
@@ -454,9 +457,11 @@ void JadeFirmwareUpdateController::update()
     m_fetching = true;
     emit fetchingChanged();
 
+    qDebug() << Q_FUNC_INFO << "download" << type << path;
     auto task = new JadeBinaryRequestTask("/bin/" + type + "/" + path, HttpManager::instance());
     m_task = task;
     connect(task, &Task::failed, this, [=, this] {
+        qWarning() << Q_FUNC_INFO << "download failed" << task->error();
         m_task = nullptr;
         task->deleteLater();
         m_fetching = false;
@@ -479,6 +484,7 @@ void JadeFirmwareUpdateController::update()
             emit updateFailed(task->error());
         } else {
             const auto data = QByteArray::fromBase64(task->body().toByteArray());
+            qDebug() << Q_FUNC_INFO << "downloaded" << data.size() << "bytes";
             install(data);
         }
     });
@@ -557,5 +563,6 @@ void JadeFirmwareUpdateController::install(const QByteArray& data)
             emit updateFinished();
         });
     });
+    qDebug() << Q_FUNC_INFO << "queue update task, connected" << m_device->isConnected();
     m_device->exec(task);
 }

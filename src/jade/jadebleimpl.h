@@ -43,6 +43,7 @@ private:
     // Writes refused while the platform is still setting up link encryption are
     // retried rather than dropping the connection, until Jade first replies.
     int                         m_write_retries{0};
+    int                         m_unconfirmed_writes{0};
     bool                        m_replied{false};
     bool                        m_ready{false};
 };

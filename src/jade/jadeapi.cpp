@@ -571,6 +571,7 @@ int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& 
     QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash} };
     if (!fwhash.isEmpty()) params.insert(QString("fwhash"), QByteArray::fromHex(fwhash.toLocal8Bit()));
     const QCborMap request = getRequest(tmpId, "ota", params);
+    qDebug() << Q_FUNC_INFO << "send ota" << tmpId << "inflight" << m_msg_inflight.size() << "queued" << m_msg_queue.size();
     enqueue(request);
     return id;
 }
@@ -595,6 +596,7 @@ int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const QStr
     QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash}, {"patchsize", patch_size} };
     if (!fwhash.isEmpty()) params.insert(QString("fwhash"), QByteArray::fromHex(fwhash.toLocal8Bit()));
     const QCborMap request = getRequest(tmpId, "ota_delta", params);
+    qDebug() << Q_FUNC_INFO << "send ota_delta" << tmpId << "inflight" << m_msg_inflight.size() << "queued" << m_msg_queue.size();
     enqueue(request);
     return id;
 }
@@ -651,6 +653,7 @@ JadeAPI::ResponseHandler JadeAPI::makeOtaChunkCallback(const int id, const QByte
         else
         {
             // Error - stop loading chunks and forward error to caller's response handler
+            qWarning() << "JadeAPI::makeOtaChunkCallback()::lambda for" << id << "failed at" << currentPos << rslt;
             forwardToResponseHandler(id, rslt);
         }
     };

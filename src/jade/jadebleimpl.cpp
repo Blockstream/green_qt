@@ -154,6 +154,7 @@ void JadeBleImpl::connectDeviceImpl()
 
     // Initiate connection process (see connected callback waterfall, above)
     m_write_retries = 0;
+    m_unconfirmed_writes = 0;
     m_replied = false;
     m_ready = false;
     m_service = nullptr;
@@ -205,6 +206,9 @@ void JadeBleImpl::onServiceStateChange(const QLowEnergyService::ServiceState new
     // Connect 'data received' slot
     connect(m_service, &QLowEnergyService::characteristicChanged,
             this, &JadeBleImpl::onBleDataReady);
+    connect(m_service, &QLowEnergyService::characteristicWritten, this, [this] {
+        m_unconfirmed_writes--;
+    });
 
     // Jade replies through the subscription this descriptor write sets up, and the
     // write is asynchronous. Prefer to report the connection as ready only once it
@@ -311,10 +315,12 @@ int JadeBleImpl::writeImpl(const QByteArray &data)
     // byte stream, so chunking to whatever was negotiated is safe.
     const int mtu = m_controller->mtu();
     const int chunk = mtu > 3 ? mtu - 3 : 20;
+    qDebug() << "JadeBleImpl::writeImpl()" << data.length() << "bytes, mtu" << mtu << "unconfirmed writes" << m_unconfirmed_writes;
 
     auto buffer = data;
     while (!buffer.isEmpty()) {
         auto n = qMin(chunk, buffer.length());
+        m_unconfirmed_writes++;
         m_service->writeCharacteristic(m_tx, buffer.mid(0, n), QLowEnergyService::WriteWithResponse);
         buffer = buffer.mid(n);
     }
