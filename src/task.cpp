@@ -210,6 +210,7 @@ void Task::setStatus(Status status)
                               << Qt::hex << reinterpret_cast<quintptr>(profilingContext()) << Qt::dec;
 
     m_status = status;
+    if (m_status == Status::Finished || m_status == Status::Failed) releaseSecrets();
     emit statusChanged();
 
     if (m_status == Status::Finished) {
@@ -816,6 +817,12 @@ RegisterUserTask::RegisterUserTask(const QJsonObject& details, const QJsonObject
     d->device_details = hw_device;
 }
 
+void RegisterUserTask::releaseSecrets()
+{
+    Q_D(RegisterUserTask);
+    d->details = {};
+}
+
 bool RegisterUserTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     Q_D(RegisterUserTask);
@@ -936,6 +943,12 @@ void LoginTask::update()
     } else {
         AuthHandlerTask::update();
     }
+}
+
+void LoginTask::releaseSecrets()
+{
+    Q_D(LoginTask);
+    d->details = {};
 }
 
 bool LoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
@@ -1342,6 +1355,13 @@ bool EncryptWithPinTask::active() const
     if (!AuthHandlerTask::active()) return false;
     if (d->plaintext.isNull() || d->plaintext.isUndefined()) return false;
     return true;
+}
+
+void EncryptWithPinTask::releaseSecrets()
+{
+    Q_D(EncryptWithPinTask);
+    d->pin.clear();
+    d->plaintext = {};
 }
 
 bool EncryptWithPinTask::call(GA_session* session, GA_auth_handler** auth_handler)

@@ -156,6 +156,8 @@ protected:
     void waitForFuture(QFuture<void> future);
 private:
     virtual void update() = 0;
+    // Drops secrets held for the GDK call once the task can no longer run
+    virtual void releaseSecrets() {}
 protected:
     TaskPrivate* const d_ptr;
     TaskGroup* m_group{nullptr};
@@ -358,6 +360,7 @@ public:
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
+    void releaseSecrets() override;
 };
 
 class LoginTaskPrivate;
@@ -380,6 +383,7 @@ private:
     void update() override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
+    void releaseSecrets() override;
 };
 
 class LoadTwoFactorConfigTask : public SessionTask
@@ -430,6 +434,7 @@ public:
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+    void releaseSecrets() override;
 };
 
 class ChangeSettingsTaskPrivate;
