@@ -25,7 +25,7 @@ ApplicationWindow {
         const parts = []
         if (title) parts.push(title)
         parts.push('Blockstream');
-        if (env !== 'Production') parts.push(`[${env}]`)
+        if (env !== 'Production') parts.push(`[${[env, branch, Qt.application.version].filter(Boolean).join(' ')}]`)
         return parts.join(' - ');
     }
     onClosing: (event) => {

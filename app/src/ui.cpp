@@ -273,6 +273,8 @@ int ui_handler(Application& app, int argc, char *argv[]) {
         languages.insert(name, QVariantMap({{ "name", name }, { "language", language_code }}));
     }
     engine.rootContext()->setContextProperty("env", GREEN_ENV);
+    // CI names the log file after the branch
+    engine.rootContext()->setContextProperty("branch", GREEN_LOG_FILE);
     engine.rootContext()->setContextProperty("languages", languages.values());
     engine.rootContext()->setContextProperty("data_location_path", g_data_location);
     engine.rootContext()->setContextProperty("data_location_url", QUrl::fromLocalFile(g_data_location));
