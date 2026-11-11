@@ -488,14 +488,14 @@ Account* Context::getOrCreateAmp2Account(Network* network)
         { "type", "amp2" },
         { "name", name.isEmpty() ? QStringLiteral("AMP Liquid") : name },
         { "hidden", d->wallet && d->wallet->amp2Hidden() },
-        { "amp2_wid", d->wallet ? d->wallet->m_amp2_wid : QString() },
+        { "amp2_wid", d->wallet ? d->wallet->amp2Wid() : QString() },
     });
 }
 
 LwkAmp2AccountController* Context::amp2AccountController()
 {
     Q_D(Context);
-    if (!d->wallet || d->wallet->m_amp2_wid.isEmpty()) return nullptr;
+    if (!d->wallet || d->wallet->amp2Wid().isEmpty()) return nullptr;
 
     if (!d->amp2_account_controller) {
         d->amp2_account_controller = new LwkAmp2AccountController(this);

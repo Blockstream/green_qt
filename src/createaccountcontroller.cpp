@@ -171,8 +171,7 @@ void CreateAccountController::createAmp2Account()
         // from the signer at load to keep the blinding key off disk.
         auto wallet = context()->wallet();
         if (wallet) {
-            wallet->m_amp2_wid = result.wid;
-            wallet->save();
+            wallet->setAmp2Wid(result.wid);
         }
 
         // context()->amp2AccountController() is gated on the wallet having a

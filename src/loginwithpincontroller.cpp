@@ -200,12 +200,12 @@ void LoginController::loginWithDevice(Device* device)
             }
         } else {
             m_wallet = WalletManager::instance()->createWallet();
-            m_wallet->m_deployment = context()->deployment();
+            m_wallet->setDeployment(context()->deployment());
             m_wallet->setName(device->name());
             auto device_data = new DeviceData(m_wallet);
             device_data->setDevice(device->details());
             m_wallet->setLogin(device_data);
-            m_wallet->m_is_persisted = context()->remember();
+            m_wallet->setPersisted(context()->remember());
             WalletManager::instance()->insertWallet(m_wallet);
         }
     });
@@ -313,7 +313,7 @@ LoadController::LoadController(QObject* parent)
             wallet->setContext(context());
             for (auto session : context()->getSessions()) {
                 if (!session->m_wallet_hash_id.isEmpty()) {
-                    wallet->m_hashes.insert(session->m_wallet_hash_id);
+                    wallet->addHash(session->m_wallet_hash_id);
                 }
             }
             wallet->save();
@@ -361,8 +361,8 @@ void LoadController::loadAmp2()
     // software signer is required (matches the create flow).
     if (!context()->isSoftwareSigner()) return;
 
-    if (!wallet->m_amp2_wid.isEmpty()) {
-        // context()->amp2AccountController() is gated on wallet->m_amp2_wid,
+    if (!wallet->amp2Wid().isEmpty()) {
+        // context()->amp2AccountController() is gated on wallet->amp2Wid(),
         // already confirmed non-empty above, so this returns a real instance.
         if (auto controller = context()->amp2AccountController()) {
             controller->load();
@@ -397,10 +397,9 @@ void LoadController::loadAmp2()
 
         auto wallet = context()->wallet();
         if (!wallet) return;
-        wallet->m_amp2_wid = result.wid;
-        wallet->save();
+        wallet->setAmp2Wid(result.wid);
 
-        // context()->amp2AccountController() is gated on wallet->m_amp2_wid,
+        // context()->amp2AccountController() is gated on wallet->amp2Wid(),
         // just persisted above, so this now returns the real controller.
         if (auto real_controller = context()->amp2AccountController()) {
             real_controller->start(result.wollet, result.amp2);

@@ -115,21 +115,9 @@ void WalletManager::loadWallets()
         QJsonObject data;
         if (!ReadWalletRecord(it.next(), id, data)) continue;
 
-        Wallet* wallet = new Wallet(this);
-        wallet->m_is_persisted = true;
-        wallet->m_id = id;
-        wallet->m_deployment = data.value("deployment").toString("mainnet");
-        wallet->m_name = data.value("name").toString();
-        wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
-        wallet->m_lightning_enabled = data.value("lightning_enabled").toBool(false);
-        const auto amp2 = data.value("amp2").toObject();
-        wallet->m_amp2_wid = amp2.value("wid").toString(data.value("amp2_wid").toString());
-        wallet->m_amp2_hidden = amp2.value("hidden").toBool(false);
-        wallet->m_amp2_name = amp2.value("name").toString();
-
-        for (const auto hash : data.value("hashes").toArray()) {
-            wallet->m_hashes.insert(hash.toString());
-        }
+        Wallet* wallet = new Wallet(id, this);
+        wallet->setPersisted(true);
+        wallet->read(data);
 
         if (data.contains("pin")) {
             auto pin = new PinData(wallet);
@@ -181,15 +169,11 @@ void WalletManager::addWallet(Wallet* wallet)
 
 Wallet* WalletManager::createWallet()
 {
-    auto wallet = new Wallet(this);
-    wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    return wallet;
+    return new Wallet(QUuid::createUuid().toString(QUuid::WithoutBraces), this);
 }
 
 void WalletManager::insertWallet(Wallet* wallet)
 {
-    Q_ASSERT(!wallet->m_id.isEmpty());
-    QFile file(GetDataFile("wallets2", wallet->m_id));
     addWallet(wallet);
     wallet->save();
 }
@@ -200,7 +184,7 @@ void WalletManager::removeWallet(Wallet* wallet)
     m_wallets.removeOne(wallet);
     emit changed();
     if (wallet->isPersisted()) {
-        bool result = QFile::remove(GetDataFile("wallets2", wallet->m_id));
+        bool result = QFile::remove(GetDataFile("wallets2", wallet->id()));
         Q_ASSERT(result);
     }
 }

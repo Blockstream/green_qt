@@ -271,8 +271,8 @@ void WatchOnlyCreateWalletTask::update()
             }
             wallet->setName(WalletManager::instance()->uniqueWalletName(name));
             wallet->setLogin(watchonly_data);
-            wallet->m_deployment = m_controller->network()->deployment();
-            wallet->m_is_persisted = m_controller->saveWallet();
+            wallet->setDeployment(m_controller->network()->deployment());
+            wallet->setPersisted(m_controller->saveWallet());
         }
         context->setWallet(wallet);
         wallet->save();

@@ -94,8 +94,8 @@ void RestoreController::restore(const QString& deployment)
         auto wallet = WalletManager::instance()->createWallet();
         wallet->setName(WalletManager::instance()->newWalletName());
         wallet->setXPubHashId(context()->xpubHashId());
-        wallet->m_deployment = context()->deployment();
-        wallet->m_is_persisted = true;
+        wallet->setDeployment(context()->deployment());
+        wallet->setPersisted(true);
 
         context()->setWallet(wallet);
         wallet->setContext(context());

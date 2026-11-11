@@ -24,44 +24,106 @@
 
 #include <nlohmann/json.hpp>
 
-Wallet::Wallet(QObject* parent)
+class WalletPrivate
+{
+public:
+    WalletPrivate(const QString& id) : id(id) {}
+    const QString id;
+    bool is_persisted{false};
+    QString deployment;
+    QString name;
+    LoginData* login{nullptr};
+    QString xpub_hash_id;
+    QSet<QString> hashes;
+    bool lightning_enabled{false};
+    QString amp2_wid;
+    bool amp2_hidden{false};
+    QString amp2_name;
+    Context* context{nullptr};
+};
+
+Wallet::Wallet(const QString& id, QObject* parent)
     : QObject(parent)
+    , d_ptr(new WalletPrivate(id))
 {
 }
 
 Wallet::~Wallet()
 {
+    delete d_ptr;
 }
 
 void Wallet::disconnect()
 {
-    if (m_context) {
-        if (m_context->device()) {
-            auto task = m_context->device()->logout();
-            if (task) m_context->device()->exec(task);
+    Q_D(Wallet);
+    if (d->context) {
+        if (d->context->device()) {
+            auto task = d->context->device()->logout();
+            if (task) d->context->device()->exec(task);
         }
-        m_context->deleteLater();
+        d->context->deleteLater();
         setContext(nullptr);
     }
 }
 
+Context* Wallet::context() const
+{
+    Q_D(const Wallet);
+    return d->context;
+}
+
 void Wallet::setContext(Context* context)
 {
-    if (m_context == context) return;
-    m_context = context;
+    Q_D(Wallet);
+    if (d->context == context) return;
+    d->context = context;
     emit contextChanged();
 }
 
 QString Wallet::id() const
 {
-    Q_ASSERT(!m_id.isEmpty());
-    return m_id;
+    Q_D(const Wallet);
+    Q_ASSERT(!d->id.isEmpty());
+    return d->id;
+}
+
+QString Wallet::deployment() const
+{
+    Q_D(const Wallet);
+    return d->deployment;
+}
+
+void Wallet::setDeployment(const QString& deployment)
+{
+    Q_D(Wallet);
+    d->deployment = deployment;
+}
+
+bool Wallet::isPersisted() const
+{
+    Q_D(const Wallet);
+    return d->is_persisted;
+}
+
+void Wallet::setPersisted(bool persisted)
+{
+    Q_D(Wallet);
+    if (d->is_persisted == persisted) return;
+    d->is_persisted = persisted;
+    emit isPersistedChanged();
+}
+
+QString Wallet::name() const
+{
+    Q_D(const Wallet);
+    return d->name;
 }
 
 void Wallet::setName(const QString& name)
 {
-    if (m_name == name) return;
-    m_name = name;
+    Q_D(Wallet);
+    if (d->name == name) return;
+    d->name = name;
     emit nameChanged();
 }
 
@@ -102,47 +164,65 @@ void Wallet::reload(bool refresh_accounts)
 
 bool Wallet::rename(QString name, bool active_focus)
 {
+    Q_D(Wallet);
     if (!active_focus) name = name.trimmed();
     if (name.isEmpty() && !active_focus) {
         name = WalletManager::instance()->newWalletName();
     }
-    if (m_name == name) return false;
+    if (d->name == name) return false;
     if (active_focus) return false;
     setName(name);
-    if (m_name.isEmpty()) return false;
+    if (d->name.isEmpty()) return false;
     save();
     return true;
 }
 
+void Wallet::read(const QJsonObject& data)
+{
+    Q_D(Wallet);
+    d->deployment = data.value("deployment").toString("mainnet");
+    d->name = data.value("name").toString();
+    d->xpub_hash_id = data.value("xpub_hash_id").toString();
+    d->lightning_enabled = data.value("lightning_enabled").toBool(false);
+    const auto amp2 = data.value("amp2").toObject();
+    d->amp2_wid = amp2.value("wid").toString(data.value("amp2_wid").toString());
+    d->amp2_hidden = amp2.value("hidden").toBool(false);
+    d->amp2_name = amp2.value("name").toString();
+    for (const auto hash : data.value("hashes").toArray()) {
+        d->hashes.insert(hash.toString());
+    }
+}
+
 void Wallet::save()
 {
+    Q_D(Wallet);
     Q_ASSERT(QThread::currentThread() == thread());
-    Q_ASSERT(!m_id.isEmpty());
-    if (!m_is_persisted) return;
+    Q_ASSERT(!d->id.isEmpty());
+    if (!d->is_persisted) return;
     QJsonObject data({
-        { "name", m_name },
-        { "deployment", m_deployment },
-        { "hashes", QJsonArray::fromStringList(m_hashes.values()) },
-        { "lightning_enabled", m_lightning_enabled },
+        { "name", d->name },
+        { "deployment", d->deployment },
+        { "hashes", QJsonArray::fromStringList(d->hashes.values()) },
+        { "lightning_enabled", d->lightning_enabled },
     });
-    if (!m_xpub_hash_id.isEmpty()) {
-        data.insert("xpub_hash_id", m_xpub_hash_id);
+    if (!d->xpub_hash_id.isEmpty()) {
+        data.insert("xpub_hash_id", d->xpub_hash_id);
     }
     QJsonObject amp2;
-    if (!m_amp2_wid.isEmpty()) {
-        amp2.insert("wid", m_amp2_wid);
+    if (!d->amp2_wid.isEmpty()) {
+        amp2.insert("wid", d->amp2_wid);
     }
-    if (m_amp2_hidden) {
+    if (d->amp2_hidden) {
         amp2.insert("hidden", true);
     }
-    if (!m_amp2_name.isEmpty()) {
-        amp2.insert("name", m_amp2_name);
+    if (!d->amp2_name.isEmpty()) {
+        amp2.insert("name", d->amp2_name);
     }
     if (!amp2.isEmpty()) {
         data.insert("amp2", amp2);
     }
-    if (m_login) m_login->write(data);
-    QFile file(GetDataFile("wallets2", m_id));
+    if (d->login) d->login->write(data);
+    QFile file(GetDataFile("wallets2", d->id));
     bool result = file.open(QFile::WriteOnly | QFile::Truncate);
     Q_ASSERT(result);
     file.write(QJsonDocument(data).toJson());
@@ -150,11 +230,18 @@ void Wallet::save()
     Q_ASSERT(result);
 }
 
+LoginData* Wallet::login() const
+{
+    Q_D(const Wallet);
+    return d->login;
+}
+
 void Wallet::setLogin(LoginData* login)
 {
-    if (m_login == login) return;
-    if (m_login) m_login->deleteLater();
-    m_login = login;
+    Q_D(Wallet);
+    if (d->login == login) return;
+    if (d->login) d->login->deleteLater();
+    d->login = login;
     emit loginChanged();
 }
 
@@ -172,8 +259,9 @@ void Wallet::setPinData(Network* network, const QByteArray& pin_data)
 
 QJsonObject Wallet::convert(const QJsonObject& value) const
 {
-    if (!m_context) return {};
-    auto session = m_context->primarySession();
+    Q_D(const Wallet);
+    if (!d->context) return {};
+    auto session = d->context->primarySession();
     if (!session) return {};
     auto details = Json::fromObject(value);
     GA_json* balance;
@@ -186,14 +274,16 @@ QJsonObject Wallet::convert(const QJsonObject& value) const
 
 QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 {
-    const auto session = m_context->primarySession();
+    Q_D(const Wallet);
+    const auto session = d->context->primarySession();
     return formatAmount(amount, include_ticker, session->unit());
 }
 
 QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
-    if (!m_context) return {};
-    const auto session = m_context->primarySession();
+    Q_D(const Wallet);
+    if (!d->context) return {};
+    const auto session = d->context->primarySession();
     const auto effective_unit = unit.isEmpty() ? session->unit() : unit;
     if (effective_unit.isEmpty()) return {};
     auto str = convert({{ "satoshi", amount }}).value(effective_unit == "\u00B5BTC" ? "ubtc" : effective_unit.toLower()).toString();
@@ -220,34 +310,81 @@ void Wallet::updateDeviceDetails(const QJsonObject& device_details)
 }
 */
 
+void Wallet::addHash(const QString& hash)
+{
+    Q_D(Wallet);
+    d->hashes.insert(hash);
+}
+
+QString Wallet::xpubHashId() const
+{
+    Q_D(const Wallet);
+    return d->xpub_hash_id;
+}
+
 void Wallet::setXPubHashId(const QString &xpub_hash_id)
 {
-    if (m_xpub_hash_id == xpub_hash_id) return;
-    // Q_ASSERT(m_xpub_hash_id.isEmpty());
-    m_xpub_hash_id = xpub_hash_id;
+    Q_D(Wallet);
+    if (d->xpub_hash_id == xpub_hash_id) return;
+    d->xpub_hash_id = xpub_hash_id;
     emit xpubHashIdChanged();
     save();
 }
 
+bool Wallet::lightningEnabled() const
+{
+    Q_D(const Wallet);
+    return d->lightning_enabled;
+}
+
 void Wallet::setLightningEnabled(bool enabled)
 {
-    if (m_lightning_enabled == enabled) return;
-    m_lightning_enabled = enabled;
+    Q_D(Wallet);
+    if (d->lightning_enabled == enabled) return;
+    d->lightning_enabled = enabled;
     emit lightningEnabledChanged();
     save();
 }
 
+QString Wallet::amp2Wid() const
+{
+    Q_D(const Wallet);
+    return d->amp2_wid;
+}
+
+void Wallet::setAmp2Wid(const QString& wid)
+{
+    Q_D(Wallet);
+    if (d->amp2_wid == wid) return;
+    d->amp2_wid = wid;
+    save();
+}
+
+bool Wallet::amp2Hidden() const
+{
+    Q_D(const Wallet);
+    return d->amp2_hidden;
+}
+
 void Wallet::setAmp2Hidden(bool hidden)
 {
-    if (m_amp2_hidden == hidden) return;
-    m_amp2_hidden = hidden;
+    Q_D(Wallet);
+    if (d->amp2_hidden == hidden) return;
+    d->amp2_hidden = hidden;
     save();
+}
+
+QString Wallet::amp2Name() const
+{
+    Q_D(const Wallet);
+    return d->amp2_name;
 }
 
 void Wallet::setAmp2Name(const QString& name)
 {
-    if (m_amp2_name == name) return;
-    m_amp2_name = name;
+    Q_D(Wallet);
+    if (d->amp2_name == name) return;
+    d->amp2_name = name;
     save();
 }
 

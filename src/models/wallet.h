@@ -109,6 +109,7 @@ private:
     QStringList m_extended_pubkeys;
 };
 
+class WalletPrivate;
 class Wallet : public QObject
 {
     Q_OBJECT
@@ -120,22 +121,25 @@ class Wallet : public QObject
     Q_PROPERTY(QString xpubHashId READ xpubHashId NOTIFY xpubHashIdChanged)
     Q_PROPERTY(LoginData* login READ login NOTIFY loginChanged)
     Q_PROPERTY(bool lightningEnabled READ lightningEnabled WRITE setLightningEnabled NOTIFY lightningEnabledChanged)
+    Q_DECLARE_PRIVATE(Wallet)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    explicit Wallet(QObject* parent = nullptr);
+    Wallet(const QString& id, QObject* parent);
     virtual ~Wallet();
 
-    Context* context() const { return m_context; }
+    Context* context() const;
     void setContext(Context* context);
 
     QString id() const;
-    QString deployment() const { return m_deployment; }
-    bool isPersisted() const { return m_is_persisted; }
-    QString name() const { return m_name; }
+    QString deployment() const;
+    void setDeployment(const QString& deployment);
+    bool isPersisted() const;
+    void setPersisted(bool persisted);
+    QString name() const;
     void setName(const QString& name);
 
-    LoginData* login() const { return m_login; }
+    LoginData* login() const;
     void setLogin(LoginData* login);
 
     Q_INVOKABLE QJsonObject convert(const QJsonObject& value) const;
@@ -143,19 +147,26 @@ public:
     QString formatAmount(qint64 amount, bool include_ticker) const;
     Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit) const;
 
-    void updateHashId(const QString& hash_id);
+    void addHash(const QString& hash);
 
-    QString xpubHashId() const { return m_xpub_hash_id; }
+    QString xpubHashId() const;
     void setXPubHashId(const QString& xpub_hash_id);
 
-    bool lightningEnabled() const { return m_lightning_enabled; }
+    bool lightningEnabled() const;
     void setLightningEnabled(bool enabled);
 
-    bool amp2Hidden() const { return m_amp2_hidden; }
+    // Non-empty means an AMP2 account was registered and is reloaded on login
+    QString amp2Wid() const;
+    void setAmp2Wid(const QString& wid);
+
+    bool amp2Hidden() const;
     void setAmp2Hidden(bool hidden);
 
-    QString amp2Name() const { return m_amp2_name; }
+    QString amp2Name() const;
     void setAmp2Name(const QString& name);
+
+    void read(const QJsonObject& data);
+    void save();
 
 public slots:
     void disconnect();
@@ -170,28 +181,8 @@ signals:
     void incognitoChanged();
     void loginChanged();
     void lightningEnabledChanged();
-public:
-    bool m_is_persisted{false};
-    QString m_deployment;
-    QString m_id;
-    QString m_name;
-    LoginData* m_login{nullptr};
-
-    QString m_xpub_hash_id;
-    QSet<QString> m_hashes;
-    bool m_lightning_enabled{false};
-    bool m_busy{false};
-
-    // Persisted AMP2 wallet id; non-empty means an AMP2 account was registered
-    // and should be reloaded on login (see Context::amp2AccountController /
-    // LwkAmp2AccountController::deriveAmp2 / LoadController).
-    QString m_amp2_wid;
-    bool m_amp2_hidden{false};
-    QString m_amp2_name;
-
-    void save();
 private:
-    Context* m_context{nullptr};
+    WalletPrivate* const d_ptr;
 };
 
 #endif // BLOCKSTREAM_WALLET_H
