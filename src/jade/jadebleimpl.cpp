@@ -355,7 +355,10 @@ int JadeBleImpl::writeImpl(const QByteArray &data)
     // byte stream, so chunking to whatever was negotiated is safe.
     const int mtu = m_mtu > 0 ? m_mtu : m_controller->mtu();
     const int chunk = mtu > 3 ? mtu - 3 : 20;
-    qDebug() << "JadeBleImpl::writeImpl()" << data.length() << "bytes, mtu" << mtu << "unconfirmed writes" << m_unconfirmed_writes;
+    // Skip the single chunk background polling, it repeats every second
+    if (data.length() > chunk || m_unconfirmed_writes > 0) {
+        qDebug() << "JadeBleImpl::writeImpl()" << data.length() << "bytes, mtu" << mtu << "unconfirmed writes" << m_unconfirmed_writes;
+    }
 
     auto buffer = data;
     while (!buffer.isEmpty()) {
