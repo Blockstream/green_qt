@@ -9,9 +9,44 @@
 #include <qlowenergycontroller.h>
 #include <qlowenergyservice.h>
 
+#ifdef Q_OS_LINUX
+#include <QDBusConnection>
+#include <QDBusMetaType>
+#include <QDBusObjectPath>
+#include <QDBusReply>
+#endif
+
 static const QUuid IO_SERVICE_UUID("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
 static const QUuid IO_TX_CHAR_UUID("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
 static const QUuid IO_RX_CHAR_UUID("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
+
+#ifdef Q_OS_LINUX
+using DBusInterfaces = QMap<QString, QVariantMap>;
+using DBusObjects = QMap<QDBusObjectPath, DBusInterfaces>;
+
+// Qt's BlueZ backend leaves mtu() at -1 for a central, but BlueZ (5.62+) has
+// already exchanged it and exposes it on the characteristic.
+static int bluezMtu(const QBluetoothAddress& address)
+{
+    qDBusRegisterMetaType<DBusInterfaces>();
+    qDBusRegisterMetaType<DBusObjects>();
+    const auto message = QDBusMessage::createMethodCall(QStringLiteral("org.bluez"), QStringLiteral("/"), QStringLiteral("org.freedesktop.DBus.ObjectManager"), QStringLiteral("GetManagedObjects"));
+    const QDBusReply<DBusObjects> reply = QDBusConnection::systemBus().call(message);
+    if (!reply.isValid()) return -1;
+    const auto objects = reply.value();
+    for (auto device = objects.begin(); device != objects.end(); ++device) {
+        if (QBluetoothAddress(device->value(QStringLiteral("org.bluez.Device1")).value(QStringLiteral("Address")).toString()) != address) continue;
+        const auto prefix = device.key().path() + QLatin1Char('/');
+        for (auto object = objects.begin(); object != objects.end(); ++object) {
+            if (!object.key().path().startsWith(prefix)) continue;
+            const auto characteristic = object->value(QStringLiteral("org.bluez.GattCharacteristic1"));
+            if (QUuid(characteristic.value(QStringLiteral("UUID")).toString()) != IO_TX_CHAR_UUID) continue;
+            return characteristic.value(QStringLiteral("MTU"), -1).toInt();
+        }
+    }
+    return -1;
+}
+#endif
 
 JadeBleImpl::JadeBleImpl(const QBluetoothDeviceInfo &deviceInfo,
                          QObject *parent)
@@ -157,6 +192,7 @@ void JadeBleImpl::connectDeviceImpl()
     m_unconfirmed_writes = 0;
     m_replied = false;
     m_ready = false;
+    m_mtu = -1;
     m_service = nullptr;
     m_controller->connectToDevice();
 }
@@ -182,6 +218,10 @@ void JadeBleImpl::onServiceStateChange(const QLowEnergyService::ServiceState new
     // Get the expected Tx and Rx characteristics
     m_tx = m_service->characteristic(IO_TX_CHAR_UUID);
     m_rx = m_service->characteristic(IO_RX_CHAR_UUID);
+#ifdef Q_OS_LINUX
+    m_mtu = bluezMtu(m_controller->remoteAddress());
+    qDebug() << "JadeBleImpl::onServiceStateChange() bluez mtu" << m_mtu;
+#endif
     if (!m_tx.isValid() || !m_rx.isValid() || !m_rx.properties().testFlag(QLowEnergyCharacteristic::Indicate))
     {
         qWarning() << "JadeBleImpl::onServiceStateChange() charactersistics not as expected:"
@@ -313,7 +353,7 @@ int JadeBleImpl::writeImpl(const QByteArray &data)
     // there, but Android stays at the 23 byte default unless the peer asks for
     // more, and a single oversized write is silently dropped. The service is a
     // byte stream, so chunking to whatever was negotiated is safe.
-    const int mtu = m_controller->mtu();
+    const int mtu = m_mtu > 0 ? m_mtu : m_controller->mtu();
     const int chunk = mtu > 3 ? mtu - 3 : 20;
     qDebug() << "JadeBleImpl::writeImpl()" << data.length() << "bytes, mtu" << mtu << "unconfirmed writes" << m_unconfirmed_writes;
 

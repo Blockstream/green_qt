@@ -46,6 +46,7 @@ private:
     int                         m_unconfirmed_writes{0};
     bool                        m_replied{false};
     bool                        m_ready{false};
+    int                         m_mtu{-1};
 };
 
 #endif // JADEBLEIMPL_H
