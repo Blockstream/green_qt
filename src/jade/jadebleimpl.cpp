@@ -119,6 +119,8 @@ void JadeBleImpl::connectDeviceImpl()
                                 if (error == QLowEnergyService::CharacteristicWriteError && !m_replied && m_write_retries < 5) {
                                     m_write_retries++;
                                     qWarning() << "JadeBleImpl::lambda - write refused before the first reply" << m_write_retries;
+                                    m_writing = false;
+                                    writeNextChunk();
                                     return;
                                 }
                                 qWarning() << "JadeBleImpl::lambda - error from the Jade service - disconnecting:" << error << "replied" << m_replied << "retries" << m_write_retries;
@@ -189,7 +191,8 @@ void JadeBleImpl::connectDeviceImpl()
 
     // Initiate connection process (see connected callback waterfall, above)
     m_write_retries = 0;
-    m_unconfirmed_writes = 0;
+    m_chunks.clear();
+    m_writing = false;
     m_replied = false;
     m_ready = false;
     m_mtu = -1;
@@ -247,7 +250,8 @@ void JadeBleImpl::onServiceStateChange(const QLowEnergyService::ServiceState new
     connect(m_service, &QLowEnergyService::characteristicChanged,
             this, &JadeBleImpl::onBleDataReady);
     connect(m_service, &QLowEnergyService::characteristicWritten, this, [this] {
-        m_unconfirmed_writes--;
+        m_writing = false;
+        writeNextChunk();
     });
 
     // Jade replies through the subscription this descriptor write sets up, and the
@@ -356,19 +360,25 @@ int JadeBleImpl::writeImpl(const QByteArray &data)
     const int mtu = m_mtu > 0 ? m_mtu : m_controller->mtu();
     const int chunk = mtu > 3 ? mtu - 3 : 20;
     // Skip the single chunk background polling, it repeats every second
-    if (data.length() > chunk || m_unconfirmed_writes > 0) {
-        qDebug() << "JadeBleImpl::writeImpl()" << data.length() << "bytes, mtu" << mtu << "unconfirmed writes" << m_unconfirmed_writes;
+    if (data.length() > chunk || !m_chunks.isEmpty()) {
+        qDebug() << "JadeBleImpl::writeImpl()" << data.length() << "bytes, mtu" << mtu << "queued chunks" << m_chunks.size();
     }
 
-    auto buffer = data;
-    while (!buffer.isEmpty()) {
-        auto n = qMin(chunk, buffer.length());
-        m_unconfirmed_writes++;
-        m_service->writeCharacteristic(m_tx, buffer.mid(0, n), QLowEnergyService::WriteWithResponse);
-        buffer = buffer.mid(n);
+    for (qsizetype offset = 0; offset < data.length(); offset += chunk) {
+        m_chunks.enqueue(data.mid(offset, chunk));
     }
+    writeNextChunk();
 
     return data.length();
+}
+
+// The Windows backend starts every write on its own, so back to back writes
+// can reach Jade out of order. Send the next chunk only once the last is confirmed.
+void JadeBleImpl::writeNextChunk()
+{
+    if (m_writing || m_chunks.isEmpty() || !m_service) return;
+    m_writing = true;
+    m_service->writeCharacteristic(m_tx, m_chunks.dequeue(), QLowEnergyService::WriteWithResponse);
 }
 
 // 'data received' slot function

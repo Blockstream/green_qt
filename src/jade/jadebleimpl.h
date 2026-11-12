@@ -1,6 +1,7 @@
 #ifndef JADEBLEIMPL_H
 #define JADEBLEIMPL_H
 
+#include <QQueue>
 #include <qlowenergycharacteristic.h>
 #include <qlowenergyservice.h>
 
@@ -34,6 +35,7 @@ private:
 
     // Called by derived implmentation to write bytes to underlying transport
     int writeImpl(const QByteArray& data);
+    void writeNextChunk();
 
     // Underlying connection - lifetime managed by QObject hierarchy
     QLowEnergyController        *m_controller;
@@ -43,7 +45,8 @@ private:
     // Writes refused while the platform is still setting up link encryption are
     // retried rather than dropping the connection, until Jade first replies.
     int                         m_write_retries{0};
-    int                         m_unconfirmed_writes{0};
+    QQueue<QByteArray>          m_chunks;
+    bool                        m_writing{false};
     bool                        m_replied{false};
     bool                        m_ready{false};
     int                         m_mtu{-1};
