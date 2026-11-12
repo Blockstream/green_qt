@@ -10,6 +10,8 @@ UiCard {
     signal connectUsbClicked(JadeDevice device)
     signal connectBluetoothClicked(JadeDevice device)
     required property JadeDevice device
+    // Only reported since firmware 1.0.42
+    readonly property string jadeInterface: self.device.versionInfo?.JADE_INTERFACE ?? 'NONE'
     Layout.alignment: Qt.AlignCenter
     Layout.minimumWidth: 350
     id: self
@@ -35,12 +37,17 @@ UiCard {
             visible: !self.device.connected && self.device.bluetoothState === JadeDevice.BluetoothNone
             onClicked: DeviceManager.removeDevice(self.device)
         }
+        UiIcon {
+            name: Theme.icons.qrCode
+            visible: self.jadeInterface === 'QR'
+        }
         UiButton {
             iconName: Theme.icons.usb
             size: UiButton.ExtraSmall
             text: 'USB'
             variant: UiButton.Secondary
-            visible: self.device.connected && self.device.usbAvailable
+            enabled: self.jadeInterface === 'NONE' || self.jadeInterface === 'SERIAL'
+            visible: self.device.connected && self.device.usbAvailable && self.jadeInterface !== 'QR'
             onClicked: self.connectUsbClicked(self.device)
         }
         UiButton {
@@ -48,7 +55,8 @@ UiCard {
             size: UiButton.ExtraSmall
             text: qsTrId('id_bluetooth')
             variant: UiButton.Secondary
-            visible: self.device.bluetoothState === JadeDevice.BluetoothUnpaired || self.device.connected && self.device.bluetoothAvailable
+            enabled: self.jadeInterface === 'NONE' || self.jadeInterface === 'BLE'
+            visible: (self.device.bluetoothState === JadeDevice.BluetoothUnpaired || self.device.connected && self.device.bluetoothAvailable) && self.jadeInterface !== 'QR'
             onClicked: self.connectBluetoothClicked(self.device)
         }
     }
