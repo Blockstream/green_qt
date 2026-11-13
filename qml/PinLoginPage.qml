@@ -216,49 +216,9 @@ StackViewPage {
                 HSpacer {
                 }
             }
-            // VSpacer {
-            // }
         }
     }
     footer: null
-    // footerItem: RowLayout {
-    //     HSpacer {
-    //         Layout.minimumHeight: 100
-    //     }
-    //     ColumnLayout {
-    //         Layout.fillWidth: false
-    //         Layout.alignment: Qt.AlignBottom
-    //         visible: !self.connecting
-    //         Image {
-    //             Layout.alignment: Qt.AlignCenter
-    //             source: 'qrc:/svg2/house.svg'
-    //         }
-    //         Label {
-    //             Layout.alignment: Qt.AlignCenter
-    //             font.pixelSize: 12
-    //             font.weight: 600
-    //             text: qsTrId('id_make_sure_to_be_in_a_private')
-    //         }
-    //     }
-    //     ColumnLayout {
-    //         Layout.alignment: Qt.AlignBottom
-    //         Layout.fillWidth: false
-    //         visible: self.connecting
-    //         TProgressBar {
-    //             Layout.alignment: Qt.AlignCenter
-    //             Layout.minimumWidth: 100
-    //             indeterminate: self.connecting
-    //         }
-    //         Label {
-    //             Layout.alignment: Qt.AlignCenter
-    //             font.pixelSize: 12
-    //             font.weight: 600
-    //             text: qsTrId('id_connecting')
-    //         }
-    //     }
-    //     HSpacer {
-    //     }
-    // }
     Component {
         id: no_attempts_view
         ColumnLayout {

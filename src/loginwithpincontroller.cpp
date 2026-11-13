@@ -234,6 +234,7 @@ void LoginController::login(LoginTask* login_task, const QString& passphrase)
     });
     connect(group, &TaskGroup::finished, this, [=, this] {
         if (passphrase.isEmpty()) {
+            setPassphrase({});
             context()->setWallet(m_wallet);
             emit loginFinished(context());
         } else {
