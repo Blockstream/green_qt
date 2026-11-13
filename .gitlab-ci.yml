@@ -8,6 +8,9 @@ default:
 
 # Required project/group CI variables (values are configuration, not credentials):
 # GAR, GAR_SERVICE_ACCOUNT_EMAIL, UPDATE_SERVER_SERVICE_ACCOUNT_EMAIL.
+# Required secret CI variables (masked): GREENLIGHT_DEVELOPER_CERT and
+# GREENLIGHT_DEVELOPER_KEY, the base64-encoded Greenlight device credentials
+# embedded into the binary at build time (see cmake/AppOptions.cmake).
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

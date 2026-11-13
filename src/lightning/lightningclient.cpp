@@ -86,7 +86,7 @@ LightningValueResult<std::shared_ptr<glsdk::Config>> BuildGlsdkConfig()
     const auto device_cert = LoadBase64Path(QStringLiteral(":/greenlight/greenlight_device_cert.txt"));
     const auto device_key = LoadBase64Path(QStringLiteral(":/greenlight/greenlight_device_key.txt"));
     if (!device_cert || !device_key) {
-        const auto error = QStringLiteral("Missing Lightning credentials at assets/greenlight/greenlight_device_cert.txt and assets/greenlight/greenlight_device_key.txt");
+        const auto error = QStringLiteral("Missing Lightning credentials; build with GREENLIGHT_DEVELOPER_CERT and GREENLIGHT_DEVELOPER_KEY set");
         qWarning() << Q_FUNC_INFO << error;
         return { std::nullopt, error };
     }

@@ -696,6 +696,7 @@ Pane {
         property int subtitleElide: Label.ElideRight
 
         id: copy_button
+        enabled: copy_button.copyText !== ''
         leftPadding: 16
         rightPadding: 16
         topPadding: 12
@@ -731,6 +732,7 @@ Pane {
                 }
             }
             Image {
+                visible: copy_button.enabled
                 source: copy_timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
             }
         }

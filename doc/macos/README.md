@@ -148,6 +148,8 @@ qt-cmake --preset dev
 
 Analytics needs the Countly development app key; export `COUNTLY_APP_KEY_DEV` before configuring, otherwise analytics is disabled.
 
+Lightning needs the base64-encoded Greenlight device credentials; export `GREENLIGHT_DEVELOPER_CERT` and `GREENLIGHT_DEVELOPER_KEY` before configuring, otherwise Lightning is unavailable (required for production builds).
+
 Build:
 
 ```bash

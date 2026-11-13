@@ -128,9 +128,6 @@ qt_add_resources(blockstream_core "images"
         png/logo_bubbles.png
         png/lightning_shine.png
 
-        greenlight/greenlight_device_cert.txt
-        greenlight/greenlight_device_key.txt
-        
         svg2/alert.svg
         svg2/arrow_square_down.svg
         svg2/arrow_right.svg
@@ -559,4 +556,18 @@ qt_add_resources(blockstream_core "fonts"
         fonts/Inter-SemiBold.ttf
         fonts/Inter-Bold.ttf
         fonts/RobotoMono-Regular.ttf
+)
+
+# The Greenlight device credentials are injected at configure time from the
+# GREENLIGHT_DEVELOPER_CERT/GREENLIGHT_DEVELOPER_KEY cache variables (see
+# cmake/AppOptions.cmake and CMakePresets.json) instead of being checked in.
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/greenlight/greenlight_device_cert.txt" "${GREENLIGHT_DEVELOPER_CERT}")
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/greenlight/greenlight_device_key.txt" "${GREENLIGHT_DEVELOPER_KEY}")
+
+qt_add_resources(blockstream_core "greenlight"
+    PREFIX "/"
+    BASE ${CMAKE_CURRENT_BINARY_DIR}
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/greenlight/greenlight_device_cert.txt
+        ${CMAKE_CURRENT_BINARY_DIR}/greenlight/greenlight_device_key.txt
 )

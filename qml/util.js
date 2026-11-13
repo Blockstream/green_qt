@@ -208,7 +208,7 @@ function assets(context) {
         const asset = context.getOrCreateAsset(session.network.policyAsset)
         assets.set(asset, { asset, satoshi: 0 })
     }
-    if (context.lightningEnabled) {
+    if (context.lightningEnabled && context.lightningNodeInfo?.id) {
         const asset = context.getOrCreateAsset('lnbtc')
         assets.set(asset, { asset, satoshi: context.lightningNodeInfo?.channel_balance ?? 0 })
     }

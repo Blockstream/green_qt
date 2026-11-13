@@ -31,6 +31,7 @@ void AssetsModel::setContext(Context* context)
     if (m_context) {
         disconnect(m_context, &Context::accountsChanged, this, nullptr);
         disconnect(m_context, &Context::lightningEnabledChanged, this, nullptr);
+        disconnect(m_context, &Context::lightningNodeInfoChanged, this, nullptr);
         for (auto account : m_context->getAccounts()) {
             disconnect(account, nullptr, this, nullptr);
         }
@@ -45,6 +46,7 @@ void AssetsModel::setContext(Context* context)
         connect(m_context, &Context::lightningEnabledChanged, this, [=, this] {
             refilter();
         });
+        connect(m_context, &Context::lightningNodeInfoChanged, this, &AssetsModel::refilter);
         connectAccounts();
     }
     emit contextChanged();
@@ -109,7 +111,7 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
 
     if (asset->isAmp() && !m_show_amp) return false;
 
-    if (asset->isLightning() && (!m_show_lightning || !m_context || !m_context->lightningEnabled())) {
+    if (asset->isLightning() && (!m_show_lightning || !m_context || !m_context->lightningEnabled() || !m_context->lightningNodeInfo().contains("id"))) {
         return false;
     }
 

@@ -336,6 +336,8 @@ cmake --build bld --config RelWithDebInfo
 
 Analytics needs the Countly development app key; `set COUNTLY_APP_KEY_DEV=...` before configuring, otherwise analytics is disabled.
 
+Lightning needs the base64-encoded Greenlight device credentials; `set GREENLIGHT_DEVELOPER_CERT=...` and `set GREENLIGHT_DEVELOPER_KEY=...` before configuring, otherwise Lightning is unavailable (required for production builds).
+
 For a production-style build (e.g. release), override the preset on the command line:
 
 ```bat

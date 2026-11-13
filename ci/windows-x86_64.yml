@@ -114,7 +114,7 @@ windows-x86_64:build:
         - .ccache/
   script:
     - if (-not (docker image inspect $env:IMAGE 2>$null)) { docker pull $env:IMAGE }
-    - docker run --rm -v "${env:CI_PROJECT_DIR}:C:\src" -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY -e SENTRY_PROJECT -e COUNTLY_APP_KEY_DEV -e COUNTLY_APP_KEY_PROD -e CMAKE_CXX_COMPILER_LAUNCHER -e CCACHE_DIR -e CCACHE_BASEDIR -e CCACHE_NOHASHDIR -e CCACHE_MAXSIZE $env:IMAGE cmd /c C:\src\build.bat
+    - docker run --rm -v "${env:CI_PROJECT_DIR}:C:\src" -e CI_COMMIT_REF_NAME -e CI_COMMIT_SHORT_SHA -e CI_COMMIT_BRANCH -e SENTRY_KEY -e SENTRY_PROJECT -e COUNTLY_APP_KEY_DEV -e COUNTLY_APP_KEY_PROD -e GREENLIGHT_DEVELOPER_CERT -e GREENLIGHT_DEVELOPER_KEY -e CMAKE_CXX_COMPILER_LAUNCHER -e CCACHE_DIR -e CCACHE_BASEDIR -e CCACHE_NOHASHDIR -e CCACHE_MAXSIZE $env:IMAGE cmd /c C:\src\build.bat
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
