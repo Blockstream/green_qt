@@ -67,6 +67,8 @@ void SignupController::signup(const QString& deployment)
     persist_wallet->needs(get_credentials);
 
     dispatcher()->add(group);
+
+    setMnemonic({});
 }
 
 void SignupController::setNetworkLoginActive(bool active)

@@ -114,6 +114,9 @@ void RestoreController::restore(const QString& deployment)
             monitor->add(group);
         }
     }
+
+    setMnemonic({});
+    setPassword({});
 }
 
 TaskGroup* RestoreController::check(Network* network)
