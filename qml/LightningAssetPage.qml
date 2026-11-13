@@ -311,6 +311,7 @@ StackViewPage {
         id: lightning_mnemonic_page
         StackViewPage {
             id: recovery_page
+            readonly property var mnemonic: self.context.lightningMnemonic()
 
             title: qsTrId('id_recovery_phrase')
             leftItem: BackButton {
@@ -329,7 +330,7 @@ StackViewPage {
                     background: null
                     contentItem: MnemonicView {
                         columns: 2
-                        mnemonic: self.context.lightningMnemonic
+                        mnemonic: recovery_page.mnemonic
                     }
                 }
                 Label {
@@ -346,7 +347,7 @@ StackViewPage {
                 }
                 RegularButton {
                     Layout.fillWidth: true
-                    enabled: self.context.lightningMnemonic.length > 0
+                    enabled: recovery_page.mnemonic.length > 0
                     text: qsTrId('id_show_qr_code')
                     onClicked: recovery_page.pushPage(qrcode_page)
                 }
@@ -367,7 +368,7 @@ StackViewPage {
                         alignment: Qt.AlignTop
                         QRCode {
                             Layout.alignment: Qt.AlignHCenter
-                            text: self.context.lightningMnemonic.join(' ')
+                            text: recovery_page.mnemonic.join(' ')
                             implicitHeight: 300
                             implicitWidth: 300
                             radius: 4

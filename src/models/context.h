@@ -56,9 +56,7 @@ class Context : public QObject
     Q_PROPERTY(QQmlListProperty<Session> sessions READ sessions NOTIFY sessionsChanged)
     Q_PROPERTY(Session* primarySession READ primarySession NOTIFY sessionsChanged)
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
-    Q_PROPERTY(QJsonObject credentials READ credentials NOTIFY credentialsChanged)
     Q_PROPERTY(bool lightningEnabled READ lightningEnabled NOTIFY lightningEnabledChanged)
-    Q_PROPERTY(QStringList lightningMnemonic READ lightningMnemonic NOTIFY lightningMnemonicChanged)
     Q_PROPERTY(LightningSession* lightningSession READ lightningSession NOTIFY lightningSessionChanged)
     Q_PROPERTY(QJsonObject lightningNodeInfo READ lightningNodeInfo NOTIFY lightningNodeInfoChanged)
     Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
@@ -96,6 +94,8 @@ public:
 
     QJsonObject credentials() const;
     void setCredentials(const QJsonObject& credentials);
+    Q_INVOKABLE QStringList mnemonic() const;
+    Q_INVOKABLE QString bip39Passphrase() const;
 
     bool isSoftwareSigner() const;
 
@@ -135,7 +135,7 @@ public:
     bool lightningEnabled() const;
     void setLightningEnabled(bool enabled);
 
-    QStringList lightningMnemonic() const;
+    Q_INVOKABLE QStringList lightningMnemonic() const;
     LightningSession* lightningSession();
     QJsonObject lightningNodeInfo() const;
 
@@ -166,7 +166,6 @@ signals:
     void walletChanged();
     void deviceChanged();
     void rememberChanged();
-    void credentialsChanged();
     void accountsChanged();
     void watchonlyChanged();
     void sessionsChanged();
@@ -182,7 +181,6 @@ signals:
     void addressUpdated();
     void paymentUpdated();
     void lightningEnabledChanged();
-    void lightningMnemonicChanged();
     void lightningSessionChanged();
     void lightningNodeInfoChanged();
 

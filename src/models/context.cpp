@@ -370,8 +370,18 @@ void Context::setCredentials(const QJsonObject &credentials)
 
     if (d->credentials == credentials) return;
     d->credentials = credentials;
-    emit credentialsChanged();
-    emit lightningMnemonicChanged();
+}
+
+QStringList Context::mnemonic() const
+{
+    Q_D(const Context);
+    return d->credentials.value("mnemonic").toString().split(' ', Qt::SkipEmptyParts);
+}
+
+QString Context::bip39Passphrase() const
+{
+    Q_D(const Context);
+    return d->credentials.value("bip39_passphrase").toString();
 }
 
 bool Context::isSoftwareSigner() const

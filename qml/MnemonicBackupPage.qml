@@ -9,6 +9,7 @@ StackViewPage {
     property Context context
     property int size: 12
     property int columns: self.size / 6
+    readonly property string passphrase: self.context?.bip39Passphrase() ?? ''
 
     id: self
     title: 'Backup'
@@ -64,13 +65,7 @@ StackViewPage {
             contentItem: MnemonicView {
                 id: mnemonic_view
                 columns: self.columns
-                mnemonic: {
-                    if (self.context) {
-                        return self.context.credentials?.mnemonic?.split(' ') ?? []
-                    } else {
-                        return WalletManager.generateMnemonic(self.size)
-                    }
-                }
+                mnemonic: self.context?.mnemonic() ?? WalletManager.generateMnemonic(self.size)
             }
         }
         Bip39Passphrase {
@@ -118,7 +113,7 @@ StackViewPage {
                 QRCode {
                     Layout.alignment: Qt.AlignHCenter
                     id: qrcode
-                    text: self.context?.credentials?.mnemonic ?? ''
+                    text: mnemonic_view.mnemonic.join(' ')
                     implicitHeight: 300
                     implicitWidth: 300
                     radius: 4
@@ -128,7 +123,7 @@ StackViewPage {
                     opacity: 0.6
                     font.pixelSize: 12
                     text: qsTrId('id_the_qr_code_does_not_include')
-                    visible: self.context?.credentials?.bip39_passphrase ?? false
+                    visible: self.passphrase !== ''
                 }
                 Bip39Passphrase {
                 }
@@ -141,7 +136,7 @@ StackViewPage {
         Layout.fillWidth: false
         Layout.topMargin: 10
         spacing: 20
-        visible: self.context?.credentials?.bip39_passphrase ?? false
+        visible: self.passphrase !== ''
         Image {
             source: 'qrc:/svg2/passphrase.svg'
         }
@@ -152,7 +147,7 @@ StackViewPage {
             color: '#2FD058'
             font.pixelSize : 14
             font.weight: 600
-            text: self?.context.credentials?.bip39_passphrase ?? ''
+            text: self.passphrase
         }
     }
 }
