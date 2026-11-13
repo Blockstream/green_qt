@@ -249,6 +249,8 @@ void LoginController::login(LoginTask* login_task, const QString& passphrase)
             login(task);
         }
     });
+    connect(group, &TaskGroup::finished, group, &QObject::deleteLater);
+    connect(group, &TaskGroup::failed, group, &QObject::deleteLater);
 }
 
 void LoginController::login(TaskGroup* group, LoginTask* login_task)
