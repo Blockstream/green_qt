@@ -3,7 +3,6 @@
 #include "context.h"
 #include "controllers/lwkamp2accountcontroller.h"
 #include "createaccountcontroller.h"
-#include "ga.h"
 #include "json.h"
 #include "lwk/lwk.hpp"
 #include "network.h"
@@ -64,11 +63,6 @@ void CreateAccountController::setRecoveryMnemonic(const QStringList& recovery_mn
         m_recovery_xpub.clear();
         emit recoveryXpubChanged();
     }
-}
-
-QStringList CreateAccountController::generateMnemonic(int size) const
-{
-    return gdk::generate_mnemonic(size);
 }
 
 void CreateAccountController::create()
@@ -360,27 +354,6 @@ void CreateAccountController::setRecoveryXpub(const QString& recovery_xpub)
     }
     m_recovery_xpub = recovery_xpub;
     emit recoveryXpubChanged();
-}
-
-MnemonicGenerator::MnemonicGenerator(QObject *parent)
-    : QObject(parent)
-{
-    generate();
-}
-
-void MnemonicGenerator::setSize(int size)
-{
-    if (m_size == size) return;
-    if (size != 12 && size != 24) return;
-    m_size = size;
-    emit sizeChanged();
-    generate();
-}
-
-void MnemonicGenerator::generate()
-{
-    m_mnemonic = gdk::generate_mnemonic(m_size);
-    emit mnemonicChanged();
 }
 
 XPubValidator::XPubValidator(QObject* parent)

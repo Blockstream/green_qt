@@ -8,32 +8,6 @@
 
 class Account;
 
-class MnemonicGenerator : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(int size READ size WRITE setSize NOTIFY sizeChanged)
-    Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
-    QML_ELEMENT
-public:
-    MnemonicGenerator(QObject* parent = nullptr);
-
-    int size() const { return m_size; }
-    void setSize(int size);
-
-    QStringList mnemonic() const { return m_mnemonic; }
-
-public slots:
-    void generate();
-
-signals:
-    void sizeChanged();
-    void mnemonicChanged();
-
-private:
-    int m_size{12};
-    QStringList m_mnemonic;
-};
-
 class CreateAccountController : public Controller
 {
     Q_OBJECT
@@ -60,8 +34,6 @@ public:
     void setRecoveryXpub(const QString& recovery_xpub);
     bool busy() const { return m_busy; }
     QString error() const { return m_error; }
-
-    Q_INVOKABLE QStringList generateMnemonic(int size) const;
 
 signals:
     void assetChanged();
