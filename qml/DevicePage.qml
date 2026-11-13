@@ -19,8 +19,10 @@ StackViewPage {
     DeviceDiscoveryRequest {
         active: self.visible && self.StackView.status === StackView.Active
     }
+    // Jade wallets log in through the Jade connection flow instead.
     DeviceListModel {
         id: devices_model
+        vendor: Device.Ledger
         onRowCountChanged: self.update()
     }
     Timer {
@@ -45,15 +47,6 @@ StackViewPage {
     contentItem: GStackView {
         id: stack_view
         initialItem: VFlickable {
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                sourceComponent: {
-                    switch (self.wallet.login?.device?.type) {
-                    case 'jade': return jade_view
-                    default: return null
-                    }
-                }
-            }
             BusyIndicator {
                 Layout.alignment: Qt.AlignCenter
                 Layout.topMargin: 20
@@ -66,9 +59,6 @@ StackViewPage {
                 font.pixelSize: 12
                 font.weight: 600
                 text: qsTrId('id_looking_for_device')
-            }
-            BluetoothPermissionWarning {
-                Layout.bottomMargin: 60
             }
         }
     }
@@ -87,44 +77,10 @@ StackViewPage {
                     property Device _device: modelData
                     Layout.alignment: Qt.AlignCenter
                     Layout.minimumWidth: 325
-                    id: loader
-                    sourceComponent: {
-                        switch (loader._device.type) {
-                        case Device.BlockstreamJade: return jade_device
-                        case Device.LedgerNanoS: return ledger_device
-                        case Device.LedgerNanoX: return ledger_device
-                        }
-                    }
+                    sourceComponent: ledger_device
                 }
             }
             VSpacer {
-            }
-        }
-    }
-    Component {
-        id: jade_device
-        JadeDeviceDelegate {
-            device: _device
-            onConnectUsbClicked: (device) => {
-                device.selectConnection(JadeDevice.USB)
-                self.deviceSelected(device)
-            }
-            onConnectBluetoothClicked: (device) => {
-                if (device.connected && device.bluetoothAvailable) {
-                    device.selectConnection(JadeDevice.Bluetooth)
-                    self.deviceSelected(device)
-                } else {
-                    stack_view.push(jade_bluetooth_pair_page, { device })
-                }
-            }
-        }
-    }
-    Component {
-        id: jade_bluetooth_pair_page
-        JadeBluetoothPairPage {
-            onDeviceSelected: (device) => {
-                stack_view.pop(StackView.Immediate)
-                self.deviceSelected(device)
             }
         }
     }
@@ -137,12 +93,6 @@ StackViewPage {
                 self.deviceSelected(delegate.device)
             }
             onSelected: delegate.trigger()
-        }
-    }
-
-    Component {
-        id: jade_view
-        JadeInstructionsView {
         }
     }
 }

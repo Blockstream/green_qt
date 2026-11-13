@@ -151,10 +151,8 @@ MainPage {
             return
         }
 
-        const wallet = WalletManager.wallets[0] ?? null
-        wallet_view.createObject(stack_layout, { wallet })
-        stack_layout.currentIndex = stack_layout.children.length - 1
-        side_bar.currentView = SideBar.View.Wallet
+        // A single saved Jade wallet goes through the Jade connection flow too.
+        self.openWallet(WalletManager.wallets[0] ?? null)
     }
     function closeWallet(wallet) {
         stack_layout.currentIndex = 0

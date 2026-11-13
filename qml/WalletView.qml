@@ -80,14 +80,7 @@ MainPage {
         id: device_page
         DevicePage {
             padding: 60
-            onDeviceSelected: (device) => {
-                if (device instanceof JadeDevice) {
-                    stack_view.push(jade_page, { device, unlock: true })
-                }
-                if (device instanceof LedgerDevice) {
-                    stack_view.push(ledger_page, { device })
-                }
-            }
+            onDeviceSelected: (device) => stack_view.push(ledger_page, { device })
             onRemoveClicked: self.removeWallet(self.wallet)
             onCloseClicked: self.closeWallet(self.wallet)
         }
