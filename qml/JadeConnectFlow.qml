@@ -38,7 +38,8 @@ Item {
             // A unit reporting secure boot must pass the check, an earlier skip or DIY choice doesn't count
             const checked = device.secureBoot ? check_genuine : check_genuine || check_diy || check_skip
             if (!checked) {
-                flow.page.pushPage(genuine_check_page, { device })
+                // Dev/DIY units can't attest, show them as not genuine without asking the Jade
+                flow.page.pushPage(device.secureBoot ? genuine_check_page : unsupported_page, { device })
                 return
             }
         }
@@ -67,6 +68,8 @@ Item {
     // fetched the flow goes on without it, as there is no update to offer.
     function firmwareCheck(device, waiting = false) {
         if (!device) return
+        // Already waiting for the index for this device
+        if (!waiting && timer.running && timer.device === device) return
         update_controller.device = device
         if (!waiting && !firmware_controller.fetching) firmware_controller.check(device)
 
@@ -157,6 +160,38 @@ Item {
             onCloseClicked: flow.closeClicked()
             onGenuine: (device) => flow.processStateUnsaved(device)
             onDiy: (device) => flow.processStateUnsaved(device)
+        }
+    }
+
+    Component {
+        id: unsupported_page
+        JadeGenuineUnsupportedPage {
+            id: page
+            skipOnPop: true
+            // No check ran yet, so going back to the device list is still possible
+            leftItem: BackButton {
+                enabled: page.StackView.status === StackView.Active
+                onClicked: {
+                    // Drop a firmware check still waiting for the index, or it would push over the list
+                    timer.stop()
+                    page.popPage()
+                }
+            }
+            onCloseClicked: flow.closeClicked()
+            onDiyClicked: {
+                if (Settings.rememberDevices) {
+                    Settings.registerEvent(UtilJS.jadeGenuineCheckEvent(page.device.versionInfo.EFUSEMAC, 'diy'))
+                }
+                flow.processStateUnsaved(page.device)
+            }
+            Connections {
+                // Later steps handle their own disconnects
+                enabled: page.StackView.status === StackView.Activating || page.StackView.status === StackView.Active
+                target: page.device
+                function onConnectedChanged() {
+                    if (!page.device.connected) flow.closeClicked()
+                }
+            }
         }
     }
 

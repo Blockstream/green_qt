@@ -72,6 +72,8 @@ StackViewPage {
             }
             RegularButton {
                 Layout.minimumWidth: 160
+                // Once a click pushes the next step the page is no longer active
+                enabled: self.StackView.status === StackView.Active && (self.device?.connected ?? false) && self.device.status === JadeDevice.StatusIdle
                 text: 'Continue as DIY'
                 visible: self.diy
                 onClicked: self.diyClicked()
