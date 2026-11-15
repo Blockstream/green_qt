@@ -46,9 +46,13 @@ AbstractButton {
         ColumnLayout {
             Layout.alignment: Qt.AlignCenter
             Layout.fillHeight: false
+            Layout.fillWidth: true
             spacing: 0
             Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
                 color: '#FAFAFA'
+                elide: Label.ElideRight
                 font.pixelSize: 16
                 font.weight: 600
                 text: self.asset?.name ?? self.account?.network?.displayName ?? '-'
