@@ -17,6 +17,22 @@ Drawer {
     z: 2
 
     contentWidth: Math.max(self.minimumContentWidth, self.preferredContentWidth)
+    enter: Transition {
+        NumberAnimation {
+            property: 'position'
+            to: 1
+            duration: 250
+            easing.type: Easing.OutCubic
+        }
+    }
+    exit: Transition {
+        NumberAnimation {
+            property: 'position'
+            to: 0
+            duration: 200
+            easing.type: Easing.InCubic
+        }
+    }
     Behavior on contentWidth {
         SmoothedAnimation {
             velocity: 500
