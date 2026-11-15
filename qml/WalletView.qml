@@ -18,7 +18,19 @@ MainPage {
     // The context a Jade was unlocked on, logged in from here.
     property Context context: null
     readonly property Account currentAccount: stack_view.currentItem?.currentAccount ?? null
-    readonly property var notifications: UtilJS.flatten(stack_view.currentItem?.notifications, login_alert.notification)
+    // Wallet notifications show 2 seconds after the wallet page is shown.
+    readonly property Item shownPage: StackLayout.isCurrentItem ? stack_view.currentItem : null
+    property Item notifyingPage: null
+    onShownPageChanged: {
+        self.notifyingPage = null
+        notifications_timer.restart()
+    }
+    Timer {
+        id: notifications_timer
+        interval: 2000
+        onTriggered: self.notifyingPage = self.shownPage
+    }
+    readonly property var notifications: UtilJS.flatten(self.notifyingPage?.notifications, login_alert.notification)
 
     function send(url) {
         if (stack_view.currentItem instanceof OverviewPage) {
