@@ -150,8 +150,6 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     SentryInit();
     auto sentry_close = qScopeGuard([] { SentryClose(); });
 
-    auto video_inputs = QMediaDevices::videoInputs();
-
     qInfo() << qPrintable(QCoreApplication::organizationName()) << qPrintable(QCoreApplication::applicationName()) << qPrintable(QCoreApplication::applicationVersion());
     qInfo() << "Environment:" << GREEN_ENV;
     qInfo() << "System Information:";
@@ -164,10 +162,7 @@ int ui_handler(Application& app, int argc, char *argv[]) {
     qInfo() << "  Product:" << qPrintable(QSysInfo::prettyProductName());
     qInfo() << "  Product Type:" << qPrintable(QSysInfo::productType());
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
-    qInfo() << "  Video inputs:" << video_inputs.size();
-    for (const auto video_input : video_inputs) {
-        qInfo() << "    " << video_input.description() << (video_input.isDefault() ? "(default)" : "");
-    }
+    qInfo() << "  Video inputs:" << QMediaDevices::videoInputs().size();
     qInfo() << "Data directory:" << qPrintable(g_data_location);
     qInfo() << "Log file:" << qPrintable(GetLogFilename());
     qInfo() << "Initialize GDK";
