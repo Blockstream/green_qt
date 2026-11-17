@@ -48,7 +48,7 @@ StackViewPage {
             Layout.bottomMargin: 20
             external: true
             text: qsTrId('id_troubleshoot')
-            onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900005443223-Fix-issues-connecting-Jade-via-USB')
+            onClicked: Qt.openUrlExternally('https://help.blockstream.com/blockstream-jade/troubleshooting/fix-issues-connecting-jade-via-usb-or-bluetooth')
         }
     }
     DeviceDiscoveryRequest {
