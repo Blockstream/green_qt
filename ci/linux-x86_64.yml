@@ -12,7 +12,7 @@ linux-x86_64:build-image:
   tags:
     - cloud
   variables:
-    LINUX_IMAGE: $GAR/green_qt/linux-x86_64@sha256:8a5891575ad37715f9e9dbd302d2d6f92aecbb39c8f74db7c278c07460056af5
+    LINUX_IMAGE: $GAR/green_qt/linux-x86_64@sha256:7d4373fba405e10297495cd424755c3049475e92ec94797811244be68f727b3d
 
 linux-x86_64:build-appimage:
   extends:
