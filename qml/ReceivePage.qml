@@ -178,7 +178,7 @@ StackViewPage {
                     wrapMode: Label.Wrap
                 }
             }
-            onClicked: Qt.openUrlExternally('https://docs.blockstream.com/green/hww/hww-index.html#ledger-supported-assets')
+            onClicked: Qt.openUrlExternally('https://help.blockstream.com/liquid-network/use-liquid-integrated-tools/liquid-assets-supported-by-the-ledger-nano-s')
         }
         AccountAssetField {
             Layout.fillWidth: true

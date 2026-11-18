@@ -68,7 +68,7 @@ StackViewPage {
             font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
-            text: `By continuing you agree to Blockstream's ${UtilJS.link('https://blockstream.com/green/terms/', 'Terms of Service')} and ${UtilJS.link('https://blockstream.com/green/privacy/', 'Privacy Policy')}`
+            text: `By continuing you agree to Blockstream's ${UtilJS.link('https://blockstream.com/app/terms/', 'Terms of Service')} and ${UtilJS.link('https://blockstream.com/app/privacy/', 'Privacy Policy')}`
             wrapMode: Label.Wrap
         }
         Label {

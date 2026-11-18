@@ -77,8 +77,8 @@ StackViewPage {
             const terms = new RegExp('(Terms & Conditions)', 'gi')
             const privacy = new RegExp('(Privacy Policy)', 'gi')
             return 'By using the Blockstream app, you agree to the Terms & Conditions and Privacy Policy.'
-                .replace(terms, UtilJS.link('https://blockstream.com/green/terms/', '$1'))
-                .replace(privacy, UtilJS.link('https://blockstream.com/green/privacy/', '$1'))
+                .replace(terms, UtilJS.link('https://blockstream.com/app/terms/', '$1'))
+                .replace(privacy, UtilJS.link('https://blockstream.com/app/privacy/', '$1'))
         }
     }
 }
