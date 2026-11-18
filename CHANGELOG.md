@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.7.0] - 2026-11-26
+### Added
+- Connect Jade over Bluetooth on Windows, macOS and Linux, with pairing from the app
+- Pick a Jade and its USB or Bluetooth connection, and reconnect a turned-off Jade from the wallet card
+- Remove wallet option in the wallet menu
+- AMP2 account renaming and archiving
+- Ledger transaction review pages when signing
+- Jade PIN status in the device details
+
+### Changed
+- Updated GDK to 0.78.2
+- Updated Qt to 6.12.0
+- New Blockstream logo, app icons, installer artwork and recovery phrase backup template
+- Jade Plus and Core units that fail the genuine check are blocked, with retry on failure
+- Promotions shown in a carousel
+- Wallet data redacted from logs shared with support
+- Reduced how long mnemonics and passphrases are kept in memory
+- Transaction CSV exports use UTC timestamps and include UTC offset, account ID and asset ID
+- Lightning service capacity is checked before enabling Lightning
+- Animated QR scans are limited in size and duration, with retry
+- In-app update notifications disabled on Flatpak
+- Updated minimum Jade firmware version to 1.0.42
+
+### Fixed
+- Missing Liquid asset details after login, new transactions or wallet refresh
+- Long asset names overflowing in the account and asset field
+- Returning to the update flow when a Jade firmware update fails
+- Close button in the backup QR code view
+- Archiving the last account of a network when the wallet has accounts on other networks
+- Crash when scanning an invalid transaction QR code
+- PIN change no longer offered in BIP39 passphrase sessions
+- Transaction and address CSV exports quote every field
+
 ## [3.6.1] - 2026-11-04
 
 ### Changed
