@@ -60,6 +60,7 @@ macos-arm64:build:
       policy: pull
   after_script:
     - $HOME/Qt/$QT_VERSION/$QT_VERSION/macos/bin/macdeployqt build/Blockstream.app -qmldir=qml
+    - rm -rf build/Blockstream.app/Contents/PlugIns/sqldrivers
     - cp "$PREFIX/bin/crashpad_handler" build/Blockstream.app/Contents/MacOS/
     # keep the .dSYM (dsymutil output) for the symbols upload job instead of deleting it
     - mkdir -p symbols && mv build/Blockstream.app/Contents/MacOS/Blockstream.dSYM symbols/
