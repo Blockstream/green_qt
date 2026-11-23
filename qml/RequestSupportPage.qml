@@ -87,7 +87,7 @@ StackViewPage {
             visible: self.type === 'incident'
             CheckBox {
                 id: logs_checkbox
-                checked: self.type === 'incident'
+                checked: false
                 onCheckedChanged: error_badge.clear()
             }
             Label {
