@@ -276,6 +276,21 @@ QString GetPlatformName()
     return "linux";
 }
 
+// Neutralizes spreadsheet formulas in untrusted text
+QString CsvText(QString value)
+{
+    if (!value.isEmpty() && QStringLiteral("=+-@\t\r\n\uFF1D\uFF0B\uFF0D\uFF20").contains(value.front())) value.prepend("\t'");
+    return value;
+}
+
+QString CsvLine(QStringList values)
+{
+    for (auto& value : values) {
+        value = '"' + value.replace('"', "\"\"") + '"';
+    }
+    return values.join(',');
+}
+
 bool IsRunningAsFlatpak()
 {
 #ifdef Q_OS_LINUX

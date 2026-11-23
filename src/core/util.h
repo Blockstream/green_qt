@@ -32,6 +32,9 @@ QString Sha256(const QJsonObject& value);
 
 bool RedactLog(QIODevice& in, QIODevice& out);
 
+QString CsvText(QString value);
+QString CsvLine(QStringList values);
+
 QString GetHardwareModel();
 
 bool IsSupportedPaymentUrl(const QString& url);

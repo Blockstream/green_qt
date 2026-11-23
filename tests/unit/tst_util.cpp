@@ -17,6 +17,7 @@ private slots:
     void reverseEmptyByteArray();
     void sha256String();
     void redactLog();
+    void csv();
 };
 
 void UtilTest::parsePathFromArray()
@@ -131,6 +132,24 @@ void UtilTest::redactLog()
     QVERIFY(out.open(QIODevice::WriteOnly));
     QVERIFY(RedactLog(in, out));
     QCOMPARE(output, expected);
+}
+
+void UtilTest::csv()
+{
+    QCOMPARE(CsvText("=WEBSERVICE(\"x\")"), QString("\t'=WEBSERVICE(\"x\")"));
+    QCOMPARE(CsvText("+1"), QString("\t'+1"));
+    QCOMPARE(CsvText("-1"), QString("\t'-1"));
+    QCOMPARE(CsvText("@a"), QString("\t'@a"));
+    QCOMPARE(CsvText("\t=1"), QString("\t'\t=1"));
+    QCOMPARE(CsvText("\r=1"), QString("\t'\r=1"));
+    QCOMPARE(CsvText("\n=1"), QString("\t'\n=1"));
+    for (const auto prefix : {u"\uFF1D", u"\uFF0B", u"\uFF0D", u"\uFF20"}) {
+        const auto value = QString::fromUtf16(prefix) + "1";
+        QCOMPARE(CsvText(value), "\t'" + value);
+    }
+    QCOMPARE(CsvText("rent"), QString("rent"));
+    QCOMPARE(CsvText(""), QString());
+    QCOMPARE(CsvLine({"a", "b,c", "d\"e", "f\ng"}), QString("\"a\",\"b,c\",\"d\"\"e\",\"f\ng\""));
 }
 
 QTEST_GUILESS_MAIN(UtilTest)

@@ -8,6 +8,7 @@
 #include "payment.h"
 #include "session.h"
 #include "transaction.h"
+#include "util.h"
 #include "wallet.h"
 #include <QDateTime>
 #include <QDesktopServices>
@@ -195,9 +196,7 @@ void TransactionModel::exportToFile()
         QString fiat_field = QString("fiat (%1 %2 %3)").arg(currency, exchange, datetime.toUTC().toString(Qt::ISODate));
         QStringList fields = QStringList{"time", "utc_offset", "network", "account", "account_id", "description", "amount", "unit", "asset_id", fee_field, fiat_field, "txhash", "memo"};
         QStringList lines;
-        QString separator{","};
-
-        lines.append(fields.join(separator));
+        lines.append(CsvLine(fields));
 
         const auto row_count = rowCount();
         for (int row = 0; row < row_count; ++row) {
@@ -217,7 +216,7 @@ void TransactionModel::exportToFile()
                         values.append(network->displayName());
                     } else if (field == "account") {
                         auto name = transaction->account()->name();
-                        values.append(name.isEmpty() ? qtTrId("id_main_account") : name);
+                        values.append(name.isEmpty() ? qtTrId("id_main_account") : CsvText(name));
                     } else if (field == "account_id") {
                         const auto account = transaction->account();
                         values.append(QString("%1-%2-%3").arg(network->key(), account->type()).arg(account->pointer()));
@@ -241,7 +240,7 @@ void TransactionModel::exportToFile()
                         }
                     } else if (field == "unit") {
                         if (asset && asset->id() != network->policyAsset()) {
-                            values.append(asset->data().value("ticker").toString());
+                            values.append(CsvText(asset->data().value("ticker").toString()));
                         } else {
                             values.append(display_unit);
                         }
@@ -265,12 +264,12 @@ void TransactionModel::exportToFile()
                     } else if (field == "txhash") {
                         values.append(data.value("txhash").toString());
                     } else if (field == "memo") {
-                        values.append(data.value("memo").toString().replace("\n", " ").replace(",", "-"));
+                        values.append(CsvText(data.value("memo").toString()));
                     } else {
                         Q_UNREACHABLE();
                     }
                 }
-                lines.append(values.join(separator));
+                lines.append(CsvLine(values));
             }
         }
 
@@ -413,9 +412,7 @@ void AddressModel::exportToFile()
 
         QStringList fields = QStringList{"network", "account", "address", "tx_count"};
         QStringList lines;
-        QString separator{","};
-
-        lines.append(fields.join(separator));
+        lines.append(CsvLine(fields));
 
         const auto row_count = rowCount();
         for (int row = 0; row < row_count; ++row) {
@@ -423,10 +420,10 @@ void AddressModel::exportToFile()
             QStringList values;
             values.append(address->account()->network()->displayName());
             auto name = address->account()->name();
-            values.append(name.isEmpty() ? qtTrId("id_main_account") : name);
+            values.append(name.isEmpty() ? qtTrId("id_main_account") : CsvText(name));
             values.append(address->address());
             values.append(QString::number(address->data().value("tx_count").toInt()));
-            lines.append(values.join(separator));
+            lines.append(CsvLine(values));
         }
 
         QFile file(filename);
