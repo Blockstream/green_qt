@@ -219,6 +219,8 @@ void Controller::changePin(const QString& pin)
 {
     Q_D(Controller);
     if (!d->context) return;
+    // credentials of a bip39 passphrase session must never reach the wallet's pin data
+    if (d->context->bip39()) return;
 
     auto session = d->context->primarySession();
     auto encrypt_with_pin = new EncryptWithPinTask(d->context->credentials(), pin, session);

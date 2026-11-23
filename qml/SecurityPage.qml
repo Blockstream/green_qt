@@ -264,7 +264,7 @@ Page {
                     ColumnLayout {
                         spacing: 8
                         Layout.preferredWidth: 1
-                        visible: !self.context.watchonly
+                        visible: !self.context.watchonly && !self.context.bip39
                         Label {
                             text: "Unlock Method"
                             color: "#A0A0A0"
