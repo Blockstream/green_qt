@@ -30,7 +30,7 @@ bool IsSegwitAddressType(const QString& addr_type)
     Q_UNREACHABLE();
 }
 
-const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{1, 0, 40};
+const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{1, 0, 42};
 
 // Jade renders the asset contract into a 768 byte buffer before hashing it, and
 // a single oversized entry rejects the whole signing request
